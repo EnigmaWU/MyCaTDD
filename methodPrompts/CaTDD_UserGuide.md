@@ -75,7 +75,7 @@ graph TD
 
 ### 1. Copy the Template
 ```bash
-cp LLM/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
+cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
 
 ### 2. Fill in the OVERVIEW
@@ -821,7 +821,7 @@ Ready to write your first CaTDD test file? Follow this checklist:
 
 ### ✅ Step 1: Copy Template
 ```bash
-cp LLM/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
+cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
 
 ### ✅ Step 2: Fill OVERVIEW Section

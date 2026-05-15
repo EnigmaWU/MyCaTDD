@@ -701,7 +701,7 @@ Copy this block into your test files to track progress:
 
 ### When Starting a New Test Module
 
-1. **Copy the template** (`LLM/CaTDD_ImplTemplate.cxx`)
+1. **Copy the template** (`methodPrompts/CaTDD_ImplTemplate.cxx`)
 2. **Fill in OVERVIEW section**: What you're testing and why
 3. **Freely draft ideas**: Capture test scenarios without format
 4. **Define coverage matrix**: Identify test dimensions
@@ -1180,7 +1180,7 @@ When you encounter problems during test implementation, follow these systematic 
    - README_Glossary.md (terminology and concepts)
    - Doc/*.md (detailed design documents)
    - Source/[Component].md (implementation notes for specific modules)
-   - LLM/CaTDD_DesignPrompt.md (this testing methodology)
+   - methodPrompts/CaTDD_DesignPrompt.md (this testing methodology)
    ```
    - Look for explicit behavior specifications
    - Note design principles and constraints

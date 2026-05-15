@@ -16,7 +16,7 @@
 // TDD WORKFLOW:
 //   Design → Draft → Structure → Test (RED) → Code (GREEN) → Refactor → Repeat
 //
-// REFERENCE: LLM/CaTDD_DesignPrompt.md for full methodology
+// REFERENCE: methodPrompts/CaTDD_DesignPrompt.md for full methodology
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "_UT_IOC_Common.h"

@@ -296,7 +296,7 @@ stateDiagram-v2
 
 ### 1️⃣ 复制模板
 ```bash
-cp LLM/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
+cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
 
 ### 2️⃣ 编写用户故事
@@ -851,7 +851,7 @@ P1（功能性）→ P2（设计）→ P3（质量）→ P4（附加）
 
 ### 步骤 1：复制模板
 ```bash
-cp LLM/CaTDD_ImplTemplate.cxx Test/UT_YourFirstFeature.cxx
+cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFirstFeature.cxx
 ```
 
 ### 步骤 2：编写你的第一个 US/AC/TC
@@ -883,9 +883,9 @@ RED（失败测试）→ GREEN（通过测试）→ 重构
 **创建者：EnigmaWU** • 始于 2023年10月
 
 **资源**：
-- 用户指南：`LLM/CaTDD_UserGuide.md`
-- 方法论：`LLM/CaTDD_DesignPrompt.md`
-- 模板：`LLM/CaTDD_ImplTemplate.cxx`
+- 用户指南：`methodPrompts/CaTDD_UserGuide.md`
+- 方法论：`methodPrompts/CaTDD_DesignPrompt.md`
+- 模板：`methodPrompts/CaTDD_ImplTemplate.cxx`
 - 示例：`Test/UT_*.cxx`（80+ 测试文件）
 
 **仓库**：github.com/EnigmaWU/MyIOC_inTDD_withGHC

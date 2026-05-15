@@ -296,7 +296,7 @@ stateDiagram-v2
 
 ### 1️⃣ Copy Template
 ```bash
-cp LLM/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
+cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
 
 ### 2️⃣ Write User Story
@@ -850,7 +850,7 @@ P1 (Functional) → P2 (Design) → P3 (Quality) → P4 (Addons)
 
 ### Step 1: Copy the Template
 ```bash
-cp LLM/CaTDD_ImplTemplate.cxx Test/UT_YourFirstFeature.cxx
+cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFirstFeature.cxx
 ```
 
 ### Step 2: Write Your First US/AC/TC
@@ -882,9 +882,9 @@ Teach others, contribute patterns, iterate!
 **Created by EnigmaWU** • Since October 2023
 
 **Resources**:
-- User Guide: `LLM/CaTDD_UserGuide.md`
-- Methodology: `LLM/CaTDD_DesignPrompt.md`
-- Template: `LLM/CaTDD_ImplTemplate.cxx`
+- User Guide: `methodPrompts/CaTDD_UserGuide.md`
+- Methodology: `methodPrompts/CaTDD_DesignPrompt.md`
+- Template: `methodPrompts/CaTDD_ImplTemplate.cxx`
 - Examples: `Test/UT_*.cxx` (80+ test files)
 
 **Repository**: github.com/EnigmaWU/MyIOC_inTDD_withGHC
