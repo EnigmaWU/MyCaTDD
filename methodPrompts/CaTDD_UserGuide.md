@@ -77,6 +77,7 @@ graph TD
 ```bash
 cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
+If your project does not have a `Test/` directory, create one or adjust the destination path.
 
 ### 2. Fill in the OVERVIEW
 ```cpp
@@ -823,6 +824,7 @@ Ready to write your first CaTDD test file? Follow this checklist:
 ```bash
 cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
+If your project does not have a `Test/` directory, create one or adjust the destination path.
 
 ### ✅ Step 2: Fill OVERVIEW Section
 - [ ] What functionality are you testing?
