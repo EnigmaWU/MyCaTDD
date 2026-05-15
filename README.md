@@ -8,8 +8,8 @@ https://github.com/EnigmaWU/MyIOC_inTDD_withGHC/tree/main/LLM
 
 Note: some relative example paths inside imported documents point to the original source repository layout.
 
-- `LLM/CaTDD_DesignPrompt.md`
-- `LLM/CaTDD_UserGuide.md`
-- `LLM/CaTDD-UserGuide-PPT.md`
-- `LLM/CaTDD-UserGuide-PPT-ZH_CN.md`
-- `LLM/CaTDD_ImplTemplate.cxx`
+- `methodPrompts/CaTDD_DesignPrompt.md`
+- `methodPrompts/CaTDD_UserGuide.md`
+- `methodPrompts/CaTDD-UserGuide-PPT.md`
+- `methodPrompts/CaTDD-UserGuide-PPT-ZH_CN.md`
+- `methodPrompts/CaTDD_ImplTemplate.cxx`
