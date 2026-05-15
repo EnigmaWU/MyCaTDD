@@ -2,7 +2,7 @@
 
 **Quick Reference for Comment-alive Test-Driven Development**
 
-> Note: This guide is imported from `MyIOC_inTDD_withGHC/LLM`; some relative example paths (for example `../Test/*.cxx`) refer to that source repository layout.
+> Note: This guide is imported from `MyIOC_inTDD_withGHC/LLM`; some example project paths (for example `../Test/*.cxx`) are illustrative and may not exist in this repository.
 
 ---
 
