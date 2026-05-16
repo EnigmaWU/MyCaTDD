@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SUPPORTED_SKILL="comment-alive-test-driven-development"
 SKILL_NAME="${1:-$SUPPORTED_SKILL}"
 
@@ -10,7 +11,7 @@ if [[ "$SKILL_NAME" != "$SUPPORTED_SKILL" ]]; then
   exit 1
 fi
 
-SKILL_DIR="$REPO_ROOT/agentSkill/$SKILL_NAME"
+SKILL_DIR="$SCRIPT_DIR/$SKILL_NAME"
 
 if [[ ! -d "$SKILL_DIR" ]]; then
   echo "Skill directory not found: $SKILL_DIR" >&2

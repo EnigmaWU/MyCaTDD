@@ -27,3 +27,13 @@
 ## 维护规则
 
 更新技能行为时，需要与 `methodPrompts` 保持一致，并同步刷新技能内参考资料。
+
+## 打包命令
+
+在仓库根目录运行打包脚本：
+
+```bash
+bash agentSkill/makeSkill.sh
+```
+
+该脚本会为 `comment-alive-test-driven-development` 更新到 `methodPrompts` 与 `slashCommands` 的技能级符号链接。

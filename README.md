@@ -105,4 +105,5 @@ This asset layer can be seen as the key bridge from [1] to [2]/[3].
 1. Read `methodPrompts/CaTDD_UserGuide.md` first for the full picture.
 2. Use `methodPrompts/CaTDD_ImplTemplate.cxx` to create a new test-file skeleton.
 3. Follow `agentSkill/comment-alive-test-driven-development/SKILL.md` to execute with a skill-based workflow.
-4. Gradually complete `slashCommands` and CLI code-agent integration in your toolchain.
+4. Run `bash agentSkill/makeSkill.sh` to package skill references and links.
+5. Gradually complete `slashCommands` and CLI code-agent integration in your toolchain.

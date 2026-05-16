@@ -27,3 +27,13 @@ This directory contains packaged skills that make CaTDD reusable in agent workfl
 ## Maintenance rule
 
 When updating a skill's behavior, ensure consistency with `methodPrompts` and refresh the skill-local references.
+
+## Packaging command
+
+Run the packaging script from repository root:
+
+```bash
+bash agentSkill/makeSkill.sh
+```
+
+This updates skill-level symlinks to `methodPrompts` and `slashCommands` for `comment-alive-test-driven-development`.
