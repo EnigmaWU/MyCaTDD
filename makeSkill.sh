@@ -38,7 +38,11 @@ ln -sfn "../../../methodPrompts/CaTDD_UserGuide.md" "$SKILL_DIR/references/CaTDD
 ln -sfn "../../../methodPrompts/CaTDD_DesignPrompt.md" "$SKILL_DIR/references/CaTDD_DesignPrompt.md"
 ln -sfn "../../../methodPrompts/CaTDD_ImplTemplate.cxx" "$SKILL_DIR/references/CaTDD_ImplTemplate.cxx"
 ln -sfn "../../../methodPrompts/CaTDD-UserGuide-PPT.md" "$SKILL_DIR/references/CaTDD-UserGuide-PPT.md"
-# SKILL_DIR is <repo_root>/agentSkill/<skill>, so ../../slashCommands resolves to <repo_root>/slashCommands.
 ln -sfn "../../slashCommands" "$SKILL_DIR/slashCommands"
+
+if [[ ! -d "$SKILL_DIR/slashCommands" ]]; then
+  echo "Failed to link slashCommands into skill package" >&2
+  exit 1
+fi
 
 echo "Skill packaged with symlinked methodPrompts and slashCommands: $SKILL_DIR"
