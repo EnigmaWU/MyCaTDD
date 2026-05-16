@@ -63,6 +63,19 @@ graph TD
 
 ---
 
+## How This Guide Fits This Repository
+
+The root [README.md](README.md) describes MyCaTDD as a four-layer path from method knowledge to automated execution:
+
+1. [methodPrompts](methodPrompts/README.md) - the language-agnostic source-of-truth methodology layer. It defines CaTDD method prompts, category design skeletons, user-guide material, and implementation templates.
+2. [slashCommands](slashCommands/README.md) - the code-agent-agnostic commandization layer. It turns stable CaTDD method steps into small triggerable prompt commands for Copilot, Cline, Continue, or similar assistants.
+3. [utCodeAgentCLI](utCodeAgentCLI/README.md) - this repository's CaTDD-native CLI agent layer. It uses method prompts and slash commands for planning, execution, trace collection, and reflection.
+4. [agentSkill](agentSkill/README.md) - the reusable skill packaging layer. It wraps CaTDD method knowledge into triggerable skills and keeps packaged references aligned with the canonical method files.
+
+Use this guide as the user-facing entry point for CaTDD. Use the linked layer READMEs when you need to understand how the method is organized, commandized, automated, or packaged in this repository.
+
+---
+
 ## Why Use CaTDD?
 
 ✅ **Verification Design First** - Define HOW to verify before writing code (US/AC/TC structure)  
@@ -81,6 +94,7 @@ graph TD
 ```bash
 cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
+
 Run this command from the repository root so `methodPrompts/` resolves correctly.
 If your project does not have a `Test/` directory, create one or adjust the destination path.
 
@@ -176,6 +190,7 @@ Identify key dimensions:
 
 **Step 2: Freely Draft Ideas**  
 Brainstorm test scenarios without worrying about structure:
+
 ```cpp
 /**
  * FREELY DRAFTS:
@@ -188,6 +203,7 @@ Brainstorm test scenarios without worrying about structure:
 
 **Step 3: Build Coverage Matrix**  
 Organize scenarios systematically:
+
 ```
 ┌─────────────────┬─────────────┬──────────────────────────────┐
 │ Service Role    │ Client Role │ Key Scenarios                │
@@ -215,6 +231,7 @@ Express value from user perspective:
 ```
 
 **Examples (from IOC project)**:
+
 ```cpp
 US-1: As an event producer,
       I want to post events without blocking when queue is full,
@@ -238,6 +255,7 @@ Make stories testable with GIVEN/WHEN/THEN:
 ```
 
 **Examples (from IOC project)**:
+
 ```cpp
 [@US-1] Non-blocking event posting
  AC-1: GIVEN event queue is full,
@@ -270,6 +288,7 @@ Write TC specifications in the TEST CASES design section:
 ```
 
 **Example (from IOC project)**:
+
 ```cpp
 [@AC-1,US-1] Non-blocking behavior when queue is full
  TC-1:
@@ -366,6 +385,7 @@ Test Case (TC) - HOW to verify the behavior
 **Purpose**: Express business value from user's perspective
 
 **Format**:
+
 ```
 As a [role],
 I want [capability],
@@ -380,6 +400,7 @@ So that [value/benefit].
 - Should be understandable by non-technical stakeholders
 
 **Good Example (from IOC project)**:
+
 ```
 US-1: As an event producer in high-load scenarios,
       I want to post events without blocking when queue is full,
@@ -387,11 +408,13 @@ US-1: As an event producer in high-load scenarios,
 ```
 
 **Bad Example** ❌:
+
 ```
 US-1: As a developer,
       I want to implement a queue,
       So that it works.
 ```
+
 (Too vague, no clear value, implementation-focused)
 
 ---
@@ -401,6 +424,7 @@ US-1: As a developer,
 **Purpose**: Define testable conditions that satisfy the US
 
 **Format**:
+
 ```
 GIVEN [context/preconditions],
 WHEN [action/trigger],
@@ -416,6 +440,7 @@ THEN [expected outcome],
 - Cover both success and failure scenarios
 
 **Good Example (from IOC project)**:
+
 ```
 [@US-1] Non-blocking event posting
  AC-1: GIVEN event queue is full,
@@ -426,11 +451,13 @@ THEN [expected outcome],
 ```
 
 **Bad Example** ❌:
+
 ```
 AC-1: GIVEN queue,
       WHEN post,
       THEN works.
 ```
+
 (Too vague, not testable, missing details)
 
 ---
@@ -440,6 +467,7 @@ AC-1: GIVEN queue,
 **Purpose**: Provide concrete steps to verify AC
 
 **Format**:
+
 ```
 [@AC-n,US-n]
  TC-n:
@@ -452,6 +480,7 @@ AC-1: GIVEN queue,
 ```
 
 **Naming Convention**:
+
 ```
 verifyBehavior_byCondition_expectResult
          ↑           ↑            ↑
@@ -733,6 +762,7 @@ stateDiagram-v2
 ### 1. Test Naming Convention
 
 **Good Names** ✅:
+
 ```cpp
 verifyServiceRegistration_byValidName_expectSuccess
 verifyEventPost_byFullQueue_expectNonBlockReturn
@@ -740,6 +770,7 @@ verifyCommandExec_byTimeout_expectTimeoutError
 ```
 
 **Bad Names** ❌:
+
 ```cpp
 test1                           // Not descriptive
 testEventPosting               // Missing condition and expectation
@@ -802,6 +833,7 @@ You can create similar macros for your project or use standard assertions with d
 **Why?** Each test should verify ONE behavior clearly with a few critical verification points.
 
 **Good Example** ✅ (from IOC project):
+
 ```cpp
 TEST(EventPost, verifyNonBlockPost_byFullQueue_expectImmediateReturn) {
     // Fill queue...
@@ -823,6 +855,7 @@ TEST(EventPost, verifyNonBlockPost_byFullQueue_expectImmediateReturn) {
 ```
 
 **Bad Example** ❌:
+
 ```cpp
 TEST(EventPost, testEverything) {
     // Tests 10 different scenarios with 20 assertions
@@ -859,6 +892,7 @@ Ready to write your first CaTDD test file? Follow this checklist:
 ```bash
 cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
+
 If your project does not have a `Test/` directory, create one or adjust the destination path.
 
 ### ✅ Step 2: Fill OVERVIEW Section
@@ -939,6 +973,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 **Example from IOC project**:
 
 **TC Spec (in TEST CASES section)**:
+
 ```cpp
 /**
  * [@AC-1,US-1] Basic service registration
@@ -951,6 +986,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 ```
 
 **TEST Implementation (in IMPLEMENTATION section)**:
+
 ```cpp
 TEST(ServiceAPI, verifyServiceRegister_byValidName_expectSuccess) {
     //===SETUP===
@@ -982,6 +1018,7 @@ TEST(ServiceAPI, verifyServiceRegister_byValidName_expectSuccess) {
 **Example from IOC project**:
 
 **TC Spec (in TEST CASES section)**:
+
 ```cpp
 /**
  * [@AC-2,US-1] Input validation
@@ -994,6 +1031,7 @@ TEST(ServiceAPI, verifyServiceRegister_byValidName_expectSuccess) {
 ```
 
 **TEST Implementation (in IMPLEMENTATION section)**:
+
 ```cpp
 TEST(ServiceAPI, verifyServiceRegister_byNullName_expectError) {
     //===SETUP===
@@ -1021,6 +1059,7 @@ TEST(ServiceAPI, verifyServiceRegister_byNullName_expectError) {
 **Example from IOC project**:
 
 **TC Spec (in TEST CASES section)**:
+
 ```cpp
 /**
  * [@AC-1,US-2] Service lifecycle
@@ -1033,6 +1072,7 @@ TEST(ServiceAPI, verifyServiceRegister_byNullName_expectError) {
 ```
 
 **TEST Implementation (in IMPLEMENTATION section)**:
+
 ```cpp
 TEST(ServiceLifecycle, verifyServiceLifecycle_byStartStopSequence_expectCorrectStates) {
     //===SETUP===
@@ -1072,6 +1112,7 @@ TEST(ServiceLifecycle, verifyServiceLifecycle_byStartStopSequence_expectCorrectS
 **Example from IOC project**:
 
 **TC Spec (in TEST CASES section)**:
+
 ```cpp
 /**
  * [@AC-1,US-3] Thread safety
@@ -1084,6 +1125,7 @@ TEST(ServiceLifecycle, verifyServiceLifecycle_byStartStopSequence_expectCorrectS
 ```
 
 **TEST Implementation (in IMPLEMENTATION section)**:
+
 ```cpp
 TEST(EventConcurrency, verifyEventPost_byMultipleThreads_expectAllQueued) {
     //===SETUP===
@@ -1190,9 +1232,14 @@ P4: Demo/Example
 
 ## Need More Details?
 
+- **Repository layer map**: See [README.md](README.md)
+- **Method layer overview**: See [methodPrompts/README.md](methodPrompts/README.md)
 - **Methodology Deep Dive**: See [methodPrompts/CaTDD_methodPrompt.md](methodPrompts/CaTDD_methodPrompt.md)
-- **Category method prompts**: See `methodPrompts/CaTDD_methodPrompt4Cat-*.md` for category-specific design skeleton guidance
+- **Category method prompts**: See [methodPrompts/README.md](methodPrompts/README.md) for the full category prompt map
 - **Code Template**: See [methodPrompts/CaTDD_ImplTemplate.cxx](methodPrompts/CaTDD_ImplTemplate.cxx)
+- **Slash command layer**: See [slashCommands/README.md](slashCommands/README.md)
+- **CLI agent layer**: See [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)
+- **Skill package layer**: See [agentSkill/README.md](agentSkill/README.md)
 - **Questions?**: Ask EnigmaWU or check existing test files in [Test/](../Test/)
 
 ---

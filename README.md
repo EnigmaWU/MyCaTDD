@@ -10,27 +10,29 @@ Core slogan:
 
 ## What Your Diagram Means (Mapped to This Repository)
 
-Your diagram expresses a three-stage evolution path:
+Your diagram expresses a four-layer evolution path:
 
-1. `methodPrompts`（方法提示词）
-2. `slashCommands`（提示词命令）
-3. `utCodeAgentCLI`（代码智能体）
+1. [methodPrompts](methodPrompts/README.md)（方法提示词）
+2. [slashCommands](slashCommands/README.md)（提示词命令）
+3. [utCodeAgentCLI](utCodeAgentCLI/README.md)（单元测试代码智能体）
+4. [agentSkill](agentSkill/README.md)（智能体技能包）
 
 It also includes a bidirectional improvement loop:
 
 - [1] is applied into [2] and [3]
+- [4] packages [1] into reusable agent capabilities
 - Practices from [2] and [3] feed improvements back into [1]
 - Task planning and reflection in [3] further improve [2]
 
 This README is organized around that main storyline.
 
-## Three Layers of Assets and Responsibilities
+## Four Layers of Assets and Responsibilities
 
-### [1] methodPrompts (method prompts)
+### [1] [methodPrompts](methodPrompts/README.md) (method prompts)
 
-Positioning: source files of the methodology, defining "how to do it".
+Brief: the language-agnostic source-of-truth methodology layer for CaTDD. It defines comment-alive design skeletons, category method prompts, user-guide materials, and implementation templates.
 
-Applicable mode: manual developer mode (method-valid). The method layer is programming-language agnostic.
+Read more: [methodPrompts/README.md](methodPrompts/README.md).
 
 Current repository contents:
 
@@ -44,29 +46,23 @@ Source note: these materials were initially imported from
 `https://github.com/EnigmaWU/MyIOC_inTDD_withGHC/tree/main/LLM`
 (some relative paths in examples still point to the original repository layout).
 
-### [2] slashCommands (prompt commands)
+### [2] [slashCommands](slashCommands/README.md) (prompt commands)
 
-Positioning: package method prompts into command-style entries that can be triggered on demand, reducing adoption cost.
+Brief: the code-agent-agnostic commandization layer. It turns stable CaTDD method steps into small triggerable prompt commands for Copilot, Cline, Continue, or similar assistants.
 
-Applicable mode: developer + code assistant GUI mode.
+Read more: [slashCommands/README.md](slashCommands/README.md).
 
-Note: this layer is currently reserved at the architecture level (as shown in the diagram). High-frequency method workflows can be consolidated into a standard command set in later iterations.
+### [3] [utCodeAgentCLI](utCodeAgentCLI/README.md) (code agent)
 
-`slashCommands` should be code-agent agnostic, so the same command materials can be used by Copilot, Cline, Continue, or similar assistants.
+Brief: this repository's CaTDD-native CLI agent layer. Developers define goals, then the agent plans, executes, collects traces, and reflects using [1] and [2].
 
-### [3] utCodeAgentCLI (code agent)
+Read more: [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md).
 
-Positioning: in CLI scenarios, developers define goals and the agent plans and executes tasks automatically.
+### [4] [agentSkill](agentSkill/README.md) (skill package)
 
-Applicable mode: developer + code agent CLI mode.
+Brief: the reusable capability packaging layer. It wraps CaTDD method knowledge into triggerable skills and keeps skill references aligned with the canonical method files.
 
-Characteristics: relies on method constraints from [1] and command abstractions from [2], focusing on task planning, execution loops, and process reflection.
-
-`utCodeAgentCLI` is this repository's own CaTDD-native code-agent layer. It should use [1] and [2] as its base, then add deeper planning and execution with CaTDD in mind.
-
-## Assets Already Landed
-
-### agentSkill: package the method as reusable capability
+Read more: [agentSkill/README.md](agentSkill/README.md).
 
 `agentSkill/comment-alive-test-driven-development` packages CaTDD into a triggerable skill:
 
