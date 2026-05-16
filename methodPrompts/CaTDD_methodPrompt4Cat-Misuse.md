@@ -1,4 +1,4 @@
-# CaTDD Design Prompt for Category: Misuse
+# CaTDD method prompt for Category: Misuse
 
 Use this prompt when designing P1 Functional tests for wrong caller behavior, invalid API usage, and contract violations.
 
@@ -32,6 +32,19 @@ Misuse proves that the system rejects wrong use safely and clearly.
 - Verify the exact error result and that no partial side effect occurred.
 - Prefer deterministic misuse over vague "bad input" cases.
 - Preserve system state so the next valid call can still succeed when appropriate.
+
+## Design Skeleton
+
+```text
+// @[Class]: P1 Functional / InvalidFunc
+// @[Category]: Misuse
+// @[Intent]: Prove invalid caller behavior is rejected safely and clearly.
+// @[UseWhen]: The caller violates a named API precondition or call sequence.
+// @[AvoidWhen]: The caller is valid and the failure comes from environment, resource, dependency, or runtime fault.
+// @[US]: [US IDs]
+// @[AC]: [AC IDs]
+// @[TC]: verify[Operation]_by[MisuseCondition]_expect[ErrorResult]
+```
 
 ## US/AC/TC Pattern
 

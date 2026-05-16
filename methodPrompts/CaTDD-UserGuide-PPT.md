@@ -639,7 +639,7 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 tests
 ### Day 1: Setup
 
 - [ ] Copy `CaTDD_ImplTemplate.cxx` to your project
-- [ ] Read `CaTDD_DesignPrompt.md` for methodology details
+- [ ] Read `CaTDD_methodPrompt.md` for methodology details
 - [ ] Review sample tests in IOC project `/Test` folder
 - [ ] Set up custom VERIFY_KEYPOINT macros (optional)
 
@@ -667,9 +667,9 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 tests
 
 ### 📚 Core Documents
 
-- **CaTDD_UserGuide.md** — Comprehensive user guide (this presentation's source)
-- **CaTDD_DesignPrompt.md** — Detailed methodology explanation
-- **CaTDD_DesignPrompt4Cat-*.md** — Category-specific design prompts
+- **README_UserGuide.md** — Comprehensive user guide (this presentation's source)
+- **CaTDD_methodPrompt.md** — Detailed methodology explanation
+- **CaTDD_methodPrompt4Cat-*.md** — Category-specific method prompts
 - **CaTDD_ImplTemplate.cxx** — Template for new test files
 
 ### 🔍 Real Examples (IOC Project)
@@ -883,8 +883,8 @@ Teach others, contribute patterns, iterate!
 **Created by EnigmaWU** • Since October 2023
 
 **Resources**:
-- User Guide: `methodPrompts/CaTDD_UserGuide.md`
-- Methodology: `methodPrompts/CaTDD_DesignPrompt.md`
+- User Guide: `README_UserGuide.md`
+- Methodology: `methodPrompts/CaTDD_methodPrompt.md`
 - Template: `methodPrompts/CaTDD_ImplTemplate.cxx`
 - Examples: `Test/UT_*.cxx` (80+ test files)
 

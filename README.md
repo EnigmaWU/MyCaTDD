@@ -2,6 +2,8 @@
 
 MyCaTDD is a repository that productizes the CaTDD methodology step by step, with the goal of evolving "method usage" from manual execution to automated and intelligent execution.
 
+CaTDD is the methodology invented by EnigmaWU. IOC is a PlayKata module and proving ground that helped CaTDD evolve from idea to real reusable methodology.
+
 Core slogan:
 
 > Comments is Verification Design. LLM Generates Code. Iterate Forward Together.
@@ -28,12 +30,12 @@ This README is organized around that main storyline.
 
 Positioning: source files of the methodology, defining "how to do it".
 
-Applicable mode: manual developer mode (method-valid).
+Applicable mode: manual developer mode (method-valid). The method layer is programming-language agnostic.
 
 Current repository contents:
 
-- `methodPrompts/CaTDD_DesignPrompt.md`
-- `methodPrompts/CaTDD_UserGuide.md`
+- `methodPrompts/CaTDD_methodPrompt.md`
+- `README_UserGuide.md`
 - `methodPrompts/CaTDD-UserGuide-PPT.md`
 - `methodPrompts/CaTDD-UserGuide-PPT-ZH_CN.md`
 - `methodPrompts/CaTDD_ImplTemplate.cxx`
@@ -50,6 +52,8 @@ Applicable mode: developer + code assistant GUI mode.
 
 Note: this layer is currently reserved at the architecture level (as shown in the diagram). High-frequency method workflows can be consolidated into a standard command set in later iterations.
 
+`slashCommands` should be code-agent agnostic, so the same command materials can be used by Copilot, Cline, Continue, or similar assistants.
+
 ### [3] utCodeAgentCLI (code agent)
 
 Positioning: in CLI scenarios, developers define goals and the agent plans and executes tasks automatically.
@@ -58,6 +62,8 @@ Applicable mode: developer + code agent CLI mode.
 
 Characteristics: relies on method constraints from [1] and command abstractions from [2], focusing on task planning, execution loops, and process reflection.
 
+`utCodeAgentCLI` is this repository's own CaTDD-native code-agent layer. It should use [1] and [2] as its base, then add deeper planning and execution with CaTDD in mind.
+
 ## Assets Already Landed
 
 ### agentSkill: package the method as reusable capability
@@ -65,11 +71,11 @@ Characteristics: relies on method constraints from [1] and command abstractions 
 `agentSkill/comment-alive-test-driven-development` packages CaTDD into a triggerable skill:
 
 - `agentSkill/comment-alive-test-driven-development/SKILL.md`
-	- Skill definition: trigger conditions, input/output, constraints, phased workflow
+  - Skill definition: trigger conditions, input/output, constraints, phased workflow
 - `agentSkill/comment-alive-test-driven-development/README.md`
-	- Human-readable guide: US/AC/TC hierarchy, priority framework, usage examples
+  - Human-readable guide: US/AC/TC hierarchy, priority framework, usage examples
 - `agentSkill/comment-alive-test-driven-development/references/`
-	- Bundled references: User Guide / Design Prompt / Template / PPT
+  - Bundled references: User Guide / method prompt / Template / PPT
 
 This asset layer can be seen as the key bridge from [1] to [2]/[3].
 
@@ -102,7 +108,7 @@ This asset layer can be seen as the key bridge from [1] to [2]/[3].
 
 ## Quick Start
 
-1. Read `methodPrompts/CaTDD_UserGuide.md` first for the full picture.
+1. Read `README_UserGuide.md` first for the full picture.
 2. Use `methodPrompts/CaTDD_ImplTemplate.cxx` to create a new test-file skeleton.
 3. Follow `agentSkill/comment-alive-test-driven-development/SKILL.md` to execute with a skill-based workflow.
 4. Run `bash agentSkill/makeSkill.sh` to package skill references and links.

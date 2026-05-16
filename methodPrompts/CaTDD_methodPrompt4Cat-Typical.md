@@ -1,4 +1,4 @@
-# CaTDD Design Prompt for Category: Typical
+# CaTDD method prompt for Category: Typical
 
 Use this prompt when designing P1 Functional tests for core happy-path behavior.
 
@@ -32,6 +32,19 @@ Typical proves that the feature works correctly under normal, intended use.
 - Verify observable behavior rather than implementation details.
 - Keep setup ordinary and valid.
 - Prefer one behavior per test with no more than three key assertions.
+
+## Design Skeleton
+
+```text
+// @[Class]: P1 Functional / ValidFunc
+// @[Category]: Typical
+// @[Intent]: Prove the core happy-path workflow under ordinary valid use.
+// @[UseWhen]: Inputs, state, dependencies, environment, and caller behavior are valid.
+// @[AvoidWhen]: The scenario is mainly Edge, Misuse, Fault, State, Capability, or Concurrency.
+// @[US]: [US IDs]
+// @[AC]: [AC IDs]
+// @[TC]: verify[CoreBehavior]_by[ValidCondition]_expect[SuccessResult]
+```
 
 ## US/AC/TC Pattern
 

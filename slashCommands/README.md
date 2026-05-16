@@ -9,6 +9,16 @@ This directory contains reusable slash-command prompts that operationalize CaTDD
 - It turns method chunks into triggerable command units.
 - It reduces invocation cost for GUI or chat-driven workflows.
 - It improves consistency when applying the method repeatedly.
+- It is code-agent agnostic; commands should be usable by Copilot, Cline, Continue, or any assistant that can consume prompt text.
+
+## Portability contract
+
+Slash commands should not depend on one editor, one model provider, or one programming language.
+
+- Source of method truth: `methodPrompts`
+- Command form: small, triggerable, parameterized prompt units
+- Expected consumers: human developers, GUI/chat assistants, and `utCodeAgentCLI`
+- Stability rule: when a command conflicts with `methodPrompts`, update `methodPrompts` first and regenerate or revise the command.
 
 ## Typical contents
 
@@ -20,8 +30,9 @@ This directory contains reusable slash-command prompts that operationalize CaTDD
 
 - Upstream input: `methodPrompts` (method definitions)
 - Downstream consumers:
-	- `utCodeAgentCLI` (agent pipelines calling commands)
-	- Developers using assistant GUI/chat mode
+  - `utCodeAgentCLI` (agent pipelines calling commands)
+  - Developers using assistant GUI/chat mode
+  - Any compatible code assistant, such as Copilot, Cline, Continue, or similar tools
 
 ## Maintenance rule
 

@@ -1,4 +1,4 @@
-# CaTDD Design Prompt for Category: Edge
+# CaTDD method prompt for Category: Edge
 
 Use this prompt when designing P1 Functional tests for valid edge cases, boundary values, limits, and mode variations.
 
@@ -33,6 +33,19 @@ Edge proves that the feature still works correctly at the edges of valid use. In
 - Make the boundary explicit: min, max, exactly full, one before full, one after full, first call, last call.
 - State whether the expected result is success, a documented non-error result, or a graceful functional error.
 - Keep each test centered on one edge so failures are diagnostic.
+
+## Design Skeleton
+
+```text
+// @[Class]: P1 Functional / ValidFunc
+// @[Category]: Edge
+// @[Intent]: Prove valid edge values, limits, and mode variations.
+// @[UseWhen]: The caller is valid, but the condition is empty, zero, min, max, full, first, last, or mode-specific.
+// @[AvoidWhen]: The scenario is caller misuse, external fault, capacity, performance, state, or concurrency.
+// @[US]: [US IDs]
+// @[AC]: [AC IDs]
+// @[TC]: verify[Behavior]_by[EdgeCondition]_expect[DocumentedResult]
+```
 
 ## US/AC/TC Pattern
 

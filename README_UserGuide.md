@@ -2,7 +2,7 @@
 
 **Quick Reference for Comment-alive Test-Driven Development**
 
-> Note: This guide originated from `MyIOC_inTDD_withGHC/LLM` and is maintained in this repository at `methodPrompts/CaTDD_UserGuide.md`; skill references point here via symlink. Some example project paths (for example `../Test/*.cxx`) are illustrative and may not exist in this repository.
+> Note: CaTDD is the methodology invented by EnigmaWU. IOC is the PlayKata module and proving ground that helped CaTDD evolve from an idea into a reusable methodology. This guide is maintained in this repository at `README_UserGuide.md`; some example project paths from IOC are illustrative and may not exist in this repository.
 
 ---
 
@@ -36,6 +36,7 @@ graph TD
 ```
 
 **Inner Spirit**:
+>
 > - 🤖 **LLM-Friendly Context** - Human + AI collaboration
 > - 🔄 **Iterate Forever** - Design and code evolve as one
 
@@ -46,6 +47,7 @@ graph TD
 **CaTDD** (Comment-alive Test-Driven Development) is a **software development methodology** where **structured comments define verification design**, which LLMs use to generate test and production code, enabling humans and AI to iterate forward together.
 
 **Key Principles**:
+
 - **Comments ARE Verification Design** - Not documentation, but executable specifications (US/AC/TC)
 - **LLMs Generate Code** - AI parses structured comments to produce test and production code
 - **Iterate Forward Together** - Design and code evolve as one through human+AI collaboration
@@ -53,10 +55,11 @@ graph TD
 **Revolutionary Shift**: Your test file becomes the **single source of truth** - readable by humans, parseable by LLMs, and verified by tests.
 
 **CaTDD vs IOC**:
-- **CaTDD** = The **methodology** (TDD improved for the LLM era by EnigmaWU)
-- **IOC** = A **demonstration project** (PlayKata module showcasing CaTDD in practice)
 
-> This guide explains the CaTDD methodology with examples drawn from the IOC project.
+- **CaTDD** = The **methodology invented by EnigmaWU** (TDD improved for the LLM era)
+- **IOC** = A **PlayKata module/proving ground** that helped CaTDD move from idea to real methodology
+
+> This guide explains the CaTDD methodology. IOC examples are practice evidence and learning material, not the source of ownership for the method.
 
 ---
 
@@ -74,6 +77,7 @@ graph TD
 ## Quick Start in 5 Minutes
 
 ### 1. Copy the Template
+
 ```bash
 cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
@@ -81,6 +85,7 @@ Run this command from the repository root so `methodPrompts/` resolves correctly
 If your project does not have a `Test/` directory, create one or adjust the destination path.
 
 ### 2. Fill in the OVERVIEW
+
 ```cpp
 /**
  * @brief
@@ -96,6 +101,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 ```
 
 ### 3. Write Your First User Story
+
 ```cpp
 /**
  * US-1: As an event producer,
@@ -105,6 +111,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 ```
 
 ### 4. Define Acceptance Criteria
+
 ```cpp
 /**
  * [@US-1] Non-blocking event posting
@@ -115,6 +122,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 ```
 
 ### 5. Specify Test Case (in TEST CASES section)
+
 ```cpp
 //======>BEGIN OF TEST CASES=======================================================================
 /**
@@ -129,6 +137,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 ```
 
 ### 6. Let LLM Generate Test Implementation
+
 ```cpp
 //======BEGIN OF UNIT TESTING IMPLEMENTATION=======================================================
 /**
@@ -160,6 +169,7 @@ TEST(EventPosting, verifyNonBlockPost_byFullQueue_expectImmediateReturn) {
 
 **Step 1: Define Coverage Strategy**  
 Identify key dimensions:
+
 - Service Role × Client Role × Mode
 - Component State × Operation × Edge
 - Concurrency × Resource Limits × Faults
@@ -317,6 +327,7 @@ TEST(EventPosting, verifyNonBlockPost_byFullQueue_expectImmediateReturn) {
 6. **Repeat** for next test
 
 **Step 10: Refactor & Organize**  
+
 - Extract common setup to fixtures
 - Move stable tests to category files
 - Update documentation
@@ -362,6 +373,7 @@ So that [value/benefit].
 ```
 
 **Guidelines**:
+
 - Focus on value, not implementation
 - 1 US typically = 1 major feature/behavior
 - Usually 2-5 US per module
@@ -397,6 +409,7 @@ THEN [expected outcome],
 ```
 
 **Guidelines**:
+
 - Each US should have 1-4 ACs
 - Each AC must be independently verifiable
 - Use precise, unambiguous language
@@ -446,6 +459,7 @@ verifyBehavior_byCondition_expectResult
 ```
 
 **Examples**:
+
 - `verifyServiceRegistration_byValidName_expectSuccess`
 - `verifyEventPost_byFullQueue_expectNonBlockReturn`
 - `verifyCommandExec_byMultipleClients_expectIsolatedExecution`
@@ -511,12 +525,14 @@ P4 🎯 ADDONS = Demo/Example
 **ValidFunc** - Proves it works correctly:
 
 **⭐ Typical** (Core workflows)
+
 - **When**: FIRST priority
 - **What**: Happy paths, main usage scenarios
 - **General examples**: User registration, file save, API call success
 - **IOC examples**: Service registration, event flow, command execution
 
 **🔲 Edge** (Edge cases & limits)
+
 - **When**: Right after Typical
 - **What**: Min/max values, empty/null inputs, mode variations
 - **General examples**: Empty string, zero/negative numbers, maximum array size
@@ -525,12 +541,14 @@ P4 🎯 ADDONS = Demo/Example
 **InvalidFunc** - Proves it fails gracefully:
 
 **🚫 Misuse** (Wrong usage patterns)
+
 - **When**: After core functionality
 - **What**: Incorrect API usage, wrong call sequences
 - **General examples**: Using after close, wrong parameter types, missing prerequisites
 - **IOC examples**: Double-init service, wrong command sequence, invalid handle
 
 **⚠️ Fault** (Error handling)
+
 - **When**: Critical for reliability
 - **What**: External failures, resource exhaustion
 - **General examples**: Network timeout, out of memory, disk full, database down
@@ -541,18 +559,21 @@ P4 🎯 ADDONS = Demo/Example
 ### P2 🥈 Design Testing
 
 **🔄 State** (Lifecycle & FSM)
+
 - **When**: Essential for stateful components
 - **What**: State transitions, object lifecycle
 - **General examples**: Connection states, document lifecycle, user session states
 - **IOC examples**: Service states (Init→Ready→Running→Stopped), link states
 
 **🏆 Capability** (Capacity & limits)
+
 - **When**: After basic functionality
 - **What**: Maximum capacity, system limits
 - **General examples**: Max users, file size limits, request rate limits
 - **IOC examples**: Max concurrent connections, event queue capacity, service limits
 
 **🚀 Concurrency** (Thread safety)
+
 - **When**: For concurrent components
 - **What**: Multi-threading, race conditions, deadlocks
 - **General examples**: Concurrent file access, shared cache updates, parallel requests
@@ -563,22 +584,26 @@ P4 🎯 ADDONS = Demo/Example
 ### P3 🥉 Quality Testing
 
 **⚡ Performance** (Speed & efficiency)
+
 - **When**: When SLOs exist
 - **What**: Latency, throughput, resource usage
 - **General examples**: Page load time, query response time, memory footprint
 - **IOC examples**: Event posting latency, command roundtrip time, queue throughput
 
 **🛡️ Robust** (Stability)
+
 - **When**: Production readiness
 - **What**: Stress testing, soak testing, repetition
 - **Example**: 1000x repetition, 24h soak test
 
 **🔄 Compatibility** (Cross-platform)
+
 - **When**: Multi-platform products
 - **What**: Different OS, versions, configurations
 - **Example**: Windows/Linux/macOS variations
 
 **🎛️ Configuration** (Settings validation)
+
 - **When**: Configurable systems
 - **What**: Different configuration scenarios
 - **Example**: Debug/Release builds, feature flags
@@ -588,6 +613,7 @@ P4 🎯 ADDONS = Demo/Example
 ### P4 🎯 Addons Testing
 
 **🎨 Demo/Example** (Documentation)
+
 - **When**: Optional, for documentation
 - **What**: End-to-end demonstrations, tutorials
 - **Example**: Complete workflow showcase
@@ -653,29 +679,34 @@ stateDiagram-v2
 ### When to Use Each Status
 
 **⚪ TODO/PLANNED**
+
 - You've written the TC specification in comments
 - Test code not yet written
 - Planning phase complete
 
 **🔴 RED/IMPLEMENTED**
+
 - Test code is written
 - Test runs but FAILS (expected!)
 - Production code not yet implemented
 - This is the "RED" in TDD Red→Green
 
 **🟢 GREEN/PASSED**
+
 - Test code is written
 - Test runs and PASSES
 - Production code is implemented
 - This is the "GREEN" in TDD Red→Green
 
 **⚠️ ISSUES**
+
 - Test is flaky or intermittently failing
 - Known bug in production code
 - Design issue discovered
 - Need investigation or fix
 
 **🚫 BLOCKED**
+
 - Cannot write/run test due to missing dependency
 - Waiting for another feature to be completed
 - External blocker (infrastructure, tool, etc.)
@@ -747,11 +778,13 @@ TEST(Category, verifyBehavior_byCondition_expectResult) {
 **About `VERIFY_KEYPOINT_xyz` Macros**:
 
 CaTDD recommends using **enhanced assertion macros** that:
+
 - Mark **critical verification points** with clear descriptions
 - Print descriptive messages: `🔑 [KEY VERIFY POINT] Description`
 - Provide better failure context than plain `ASSERT_xyz`
 
 IOC project uses `VERIFY_KEYPOINT_xyz` (defined in `_UT_IOC_Common.h`):
+
 - `VERIFY_KEYPOINT_EQ(actual, expected, "description")`
 - `VERIFY_KEYPOINT_NE(val1, val2, "description")`
 - `VERIFY_KEYPOINT_TRUE(condition, "description")`
@@ -822,12 +855,14 @@ Run these tests **early and often** to catch common issues:
 Ready to write your first CaTDD test file? Follow this checklist:
 
 ### ✅ Step 1: Copy Template
+
 ```bash
 cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
 If your project does not have a `Test/` directory, create one or adjust the destination path.
 
 ### ✅ Step 2: Fill OVERVIEW Section
+
 - [ ] What functionality are you testing?
 - [ ] Where in the codebase?
 - [ ] Why is this important?
@@ -836,41 +871,48 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 - [ ] Note dependencies and related files
 
 ### ✅ Step 3: Define Coverage Strategy
+
 - [ ] Identify 2-3 key dimensions
 - [ ] Create coverage matrix
 - [ ] List major scenarios
 
 ### ✅ Step 4: Draft Ideas Freely
+
 - [ ] Brainstorm "what if" scenarios
 - [ ] Don't worry about format yet
 - [ ] Capture edge cases
 - [ ] Note error conditions
 
 ### ✅ Step 5: Write User Stories
+
 - [ ] Express value from user perspective
 - [ ] Use "As a... I want... So that..." format
 - [ ] Focus on business value
 - [ ] 2-5 US for the module
 
 ### ✅ Step 6: Define Acceptance Criteria
+
 - [ ] Use GIVEN/WHEN/THEN format
 - [ ] 1-4 AC per US
 - [ ] Make each AC independently verifiable
 - [ ] Cover success AND failure cases
 
 ### ✅ Step 7: Specify Test Cases
+
 - [ ] Detail concrete steps for each AC
 - [ ] Use naming convention: `verifyBehavior_byCondition_expectResult`
 - [ ] 1+ TC per AC
 - [ ] Add status markers (⚪ TODO)
 
 ### ✅ Step 8: Prioritize Tests
+
 - [ ] Mark P1 (Functional) tests
 - [ ] Mark P2 (Design) tests if needed
 - [ ] Mark P3 (Quality) tests if needed
 - [ ] Adjust based on risk scoring
 
 ### ✅ Step 9: Implement Using TDD
+
 - [ ] Write test first (should FAIL) ← 🔴 RED
 - [ ] Run test, confirm RED
 - [ ] Implement minimal production code
@@ -880,6 +922,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 - [ ] Repeat for next test
 
 ### ✅ Step 10: Quality Gates
+
 - [ ] All P1 tests GREEN before moving to P2
 - [ ] Fast-Fail Six all passing
 - [ ] No critical bugs
@@ -1073,6 +1116,7 @@ TEST(EventConcurrency, verifyEventPost_byMultipleThreads_expectAllQueued) {
 ```
 
 **💡 Key Takeaway from Patterns**: 
+
 - **TC specs** (verification design) go in the TEST CASES section
 - **TEST code** (implementation) goes in the IMPLEMENTATION section  
 - **Both** live in the same file - this is "comment-alive"!
@@ -1146,9 +1190,9 @@ P4: Demo/Example
 
 ## Need More Details?
 
-- **Methodology Deep Dive**: See [CaTDD_DesignPrompt.md](CaTDD_DesignPrompt.md)
-- **Category Design Prompts**: See `CaTDD_DesignPrompt4Cat-*.md` for Typical, Edge, Misuse, Fault, State, Capability, and Concurrency guidance
-- **Code Template**: See [CaTDD_ImplTemplate.cxx](CaTDD_ImplTemplate.cxx)
+- **Methodology Deep Dive**: See [methodPrompts/CaTDD_methodPrompt.md](methodPrompts/CaTDD_methodPrompt.md)
+- **Category method prompts**: See `methodPrompts/CaTDD_methodPrompt4Cat-*.md` for category-specific design skeleton guidance
+- **Code Template**: See [methodPrompts/CaTDD_ImplTemplate.cxx](methodPrompts/CaTDD_ImplTemplate.cxx)
 - **Questions?**: Ask EnigmaWU or check existing test files in [Test/](../Test/)
 
 ---
@@ -1156,12 +1200,14 @@ P4: Demo/Example
 ## Summary
 
 **CaTDD Methodology** (Universal):
+
 - A TDD approach improved for the LLM era
 - Applicable to any programming language or domain
 - Structured comments (US/AC/TC) as living documentation
 - Can be adopted in your own projects
 
 **IOC Project** (Demonstration):
+
 - A C/C++ PlayKata showcasing CaTDD
 - Real test files following CaTDD principles
 - Reference implementation you can learn from

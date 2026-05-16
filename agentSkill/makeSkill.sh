@@ -21,8 +21,8 @@ fi
 mkdir -p "$SKILL_DIR/references"
 
 required_sources=(
-  "$REPO_ROOT/methodPrompts/CaTDD_UserGuide.md"
-  "$REPO_ROOT/methodPrompts/CaTDD_DesignPrompt.md"
+  "$REPO_ROOT/README_UserGuide.md"
+  "$REPO_ROOT/methodPrompts/CaTDD_methodPrompt.md"
   "$REPO_ROOT/methodPrompts/CaTDD_ImplTemplate.cxx"
   "$REPO_ROOT/methodPrompts/CaTDD-UserGuide-PPT.md"
   "$REPO_ROOT/slashCommands"
@@ -35,8 +35,13 @@ for source in "${required_sources[@]}"; do
   fi
 done
 
-ln -sfn "../../../methodPrompts/CaTDD_UserGuide.md" "$SKILL_DIR/references/CaTDD_UserGuide.md"
-ln -sfn "../../../methodPrompts/CaTDD_DesignPrompt.md" "$SKILL_DIR/references/CaTDD_DesignPrompt.md"
+legacy_user_guide_ref="$SKILL_DIR/references/CaTDD_""UserGuide.md"
+legacy_method_prompt_ref="$SKILL_DIR/references/CaTDD_""Design""Prompt.md"
+rm -f "$legacy_user_guide_ref"
+rm -f "$legacy_method_prompt_ref"
+
+ln -sfn "../../../README_UserGuide.md" "$SKILL_DIR/references/README_UserGuide.md"
+ln -sfn "../../../methodPrompts/CaTDD_methodPrompt.md" "$SKILL_DIR/references/CaTDD_methodPrompt.md"
 ln -sfn "../../../methodPrompts/CaTDD_ImplTemplate.cxx" "$SKILL_DIR/references/CaTDD_ImplTemplate.cxx"
 ln -sfn "../../../methodPrompts/CaTDD-UserGuide-PPT.md" "$SKILL_DIR/references/CaTDD-UserGuide-PPT.md"
 ln -sfn "../../slashCommands" "$SKILL_DIR/slashCommands"

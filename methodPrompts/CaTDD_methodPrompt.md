@@ -1,4 +1,4 @@
-# CaTDD Design Prompt
+# CaTDD method prompt
 
 **Short name**: CaTDD (Comment‑alive Test‑Driven Development)
 
@@ -9,10 +9,39 @@
     - Comments are first-class artifacts that LLMs can parse and update
     - US/AC/TC format bridges human intent and machine-executable tests
   - `TDD` is same meaning as traditional TDD.
-  - `EnigmaWU` named this method and practicing from 2023.10.
+  - `EnigmaWU` invented and named this method, and has practiced it since 2023.10.
+  - IOC is a PlayKata module/proving ground that helped CaTDD evolve from idea to real reusable methodology.
 
 ## Purpose
 Turn design intent into executable tests by writing rich, structured comments first, then evolving them into unit tests and code. The test file serves as a living design document for humans and LLMs.
+
+## Design Skeleton Contract
+
+In CaTDD, **design** means a reusable comment skeleton inside the test/source file, not only an external explanation document.
+
+Each skeleton is organized by:
+
+- **Class**: the priority family, such as `P1 Functional`, `P2 Design`, `P3 Quality`, or `P4 Addons`.
+- **Category**: the specific verification angle, such as `Typical`, `Edge`, `Misuse`, `Fault`, `State`, `Capability`, `Concurrency`, `Performance`, `Robust`, `Compatibility`, `Configuration`, or `Demo/Example`.
+
+Every Class/Category skeleton should preserve this minimum shape so developers and CodeAgents can read and fill it consistently:
+
+```text
+//=================================================================================================
+// [Class] / [Category] Design Skeleton
+//=================================================================================================
+// @[Class]: P1 Functional / ValidFunc
+// @[Category]: Typical
+// @[Intent]: What this category proves for this component
+// @[UseWhen]: When this category applies
+// @[AvoidWhen]: When to move the scenario to another category
+// @[US]: User Story IDs covered by this category
+// @[AC]: Acceptance Criteria IDs covered by this category
+// @[TC]: Test Cases, status, and expected TDD next action
+//=================================================================================================
+```
+
+For example, `P1 Functional / Typical` is the design skeleton for core happy-path functional verification. `P1 Functional / Edge` is a different skeleton for valid boundary values, limits, and mode variations.
 
 ## Core Principles
 
@@ -56,7 +85,7 @@ Stage-0: Freely Drafting
 Stage-1: Classifying Design
 
 - Classify drafts into CaTDD categories before writing final US/AC/TC design.
-- Use category-specific prompt files (`CaTDD_DesignPrompt4Cat-*.md`) when a category needs deeper guidance.
+- Use category-specific prompt files (`CaTDD_methodPrompt4Cat-*.md`) when a category needs deeper guidance.
 - Treat **Edge** as the canonical category name; **Boundary** is only an explanatory alias for edge values and limits.
 
 **Step 2: Freely Draft Ideas**
@@ -1192,7 +1221,7 @@ When you encounter problems during test implementation, follow these systematic 
    - README_Glossary.md (terminology and concepts)
    - Doc/*.md (detailed design documents)
    - Source/[Component].md (implementation notes for specific modules)
-   - methodPrompts/CaTDD_DesignPrompt.md (this testing methodology)
+   - methodPrompts/CaTDD_methodPrompt.md (this testing methodology)
    ```
    - Look for explicit behavior specifications
    - Note design principles and constraints

@@ -156,8 +156,8 @@ For each TC in priority order (P1 first):
    > - Coverage gaps: [list or none]"
 
 ## Resources
-- `references/CaTDD_UserGuide.md` — Full CaTDD user guide with examples, quick-start guide, and workflow.
-- `references/CaTDD_DesignPrompt.md` — Complete methodology specification with priority framework, category definitions, quality gates, and context-specific priority adjustments.
+- `references/README_UserGuide.md` — Full CaTDD user guide with examples, quick-start guide, and workflow.
+- `references/CaTDD_methodPrompt.md` — Complete methodology specification with priority framework, category definitions, design skeletons, quality gates, and context-specific priority adjustments.
 - `references/CaTDD_ImplTemplate.cxx` — C++ implementation template showing the complete CaTDD file structure (copy and adapt for any language).
 - `references/CaTDD-UserGuide-PPT.md` — Presentation-style overview of CaTDD covering all concepts with slides, diagrams, and examples.
 - `slashCommands` — Shared slash command materials linked from repository `slashCommands/`.

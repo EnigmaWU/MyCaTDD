@@ -1,4 +1,4 @@
-# CaTDD Design Prompt for Category: Capability
+# CaTDD method prompt for Category: Capability
 
 Use this prompt when designing P2 Design-oriented tests for designed capacity, limits, and maximum ability.
 
@@ -32,6 +32,19 @@ Capability proves that the implementation matches the intended capacity contract
 - Test exact limit behavior: below limit, at limit, above limit.
 - Distinguish "maximum supported" from "fast enough".
 - Capture whether exceeding capacity is an error, backpressure, queueing, rejection, or degradation.
+
+## Design Skeleton
+
+```text
+// @[Class]: P2 Design
+// @[Category]: Capability
+// @[Intent]: Prove designed capacity, maximum ability, and over-limit behavior.
+// @[UseWhen]: The design promises a default, maximum, minimum, or configurable capacity.
+// @[AvoidWhen]: The scenario is about speed, repeated stability, or thread interleaving.
+// @[CapacitySource]: [constant/config/API/product claim/discovered limit]
+// @[US]/@[AC]: [traceability IDs]
+// @[TC]: verify[Capability]_by[CapacityCondition]_expect[LimitBehavior]
+```
 
 ## US/AC/TC Pattern
 

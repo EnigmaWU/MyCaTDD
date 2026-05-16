@@ -1,4 +1,4 @@
-# CaTDD Design Prompt for Category: Concurrency
+# CaTDD method prompt for Category: Concurrency
 
 Use this prompt when designing P2 Design-oriented tests for thread safety, synchronization, race conditions, and parallel API usage.
 
@@ -32,6 +32,19 @@ Concurrency proves that correct behavior survives simultaneous access and interl
 - Define the interleaving or contention pattern being verified.
 - Prefer deterministic barriers/latches over arbitrary sleeps.
 - Verify correctness invariants: all work processed once, no lost update, no corruption, no deadlock, stable final state.
+
+## Design Skeleton
+
+```text
+// @[Class]: P2 Design
+// @[Category]: Concurrency
+// @[Intent]: Prove thread-safety and correctness under simultaneous access.
+// @[UseWhen]: Multiple actors can access shared state or interleave operations.
+// @[AvoidWhen]: The scenario is only capacity, performance load, or single-threaded lifecycle.
+// @[ActorsAndResource]: [actors, shared resource, synchronization strategy]
+// @[Invariant]: [what must remain true]
+// @[TC]: verify[Operation]_by[ConcurrentPattern]_expect[CorrectInvariant]
+```
 
 ## US/AC/TC Pattern
 

@@ -16,7 +16,7 @@
 // TDD WORKFLOW:
 //   Design → Draft → Structure → Test (RED) → Code (GREEN) → Refactor → Repeat
 //
-// REFERENCE: methodPrompts/CaTDD_DesignPrompt.md for full methodology
+// REFERENCE: methodPrompts/CaTDD_methodPrompt.md for full methodology
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "_UT_IOC_Common.h"
@@ -66,6 +66,22 @@
  * 📋 TEST CASE DESIGN ASPECTS/CATEGORIES
  *
  * DESIGN PRINCIPLE: IMPROVE VALUE • AVOID LOSS • BALANCE SKILL vs COST
+ *
+ * DESIGN SKELETON CONTRACT:
+ *   In CaTDD, "design" means a comment skeleton that lives in this test file.
+ *   Each skeleton is organized by Class/Priority and Category, for example:
+ *
+ *     @[Class]: P1 Functional / ValidFunc
+ *     @[Category]: Typical
+ *     @[Intent]: Prove the core happy-path workflow.
+ *     @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
+ *     @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
+ *     @[US]: US-1
+ *     @[AC]: AC-1
+ *     @[TC]: TC-1 verifyCore_byValidInput_expectSuccess
+ *
+ *   Developers fill this skeleton to make verification intent clear.
+ *   CodeAgents preserve and update this skeleton before generating TEST code.
  *
  * PRIORITY FRAMEWORK:
  *   P1 🥇 FUNCTIONAL:     Must complete before P2 (ValidFunc + InvalidFunc)
@@ -348,8 +364,11 @@
  *===================================================================================================
  *
  * ═════════════════════════════════════════════════════════════════════════════════════════════
- * 📋 [CATEGORY: Typical] Core Functionality Tests
+ * 📋 [CLASS: P1 Functional / ValidFunc] [CATEGORY: Typical] Core Functionality Tests
  * ═════════════════════════════════════════════════════════════════════════════════════════════
+ *  @[Intent]: Prove the core happy-path workflow under valid ordinary use.
+ *  @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
+ *  @[AvoidWhen]: The scenario is mainly Edge, Misuse, Fault, State, Capability, or Concurrency.
  *
  * [@AC-1,US-1] Basic command execution with callback
  *  🟢 TC-1: verifyServiceAsCmdExecutor_bySingleClient_expectSynchronousResponse
@@ -363,8 +382,11 @@
  *      @[Status]: IMPLEMENTED/RED - Need to implement CALC command handler
  *
  * ═════════════════════════════════════════════════════════════════════════════════════════════
- * 📋 [CATEGORY: Edge] Edge Cases and Limits
+ * 📋 [CLASS: P1 Functional / ValidFunc] [CATEGORY: Edge] Edge Cases and Limits
  * ═════════════════════════════════════════════════════════════════════════════════════════════
+ *  @[Intent]: Prove valid edge values, limits, and mode variations.
+ *  @[UseWhen]: The caller is valid, but the condition is empty, zero, min, max, full, first, last, or mode-specific.
+ *  @[AvoidWhen]: The caller violates the API contract, or the scenario is really capacity/performance/concurrency.
  *
  * [@AC-2,US-1] Non-blocking behavior under load
  *  ⚪ TC-1: verifyNonBlockPost_byFullQueue_expectImmediateReturn

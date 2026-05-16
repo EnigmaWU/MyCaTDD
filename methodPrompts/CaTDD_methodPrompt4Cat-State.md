@@ -1,4 +1,4 @@
-# CaTDD Design Prompt for Category: State
+# CaTDD method prompt for Category: State
 
 Use this prompt when designing P2 Design-oriented tests for lifecycle, state machines, and state transition logic.
 
@@ -32,6 +32,19 @@ State proves that the implementation follows the intended lifecycle and transiti
 - Test both allowed transitions and rejected transitions.
 - Verify observable state, not only return codes.
 - Include cleanup paths such as close, reset, stop, and recovery from error.
+
+## Design Skeleton
+
+```text
+// @[Class]: P2 Design
+// @[Category]: State
+// @[Intent]: Prove lifecycle and state-machine transitions match design intent.
+// @[UseWhen]: Operations depend on current state or lifecycle phase.
+// @[AvoidWhen]: The scenario is only stateless happy path, simple edge value, or caller misuse.
+// @[StateModel]: [states and allowed transitions]
+// @[US]/@[AC]: [traceability IDs]
+// @[TC]: verify[Lifecycle]_by[TransitionSequence]_expect[TargetState]
+```
 
 ## US/AC/TC Pattern
 

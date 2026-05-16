@@ -640,7 +640,7 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 测试
 ### 第 1 天：设置
 
 - [ ] 将 `CaTDD_ImplTemplate.cxx` 复制到你的项目
-- [ ] 阅读 `CaTDD_DesignPrompt.md` 了解方法论细节
+- [ ] 阅读 `CaTDD_methodPrompt.md` 了解方法论细节
 - [ ] 查看 IOC 项目 `/Test` 文件夹中的示例测试
 - [ ] 设置自定义 VERIFY_KEYPOINT 宏（可选）
 
@@ -668,9 +668,9 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 测试
 
 ### 📚 核心文档
 
-- **CaTDD_UserGuide.md** — 综合用户指南（本演示的来源）
-- **CaTDD_DesignPrompt.md** — 详细的方法论说明
-- **CaTDD_DesignPrompt4Cat-*.md** — 分类专用设计提示词
+- **README_UserGuide.md** — 综合用户指南（本演示的来源）
+- **CaTDD_methodPrompt.md** — 详细的方法论说明
+- **CaTDD_methodPrompt4Cat-*.md** — 分类专用方法提示词
 - **CaTDD_ImplTemplate.cxx** — 新测试文件的模板
 
 ### 🔍 真实示例（IOC 项目）
@@ -884,8 +884,8 @@ RED（失败测试）→ GREEN（通过测试）→ 重构
 **创建者：EnigmaWU** • 始于 2023年10月
 
 **资源**：
-- 用户指南：`methodPrompts/CaTDD_UserGuide.md`
-- 方法论：`methodPrompts/CaTDD_DesignPrompt.md`
+- 用户指南：`README_UserGuide.md`
+- 方法论：`methodPrompts/CaTDD_methodPrompt.md`
 - 模板：`methodPrompts/CaTDD_ImplTemplate.cxx`
 - 示例：`Test/UT_*.cxx`（80+ 测试文件）
 

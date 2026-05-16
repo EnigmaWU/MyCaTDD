@@ -1,4 +1,4 @@
-# CaTDD Design Prompt for Category: Fault
+# CaTDD method prompt for Category: Fault
 
 Use this prompt when designing P1 Functional tests for failures caused by dependencies, resources, processes, networks, storage, or runtime environment.
 
@@ -32,6 +32,19 @@ Fault proves that the system fails right when the caller behaves correctly but t
 - Verify the failure result and the recovery or cleanup behavior.
 - Avoid nondeterministic tests where the fault might not actually happen.
 - Make external dependency boundaries explicit so the test can be repeated reliably.
+
+## Design Skeleton
+
+```text
+// @[Class]: P1 Functional / InvalidFunc
+// @[Category]: Fault
+// @[Intent]: Prove graceful behavior when dependencies, resources, processes, or environment fail.
+// @[UseWhen]: The caller is valid but an external/runtime fault is injected or simulated.
+// @[AvoidWhen]: The scenario is caller misuse, simple valid edge behavior, or long-running robustness.
+// @[US]: [US IDs]
+// @[AC]: [AC IDs]
+// @[TC]: verify[Operation]_by[InjectedFault]_expect[GracefulFailure]
+```
 
 ## US/AC/TC Pattern
 
