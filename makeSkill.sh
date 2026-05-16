@@ -38,6 +38,8 @@ ln -sfn "../../../methodPrompts/CaTDD_UserGuide.md" "$SKILL_DIR/references/CaTDD
 ln -sfn "../../../methodPrompts/CaTDD_DesignPrompt.md" "$SKILL_DIR/references/CaTDD_DesignPrompt.md"
 ln -sfn "../../../methodPrompts/CaTDD_ImplTemplate.cxx" "$SKILL_DIR/references/CaTDD_ImplTemplate.cxx"
 ln -sfn "../../../methodPrompts/CaTDD-UserGuide-PPT.md" "$SKILL_DIR/references/CaTDD-UserGuide-PPT.md"
-ln -sfn "../../slashCommands" "$SKILL_DIR/slashCommands"
+
+slash_commands_target="$(realpath --relative-to="$SKILL_DIR" "$REPO_ROOT/slashCommands")"
+ln -sfn "$slash_commands_target" "$SKILL_DIR/slashCommands"
 
 echo "Skill packaged with symlinked methodPrompts and slashCommands: $SKILL_DIR"
