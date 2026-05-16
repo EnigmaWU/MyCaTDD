@@ -45,8 +45,19 @@ Prioritize test categories by: **Impact × Likelihood × Uncertainty**
 - Identify key dimensions for systematic coverage
 - Examples:
   - Service Role × Client Role × Mode (Producer/Consumer × Callback/Pull)
-  - Component State × Operation × Boundary (Init/Ready/Running × Start/Stop × Min/Max)
+  - Component State × Operation × Edge (Init/Ready/Running × Start/Stop × Min/Max)
   - Concurrency × Resource Limits × Faults (Multi-thread × Buffer Full × Network Fail)
+
+Stage-0: Freely Drafting
+
+- Capture raw scenarios, risks, examples, and questions without forcing category decisions too early.
+- Keep drafts traceable so they can be classified later instead of discarded.
+
+Stage-1: Classifying Design
+
+- Classify drafts into CaTDD categories before writing final US/AC/TC design.
+- Use category-specific prompt files (`CaTDD_DesignPrompt4Cat-*.md`) when a category needs deeper guidance.
+- Treat **Edge** as the canonical category name; **Boundary** is only an explanatory alias for edge values and limits.
 
 **Step 2: Freely Draft Ideas**
 - Capture test ideas quickly without format constraints
@@ -83,7 +94,7 @@ Prioritize test categories by: **Impact × Likelihood × Uncertainty**
 
 **Step 7: Prioritize & Track Status**
 - Default order:
-  - P1: Typical → Boundary → Misuse → Fault
+  - P1: Typical → Edge → Misuse → Fault
   - P2: State → Capability → Concurrency
   - P3: Performance → Robust → Compatibility → Configuration
   - P4: Demo/Example
@@ -113,7 +124,7 @@ Prioritize test categories by: **Impact × Likelihood × Uncertainty**
 │ Dimension 1     │ Dimension 2 │ Key Scenarios                │
 ├─────────────────┼─────────────┼──────────────────────────────┤
 │ Value A         │ Value X     │ US-1: Core happy path        │
-│ Value A         │ Value Y     │ US-2: Boundary condition     │
+│ Value A         │ Value Y     │ US-2: Edge condition         │
 │ Value B         │ Value X     │ US-3: Error handling         │
 └─────────────────┴─────────────┴──────────────────────────────┘
 ```
@@ -141,7 +152,7 @@ Prioritize test categories by: **Impact × Likelihood × Uncertainty**
 **State Machine Component**
 - State: Init, Ready, Running, Stopped, Error
 - Operation: Start, Stop, Pause, Resume, Reset
-- Boundary: First call, Last call, Max transitions
+- Edge: First call, Last call, Max transitions
 
 **Concurrent Queue**
 - Concurrency: Single-thread, Multi-thread, High-contention
@@ -160,11 +171,11 @@ Status indicators
 
 **Priority-1: Functional Testing**
 ```
-P1-Functional = ValidFunc(Typical + Boundary) + InvalidFunc(Misuse + Fault)
+P1-Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
 ```
 - **ValidFunc**: Tests with valid inputs/states - verify correct behavior
   - Typical: Happy paths and core workflows
-  - Boundary: Edge cases and parameter limits
+  - Edge: Edge cases, parameter limits, boundary values, and mode variations
 - **InvalidFunc**: Tests with invalid inputs/states - verify error handling
   - Misuse: Incorrect API usage patterns
   - Fault: External failures and recovery
@@ -181,7 +192,7 @@ P1-Functional = ValidFunc(Typical + Boundary) + InvalidFunc(Misuse + Fault)
 ### Default Test Order
 
 **P1-Functional**: ValidFunc + InvalidFunc
-- ValidFunc: Typical → Boundary (prove it works right)
+- ValidFunc: Typical → Edge (prove it works right)
 - InvalidFunc: Misuse → Fault (prove it fails right)
 
 **P2-Design**: State → Capability → Concurrency
@@ -194,7 +205,7 @@ P1-Functional = ValidFunc(Typical + Boundary) + InvalidFunc(Misuse + Fault)
 
 ## Priority-1: Functional Testing
 
-**Formula**: `P1 = ValidFunc(Typical + Boundary) + InvalidFunc(Misuse + Fault)`
+**Formula**: `P1 = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`
 
 Functional testing ensures the component behaves correctly for both valid and invalid inputs, covering the complete contract between the API and its users.
 
@@ -214,9 +225,10 @@ Tests that verify correct behavior with **valid inputs and states**.
   - Command execution with expected response
   - Normal data flow through system
 
-**2. Boundary** 🔲 *Edge Cases & Limits*
+**2. Edge** 🔲 *Edge Cases, Boundary Values & Limits*
 - **Purpose**: Test edge cases, parameter limits, and mode variations
 - **When**: High priority, right after typical cases
+- **Alias**: Boundary testing is treated as part of Edge in CaTDD.
 - **Examples**:
   - Min/Max values (zero timeout, max string length)
   - Null/empty inputs (null pointer, empty array)
@@ -248,7 +260,7 @@ Tests that verify correct **error handling and recovery** with invalid inputs, w
 ### Summary of Priority-1
 
 ✅ **Complete P1 Gate Requirements**:
-- All ValidFunc tests GREEN (Typical + Boundary)
+- All ValidFunc tests GREEN (Typical + Edge)
 - All InvalidFunc tests GREEN (Misuse + Fault)
 - Fast-Fail Six passing
 - No critical functional bugs
@@ -346,7 +358,7 @@ Optional tests that demonstrate features and provide documentation value but are
 
 **Default/Balanced Approach**
 ```
-P1: Typical → Boundary → Misuse → Fault
+P1: Typical → Edge → Misuse → Fault
 P2: State → Capability → Concurrency
 P3: Performance → Robust → Compatibility
 ```
@@ -354,7 +366,7 @@ P3: Performance → Robust → Compatibility
 
 **New Public API**
 ```
-P1: Typical → Boundary → Misuse → Fault (complete P1 thoroughly)
+P1: Typical → Edge → Misuse → Fault (complete P1 thoroughly)
 P2: State → Capability → Concurrency
 P3: Performance
 ```
@@ -362,7 +374,7 @@ P3: Performance
 
 **Stateful/FSM-Heavy Component**
 ```
-P1: Typical → Boundary (basic functional)
+P1: Typical → Edge (basic functional)
 P2: State (promote to early) → Capability → Concurrency
 P1: Misuse → Fault (complete functional)
 P3: Performance → Robust
@@ -371,7 +383,7 @@ P3: Performance → Robust
 
 **Reliability-Critical Service**
 ```
-P1: Typical → Boundary → Fault (promote) → Misuse
+P1: Typical → Edge → Fault (promote) → Misuse
 P2: State → Capability → Concurrency
 P3: Robust (promote) → Performance → Compatibility
 ```
@@ -379,7 +391,7 @@ P3: Robust (promote) → Performance → Compatibility
 
 **High-Performance System (SLOs)**
 ```
-P1: Typical → Boundary → Misuse
+P1: Typical → Edge → Misuse
 P3: Performance (promote to P2 level) → Robust
 P2: State → Capability → Concurrency
 P1: Fault (complete functional)
@@ -388,7 +400,7 @@ P1: Fault (complete functional)
 
 **Highly Concurrent Design**
 ```
-P1: Typical → Boundary → Misuse
+P1: Typical → Edge → Misuse
 P2: Concurrency (promote to first P2) → State → Capability
 P1: Fault (complete functional)
 P3: Performance → Robust
@@ -397,7 +409,7 @@ P3: Performance → Robust
 
 **Data Processing Pipeline**
 ```
-P1: Typical → Boundary → Fault → Misuse
+P1: Typical → Edge → Fault → Misuse
 P3: Performance (promote) → Robust (promote)
 P2: State → Capability → Concurrency
 ```
@@ -414,7 +426,7 @@ Risk Score = Impact × Likelihood × Uncertainty
 ```
 
 **Priority Rules**
-- Score ≥ 18: Move category immediately after Boundary
+- Score ≥ 18: Move category immediately after Edge
 - Score 12-17: Move up 2 positions from default
 - Score 9-11: Move up 1 position from default
 - Score ≤ 8: Keep default position
@@ -425,7 +437,7 @@ Concurrency in multi-threaded queue:
   Impact: 3 (data corruption)
   Likelihood: 3 (many threads)
   Uncertainty: 3 (complex interactions)
-  Score: 27 → Test immediately after Boundary
+  Score: 27 → Test immediately after Edge
 
 Performance in batch processor:
   Impact: 2 (slower but functional)
@@ -440,11 +452,11 @@ Performance in batch processor:
 
 **Gate P1: Before Leaving Priority-1 (Functional Testing)**
 
-Must complete: `ValidFunc(Typical + Boundary) + InvalidFunc(Misuse + Fault)`
+Must complete: `ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`
 
 - ✅ **ValidFunc complete** (system works correctly):
   - All Typical tests GREEN (80-90% core workflow coverage)
-  - All Boundary tests GREEN (edge cases and limits validated)
+  - All Edge tests GREEN (edge cases, boundary values, and limits validated)
 - ✅ **InvalidFunc complete** (system fails gracefully):
   - All Misuse tests GREEN or documented (wrong usage handled)
   - All Fault tests GREEN or documented (error recovery verified)
@@ -509,7 +521,7 @@ Run these tests **early and often** to catch common issues quickly:
    IOC_post(...)           → IOC_RESULT_INVALID_STATE (after cleanup)
    ```
 
-5. **Buffer Full/Empty Boundaries**
+5. **Buffer Full/Empty Edge Cases**
    ```c
    // Fill buffer to capacity
    for (i = 0; i < CAPACITY; i++)
@@ -669,8 +681,8 @@ Copy this block into your test files to track progress:
 //   ⚠️  ISSUES:           Known problem needing attention
 //
 // PRIORITY LEVELS:
-//   🥇 HIGH:    Must-have for release (Typical, critical Boundary)
-//   🥈 MEDIUM:  Important for quality (State, Misuse, most Boundary)
+//   🥇 HIGH:    Must-have for release (Typical, critical Edge)
+//   🥈 MEDIUM:  Important for quality (State, Misuse, most Edge)
 //   🥉 LOW:     Nice-to-have (Performance, advanced scenarios)
 //
 //=================================================================================================
@@ -681,10 +693,10 @@ Copy this block into your test files to track progress:
 //   🔴 [@AC-2,US-1] TC-1: verifyCore_byMaxCapacity_expectProperHandling – BLOCKED: need capacity API
 //
 //=================================================================================================
-// 🥈 MEDIUM PRIORITY – Boundary & Error Handling
+// 🥈 MEDIUM PRIORITY – Edge & Error Handling
 //=================================================================================================
-//   ⚪ [@AC-3,US-1] TC-1: verifyBoundary_byEmptyQueue_expectEmptyResult
-//   ⚪ [@AC-3,US-1] TC-2: verifyBoundary_byFullQueue_expectFullResult
+//   ⚪ [@AC-3,US-1] TC-1: verifyEdge_byEmptyQueue_expectEmptyResult
+//   ⚪ [@AC-3,US-1] TC-2: verifyEdge_byFullQueue_expectFullResult
 //   ⚪ [@AC-4,US-2] TC-1: verifyMisuse_byDoubleInit_expectError
 //
 //=================================================================================================
@@ -735,7 +747,7 @@ Copy this block into your test files to track progress:
 - Start with `UT_ComponentFreelyDrafts.cxx` for exploration
 - Move to category-specific files as tests mature:
   - `UT_ComponentTypical.cxx` - Core workflows
-  - `UT_ComponentBoundary.cxx` - Edge cases
+  - `UT_ComponentEdge.cxx` - Edge cases, boundary values, and limits
   - `UT_ComponentState.cxx` - State transitions
   - `UT_ComponentConcurrency.cxx` - Thread safety
   - etc.
@@ -912,7 +924,7 @@ Shall I proceed with implementation?"
   - Update TODO section: 🔴 → 🟢 GREEN/PASSED
   - Commit changes with clear message
 
-- ☐ **Implement P1 Boundary tests**
+- ☐ **Implement P1 Edge tests**
   - Follow same RED→GREEN cycle
   - Test edge cases: min/max values, null/empty, limits
   - Update TODO section as tests pass
@@ -934,7 +946,7 @@ Shall I proceed with implementation?"
 **Gate P1 Checkpoint**: Before proceeding to P2:
 
 ```text
-✅ All P1 ValidFunc tests GREEN (Typical + Boundary)
+✅ All P1 ValidFunc tests GREEN (Typical + Edge)
 ✅ All P1 InvalidFunc tests GREEN (Misuse + Fault)
 ✅ Fast-Fail Six tests all passing
 ✅ Code coverage ≥80% for tested modules
@@ -1148,7 +1160,7 @@ When you encounter problems during test implementation, follow these systematic 
 
 4. **Review Fast-Fail Six checklist**
    - Have you covered null/empty inputs?
-   - Have you tested boundary conditions?
+  - Have you tested edge conditions?
    - Have you verified error handling?
    - If any missing, add to test design
 
@@ -1334,7 +1346,7 @@ When you encounter problems during test implementation, follow these systematic 
    Option B: Continue with other P1 tests, defer capacity tests to P2
    Option C: Use hard-coded constant for now, add TODO to fix later
    
-   My recommendation: Option B - complete P1 ValidFunc (Typical+Boundary) first.
+  My recommendation: Option B - complete P1 ValidFunc (Typical+Edge) first.
    
    Proceed? [A/B/C]"
    ```

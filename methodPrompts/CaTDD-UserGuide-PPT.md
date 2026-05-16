@@ -189,11 +189,11 @@ graph TD
         ValidFunc[ValidFunc]
         InvalidFunc[InvalidFunc]
         Typical[⭐ Typical<br/>Core workflows]
-        Boundary[🔲 Boundary<br/>Edge cases]
+        Edge[🔲 Edge<br/>Boundary values]
         Misuse[🚫 Misuse<br/>Wrong usage]
         Fault[⚠️ Fault<br/>Error handling]
         ValidFunc --> Typical
-        ValidFunc --> Boundary
+        ValidFunc --> Edge
         InvalidFunc --> Misuse
         InvalidFunc --> Fault
     end
@@ -231,7 +231,7 @@ graph TD
 
 **ValidFunc** — Proves it works correctly:
 - **⭐ Typical**: Core workflows, happy paths
-- **🔲 Boundary**: Edge cases, min/max values, null inputs
+- **🔲 Edge**: Edge cases, boundary values, min/max values, null inputs
 
 **InvalidFunc** — Proves it fails gracefully:
 - **🚫 Misuse**: Wrong API usage, incorrect sequences
@@ -468,7 +468,7 @@ VERIFY_KEYPOINT_EQ(callbackCount, 1024, "All events processed");
 ### Common Dimension Patterns
 
 - **Option A**: Service Role × Client Role × Mode
-- **Option B**: Component State × Operation × Boundary
+- **Option B**: Component State × Operation × Edge
 - **Option C**: Concurrency × Resource Limits × Error Scenarios
 - **Custom**: [Your dimensions based on domain]
 
@@ -513,7 +513,7 @@ graph LR
 
 **Test Files**: 80+ unit test files
 **Test Categories**:
-- P1 Functional: Typical, Boundary, Misuse, Fault
+- P1 Functional: Typical, Edge, Misuse, Fault
 - P2 Design: State, Capability, Concurrency
 - P3 Quality: Performance, Robust, Compatibility
 - P4 Addons: Demo/Example
@@ -541,7 +541,7 @@ UT_FeatureTypical.cxx          // All P1 tests
 **Split by Priority** (Growing):
 ```
 UT_FeatureTypical.cxx          // P1 Typical
-UT_FeatureBoundary.cxx         // P1 Boundary
+UT_FeatureEdge.cxx             // P1 Edge
 UT_FeatureMisuse.cxx           // P1 Misuse
 UT_FeatureState.cxx            // P2 State
 ```
@@ -655,7 +655,7 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 tests
 
 ### Month 1: Build Momentum
 
-- [ ] Complete P1 Functional tests (Typical + Boundary + Misuse + Fault)
+- [ ] Complete P1 Functional tests (Typical + Edge + Misuse + Fault)
 - [ ] Add P2 Design tests if component is stateful/concurrent
 - [ ] Refactor common setup into fixtures
 - [ ] Review test naming consistency
@@ -669,6 +669,7 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 tests
 
 - **CaTDD_UserGuide.md** — Comprehensive user guide (this presentation's source)
 - **CaTDD_DesignPrompt.md** — Detailed methodology explanation
+- **CaTDD_DesignPrompt4Cat-*.md** — Category-specific design prompts
 - **CaTDD_ImplTemplate.cxx** — Template for new test files
 
 ### 🔍 Real Examples (IOC Project)
@@ -681,7 +682,7 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 tests
 **Advanced Examples**:
 - `UT_CommandStateTCP.cxx` — State machine + protocol integration
 - `UT_DataBoundaryUS4AC*.cxx` — Large feature split by AC
-- `UT_ConlesEventMayBlock.cxx` — Boundary/blocking behavior
+- `UT_ConlesEventMayBlock.cxx` — Edge/blocking behavior
 
 **Design Pattern Examples**:
 - `UT_FreelyDrafts.cxx` — Brainstorming test ideas
@@ -718,7 +719,7 @@ US-n: As a [role], I want [capability], So that [value].
 ### Priority Order
 
 ```
-P1: Typical → Boundary → Misuse → Fault
+P1: Typical → Edge → Misuse → Fault
 P2: State → Capability → Concurrency
 P3: Performance → Robust → Compatibility
 P4: Demo/Example

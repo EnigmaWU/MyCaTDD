@@ -189,11 +189,11 @@ graph TD
         ValidFunc[正向功能]
         InvalidFunc[逆向功能]
         Typical[⭐ 典型<br/>核心工作流]
-        Boundary[🔲 边界<br/>边缘情况]
+        Edge[🔲 边缘<br/>边界值]
         Misuse[🚫 误用<br/>错误使用]
         Fault[⚠️ 故障<br/>错误处理]
         ValidFunc --> Typical
-        ValidFunc --> Boundary
+        ValidFunc --> Edge
         InvalidFunc --> Misuse
         InvalidFunc --> Fault
     end
@@ -231,7 +231,7 @@ graph TD
 
 **正向功能** — 证明正确工作：
 - **⭐ 典型**：核心工作流，正常路径
-- **🔲 边界**：边缘情况，最小/最大值，空输入
+- **🔲 边缘**：边缘情况、边界值、最小/最大值、空输入
 
 **逆向功能** — 证明优雅失败：
 - **🚫 误用**：错误的 API 使用，不正确的顺序
@@ -469,7 +469,7 @@ VERIFY_KEYPOINT_EQ(callbackCount, 1024, "所有事件已处理");
 ### 常见维度模式
 
 - **选项 A**：服务角色 × 客户角色 × 模式
-- **选项 B**：组件状态 × 操作 × 边界
+- **选项 B**：组件状态 × 操作 × 边缘
 - **选项 C**：并发 × 资源限制 × 错误场景
 - **自定义**：[基于领域的你的维度]
 
@@ -514,7 +514,7 @@ graph LR
 
 **测试文件**：80+ 个单元测试文件
 **测试类别**：
-- P1 功能性：典型、边界、误用、故障
+- P1 功能性：典型、边缘、误用、故障
 - P2 设计：状态、容量、并发
 - P3 质量：性能、鲁棒、兼容性
 - P4 附加：演示/示例
@@ -542,7 +542,7 @@ UT_FeatureTypical.cxx          // 所有 P1 测试
 **按优先级拆分**（增长中）：
 ```
 UT_FeatureTypical.cxx          // P1 典型
-UT_FeatureBoundary.cxx         // P1 边界
+UT_FeatureEdge.cxx             // P1 边缘
 UT_FeatureMisuse.cxx           // P1 误用
 UT_FeatureState.cxx            // P2 状态
 ```
@@ -656,7 +656,7 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 测试
 
 ### 第 1 个月：建立动力
 
-- [ ] 完成 P1 功能性测试（典型 + 边界 + 误用 + 故障）
+- [ ] 完成 P1 功能性测试（典型 + 边缘 + 误用 + 故障）
 - [ ] 如果组件有状态/并发，添加 P2 设计测试
 - [ ] 将通用设置重构为夹具
 - [ ] 审查测试命名一致性
@@ -670,6 +670,7 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 测试
 
 - **CaTDD_UserGuide.md** — 综合用户指南（本演示的来源）
 - **CaTDD_DesignPrompt.md** — 详细的方法论说明
+- **CaTDD_DesignPrompt4Cat-*.md** — 分类专用设计提示词
 - **CaTDD_ImplTemplate.cxx** — 新测试文件的模板
 
 ### 🔍 真实示例（IOC 项目）
@@ -682,7 +683,7 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 测试
 **高级示例**：
 - `UT_CommandStateTCP.cxx` — 状态机 + 协议集成
 - `UT_DataBoundaryUS4AC*.cxx` — 按 AC 拆分的大功能
-- `UT_ConlesEventMayBlock.cxx` — 边界/阻塞行为
+- `UT_ConlesEventMayBlock.cxx` — 边缘/阻塞行为
 
 **设计模式示例**：
 - `UT_FreelyDrafts.cxx` — 头脑风暴测试想法
@@ -719,7 +720,7 @@ US-n: 作为 [角色]，我想要 [能力]，以便 [价值]。
 ### 优先级顺序
 
 ```
-P1: 典型 → 边界 → 误用 → 故障
+P1: 典型 → 边缘 → 误用 → 故障
 P2: 状态 → 容量 → 并发
 P3: 性能 → 鲁棒 → 兼容性
 P4: 演示/示例

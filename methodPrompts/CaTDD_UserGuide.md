@@ -1147,6 +1147,7 @@ P4: Demo/Example
 ## Need More Details?
 
 - **Methodology Deep Dive**: See [CaTDD_DesignPrompt.md](CaTDD_DesignPrompt.md)
+- **Category Design Prompts**: See `CaTDD_DesignPrompt4Cat-*.md` for Typical, Edge, Misuse, Fault, State, Capability, and Concurrency guidance
 - **Code Template**: See [CaTDD_ImplTemplate.cxx](CaTDD_ImplTemplate.cxx)
 - **Questions?**: Ask EnigmaWU or check existing test files in [Test/](../Test/)
 
