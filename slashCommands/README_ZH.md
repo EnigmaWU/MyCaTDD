@@ -1,22 +1,35 @@
 # slashCommands
 
-本目录存放可复用的斜杠命令提示词，用于将 CaTDD 方法落地为可触发命令。
+本目录存放可复用的斜杠命令提示词与流程，用于将 CaTDD 方法落地为可触发命令。
 
 ## 在四层模型中的角色
 
-`slashCommands` 是方法文档与完整智能体自动化之间的命令化层。
+`slashCommands` 是方法文档与现有 CodeAgent 之间偏流程的连接与命令化层。
 
-- 将方法片段转为可触发命令单元。
+- 将 `methodPrompts` 中的方法片段转为可触发命令单元。
+- 将这些命令单元组织为适合自动化执行的流程。
 - 降低 GUI 或聊天式工作流的调用成本。
 - 提升重复应用方法时的一致性。
 - 与具体 code-agent 无关；命令应可被 Copilot、Cline、Continue 或任何能消费提示词文本的助手使用。
+- 不定义 CaTDD 方法语义；只负责把现有 CodeAgent 的调用界面连接到 `methodPrompts` 中定义的方法。
+
+## 连接器契约
+
+`slashCommands` 应作为适配层，而不是第二套方法论层。
+
+- 现有 CodeAgent 提供调用界面，例如聊天提示词、prompt files、skills、rules 或 custom commands。
+- `slashCommands` 提供可移植的命令意图与流程顺序，用于自动化或半自动化执行。
+- `methodPrompts` 提供分类语义、优先级顺序、设计骨架规则与 CaTDD 方法约束。
+- 面向 Copilot、Cline、Continue 或 `utCodeAgentCLI` 的原生包装应只是这些可移植命令文件之上的薄适配。
+
+相对 `methodPrompts`，`slashCommands` 更偏流程与自动化；相对 `slashCommands`，`methodPrompts` 更偏方法本身与手工理解。
 
 ## 可移植性契约
 
 斜杠命令不应依赖某一个编辑器、某一个模型提供方或某一种编程语言。
 
 - 方法真理源：`methodPrompts`
-- 命令形态：小型、可触发、可参数化的提示词单元
+- 命令形态：小型、可触发、可参数化，并被组织成流程的提示词单元
 - 预期消费方：人类开发者、GUI/聊天助手，以及 `utCodeAgentCLI`
 - 稳定性规则：当命令与 `methodPrompts` 冲突时，先更新 `methodPrompts`，再重新生成或修订命令。
 

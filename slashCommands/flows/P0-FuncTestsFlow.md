@@ -12,7 +12,7 @@ ValidFunc = Typical + Edge
 InvalidFunc = Misuse + Fault
 ```
 
-The flow commands orchestrate execution; category meaning remains in `methodPrompts`.
+The flow commands connect existing CodeAgent invocation surfaces to execution steps; category meaning remains in `methodPrompts`.
 
 ## Developer Stories
 

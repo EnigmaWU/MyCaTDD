@@ -1,22 +1,35 @@
 # slashCommands
 
-This directory contains reusable slash-command prompts that operationalize CaTDD methods.
+This directory contains reusable slash-command prompts and flows that operationalize CaTDD methods.
 
 ## Role in the 4-layer model
 
-`slashCommands` is the commandization layer between method docs and full agent automation.
+`slashCommands` is the flow-oriented connector and commandization layer between method docs and existing CodeAgents.
 
-- It turns method chunks into triggerable command units.
+- It turns method chunks from `methodPrompts` into triggerable command units.
+- It organizes those command units into automation-friendly flows.
 - It reduces invocation cost for GUI or chat-driven workflows.
 - It improves consistency when applying the method repeatedly.
 - It is code-agent agnostic; commands should be usable by Copilot, Cline, Continue, or any assistant that can consume prompt text.
+- It does not define CaTDD method semantics; it only connects existing CodeAgent invocation surfaces to the method defined in `methodPrompts`.
+
+## Connector contract
+
+`slashCommands` should behave as an adapter layer, not as a second methodology layer.
+
+- Existing CodeAgents provide the invocation surface, such as chat prompts, prompt files, skills, rules, or custom commands.
+- `slashCommands` provides the portable command intent and flow order for automated or semi-automated execution.
+- `methodPrompts` provides category meaning, priority order, design skeleton rules, and CaTDD method constraints.
+- Native wrappers for Copilot, Cline, Continue, or `utCodeAgentCLI` should be thin adapters over these portable command files.
+
+Compared with `methodPrompts`, `slashCommands` is more flow-first and automation-friendly. Compared with `slashCommands`, `methodPrompts` is more method-first and manual-friendly.
 
 ## Portability contract
 
 Slash commands should not depend on one editor, one model provider, or one programming language.
 
 - Source of method truth: `methodPrompts`
-- Command form: small, triggerable, parameterized prompt units
+- Command form: small, triggerable, parameterized prompt units arranged into flows
 - Expected consumers: human developers, GUI/chat assistants, and `utCodeAgentCLI`
 - Stability rule: when a command conflicts with `methodPrompts`, update `methodPrompts` first and regenerate or revise the command.
 

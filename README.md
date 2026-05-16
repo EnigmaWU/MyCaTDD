@@ -29,7 +29,7 @@ Relationship diagram:
 ```mermaid
 flowchart LR
   L1["[1] methodPrompts<br/>CaTDD method source"]
-  L2["[2] slashCommands<br/>Commandized prompt units"]
+  L2["[2] slashCommands<br/>Flow command units"]
   L3["[3] utCodeAgentCLI<br/>CaTDD-native CLI agent"]
   L4["[4] agentSkill<br/>Reusable skill package"]
 
@@ -50,13 +50,13 @@ This README is organized around that main storyline.
 
 ### [1] [methodPrompts](methodPrompts/README.md) (method prompts)
 
-Brief: the language-agnostic source-of-truth methodology layer for CaTDD. It defines comment-alive design skeletons, category method prompts, user-guide materials, and implementation templates.
+Brief: the language-agnostic source-of-truth methodology layer for CaTDD. It defines comment-alive design skeletons, category method prompts, user-guide materials, and implementation templates. It is method-first and manual-friendly.
 
 Read more: [methodPrompts/README.md](methodPrompts/README.md).
 
 ### [2] [slashCommands](slashCommands/README.md) (prompt commands)
 
-Brief: the code-agent-agnostic commandization layer. It turns stable CaTDD method steps into small triggerable prompt commands for Copilot, Cline, Continue, or similar assistants.
+Brief: the code-agent-agnostic flow connector layer. It turns stable CaTDD method steps from `methodPrompts` into small triggerable prompt commands and execution flows for Copilot, Cline, Continue, or similar assistants. It is flow-first and automation-friendly. It adapts CaTDD to existing CodeAgents; it does not define CaTDD method semantics itself.
 
 Read more: [slashCommands/README.md](slashCommands/README.md).
 
@@ -77,13 +77,13 @@ Read more: [agentSkill/README.md](agentSkill/README.md).
 ### Mode A: Manual Developer Mode
 
 - Input: `methodPrompts`
-- Method: manually read and execute method steps
+- Method: manually read and execute method steps from the method itself
 - Output: verifiable test design and implementation
 
 ### Mode B: Developer + Code Assistant (GUI)
 
 - Input: `methodPrompts` + (future) `slashCommands`
-- Method: invoke method or command fragments on demand
+- Method: invoke flow-oriented command fragments on demand
 - Focus: method decomposition and workflow automation
 
 ### Mode C: Developer + Code Agent (CLI)
