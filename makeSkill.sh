@@ -2,7 +2,14 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-SKILL_NAME="${1:-comment-alive-test-driven-development}"
+SUPPORTED_SKILL="comment-alive-test-driven-development"
+SKILL_NAME="${1:-$SUPPORTED_SKILL}"
+
+if [[ "$SKILL_NAME" != "$SUPPORTED_SKILL" ]]; then
+  echo "Unsupported skill '$SKILL_NAME'. Supported: $SUPPORTED_SKILL" >&2
+  exit 1
+fi
+
 SKILL_DIR="$REPO_ROOT/agentSkill/$SKILL_NAME"
 
 if [[ ! -d "$SKILL_DIR" ]]; then
