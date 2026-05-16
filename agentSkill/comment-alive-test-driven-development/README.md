@@ -94,14 +94,15 @@ Or:
 Apply comment-alive test-driven development to design tests for this API: <header file>
 ```
 
-### Bundled References
+### Linked References
 
 | File | Purpose |
 | ---- | ------- |
-| `references/CaTDD_UserGuide.md` | Full user guide with examples, quick-start guide, and getting-started checklist |
-| `references/CaTDD_DesignPrompt.md` | Complete methodology specification with priority framework, category definitions, and quality gates |
-| `references/CaTDD_ImplTemplate.cxx` | C++ implementation template showing the full CaTDD file structure (adapt for any language) |
-| `references/CaTDD-UserGuide-PPT.md` | Presentation-style overview of all CaTDD concepts with slides, diagrams, and real examples |
+| `references/CaTDD_UserGuide.md` | Full user guide with examples, quick-start guide, and getting-started checklist (linked from `methodPrompts/`) |
+| `references/CaTDD_DesignPrompt.md` | Complete methodology specification with priority framework, category definitions, and quality gates (linked from `methodPrompts/`) |
+| `references/CaTDD_ImplTemplate.cxx` | C++ implementation template showing the full CaTDD file structure (adapt for any language; linked from `methodPrompts/`) |
+| `references/CaTDD-UserGuide-PPT.md` | Presentation-style overview of all CaTDD concepts with slides, diagrams, and real examples (linked from `methodPrompts/`) |
+| `slashCommands` | Shared slash command prompts for this skill (linked from repository `slashCommands/`) |
 
 ## Related Skills
 

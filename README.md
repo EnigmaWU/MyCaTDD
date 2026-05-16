@@ -17,6 +17,7 @@ Note: some relative example paths inside imported documents point to the origina
 ## Agent Skills (initial import)
 
 Agent skills package CaTDD methodology for reuse in AI-assisted development workflows.
+Use `./makeSkill.sh` to (re)package skill resources from `methodPrompts/` and `slashCommands/` without duplicating content.
 
 ### `agentSkill/comment-alive-test-driven-development`
 
@@ -25,4 +26,5 @@ Write new test files from scratch using CaTDD (Comment-alive Test-Driven Develop
 Key files:
 - `agentSkill/comment-alive-test-driven-development/SKILL.md` — Skill definition (trigger conditions, inputs, outputs, constraints, and step-by-step workflow)
 - `agentSkill/comment-alive-test-driven-development/README.md` — Human-readable overview of the skill, file structure, US/AC/TC hierarchy, priority framework, and usage examples
-- `agentSkill/comment-alive-test-driven-development/references/` — Bundled reference materials (user guide, design prompt, C++ implementation template, PPT overview)
+- `agentSkill/comment-alive-test-driven-development/references/` — Symlinked reference entrypoints to `methodPrompts/` (user guide, design prompt, C++ implementation template, PPT overview)
+- `agentSkill/comment-alive-test-driven-development/slashCommands` — Symlink to repository `slashCommands/`

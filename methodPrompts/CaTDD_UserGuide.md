@@ -2,7 +2,7 @@
 
 **Quick Reference for Comment-alive Test-Driven Development**
 
-> Note: This guide is imported from `MyIOC_inTDD_withGHC/LLM`; some example project paths (for example `../Test/*.cxx`) are illustrative and may not exist in this repository.
+> Note: This guide originated from `MyIOC_inTDD_withGHC/LLM` and is maintained in this repository at `methodPrompts/CaTDD_UserGuide.md`; skill references point here via symlink. Some example project paths (for example `../Test/*.cxx`) are illustrative and may not exist in this repository.
 
 ---
 
@@ -77,6 +77,7 @@ graph TD
 ```bash
 cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
+Run this command from the repository root so `methodPrompts/` resolves correctly.
 If your project does not have a `Test/` directory, create one or adjust the destination path.
 
 ### 2. Fill in the OVERVIEW
