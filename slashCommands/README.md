@@ -24,6 +24,36 @@ This directory contains reusable slash-command prompts and flows that operationa
 
 Compared with `methodPrompts`, `slashCommands` is more flow-first and automation-friendly. Compared with `slashCommands`, `methodPrompts` is more method-first and manual-friendly.
 
+## Native adapter generation
+
+Copilot uses `.github/prompts/*.prompt.md` files as slash-invoked prompt files. Generate Copilot-native wrappers from these portable command files with:
+
+```bash
+scripts/makeSlashCmd4Copilot.sh --clean
+```
+
+The generated files live under `.github/prompts/` and should stay thin. Each wrapper points back to the portable source command and to `methodPrompts` as the method source of truth.
+
+Validate the generator with:
+
+```bash
+bash scripts/test_makeSlashCmd4Copilot.sh
+```
+
+Install or refresh CaTDD into another Copilot-enabled project with:
+
+```bash
+scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
+```
+
+The installer copies `methodPrompts` and `slashCommands` into the target project's `.catdd/` directory, then generates Copilot prompt wrappers under the target project's `.github/prompts/` directory.
+
+Validate the installer with:
+
+```bash
+bash scripts/test_installCaTDD4Copilot.sh
+```
+
 ## Portability contract
 
 Slash commands should not depend on one editor, one model provider, or one programming language.

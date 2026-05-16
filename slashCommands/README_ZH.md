@@ -24,6 +24,36 @@
 
 相对 `methodPrompts`，`slashCommands` 更偏流程与自动化；相对 `slashCommands`，`methodPrompts` 更偏方法本身与手工理解。
 
+## 原生适配生成
+
+Copilot 使用 `.github/prompts/*.prompt.md` 文件作为可通过斜杠触发的提示词文件。可以用下面的脚本从这些可移植命令文件生成 Copilot 原生包装：
+
+```bash
+scripts/makeSlashCmd4Copilot.sh --clean
+```
+
+生成文件位于 `.github/prompts/`，并且应保持为薄包装。每个包装都指回可移植命令源文件，并指向 `methodPrompts` 作为方法真理源。
+
+可以用下面的命令验证生成器：
+
+```bash
+bash scripts/test_makeSlashCmd4Copilot.sh
+```
+
+可以用下面的命令把 CaTDD 安装或刷新到另一个已启用 Copilot 的项目：
+
+```bash
+scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
+```
+
+安装器会把 `methodPrompts` 和 `slashCommands` 复制到目标项目的 `.catdd/` 目录，然后在目标项目的 `.github/prompts/` 目录下生成 Copilot prompt 包装。
+
+可以用下面的命令验证安装器：
+
+```bash
+bash scripts/test_installCaTDD4Copilot.sh
+```
+
 ## 可移植性契约
 
 斜杠命令不应依赖某一个编辑器、某一个模型提供方或某一种编程语言。

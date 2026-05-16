@@ -99,6 +99,27 @@ flowchart LR
 3. 在 [3] 把完整任务交给智能体执行。
 4. 把 [3] 暴露的问题回写到 [2] 与 [1]，持续改进。
 
+## 安装 / 刷新到 Copilot 项目
+
+可以用下面的命令把 CaTDD 安装或刷新到已有的 Copilot 项目：
+
+```bash
+scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
+```
+
+如果目标目录还不存在，增加 `--init`：
+
+```bash
+scripts/installCaTDD4Copilot.sh --target /path/to/new-project --init --clean-prompts
+```
+
+安装器会在目标项目中创建或刷新这些资产：
+
+- `.catdd/methodPrompts/`：安装后的 CaTDD 方法源，用于手工阅读与方法真理源。
+- `.catdd/slashCommands/`：安装后的可移植流程命令源，用于自动化。
+- `.github/prompts/UT_*.prompt.md`：从 `slashCommands` 生成的 Copilot 原生薄适配。
+- `.github/instructions/catdd.instructions.md`：指向 `.catdd/` 的 Copilot instruction 文件。
+
 ## 快速开始
 
 1. 先阅读 `README_UserGuide.md` 了解全貌。

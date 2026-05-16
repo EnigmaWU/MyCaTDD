@@ -99,6 +99,27 @@ Read more: [agentSkill/README.md](agentSkill/README.md).
 3. In [3], hand complete tasks to the agent for execution.
 4. Feed issues exposed by [3] back into [2] and [1] for continuous improvement.
 
+## Install / Refresh into a Copilot Project
+
+Install or refresh CaTDD into an existing Copilot-enabled project with:
+
+```bash
+scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
+```
+
+For a new target directory, add `--init`:
+
+```bash
+scripts/installCaTDD4Copilot.sh --target /path/to/new-project --init --clean-prompts
+```
+
+The installer creates or refreshes these target-project assets:
+
+- `.catdd/methodPrompts/`: installed CaTDD method source for manual reading and method truth.
+- `.catdd/slashCommands/`: installed portable flow-command source for automation.
+- `.github/prompts/UT_*.prompt.md`: Copilot-native thin adapters generated from `slashCommands`.
+- `.github/instructions/catdd.instructions.md`: Copilot instruction file that points agents back to `.catdd/`.
+
 ## Quick Start
 
 1. Read `README_UserGuide.md` first for the full picture.
