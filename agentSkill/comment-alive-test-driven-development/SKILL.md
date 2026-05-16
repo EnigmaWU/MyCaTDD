@@ -16,7 +16,7 @@ Apply the CaTDD methodology to create a new test file that serves as a living de
 - **Test Case (TC) specifications** with structured metadata (`@[Name]`, `@[Purpose]`, `@[Brief]`, `@[Expect]`).
 - **Test implementations** following the four-phase pattern (SETUP → BEHAVIOR → VERIFY → CLEANUP).
 - A **TODO/implementation tracking section** with status markers (⚪ TODO → 🔴 RED → 🟢 GREEN).
-- **Priority classification** (P1 Functional → P2 Design → P3 Quality → P4 Addons).
+- **Priority classification** (P0 Functional → P1 Design → P2 Quality → P3 Addons).
 
 The result is a self-contained design document that is readable by humans, parseable by LLMs, and verified by tests.
 
@@ -37,7 +37,7 @@ The result is a self-contained design document that is readable by humans, parse
 ## Why
 - CaTDD ensures verification is designed before code is written, producing higher-quality tests.
 - Structured US/AC/TC comments give LLMs the context needed to generate correct test and production code.
-- The priority framework (P1–P4) guides what to test first based on business value and risk.
+- The priority framework (P0-P3) guides what to test first based on business value and risk.
 - Comments live in the test file and evolve with the code, so design intent never goes stale.
 - The result is a single source of truth that bridges human intent and machine-executable tests.
 
@@ -107,19 +107,19 @@ If the feature description, target language, or testing level is unclear or miss
         @[Expect]: How to verify success (observable outcome)
      ```
    - Classify each TC using the priority framework:
-     - **P1 Functional**: Typical → Boundary → Misuse → Fault
-     - **P2 Design**: State → Capability → Concurrency
-     - **P3 Quality**: Performance → Robust → Compatibility → Configuration
-     - **P4 Addons**: Demo/Example
+   - **P0 Functional**: Typical → Edge → Misuse → Fault
+     - **P1 Design**: State → Capability → Concurrency
+     - **P2 Quality**: Performance → Robust → Compatibility → Configuration
+     - **P3 Addons**: Demo/Example
    - Mark all new TCs as ⚪ TODO.
 
 4. Use risk scoring to adjust priority order when needed:
    - `Risk Score = Impact × Likelihood × Uncertainty` (each 1–3, max 27).
-   - Score ≥ 18: Move that category immediately after Boundary in P1.
+   - Score ≥ 18: Move that category immediately after Edge in P0.
 
 ### Phase 3: Implementation — Red→Green Cycle
 
-For each TC in priority order (P1 first):
+For each TC in priority order (P0 first):
 
 1. **Write the test implementation** (SETUP → BEHAVIOR → VERIFY → CLEANUP).
    - Add `@[Name]` and `@[Steps]` comments above the test function.
@@ -134,8 +134,8 @@ For each TC in priority order (P1 first):
 5. **Refactor** the test and production code while keeping all tests green.
 6. Advance to the next TC. Stop at each priority gate before moving to the next priority level.
 
-**Priority Gate Checklist** (before advancing from P1 to P2):
-- ✅ All Typical and Boundary tests GREEN.
+**Priority Gate Checklist** (before advancing from P0 to P1):
+- ✅ All Typical and Edge tests GREEN.
 - ✅ All Misuse and Fault tests GREEN or documented with a known issue.
 - ✅ No critical correctness bugs.
 
@@ -151,7 +151,7 @@ For each TC in priority order (P1 first):
    > - Testing level: [Unit / System / User]
    > - User Stories: [count]
    > - Acceptance Criteria: [count]
-   > - Test Cases designed: [count] (P1=[count], P2=[count], P3=[count], P4=[count])
+   > - Test Cases designed: [count] (P0=[count], P0=[count], P2=[count], P3=[count])
    > - Tests implemented and GREEN: [count]
    > - Coverage gaps: [list or none]"
 

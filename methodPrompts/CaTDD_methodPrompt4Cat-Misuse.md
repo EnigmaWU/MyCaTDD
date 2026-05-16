@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Misuse
 
-Use this prompt when designing P1 Functional tests for wrong caller behavior, invalid API usage, and contract violations.
+Use this prompt when designing P0 Functional tests for wrong caller behavior, invalid API usage, and contract violations.
 
 ## Position
 
-Misuse belongs to P1 Functional InvalidFunc testing.
+Misuse belongs to P0 Functional InvalidFunc testing.
 
 ```text
-P1 Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
+P0 Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
 ```
 
 Misuse proves that the system rejects wrong use safely and clearly.
@@ -36,7 +36,7 @@ Misuse proves that the system rejects wrong use safely and clearly.
 ## Design Skeleton
 
 ```text
-// @[Class]: P1 Functional / InvalidFunc
+// @[Class]: P0 Functional / InvalidFunc
 // @[Category]: Misuse
 // @[Intent]: Prove invalid caller behavior is rejected safely and clearly.
 // @[UseWhen]: The caller violates a named API precondition or call sequence.

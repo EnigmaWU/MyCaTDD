@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Fault
 
-Use this prompt when designing P1 Functional tests for failures caused by dependencies, resources, processes, networks, storage, or runtime environment.
+Use this prompt when designing P0 Functional tests for failures caused by dependencies, resources, processes, networks, storage, or runtime environment.
 
 ## Position
 
-Fault belongs to P1 Functional InvalidFunc testing.
+Fault belongs to P0 Functional InvalidFunc testing.
 
 ```text
-P1 Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
+P0 Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
 ```
 
 Fault proves that the system fails right when the caller behaves correctly but the world around the system does not.
@@ -36,7 +36,7 @@ Fault proves that the system fails right when the caller behaves correctly but t
 ## Design Skeleton
 
 ```text
-// @[Class]: P1 Functional / InvalidFunc
+// @[Class]: P0 Functional / InvalidFunc
 // @[Category]: Fault
 // @[Intent]: Prove graceful behavior when dependencies, resources, processes, or environment fail.
 // @[UseWhen]: The caller is valid but an external/runtime fault is injected or simulated.

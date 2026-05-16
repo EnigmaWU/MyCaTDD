@@ -31,10 +31,10 @@ CaTDD 方法提示词支持两个设计阶段：
 
 默认分类顺序：
 
-- P1 功能型：Typical -> Edge -> Misuse -> Fault
-- P2 设计型：State -> Capability -> Concurrency
-- P3 质量型：Performance -> Robust -> Compatibility -> Configuration
-- P4 附加型：Demo/Example
+- P0 功能型：Typical -> Edge -> Misuse -> Fault
+- P1 设计型：State -> Capability -> Concurrency
+- P2 质量型：Performance -> Robust -> Compatibility -> Configuration
+- P3 附加型：Demo/Example
 
 ## 典型内容
 

@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Edge
 
-Use this prompt when designing P1 Functional tests for valid edge cases, boundary values, limits, and mode variations.
+Use this prompt when designing P0 Functional tests for valid edge cases, boundary values, limits, and mode variations.
 
 ## Position
 
-Edge belongs to P1 Functional ValidFunc testing.
+Edge belongs to P0 Functional ValidFunc testing.
 
 ```text
-P1 Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
+P0 Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
 ```
 
 Edge proves that the feature still works correctly at the edges of valid use. In older material, "Boundary" is an alias for this category.
@@ -37,7 +37,7 @@ Edge proves that the feature still works correctly at the edges of valid use. In
 ## Design Skeleton
 
 ```text
-// @[Class]: P1 Functional / ValidFunc
+// @[Class]: P0 Functional / ValidFunc
 // @[Category]: Edge
 // @[Intent]: Prove valid edge values, limits, and mode variations.
 // @[UseWhen]: The caller is valid, but the condition is empty, zero, min, max, full, first, last, or mode-specific.

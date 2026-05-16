@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Performance
 
-Use this prompt when designing P3 Quality tests for speed, latency, throughput, and resource-use characteristics.
+Use this prompt when designing P2 Quality tests for speed, latency, throughput, and resource-use characteristics.
 
 ## Position
 
-Performance belongs to P3 Quality-oriented testing.
+Performance belongs to P2 Quality-oriented testing.
 
 ```text
-P3 Quality = Performance -> Robust -> Compatibility -> Configuration
+P2 Quality = Performance -> Robust -> Compatibility -> Configuration
 ```
 
 Performance proves that the feature is fast or efficient enough under defined conditions.
@@ -27,7 +27,7 @@ Performance proves that the feature is fast or efficient enough under defined co
 ## Design Skeleton
 
 ```text
-// @[Class]: P3 Quality
+// @[Class]: P2 Quality
 // @[Category]: Performance
 // @[Intent]: Prove latency, throughput, or resource-use target under defined conditions.
 // @[UseWhen]: A measurable performance target exists.

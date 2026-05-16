@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Robust
 
-Use this prompt when designing P3 Quality tests for stability under stress, repetition, resource churn, or long-running operation.
+Use this prompt when designing P2 Quality tests for stability under stress, repetition, resource churn, or long-running operation.
 
 ## Position
 
-Robust belongs to P3 Quality-oriented testing.
+Robust belongs to P2 Quality-oriented testing.
 
 ```text
-P3 Quality = Performance -> Robust -> Compatibility -> Configuration
+P2 Quality = Performance -> Robust -> Compatibility -> Configuration
 ```
 
 Robust proves that the system remains stable after repeated or sustained use.
@@ -27,7 +27,7 @@ Robust proves that the system remains stable after repeated or sustained use.
 ## Design Skeleton
 
 ```text
-// @[Class]: P3 Quality
+// @[Class]: P2 Quality
 // @[Category]: Robust
 // @[Intent]: Prove stable behavior across repeated or sustained operation.
 // @[UseWhen]: Repetition, stress, soak, or resource churn is the primary risk.

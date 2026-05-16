@@ -31,10 +31,10 @@ CaTDD method prompts support two design stages:
 
 Default classification order:
 
-- P1 Functional: Typical -> Edge -> Misuse -> Fault
-- P2 Design: State -> Capability -> Concurrency
-- P3 Quality: Performance -> Robust -> Compatibility -> Configuration
-- P4 Addons: Demo/Example
+- P0 Functional: Typical -> Edge -> Misuse -> Fault
+- P1 Design: State -> Capability -> Concurrency
+- P2 Quality: Performance -> Robust -> Compatibility -> Configuration
+- P3 Addons: Demo/Example
 
 ## Typical contents
 

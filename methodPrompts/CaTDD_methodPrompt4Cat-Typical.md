@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Typical
 
-Use this prompt when designing P1 Functional tests for core happy-path behavior.
+Use this prompt when designing P0 Functional tests for core happy-path behavior.
 
 ## Position
 
-Typical is the first CaTDD category in P1 Functional testing.
+Typical is the first CaTDD category in P0 Functional testing.
 
 ```text
-P1 Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
+P0 Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
 ```
 
 Typical proves that the feature works correctly under normal, intended use.
@@ -36,7 +36,7 @@ Typical proves that the feature works correctly under normal, intended use.
 ## Design Skeleton
 
 ```text
-// @[Class]: P1 Functional / ValidFunc
+// @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: Prove the core happy-path workflow under ordinary valid use.
 // @[UseWhen]: Inputs, state, dependencies, environment, and caller behavior are valid.

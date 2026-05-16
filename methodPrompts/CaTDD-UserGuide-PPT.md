@@ -184,7 +184,7 @@ US-1: As an event producer in high-load scenarios,
 
 ```mermaid
 graph TD
-    subgraph P1["🥇 P1: FUNCTIONAL (MUST COMPLETE)"]
+    subgraph P0["🥇 P0: FUNCTIONAL (MUST COMPLETE)"]
         direction TB
         ValidFunc[ValidFunc]
         InvalidFunc[InvalidFunc]
@@ -198,36 +198,36 @@ graph TD
         InvalidFunc --> Fault
     end
     
-    subgraph P2["🥈 P2: DESIGN"]
+    subgraph P1["🥈 P1: DESIGN"]
         State[🔄 State<br/>FSM & lifecycle]
         Capability[🏆 Capability<br/>Capacity limits]
         Concurrency[🚀 Concurrency<br/>Thread safety]
     end
     
-    subgraph P3["🥉 P3: QUALITY"]
+    subgraph P2["🥉 P2: QUALITY"]
         Performance[⚡ Performance<br/>Speed & efficiency]
         Robust[🛡️ Robust<br/>Stability]
     end
     
-    subgraph P4["🎯 P4: ADDONS"]
+    subgraph P3["🎯 P3: ADDONS"]
         Demo[🎨 Demo/Example<br/>Documentation]
     end
     
+    P0 --> P1
     P1 --> P2
     P2 --> P3
-    P3 --> P4
     
-    style P1 fill:#ffd700,stroke:#333,stroke-width:3px
-    style P2 fill:#c0c0c0,stroke:#333,stroke-width:2px
-    style P3 fill:#cd7f32,stroke:#333,stroke-width:2px
-    style P4 fill:#e6e6fa,stroke:#333,stroke-width:1px
+    style P0 fill:#ffd700,stroke:#333,stroke-width:3px
+    style P1 fill:#c0c0c0,stroke:#333,stroke-width:2px
+    style P2 fill:#cd7f32,stroke:#333,stroke-width:2px
+    style P3 fill:#e6e6fa,stroke:#333,stroke-width:1px
 ```
 
 ---
 
 ## Slide 10: Priority Framework - Details
 
-### P1 🥇 FUNCTIONAL (MUST COMPLETE)
+### P0 🥇 FUNCTIONAL (MUST COMPLETE)
 
 **ValidFunc** — Proves it works correctly:
 - **⭐ Typical**: Core workflows, happy paths
@@ -237,18 +237,18 @@ graph TD
 - **🚫 Misuse**: Wrong API usage, incorrect sequences
 - **⚠️ Fault**: External failures, resource exhaustion
 
-### P2 🥈 DESIGN
+### P1 🥈 DESIGN
 
 - **🔄 State**: Lifecycle transitions, FSM verification
 - **🏆 Capability**: Maximum capacity, system limits
 - **🚀 Concurrency**: Thread safety, race conditions
 
-### P3 🥉 QUALITY
+### P2 🥉 QUALITY
 
 - **⚡ Performance**: Speed benchmarks, throughput
 - **🛡️ Robust**: Stress testing, long-running stability
 
-### P4 🎯 ADDONS
+### P3 🎯 ADDONS
 
 - **🎨 Demo/Example**: End-to-end demonstrations, tutorials
 
@@ -513,10 +513,10 @@ graph LR
 
 **Test Files**: 80+ unit test files
 **Test Categories**:
-- P1 Functional: Typical, Edge, Misuse, Fault
-- P2 Design: State, Capability, Concurrency
-- P3 Quality: Performance, Robust, Compatibility
-- P4 Addons: Demo/Example
+- P0 Functional: Typical, Edge, Misuse, Fault
+- P1 Design: State, Capability, Concurrency
+- P2 Quality: Performance, Robust, Compatibility
+- P3 Addons: Demo/Example
 
 **Sample Test Files**:
 - `UT_ConlesEventTypical.cxx` — Event posting basics (885 lines)
@@ -535,7 +535,7 @@ graph LR
 
 **Single File** (Initial):
 ```
-UT_FeatureTypical.cxx          // All P1 tests
+UT_FeatureTypical.cxx          // All P0 tests
 ```
 
 **Split by Priority** (Growing):
@@ -655,8 +655,8 @@ UT_FeatureUS4AC3.cxx           // US-4 AC-3 tests
 
 ### Month 1: Build Momentum
 
-- [ ] Complete P1 Functional tests (Typical + Edge + Misuse + Fault)
-- [ ] Add P2 Design tests if component is stateful/concurrent
+- [ ] Complete P0 Functional tests (Typical + Edge + Misuse + Fault)
+- [ ] Add P1 Design tests if component is stateful/concurrent
 - [ ] Refactor common setup into fixtures
 - [ ] Review test naming consistency
 - [ ] Update team on learnings
@@ -719,10 +719,10 @@ US-n: As a [role], I want [capability], So that [value].
 ### Priority Order
 
 ```
-P1: Typical → Edge → Misuse → Fault
-P2: State → Capability → Concurrency
-P3: Performance → Robust → Compatibility
-P4: Demo/Example
+P0: Typical → Edge → Misuse → Fault
+P1: State → Capability → Concurrency
+P2: Performance → Robust → Compatibility
+P3: Demo/Example
 ```
 
 ### Status Markers
@@ -771,7 +771,7 @@ P4: Demo/Example
 **Test Quality**:
 - ✅ All tests follow 4-phase structure (SETUP/BEHAVIOR/VERIFY/CLEANUP)
 - ✅ Tests have ≤3 key assertions
-- ✅ P1 functional coverage complete before P2/P3
+- ✅ P0 functional coverage complete before P1/P2
 
 **Process Quality**:
 - ✅ Status tracking updated regularly (⚪→🔴→🟢)
@@ -834,7 +834,7 @@ Design Comments → Generate Test Code → Generate Production Code → Iterate
 ## Priority
 
 ```
-P1 (Functional) → P2 (Design) → P3 (Quality) → P4 (Addons)
+P0 (Functional) → P1 (Design) → P2 (Quality) → P3 (Addons)
 ```
 
 ## Status

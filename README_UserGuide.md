@@ -307,13 +307,13 @@ Write TC specifications in the TEST CASES design section:
 **Step 7: Prioritize Tests**  
 Follow the priority framework:
 
-- **P1 🥇 Functional** (MUST COMPLETE):
+- **P0 🥇 Functional** (MUST COMPLETE):
   - Typical → Edge → Misuse → Fault
-- **P2 🥈 Design** (Important):
+- **P1 🥈 Design** (Important):
   - State → Capability → Concurrency
-- **P3 🥉 Quality** (Nice-to-have):
+- **P2 🥉 Quality** (Nice-to-have):
   - Performance → Robust → Compatibility
-- **P4 🎯 Addons** (Optional):
+- **P3 🎯 Addons** (Optional):
   - Demo/Example
 
 **Step 8: Write Test Implementation Code**  
@@ -502,7 +502,7 @@ verifyBehavior_byCondition_expectResult
 
 ```mermaid
 graph TD
-    subgraph P1["P1 🥇 FUNCTIONAL (MUST COMPLETE)"]
+    subgraph P0["P0 🥇 FUNCTIONAL (MUST COMPLETE)"]
         ValidFunc[ValidFunc]
         InvalidFunc[InvalidFunc]
         Typical[⭐ Typical]
@@ -515,41 +515,41 @@ graph TD
         InvalidFunc --> Fault
     end
     
-    subgraph P2["P2 🥈 DESIGN"]
+    subgraph P1["P1 🥈 DESIGN"]
         State[🔄 State]
         Capability[🏆 Capability]
         Concurrency[🚀 Concurrency]
     end
     
-    subgraph P3["P3 🥉 QUALITY"]
+    subgraph P2["P2 🥉 QUALITY"]
         Performance[⚡ Performance]
         Robust[🛡️ Robust]
         Compatibility[🔄 Compatibility]
         Configuration[🎛️ Configuration]
     end
     
-    subgraph P4["P4 🎯 ADDONS"]
+    subgraph P3["P3 🎯 ADDONS"]
         Demo[🎨 Demo/Example]
     end
     
+    P0 --> P1
     P1 --> P2
     P2 --> P3
-    P3 --> P4
     
-    style P1 fill:#ffd700,stroke:#333,stroke-width:3px
-    style P2 fill:#c0c0c0,stroke:#333,stroke-width:2px
-    style P3 fill:#cd7f32,stroke:#333,stroke-width:2px
-    style P4 fill:#e6e6fa,stroke:#333,stroke-width:1px
+    style P0 fill:#ffd700,stroke:#333,stroke-width:3px
+    style P1 fill:#c0c0c0,stroke:#333,stroke-width:2px
+    style P2 fill:#cd7f32,stroke:#333,stroke-width:2px
+    style P3 fill:#e6e6fa,stroke:#333,stroke-width:1px
 ```
 
 ```
-P1 🥇 FUNCTIONAL = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
-P2 🥈 DESIGN = State → Capability → Concurrency
-P3 🥉 QUALITY = Performance → Robust → Compatibility → Configuration
-P4 🎯 ADDONS = Demo/Example
+P0 🥇 FUNCTIONAL = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
+P1 🥈 DESIGN = State → Capability → Concurrency
+P2 🥉 QUALITY = Performance → Robust → Compatibility → Configuration
+P3 🎯 ADDONS = Demo/Example
 ```
 
-### P1 🥇 Functional Testing (MUST COMPLETE)
+### P0 🥇 Functional Testing (MUST COMPLETE)
 
 **ValidFunc** - Proves it works correctly:
 
@@ -585,7 +585,7 @@ P4 🎯 ADDONS = Demo/Example
 
 ---
 
-### P2 🥈 Design Testing
+### P1 🥈 Design Testing
 
 **🔄 State** (Lifecycle & FSM)
 
@@ -610,7 +610,7 @@ P4 🎯 ADDONS = Demo/Example
 
 ---
 
-### P3 🥉 Quality Testing
+### P2 🥉 Quality Testing
 
 **⚡ Performance** (Speed & efficiency)
 
@@ -639,7 +639,7 @@ P4 🎯 ADDONS = Demo/Example
 
 ---
 
-### P4 🎯 Addons Testing
+### P3 🎯 Addons Testing
 
 **🎨 Demo/Example** (Documentation)
 
@@ -744,7 +744,7 @@ stateDiagram-v2
 
 ```cpp
 //=================================================================================================
-// P1 🥇 FUNCTIONAL TESTING
+// P0 🥇 FUNCTIONAL TESTING
 //=================================================================================================
 //   🟢 [@AC-1,US-1] TC-1: verifyTypical_byBasicOp_expectSuccess
 //   🟢 [@AC-1,US-1] TC-2: verifyEdge_byNullInput_expectError
@@ -940,9 +940,9 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 
 ### ✅ Step 8: Prioritize Tests
 
-- [ ] Mark P1 (Functional) tests
-- [ ] Mark P2 (Design) tests if needed
-- [ ] Mark P3 (Quality) tests if needed
+- [ ] Mark P0 (Functional) tests
+- [ ] Mark P1 (Design) tests if needed
+- [ ] Mark P2 (Quality) tests if needed
 - [ ] Adjust based on risk scoring
 
 ### ✅ Step 9: Implement Using TDD
@@ -957,7 +957,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 
 ### ✅ Step 10: Quality Gates
 
-- [ ] All P1 tests GREEN before moving to P2
+- [ ] All P0 tests GREEN before moving to P1
 - [ ] Fast-Fail Six all passing
 - [ ] No critical bugs
 - [ ] Run with sanitizers (Address, Thread)
@@ -1214,10 +1214,10 @@ TEST(Category, verifyBehavior_byCondition_expectResult) {
 ### Priority Order
 
 ```
-P1: Typical → Edge → Misuse → Fault
-P2: State → Capability → Concurrency
-P3: Performance → Robust → Compatibility → Configuration
-P4: Demo/Example
+P0: Typical → Edge → Misuse → Fault
+P1: State → Capability → Concurrency
+P2: Performance → Robust → Compatibility → Configuration
+P3: Demo/Example
 ```
 
 ### Status Markers

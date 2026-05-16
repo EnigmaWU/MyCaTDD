@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: DemoExample
 
-Use this prompt when designing P4 Addons tests that demonstrate an end-to-end workflow for documentation, tutorials, onboarding, or visible examples.
+Use this prompt when designing P3 Addons tests that demonstrate an end-to-end workflow for documentation, tutorials, onboarding, or visible examples.
 
 ## Position
 
-DemoExample belongs to P4 Addons testing.
+DemoExample belongs to P3 Addons testing.
 
 ```text
-P4 Addons = Demo/Example
+P3 Addons = Demo/Example
 ```
 
 DemoExample proves that a user-visible workflow can be followed and observed as documented.
@@ -20,14 +20,14 @@ DemoExample proves that a user-visible workflow can be followed and observed as 
 
 ## Do Not Use When
 
-- The scenario is required for functional correctness; use P1 categories first.
-- The scenario verifies architecture or quality attributes; use P2/P3 categories.
+- The scenario is required for functional correctness; use P0 categories first.
+- The scenario verifies architecture or quality attributes; use P1/P2 categories.
 - The example would invent behavior not present in the user guide or requirements.
 
 ## Design Skeleton
 
 ```text
-// @[Class]: P4 Addons
+// @[Class]: P3 Addons
 // @[Category]: DemoExample
 // @[Intent]: Demonstrate a complete user-visible workflow.
 // @[UseWhen]: A guide, tutorial, or onboarding path needs executable evidence.
@@ -41,5 +41,5 @@ DemoExample proves that a user-visible workflow can be followed and observed as 
 
 - Does the demo map to a real user guide section?
 - Are setup, run, expected output, and cleanup clear?
-- Does the demo avoid replacing required P1/P2/P3 tests?
+- Does the demo avoid replacing required P0/P1/P2 tests?
 - Can a new user understand the feature by reading or running it?

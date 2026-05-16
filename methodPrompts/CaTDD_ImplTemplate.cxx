@@ -71,7 +71,7 @@
  *   In CaTDD, "design" means a comment skeleton that lives in this test file.
  *   Each skeleton is organized by Class/Priority and Category, for example:
  *
- *     @[Class]: P1 Functional / ValidFunc
+ *     @[Class]: P0 Functional / ValidFunc
  *     @[Category]: Typical
  *     @[Intent]: Prove the core happy-path workflow.
  *     @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
@@ -84,20 +84,20 @@
  *   CodeAgents preserve and update this skeleton before generating TEST code.
  *
  * PRIORITY FRAMEWORK:
- *   P1 🥇 FUNCTIONAL:     Must complete before P2 (ValidFunc + InvalidFunc)
- *   P2 🥈 DESIGN-ORIENTED: Test after P1 (State, Capability, Concurrency)
- *   P3 🥉 QUALITY-ORIENTED: Test for quality attributes (Performance, Robust, etc.)
- *   P4 🎯 ADDONS:          Optional (Demo, Examples)
+ *   P0 🥇 FUNCTIONAL:     Must complete before P1 (ValidFunc + InvalidFunc)
+ *   P1 🥈 DESIGN-ORIENTED: Test after P0 (State, Capability, Concurrency)
+ *   P2 🥉 QUALITY-ORIENTED: Test for quality attributes (Performance, Robust, etc.)
+ *   P3 🎯 ADDONS:          Optional (Demo, Examples)
  *
  * DEFAULT TEST ORDER:
- *   P1: Typical → Edge → Misuse → Fault
- *   P2: State → Capability → Concurrency
- *   P3: Performance → Robust → Compatibility → Configuration
- *   P4: Demo/Example
+ *   P0: Typical → Edge → Misuse → Fault
+ *   P1: State → Capability → Concurrency
+ *   P2: Performance → Robust → Compatibility → Configuration
+ *   P3: Demo/Example
  *
  * CONTEXT-SPECIFIC ADJUSTMENTS:
- *   - New Public API: Complete P1 thoroughly before P2
- *   - Stateful/FSM: Promote State to early P2 (after Typical+Edge)
+ *   - New Public API: Complete P0 thoroughly before P1
+ *   - Stateful/FSM: Promote State to early P1 (after Typical+Edge)
  *   - High Reliability: Promote Fault & Robust
  *   - Performance SLOs: Promote Performance to P2 level
  *   - Highly Concurrent: Promote Concurrency to first in P2
@@ -107,7 +107,7 @@
  *   If Score ≥ 18: Promote category to earlier priority
  *
  *===================================================================================================
- * PRIORITY-1: FUNCTIONAL TESTING (ValidFunc + InvalidFunc)
+ * PRIORITY-0: FUNCTIONAL TESTING (ValidFunc + InvalidFunc)
  *===================================================================================================
  *
  * ValidFunc - Verifies correct behavior with valid inputs/states.
@@ -131,7 +131,7 @@
  *      - Examples: Network failures, disk full, process crash recovery.
  *
  *===================================================================================================
- * PRIORITY-2: DESIGN-ORIENTED TESTING (Architecture Validation)
+ * PRIORITY-1: DESIGN-ORIENTED TESTING (Architecture Validation)
  *===================================================================================================
  *
  *   🔄 STATE: Lifecycle transitions and state machine validation. (KEY FOR STATEFUL COMPONENTS)
@@ -147,7 +147,7 @@
  *      - Examples: Race conditions, deadlocks, parallel access.
  *
  *===================================================================================================
- * PRIORITY-3: QUALITY-ORIENTED TESTING (Non-Functional Requirements)
+ * PRIORITY-2: QUALITY-ORIENTED TESTING (Non-Functional Requirements)
  *===================================================================================================
  *
  *   ⚡ PERFORMANCE: Speed, throughput, and resource usage. (FOR SLO VALIDATION)
@@ -167,7 +167,7 @@
  *      - Examples: Debug/release modes, feature flags.
  *
  *===================================================================================================
- * PRIORITY-4: OTHER-ADDONS TESTING (Documentation & Tutorials)
+ * PRIORITY-3: OTHER-ADDONS TESTING (Documentation & Tutorials)
  *===================================================================================================
  *
  *   🎨 DEMO/EXAMPLE: End-to-end feature demonstrations. (FOR DOCUMENTATION)
@@ -175,10 +175,10 @@
  *      - Examples: Tutorial code, complete workflows.
  *
  * SELECTION STRATEGY:
- *   🥇 P1 (Functional): MUST be completed before moving to P2.
- *   🥈 P2 (Design): Test after P1 if the component has significant design complexity (state, concurrency).
- *   🥉 P3 (Quality): Test when quality attributes (performance, robustness) are critical.
- *   🎯 P4 (Addons): Optional, for documentation and examples.
+ *   🥇 P0 (Functional): MUST be completed before moving to P1.
+ *   🥈 P1 (Design): Test after P0 if the component has significant design complexity (state, concurrency).
+ *   🥉 P2 (Quality): Test when quality attributes (performance, robustness) are critical.
+ *   🎯 P3 (Addons): Optional, for documentation and examples.
  *************************************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -364,7 +364,7 @@
  *===================================================================================================
  *
  * ═════════════════════════════════════════════════════════════════════════════════════════════
- * 📋 [CLASS: P1 Functional / ValidFunc] [CATEGORY: Typical] Core Functionality Tests
+ * 📋 [CLASS: P0 Functional / ValidFunc] [CATEGORY: Typical] Core Functionality Tests
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  *  @[Intent]: Prove the core happy-path workflow under valid ordinary use.
  *  @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
@@ -382,7 +382,7 @@
  *      @[Status]: IMPLEMENTED/RED - Need to implement CALC command handler
  *
  * ═════════════════════════════════════════════════════════════════════════════════════════════
- * 📋 [CLASS: P1 Functional / ValidFunc] [CATEGORY: Edge] Edge Cases and Limits
+ * 📋 [CLASS: P0 Functional / ValidFunc] [CATEGORY: Edge] Edge Cases and Limits
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  *  @[Intent]: Prove valid edge values, limits, and mode variations.
  *  @[UseWhen]: The caller is valid, but the condition is empty, zero, min, max, full, first, last, or mode-specific.
@@ -484,20 +484,20 @@ TEST_F(UT_NameofCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 //   🚫 BLOCKED:          Cannot proceed due to a dependency.
 //
 // PRIORITY LEVELS:
-//   P1 🥇 FUNCTIONAL:     Must complete before P2 (ValidFunc + InvalidFunc).
-//   P2 🥈 DESIGN-ORIENTED: Test after P1 (State, Capability, Concurrency).
-//   P3 🥉 QUALITY-ORIENTED: Test for quality attributes (Performance, Robust, etc.).
-//   P4 🎯 ADDONS:          Optional (Demo, Examples).
+//   P0 🥇 FUNCTIONAL:     Must complete before P1 (ValidFunc + InvalidFunc).
+//   P1 🥈 DESIGN-ORIENTED: Test after P0 (State, Capability, Concurrency).
+//   P2 🥉 QUALITY-ORIENTED: Test for quality attributes (Performance, Robust, etc.).
+//   P3 🎯 ADDONS:          Optional (Demo, Examples).
 //
 // WORKFLOW:
-//   1. Complete all P1 tests (this is the gate before P2).
-//   2. Move to P2 tests based on design complexity.
-//   3. Add P3 tests for specific quality requirements.
-//   4. Add P4 tests for documentation purposes.
+//   1. Complete all P0 tests (this is the gate before P1).
+//   2. Move to P1 tests based on design complexity.
+//   3. Add P2 tests for specific quality requirements.
+//   4. Add P3 tests for documentation purposes.
 //   5. Mark status as you go: ⚪ TODO → 🔴 RED → 🟢 GREEN.
 //
 //===================================================================================================
-// P1 🥇 FUNCTIONAL TESTING – ValidFunc (Typical + Edge)
+// P0 🥇 FUNCTIONAL TESTING – ValidFunc (Typical + Edge)
 //===================================================================================================
 //
 //   ⚪ [@AC-1,US-1] TC-1: verifyTypical_byBasicOperation_expectSuccess
@@ -511,7 +511,7 @@ TEST_F(UT_NameofCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 //        - Estimated effort: 30 min
 //
 //===================================================================================================
-// P1 🥇 FUNCTIONAL TESTING – InvalidFunc (Misuse + Fault)
+// P0 🥇 FUNCTIONAL TESTING – InvalidFunc (Misuse + Fault)
 //===================================================================================================
 //
 //   ⚪ [@AC-3,US-1] TC-1: verifyMisuse_byDoubleInit_expectIdempotentOrError
@@ -524,41 +524,41 @@ TEST_F(UT_NameofCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 //        - Category: Fault (InvalidFunc)
 //        - Estimated effort: 1 hour
 //
-// 🚪 GATE P1: All P1 tests must be GREEN before proceeding to P2.
+// 🚪 GATE P0: All P0 tests must be GREEN before proceeding to P1.
 //
 //===================================================================================================
-// P2 🥈 DESIGN-ORIENTED TESTING – State, Capability, Concurrency
+// P1 🥈 DESIGN-ORIENTED TESTING – State, Capability, Concurrency
 //===================================================================================================
 //
 //   ⚪ [@AC-5,US-2] TC-1: verifyState_byValidTransitions_expectSuccess
 //        - Description: Validate normal state transitions (Init→Ready→Running).
 //        - Category: State
-//        - Depends on: P1 complete
+//        - Depends on: P0 complete
 //        - Estimated effort: 2 hours
 //
 //   🚫 [@AC-7,US-3] TC-1: verifyConcurrency_byMultipleThreads_expectThreadSafe
 //        - Description: Test concurrent access from 10 threads.
 //        - Category: Concurrency
-//        - Depends on: P1 complete, run with ThreadSanitizer.
+//        - Depends on: P0 complete, run with ThreadSanitizer.
 //        - Estimated effort: 3 hours
 //
-// 🚪 GATE P2: All P2 tests GREEN, architecture validated.
+// 🚪 GATE P1: All P1 tests GREEN, architecture validated.
 //
 //===================================================================================================
-// P3 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility
+// P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility
 //===================================================================================================
 //
 //   ⚪ [@AC-8,US-3] TC-1: verifyPerformance_byHighLoad_expectAcceptableLatency
 //        - Description: Benchmark latency under 1000 req/sec load.
 //        - Category: Performance
-//        - Depends on: P2 complete
+//        - Depends on: P1 complete
 //        - Target: < 100ms p99 latency
 //        - Estimated effort: 2 hours
 //
-// 🚪 GATE P3: Quality attributes validated, production ready.
+// 🚪 GATE P2: Quality attributes validated, production ready.
 //
 //===================================================================================================
-// P4 🎯 OTHER-ADDONS TESTING – Demo, Examples (Optional)
+// P3 🎯 OTHER-ADDONS TESTING – Demo, Examples (Optional)
 //===================================================================================================
 //
 //   ⚪ [@AC-11,US-5] TC-1: verifyDemo_byEndToEndWorkflow_expectComplete

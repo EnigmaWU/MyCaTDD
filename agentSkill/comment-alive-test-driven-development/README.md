@@ -58,10 +58,10 @@ Test Case (TC) — HOW to verify the behavior (concrete steps)
 ## Priority Framework
 
 ```
-P1 🥇 FUNCTIONAL = ValidFunc(Typical + Boundary) + InvalidFunc(Misuse + Fault)
-P2 🥈 DESIGN     = State → Capability → Concurrency
-P3 🥉 QUALITY    = Performance → Robust → Compatibility → Configuration
-P4 🎯 ADDONS     = Demo/Example
+P0 🥇 FUNCTIONAL = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
+P1 🥈 DESIGN     = State → Capability → Concurrency
+P2 🥉 QUALITY    = Performance → Robust → Compatibility → Configuration
+P3 🎯 ADDONS     = Demo/Example
 ```
 
 ## Applicable Testing Levels

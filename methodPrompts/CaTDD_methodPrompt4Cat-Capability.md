@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Capability
 
-Use this prompt when designing P2 Design-oriented tests for designed capacity, limits, and maximum ability.
+Use this prompt when designing P1 Design-oriented tests for designed capacity, limits, and maximum ability.
 
 ## Position
 
-Capability is the second P2 Design category.
+Capability is the second P1 Design category.
 
 ```text
-P2 Design = State -> Capability -> Concurrency
+P1 Design = State -> Capability -> Concurrency
 ```
 
 Capability proves that the implementation matches the intended capacity contract.
@@ -36,7 +36,7 @@ Capability proves that the implementation matches the intended capacity contract
 ## Design Skeleton
 
 ```text
-// @[Class]: P2 Design
+// @[Class]: P1 Design
 // @[Category]: Capability
 // @[Intent]: Prove designed capacity, maximum ability, and over-limit behavior.
 // @[UseWhen]: The design promises a default, maximum, minimum, or configurable capacity.

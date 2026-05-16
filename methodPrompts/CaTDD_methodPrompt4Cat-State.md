@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: State
 
-Use this prompt when designing P2 Design-oriented tests for lifecycle, state machines, and state transition logic.
+Use this prompt when designing P1 Design-oriented tests for lifecycle, state machines, and state transition logic.
 
 ## Position
 
-State is the first P2 Design category.
+State is the first P1 Design category.
 
 ```text
-P2 Design = State -> Capability -> Concurrency
+P1 Design = State -> Capability -> Concurrency
 ```
 
 State proves that the implementation follows the intended lifecycle and transition rules.
@@ -36,7 +36,7 @@ State proves that the implementation follows the intended lifecycle and transiti
 ## Design Skeleton
 
 ```text
-// @[Class]: P2 Design
+// @[Class]: P1 Design
 // @[Category]: State
 // @[Intent]: Prove lifecycle and state-machine transitions match design intent.
 // @[UseWhen]: Operations depend on current state or lifecycle phase.

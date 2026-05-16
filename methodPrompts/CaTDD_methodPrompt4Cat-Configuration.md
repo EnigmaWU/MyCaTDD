@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Configuration
 
-Use this prompt when designing P3 Quality tests for settings, feature flags, modes, environment variables, build profiles, and deployment configuration.
+Use this prompt when designing P2 Quality tests for settings, feature flags, modes, environment variables, build profiles, and deployment configuration.
 
 ## Position
 
-Configuration belongs to P3 Quality-oriented testing.
+Configuration belongs to P2 Quality-oriented testing.
 
 ```text
-P3 Quality = Performance -> Robust -> Compatibility -> Configuration
+P2 Quality = Performance -> Robust -> Compatibility -> Configuration
 ```
 
 Configuration proves that supported settings produce the intended behavior.
@@ -27,7 +27,7 @@ Configuration proves that supported settings produce the intended behavior.
 ## Design Skeleton
 
 ```text
-// @[Class]: P3 Quality
+// @[Class]: P2 Quality
 // @[Category]: Configuration
 // @[Intent]: Prove supported settings map to expected behavior.
 // @[UseWhen]: Config files, environment variables, flags, or modes affect behavior.

@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Compatibility
 
-Use this prompt when designing P3 Quality tests for cross-platform, version, protocol, dependency, or integration compatibility.
+Use this prompt when designing P2 Quality tests for cross-platform, version, protocol, dependency, or integration compatibility.
 
 ## Position
 
-Compatibility belongs to P3 Quality-oriented testing.
+Compatibility belongs to P2 Quality-oriented testing.
 
 ```text
-P3 Quality = Performance -> Robust -> Compatibility -> Configuration
+P2 Quality = Performance -> Robust -> Compatibility -> Configuration
 ```
 
 Compatibility proves that the same contract works across supported environments or versions.
@@ -27,7 +27,7 @@ Compatibility proves that the same contract works across supported environments 
 ## Design Skeleton
 
 ```text
-// @[Class]: P3 Quality
+// @[Class]: P2 Quality
 // @[Category]: Compatibility
 // @[Intent]: Prove contract stability across supported environments or versions.
 // @[UseWhen]: OS, compiler, runtime, dependency, protocol, or version variation matters.

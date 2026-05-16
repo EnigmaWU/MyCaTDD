@@ -1,13 +1,13 @@
 # CaTDD method prompt for Category: Concurrency
 
-Use this prompt when designing P2 Design-oriented tests for thread safety, synchronization, race conditions, and parallel API usage.
+Use this prompt when designing P1 Design-oriented tests for thread safety, synchronization, race conditions, and parallel API usage.
 
 ## Position
 
-Concurrency is the third P2 Design category by default, but it can be promoted when thread safety is architectural core.
+Concurrency is the third P1 Design category by default, but it can be promoted when thread safety is architectural core.
 
 ```text
-P2 Design = State -> Capability -> Concurrency
+P1 Design = State -> Capability -> Concurrency
 ```
 
 Concurrency proves that correct behavior survives simultaneous access and interleaving.
@@ -36,7 +36,7 @@ Concurrency proves that correct behavior survives simultaneous access and interl
 ## Design Skeleton
 
 ```text
-// @[Class]: P2 Design
+// @[Class]: P1 Design
 // @[Category]: Concurrency
 // @[Intent]: Prove thread-safety and correctness under simultaneous access.
 // @[UseWhen]: Multiple actors can access shared state or interleave operations.
