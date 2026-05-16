@@ -19,6 +19,21 @@ fi
 
 mkdir -p "$SKILL_DIR/references"
 
+required_sources=(
+  "$REPO_ROOT/methodPrompts/CaTDD_UserGuide.md"
+  "$REPO_ROOT/methodPrompts/CaTDD_DesignPrompt.md"
+  "$REPO_ROOT/methodPrompts/CaTDD_ImplTemplate.cxx"
+  "$REPO_ROOT/methodPrompts/CaTDD-UserGuide-PPT.md"
+  "$REPO_ROOT/slashCommands"
+)
+
+for source in "${required_sources[@]}"; do
+  if [[ ! -e "$source" ]]; then
+    echo "Required source not found: $source" >&2
+    exit 1
+  fi
+done
+
 ln -sfn "../../../methodPrompts/CaTDD_UserGuide.md" "$SKILL_DIR/references/CaTDD_UserGuide.md"
 ln -sfn "../../../methodPrompts/CaTDD_DesignPrompt.md" "$SKILL_DIR/references/CaTDD_DesignPrompt.md"
 ln -sfn "../../../methodPrompts/CaTDD_ImplTemplate.cxx" "$SKILL_DIR/references/CaTDD_ImplTemplate.cxx"

@@ -77,6 +77,7 @@ graph TD
 ```bash
 cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
+Run this command from the repository root so `methodPrompts/` resolves correctly.
 If your project does not have a `Test/` directory, create one or adjust the destination path.
 
 ### 2. Fill in the OVERVIEW
