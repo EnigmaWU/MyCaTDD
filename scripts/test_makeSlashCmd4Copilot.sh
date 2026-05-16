@@ -17,6 +17,8 @@ fail() {
 
 [[ -x "$GENERATOR" ]] || fail "missing executable generator: scripts/makeSlashCmd4Copilot.sh"
 
+git -C "$REPO_ROOT" check-ignore -q .github/prompts/UT_example.prompt.md || fail "generated Copilot prompt wrappers must be ignored in this source repo"
+
 "$GENERATOR" --output "$OUT_DIR" --clean
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f -name 'UT_*.md' | wc -l | tr -d '[:space:]')"

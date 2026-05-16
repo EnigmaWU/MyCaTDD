@@ -120,6 +120,8 @@ The installer creates or refreshes these target-project assets:
 - `.github/prompts/UT_*.prompt.md`: Copilot-native thin adapters generated from `slashCommands`.
 - `.github/instructions/catdd.instructions.md`: Copilot instruction file that points agents back to `.catdd/`.
 
+In this source repository, generated `.github/prompts/UT_*.prompt.md` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native prompt wrappers for target projects when needed.
+
 ## Quick Start
 
 1. Read `README_UserGuide.md` first for the full picture.

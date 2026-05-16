@@ -34,6 +34,8 @@ scripts/makeSlashCmd4Copilot.sh --clean
 
 The generated files live under `.github/prompts/` and should stay thin. Each wrapper points back to the portable source command and to `methodPrompts` as the method source of truth.
 
+In this source repository, generated `UT_*.prompt.md` wrappers are temporary output and should not be committed. Commit the portable command source and generator scripts instead.
+
 Validate the generator with:
 
 ```bash

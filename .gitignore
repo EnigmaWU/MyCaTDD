@@ -67,3 +67,7 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# CaTDD generated install/adapter outputs in this source repo
+/.catdd/
+/.github/prompts/UT_*.prompt.md

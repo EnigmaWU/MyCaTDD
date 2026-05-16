@@ -34,6 +34,8 @@ scripts/makeSlashCmd4Copilot.sh --clean
 
 生成文件位于 `.github/prompts/`，并且应保持为薄包装。每个包装都指回可移植命令源文件，并指向 `methodPrompts` 作为方法真理源。
 
+在本源仓库中，生成的 `UT_*.prompt.md` 包装是临时输出，不应提交。应提交可移植命令源与生成脚本。
+
 可以用下面的命令验证生成器：
 
 ```bash

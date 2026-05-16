@@ -120,6 +120,8 @@ scripts/installCaTDD4Copilot.sh --target /path/to/new-project --init --clean-pro
 - `.github/prompts/UT_*.prompt.md`：从 `slashCommands` 生成的 Copilot 原生薄适配。
 - `.github/instructions/catdd.instructions.md`：指向 `.catdd/` 的 Copilot instruction 文件。
 
+在本源仓库中，生成的 `.github/prompts/UT_*.prompt.md` 文件只是临时适配输出，并被刻意忽略。应提交 `methodPrompts`、`slashCommands`、脚本与文档；需要时再为目标项目重新生成原生 prompt 包装。
+
 ## 快速开始
 
 1. 先阅读 `README_UserGuide.md` 了解全貌。
