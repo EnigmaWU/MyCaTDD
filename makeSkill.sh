@@ -40,7 +40,7 @@ ln -sfn "../../../methodPrompts/CaTDD_ImplTemplate.cxx" "$SKILL_DIR/references/C
 ln -sfn "../../../methodPrompts/CaTDD-UserGuide-PPT.md" "$SKILL_DIR/references/CaTDD-UserGuide-PPT.md"
 ln -sfn "../../slashCommands" "$SKILL_DIR/slashCommands"
 
-if [[ ! -d "$SKILL_DIR/slashCommands" ]]; then
+if [[ ! -L "$SKILL_DIR/slashCommands" || ! -e "$SKILL_DIR/slashCommands" ]]; then
   echo "Failed to link slashCommands into skill package" >&2
   exit 1
 fi
