@@ -24,6 +24,26 @@ It also includes a bidirectional improvement loop:
 - Practices from [2] and [3] feed improvements back into [1]
 - Task planning and reflection in [3] further improve [2]
 
+Relationship diagram:
+
+```mermaid
+flowchart LR
+  L1["[1] methodPrompts<br/>CaTDD method source"]
+  L2["[2] slashCommands<br/>Commandized prompt units"]
+  L3["[3] utCodeAgentCLI<br/>CaTDD-native CLI agent"]
+  L4["[4] agentSkill<br/>Reusable skill package"]
+
+  L1 -->|method steps| L2
+  L1 -->|method constraints| L3
+  L1 -->|canonical references| L4
+  L2 -->|reusable commands| L3
+  L4 -->|packaged capability| L2
+  L4 -->|packaged capability| L3
+  L2 -.->|practice feedback| L1
+  L3 -.->|execution feedback| L1
+  L3 -.->|planning feedback| L2
+```
+
 This README is organized around that main storyline.
 
 ## Four Layers of Assets and Responsibilities
@@ -33,18 +53,6 @@ This README is organized around that main storyline.
 Brief: the language-agnostic source-of-truth methodology layer for CaTDD. It defines comment-alive design skeletons, category method prompts, user-guide materials, and implementation templates.
 
 Read more: [methodPrompts/README.md](methodPrompts/README.md).
-
-Current repository contents:
-
-- `methodPrompts/CaTDD_methodPrompt.md`
-- `README_UserGuide.md`
-- `methodPrompts/CaTDD-UserGuide-PPT.md`
-- `methodPrompts/CaTDD-UserGuide-PPT-ZH_CN.md`
-- `methodPrompts/CaTDD_ImplTemplate.cxx`
-
-Source note: these materials were initially imported from
-`https://github.com/EnigmaWU/MyIOC_inTDD_withGHC/tree/main/LLM`
-(some relative paths in examples still point to the original repository layout).
 
 ### [2] [slashCommands](slashCommands/README.md) (prompt commands)
 
@@ -63,17 +71,6 @@ Read more: [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md).
 Brief: the reusable capability packaging layer. It wraps CaTDD method knowledge into triggerable skills and keeps skill references aligned with the canonical method files.
 
 Read more: [agentSkill/README.md](agentSkill/README.md).
-
-`agentSkill/comment-alive-test-driven-development` packages CaTDD into a triggerable skill:
-
-- `agentSkill/comment-alive-test-driven-development/SKILL.md`
-  - Skill definition: trigger conditions, input/output, constraints, phased workflow
-- `agentSkill/comment-alive-test-driven-development/README.md`
-  - Human-readable guide: US/AC/TC hierarchy, priority framework, usage examples
-- `agentSkill/comment-alive-test-driven-development/references/`
-  - Bundled references: User Guide / method prompt / Template / PPT
-
-This asset layer can be seen as the key bridge from [1] to [2]/[3].
 
 ## Three Collaboration Modes (Aligned with the Diagram)
 
@@ -105,7 +102,7 @@ This asset layer can be seen as the key bridge from [1] to [2]/[3].
 ## Quick Start
 
 1. Read `README_UserGuide.md` first for the full picture.
-2. Use `methodPrompts/CaTDD_ImplTemplate.cxx` to create a new test-file skeleton.
-3. Follow `agentSkill/comment-alive-test-driven-development/SKILL.md` to execute with a skill-based workflow.
-4. Run `bash agentSkill/makeSkill.sh` to package skill references and links.
-5. Gradually complete `slashCommands` and CLI code-agent integration in your toolchain.
+2. Read [methodPrompts/README.md](methodPrompts/README.md) when you need the method prompt map.
+3. Read [slashCommands/README.md](slashCommands/README.md) when you want to commandize stable method steps.
+4. Read [agentSkill/README.md](agentSkill/README.md) when you want reusable skill packaging.
+5. Read [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md) when you want CLI agent execution.
