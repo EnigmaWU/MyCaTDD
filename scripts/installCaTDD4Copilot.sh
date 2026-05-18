@@ -14,7 +14,7 @@ Install or refresh CaTDD methodPrompts, slashCommands, and Copilot-native prompt
 
 Options:
   --target DIR      Target project directory.
-  --clean-prompts   Remove existing generated UT_*.prompt.md files before regenerating Copilot wrappers.
+  --clean-prompts   Remove existing generated UT_*.prompt.md and SPEC_*.prompt.md files before regenerating Copilot wrappers.
   --init            Create the target directory if it does not exist.
   -h, --help        Show this help.
 USAGE
@@ -82,20 +82,20 @@ This directory is managed by `scripts/installCaTDD4Copilot.sh` from MyCaTDD.
 
 - `methodPrompts/` is the installed CaTDD method source.
 - `slashCommands/` is the installed portable flow-command source.
-- `.github/prompts/UT_*.prompt.md` files are generated Copilot adapters.
+- `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` files are generated Copilot adapters.
 
 Refresh this project by rerunning the installer from the MyCaTDD repository.
 MARKER
 
 cat > "$INSTRUCTIONS_DIR/catdd.instructions.md" <<'INSTRUCTIONS'
 ---
-description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeletons, or UT_* slash commands."
+description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeletons, or UT_* and SPEC_* slash commands."
 ---
 # CaTDD Project Instructions
 
 - CaTDD method source: `.catdd/methodPrompts/`
 - Portable slash command source: `.catdd/slashCommands/`
-- Copilot prompt wrappers: `.github/prompts/UT_*.prompt.md`
+- Copilot prompt wrappers: `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md`
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.

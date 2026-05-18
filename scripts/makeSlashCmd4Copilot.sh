@@ -17,7 +17,7 @@ Options:
   --source-dir DIR      Portable command source directory. Defaults to slashCommands/commands.
   --output DIR  Output directory for generated prompt files. Defaults to .github/prompts.
   --workspace-root DIR  Workspace root used for generated path references. Defaults to this repository root.
-  --clean       Remove existing generated UT_*.prompt.md files from the output directory first.
+  --clean       Remove existing generated UT_*.prompt.md and SPEC_*.prompt.md files from the output directory first.
   -h, --help    Show this help.
 USAGE
 }
@@ -92,7 +92,7 @@ mkdir -p "$OUTPUT_DIR"
 OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
 
 if [[ "$CLEAN" -eq 1 ]]; then
-  find "$OUTPUT_DIR" -maxdepth 1 -type f -name 'UT_*.prompt.md' -delete
+  find "$OUTPUT_DIR" -maxdepth 1 -type f \( -name 'UT_*.prompt.md' -o -name 'SPEC_*.prompt.md' \) -delete
 fi
 
 generated_count=0
@@ -142,6 +142,6 @@ ONE-MORE-THING: ask developer if something not sure
 PROMPT
 
   generated_count=$((generated_count + 1))
-done < <(find "$SOURCE_DIR" -type f -name 'UT_*.md' | sort)
+done < <(find "$SOURCE_DIR" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | sort)
 
 echo "[makeSlashCmd4Copilot] Generated $generated_count Copilot prompt wrappers in $(rel_to_workspace "$OUTPUT_DIR")"

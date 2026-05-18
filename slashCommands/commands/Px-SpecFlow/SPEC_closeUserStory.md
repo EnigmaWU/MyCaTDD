@@ -1,0 +1,31 @@
+# SPEC_closeUserStory
+
+## Purpose
+
+Close an active user story after implementation, review, commit, and CI are complete.
+
+## Inputs
+
+- `doing_user_story`: active story under `doingUS/`.
+- `commit_ref`: completed commit.
+- `ci_summary`: CI result or accepted verification summary.
+
+## Method References
+
+- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
+
+## Output Contract
+
+- Story moved or marked from `doingUS/` to `doneUS/`.
+- Completion summary with traceability to source issue, design, tests, code, commit, and CI.
+- Remaining follow-up work, if any.
+
+## Prompt Template
+
+Ask the assistant to close only verified work and preserve enough history for later review.
+
+## Conflict Guard
+
+Do not close if product intent, acceptance criteria, tests, review, commit, or CI status remains unresolved.
+
+ONE-MORE-THING: ask developer if something not sure

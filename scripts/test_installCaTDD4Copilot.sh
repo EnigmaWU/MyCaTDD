@@ -23,8 +23,8 @@ fail() {
 [[ -f "$TARGET_DIR/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "missing installed slashCommands"
 [[ -f "$TARGET_DIR/.github/instructions/catdd.instructions.md" ]] || fail "missing Copilot CaTDD instruction file"
 
-source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f -name 'UT_*.md' | wc -l | tr -d '[:space:]')"
-prompt_count="$(find "$TARGET_DIR/.github/prompts" -type f -name 'UT_*.prompt.md' | wc -l | tr -d '[:space:]')"
+source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"
+prompt_count="$(find "$TARGET_DIR/.github/prompts" -type f \( -name 'UT_*.prompt.md' -o -name 'SPEC_*.prompt.md' \) | wc -l | tr -d '[:space:]')"
 
 [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count installed Copilot prompts, got $prompt_count"
 
@@ -39,7 +39,12 @@ grep -Fq 'ONE-MORE-THING: ask developer if something not sure' "$sample" || fail
 instructions="$TARGET_DIR/.github/instructions/catdd.instructions.md"
 grep -Fq '.catdd/methodPrompts' "$instructions" || fail "instructions missing methodPrompts location"
 grep -Fq '.catdd/slashCommands' "$instructions" || fail "instructions missing slashCommands location"
-grep -Fq '.github/prompts/UT_*.prompt.md' "$instructions" || fail "instructions missing Copilot prompt wrapper location"
+grep -Fq '.github/prompts/UT_*.prompt.md' "$instructions" || fail "instructions missing UT prompt wrapper location"
+grep -Fq '.github/prompts/SPEC_*.prompt.md' "$instructions" || fail "instructions missing SPEC prompt wrapper location"
+
+spec_sample="$TARGET_DIR/.github/prompts/SPEC_openUserStory.prompt.md"
+[[ -f "$spec_sample" ]] || fail "missing installed SPEC sample prompt"
+grep -Fq '.catdd/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md' "$spec_sample" || fail "SPEC sample prompt does not point to installed slashCommands"
 
 init_target="$TARGET_DIR/new-project"
 "$INSTALLER" --target "$init_target" --init --clean-prompts
@@ -47,5 +52,6 @@ init_target="$TARGET_DIR/new-project"
 [[ -f "$init_target/.catdd/methodPrompts/README.md" ]] || fail "--init target missing installed methodPrompts"
 [[ -f "$init_target/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "--init target missing installed slashCommands"
 [[ -f "$init_target/.github/prompts/UT_convertDemoToTypical.prompt.md" ]] || fail "--init target missing generated Copilot prompt"
+[[ -f "$init_target/.github/prompts/SPEC_openUserStory.prompt.md" ]] || fail "--init target missing generated SPEC Copilot prompt"
 
 echo "[installCaTDD4Copilot-test] PASSED: installed CaTDD Copilot assets into temporary target"

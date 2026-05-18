@@ -1,0 +1,31 @@
+# SPEC_commitWorks
+
+## Purpose
+
+Prepare and commit completed work after story, tests, product code, and review pass.
+
+## Inputs
+
+- `changed_files`: files to commit.
+- `doing_user_story`: active story under `doingUS/`.
+- `verification_summary`: evidence from tests, lint, build, review, or CI preparation.
+
+## Method References
+
+- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
+
+## Output Contract
+
+- Commit scope summary.
+- Structured commit message with what, how, and why.
+- Next recommended command: `SPEC_triggerCI`.
+
+## Prompt Template
+
+Ask the assistant to verify scope, exclude unrelated changes, and create a commit message tied to the active story.
+
+## Conflict Guard
+
+Do not commit unrelated changes. Ask the developer before including ambiguous files.
+
+ONE-MORE-THING: ask developer if something not sure

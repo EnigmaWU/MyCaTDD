@@ -72,6 +72,14 @@ flowchart LR
 
 更多说明：[agentSkill/README.md](agentSkill/README.md)。
 
+## CaTDD 规格驱动流程
+
+`slashCommands` 是 CaTDD 基于 `methodPrompts` 的 Spec-Driven Development 风格流程层。
+
+在本仓库中，spec 不是一套独立的产品规格 DSL。spec 是 comment-alive verification design：US/AC/TC 骨架、CaTDD 分类覆盖、优先级关卡和测试用例状态。`methodPrompts` 定义这套方法/规格语言；`slashCommands` 把它转成可重复执行的 CodeAgent 工作流步骤；原生 prompt 文件只是面向具体智能体的适配器。
+
+CaTDD 术语 **VibeCoding** 和 **SpecCoding** 的定义见 [slashCommands/README.md](slashCommands/README.md)。
+
 ## 三种协作模式（与图一致）
 
 ### 模式 A：开发人员手动模式

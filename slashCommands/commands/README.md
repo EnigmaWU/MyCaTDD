@@ -6,8 +6,12 @@ All commands should follow [../UT_slashCommandTemplate.md](../UT_slashCommandTem
 
 ## Command Groups
 
+- [Px-SpecFlow](Px-SpecFlow): SpecCoding lifecycle for project context, work items, user stories, design, tests, product code, review, CI, and closure.
 - [P0-FuncTestsFlow](P0-FuncTestsFlow): first imported flow for functional test skeleton and TC implementation.
 
 ## Contract
 
 Commands may orchestrate work, request inputs, and define output shape. They must not redefine CaTDD category meaning. Use `methodPrompts` as the source of truth.
+
+- `SPEC_*` commands are SpecCoding lifecycle commands.
+- `UT_*` commands are unit-test design and implementation commands.

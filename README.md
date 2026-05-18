@@ -72,6 +72,14 @@ Brief: the reusable capability packaging layer. It wraps CaTDD method knowledge 
 
 Read more: [agentSkill/README.md](agentSkill/README.md).
 
+## CaTDD Spec-Driven Flow
+
+`slashCommands` is CaTDD's Spec-Driven Development-style flow layer over `methodPrompts`.
+
+In this repository, the spec is not a separate product-spec DSL. The spec is comment-alive verification design: US/AC/TC skeletons, CaTDD category coverage, priority gates, and test-case status. `methodPrompts` defines that method/spec language; `slashCommands` turns it into repeatable CodeAgent workflow steps; native prompt files are only agent-specific adapters.
+
+For the CaTDD terms **VibeCoding** and **SpecCoding**, see [slashCommands/README.md](slashCommands/README.md).
+
 ## Three Collaboration Modes (Aligned with the Diagram)
 
 ### Mode A: Manual Developer Mode

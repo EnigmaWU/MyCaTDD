@@ -24,9 +24,21 @@ This directory contains reusable slash-command prompts and flows that operationa
 
 Compared with `methodPrompts`, `slashCommands` is more flow-first and automation-friendly. Compared with `slashCommands`, `methodPrompts` is more method-first and manual-friendly.
 
+## Spec-driven flow contract
+
+`slashCommands` is CaTDD's Spec-Driven Development-style workflow layer. It is not a loose collection of prompt shortcuts.
+
+- The governing spec is the CaTDD verification design defined in `methodPrompts`.
+- Flow commands move a developer and CodeAgent through repeatable phases: convert or design skeletons, review skeletons, select the next TC, implement one TC, and review the implementation.
+- The living artifacts are US/AC/TC comments, category labels, priority gates, TC status markers, and test files.
+- Command files describe what to do now, what to read, what to produce, what to preserve, and what command should come next.
+- Native Copilot, Cline, Continue, or `utCodeAgentCLI` adapters expose the flow; they do not own the method.
+
+In CaTDD terminology, using `methodPrompts` directly in CodeAgent chat is **VibeCoding**: flexible, method-guided conversation. Using `slashCommands` is **SpecCoding**: structured Spec-Driven Development flow based on the same method definitions.
+
 ## Native adapter generation
 
-Copilot uses `.github/prompts/*.prompt.md` files as slash-invoked prompt files. Generate Copilot-native wrappers from these portable command files with:
+Copilot uses `.github/prompts/*.prompt.md` files as slash-invoked prompt files. Generate Copilot-native wrappers from these portable `SPEC_*` and `UT_*` command files with:
 
 ```bash
 scripts/makeSlashCmd4Copilot.sh --clean
@@ -93,6 +105,7 @@ Use slash commands when a developer has one of these starting points:
 
 | Flow | Purpose | Start here |
 | --- | --- | --- |
+| Px SpecFlow | Drive SpecCoding from project context and work item to reviewed, committed story | [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) |
 | P0 FuncTestsFlow | Convert or design functional test skeletons, then implement TC-by-TC | [flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md) |
 | P1 DesignTestsFlow | Extend stable functional coverage into State, Capability, and Concurrency | [flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md) |
 | P2 QualityTestsFlow | Extend stable behavior into Performance, Robust, Compatibility, and Configuration | [flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md) |
@@ -102,6 +115,7 @@ Use slash commands when a developer has one of these starting points:
 | Developer need | Command template |
 | --- | --- |
 | Create or revise a portable UT slash command | [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md) |
+| Drive a full SpecCoding lifecycle | [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md) |
 | Convert demo tests into CaTDD Typical skeleton | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
 | Design Typical, Edge, Misuse, or Fault skeleton from interface/protocol | [commands/P0-FuncTestsFlow/UT_designCatSkeleton.md](commands/P0-FuncTestsFlow/UT_designCatSkeleton.md) |
 | Review the functional skeleton set before implementation | [commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |

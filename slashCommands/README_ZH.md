@@ -24,9 +24,21 @@
 
 相对 `methodPrompts`，`slashCommands` 更偏流程与自动化；相对 `slashCommands`，`methodPrompts` 更偏方法本身与手工理解。
 
+## 规格驱动流程契约
+
+`slashCommands` 是 CaTDD 的 Spec-Driven Development 风格工作流层。它不是一组松散的提示词快捷方式。
+
+- 治理 spec 是 `methodPrompts` 中定义的 CaTDD verification design。
+- 流程命令推动开发者和 CodeAgent 经过可重复阶段：转换或设计骨架、审查骨架、选择下一个 TC、实现一个 TC、审查实现。
+- 活的产物是 US/AC/TC 注释、分类标签、优先级关卡、TC 状态标记和测试文件。
+- 命令文件描述现在做什么、读什么、产出什么、保留什么，以及下一条命令是什么。
+- 原生 Copilot、Cline、Continue 或 `utCodeAgentCLI` 适配器只暴露流程，不拥有方法本身。
+
+在 CaTDD 术语中，直接在 CodeAgent 对话中使用 `methodPrompts` 是 **VibeCoding**：灵活、由方法引导的对话。使用 `slashCommands` 是 **SpecCoding**：基于同一套方法定义的结构化 Spec-Driven Development 流程。
+
 ## 原生适配生成
 
-Copilot 使用 `.github/prompts/*.prompt.md` 文件作为可通过斜杠触发的提示词文件。可以用下面的脚本从这些可移植命令文件生成 Copilot 原生包装：
+Copilot 使用 `.github/prompts/*.prompt.md` 文件作为可通过斜杠触发的提示词文件。可以用下面的脚本从这些可移植的 `SPEC_*` 和 `UT_*` 命令文件生成 Copilot 原生包装：
 
 ```bash
 scripts/makeSlashCmd4Copilot.sh --clean
@@ -93,6 +105,7 @@ bash scripts/test_installCaTDD4Copilot.sh
 
 | Flow | Purpose | Start here |
 | --- | --- | --- |
+| Px SpecFlow | 从项目上下文和 work item 驱动 SpecCoding，直到故事完成审查与提交 | [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) |
 | P0 FuncTestsFlow | 转换或设计功能测试骨架，然后逐个 TC 实现 | [flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md) |
 | P1 DesignTestsFlow | 在稳定功能覆盖基础上扩展 State、Capability、Concurrency | [flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md) |
 | P2 QualityTestsFlow | 在稳定行为基础上扩展 Performance、Robust、Compatibility、Configuration | [flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md) |
@@ -102,6 +115,7 @@ bash scripts/test_installCaTDD4Copilot.sh
 | Developer need | Command template |
 | --- | --- |
 | 创建或修订可移植的 UT 斜杠命令 | [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md) |
+| 驱动完整 SpecCoding 生命周期 | [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md) |
 | 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
 | 基于 interface/protocol 设计 Typical、Edge、Misuse 或 Fault 骨架 | [commands/P0-FuncTestsFlow/UT_designCatSkeleton.md](commands/P0-FuncTestsFlow/UT_designCatSkeleton.md) |
 | 实现前审查功能测试骨架集合 | [commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
