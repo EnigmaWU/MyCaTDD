@@ -7,7 +7,7 @@ Review product code, tests, and traceability before commit or refactor routing.
 ## Inputs
 
 - `changed_files`: product and test files changed for the active story.
-- `doing_user_story`: active story under `doingUS/`.
+- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `verification_output`: test, lint, build, or manual verification output.
 
 ## Method References
@@ -17,7 +17,7 @@ Review product code, tests, and traceability before commit or refactor routing.
 
 ## Output Contract
 
-- Review result: pass, refactor, update design, add tests, or ask developer.
+- Review result for committed-scope product/test changes: pass, refactor, update design, add tests, or ask developer.
 - Findings prioritized by correctness, traceability, and quality risk.
 - Next recommended command: `SPEC_commitWorks` or `SPEC_refactorIssue`.
 

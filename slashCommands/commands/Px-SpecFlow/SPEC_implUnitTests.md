@@ -18,7 +18,7 @@ Implement selected CaTDD test cases for the active user story.
 
 ## Output Contract
 
-- Implemented test case code tied to selected TC comments.
+- Implemented test case code in committed test files, tied to selected TC comments.
 - Test status update showing red/green state when known.
 - Next recommended command: `SPEC_implProductCodes` or another `SPEC_implUnitTests` pass.
 

@@ -16,7 +16,7 @@ Trigger, monitor, or summarize CI after committed work.
 
 ## Output Contract
 
-- CI trigger or verification summary.
+- CI trigger or verification summary for committed team-shared work.
 - Failing checks and suggested routing if CI fails.
 - Next recommended command: `SPEC_closeUserStory` if CI passes, otherwise `SPEC_refactorIssue`.
 

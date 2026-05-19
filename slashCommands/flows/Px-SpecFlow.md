@@ -24,28 +24,55 @@ The governing spec is comment-alive verification design: project context, user s
 
 ## Artifacts
 
-- `projectContext.md`: project facts, constraints, conventions, and current operating context.
-- `pendingNews/YYYYMMDD-*.md`: imported issues or feature requests waiting for analysis.
-- `todoUS/YYYYMMDD-UserStory.md`: analyzed user stories waiting to be opened.
-- `doingUS/YYYYMMDD-UserStory.md`: active user stories under design, test, implementation, or review.
-- `doneUS/YYYYMMDD-UserStory.md`: completed user stories after review, commit, and CI.
+- `.catdd/spec/projectContext.md`: project facts, constraints, conventions, and current operating context.
+- `.catdd/spec/pendingNews/YYYYMMDD-*.md`: imported issues or feature requests waiting for analysis.
+- `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`: analyzed user stories waiting to be opened.
+- `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`: active user stories under design, test, implementation, or review.
+- `.catdd/spec/doneUS/YYYYMMDD-UserStory.md`: completed user stories after review, commit, and CI.
 - `README.md` or module design docs: detail design and acceptance criteria for the active module or feature.
-- `WorkingProcessLog.md`: optional trace log for decisions, command transitions, and unresolved questions.
+- `.catdd/spec/WorkingProcessLog.md`: optional trace log for decisions, command transitions, and unresolved questions.
+
+## Artifact Persistence Policy
+
+SpecCoding separates team knowledge from personal work-in-progress state.
+
+All SpecFlow-managed artifacts live under `.catdd/spec/` in the target project.
+
+| Artifact | Scope | Git policy |
+| --- | --- | --- |
+| `.catdd/spec/projectContext.md` | Team-shared | Commit stable project context so teammates and CodeAgents use the same facts. |
+| `.catdd/spec/pendingNews/` | Team-shared | Commit imported work items that should be visible to the team. |
+| `.catdd/spec/todoUS/` | Team-shared | Commit analyzed user stories that are ready to be picked up. |
+| `.catdd/spec/doingUS/` | Local work state | Gitignore active user stories because they represent one developer's current progress. |
+| `.catdd/spec/doneUS/` | Team-shared | Commit completed story records after review, verification, and close. |
+| `README.md` or module design docs | Team-shared | Commit stable design and acceptance criteria with the feature or module. |
+| `.catdd/spec/WorkingProcessLog.md` | Local work state | Gitignore personal command traces, temporary decisions, and unresolved local notes. |
+
+Recommended target-project `.gitignore` rules:
+
+```gitignore
+/.catdd/spec/doingUS/
+/.catdd/spec/WorkingProcessLog.md
+```
 
 ## Flow Diagram
 
 ```mermaid
 flowchart LR
-    Init["SPEC_initProjectContext"] --> Context["projectContext.md"]
+    Init["SPEC_initProjectContext"] --> Context[".catdd/spec/projectContext.md"]
     UpdateContext["SPEC_updateProjectContext"] --> Context
-    Context --> Import["SPEC_importWorkItem"]
+    Context --> ImportIssue["SPEC_importIssue"]
+    Context --> ImportFeature["SPEC_importFeature"]
 
-    Import --> Pending["pendingNews/*.md"]
-    Pending --> Analyze["SPEC_analyzeWorkItem"]
-    Analyze --> Todo["todoUS/*-UserStory.md"]
+    ImportIssue --> Pending[".catdd/spec/pendingNews/*.md"]
+    ImportFeature --> Pending
+    Pending --> AnalyzeIssue["SPEC_analyzeIssue"]
+    Pending --> AnalyzeFeature["SPEC_analyzeFeature"]
+    AnalyzeIssue --> Todo[".catdd/spec/todoUS/*-UserStory.md"]
+    AnalyzeFeature --> Todo
 
     Todo --> Open["SPEC_openUserStory"]
-    Open --> Doing["doingUS/*-UserStory.md"]
+    Open --> Doing[".catdd/spec/doingUS/*-UserStory.md"]
 
     Doing --> Detail["SPEC_takeDetailDesign"]
     Detail --> ReviewStory["SPEC_reviewUserStory"]
@@ -64,16 +91,16 @@ flowchart LR
     QualityCode -- "YES" --> Commit["SPEC_commitWorks"]
     Commit --> CI["SPEC_triggerCI"]
     CI --> Close["SPEC_closeUserStory"]
-    Close --> Done["doneUS/*-UserStory.md"]
+    Close --> Done[".catdd/spec/doneUS/*-UserStory.md"]
 ```
 
 ## Command Sequence
 
 1. Use [../commands/Px-SpecFlow/SPEC_initProjectContext.md](../commands/Px-SpecFlow/SPEC_initProjectContext.md) to create the first project context.
 2. Use [../commands/Px-SpecFlow/SPEC_updateProjectContext.md](../commands/Px-SpecFlow/SPEC_updateProjectContext.md) whenever project facts, constraints, or conventions change.
-3. Use [../commands/Px-SpecFlow/SPEC_importWorkItem.md](../commands/Px-SpecFlow/SPEC_importWorkItem.md) to import an issue or feature request into `pendingNews/`.
-4. Use [../commands/Px-SpecFlow/SPEC_analyzeWorkItem.md](../commands/Px-SpecFlow/SPEC_analyzeWorkItem.md) to convert pending work into a user story in `todoUS/`.
-5. Use [../commands/Px-SpecFlow/SPEC_openUserStory.md](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `doingUS/`.
+3. Use [../commands/Px-SpecFlow/SPEC_importIssue.md](../commands/Px-SpecFlow/SPEC_importIssue.md) or [../commands/Px-SpecFlow/SPEC_importFeature.md](../commands/Px-SpecFlow/SPEC_importFeature.md) to import issue or feature input into `.catdd/spec/pendingNews/`.
+4. Use [../commands/Px-SpecFlow/SPEC_analyzeIssue.md](../commands/Px-SpecFlow/SPEC_analyzeIssue.md) or [../commands/Px-SpecFlow/SPEC_analyzeFeature.md](../commands/Px-SpecFlow/SPEC_analyzeFeature.md) to convert pending input into a user story in `.catdd/spec/todoUS/`.
+5. Use [../commands/Px-SpecFlow/SPEC_openUserStory.md](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/spec/doingUS/`.
 6. Use [../commands/Px-SpecFlow/SPEC_takeDetailDesign.md](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) to produce detailed design and acceptance criteria.
 7. Use [../commands/Px-SpecFlow/SPEC_reviewUserStory.md](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) to gate story and design quality.
 8. Use [../commands/Px-SpecFlow/SPEC_updateDetailDesign.md](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) when the review finds missing or weak design.

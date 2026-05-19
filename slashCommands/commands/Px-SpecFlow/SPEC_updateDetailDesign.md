@@ -6,7 +6,7 @@ Revise detailed design and acceptance criteria after story review, implementatio
 
 ## Inputs
 
-- `doing_user_story`: active story under `doingUS/`.
+- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `detail_design`: design file to update.
 - `review_feedback`: findings from story, code, test, or CI review.
 
@@ -17,7 +17,7 @@ Revise detailed design and acceptance criteria after story review, implementatio
 
 ## Output Contract
 
-- Updated design and acceptance criteria.
+- Updated design and acceptance criteria in local gitignored `.catdd/spec/doingUS/` work state or stable team-shared design docs.
 - Review-feedback checklist showing what was addressed.
 - Remaining risks and next recommended command.
 

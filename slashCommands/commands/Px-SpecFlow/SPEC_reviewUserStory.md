@@ -6,7 +6,7 @@ Review the active user story, detailed design, and acceptance criteria before te
 
 ## Inputs
 
-- `doing_user_story`: active story under `doingUS/`.
+- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `detail_design`: design or README file updated by `SPEC_takeDetailDesign`.
 - `projectContext_file`: current project context.
 
@@ -17,7 +17,7 @@ Review the active user story, detailed design, and acceptance criteria before te
 
 ## Output Contract
 
-- Review result: pass, revise design, or ask developer.
+- Review result recorded against local gitignored `.catdd/spec/doingUS/` work state: pass, revise design, or ask developer.
 - Missing acceptance criteria, ambiguity, and risk list.
 - Next recommended command: `SPEC_designUnitTests` or `SPEC_updateDetailDesign`.
 

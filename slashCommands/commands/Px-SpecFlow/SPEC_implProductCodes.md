@@ -17,7 +17,7 @@ Implement product code for the active story after selected unit tests exist.
 
 ## Output Contract
 
-- Product code changes scoped to the active story.
+- Product code changes scoped to the active story and intended for commit when review passes.
 - Traceability from implementation to tests and acceptance criteria.
 - Known verification result or reason verification was not run.
 

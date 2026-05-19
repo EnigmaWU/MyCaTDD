@@ -46,7 +46,7 @@ scripts/makeSlashCmd4Copilot.sh --clean
 
 The generated files live under `.github/prompts/` and should stay thin. Each wrapper points back to the portable source command and to `methodPrompts` as the method source of truth.
 
-In this source repository, generated `UT_*.prompt.md` wrappers are temporary output and should not be committed. Commit the portable command source and generator scripts instead.
+In this source repository, generated `UT_*.prompt.md` and `SPEC_*.prompt.md` wrappers are temporary output and should not be committed. Commit the portable command source and generator scripts instead.
 
 Validate the generator with:
 
@@ -61,6 +61,8 @@ scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
 ```
 
 The installer copies `methodPrompts` and `slashCommands` into the target project's `.catdd/` directory, then generates Copilot prompt wrappers under the target project's `.github/prompts/` directory.
+
+For SpecCoding work inside a target project, keep all SpecFlow-managed artifacts under `.catdd/spec/`. Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/todoUS/`, and `.catdd/spec/doneUS/`. Keep local work-in-progress artifacts such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored; the installer manages those `.gitignore` rules.
 
 Validate the installer with:
 

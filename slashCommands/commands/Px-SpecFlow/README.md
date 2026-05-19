@@ -4,14 +4,18 @@ This directory contains `SPEC_*` command templates for the CaTDD SpecCoding life
 
 `SPEC_*` commands orchestrate issue, story, design, test, implementation, review, CI, and closure work. They are flow commands, not CaTDD category definitions. Method semantics remain in `methodPrompts`.
 
+Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doneUS/`, tests, product code, and stable design docs. Keep local active-work state such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored.
+
 ## Command Map
 
 | Command | Purpose |
 | --- | --- |
 | [SPEC_initProjectContext.md](SPEC_initProjectContext.md) | Create initial project context. |
 | [SPEC_updateProjectContext.md](SPEC_updateProjectContext.md) | Refresh project context after facts change. |
-| [SPEC_importWorkItem.md](SPEC_importWorkItem.md) | Import issue or feature request into pending work. |
-| [SPEC_analyzeWorkItem.md](SPEC_analyzeWorkItem.md) | Analyze pending work and generate a user story. |
+| [SPEC_importIssue.md](SPEC_importIssue.md) | Import issue, bug, defect, or support problem into pending work. |
+| [SPEC_importFeature.md](SPEC_importFeature.md) | Import feature request, enhancement, or product idea into pending work. |
+| [SPEC_analyzeIssue.md](SPEC_analyzeIssue.md) | Analyze pending issue input and generate a repair-oriented user story. |
+| [SPEC_analyzeFeature.md](SPEC_analyzeFeature.md) | Analyze pending feature input and generate a value-oriented user story. |
 | [SPEC_openUserStory.md](SPEC_openUserStory.md) | Move a selected user story into active work. |
 | [SPEC_takeDetailDesign.md](SPEC_takeDetailDesign.md) | Produce detailed design and acceptance criteria. |
 | [SPEC_reviewUserStory.md](SPEC_reviewUserStory.md) | Review story, acceptance criteria, and design readiness. |

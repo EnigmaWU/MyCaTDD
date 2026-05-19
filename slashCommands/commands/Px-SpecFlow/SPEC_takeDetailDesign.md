@@ -6,7 +6,7 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 ## Inputs
 
-- `doing_user_story`: active story under `doingUS/`.
+- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `projectContext_file`: current project context.
 - `design_target`: module README, detail design file, API contract, or architecture note.
 
@@ -17,7 +17,7 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 ## Output Contract
 
-- Detailed design notes tied to the active user story.
+- Detailed design notes tied to the active user story in local gitignored `.catdd/spec/doingUS/` work state or stable team-shared design docs.
 - Acceptance criteria that can be converted into CaTDD US/AC/TC skeletons.
 - Explicit assumptions, constraints, and unresolved questions.
 

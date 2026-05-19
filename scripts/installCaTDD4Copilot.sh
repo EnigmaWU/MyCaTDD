@@ -65,15 +65,52 @@ fi
 
 TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
 CATDD_DIR="$TARGET_DIR/.catdd"
+SPEC_DIR="$CATDD_DIR/spec"
 GITHUB_DIR="$TARGET_DIR/.github"
 PROMPTS_DIR="$GITHUB_DIR/prompts"
 INSTRUCTIONS_DIR="$GITHUB_DIR/instructions"
 
-mkdir -p "$CATDD_DIR" "$PROMPTS_DIR" "$INSTRUCTIONS_DIR"
+mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/doneUS" "$PROMPTS_DIR" "$INSTRUCTIONS_DIR"
+
+update_spec_gitignore() {
+  local gitignore_file="$TARGET_DIR/.gitignore"
+  local temp_file
+  temp_file="$(mktemp)"
+
+  if [[ -f "$gitignore_file" ]]; then
+    awk '
+      $0 == "# BEGIN CaTDD SpecCoding local state" { skip = 1; next }
+      $0 == "# END CaTDD SpecCoding local state" { skip = 0; next }
+      !skip { print }
+    ' "$gitignore_file" > "$temp_file"
+  else
+    : > "$temp_file"
+  fi
+
+  if [[ -s "$temp_file" ]]; then
+    perl -0pi -e 's/[ \t\r]*\n+\z/\n/' "$temp_file"
+  fi
+
+  {
+    if [[ -s "$temp_file" ]]; then
+      cat "$temp_file"
+      printf '\n'
+    fi
+    cat <<'GITIGNORE'
+# BEGIN CaTDD SpecCoding local state
+/.catdd/spec/doingUS/
+/.catdd/spec/WorkingProcessLog.md
+# END CaTDD SpecCoding local state
+GITIGNORE
+  } > "$gitignore_file"
+
+  rm -f "$temp_file"
+}
 
 rm -rf "$CATDD_DIR/methodPrompts" "$CATDD_DIR/slashCommands"
 cp -R "$REPO_ROOT/methodPrompts" "$CATDD_DIR/methodPrompts"
 cp -R "$REPO_ROOT/slashCommands" "$CATDD_DIR/slashCommands"
+update_spec_gitignore
 
 cat > "$CATDD_DIR/CaTDD_INSTALL.md" <<'MARKER'
 # CaTDD Install Marker
@@ -82,7 +119,10 @@ This directory is managed by `scripts/installCaTDD4Copilot.sh` from MyCaTDD.
 
 - `methodPrompts/` is the installed CaTDD method source.
 - `slashCommands/` is the installed portable flow-command source.
+- `spec/` is the installed SpecCoding artifact workspace.
 - `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` files are generated Copilot adapters.
+- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `todoUS/`, and `doneUS/`.
+- Keep local SpecCoding work state such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored.
 
 Refresh this project by rerunning the installer from the MyCaTDD repository.
 MARKER
@@ -98,6 +138,8 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Copilot prompt wrappers: `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md`
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
+- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `todoUS/`, and `doneUS/`.
+- Keep local SpecCoding work state such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
 INSTRUCTIONS
 
@@ -116,4 +158,5 @@ bash "$REPO_ROOT/scripts/makeSlashCmd4Copilot.sh" "${generator_args[@]}"
 echo "[installCaTDD4Copilot] Installed CaTDD for Copilot into $TARGET_DIR"
 echo "[installCaTDD4Copilot] Method source: .catdd/methodPrompts"
 echo "[installCaTDD4Copilot] Slash command source: .catdd/slashCommands"
+echo "[installCaTDD4Copilot] SpecCoding artifacts: .catdd/spec"
 echo "[installCaTDD4Copilot] Copilot prompts: .github/prompts"

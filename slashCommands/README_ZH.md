@@ -46,7 +46,7 @@ scripts/makeSlashCmd4Copilot.sh --clean
 
 生成文件位于 `.github/prompts/`，并且应保持为薄包装。每个包装都指回可移植命令源文件，并指向 `methodPrompts` 作为方法真理源。
 
-在本源仓库中，生成的 `UT_*.prompt.md` 包装是临时输出，不应提交。应提交可移植命令源与生成脚本。
+在本源仓库中，生成的 `UT_*.prompt.md` 和 `SPEC_*.prompt.md` 包装是临时输出，不应提交。应提交可移植命令源与生成脚本。
 
 可以用下面的命令验证生成器：
 
@@ -61,6 +61,8 @@ scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
 ```
 
 安装器会把 `methodPrompts` 和 `slashCommands` 复制到目标项目的 `.catdd/` 目录，然后在目标项目的 `.github/prompts/` 目录下生成 Copilot prompt 包装。
+
+在目标项目中使用 SpecCoding 时，所有由 SpecFlow 管理的产物都放在 `.catdd/spec/` 下。应提交 `.catdd/spec/projectContext.md`、`.catdd/spec/pendingNews/`、`.catdd/spec/todoUS/`、`.catdd/spec/doneUS/` 等团队共享产物。`.catdd/spec/doingUS/` 和 `.catdd/spec/WorkingProcessLog.md` 属于本地进行中的工作状态，应保持 gitignore；安装器会维护这些 `.gitignore` 规则。
 
 可以用下面的命令验证安装器：
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Refresh `projectContext.md` when project facts, constraints, conventions, or decisions change.
+Refresh `.catdd/spec/projectContext.md` when project facts, constraints, conventions, or decisions change.
 
 ## Inputs
 
@@ -16,7 +16,7 @@ Refresh `projectContext.md` when project facts, constraints, conventions, or dec
 
 ## Output Contract
 
-- Updated project context with only confirmed changes.
+- Updated `.catdd/spec/projectContext.md` team-shared persistent artifact with only confirmed changes.
 - A short change log describing what changed and why.
 - Open questions for uncertain project intent.
 

@@ -43,4 +43,14 @@ grep -Fq 'description: "Run CaTDD slash command SPEC_openUserStory"' "$spec_samp
 grep -Fq 'slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md' "$spec_sample" || fail "SPEC sample prompt missing source command reference"
 grep -Fq 'methodPrompts' "$spec_sample" || fail "SPEC sample prompt missing methodPrompts source-of-truth reference"
 
+for command_name in SPEC_importIssue SPEC_importFeature SPEC_analyzeIssue SPEC_analyzeFeature; do
+  command_prompt="$OUT_DIR/${command_name}.prompt.md"
+  [[ -f "$command_prompt" ]] || fail "missing generated prompt: ${command_name}.prompt.md"
+  grep -Fq "description: \"Run CaTDD slash command ${command_name}\"" "$command_prompt" || fail "${command_name} prompt missing Copilot description"
+  grep -Fq "slashCommands/commands/Px-SpecFlow/${command_name}.md" "$command_prompt" || fail "${command_name} prompt missing source command reference"
+done
+
+[[ ! -e "$OUT_DIR/SPEC_importWorkItem.prompt.md" ]] || fail "old SPEC_importWorkItem prompt should not be generated"
+[[ ! -e "$OUT_DIR/SPEC_analyzeWorkItem.prompt.md" ]] || fail "old SPEC_analyzeWorkItem prompt should not be generated"
+
 echo "[makeSlashCmd4Copilot-test] PASSED: generated $prompt_count Copilot prompt wrappers"

@@ -69,6 +69,12 @@ Testing/
 .cache/
 
 # CaTDD generated install/adapter outputs in this source repo
-/.catdd/
+/.catdd/methodPrompts/
+/.catdd/slashCommands/
+/.catdd/CaTDD_INSTALL.md
 /.github/prompts/UT_*.prompt.md
 /.github/prompts/SPEC_*.prompt.md
+
+# CaTDD SpecCoding local work state
+/.catdd/spec/doingUS/
+/.catdd/spec/WorkingProcessLog.md

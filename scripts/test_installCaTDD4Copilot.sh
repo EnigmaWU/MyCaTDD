@@ -46,6 +46,15 @@ spec_sample="$TARGET_DIR/.github/prompts/SPEC_openUserStory.prompt.md"
 [[ -f "$spec_sample" ]] || fail "missing installed SPEC sample prompt"
 grep -Fq '.catdd/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md' "$spec_sample" || fail "SPEC sample prompt does not point to installed slashCommands"
 
+for command_name in SPEC_importIssue SPEC_importFeature SPEC_analyzeIssue SPEC_analyzeFeature; do
+  command_prompt="$TARGET_DIR/.github/prompts/${command_name}.prompt.md"
+  [[ -f "$command_prompt" ]] || fail "missing installed prompt: ${command_name}.prompt.md"
+  grep -Fq ".catdd/slashCommands/commands/Px-SpecFlow/${command_name}.md" "$command_prompt" || fail "${command_name} prompt does not point to installed slashCommands"
+done
+
+[[ ! -e "$TARGET_DIR/.github/prompts/SPEC_importWorkItem.prompt.md" ]] || fail "old SPEC_importWorkItem prompt should not be installed"
+[[ ! -e "$TARGET_DIR/.github/prompts/SPEC_analyzeWorkItem.prompt.md" ]] || fail "old SPEC_analyzeWorkItem prompt should not be installed"
+
 init_target="$TARGET_DIR/new-project"
 "$INSTALLER" --target "$init_target" --init --clean-prompts
 
@@ -53,5 +62,6 @@ init_target="$TARGET_DIR/new-project"
 [[ -f "$init_target/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "--init target missing installed slashCommands"
 [[ -f "$init_target/.github/prompts/UT_convertDemoToTypical.prompt.md" ]] || fail "--init target missing generated Copilot prompt"
 [[ -f "$init_target/.github/prompts/SPEC_openUserStory.prompt.md" ]] || fail "--init target missing generated SPEC Copilot prompt"
+[[ -f "$init_target/.github/prompts/SPEC_importIssue.prompt.md" ]] || fail "--init target missing generated SPEC import issue prompt"
 
 echo "[installCaTDD4Copilot-test] PASSED: installed CaTDD Copilot assets into temporary target"

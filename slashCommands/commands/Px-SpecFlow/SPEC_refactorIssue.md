@@ -8,7 +8,7 @@ Route failed quality, unclear design, or implementation debt back into a focused
 
 - `review_findings`: findings from story, test, product-code, or CI review.
 - `changed_files`: files involved in the issue.
-- `doing_user_story`: active story under `doingUS/`.
+- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 
 ## Method References
 
@@ -17,7 +17,7 @@ Route failed quality, unclear design, or implementation debt back into a focused
 
 ## Output Contract
 
-- Refactor or correction plan.
+- Refactor or correction plan recorded in local gitignored active story context unless it becomes a new team-shared work item.
 - Routing decision: update design, redesign tests, fix product code, or ask developer.
 - Next recommended command.
 

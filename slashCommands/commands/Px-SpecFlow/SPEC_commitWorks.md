@@ -7,7 +7,7 @@ Prepare and commit completed work after story, tests, product code, and review p
 ## Inputs
 
 - `changed_files`: files to commit.
-- `doing_user_story`: active story under `doingUS/`.
+- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `verification_summary`: evidence from tests, lint, build, review, or CI preparation.
 
 ## Method References
@@ -16,7 +16,7 @@ Prepare and commit completed work after story, tests, product code, and review p
 
 ## Output Contract
 
-- Commit scope summary.
+- Commit scope summary for team-shared artifacts, tests, and product code; exclude local gitignored `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` state.
 - Structured commit message with what, how, and why.
 - Next recommended command: `SPEC_triggerCI`.
 

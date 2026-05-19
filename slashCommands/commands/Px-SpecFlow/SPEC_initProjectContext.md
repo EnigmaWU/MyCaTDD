@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Create the first `projectContext.md` for a target project before SpecCoding begins.
+Create the first `.catdd/spec/projectContext.md` for a target project before SpecCoding begins.
 
 ## Inputs
 
@@ -17,9 +17,9 @@ Create the first `projectContext.md` for a target project before SpecCoding begi
 
 ## Output Contract
 
-- A `projectContext.md` draft with project facts, constraints, code conventions, test conventions, and open questions.
+- A `.catdd/spec/projectContext.md` team-shared persistent artifact with project facts, constraints, code conventions, test conventions, and open questions.
 - A list of assumptions that must be confirmed by the developer.
-- Next recommended command: `SPEC_importWorkItem` or `SPEC_updateProjectContext`.
+- Next recommended command: `SPEC_importIssue`, `SPEC_importFeature`, or `SPEC_updateProjectContext`.
 
 ## Prompt Template
 

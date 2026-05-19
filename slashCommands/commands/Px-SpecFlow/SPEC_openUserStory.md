@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Move a selected user story from `todoUS/` into `doingUS/` and prepare it for detailed design.
+Move a selected user story from `.catdd/spec/todoUS/` into `.catdd/spec/doingUS/` and prepare it for detailed design.
 
 ## Inputs
 
-- `todo_user_story`: selected `todoUS/*-UserStory.md` file.
+- `todo_user_story`: selected `.catdd/spec/todoUS/*-UserStory.md` file.
 - `projectContext_file`: current project context.
-- `working_log`: optional `WorkingProcessLog.md`.
+- `working_log`: optional `.catdd/spec/WorkingProcessLog.md`.
 
 ## Method References
 
@@ -17,13 +17,13 @@ Move a selected user story from `todoUS/` into `doingUS/` and prepare it for det
 
 ## Output Contract
 
-- A `doingUS/*-UserStory.md` active story file.
+- A `.catdd/spec/doingUS/*-UserStory.md` local gitignored work state file.
 - Status marker showing the story is open.
 - Initial next-step recommendation, usually `SPEC_takeDetailDesign`.
 
 ## Prompt Template
 
-Ask the assistant to preserve story traceability, move only the selected story, and start a clear active-work status section.
+Ask the assistant to preserve story traceability, copy or move only the selected story into local active work state, and start a clear active-work status section.
 
 ## Conflict Guard
 
