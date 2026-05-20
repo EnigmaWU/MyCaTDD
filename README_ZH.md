@@ -58,7 +58,7 @@ flowchart LR
 
 简介：与具体 code-agent 无关的流程连接层。它把 `methodPrompts` 中稳定的 CaTDD 方法步骤整理为小型、可触发的提示词命令和执行流程，可被 Copilot、Cline、Continue 或类似助手使用。它更偏自动化流程。它把 CaTDD 适配到现有 CodeAgent，但不自行定义 CaTDD 方法语义。
 
-更多说明：[slashCommands/README.md](slashCommands/README.md)。
+更多说明：[slashCommands/README.md](slashCommands/README.md)。生成器、安装器、流程和命令用法见 [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)。
 
 ### [3] [utCodeAgentCLI](utCodeAgentCLI/README.md)（代码智能体）
 
@@ -78,7 +78,7 @@ flowchart LR
 
 在本仓库中，spec 不是一套独立的产品规格 DSL。spec 是 comment-alive verification design：US/AC/TC 骨架、CaTDD 分类覆盖、优先级关卡和测试用例状态。`methodPrompts` 定义这套方法/规格语言；`slashCommands` 把它转成可重复执行的 CodeAgent 工作流步骤；原生 prompt 文件只是面向具体智能体的适配器。
 
-CaTDD 术语 **VibeCoding** 和 **SpecCoding** 的定义见 [slashCommands/README.md](slashCommands/README.md)。
+CaTDD 术语 **VibeCoding** 和 **SpecCoding** 的定义见 [slashCommands/README.md](slashCommands/README.md)。可执行工作流见 [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)。
 
 ## 三种协作模式（与图一致）
 
@@ -151,6 +151,7 @@ scripts/installCaTDD4Cline.sh --target /path/to/project
 
 1. 先阅读 `README_UserGuide.md` 了解全貌。
 2. 需要方法提示词地图时，阅读 [methodPrompts/README.md](methodPrompts/README.md)。
-3. 需要把稳定方法步骤命令化时，阅读 [slashCommands/README.md](slashCommands/README.md)。
-4. 需要可复用技能封装时，阅读 [agentSkill/README.md](agentSkill/README.md)。
-5. 需要 CLI 智能体执行时，阅读 [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)。
+3. 需要命令层 WHAT/WHY 时，阅读 [slashCommands/README.md](slashCommands/README.md)。
+4. 需要生成、安装或运行稳定方法步骤命令时，阅读 [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)。
+5. 需要可复用技能封装时，阅读 [agentSkill/README.md](agentSkill/README.md)。
+6. 需要 CLI 智能体执行时，阅读 [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)。

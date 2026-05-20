@@ -58,7 +58,7 @@ Read more: [methodPrompts/README.md](methodPrompts/README.md).
 
 Brief: the code-agent-agnostic flow connector layer. It turns stable CaTDD method steps from `methodPrompts` into small triggerable prompt commands and execution flows for Copilot, Cline, Continue, or similar assistants. It is flow-first and automation-friendly. It adapts CaTDD to existing CodeAgents; it does not define CaTDD method semantics itself.
 
-Read more: [slashCommands/README.md](slashCommands/README.md).
+Read more: [slashCommands/README.md](slashCommands/README.md). Use [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) for generator, installer, flow, and command usage.
 
 ### [3] [utCodeAgentCLI](utCodeAgentCLI/README.md) (code agent)
 
@@ -78,7 +78,7 @@ Read more: [agentSkill/README.md](agentSkill/README.md).
 
 In this repository, the spec is not a separate product-spec DSL. The spec is comment-alive verification design: US/AC/TC skeletons, CaTDD category coverage, priority gates, and test-case status. `methodPrompts` defines that method/spec language; `slashCommands` turns it into repeatable CodeAgent workflow steps; native prompt files are only agent-specific adapters.
 
-For the CaTDD terms **VibeCoding** and **SpecCoding**, see [slashCommands/README.md](slashCommands/README.md).
+For the CaTDD terms **VibeCoding** and **SpecCoding**, see [slashCommands/README.md](slashCommands/README.md). For the executable workflow, see [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md).
 
 ## Three Collaboration Modes (Aligned with the Diagram)
 
@@ -151,6 +151,7 @@ In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/
 
 1. Read `README_UserGuide.md` first for the full picture.
 2. Read [methodPrompts/README.md](methodPrompts/README.md) when you need the method prompt map.
-3. Read [slashCommands/README.md](slashCommands/README.md) when you want to commandize stable method steps.
-4. Read [agentSkill/README.md](agentSkill/README.md) when you want reusable skill packaging.
-5. Read [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md) when you want CLI agent execution.
+3. Read [slashCommands/README.md](slashCommands/README.md) when you want the command layer WHAT/WHY.
+4. Read [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) when you want to generate, install, or run stable method-step commands.
+5. Read [agentSkill/README.md](agentSkill/README.md) when you want reusable skill packaging.
+6. Read [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md) when you want CLI agent execution.

@@ -160,7 +160,7 @@ For each TC in priority order (P0 first):
 - Packaged `references/README_UserGuide_ZH.md` — Chinese standalone CaTDD user guide copied from `methodPrompts/README_UserGuide_ZH.md`.
 - Packaged `references/CaTDD_methodPrompt.md` — Complete methodology specification with priority framework, category definitions, design skeletons, quality gates, and context-specific priority adjustments.
 - Packaged `references/CaTDD_ImplTemplate.cxx` — C++ implementation template showing the complete CaTDD file structure (copy and adapt for any language).
-- Packaged `slashCommands` — Shared slash command materials copied from repository `slashCommands/` when `agentSkill/makeSkill.sh` generates the distributable skill package.
+- Packaged `slashCommands` — Shared slash command materials and user guides copied from repository `slashCommands/` when `agentSkill/makeSkill.sh` generates the distributable skill package.
 
 ## Validation
 1. Verify the new test file contains all required sections: OVERVIEW, UNIT TESTING DESIGN, UNIT TESTING IMPLEMENTATION, TODO/TRACKING.

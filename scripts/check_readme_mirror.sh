@@ -8,6 +8,7 @@ pairs=(
   "methodPrompts/README.md|methodPrompts/README_ZH.md"
   "methodPrompts/README_UserGuide.md|methodPrompts/README_UserGuide_ZH.md"
   "slashCommands/README.md|slashCommands/README_ZH.md"
+  "slashCommands/README_UserGuide.md|slashCommands/README_UserGuide_ZH.md"
   "utCodeAgentCLI/README.md|utCodeAgentCLI/README_ZH.md"
   "agentSkill/README.md|agentSkill/README_ZH.md"
 )

@@ -78,6 +78,8 @@ Use this guide as the user-facing entry point for CaTDD. Use the linked layer RE
 
 - **methodPrompts standalone user guide**: [methodPrompts/README_UserGuide.md](methodPrompts/README_UserGuide.md) for users who copy or use only `methodPrompts/`.
 - **methodPrompts standalone user guide (ZH)**: [methodPrompts/README_UserGuide_ZH.md](methodPrompts/README_UserGuide_ZH.md) for Chinese readers using only `methodPrompts/`.
+- **slashCommands user guide**: [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) for users who generate, install, or run portable command flows.
+- **slashCommands user guide (ZH)**: [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md) for Chinese readers using portable command flows.
 
 ---
 
@@ -1244,6 +1246,7 @@ P3: Demo/Example
 - **Category method prompts**: See [methodPrompts/README.md](methodPrompts/README.md) for the full category prompt map
 - **Code Template**: See [methodPrompts/CaTDD_ImplTemplate.cxx](methodPrompts/CaTDD_ImplTemplate.cxx)
 - **Slash command layer**: See [slashCommands/README.md](slashCommands/README.md)
+- **Slash command user guide**: See [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) or [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)
 - **CLI agent layer**: See [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)
 - **Skill package layer**: See [agentSkill/README.md](agentSkill/README.md)
 - **Questions?**: Ask EnigmaWU or check existing test files in [Test/](../Test/)
