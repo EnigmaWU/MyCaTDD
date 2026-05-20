@@ -100,10 +100,10 @@ The authored skill source keeps only the skill metadata. Run `bash agentSkill/ma
 
 | File | Purpose |
 | ---- | ------- |
-| `references/README_UserGuide.md` | Full user guide with examples, quick-start guide, and getting-started checklist copied from the repository root |
+| `references/README_UserGuide.md` | Standalone CaTDD user guide copied from `methodPrompts/README_UserGuide.md` |
+| `references/README_UserGuide_ZH.md` | Chinese standalone CaTDD user guide copied from `methodPrompts/README_UserGuide_ZH.md` |
 | `references/CaTDD_methodPrompt.md` | Complete methodology specification with priority framework, category definitions, design skeletons, and quality gates copied from `methodPrompts/` |
 | `references/CaTDD_ImplTemplate.cxx` | C++ implementation template showing the full CaTDD file structure, copied from `methodPrompts/` and adaptable for any language |
-| `references/CaTDD-UserGuide-PPT.md` | Presentation-style overview of all CaTDD concepts with slides, diagrams, and real examples copied from `methodPrompts/` |
 | `slashCommands` | Shared slash command prompts copied from repository `slashCommands/` |
 
 ## Usage Example

@@ -156,10 +156,10 @@ For each TC in priority order (P0 first):
    > - Coverage gaps: [list or none]"
 
 ## Resources
-- Packaged `references/README_UserGuide.md` — Full CaTDD user guide with examples, quick-start guide, and workflow.
+- Packaged `references/README_UserGuide.md` — Standalone CaTDD user guide copied from `methodPrompts/README_UserGuide.md`.
+- Packaged `references/README_UserGuide_ZH.md` — Chinese standalone CaTDD user guide copied from `methodPrompts/README_UserGuide_ZH.md`.
 - Packaged `references/CaTDD_methodPrompt.md` — Complete methodology specification with priority framework, category definitions, design skeletons, quality gates, and context-specific priority adjustments.
 - Packaged `references/CaTDD_ImplTemplate.cxx` — C++ implementation template showing the complete CaTDD file structure (copy and adapt for any language).
-- Packaged `references/CaTDD-UserGuide-PPT.md` — Presentation-style overview of CaTDD covering all concepts with slides, diagrams, and examples.
 - Packaged `slashCommands` — Shared slash command materials copied from repository `slashCommands/` when `agentSkill/makeSkill.sh` generates the distributable skill package.
 
 ## Validation

@@ -74,6 +74,11 @@ The root [README.md](README.md) describes MyCaTDD as a four-layer path from meth
 
 Use this guide as the user-facing entry point for CaTDD. Use the linked layer READMEs when you need to understand how the method is organized, commandized, automated, or packaged in this repository.
 
+### Sub User Guides
+
+- **methodPrompts standalone user guide**: [methodPrompts/README_UserGuide.md](methodPrompts/README_UserGuide.md) for users who copy or use only `methodPrompts/`.
+- **methodPrompts standalone user guide (ZH)**: [methodPrompts/README_UserGuide_ZH.md](methodPrompts/README_UserGuide_ZH.md) for Chinese readers using only `methodPrompts/`.
+
 ---
 
 ## Why Use CaTDD?
@@ -1234,6 +1239,7 @@ P3: Demo/Example
 
 - **Repository layer map**: See [README.md](README.md)
 - **Method layer overview**: See [methodPrompts/README.md](methodPrompts/README.md)
+- **Method standalone user guide**: See [methodPrompts/README_UserGuide.md](methodPrompts/README_UserGuide.md) or [methodPrompts/README_UserGuide_ZH.md](methodPrompts/README_UserGuide_ZH.md)
 - **Methodology Deep Dive**: See [methodPrompts/CaTDD_methodPrompt.md](methodPrompts/CaTDD_methodPrompt.md)
 - **Category method prompts**: See [methodPrompts/README.md](methodPrompts/README.md) for the full category prompt map
 - **Code Template**: See [methodPrompts/CaTDD_ImplTemplate.cxx](methodPrompts/CaTDD_ImplTemplate.cxx)

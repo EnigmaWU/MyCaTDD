@@ -2,25 +2,32 @@
 
 本目录存放 CaTDD 的方法级提示词资产。
 
-## 在四层模型中的角色
+本 README 是方法层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何独立使用 `methodPrompts/`，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
 
-`methodPrompts` 是方法论的权威源头层。
+## What
 
-- 定义如何设计并执行 CaTDD 工作流。
-- 既适合人类阅读，也适合 LLM 理解。
-- 应保持稳定、明确，并可被多工具复用。
-- 与编程语言无关；特定语言文件只是示例或实现模板，不是方法限制。
+`methodPrompts` 是 CaTDD 四层模型中的方法论权威源头层。
 
-## 消费方契约
+它定义稳定的 CaTDD 方法契约：
 
-下游工具应将本目录视为稳定的 CaTDD 方法契约：
+- comment-alive 验证设计的主方法规范。
+- 面向 P0/P1/P2/P3 测试设计优先级的分类方法提示词。
+- 面向只使用本目录的人类与 CodeAgent 的独立用户指南。
+- 展示方法形态的 C++ 实现模板，但 C++ 不是方法要求。
 
-- **开发者** 阅读它来理解方法，并手工填写 comment-alive 设计骨架。
-- **CodeAgent** 阅读它来分类场景、保持 US/AC/TC 注释，并在不改变方法意图的前提下生成测试。
-- **slashCommands** 可从中抽取高频方法步骤，形成适用于任意代码助手的命令提示词，例如 Copilot、Cline、Continue 或类似工具。
+这一层既适合人类阅读，也适合 LLM 理解；它与编程语言无关，并可被多种 code-agent 工具复用。
+
+## Why
+
+`methodPrompts` 存在的原因，是让 CaTDD 方法意图独立于任何单一工作流适配器、code-agent 产品、编程语言或项目模块。
+
+下游层应将本目录视为稳定的方法契约：
+
+- **slashCommands** 将高频方法步骤命令化，供 Copilot、Cline、Continue 或类似助手使用。
 - **utCodeAgentCLI** 可将其作为 CaTDD-native 方法基础，再结合 `slashCommands` 进行更深入的规划与执行。
+- **agentSkill** 将其封装为 code-agent 可复用能力。
 
-不要在这里把某一种编程语言、某一个 code-agent 产品或某一个项目模块写成方法要求。
+当方法意图发生变化时，先修改这一层，让所有下游层继承同一个 CaTDD 含义。
 
 ## 阶段模型
 
@@ -40,31 +47,19 @@ CaTDD 方法提示词支持两个设计阶段：
 
 - 主方法规范（`CaTDD_methodPrompt.md`）
 - 分类方法提示词（`CaTDD_methodPrompt4Cat-*.md`）
-- 根目录用户指南（`../README_UserGuide.md`）
-- 演示摘要（`CaTDD-UserGuide-PPT*.md`）
+- 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
 - 实现模板（`CaTDD_ImplTemplate.cxx`）
 
-## 提示词地图
+## 文档边界
 
-选择方法提示词时使用此地图：
+保持文档分工清晰：
 
-| 需求 | 使用 |
+| 文件 | 负责内容 |
 | --- | --- |
-| 先学习面向用户的工作流 | `../README_UserGuide.md` |
-| 学习或解释完整 CaTDD 方法 | `CaTDD_methodPrompt.md` |
-| 设计核心 happy-path 行为 | `CaTDD_methodPrompt4Cat-Typical.md` |
-| 设计合法边缘场景、极限值和边界值 | `CaTDD_methodPrompt4Cat-Edge.md` |
-| 设计错误 API 使用或非法调用者行为 | `CaTDD_methodPrompt4Cat-Misuse.md` |
-| 设计依赖、资源或环境故障处理 | `CaTDD_methodPrompt4Cat-Fault.md` |
-| 设计生命周期和 FSM 验证 | `CaTDD_methodPrompt4Cat-State.md` |
-| 设计容量和最大能力验证 | `CaTDD_methodPrompt4Cat-Capability.md` |
-| 设计线程安全或竞态条件验证 | `CaTDD_methodPrompt4Cat-Concurrency.md` |
-| 设计速度、延迟、吞吐量或资源使用检查 | `CaTDD_methodPrompt4Cat-Performance.md` |
-| 设计压力、重复、长稳或稳定性检查 | `CaTDD_methodPrompt4Cat-Robust.md` |
-| 设计跨平台、版本或集成兼容性检查 | `CaTDD_methodPrompt4Cat-Compatibility.md` |
-| 设计配置、功能开关或环境变量检查 | `CaTDD_methodPrompt4Cat-Configuration.md` |
-| 设计面向文档的演示和示例 | `CaTDD_methodPrompt4Cat-DemoExample.md` |
-| 编写 C++ comment-alive 测试文件 | `CaTDD_ImplTemplate.cxx` |
+| `README.md` / `README_ZH.md` | WHAT：这一层包含什么；WHY：这一层为什么存在。 |
+| `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW：如何使用；WHO：谁使用；WHEN：何时使用；WHERE：放在哪里；以及可复制执行的 `Usage Example`。 |
+
+具体的提示词选择步骤属于独立用户指南，不放在本 README 中。
 
 ## 上游 / 下游
 
