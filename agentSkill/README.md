@@ -1,55 +1,76 @@
 # agentSkill
 
-This directory contains authored skill sources and generated packages that make CaTDD reusable in agent workflows.
+`agentSkill` contains authored skill sources and generated packages that make CaTDD reusable in agent workflows.
 
-## Role in the 4-layer model
+This README is the WHAT / WHY entry point for the capability packaging layer. For HOW, WHO, WHEN, and WHERE to package or consume CaTDD skills, read [README_UserGuide.md](README_UserGuide.md) or [README_UserGuide_ZH.md](README_UserGuide_ZH.md).
 
-`agentSkill` is the capability packaging layer.
+## What
 
-- It wraps method knowledge into triggerable skills.
-- It defines skill scope, constraints, inputs, and outputs.
-- It provides references that keep execution aligned with CaTDD.
+`agentSkill` is the reusable capability packaging layer in the CaTDD 4-layer model.
+
+It defines how CaTDD method knowledge is wrapped into CodeAgent-friendly skills:
+
+- Authored skill source directories.
+- Machine-readable `SKILL.md` definitions.
+- Human-readable skill-local README files.
+- Packaged references copied from `methodPrompts`.
+- Packaged `slashCommands` command flows for execution support.
+- Generated distributable packages under ignored `dist/` output.
+
+The authored source is the durable asset. Generated packages are build output.
+
+## Why
+
+`agentSkill` exists so CaTDD can be reused by agents without making every agent rediscover the method, command flows, constraints, and references from scratch.
+
+It keeps a clean packaging boundary:
+
+- `methodPrompts` owns the canonical CaTDD method definition.
+- `slashCommands` owns portable command flow execution.
+- `agentSkill` packages those assets as a reusable capability with scope, constraints, inputs, outputs, and validation expectations.
+- Generated `dist/` packages are self-contained so they can be copied or published without exposing source-tree symlinks or duplicate authored paths.
+
+## Packaging contract
+
+Skill packages should be generated from source, not manually edited in `dist/`.
+
+- Edit authored skill source under `agentSkill/comment-alive-test-driven-development/`.
+- Keep references aligned with `methodPrompts` and `slashCommands`.
+- Use `agentSkill/makeSkill.sh` to generate a self-contained package.
+- Keep generated `agentSkill/dist/` output ignored in this source repository.
 
 ## Typical contents
 
-- Authored skill source folders (for example, `comment-alive-test-driven-development/`)
-- `SKILL.md` files (machine-readable skill definitions)
-- Skill-local `README.md` files (human-readable usage)
-- Generated packages under `dist/` containing copied `references/` assets and `slashCommands/`
+- Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
+- Packaging script (`makeSkill.sh`)
+- Authored skill source folders such as `comment-alive-test-driven-development/`
+- `SKILL.md` files for machine-readable skill behavior
+- Skill-local `README.md` files for human-readable skill usage
+- Generated packages under `dist/` containing copied `references/` assets and copied `slashCommands/`
 
 ## Upstream / Downstream
 
-- Upstream input: `methodPrompts` (canonical method definition)
+- Upstream inputs:
+  - `methodPrompts` for canonical method definition.
+  - `slashCommands` for portable execution flows.
 - Downstream consumers:
-  - `utCodeAgentCLI` (agent execution)
-  - Assistant/chat workflows that call specific skills
+  - CodeAgent skill systems that load packaged skills.
+  - `utCodeAgentCLI` when it needs reusable skill behavior.
+  - Developers or maintainers distributing CaTDD as an agent capability.
+
+## Documentation boundary
+
+Keep the documentation split clear:
+
+| File | Owns |
+| --- | --- |
+| `README.md` / `README_ZH.md` | WHAT this layer contains and WHY it exists. |
+| `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW to generate packages, WHO uses them, WHEN to package, WHERE output lives, and a copy-exec `Usage Example`. |
+
+Operational packaging commands and validation commands belong in the standalone user guides, not in this README.
 
 ## Maintenance rule
 
-When updating a skill's behavior, edit the authored source and ensure consistency with `methodPrompts`. Generated packages under `dist/` are build output and should not be committed.
+When updating a skill's behavior, edit the authored source and ensure consistency with `methodPrompts` and `slashCommands`.
 
-## Packaging command
-
-Run the packaging script from repository root:
-
-```bash
-bash agentSkill/makeSkill.sh
-```
-
-This creates a self-contained generated package at `agentSkill/dist/comment-alive-test-driven-development/`. The generated package copies `methodPrompts` references and `slashCommands` so the authored source tree does not expose duplicate linked paths during normal repository work.
-
-## Usage Example
-
-Generate the default package from the repository root:
-
-```bash
-bash agentSkill/makeSkill.sh
-```
-
-Generate into a temporary output directory for validation:
-
-```bash
-bash agentSkill/makeSkill.sh --output /tmp/catdd-agent-skills
-```
-
-Expected result: the output directory contains `comment-alive-test-driven-development/SKILL.md`, copied `references/`, and copied `slashCommands/`, with no symlinks.
+When packaging rules change, update the user guide and tests so the generated package remains self-contained and reproducible.

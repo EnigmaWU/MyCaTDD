@@ -1,55 +1,76 @@
 # agentSkill
 
-本目录存放技能源码与生成后的技能包，用于在智能体工作流中复用 CaTDD。
+`agentSkill` 存放技能源码与生成后的技能包，用于在智能体工作流中复用 CaTDD。
 
-## 在四层模型中的角色
+本 README 是能力封装层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何打包或消费 CaTDD skills，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
 
-`agentSkill` 是能力封装层。
+## What
 
-- 将方法知识封装为可触发技能。
-- 定义技能范围、约束、输入与输出。
-- 通过参考资料保证执行与 CaTDD 对齐。
+`agentSkill` 是 CaTDD 四层模型中的可复用能力封装层。
 
-## 典型内容
+它定义如何把 CaTDD 方法知识封装为 CodeAgent 友好的技能：
 
-- 技能源码目录（例如 `comment-alive-test-driven-development/`）
-- `SKILL.md` 文件（机器可读技能定义）
-- 技能本地 `README.md`（人类可读用法）
-- `dist/` 下生成的技能包，其中包含复制后的 `references/` 资产与 `slashCommands/`
+- 技能源码目录。
+- 机器可读的 `SKILL.md` 定义。
+- 人类可读的技能本地 README 文件。
+- 从 `methodPrompts` 复制的打包参考资料。
+- 用于执行支持的打包版 `slashCommands` 命令流程。
+- 被忽略的 `dist/` 输出目录下的生成式分发包。
 
-## 上游 / 下游
+技能源码是持久资产。生成包是构建输出。
 
-- 上游输入：`methodPrompts`（权威方法定义）
+## Why
+
+`agentSkill` 存在的原因，是让 CaTDD 可以被智能体复用，而不需要每个智能体都从零发现方法、命令流程、约束和参考资料。
+
+它保持清晰的打包边界：
+
+- `methodPrompts` 负责权威 CaTDD 方法定义。
+- `slashCommands` 负责可移植命令流程执行。
+- `agentSkill` 将这些资产封装为包含范围、约束、输入、输出和验证预期的可复用能力。
+- 生成的 `dist/` 包是自包含的，因此可以复制或发布，而不会暴露源码树中的符号链接或重复 authored paths。
+
+## Packaging contract
+
+技能包应从源码生成，不应手工编辑 `dist/`。
+
+- 编辑 `agentSkill/comment-alive-test-driven-development/` 下的技能源码。
+- 保持参考资料与 `methodPrompts`、`slashCommands` 对齐。
+- 使用 `agentSkill/makeSkill.sh` 生成自包含包。
+- 在本源仓库中保持生成的 `agentSkill/dist/` 输出被忽略。
+
+## Typical contents
+
+- 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
+- 打包脚本（`makeSkill.sh`）
+- 技能源码目录，例如 `comment-alive-test-driven-development/`
+- 机器可读技能行为的 `SKILL.md` 文件
+- 人类可读技能用法的技能本地 `README.md` 文件
+- `dist/` 下生成的技能包，其中包含复制后的 `references/` 资产与复制后的 `slashCommands/`
+
+## Upstream / Downstream
+
+- 上游输入：
+  - `methodPrompts` 提供权威方法定义。
+  - `slashCommands` 提供可移植执行流程。
 - 下游消费方：
-  - `utCodeAgentCLI`（智能体执行）
-  - 调用特定技能的助手/聊天式工作流
+  - 加载打包技能的 CodeAgent skill systems。
+  - 需要可复用技能行为时的 `utCodeAgentCLI`。
+  - 将 CaTDD 作为 agent capability 分发的开发者或维护者。
 
-## 维护规则
+## Documentation boundary
 
-更新技能行为时，应编辑技能源码，并与 `methodPrompts` 保持一致。`dist/` 下的生成包属于构建输出，不应提交。
+保持文档分工清晰：
 
-## 打包命令
+| 文件 | 负责内容 |
+| --- | --- |
+| `README.md` / `README_ZH.md` | WHAT：这一层包含什么；WHY：这一层为什么存在。 |
+| `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW：如何生成包；WHO：谁使用；WHEN：何时打包；WHERE：输出在哪里；以及可复制执行的 `Usage Example`。 |
 
-在仓库根目录运行打包脚本：
+具体的打包命令与验证命令属于独立用户指南，不放在本 README 中。
 
-```bash
-bash agentSkill/makeSkill.sh
-```
+## Maintenance rule
 
-该脚本会在 `agentSkill/dist/comment-alive-test-driven-development/` 生成自包含技能包。生成包会复制 `methodPrompts` 参考资料与 `slashCommands`，因此日常仓库工作中的技能源码目录不会暴露重复的链接路径。
+更新技能行为时，应编辑技能源码，并与 `methodPrompts` 和 `slashCommands` 保持一致。
 
-## Usage Example
-
-在仓库根目录生成默认技能包：
-
-```bash
-bash agentSkill/makeSkill.sh
-```
-
-生成到临时输出目录以便验证：
-
-```bash
-bash agentSkill/makeSkill.sh --output /tmp/catdd-agent-skills
-```
-
-预期结果：输出目录中包含 `comment-alive-test-driven-development/SKILL.md`、复制后的 `references/` 与复制后的 `slashCommands/`，且不包含符号链接。
+当打包规则发生变化时，更新用户指南和测试，确保生成包保持自包含且可复现。

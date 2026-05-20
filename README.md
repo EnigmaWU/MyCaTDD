@@ -52,7 +52,7 @@ This README is organized around that main storyline.
 
 Brief: the language-agnostic source-of-truth methodology layer for CaTDD. It defines comment-alive design skeletons, category method prompts, user-guide materials, and implementation templates. It is method-first and manual-friendly.
 
-Read more: [methodPrompts/README.md](methodPrompts/README.md).
+Read more: [methodPrompts/README.md](methodPrompts/README.md). Use [methodPrompts/README_UserGuide.md](methodPrompts/README_UserGuide.md) for standalone method-layer usage.
 
 ### [2] [slashCommands](slashCommands/README.md) (prompt commands)
 
@@ -70,7 +70,7 @@ Read more: [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md).
 
 Brief: the reusable capability packaging layer. It wraps CaTDD method knowledge into triggerable skills and keeps skill references aligned with the canonical method files.
 
-Read more: [agentSkill/README.md](agentSkill/README.md).
+Read more: [agentSkill/README.md](agentSkill/README.md). Use [agentSkill/README_UserGuide.md](agentSkill/README_UserGuide.md) for packaging and validation steps.
 
 ## CaTDD Spec-Driven Flow
 
@@ -153,5 +153,6 @@ In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/
 2. Read [methodPrompts/README.md](methodPrompts/README.md) when you need the method prompt map.
 3. Read [slashCommands/README.md](slashCommands/README.md) when you want the command layer WHAT/WHY.
 4. Read [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) when you want to generate, install, or run stable method-step commands.
-5. Read [agentSkill/README.md](agentSkill/README.md) when you want reusable skill packaging.
-6. Read [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md) when you want CLI agent execution.
+5. Read [agentSkill/README.md](agentSkill/README.md) when you want the skill package layer WHAT/WHY.
+6. Read [agentSkill/README_UserGuide.md](agentSkill/README_UserGuide.md) when you want to generate or validate reusable skill packages.
+7. Read [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md) when you want CLI agent execution.

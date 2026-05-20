@@ -80,6 +80,8 @@ Use this guide as the user-facing entry point for CaTDD. Use the linked layer RE
 - **methodPrompts standalone user guide (ZH)**: [methodPrompts/README_UserGuide_ZH.md](methodPrompts/README_UserGuide_ZH.md) for Chinese readers using only `methodPrompts/`.
 - **slashCommands user guide**: [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) for users who generate, install, or run portable command flows.
 - **slashCommands user guide (ZH)**: [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md) for Chinese readers using portable command flows.
+- **agentSkill user guide**: [agentSkill/README_UserGuide.md](agentSkill/README_UserGuide.md) for users who generate or validate reusable CaTDD skill packages.
+- **agentSkill user guide (ZH)**: [agentSkill/README_UserGuide_ZH.md](agentSkill/README_UserGuide_ZH.md) for Chinese readers packaging reusable CaTDD skills.
 
 ---
 
@@ -1249,6 +1251,7 @@ P3: Demo/Example
 - **Slash command user guide**: See [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) or [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)
 - **CLI agent layer**: See [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)
 - **Skill package layer**: See [agentSkill/README.md](agentSkill/README.md)
+- **Skill package user guide**: See [agentSkill/README_UserGuide.md](agentSkill/README_UserGuide.md) or [agentSkill/README_UserGuide_ZH.md](agentSkill/README_UserGuide_ZH.md)
 - **Questions?**: Ask EnigmaWU or check existing test files in [Test/](../Test/)
 
 ---

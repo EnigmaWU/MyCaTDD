@@ -52,7 +52,7 @@ flowchart LR
 
 简介：CaTDD 的语言无关方法源头层。它定义 comment-alive 设计骨架、分类方法提示词、用户指南材料和实现模板。它更偏方法本身，也更适合手工阅读与执行。
 
-更多说明：[methodPrompts/README.md](methodPrompts/README.md)。
+更多说明：[methodPrompts/README.md](methodPrompts/README.md)。独立方法层用法见 [methodPrompts/README_UserGuide_ZH.md](methodPrompts/README_UserGuide_ZH.md)。
 
 ### [2] [slashCommands](slashCommands/README.md)（提示词命令）
 
@@ -70,7 +70,7 @@ flowchart LR
 
 简介：可复用能力封装层。它把 CaTDD 方法知识封装为可触发技能，并保持技能引用与 canonical method files 对齐。
 
-更多说明：[agentSkill/README.md](agentSkill/README.md)。
+更多说明：[agentSkill/README.md](agentSkill/README.md)。打包和验证步骤见 [agentSkill/README_UserGuide_ZH.md](agentSkill/README_UserGuide_ZH.md)。
 
 ## CaTDD 规格驱动流程
 
@@ -153,5 +153,6 @@ scripts/installCaTDD4Cline.sh --target /path/to/project
 2. 需要方法提示词地图时，阅读 [methodPrompts/README.md](methodPrompts/README.md)。
 3. 需要命令层 WHAT/WHY 时，阅读 [slashCommands/README.md](slashCommands/README.md)。
 4. 需要生成、安装或运行稳定方法步骤命令时，阅读 [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)。
-5. 需要可复用技能封装时，阅读 [agentSkill/README.md](agentSkill/README.md)。
-6. 需要 CLI 智能体执行时，阅读 [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)。
+5. 需要 skill package 层 WHAT/WHY 时，阅读 [agentSkill/README.md](agentSkill/README.md)。
+6. 需要生成或验证可复用技能包时，阅读 [agentSkill/README_UserGuide_ZH.md](agentSkill/README_UserGuide_ZH.md)。
+7. 需要 CLI 智能体执行时，阅读 [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)。

@@ -11,6 +11,7 @@ pairs=(
   "slashCommands/README_UserGuide.md|slashCommands/README_UserGuide_ZH.md"
   "utCodeAgentCLI/README.md|utCodeAgentCLI/README_ZH.md"
   "agentSkill/README.md|agentSkill/README_ZH.md"
+  "agentSkill/README_UserGuide.md|agentSkill/README_UserGuide_ZH.md"
 )
 
 has_error=0
