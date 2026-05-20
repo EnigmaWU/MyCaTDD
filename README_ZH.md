@@ -107,7 +107,7 @@ CaTDD 术语 **VibeCoding** 和 **SpecCoding** 的定义见 [slashCommands/READM
 3. 在 [3] 把完整任务交给智能体执行。
 4. 把 [3] 暴露的问题回写到 [2] 与 [1]，持续改进。
 
-## 安装 / 刷新到 Copilot 项目
+## 安装 / 刷新到 CodeAgent 项目
 
 可以用下面的命令把 CaTDD 安装或刷新到已有的 Copilot 项目：
 
@@ -121,14 +121,31 @@ scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
 scripts/installCaTDD4Copilot.sh --target /path/to/new-project --init --clean-prompts
 ```
 
+可以用下面的命令把 CaTDD 安装或刷新到 Continue 项目：
+
+```bash
+scripts/installCaTDD4Continue.sh --target /path/to/project
+```
+
+如果需要在重新生成前删除旧的 `UT_*.prompt` 和 `SPEC_*.prompt` Continue 包装，可增加 `--clean-prompts`。
+
+可以用下面的命令把 CaTDD 安装或刷新到 Cline 项目：
+
+```bash
+scripts/installCaTDD4Cline.sh --target /path/to/project
+```
+
 安装器会在目标项目中创建或刷新这些资产：
 
 - `.catdd/methodPrompts/`：安装后的 CaTDD 方法源，用于手工阅读与方法真理源。
 - `.catdd/slashCommands/`：安装后的可移植流程命令源，用于自动化。
-- `.github/prompts/UT_*.prompt.md`：从 `slashCommands` 生成的 Copilot 原生薄适配。
+- `.github/prompts/UT_*.prompt.md` 和 `.github/prompts/SPEC_*.prompt.md`：从 `slashCommands` 生成的 Copilot 原生薄适配。
 - `.github/instructions/catdd.instructions.md`：指向 `.catdd/` 的 Copilot instruction 文件。
+- `.continue/rules/catdd.md`：指向 `.catdd/` 的 Continue 项目规则。
+- `.continue/prompts/UT_*.prompt` 和 `.continue/prompts/SPEC_*.prompt`：从 `slashCommands` 生成的 Continue 原生 prompt 薄适配。
+- `.clinerules/catdd.md`：指向 `.catdd/` 的 Cline 项目规则。
 
-在本源仓库中，生成的 `.github/prompts/UT_*.prompt.md` 文件只是临时适配输出，并被刻意忽略。应提交 `methodPrompts`、`slashCommands`、脚本与文档；需要时再为目标项目重新生成原生 prompt 包装。
+在本源仓库中，生成的 `.github/prompts/UT_*.prompt.md`、`.github/prompts/SPEC_*.prompt.md`、`.continue/rules/catdd.md`、`.continue/prompts/UT_*.prompt`、`.continue/prompts/SPEC_*.prompt`、`.clinerules/catdd.md` 文件只是临时适配输出，并被刻意忽略。应提交 `methodPrompts`、`slashCommands`、脚本与文档；需要时再为目标项目重新生成原生适配。
 
 ## 快速开始
 

@@ -62,6 +62,15 @@ scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
 
 The installer copies `methodPrompts` and `slashCommands` into the target project's `.catdd/` directory, then generates Copilot prompt wrappers under the target project's `.github/prompts/` directory.
 
+Install or refresh CaTDD into Continue or Cline projects with:
+
+```bash
+scripts/installCaTDD4Continue.sh --target /path/to/project
+scripts/installCaTDD4Cline.sh --target /path/to/project
+```
+
+The Continue installer copies the same `.catdd/` sources, writes the always-on rule at `.continue/rules/catdd.md`, and generates triggerable prompt wrappers under `.continue/prompts/`. The Cline installer copies the same `.catdd/` sources and writes the thin project-rule adapter at `.clinerules/catdd.md`.
+
 For SpecCoding work inside a target project, keep lifecycle state under `.catdd/spec/` and keep shared `README*` SPEC docs in the project root. Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doneUS/`, and project-root `README*` docs. Keep local work-in-progress artifacts such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored; the installer manages those `.gitignore` rules.
 
 Project-root README SPEC docs may include `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md` as needed.
@@ -70,6 +79,9 @@ Validate the installer with:
 
 ```bash
 bash scripts/test_installCaTDD4Copilot.sh
+bash scripts/test_makeSlashCmd4Continue.sh
+bash scripts/test_installCaTDD4Continue.sh
+bash scripts/test_installCaTDD4Cline.sh
 ```
 
 ## Portability contract

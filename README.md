@@ -107,7 +107,7 @@ For the CaTDD terms **VibeCoding** and **SpecCoding**, see [slashCommands/README
 3. In [3], hand complete tasks to the agent for execution.
 4. Feed issues exposed by [3] back into [2] and [1] for continuous improvement.
 
-## Install / Refresh into a Copilot Project
+## Install / Refresh into Code Agent Projects
 
 Install or refresh CaTDD into an existing Copilot-enabled project with:
 
@@ -121,14 +121,31 @@ For a new target directory, add `--init`:
 scripts/installCaTDD4Copilot.sh --target /path/to/new-project --init --clean-prompts
 ```
 
+Install or refresh CaTDD into a Continue project with:
+
+```bash
+scripts/installCaTDD4Continue.sh --target /path/to/project
+```
+
+Add `--clean-prompts` when you want to remove old generated `UT_*.prompt` and `SPEC_*.prompt` Continue wrappers before regenerating them.
+
+Install or refresh CaTDD into a Cline project with:
+
+```bash
+scripts/installCaTDD4Cline.sh --target /path/to/project
+```
+
 The installer creates or refreshes these target-project assets:
 
 - `.catdd/methodPrompts/`: installed CaTDD method source for manual reading and method truth.
 - `.catdd/slashCommands/`: installed portable flow-command source for automation.
-- `.github/prompts/UT_*.prompt.md`: Copilot-native thin adapters generated from `slashCommands`.
+- `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md`: Copilot-native thin adapters generated from `slashCommands`.
 - `.github/instructions/catdd.instructions.md`: Copilot instruction file that points agents back to `.catdd/`.
+- `.continue/rules/catdd.md`: Continue project rule that points agents back to `.catdd/`.
+- `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`: Continue-native thin prompt adapters generated from `slashCommands`.
+- `.clinerules/catdd.md`: Cline project rule that points agents back to `.catdd/`.
 
-In this source repository, generated `.github/prompts/UT_*.prompt.md` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native prompt wrappers for target projects when needed.
+In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, `.continue/rules/catdd.md`, `.continue/prompts/UT_*.prompt`, `.continue/prompts/SPEC_*.prompt`, and `.clinerules/catdd.md` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
 
 ## Quick Start
 

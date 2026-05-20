@@ -62,6 +62,15 @@ scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
 
 安装器会把 `methodPrompts` 和 `slashCommands` 复制到目标项目的 `.catdd/` 目录，然后在目标项目的 `.github/prompts/` 目录下生成 Copilot prompt 包装。
 
+可以用下面的命令把 CaTDD 安装或刷新到 Continue 或 Cline 项目：
+
+```bash
+scripts/installCaTDD4Continue.sh --target /path/to/project
+scripts/installCaTDD4Cline.sh --target /path/to/project
+```
+
+Continue 安装器会复制同一套 `.catdd/` 来源，写入 always-on 规则 `.continue/rules/catdd.md`，并在 `.continue/prompts/` 下生成可触发的 prompt 包装。Cline 安装器会复制同一套 `.catdd/` 来源，并写入 `.clinerules/catdd.md` 这样的薄项目规则适配。
+
 在目标项目中使用 SpecCoding 时，生命周期状态放在 `.catdd/spec/` 下，共享的 `README*` SPEC 文档放在项目根目录。应提交 `.catdd/spec/projectContext.md`、`.catdd/spec/pendingNews/`、`.catdd/spec/todoUS/`、`.catdd/spec/doneUS/`，以及项目根目录的 `README*` 文档等团队共享产物。`.catdd/spec/doingUS/` 和 `.catdd/spec/WorkingProcessLog.md` 属于本地进行中的工作状态，应保持 gitignore；安装器会维护这些 `.gitignore` 规则。
 
 项目根目录的 README SPEC 文档可按需要包含 `README.md`、`README_ArchDesign.md`、`README_UserStories.md`、`README_UserGuide.md`、`README_DetailDesign.md`、`README_VerifyDesign.md`。
@@ -70,6 +79,9 @@ scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
 
 ```bash
 bash scripts/test_installCaTDD4Copilot.sh
+bash scripts/test_makeSlashCmd4Continue.sh
+bash scripts/test_installCaTDD4Continue.sh
+bash scripts/test_installCaTDD4Cline.sh
 ```
 
 ## 可移植性契约

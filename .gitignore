@@ -74,6 +74,10 @@ Testing/
 /.catdd/CaTDD_INSTALL.md
 /.github/prompts/UT_*.prompt.md
 /.github/prompts/SPEC_*.prompt.md
+/.continue/rules/catdd.md
+/.continue/prompts/UT_*.prompt
+/.continue/prompts/SPEC_*.prompt
+/.clinerules/catdd.md
 
 # CaTDD SpecCoding local work state
 /.catdd/spec/doingUS/
