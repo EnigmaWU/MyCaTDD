@@ -1,41 +1,80 @@
 # utCodeAgentCLI
 
-本目录代表 CLI 代码智能体执行层。
+`utCodeAgentCLI` 代表 CaTDD-native CLI 代码智能体执行层。
 
-## 在四层模型中的角色
+本 README 是 CLI agent 层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何设计或使用这一层，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
 
-`utCodeAgentCLI` 是智能执行层。
+## What
 
-- 开发者定义目标，智能体完成任务规划与执行。
-- 继承 `methodPrompts` 的方法约束。
-- 可调用 `slashCommands` 的标准化步骤。
-- 它是本仓库自己的 CaTDD-native 代码智能体概念，设计时深度内化 CaTDD。
+`utCodeAgentCLI` 是 CaTDD 四层模型中的智能执行层。
 
-## CaTDD-native 契约
+它是本仓库的 CaTDD-native agent 概念：
 
-`utCodeAgentCLI` 应建立在两个上游层之上：
+- 开发者定义目标。
+- 智能体基于 CaTDD 方法约束进行规划。
+- 智能体可调用 `slashCommands` 的标准化步骤。
+- 智能体收集轨迹、反思结果，并将可复用模式反馈回方法层和命令层。
+- 智能体保持 CaTDD 注释骨架、US/AC/TC 可追踪关系、分类归属和 RED/GREEN 状态纪律。
+
+在当前仓库阶段，本目录记录预期的 CLI 层契约。它尚未包含可运行的 CLI 实现。
+
+## Why
+
+`utCodeAgentCLI` 存在的原因，是把可复用 CaTDD 知识闭环到有明确取向的 CaTDD-native 执行。
+
+它保持清晰的执行边界：
+
+- `methodPrompts` 负责方法语义。
+- `slashCommands` 负责可移植命令步骤和流程。
+- `agentSkill` 负责可复用的打包能力。
+- `utCodeAgentCLI` 在 CLI 实现加入后，负责目标驱动规划、执行、轨迹收集和反思。
+
+这样可以避免让通用 CodeAgent 适配器承载 CaTDD 专用编排逻辑，同时保留未来一等 CaTDD 自动化路径。
+
+## CaTDD-native contract
+
+未来的 CLI 实现应建立在上游层之上：
 
 - `methodPrompts` 提供与语言无关的 CaTDD 方法契约。
 - `slashCommands` 提供与 code-agent 无关的可复用提示词命令。
-- `utCodeAgentCLI` 增加规划、执行、轨迹收集和反思，形成有明确取向的 CaTDD-native 智能体工作流。
+- `agentSkill` 提供已打包的领域工作流和参考资料。
+- `utCodeAgentCLI` 增加规划、执行策略、轨迹处理和反思回路。
 
-它可以面向多种编程语言，但应保持 CaTDD 的注释骨架、US/AC/TC 可追踪关系、分类归属和 RED/GREEN 状态纪律。
+它可以面向多种编程语言，但必须保持 CaTDD 的 comment-alive verification design。
 
-## 典型内容
+## Typical contents
 
-- CLI 任务入口提示词
-- 目标模板与执行检查清单
-- 反思回路与迭代记录
+- 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
+- 未来的 CLI 任务入口提示词
+- 未来的目标模板与执行检查清单
+- 未来的轨迹收集与反思回路设计记录
+- CLI 变为可执行时的未来实现文件
 
-## 上游 / 下游
+## Upstream / Downstream
 
 - 上游输入：
-  - `methodPrompts`：方法约束来源
-  - `slashCommands`：可复用执行单元
-  - `agentSkill`：领域技能封装
+  - `methodPrompts` 提供方法约束。
+  - `slashCommands` 提供可复用执行单元。
+  - `agentSkill` 提供领域技能封装。
 - 下游输出：
-  - 已执行任务、过程轨迹与反馈，用于方法改进
+  - 已执行任务。
+  - 执行轨迹。
+  - 反思记录。
+  - 用于改进 `slashCommands` 和 `methodPrompts` 的反馈。
 
-## 维护规则
+## Documentation boundary
 
-当规划/执行/反思模式出现稳定复用时，将其固化，并把改进回写到 `slashCommands` 与 `methodPrompts`。
+保持文档分工清晰：
+
+| 文件 | 负责内容 |
+| --- | --- |
+| `README.md` / `README_ZH.md` | WHAT：这一层是什么；WHY：这一层为什么存在。 |
+| `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW：现在如何设计或使用这一层；WHO：谁使用；WHEN：何时在这一层工作；WHERE：未来资产位于哪里；以及可复制执行的 `Usage Example`。 |
+
+当可运行 CLI 存在后，具体 CLI 命令应记录在独立用户指南中。
+
+## Maintenance rule
+
+当规划、执行、轨迹或反思模式出现稳定复用时，将其固化到这里。
+
+当这些模式稳定为可复用提示词步骤时，将改进反馈回 `slashCommands` 与 `methodPrompts`。

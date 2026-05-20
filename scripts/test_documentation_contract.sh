@@ -7,6 +7,7 @@ layers=(
   "methodPrompts"
   "slashCommands"
   "agentSkill"
+  "utCodeAgentCLI"
 )
 
 fail() {
@@ -49,9 +50,5 @@ for layer in "${layers[@]}"; do
   grep -Fq "[$layer/README_UserGuide.md]($layer/README_UserGuide.md)" "$REPO_ROOT/README_UserGuide.md" || fail "main user guide missing $layer sub-user-guide link"
   grep -Fq "[$layer/README_UserGuide_ZH.md]($layer/README_UserGuide_ZH.md)" "$REPO_ROOT/README_UserGuide.md" || fail "main user guide missing $layer ZH sub-user-guide link"
 done
-
-if grep -Fq 'utCodeAgentCLI/README_UserGuide.md' "$REPO_ROOT/README.md" "$REPO_ROOT/README_ZH.md" "$REPO_ROOT/README_UserGuide.md"; then
-  fail "utCodeAgentCLI user guide should wait for the later CLI guide pass"
-fi
 
 echo "[documentation-contract-test] PASSED: README/UserGuide contract is documented for completed layers"

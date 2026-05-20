@@ -64,7 +64,7 @@ Read more: [slashCommands/README.md](slashCommands/README.md). Use [slashCommand
 
 Brief: this repository's CaTDD-native CLI agent layer. Developers define goals, then the agent plans, executes, collects traces, and reflects using [1] and [2].
 
-Read more: [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md).
+Read more: [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md). Use [utCodeAgentCLI/README_UserGuide.md](utCodeAgentCLI/README_UserGuide.md) for current CLI-layer design guidance.
 
 ### [4] [agentSkill](agentSkill/README.md) (skill package)
 
@@ -155,4 +155,5 @@ In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/
 4. Read [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) when you want to generate, install, or run stable method-step commands.
 5. Read [agentSkill/README.md](agentSkill/README.md) when you want the skill package layer WHAT/WHY.
 6. Read [agentSkill/README_UserGuide.md](agentSkill/README_UserGuide.md) when you want to generate or validate reusable skill packages.
-7. Read [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md) when you want CLI agent execution.
+7. Read [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md) when you want the CLI agent layer WHAT/WHY.
+8. Read [utCodeAgentCLI/README_UserGuide.md](utCodeAgentCLI/README_UserGuide.md) when you want current CLI-layer design guidance.

@@ -64,7 +64,7 @@ flowchart LR
 
 简介：本仓库自己的 CaTDD-native CLI 智能体层。开发人员定义目标后，智能体基于 [1] 和 [2] 完成规划、执行、追踪与反思。
 
-更多说明：[utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)。
+更多说明：[utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)。当前 CLI 层设计指南见 [utCodeAgentCLI/README_UserGuide_ZH.md](utCodeAgentCLI/README_UserGuide_ZH.md)。
 
 ### [4] [agentSkill](agentSkill/README.md)（技能包）
 
@@ -155,4 +155,5 @@ scripts/installCaTDD4Cline.sh --target /path/to/project
 4. 需要生成、安装或运行稳定方法步骤命令时，阅读 [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)。
 5. 需要 skill package 层 WHAT/WHY 时，阅读 [agentSkill/README.md](agentSkill/README.md)。
 6. 需要生成或验证可复用技能包时，阅读 [agentSkill/README_UserGuide_ZH.md](agentSkill/README_UserGuide_ZH.md)。
-7. 需要 CLI 智能体执行时，阅读 [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)。
+7. 需要 CLI agent 层 WHAT/WHY 时，阅读 [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)。
+8. 需要当前 CLI 层设计指南时，阅读 [utCodeAgentCLI/README_UserGuide_ZH.md](utCodeAgentCLI/README_UserGuide_ZH.md)。
