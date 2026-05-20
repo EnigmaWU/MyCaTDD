@@ -1,1 +1,0 @@
-../../../methodPrompts/CaTDD_methodPrompt.md

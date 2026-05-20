@@ -151,16 +151,16 @@ For each TC in priority order (P0 first):
    > - Testing level: [Unit / System / User]
    > - User Stories: [count]
    > - Acceptance Criteria: [count]
-   > - Test Cases designed: [count] (P0=[count], P0=[count], P2=[count], P3=[count])
+   > - Test Cases designed: [count] (P0=[count], P1=[count], P2=[count], P3=[count])
    > - Tests implemented and GREEN: [count]
    > - Coverage gaps: [list or none]"
 
 ## Resources
-- `references/README_UserGuide.md` — Full CaTDD user guide with examples, quick-start guide, and workflow.
-- `references/CaTDD_methodPrompt.md` — Complete methodology specification with priority framework, category definitions, design skeletons, quality gates, and context-specific priority adjustments.
-- `references/CaTDD_ImplTemplate.cxx` — C++ implementation template showing the complete CaTDD file structure (copy and adapt for any language).
-- `references/CaTDD-UserGuide-PPT.md` — Presentation-style overview of CaTDD covering all concepts with slides, diagrams, and examples.
-- `slashCommands` — Shared slash command materials linked from repository `slashCommands/`.
+- Packaged `references/README_UserGuide.md` — Full CaTDD user guide with examples, quick-start guide, and workflow.
+- Packaged `references/CaTDD_methodPrompt.md` — Complete methodology specification with priority framework, category definitions, design skeletons, quality gates, and context-specific priority adjustments.
+- Packaged `references/CaTDD_ImplTemplate.cxx` — C++ implementation template showing the complete CaTDD file structure (copy and adapt for any language).
+- Packaged `references/CaTDD-UserGuide-PPT.md` — Presentation-style overview of CaTDD covering all concepts with slides, diagrams, and examples.
+- Packaged `slashCommands` — Shared slash command materials copied from repository `slashCommands/` when `agentSkill/makeSkill.sh` generates the distributable skill package.
 
 ## Validation
 1. Verify the new test file contains all required sections: OVERVIEW, UNIT TESTING DESIGN, UNIT TESTING IMPLEMENTATION, TODO/TRACKING.

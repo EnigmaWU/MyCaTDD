@@ -4,23 +4,66 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SUPPORTED_SKILL="comment-alive-test-driven-development"
-SKILL_NAME="${1:-$SUPPORTED_SKILL}"
+SKILL_NAME=""
+OUTPUT_ROOT="$SCRIPT_DIR/dist"
+
+usage() {
+  cat <<'USAGE'
+Usage: agentSkill/makeSkill.sh [SKILL_NAME] [--output DIR]
+
+Generate a self-contained skill package under agentSkill/dist by default.
+
+Options:
+  --output DIR   Directory that will receive the generated skill package.
+  -h, --help     Show this help.
+USAGE
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --output)
+      [[ $# -ge 2 ]] || { echo "[makeSkill] --output requires a directory" >&2; exit 2; }
+      OUTPUT_ROOT="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --*)
+      echo "[makeSkill] Unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      if [[ -n "$SKILL_NAME" ]]; then
+        echo "[makeSkill] Unexpected extra argument: $1" >&2
+        usage >&2
+        exit 2
+      fi
+      SKILL_NAME="$1"
+      shift
+      ;;
+  esac
+done
+
+SKILL_NAME="${SKILL_NAME:-$SUPPORTED_SKILL}"
 
 if [[ "$SKILL_NAME" != "$SUPPORTED_SKILL" ]]; then
   echo "Unsupported skill '$SKILL_NAME'. Supported: $SUPPORTED_SKILL" >&2
   exit 1
 fi
 
-SKILL_DIR="$SCRIPT_DIR/$SKILL_NAME"
+SOURCE_SKILL_DIR="$SCRIPT_DIR/$SKILL_NAME"
 
-if [[ ! -d "$SKILL_DIR" ]]; then
-  echo "Skill directory not found: $SKILL_DIR" >&2
+if [[ ! -d "$SOURCE_SKILL_DIR" ]]; then
+  echo "Skill directory not found: $SOURCE_SKILL_DIR" >&2
   exit 1
 fi
 
-mkdir -p "$SKILL_DIR/references"
-
 required_sources=(
+  "$SOURCE_SKILL_DIR/SKILL.md"
+  "$SOURCE_SKILL_DIR/README.md"
   "$REPO_ROOT/README_UserGuide.md"
   "$REPO_ROOT/methodPrompts/CaTDD_methodPrompt.md"
   "$REPO_ROOT/methodPrompts/CaTDD_ImplTemplate.cxx"
@@ -35,20 +78,48 @@ for source in "${required_sources[@]}"; do
   fi
 done
 
-legacy_user_guide_ref="$SKILL_DIR/references/CaTDD_""UserGuide.md"
-legacy_method_prompt_ref="$SKILL_DIR/references/CaTDD_""Design""Prompt.md"
-rm -f "$legacy_user_guide_ref"
-rm -f "$legacy_method_prompt_ref"
-
-ln -sfn "../../../README_UserGuide.md" "$SKILL_DIR/references/README_UserGuide.md"
-ln -sfn "../../../methodPrompts/CaTDD_methodPrompt.md" "$SKILL_DIR/references/CaTDD_methodPrompt.md"
-ln -sfn "../../../methodPrompts/CaTDD_ImplTemplate.cxx" "$SKILL_DIR/references/CaTDD_ImplTemplate.cxx"
-ln -sfn "../../../methodPrompts/CaTDD-UserGuide-PPT.md" "$SKILL_DIR/references/CaTDD-UserGuide-PPT.md"
-ln -sfn "../../slashCommands" "$SKILL_DIR/slashCommands"
-
-if [[ ! -L "$SKILL_DIR/slashCommands" || ! -e "$SKILL_DIR/slashCommands" ]]; then
-  echo "Failed to link slashCommands into skill package" >&2
+if [[ -e "$SOURCE_SKILL_DIR/slashCommands" && ! -L "$SOURCE_SKILL_DIR/slashCommands" ]]; then
+  echo "Refusing to remove non-symlink source path: $SOURCE_SKILL_DIR/slashCommands" >&2
   exit 1
 fi
 
-echo "Skill packaged with symlinked methodPrompts and slashCommands: $SKILL_DIR"
+legacy_source_links=(
+  "$SOURCE_SKILL_DIR/slashCommands"
+  "$SOURCE_SKILL_DIR/references/README_UserGuide.md"
+  "$SOURCE_SKILL_DIR/references/CaTDD_methodPrompt.md"
+  "$SOURCE_SKILL_DIR/references/CaTDD_ImplTemplate.cxx"
+  "$SOURCE_SKILL_DIR/references/CaTDD-UserGuide-PPT.md"
+  "$SOURCE_SKILL_DIR/references/CaTDD_UserGuide.md"
+  "$SOURCE_SKILL_DIR/references/CaTDD_DesignPrompt.md"
+)
+
+for legacy_link in "${legacy_source_links[@]}"; do
+  if [[ -L "$legacy_link" ]]; then
+    rm -f "$legacy_link"
+  fi
+done
+
+rmdir "$SOURCE_SKILL_DIR/references" 2>/dev/null || true
+
+mkdir -p "$OUTPUT_ROOT"
+OUTPUT_ROOT="$(cd "$OUTPUT_ROOT" && pwd)"
+DIST_SKILL_DIR="$OUTPUT_ROOT/$SKILL_NAME"
+
+rm -rf "$DIST_SKILL_DIR"
+mkdir -p "$DIST_SKILL_DIR/references"
+
+cp "$SOURCE_SKILL_DIR/SKILL.md" "$DIST_SKILL_DIR/SKILL.md"
+cp "$SOURCE_SKILL_DIR/README.md" "$DIST_SKILL_DIR/README.md"
+cp "$REPO_ROOT/README_UserGuide.md" "$DIST_SKILL_DIR/references/README_UserGuide.md"
+cp "$REPO_ROOT/methodPrompts/CaTDD_methodPrompt.md" "$DIST_SKILL_DIR/references/CaTDD_methodPrompt.md"
+cp "$REPO_ROOT/methodPrompts/CaTDD_ImplTemplate.cxx" "$DIST_SKILL_DIR/references/CaTDD_ImplTemplate.cxx"
+cp "$REPO_ROOT/methodPrompts/CaTDD-UserGuide-PPT.md" "$DIST_SKILL_DIR/references/CaTDD-UserGuide-PPT.md"
+cp -R "$REPO_ROOT/slashCommands" "$DIST_SKILL_DIR/slashCommands"
+
+dist_symlink_count="$(find "$DIST_SKILL_DIR" -type l | wc -l | tr -d '[:space:]')"
+if [[ "$dist_symlink_count" != "0" ]]; then
+  echo "Generated package contains $dist_symlink_count symlink(s), expected a self-contained copy." >&2
+  exit 1
+fi
+
+echo "Skill packaged as self-contained dist: $DIST_SKILL_DIR"

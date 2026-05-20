@@ -25,7 +25,7 @@ This skill guides the creation of a brand-new test file using CaTDD methodology 
 
 ## CaTDD File Structure
 
-```
+```text
 ┌──────────────────────────────────────────────────┐
 │ OVERVIEW                                         │
 │   [WHAT] / [WHERE] / [WHY] / SCOPE / KEY CONCEPTS│
@@ -47,7 +47,7 @@ This skill guides the creation of a brand-new test file using CaTDD methodology 
 
 ## US/AC/TC Hierarchy
 
-```
+```text
 User Story (US) — WHY we need this feature (business value)
     ↓
 Acceptance Criteria (AC) — WHAT behavior must be satisfied (GIVEN/WHEN/THEN)
@@ -57,7 +57,7 @@ Test Case (TC) — HOW to verify the behavior (concrete steps)
 
 ## Priority Framework
 
-```
+```text
 P0 🥇 FUNCTIONAL = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
 P1 🥈 DESIGN     = State → Capability → Concurrency
 P2 🥉 QUALITY    = Performance → Robust → Compatibility → Configuration
@@ -94,15 +94,27 @@ Or:
 Apply comment-alive test-driven development to design tests for this API: <header file>
 ```
 
-### Linked References
+### Packaged References
+
+The authored skill source keeps only the skill metadata. Run `bash agentSkill/makeSkill.sh` from the repository root to generate a self-contained package under `agentSkill/dist/comment-alive-test-driven-development/`.
 
 | File | Purpose |
 | ---- | ------- |
-| `references/README_UserGuide.md` | Full user guide with examples, quick-start guide, and getting-started checklist (linked from repository root) |
-| `references/CaTDD_methodPrompt.md` | Complete methodology specification with priority framework, category definitions, design skeletons, and quality gates (linked from `methodPrompts/`) |
-| `references/CaTDD_ImplTemplate.cxx` | C++ implementation template showing the full CaTDD file structure (adapt for any language; linked from `methodPrompts/`) |
-| `references/CaTDD-UserGuide-PPT.md` | Presentation-style overview of all CaTDD concepts with slides, diagrams, and real examples (linked from `methodPrompts/`) |
-| `slashCommands` | Shared slash command prompts for this skill (linked from repository `slashCommands/`) |
+| `references/README_UserGuide.md` | Full user guide with examples, quick-start guide, and getting-started checklist copied from the repository root |
+| `references/CaTDD_methodPrompt.md` | Complete methodology specification with priority framework, category definitions, design skeletons, and quality gates copied from `methodPrompts/` |
+| `references/CaTDD_ImplTemplate.cxx` | C++ implementation template showing the full CaTDD file structure, copied from `methodPrompts/` and adaptable for any language |
+| `references/CaTDD-UserGuide-PPT.md` | Presentation-style overview of all CaTDD concepts with slides, diagrams, and real examples copied from `methodPrompts/` |
+| `slashCommands` | Shared slash command prompts copied from repository `slashCommands/` |
+
+## Usage Example
+
+Generate the distributable skill package from the repository root:
+
+```bash
+bash agentSkill/makeSkill.sh
+```
+
+Expected result: `agentSkill/dist/comment-alive-test-driven-development/` contains `SKILL.md`, `README.md`, copied `references/`, and copied `slashCommands/`, with no symlinks.
 
 ## Related Skills
 
