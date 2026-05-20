@@ -7,7 +7,8 @@ Revise detailed design and acceptance criteria after story review, implementatio
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `detail_design`: design file to update.
+- `detail_design`: project-root README detail design file or active story design section to update.
+- `readme_spec_files`: optional project-root `README*` SPEC files to create or update.
 - `review_feedback`: findings from story, code, test, or CI review.
 
 ## Method References
@@ -17,7 +18,8 @@ Revise detailed design and acceptance criteria after story review, implementatio
 
 ## Output Contract
 
-- Updated design and acceptance criteria in local gitignored `.catdd/spec/doingUS/` work state or stable team-shared design docs.
+- Updated design and acceptance criteria in local gitignored `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
+- Updated `README_DetailDesign.md` or `README_VerifyDesign.md` when the feedback changes module design or verification design.
 - Review-feedback checklist showing what was addressed.
 - Remaining risks and next recommended command.
 

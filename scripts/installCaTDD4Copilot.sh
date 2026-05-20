@@ -122,6 +122,7 @@ This directory is managed by `scripts/installCaTDD4Copilot.sh` from MyCaTDD.
 - `spec/` is the installed SpecCoding artifact workspace.
 - `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` files are generated Copilot adapters.
 - Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `todoUS/`, and `doneUS/`.
+- Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md` as needed.
 - Keep local SpecCoding work state such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored.
 
 Refresh this project by rerunning the installer from the MyCaTDD repository.
@@ -139,6 +140,7 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `todoUS/`, and `doneUS/`.
+- Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md` as needed.
 - Keep local SpecCoding work state such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
 INSTRUCTIONS

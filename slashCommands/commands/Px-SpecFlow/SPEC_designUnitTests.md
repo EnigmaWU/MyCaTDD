@@ -7,7 +7,8 @@ Design CaTDD unit test skeletons for the active user story after story and detai
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `detail_design`: reviewed design and acceptance criteria.
+- `detail_design`: reviewed design and acceptance criteria, usually from project-root `README_DetailDesign.md`.
+- `verify_design`: optional project-root `README_VerifyDesign.md` to create or update.
 - `target_test_files`: test files to create or update.
 - `category_scope`: P0 first, then P1/P2 if design or quality requires it.
 
@@ -21,7 +22,8 @@ Design CaTDD unit test skeletons for the active user story after story and detai
 
 ## Output Contract
 
-- CaTDD US/AC/TC skeletons in committed test files, linked back to local gitignored active story context.
+- CaTDD US/AC/TC skeletons in committed test files, linked back to local gitignored active story context and project-root README SPEC docs.
+- Updated project-root verification design in `README_VerifyDesign.md` when test strategy or category coverage changes.
 - Category labels, priority gates, and initial TC status markers.
 - Next recommended command: `SPEC_implUnitTests` or a specific `UT_*` command.
 

@@ -4,7 +4,7 @@ This directory contains `SPEC_*` command templates for the CaTDD SpecCoding life
 
 `SPEC_*` commands orchestrate issue, story, design, test, implementation, review, CI, and closure work. They are flow commands, not CaTDD category definitions. Method semantics remain in `methodPrompts`.
 
-Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doneUS/`, tests, product code, and stable design docs. Keep local active-work state such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored.
+Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doneUS/`, project-root `README*` SPEC docs, tests, and product code. Keep local active-work state such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored.
 
 ## Command Map
 

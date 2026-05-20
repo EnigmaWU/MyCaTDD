@@ -7,6 +7,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `readme_spec_files`: optional project-root `README*` SPEC files updated by the story.
 - `commit_ref`: completed commit.
 - `ci_summary`: CI result or accepted verification summary.
 
@@ -18,7 +19,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 
 - A `.catdd/spec/doneUS/*-UserStory.md` team-shared completed story artifact.
 - Local `.catdd/spec/doingUS/` work state removed or marked closed after the completed artifact is created.
-- Completion summary with traceability to source issue, design, tests, code, commit, and CI.
+- Completion summary with traceability to source issue or feature, project-root README SPEC docs, tests, code, commit, and CI.
 - Remaining follow-up work, if any.
 
 ## Prompt Template

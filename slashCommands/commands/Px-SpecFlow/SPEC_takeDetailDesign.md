@@ -8,7 +8,8 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `projectContext_file`: current project context.
-- `design_target`: module README, detail design file, API contract, or architecture note.
+- `readme_spec_files`: optional project-root `README*` SPEC files to create or update.
+- `design_target`: optional project-root README SPEC file, API contract, architecture note, or detail design target.
 
 ## Method References
 
@@ -17,13 +18,14 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 ## Output Contract
 
-- Detailed design notes tied to the active user story in local gitignored `.catdd/spec/doingUS/` work state or stable team-shared design docs.
+- Project-root README SPEC docs as needed, such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md`.
+- Detailed design notes tied to the active user story in local gitignored `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
 - Acceptance criteria that can be converted into CaTDD US/AC/TC skeletons.
 - Explicit assumptions, constraints, and unresolved questions.
 
 ## Prompt Template
 
-Ask the assistant to design behavior and acceptance criteria before tests or product code, keeping implementation choices traceable to story intent.
+Ask the assistant to design behavior and acceptance criteria before tests or product code, updating only the project-root README SPEC docs needed for the active story and keeping implementation choices traceable to story intent.
 
 ## Conflict Guard
 

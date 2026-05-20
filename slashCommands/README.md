@@ -62,7 +62,9 @@ scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
 
 The installer copies `methodPrompts` and `slashCommands` into the target project's `.catdd/` directory, then generates Copilot prompt wrappers under the target project's `.github/prompts/` directory.
 
-For SpecCoding work inside a target project, keep all SpecFlow-managed artifacts under `.catdd/spec/`. Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/todoUS/`, and `.catdd/spec/doneUS/`. Keep local work-in-progress artifacts such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored; the installer manages those `.gitignore` rules.
+For SpecCoding work inside a target project, keep lifecycle state under `.catdd/spec/` and keep shared `README*` SPEC docs in the project root. Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doneUS/`, and project-root `README*` docs. Keep local work-in-progress artifacts such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored; the installer manages those `.gitignore` rules.
+
+Project-root README SPEC docs may include `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md` as needed.
 
 Validate the installer with:
 

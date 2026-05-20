@@ -29,14 +29,27 @@ The governing spec is comment-alive verification design: project context, user s
 - `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`: analyzed user stories waiting to be opened.
 - `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`: active user stories under design, test, implementation, or review.
 - `.catdd/spec/doneUS/YYYYMMDD-UserStory.md`: completed user stories after review, commit, and CI.
-- `README.md` or module design docs: detail design and acceptance criteria for the active module or feature.
+- `README*.md`: project-root SPEC docs created as needed for overview, architecture, stories, guide, detail design, and verification design.
 - `.catdd/spec/WorkingProcessLog.md`: optional trace log for decisions, command transitions, and unresolved questions.
+
+## Project-Root README SPEC Docs
+
+Create project-root README SPEC docs only when the project needs that SPEC surface. Keep all `README*` SPEC docs in the target project root so developers and CodeAgents can find shared project and module knowledge quickly.
+
+| File | Purpose |
+| --- | --- |
+| `README.md` | Project or module overview, ownership, public behavior, and links to deeper SPEC docs. |
+| `README_ArchDesign.md` | Architecture design, module boundaries, dependencies, data flow, and key decisions. |
+| `README_UserStories.md` | Project or module-scoped user stories and trace links to `.catdd/spec/todoUS/` or `.catdd/spec/doneUS/`. |
+| `README_UserGuide.md` | User-facing or developer-facing usage guidance. |
+| `README_DetailDesign.md` | Detailed design, acceptance criteria, interfaces, state, and behavior decisions. |
+| `README_VerifyDesign.md` | Verification design, CaTDD category coverage, US/AC/TC traceability, and test strategy. |
 
 ## Artifact Persistence Policy
 
 SpecCoding separates team knowledge from personal work-in-progress state.
 
-All SpecFlow-managed artifacts live under `.catdd/spec/` in the target project.
+SpecFlow lifecycle state lives under `.catdd/spec/`. Shared `README*` SPEC docs live in the target project root.
 
 | Artifact | Scope | Git policy |
 | --- | --- | --- |
@@ -45,7 +58,7 @@ All SpecFlow-managed artifacts live under `.catdd/spec/` in the target project.
 | `.catdd/spec/todoUS/` | Team-shared | Commit analyzed user stories that are ready to be picked up. |
 | `.catdd/spec/doingUS/` | Local work state | Gitignore active user stories because they represent one developer's current progress. |
 | `.catdd/spec/doneUS/` | Team-shared | Commit completed story records after review, verification, and close. |
-| `README.md` or module design docs | Team-shared | Commit stable design and acceptance criteria with the feature or module. |
+| `README*.md` | Team-shared | Commit project-root SPEC docs such as README, architecture design, user stories, user guide, detail design, and verify design as needed. |
 | `.catdd/spec/WorkingProcessLog.md` | Local work state | Gitignore personal command traces, temporary decisions, and unresolved local notes. |
 
 Recommended target-project `.gitignore` rules:
@@ -75,6 +88,7 @@ flowchart LR
     Open --> Doing[".catdd/spec/doingUS/*-UserStory.md"]
 
     Doing --> Detail["SPEC_takeDetailDesign"]
+    Detail --> ReadmeDocs["project-root README*.md"]
     Detail --> ReviewStory["SPEC_reviewUserStory"]
     ReviewStory --> QualityStory{"story quality?"}
     QualityStory -- "NO" --> UpdateDetail["SPEC_updateDetailDesign"]
@@ -101,7 +115,7 @@ flowchart LR
 3. Use [../commands/Px-SpecFlow/SPEC_importIssue.md](../commands/Px-SpecFlow/SPEC_importIssue.md) or [../commands/Px-SpecFlow/SPEC_importFeature.md](../commands/Px-SpecFlow/SPEC_importFeature.md) to import issue or feature input into `.catdd/spec/pendingNews/`.
 4. Use [../commands/Px-SpecFlow/SPEC_analyzeIssue.md](../commands/Px-SpecFlow/SPEC_analyzeIssue.md) or [../commands/Px-SpecFlow/SPEC_analyzeFeature.md](../commands/Px-SpecFlow/SPEC_analyzeFeature.md) to convert pending input into a user story in `.catdd/spec/todoUS/`.
 5. Use [../commands/Px-SpecFlow/SPEC_openUserStory.md](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/spec/doingUS/`.
-6. Use [../commands/Px-SpecFlow/SPEC_takeDetailDesign.md](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) to produce detailed design and acceptance criteria.
+6. Use [../commands/Px-SpecFlow/SPEC_takeDetailDesign.md](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) to produce detailed design and acceptance criteria, including project-root `README*` SPEC docs as needed.
 7. Use [../commands/Px-SpecFlow/SPEC_reviewUserStory.md](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) to gate story and design quality.
 8. Use [../commands/Px-SpecFlow/SPEC_updateDetailDesign.md](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) when the review finds missing or weak design.
 9. Use [../commands/Px-SpecFlow/SPEC_designUnitTests.md](../commands/Px-SpecFlow/SPEC_designUnitTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows.

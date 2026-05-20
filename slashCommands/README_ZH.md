@@ -62,7 +62,9 @@ scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
 
 安装器会把 `methodPrompts` 和 `slashCommands` 复制到目标项目的 `.catdd/` 目录，然后在目标项目的 `.github/prompts/` 目录下生成 Copilot prompt 包装。
 
-在目标项目中使用 SpecCoding 时，所有由 SpecFlow 管理的产物都放在 `.catdd/spec/` 下。应提交 `.catdd/spec/projectContext.md`、`.catdd/spec/pendingNews/`、`.catdd/spec/todoUS/`、`.catdd/spec/doneUS/` 等团队共享产物。`.catdd/spec/doingUS/` 和 `.catdd/spec/WorkingProcessLog.md` 属于本地进行中的工作状态，应保持 gitignore；安装器会维护这些 `.gitignore` 规则。
+在目标项目中使用 SpecCoding 时，生命周期状态放在 `.catdd/spec/` 下，共享的 `README*` SPEC 文档放在项目根目录。应提交 `.catdd/spec/projectContext.md`、`.catdd/spec/pendingNews/`、`.catdd/spec/todoUS/`、`.catdd/spec/doneUS/`，以及项目根目录的 `README*` 文档等团队共享产物。`.catdd/spec/doingUS/` 和 `.catdd/spec/WorkingProcessLog.md` 属于本地进行中的工作状态，应保持 gitignore；安装器会维护这些 `.gitignore` 规则。
+
+项目根目录的 README SPEC 文档可按需要包含 `README.md`、`README_ArchDesign.md`、`README_UserStories.md`、`README_UserGuide.md`、`README_DetailDesign.md`、`README_VerifyDesign.md`。
 
 可以用下面的命令验证安装器：
 
