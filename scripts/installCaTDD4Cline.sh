@@ -119,7 +119,7 @@ This directory is managed by `scripts/installCaTDD4Cline.sh` from MyCaTDD.
 - `spec/` is the installed SpecCoding artifact workspace.
 - Cline project rule: `.clinerules/catdd.md`.
 - Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `todoUS/`, and `doneUS/`.
-- Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md` as needed.
+- Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
 - Keep local SpecCoding work state such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored.
 
 Refresh this project by rerunning the installer from the MyCaTDD repository.
@@ -136,7 +136,7 @@ This is a Cline project rule installed by MyCaTDD. Use it when working with CaTD
 - Portable slash command source: `.catdd/slashCommands/`
 - SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
 - SpecCoding artifact workspace: `.catdd/spec/`
-- Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md` as needed.
+- Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
 
 ## Cline Behavior
 

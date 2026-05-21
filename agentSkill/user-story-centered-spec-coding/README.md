@@ -64,6 +64,7 @@ Run `bash agentSkill/makeSkill.sh user-story-centered-spec-coding` from the repo
 | `README.md` | Human-readable overview of this skill. |
 | `slashCommands/flows/Px-SpecFlow.md` | Source lifecycle flow for SpecCoding. |
 | `slashCommands/commands/Px-SpecFlow/` | Concrete `SPEC_*` command steps. |
+| `slashCommands/templates/README_*Template.md` | Project-root README SPEC doc templates, including ErrorDesign, ResourceDesign, StateDesign, PerfDesign, and DiagnosisDesign, used by `SPEC_takeDetailDesign` and related commands. |
 | `slashCommands/README_UserGuide.md` | Practical slashCommands usage guide. |
 | `references/README_UserGuide.md` | CaTDD user guide for default UnitTesting. |
 | `references/CaTDD_methodPrompt.md` | CaTDD method contract when CaTDD is selected. |
@@ -83,10 +84,11 @@ OUT_ROOT="$(mktemp -d)"
 bash agentSkill/makeSkill.sh user-story-centered-spec-coding --output "$OUT_ROOT"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/SKILL.md"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/flows/Px-SpecFlow.md"
+test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/templates/README_DetailDesignTemplate.md"
 echo "$OUT_ROOT"
 ```
 
-Expected result: the output directory contains `user-story-centered-spec-coding/SKILL.md`, copied CaTDD references, and copied `slashCommands/`, with no symlinks.
+Expected result: the output directory contains `user-story-centered-spec-coding/SKILL.md`, copied CaTDD references, copied README SPEC templates, and copied `slashCommands/`, with no symlinks.
 
 ## Related Skills
 

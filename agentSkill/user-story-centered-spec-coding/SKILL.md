@@ -63,10 +63,15 @@ README_ArchDesign.md
 README_UserStories.md
 README_UserGuide.md
 README_DetailDesign.md
+README_ErrorDesign.md
+README_ResourceDesign.md
+README_StateDesign.md
+README_PerfDesign.md
+README_DiagnosisDesign.md
 README_VerifyDesign.md
 ```
 
-Packaged resources include `slashCommands/flows/Px-SpecFlow.md` and `slashCommands/commands/Px-SpecFlow/`.
+Packaged resources include `slashCommands/flows/Px-SpecFlow.md`, `slashCommands/commands/Px-SpecFlow/`, and `slashCommands/templates/README_*Template.md` for first-time project-root README SPEC docs.
 
 ## Why
 
@@ -147,7 +152,7 @@ If the testing method is unclear, default UnitTesting to CaTDD and explicitly no
 
 1. Use `SPEC_openUserStory` intent to move selected work into `.catdd/spec/doingUS/`.
 2. Use `SPEC_takeDetailDesign` intent to produce detail design and acceptance criteria.
-3. Create or update project-root README SPEC docs only when the project needs those shared surfaces.
+3. Create or update project-root README SPEC docs only when the project needs those shared surfaces; use `slashCommands/templates/README_*Template.md` when creating one for the first time.
 4. Use `SPEC_reviewUserStory` to gate story and design readiness.
 5. Use `SPEC_updateDetailDesign` when review finds missing or weak design.
 
@@ -177,6 +182,7 @@ If the testing method is unclear, default UnitTesting to CaTDD and explicitly no
 
 - Packaged `slashCommands/flows/Px-SpecFlow.md` - Lifecycle flow for user-story-centered SpecCoding.
 - Packaged `slashCommands/commands/Px-SpecFlow/` - Concrete `SPEC_*` command steps.
+- Packaged `slashCommands/templates/README_*Template.md` - Templates for project-root README SPEC docs.
 - Packaged `slashCommands/README_UserGuide.md` - Practical command-flow usage guide.
 - Packaged `references/README_UserGuide.md` - CaTDD method user guide for default UnitTesting.
 - Packaged `references/CaTDD_methodPrompt.md` - CaTDD method contract when CaTDD is selected.

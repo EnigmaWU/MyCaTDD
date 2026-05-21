@@ -35,6 +35,11 @@ grep -Fq '.catdd/methodPrompts/' "$rule" || fail "Cline rule missing methodPromp
 grep -Fq '.catdd/slashCommands/' "$rule" || fail "Cline rule missing slashCommands location"
 grep -Fq '.catdd/spec/' "$rule" || fail "Cline rule missing spec workspace location"
 grep -Fq 'README_ArchDesign.md' "$rule" || fail "Cline rule missing project-root README SPEC docs"
+grep -Fq 'README_ErrorDesign.md' "$rule" || fail "Cline rule missing error design README SPEC doc"
+grep -Fq 'README_ResourceDesign.md' "$rule" || fail "Cline rule missing resource design README SPEC doc"
+grep -Fq 'README_StateDesign.md' "$rule" || fail "Cline rule missing state design README SPEC doc"
+grep -Fq 'README_PerfDesign.md' "$rule" || fail "Cline rule missing performance design README SPEC doc"
+grep -Fq 'README_DiagnosisDesign.md' "$rule" || fail "Cline rule missing diagnosis design README SPEC doc"
 grep -Fq 'SPEC_importIssue' "$rule" || fail "Cline rule missing SPEC command guidance"
 grep -Fq 'UT_* and SPEC_* commands' "$rule" || fail "Cline rule missing command family guidance"
 
