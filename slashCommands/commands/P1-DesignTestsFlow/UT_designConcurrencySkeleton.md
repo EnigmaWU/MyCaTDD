@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Design a CaTDD Concurrency skeleton from stable functional behavior and shared execution, ordering, locking, or reentrancy risks.
+Design a CaTDD Concurrency skeleton from project-root `README_ResourceDesign.md` and stable functional behavior.
 
 Use this command after P0 functional skeletons exist and the component can be called concurrently, scheduled asynchronously, interrupted, canceled, or accessed from multiple owners.
 
@@ -12,11 +12,18 @@ Use this command after P0 functional skeletons exist and the component can be ca
 - `feature_name`: feature under test.
 - `target_test_file`: test file to create or update.
 - `existing_skeletons`: Typical, Edge, Misuse, Fault, State, Capability, or related skeletons.
-- `concurrency_model`: optional thread, task, interrupt, async, queue, or locking notes.
+- `resource_design_doc`: required project-root `README_ResourceDesign.md` with shared ownership, contention, backpressure, lifetime, and resource coordination decisions.
+
+## Preconditions
+
+- Project-root `README_ResourceDesign.md` must exist before drafting the Concurrency skeleton.
+- WARNING: If project-root `README_ResourceDesign.md` is missing, stop before drafting the Concurrency skeleton and warn the developer.
+- If `README_ResourceDesign.md` is stale or incomplete, warn the developer and recommend updating it with `SPEC_takeDetailDesign` or `SPEC_updateDetailDesign` before continuing.
 
 ## Method References
 
 - [../../flows/P1-DesignTestsFlow.md](../../flows/P1-DesignTestsFlow.md)
+- [../../templates/README_ResourceDesignTemplate.md](../../templates/README_ResourceDesignTemplate.md)
 - [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
 - [../../../methodPrompts/CaTDD_methodPrompt4Cat-Concurrency.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Concurrency.md)
 
@@ -30,11 +37,13 @@ Use this command after P0 functional skeletons exist and the component can be ca
 
 Ask the assistant to:
 
-1. Read the functional skeletons and any supplied concurrency model.
-2. Use the Concurrency method prompt as the category source of truth.
-3. Draft only the Concurrency skeleton and preserve unrelated categories.
-4. Identify missing ordering rules, race risks, lock ownership gaps, or async lifecycle conflicts.
-5. Recommend whether to continue to `UT_designStateSkeleton`, `UT_designCapabilitySkeleton`, or `UT_reviewDesignTestsSkeleton`.
+1. Check whether project-root `README_ResourceDesign.md` exists before drafting any skeleton content.
+2. If `README_ResourceDesign.md` is missing, output a WARNING and stop before drafting the Concurrency skeleton.
+3. Read `README_ResourceDesign.md` as the resource and contention design source, then read the functional skeletons for observable behavior links.
+4. Use the Concurrency method prompt as the category source of truth.
+5. Draft only the Concurrency skeleton and preserve unrelated categories.
+6. Identify missing ordering rules, race risks, lock ownership gaps, or async lifecycle conflicts.
+7. Recommend whether to continue to `UT_designStateSkeleton`, `UT_designCapabilitySkeleton`, or `UT_reviewDesignTestsSkeleton`.
 
 ## Conflict Guard
 

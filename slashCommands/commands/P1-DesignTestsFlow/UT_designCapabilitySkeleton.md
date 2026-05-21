@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Design a CaTDD Capability skeleton from stable functional behavior and explicit feature capability boundaries.
+Design a CaTDD Capability skeleton from project-root `README_DetailDesign.md` and stable functional behavior.
 
 Use this command after P0 functional skeletons exist and the component exposes modes, feature flags, limits, supported operations, or intentionally unsupported behavior.
 
@@ -12,11 +12,18 @@ Use this command after P0 functional skeletons exist and the component exposes m
 - `feature_name`: feature under test.
 - `target_test_file`: test file to create or update.
 - `existing_skeletons`: Typical, Edge, Misuse, Fault, State, or related skeletons.
-- `capability_matrix`: optional list of supported, unsupported, limited, or conditional capabilities.
+- `detail_design_doc`: required project-root `README_DetailDesign.md` with capability boundaries, supported modes, limits, and unsupported behavior.
+
+## Preconditions
+
+- Project-root `README_DetailDesign.md` must exist before drafting the Capability skeleton.
+- WARNING: If project-root `README_DetailDesign.md` is missing, stop before drafting the Capability skeleton and warn the developer.
+- If `README_DetailDesign.md` is stale or incomplete, warn the developer and recommend updating it with `SPEC_takeDetailDesign` or `SPEC_updateDetailDesign` before continuing.
 
 ## Method References
 
 - [../../flows/P1-DesignTestsFlow.md](../../flows/P1-DesignTestsFlow.md)
+- [../../templates/README_DetailDesignTemplate.md](../../templates/README_DetailDesignTemplate.md)
 - [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
 - [../../../methodPrompts/CaTDD_methodPrompt4Cat-Capability.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Capability.md)
 
@@ -30,11 +37,13 @@ Use this command after P0 functional skeletons exist and the component exposes m
 
 Ask the assistant to:
 
-1. Read the functional skeletons and any supplied capability matrix.
-2. Use the Capability method prompt as the category source of truth.
-3. Draft only the Capability skeleton and preserve unrelated categories.
-4. Identify missing capability boundaries, hidden feature coupling, or unclear unsupported behavior.
-5. Recommend whether to continue to `UT_designStateSkeleton`, `UT_designConcurrencySkeleton`, or `UT_reviewDesignTestsSkeleton`.
+1. Check whether project-root `README_DetailDesign.md` exists before drafting any skeleton content.
+2. If `README_DetailDesign.md` is missing, output a WARNING and stop before drafting the Capability skeleton.
+3. Read `README_DetailDesign.md` as the capability design source, then read the functional skeletons for observable behavior links.
+4. Use the Capability method prompt as the category source of truth.
+5. Draft only the Capability skeleton and preserve unrelated categories.
+6. Identify missing capability boundaries, hidden feature coupling, or unclear unsupported behavior.
+7. Recommend whether to continue to `UT_designStateSkeleton`, `UT_designConcurrencySkeleton`, or `UT_reviewDesignTestsSkeleton`.
 
 ## Conflict Guard
 

@@ -40,9 +40,9 @@ flowchart LR
 
 ## Command Sequence
 
-1. Use [../commands/P1-DesignTestsFlow/UT_designStateSkeleton.md](../commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) when lifecycle, transition, ownership, persistence, or recovery behavior matters.
-2. Use [../commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md](../commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) when supported, limited, conditional, or unsupported capability boundaries matter.
-3. Use [../commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md](../commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) when ordering, interleaving, reentrancy, cancellation, or shared ownership matters.
+1. Use [../commands/P1-DesignTestsFlow/UT_designStateSkeleton.md](../commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) when project-root `README_StateDesign.md` exists and lifecycle, transition, ownership, persistence, or recovery behavior matters. If `README_StateDesign.md` is missing, the command warns and stops before drafting the State skeleton.
+2. Use [../commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md](../commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) when project-root `README_DetailDesign.md` exists and supported, limited, conditional, or unsupported capability boundaries matter. If `README_DetailDesign.md` is missing, the command warns and stops before drafting the Capability skeleton.
+3. Use [../commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md](../commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) when project-root `README_ResourceDesign.md` exists and ordering, interleaving, reentrancy, cancellation, or shared ownership matters. If `README_ResourceDesign.md` is missing, the command warns and stops before drafting the Concurrency skeleton.
 4. Use [../commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md](../commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) before moving to P2 quality coverage or TC-by-TC implementation.
 
 ## Conflict Guard
