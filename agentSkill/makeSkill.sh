@@ -3,7 +3,11 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-SUPPORTED_SKILL="comment-alive-test-driven-development"
+DEFAULT_SKILL="comment-alive-test-driven-development"
+SUPPORTED_SKILLS=(
+  "comment-alive-test-driven-development"
+  "user-story-centered-spec-coding"
+)
 SKILL_NAME=""
 OUTPUT_ROOT="$SCRIPT_DIR/dist"
 
@@ -12,6 +16,10 @@ usage() {
 Usage: agentSkill/makeSkill.sh [SKILL_NAME] [--output DIR]
 
 Generate a self-contained skill package under agentSkill/dist by default.
+
+Supported skills:
+  - comment-alive-test-driven-development
+  - user-story-centered-spec-coding
 
 Options:
   --output DIR   Directory that will receive the generated skill package.
@@ -47,10 +55,21 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-SKILL_NAME="${SKILL_NAME:-$SUPPORTED_SKILL}"
+SKILL_NAME="${SKILL_NAME:-$DEFAULT_SKILL}"
 
-if [[ "$SKILL_NAME" != "$SUPPORTED_SKILL" ]]; then
-  echo "Unsupported skill '$SKILL_NAME'. Supported: $SUPPORTED_SKILL" >&2
+is_supported_skill() {
+  local candidate="$1"
+  local supported
+  for supported in "${SUPPORTED_SKILLS[@]}"; do
+    if [[ "$candidate" == "$supported" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+if ! is_supported_skill "$SKILL_NAME"; then
+  echo "Unsupported skill '$SKILL_NAME'. Supported: ${SUPPORTED_SKILLS[*]}" >&2
   exit 1
 fi
 

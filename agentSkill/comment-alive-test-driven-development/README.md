@@ -119,6 +119,7 @@ Expected result: `agentSkill/dist/comment-alive-test-driven-development/` contai
 ## Related Skills
 
 - **`UnitTesting-convert2CaTDD`** — Use this when you want to convert *existing* test files to CaTDD format. This skill (`comment-alive-test-driven-development`) is for writing *new* test files from scratch.
+- **`user-story-centered-spec-coding`** — Use this when you need a full SpecCoding lifecycle around a user story; it uses CaTDD as the default UnitTesting method but does not replace CaTDD.
 - **`test-driven-development`** — Classic TDD Red→Green→Refactor workflow without the CaTDD comment structure.
 
 ## Origin

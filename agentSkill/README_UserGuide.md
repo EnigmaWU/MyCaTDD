@@ -1,6 +1,6 @@
 # agentSkill User Guide
 
-Practical guide for developers and CodeAgents packaging CaTDD as reusable agent skills.
+Practical guide for developers and CodeAgents packaging CaTDD and SpecCoding as reusable agent skills.
 
 For WHAT this layer is and WHY it exists, read [README.md](README.md). This guide focuses on HOW to package skills, WHO uses them, WHEN to generate packages, and WHERE the outputs live.
 
@@ -8,14 +8,14 @@ For WHAT this layer is and WHY it exists, read [README.md](README.md). This guid
 
 Use this guide if you are one of these readers:
 
-- A maintainer who edits authored CaTDD skill source.
+- A maintainer who edits authored CaTDD or SpecCoding skill source.
 - A developer who wants a self-contained skill package for another agent environment.
 - A CodeAgent that needs packaged CaTDD references and command flows.
 - A tooling author validating that generated packages contain no source-tree symlinks.
 
 ## What
 
-`agentSkill/` turns authored CaTDD skill source into a self-contained generated package.
+`agentSkill/` turns authored CaTDD and SpecCoding skill source into self-contained generated packages.
 
 The generated package includes:
 
@@ -32,7 +32,7 @@ Generate or validate an agent skill package when:
 - You changed authored skill behavior.
 - You changed `methodPrompts` references used by the skill.
 - You changed `slashCommands` content that should ship with the skill.
-- You want to distribute CaTDD as a reusable CodeAgent capability.
+- You want to distribute CaTDD or user-story-centered SpecCoding as a reusable CodeAgent capability.
 - You need to confirm the generated package is self-contained before publishing or copying it.
 
 Do not edit generated `agentSkill/dist/` content as the source of truth. Regenerate it from authored sources.
@@ -51,6 +51,9 @@ agentSkill/
   comment-alive-test-driven-development/
     SKILL.md
     README.md
+  user-story-centered-spec-coding/
+    SKILL.md
+    README.md
 ```
 
 Default generated output lives under:
@@ -61,30 +64,35 @@ agentSkill/dist/comment-alive-test-driven-development/
   README.md
   references/
   slashCommands/
+agentSkill/dist/user-story-centered-spec-coding/
+  SKILL.md
+  README.md
+  references/
+  slashCommands/
 ```
 
 Temporary validation output can be written anywhere with `--output`.
 
 ## Why
 
-The skill package gives CodeAgents a compact, reusable CaTDD capability without making the authored source tree expose duplicate linked paths or partial references.
+The skill package gives CodeAgents compact, reusable CaTDD and SpecCoding capabilities without making the authored source tree expose duplicate linked paths or partial references.
 
-This keeps daily repository editing clean while still producing a distributable artifact that contains the method guide, method prompt, implementation template, and slash command flows needed for agent execution.
+This keeps daily repository editing clean while still producing distributable artifacts that contain the method guide, method prompt, implementation template, and slash command flows needed for agent execution.
 
 ## How
 
-Follow this workflow when packaging a CaTDD skill.
+Follow this workflow when packaging a skill.
 
-1. Edit authored skill source under `agentSkill/comment-alive-test-driven-development/`.
+1. Edit authored skill source under the relevant `agentSkill/<skill-name>/` directory.
 2. Keep referenced method assets in `methodPrompts/` and command assets in `slashCommands/`.
-3. Run `bash agentSkill/makeSkill.sh` from the repository root.
+3. Run `bash agentSkill/makeSkill.sh` or `bash agentSkill/makeSkill.sh <skill-name>` from the repository root.
 4. Inspect the generated package under `agentSkill/dist/` or a temporary output path.
 5. Run `bash scripts/test_makeSkill.sh` to confirm required files and no symlinks.
 6. Commit authored source, packaging script changes, and tests. Do not commit ignored generated output.
 
 ## Usage Example
 
-Run these commands from the repository root to generate a package into a temporary output directory and verify key files:
+Run these commands from the repository root to generate the default CaTDD package into a temporary output directory and verify key files:
 
 ```bash
 OUT_ROOT="$(mktemp -d)"
@@ -96,15 +104,34 @@ find "$OUT_ROOT/comment-alive-test-driven-development" -type l | wc -l
 echo "$OUT_ROOT"
 ```
 
+Generate the user-story-centered SpecCoding package:
+
+```bash
+OUT_ROOT="$(mktemp -d)"
+bash agentSkill/makeSkill.sh user-story-centered-spec-coding --output "$OUT_ROOT"
+test -f "$OUT_ROOT/user-story-centered-spec-coding/SKILL.md"
+test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/flows/Px-SpecFlow.md"
+test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md"
+find "$OUT_ROOT/user-story-centered-spec-coding" -type l | wc -l
+echo "$OUT_ROOT"
+```
+
 Expected result:
 
 - The `test` commands exit successfully.
 - The symlink count prints `0`.
-- The printed temporary path contains a self-contained `comment-alive-test-driven-development/` package.
+- The printed temporary path contains a self-contained skill package for the selected skill.
+
+## Supported Skills
+
+| Skill | Package command | Purpose |
+| --- | --- | --- |
+| `comment-alive-test-driven-development` | `bash agentSkill/makeSkill.sh` | Package CaTDD as the reusable verification and testing methodology skill. |
+| `user-story-centered-spec-coding` | `bash agentSkill/makeSkill.sh user-story-centered-spec-coding` | Package the user-story-centered SpecCoding lifecycle skill. |
 
 ## Packaging Output
 
-The default package generated by `bash agentSkill/makeSkill.sh` contains:
+Each generated package contains:
 
 | Path | Purpose |
 | --- | --- |
@@ -123,6 +150,7 @@ Treat these paths differently:
 | Path | Treat as |
 | --- | --- |
 | `agentSkill/comment-alive-test-driven-development/` | Authored source. Edit and commit. |
+| `agentSkill/user-story-centered-spec-coding/` | Authored source. Edit and commit. |
 | `agentSkill/makeSkill.sh` | Packaging logic. Edit and commit when packaging rules change. |
 | `agentSkill/dist/` | Generated output. Rebuild locally and keep ignored in this source repository. |
 

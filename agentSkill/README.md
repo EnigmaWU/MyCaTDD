@@ -1,27 +1,27 @@
 # agentSkill
 
-`agentSkill` contains authored skill sources and generated packages that make CaTDD reusable in agent workflows.
+`agentSkill` contains authored skill sources and generated packages that make CaTDD and SpecCoding capabilities reusable in agent workflows.
 
-This README is the WHAT / WHY entry point for the capability packaging layer. For HOW, WHO, WHEN, and WHERE to package or consume CaTDD skills, read [README_UserGuide.md](README_UserGuide.md) or [README_UserGuide_ZH.md](README_UserGuide_ZH.md).
+This README is the WHAT / WHY entry point for the capability packaging layer. For HOW, WHO, WHEN, and WHERE to package or consume CaTDD and SpecCoding skills, read [README_UserGuide.md](README_UserGuide.md) or [README_UserGuide_ZH.md](README_UserGuide_ZH.md).
 
 ## What
 
 `agentSkill` is the reusable capability packaging layer in the CaTDD 4-layer model.
 
-It defines how CaTDD method knowledge is wrapped into CodeAgent-friendly skills:
+It defines how CaTDD method knowledge and SpecCoding workflow knowledge are wrapped into CodeAgent-friendly skills:
 
 - Authored skill source directories.
 - Machine-readable `SKILL.md` definitions.
 - Human-readable skill-local README files.
 - Packaged references copied from `methodPrompts`.
-- Packaged `slashCommands` command flows for execution support.
+- Packaged `slashCommands` command flows for execution and SpecCoding lifecycle support.
 - Generated distributable packages under ignored `dist/` output.
 
 The authored source is the durable asset. Generated packages are build output.
 
 ## Why
 
-`agentSkill` exists so CaTDD can be reused by agents without making every agent rediscover the method, command flows, constraints, and references from scratch.
+`agentSkill` exists so CaTDD and SpecCoding can be reused by agents without making every agent rediscover the method, command flows, lifecycle rules, constraints, and references from scratch.
 
 It keeps a clean packaging boundary:
 
@@ -30,11 +30,18 @@ It keeps a clean packaging boundary:
 - `agentSkill` packages those assets as a reusable capability with scope, constraints, inputs, outputs, and validation expectations.
 - Generated `dist/` packages are self-contained so they can be copied or published without exposing source-tree symlinks or duplicate authored paths.
 
+## Supported skills
+
+| Skill | Owns |
+| --- | --- |
+| `comment-alive-test-driven-development` | CaTDD as a reusable verification and testing methodology. |
+| `user-story-centered-spec-coding` | User-story-centered SpecCoding lifecycle orchestration, using CaTDD as the default UnitTesting method. |
+
 ## Packaging contract
 
 Skill packages should be generated from source, not manually edited in `dist/`.
 
-- Edit authored skill source under `agentSkill/comment-alive-test-driven-development/`.
+- Edit authored skill source under the relevant `agentSkill/<skill-name>/` directory.
 - Keep references aligned with `methodPrompts` and `slashCommands`.
 - Use `agentSkill/makeSkill.sh` to generate a self-contained package.
 - Keep generated `agentSkill/dist/` output ignored in this source repository.
@@ -43,7 +50,7 @@ Skill packages should be generated from source, not manually edited in `dist/`.
 
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
 - Packaging script (`makeSkill.sh`)
-- Authored skill source folders such as `comment-alive-test-driven-development/`
+- Authored skill source folders such as `comment-alive-test-driven-development/` and `user-story-centered-spec-coding/`
 - `SKILL.md` files for machine-readable skill behavior
 - Skill-local `README.md` files for human-readable skill usage
 - Generated packages under `dist/` containing copied `references/` assets and copied `slashCommands/`
