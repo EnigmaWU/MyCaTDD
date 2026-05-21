@@ -186,6 +186,15 @@ The installers manage the `.gitignore` rules for those local artifacts.
 | Select the next test case from existing skeletons | [commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
 | Implement the selected test case | [commands/P0-FuncTestsFlow/UT_implTestCase.md](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
 | Review the implemented test case | [commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
+| Design State skeleton coverage | [commands/P1-DesignTestsFlow/UT_designStateSkeleton.md](commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) |
+| Design Capability skeleton coverage | [commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md](commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) |
+| Design Concurrency skeleton coverage | [commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md](commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) |
+| Review P1 design skeleton coverage | [commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md](commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) |
+| Design Performance skeleton coverage | [commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md](commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md) |
+| Design Robust skeleton coverage | [commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
+| Design Compatibility skeleton coverage | [commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
+| Design Configuration skeleton coverage | [commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
+| Review P2 quality skeleton coverage | [commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
 
 ## Quality Checklist
 

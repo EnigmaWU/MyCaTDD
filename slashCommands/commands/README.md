@@ -8,6 +8,8 @@ All commands should follow [../UT_slashCommandTemplate.md](../UT_slashCommandTem
 
 - [Px-SpecFlow](Px-SpecFlow): SpecCoding lifecycle for project context, work items, user stories, design, tests, product code, review, CI, and closure.
 - [P0-FuncTestsFlow](P0-FuncTestsFlow): first imported flow for functional test skeleton and TC implementation.
+- [P1-DesignTestsFlow](P1-DesignTestsFlow): design test skeleton flow for State, Capability, and Concurrency.
+- [P2-QualityTestsFlow](P2-QualityTestsFlow): quality test skeleton flow for Performance, Robust, Compatibility, and Configuration.
 
 ## Contract
 
