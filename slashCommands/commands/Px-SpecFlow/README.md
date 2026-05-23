@@ -16,6 +16,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_importFeature.md](SPEC_importFeature.md) | Import feature request, enhancement, or product idea into pending work. |
 | [SPEC_analyzeIssue.md](SPEC_analyzeIssue.md) | Analyze pending issue input and generate a repair-oriented user story. |
 | [SPEC_analyzeFeature.md](SPEC_analyzeFeature.md) | Analyze pending feature input and generate a value-oriented user story. |
+| [SPEC_whatsNextTask.md](SPEC_whatsNextTask.md) | Recommend the next SpecCoding task from current lifecycle state. |
 | [SPEC_openUserStory.md](SPEC_openUserStory.md) | Move a selected user story into active work. |
 | [SPEC_takeDetailDesign.md](SPEC_takeDetailDesign.md) | Produce detailed design and acceptance criteria. |
 | [SPEC_reviewUserStory.md](SPEC_reviewUserStory.md) | Review story, acceptance criteria, and design readiness. |
