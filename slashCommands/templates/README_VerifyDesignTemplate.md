@@ -9,6 +9,19 @@ This is the SpecCoding template for project-root `README_VerifyDesign.md`. Creat
 - Active story artifact: {{.catdd/spec/doingUS path}}
 - Target test files: {{test file paths}}
 
+## Testing Definition
+
+- **UnitTesting**: verifies behavior at subPackage/subModule/Class/function scope.
+- **ModuleTesting**: verifies behavior at module-level Package/Service/Interface scope.
+- **UserTesting**: verifies end-to-end user flow with demo/examples.
+
+Rules:
+
+- If the module is simple, treat `UnitTesting == ModuleTesting`.
+- If the module is complex, keep `UnitTesting` at sub-level scope and `ModuleTesting` at module-level scope.
+- `UnitTesting` and `ModuleTesting` both use CaTDD categories.
+- `UserTesting` is not CaTDD category testing; it is full-flow verification.
+
 ## Test Strategy
 
 {{Describe how tests verify the story and which risks they reduce.}}
