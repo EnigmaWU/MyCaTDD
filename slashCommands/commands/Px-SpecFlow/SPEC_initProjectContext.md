@@ -4,6 +4,10 @@
 
 Create the first `.catdd/spec/projectContext.md` for a target project before SpecCoding begins.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect available project material, reason about what is confirmed vs. assumed, draft the context artifact, and verify that uncertain facts are flagged explicitly rather than invented. The reasoning loop surfaces open questions for the developer.
+
 ## Inputs
 
 - `project_root`: target project directory.

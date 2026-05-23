@@ -4,6 +4,10 @@
 
 Close an active user story after implementation, review, commit, and CI are complete.
 
+## CoT Pattern
+
+**Linear** — Direct execution. Given verified commit and CI evidence, this command moves the story artifact to done state deterministically. If any lifecycle gate (review, commit, CI) remains unresolved, the observation stops and asks the developer instead of closing.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.

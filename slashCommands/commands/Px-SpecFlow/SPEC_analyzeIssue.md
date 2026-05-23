@@ -4,6 +4,10 @@
 
 Analyze a pending issue, bug report, or defect and generate a user story artifact under `.catdd/spec/todoUS/`.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect the raw issue input, reason about observed behavior, expected behavior, and root-cause hypotheses, draft a repair-oriented user story, and verify it before accepting the output. When reproducible intent or expected behavior is missing, the reasoning loop surfaces questions instead of inventing requirements.
+
 ## Inputs
 
 - `pending_issue`: issue file under `.catdd/spec/pendingNews/`.

@@ -4,6 +4,10 @@
 
 Revise detailed design and acceptance criteria after story review, implementation feedback, or quality failure.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect review feedback and the existing design artifacts, reason about the minimum change needed to address the finding without hiding it, apply the revision, and verify that the updated design resolves the finding and preserves traceability. If the feedback reveals new requirements, the reasoning loop routes to a new work item instead of widening scope.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.

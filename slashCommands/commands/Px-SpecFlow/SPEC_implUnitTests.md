@@ -4,6 +4,10 @@
 
 Implement selected CaTDD test cases for the active user story.
 
+## CoT Pattern
+
+**Linear** — Direct execution. Given the selected TC entries and the test framework, this command implements the test case code deterministically without branching. If tests cannot run or fail unexpectedly, the observation surfaces the issue rather than continuing to product code.
+
 ## Inputs
 
 - `selected_tc`: one or more selected TC entries.
