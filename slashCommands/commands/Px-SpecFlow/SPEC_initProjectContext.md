@@ -21,13 +21,13 @@ Create the first `.catdd/spec/projectContext.md` for a target project before Spe
 
 ## Output Contract
 
-- A `.catdd/spec/projectContext.md` team-shared persistent artifact with project facts, constraints, code conventions, test conventions, and open questions.
+- A `.catdd/spec/projectContext.md` team-shared persistent artifact with project facts, constraints, code conventions, test conventions, constitution-level guardrails, and open questions.
 - A list of assumptions that must be confirmed by the developer.
 - Next recommended command: `SPEC_importIssue`, `SPEC_importFeature`, or `SPEC_updateProjectContext`.
 
 ## Prompt Template
 
-Ask the assistant to read the provided project material, summarize stable context, mark unknowns explicitly, and avoid inventing product or architecture decisions.
+Ask the assistant to read the provided project material, summarize stable context and constitution-level guardrails, mark unknowns explicitly, and avoid inventing product or architecture decisions.
 
 ## Conflict Guard
 

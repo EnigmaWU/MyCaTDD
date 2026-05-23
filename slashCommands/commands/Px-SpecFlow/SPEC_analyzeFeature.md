@@ -22,12 +22,12 @@ Analyze a pending feature request or enhancement and generate a user story artif
 ## Output Contract
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
-- Feature-focused user story, user value, scope, non-goals, risks, and initial acceptance questions.
+- A feature-focused, independently testable user story slice with user value, priority, acceptance scenarios, edge cases, scope, non-goals, risks, assumptions, and initial acceptance questions.
 - Source trace back to the imported feature artifact.
 
 ## Prompt Template
 
-Ask the assistant to convert raw feature input into a value-oriented user story without designing implementation details too early.
+Ask the assistant to convert raw feature input into a value-oriented, independently testable user story slice without designing implementation details too early.
 
 ## Conflict Guard
 

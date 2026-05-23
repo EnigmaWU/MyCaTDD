@@ -22,12 +22,12 @@ Analyze a pending issue, bug report, or defect and generate a user story artifac
 ## Output Contract
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
-- Issue-focused user story, observed behavior, expected behavior, scope, non-goals, risks, and acceptance questions.
+- An issue-focused, independently testable user story slice with observed behavior, expected behavior, priority, acceptance scenarios, edge cases, scope, non-goals, risks, assumptions, and acceptance questions.
 - Source trace back to the imported issue artifact.
 
 ## Prompt Template
 
-Ask the assistant to convert raw issue input into a repair-oriented user story without designing implementation details too early.
+Ask the assistant to convert raw issue input into a repair-oriented, independently testable user story slice without designing implementation details too early.
 
 ## Conflict Guard
 
