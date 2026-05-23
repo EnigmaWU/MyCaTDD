@@ -31,7 +31,7 @@ Edge proves that the feature still works correctly at the edges of valid use. In
 
 - Separate valid edge behavior from invalid misuse behavior.
 - Make the boundary explicit: min, max, exactly full, one before full, one after full, first call, last call.
-- State whether the expected result is success, a documented non-error result, or a graceful functional error.
+- State whether the expected result is success or a documented non-failure edge result.
 - Keep each test centered on one edge so failures are diagnostic.
 
 ## Design Skeleton
@@ -71,7 +71,7 @@ TC-n:
 ```text
 verifyWait_byZeroTimeout_expectImmediateTimeout
 verifyQueuePush_byExactlyFullQueue_expectQueueFullResult
-verifyRegister_byEmptyName_expectInvalidParam
+verifyRead_byEmptyBuffer_expectNoDataAvailable
 verifyRead_byLastAvailableItem_expectSuccess
 ```
 

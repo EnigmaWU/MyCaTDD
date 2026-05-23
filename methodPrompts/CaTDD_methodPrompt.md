@@ -261,7 +261,7 @@ P0-Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
 
 ## Priority-0: Functional Testing
 
-**Formula**: `P1 = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`
+**Formula**: `P0 = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`
 
 Functional testing ensures the component behaves correctly for both valid and invalid inputs, covering the complete contract between the API and its users.
 
@@ -289,7 +289,7 @@ Tests that verify correct behavior with **valid inputs and states**.
 - **Alias**: Boundary testing is treated as part of Edge in CaTDD.
 - **Examples**:
   - Min/Max values (zero timeout, max string length)
-  - Null/empty inputs (null pointer, empty array)
+  - Empty-but-valid inputs (empty string, empty array)
   - Block/NonBlock/Timeout modes
   - Buffer full/empty conditions
 
@@ -1033,9 +1033,9 @@ Shall I proceed with implementation?"
   - Update TODO section: 🔴 → 🟢 GREEN/PASSED
   - Commit changes with clear message
 
-- ☐ **Implement P1 Edge tests**
+- ☐ **Implement P0 Edge tests**
   - Follow same RED→GREEN cycle
-  - Test edge cases: min/max values, null/empty, limits
+  - Test edge cases: min/max values, empty-but-valid inputs, limits
   - Update TODO section as tests pass
 
 #### 3C: P0 Functional Testing (InvalidFunc)
