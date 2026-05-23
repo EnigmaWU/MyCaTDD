@@ -4,6 +4,10 @@
 
 Review product code, tests, and traceability before commit or refactor routing.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect the changed product and test files, reason about behavior, traceability to README SPEC docs, minimality, and quality risk, produce a review finding, and verify that the finding clearly routes to the next action (commit or refactor). The reasoning loop stops when all review criteria are explicitly addressed or a quality failure is reported.
+
 ## Inputs
 
 - `changed_files`: product and test files changed for the active story.

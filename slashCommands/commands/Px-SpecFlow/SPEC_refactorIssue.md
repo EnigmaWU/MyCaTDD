@@ -4,6 +4,10 @@
 
 Route failed quality, unclear design, or implementation debt back into a focused correction loop.
 
+## CoT Pattern
+
+**ToT** — Tree of Thoughts. This command must inspect the review findings and changed files, generate candidate correction loops (update design, redesign tests, fix product code, or ask developer), evaluate each against the smallest correction that can make quality pass without hiding the finding, and select the best routing decision. Multiple correction paths may appear valid; ToT allows the assistant to reason over them before recommending one.
+
 ## Inputs
 
 - `review_findings`: findings from story, test, product-code, or CI review.

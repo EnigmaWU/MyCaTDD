@@ -4,6 +4,10 @@
 
 Import a feature request, enhancement idea, product request, or developer proposal into `.catdd/spec/pendingNews/` as raw SpecCoding input.
 
+## CoT Pattern
+
+**Linear** — Direct execution. This command performs a deterministic import and normalization step. Given a feature source, it preserves intent, classifies the input, and writes the pending artifact without branching or multi-path analysis.
+
 ## Inputs
 
 - `feature_source`: feature URL, copied request text, product note, design sketch, or chat summary.

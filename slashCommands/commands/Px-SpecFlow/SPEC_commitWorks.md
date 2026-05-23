@@ -4,6 +4,10 @@
 
 Prepare and commit completed work after story, tests, product code, and review pass.
 
+## CoT Pattern
+
+**Linear** — Direct execution. Given verified changed files and the active story, this command determines commit scope and creates the commit message deterministically. If scope ambiguity is found, the observation stops and asks the developer before committing.
+
 ## Inputs
 
 - `changed_files`: files to commit.

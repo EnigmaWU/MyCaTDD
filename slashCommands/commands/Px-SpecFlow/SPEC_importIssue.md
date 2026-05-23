@@ -4,6 +4,10 @@
 
 Import an issue, bug report, defect, or support problem into `.catdd/spec/pendingNews/` as raw SpecCoding input.
 
+## CoT Pattern
+
+**Linear** — Direct execution. This command performs a deterministic import and normalization step. Given an issue source, it preserves intent, classifies the input, and writes the pending artifact without branching or multi-path analysis.
+
 ## Inputs
 
 - `issue_source`: issue URL, copied issue text, bug report, support note, or developer-reported problem.

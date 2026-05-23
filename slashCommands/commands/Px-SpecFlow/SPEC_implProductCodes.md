@@ -4,6 +4,10 @@
 
 Implement product code for the active story after selected unit tests exist.
 
+## CoT Pattern
+
+**Linear** — Direct execution. Given failing tests and the detail design, this command writes the minimum product code needed to satisfy the tests. If scope ambiguity is found, the observation routes to `SPEC_updateDetailDesign` instead of widening implementation scope.
+
 ## Inputs
 
 - `failing_tests`: selected tests or test output.

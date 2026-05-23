@@ -4,6 +4,10 @@
 
 Recommend the next SpecCoding task when a developer is new to the flow or resuming paused work.
 
+## CoT Pattern
+
+**ToT** — Tree of Thoughts. This command must inspect all current lifecycle artifacts, generate the candidate next commands that could advance the work, evaluate each against the SpecFlow lifecycle rules and artifact state, and select exactly one recommendation. Multiple next-step paths may be valid simultaneously; ToT allows the assistant to reason over them before committing to one.
+
 ## Inputs
 
 - `projectContext_file`: optional `.catdd/spec/projectContext.md`.

@@ -4,6 +4,10 @@
 
 Move a selected user story from `.catdd/spec/todoUS/` into `.catdd/spec/doingUS/` and prepare it for detailed design.
 
+## CoT Pattern
+
+**Linear** — Direct execution. This command performs a deterministic artifact movement step. Given a selected user story, it moves the file and sets the active-work status marker without multi-path analysis.
+
 ## Inputs
 
 - `todo_user_story`: selected `.catdd/spec/todoUS/*-UserStory.md` file.

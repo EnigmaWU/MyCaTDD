@@ -4,6 +4,10 @@
 
 Trigger, monitor, or summarize CI after committed work.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect CI state, reason about which checks are required and whether they pass, act to trigger or summarize CI, and observe the result. If CI fails, the reasoning loop surfaces actionable routing (refactor or ask developer) instead of closing the story.
+
 ## Inputs
 
 - `commit_ref`: commit or branch to verify.

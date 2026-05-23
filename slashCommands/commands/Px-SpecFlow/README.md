@@ -32,6 +32,8 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 
 ## Contract
 
-All commands should follow [../../UT_slashCommandTemplate.md](../../UT_slashCommandTemplate.md) and the lifecycle in [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md).
+All commands should follow [../../SPEC_slashCommandTemplate.md](../../SPEC_slashCommandTemplate.md) and the lifecycle in [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md).
+
+Each command should declare its CoT pattern (`ReACT`, `ToT`, or `Linear`) as described in the template.
 
 ONE-MORE-THING: ask developer if something not sure

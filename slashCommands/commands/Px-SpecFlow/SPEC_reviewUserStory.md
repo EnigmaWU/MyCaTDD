@@ -4,6 +4,10 @@
 
 Review the active user story, detailed design, and acceptance criteria before test design begins.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect the story and design artifacts, reason about clarity, completeness, traceability, and testability, produce a review finding, and verify that the finding is actionable before reporting. The reasoning loop routes to a design revision when criteria cannot be tested.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.

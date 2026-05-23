@@ -4,6 +4,10 @@
 
 Design CaTDD unit test skeletons for the active user story after story and detail design review pass.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect the active story and design artifacts, reason about the required P0/P1/P2 test categories and coverage surfaces, draft or update CaTDD US/AC/TC skeletons, and verify that skeletons are traceable to acceptance criteria and design docs before finalizing. The reasoning loop promotes P1/P2 categories only after P0 Functional coverage exists.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.

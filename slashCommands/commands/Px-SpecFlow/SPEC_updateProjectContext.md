@@ -4,6 +4,10 @@
 
 Refresh `.catdd/spec/projectContext.md` when project facts, constraints, conventions, or decisions change.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect the change source and the existing context, reason about what is confirmed vs. uncertain, apply the minimum change to the context artifact, and verify that assumptions remain separated from stable facts.
+
 ## Inputs
 
 - `projectContext_file`: existing project context.

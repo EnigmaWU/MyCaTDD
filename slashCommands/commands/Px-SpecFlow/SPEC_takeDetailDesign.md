@@ -4,6 +4,10 @@
 
 Create or update detailed design and acceptance criteria for the active user story.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect the active user story and project context, reason about the design surfaces needed (detail design, error, resource, state, performance, diagnosis), draft or update the relevant project-root README SPEC docs, and verify that acceptance criteria are testable and traceable before finalizing. Embedded software and digital media domain concerns should trigger additional reasoning cycles for error, resource, state, performance, and diagnosis design surfaces.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.

@@ -4,6 +4,10 @@
 
 Analyze a pending feature request or enhancement and generate a user story artifact under `.catdd/spec/todoUS/`.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must inspect the raw feature input, reason about user value, actor, and outcome, draft a user story, and verify it against quality criteria before accepting the output. When inputs are ambiguous or incomplete, the reasoning loop surfaces questions instead of inventing requirements.
+
 ## Inputs
 
 - `pending_feature`: feature file under `.catdd/spec/pendingNews/`.
