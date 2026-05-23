@@ -180,6 +180,7 @@ The installers manage the `.gitignore` rules for those local artifacts.
 | --- | --- |
 | Create or revise a portable UT slash command | [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md) |
 | Drive a full SpecCoding lifecycle | [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md) |
+| Tell me what SpecCoding task to do next | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | Convert demo tests into CaTDD Typical skeleton | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
 | Design Typical, Edge, Misuse, or Fault skeleton from interface/protocol | [commands/P0-FuncTestsFlow/UT_designCatSkeleton.md](commands/P0-FuncTestsFlow/UT_designCatSkeleton.md) |
 | Review the functional skeleton set before implementation | [commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
