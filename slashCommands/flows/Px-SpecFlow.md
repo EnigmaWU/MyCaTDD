@@ -39,7 +39,7 @@ Create project-root README SPEC docs only when the project needs that SPEC surfa
 
 | File | Purpose |
 | --- | --- |
-| `README.md` | Project or module overview, ownership, public behavior, and links to deeper SPEC docs. |
+| `README.md` | Project or module overview, ownership, public behavior, and links to deeper SPEC docs. Most manual contents such as "WHAT I HAVE/WANT,WHAT TO MEET/SOLVE" in natural language."|
 | `README_ArchDesign.md` | Architecture design, module boundaries, dependencies, data flow, and key decisions. |
 | `README_UserStories.md` | Project or module-scoped user stories and trace links to `.catdd/spec/todoUS/` or `.catdd/spec/doneUS/`. |
 | `README_UserGuide.md` | User-facing or developer-facing usage guidance. |
