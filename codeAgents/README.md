@@ -5,4 +5,4 @@
 ## Agents
 
 - `utCodeAgentCLI`: based on CaTDD and focused on unit testing design and implementation. Its current detailed design docs remain in [`./utCodeAgentCLI/`](./utCodeAgentCLI/).
-- `specCodeAgentCLI`: based on Px-SpecFlow and `utCodeAgentCLI`, focused on module-level flow from input to output.
+- `specCodeAgentCLI`: based on Px-SpecFlow and `utCodeAgentCLI`, focused on module-level flow from input to output. Its layer README is [`./specCodeAgentCLI/README.md`](./specCodeAgentCLI/README.md).

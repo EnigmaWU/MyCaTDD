@@ -5,6 +5,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CODE_AGENTS_DIR="$REPO_ROOT/codeAgents"
 README="$CODE_AGENTS_DIR/README.md"
 UT_AGENT_DIR="$CODE_AGENTS_DIR/utCodeAgentCLI"
+SPEC_AGENT_README="$CODE_AGENTS_DIR/specCodeAgentCLI/README.md"
 
 fail() {
   echo "[codeAgents-structure-test] $*" >&2
@@ -15,6 +16,7 @@ fail() {
 [[ -f "$README" ]] || fail "missing codeAgents/README.md"
 [[ -d "$UT_AGENT_DIR" ]] || fail "missing moved codeAgents/utCodeAgentCLI directory"
 [[ -f "$UT_AGENT_DIR/README.md" ]] || fail "missing moved codeAgents/utCodeAgentCLI/README.md"
+[[ -f "$SPEC_AGENT_README" ]] || fail "missing codeAgents/specCodeAgentCLI/README.md"
 
 grep -Fq 'utCodeAgentCLI' "$README" || fail "codeAgents README must include utCodeAgentCLI"
 grep -Fq 'specCodeAgentCLI' "$README" || fail "codeAgents README must include specCodeAgentCLI"
