@@ -15,9 +15,9 @@ fail() {
   exit 1
 }
 
-grep -Fq '## Spec Kit Baseline + Refinements from OpenSpec' "$FLOW_DOC" || fail "Px-SpecFlow missing SpecKit baseline plus OpenSpec refinements section"
-grep -Fq 'keep GitHub Spec Kit as the baseline' "$FLOW_DOC" || fail "Px-SpecFlow must keep Spec Kit as baseline"
-grep -Fq 'Do not replace Spec Kit refinement points until a better OpenSpec refinement point is found.' "$FLOW_DOC" || fail "Px-SpecFlow must keep Spec Kit points unless better OpenSpec points are identified"
+grep -Fq '## Keep Spec Kit + OpenSpec Refinement Points' "$FLOW_DOC" || fail "Px-SpecFlow missing keep-SpecKit-and-OpenSpec refinements section"
+grep -Fq 'keep both GitHub Spec Kit and [OpenSpec](https://github.com/Fission-AI/OpenSpec) refinement points.' "$FLOW_DOC" || fail "Px-SpecFlow must keep both Spec Kit and OpenSpec refinement points"
+grep -Fq 'Do not replace either source until better refinement points are found from one of them.' "$FLOW_DOC" || fail "Px-SpecFlow must preserve both sources until one provides better refinement points"
 grep -Fq 'Govern work with constitution-level project context.' "$FLOW_DOC" || fail "Px-SpecFlow missing constitution-level project context refinement"
 grep -Fq 'Analyze work into independently testable story slices.' "$FLOW_DOC" || fail "Px-SpecFlow missing independently testable story-slice refinement"
 grep -Fq 'Separate `WHAT`/`WHY` from `HOW` with a lightweight plan step.' "$FLOW_DOC" || fail "Px-SpecFlow missing lightweight plan-step refinement"
@@ -31,4 +31,4 @@ grep -Fq 'lightweight implementation plan' "$TAKE_DETAIL_DESIGN" || fail "SPEC_t
 grep -Fq 'clarify/analyze/checklist-style review gate' "$REVIEW_STORY" || fail "SPEC_reviewUserStory must mention clarify/analyze/checklist gate"
 grep -Fq 'parallel-ready implementation checklist' "$DESIGN_TESTS" || fail "SPEC_designUnitTests must mention parallel-ready implementation checklist"
 
-echo "[specflow-openspec-refinements-test] PASSED: SpecFlow keeps SpecKit baseline and additive OpenSpec refinements"
+echo "[specflow-openspec-refinements-test] PASSED: SpecFlow keeps SpecKit and OpenSpec refinement points until better updates exist"
