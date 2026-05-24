@@ -11,11 +11,11 @@ REVIEW_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewUserStory
 DESIGN_TESTS="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md"
 
 fail() {
-  echo "[specflow-speckit-refinements-test] $*" >&2
+  echo "[specflow-openspec-refinements-test] $*" >&2
   exit 1
 }
 
-grep -Fq '## Refinements from GitHub Spec Kit' "$FLOW_DOC" || fail "Px-SpecFlow missing Spec Kit refinements section"
+grep -Fq '## Refinements from OpenSpec' "$FLOW_DOC" || fail "Px-SpecFlow missing OpenSpec refinements section"
 grep -Fq 'Govern work with constitution-level project context.' "$FLOW_DOC" || fail "Px-SpecFlow missing constitution-level project context refinement"
 grep -Fq 'Analyze work into independently testable story slices.' "$FLOW_DOC" || fail "Px-SpecFlow missing independently testable story-slice refinement"
 grep -Fq 'Separate `WHAT`/`WHY` from `HOW` with a lightweight plan step.' "$FLOW_DOC" || fail "Px-SpecFlow missing lightweight plan-step refinement"
@@ -29,4 +29,4 @@ grep -Fq 'lightweight implementation plan' "$TAKE_DETAIL_DESIGN" || fail "SPEC_t
 grep -Fq 'clarify/analyze/checklist-style review gate' "$REVIEW_STORY" || fail "SPEC_reviewUserStory must mention clarify/analyze/checklist gate"
 grep -Fq 'parallel-ready implementation checklist' "$DESIGN_TESTS" || fail "SPEC_designUnitTests must mention parallel-ready implementation checklist"
 
-echo "[specflow-speckit-refinements-test] PASSED: SpecFlow documents Spec Kit-inspired refinements"
+echo "[specflow-openspec-refinements-test] PASSED: SpecFlow documents OpenSpec-inspired refinements"
