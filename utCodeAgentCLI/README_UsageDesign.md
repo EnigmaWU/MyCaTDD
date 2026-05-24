@@ -41,29 +41,31 @@ Options:
 
 | Value | Meaning |
 | --- | --- |
-| `implTestCase` | Implement a single test case in the target, following the RED step of CaTDD. |
-| `implTestFile` | Implement all test cases in a target test file, following the RED step of CaTDD. |
-| `designTypical` | Design a P0 Typical category test skeleton for the target. |
-| `designEdge` | Design a P1/P2 Edge category test skeleton for the target. |
-| `designSkeleton` | Design a single-category test skeleton for the target. |
-| `designAllSkeleton` | Design all category test skeletons (Typical, Edge, and further) for the target. |
-| `designAndImplTest` | Design all category skeletons and implement them in one combined step. |
+| `implTestCase` | Implement a single test case in the target, following the RED step of CaTDD. Adds executable test code. |
+| `implTestFile` | Implement all test cases in a target test file, following the RED step of CaTDD. Adds executable test code. |
+| `designTypical` | Design test cases using the CaTDD **Typical** category. Produces a category skeleton with US/AC/TC entries appropriate for core happy-path scenarios. Does **not** add implementation test code. |
+| `designEdge` | Design test cases using the CaTDD **Edge** category. Produces a category skeleton with US/AC/TC entries for valid boundary values, limits, and mode variations. Does **not** add implementation test code. |
+| `designSkeleton` | Design a single-category test skeleton: US/AC/TC comments are placed in the target file but **no implementation test code** is written. Use when only the skeleton structure is needed before deciding which specific CaTDD category to fill. |
+| `designAllSkeleton` | Design skeletons for all applicable CaTDD categories (Typical, Edge, and others). US/AC/TC comments for every category are placed in the target file, but **no implementation test code** is written. |
+| `designAndImplTest` | Design all category skeletons **and** implement their test cases in one combined step. Both US/AC/TC structure and executable test code are produced. |
+
+> **Key distinction**: `designTypical`, `designEdge`, and other category-named values use a specific CaTDD-defined category to drive the design content. `designSkeleton` and `designAllSkeleton` produce the US/AC/TC skeleton structure without any implementation test code, regardless of category.
 
 ## Behavior Matrix
 
 | `--target` | `--behave` | Expected behavior |
 | --- | --- | --- |
-| `TestCase` | `implTestCase` | Implement one test case. Preserves CaTDD comment skeleton and RED status. |
-| `TestFile` | `implTestFile` | Implement all test cases in the file. Preserves CaTDD status discipline. |
-| `TestFile` | `designTypical` | Design P0 Typical skeleton inside the test file. |
-| `TestFile` | `designEdge` | Design P1/P2 Edge skeleton inside the test file. |
-| `TestFile` | `designSkeleton` | Design a single-category skeleton inside the test file. |
-| `TestFile` | `designAllSkeleton` | Design all category skeletons inside the test file. |
-| `TestFile` | `designAndImplTest` | Design all skeletons and implement them, maintaining RED then GREEN discipline. |
-| `InterfaceFile` | `designAllSkeleton` | Design test skeletons for all interface functions or methods. |
-| `InterfaceFile` | `designAndImplTest` | Design and implement tests for the interface in one step. |
-| `ProtocolFile` | `designAllSkeleton` | Design test skeletons for all protocol message or field cases. |
-| `ProtocolFile` | `designAndImplTest` | Design and implement tests for the protocol in one step. |
+| `TestCase` | `implTestCase` | Implement one test case. Adds executable test code. Preserves CaTDD comment skeleton and RED status. |
+| `TestFile` | `implTestFile` | Implement all test cases in the file. Adds executable test code. Preserves CaTDD status discipline. |
+| `TestFile` | `designTypical` | Design Typical category content using the CaTDD Typical category definition. Places US/AC/TC for core happy-path scenarios. No implementation test code. |
+| `TestFile` | `designEdge` | Design Edge category content using the CaTDD Edge category definition. Places US/AC/TC for boundary values and valid limits. No implementation test code. |
+| `TestFile` | `designSkeleton` | Place a single-category US/AC/TC skeleton in the test file. No implementation test code. |
+| `TestFile` | `designAllSkeleton` | Place US/AC/TC skeletons for all applicable CaTDD categories in the test file. No implementation test code. |
+| `TestFile` | `designAndImplTest` | Design all category skeletons and implement them. Produces both US/AC/TC structure and executable test code. |
+| `InterfaceFile` | `designAllSkeleton` | Place US/AC/TC skeletons for all interface functions or methods. No implementation test code. |
+| `InterfaceFile` | `designAndImplTest` | Design all skeletons for interface functions and implement their test cases. |
+| `ProtocolFile` | `designAllSkeleton` | Place US/AC/TC skeletons for all protocol message or field cases. No implementation test code. |
+| `ProtocolFile` | `designAndImplTest` | Design all skeletons for protocol cases and implement their test cases. |
 
 ## Invocation Examples
 
