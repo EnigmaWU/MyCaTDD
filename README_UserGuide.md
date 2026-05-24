@@ -69,7 +69,7 @@ The root [README.md](README.md) describes MyCaTDD as a four-layer path from meth
 
 1. [methodPrompts](methodPrompts/README.md) - the language-agnostic source-of-truth methodology layer. It defines CaTDD method prompts, category design skeletons, user-guide material, and implementation templates.
 2. [slashCommands](slashCommands/README.md) - the code-agent-agnostic commandization layer. It turns stable CaTDD method steps into small triggerable prompt commands for Copilot, Cline, Continue, or similar assistants.
-3. [utCodeAgentCLI](utCodeAgentCLI/README.md) - this repository's CaTDD-native CLI agent layer. It uses method prompts and slash commands for planning, execution, trace collection, and reflection.
+3. [utCodeAgentCLI](codeAgents/utCodeAgentCLI/README.md) - this repository's CaTDD-native CLI agent layer. It uses method prompts and slash commands for planning, execution, trace collection, and reflection.
 4. [agentSkill](agentSkill/README.md) - the reusable skill packaging layer. It wraps CaTDD method knowledge into triggerable skills and keeps packaged references aligned with the canonical method files.
 
 Use this guide as the user-facing entry point for CaTDD. Use the linked layer READMEs when you need to understand how the method is organized, commandized, automated, or packaged in this repository.
@@ -82,8 +82,8 @@ Use this guide as the user-facing entry point for CaTDD. Use the linked layer RE
 - **slashCommands user guide (ZH)**: [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md) for Chinese readers using portable command flows.
 - **agentSkill user guide**: [agentSkill/README_UserGuide.md](agentSkill/README_UserGuide.md) for users who generate or validate reusable CaTDD skill packages.
 - **agentSkill user guide (ZH)**: [agentSkill/README_UserGuide_ZH.md](agentSkill/README_UserGuide_ZH.md) for Chinese readers packaging reusable CaTDD skills.
-- **utCodeAgentCLI user guide**: [utCodeAgentCLI/README_UserGuide.md](utCodeAgentCLI/README_UserGuide.md) for current CLI-layer design guidance before runnable CLI implementation exists.
-- **utCodeAgentCLI user guide (ZH)**: [utCodeAgentCLI/README_UserGuide_ZH.md](utCodeAgentCLI/README_UserGuide_ZH.md) for Chinese readers designing the future CLI layer.
+- **utCodeAgentCLI user guide**: [codeAgents/utCodeAgentCLI/README_UserGuide.md](codeAgents/utCodeAgentCLI/README_UserGuide.md) for current CLI-layer design guidance before runnable CLI implementation exists.
+- **utCodeAgentCLI user guide (ZH)**: [codeAgents/utCodeAgentCLI/README_UserGuide_ZH.md](codeAgents/utCodeAgentCLI/README_UserGuide_ZH.md) for Chinese readers designing the future CLI layer.
 
 ---
 
@@ -1251,8 +1251,8 @@ P3: Demo/Example
 - **Code Template**: See [methodPrompts/CaTDD_ImplTemplate.cxx](methodPrompts/CaTDD_ImplTemplate.cxx)
 - **Slash command layer**: See [slashCommands/README.md](slashCommands/README.md)
 - **Slash command user guide**: See [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) or [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)
-- **CLI agent layer**: See [utCodeAgentCLI/README.md](utCodeAgentCLI/README.md)
-- **CLI agent user guide**: See [utCodeAgentCLI/README_UserGuide.md](utCodeAgentCLI/README_UserGuide.md) or [utCodeAgentCLI/README_UserGuide_ZH.md](utCodeAgentCLI/README_UserGuide_ZH.md)
+- **CLI agent layer**: See [codeAgents/utCodeAgentCLI/README.md](codeAgents/utCodeAgentCLI/README.md)
+- **CLI agent user guide**: See [codeAgents/utCodeAgentCLI/README_UserGuide.md](codeAgents/utCodeAgentCLI/README_UserGuide.md) or [codeAgents/utCodeAgentCLI/README_UserGuide_ZH.md](codeAgents/utCodeAgentCLI/README_UserGuide_ZH.md)
 - **Skill package layer**: See [agentSkill/README.md](agentSkill/README.md)
 - **Skill package user guide**: See [agentSkill/README_UserGuide.md](agentSkill/README_UserGuide.md) or [agentSkill/README_UserGuide_ZH.md](agentSkill/README_UserGuide_ZH.md)
 - **Questions?**: Ask EnigmaWU or check existing test files in [Test/](../Test/)

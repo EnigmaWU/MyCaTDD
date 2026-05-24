@@ -15,7 +15,7 @@
 
 ## 内容
 
-`utCodeAgentCLI/` 当前是未来 CLI 执行层的设计归属地。
+`codeAgents/utCodeAgentCLI/` 当前是未来 CLI 执行层的设计归属地。
 
 它尚未包含可运行的 CLI 实现。今天使用本目录时，应记录未来应成为一等 CLI 行为的稳定执行模式。
 
@@ -24,11 +24,11 @@
 - 来自 `methodPrompts/` 的方法约束。
 - 来自 `slashCommands/` 的可移植命令步骤。
 - 来自 `agentSkill/` 的打包能力。
-- 由 `utCodeAgentCLI/` 负责的目标驱动规划、执行、轨迹收集和反思。
+- 由 `codeAgents/utCodeAgentCLI/` 负责的目标驱动规划、执行、轨迹收集和反思。
 
 ## 使用时机
 
-在以下情况在 `utCodeAgentCLI/` 中工作：
+在以下情况在 `codeAgents/utCodeAgentCLI/` 中工作：
 
 - 某个工作流不只是 prompt command，而需要目标驱动编排。
 - 某个重复模式横跨规划、执行、验证和反思。
@@ -43,7 +43,7 @@
 当前目录结构：
 
 ```text
-utCodeAgentCLI/
+codeAgents/utCodeAgentCLI/
   README.md
   README_ZH.md
   README_UserGuide.md
@@ -53,7 +53,7 @@ utCodeAgentCLI/
 推荐的未来目录结构：
 
 ```text
-utCodeAgentCLI/
+codeAgents/utCodeAgentCLI/
   prompts/
   goals/
   checklists/
@@ -73,7 +73,7 @@ CLI 层应成为 CaTDD 从方法文本、提示词命令或技能包走向 nativ
 
 ## 方法
 
-今天塑造 `utCodeAgentCLI/` 时，按以下流程执行。
+今天塑造 `codeAgents/utCodeAgentCLI/` 时，按以下流程执行。
 
 1. 从一个重复出现的 CaTDD 工作模式开始。
 2. 识别哪些部分已经由 `methodPrompts/`、`slashCommands/` 或 `agentSkill/` 覆盖。
