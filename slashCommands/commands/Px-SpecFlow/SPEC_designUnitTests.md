@@ -35,12 +35,13 @@ Design CaTDD unit test skeletons for the active user story after story and detai
 - Updated project-root verification design in `README_VerifyDesign.md` when test strategy or category coverage changes.
 - Error, resource, state, performance, and diagnostic coverage linked to `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, or `README_DiagnosisDesign.md` when those design surfaces exist.
 - First-time verification design should be based on `slashCommands/templates/README_VerifyDesignTemplate.md`.
+- A parallel-ready implementation checklist that groups the next execution slices by US/AC/TC, notes dependencies, and highlights validation checkpoints before product-code work starts.
 - Category labels, priority gates, and initial TC status markers.
 - Next recommended command: `SPEC_implUnitTests` or a specific `UT_*` command.
 
 ## Prompt Template
 
-Ask the assistant to enter P0/P1/P2 test design flows as needed, preserving story-to-test traceability.
+Ask the assistant to enter P0/P1/P2 test design flows as needed, preserving story-to-test traceability and leaving a parallel-ready implementation checklist for the next execution step.
 
 ## Conflict Guard
 

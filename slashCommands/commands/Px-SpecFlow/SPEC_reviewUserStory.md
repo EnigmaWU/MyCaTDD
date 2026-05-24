@@ -23,12 +23,12 @@ Review the active user story, detailed design, and acceptance criteria before te
 ## Output Contract
 
 - Review result recorded against local gitignored `.catdd/spec/doingUS/` work state: pass, revise design, or ask developer.
-- Missing acceptance criteria, ambiguity, README SPEC doc gaps, and risk list.
+- Missing acceptance criteria, ambiguity, README SPEC doc gaps, edge cases, measurable outcomes, and risk list from a clarify/analyze/checklist-style review gate.
 - Next recommended command: `SPEC_designUnitTests` or `SPEC_updateDetailDesign`.
 
 ## Prompt Template
 
-Ask the assistant to check clarity, completeness, traceability, testability, and consistency with project context.
+Ask the assistant to run a clarify/analyze/checklist-style review gate over clarity, completeness, traceability, testability, measurable outcomes, and consistency with project context.
 
 ## Conflict Guard
 
