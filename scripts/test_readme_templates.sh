@@ -22,6 +22,7 @@ required_pairs=(
   "README_PerfDesign.md|slashCommands/templates/README_PerfDesignTemplate.md"
   "README_DiagnosisDesign.md|slashCommands/templates/README_DiagnosisDesignTemplate.md"
   "README_VerifyDesign.md|slashCommands/templates/README_VerifyDesignTemplate.md"
+  "README_UsageDesign.md|slashCommands/templates/README_UsageDesignTemplate.md"
 )
 
 domain_templates=(

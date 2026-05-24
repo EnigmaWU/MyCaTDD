@@ -62,6 +62,7 @@ Create project-root README SPEC docs only when the project needs that SPEC surfa
 | `README_PerfDesign.md` | Performance budgets, latency, throughput, memory, CPU, power, and quality-of-service decisions. |
 | `README_DiagnosisDesign.md` | Diagnostic evidence, runtime symptoms, logs, counters, traces, debug hooks, and root-cause routing. |
 | `README_VerifyDesign.md` | Verification design, CaTDD category coverage, US/AC/TC traceability, and test strategy. |
+| `README_UsageDesign.md` | CLI interface design, argument reference, behavior matrix, and usage examples. |
 
 Use matching templates from `slashCommands/templates/` when creating a README SPEC doc for the first time.
 For embedded software and digital video/audio domain work, use `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, and `README_DiagnosisDesign.md` when hardware faults, finite resources, hardware state, real-time behavior, buffering, media pipeline timing, A/V sync constraints, or field-debug evidence matter.
