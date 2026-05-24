@@ -7,7 +7,7 @@ layers=(
   "methodPrompts"
   "slashCommands"
   "agentSkill"
-  "utCodeAgentCLI"
+  "codeAgents/utCodeAgentCLI"
 )
 
 fail() {

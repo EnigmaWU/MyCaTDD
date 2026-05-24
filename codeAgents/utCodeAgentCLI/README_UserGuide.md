@@ -15,7 +15,7 @@ Use this guide if you are one of these readers:
 
 ## What
 
-`utCodeAgentCLI/` is currently a design home for the future CLI execution layer.
+`codeAgents/utCodeAgentCLI/` is currently a design home for the future CLI execution layer.
 
 It does not yet contain a runnable CLI implementation. Today, use this directory to document stable execution patterns that should eventually become first-class CLI behavior.
 
@@ -24,11 +24,11 @@ Future CLI behavior should combine:
 - Method constraints from `methodPrompts/`.
 - Portable command steps from `slashCommands/`.
 - Packaged capabilities from `agentSkill/`.
-- Goal-driven planning, execution, trace collection, and reflection owned by `utCodeAgentCLI/`.
+- Goal-driven planning, execution, trace collection, and reflection owned by `codeAgents/utCodeAgentCLI/`.
 
 ## When
 
-Work in `utCodeAgentCLI/` when:
+Work in `codeAgents/utCodeAgentCLI/` when:
 
 - A workflow is more than a prompt command and needs goal-driven orchestration.
 - A repeated pattern spans planning, execution, verification, and reflection.
@@ -43,7 +43,7 @@ Use `slashCommands/` when the behavior is a stable single command or flow step. 
 Current directory layout:
 
 ```text
-utCodeAgentCLI/
+codeAgents/utCodeAgentCLI/
   README.md
   README_ZH.md
   README_UserGuide.md
@@ -53,7 +53,7 @@ utCodeAgentCLI/
 Recommended future layout:
 
 ```text
-utCodeAgentCLI/
+codeAgents/utCodeAgentCLI/
   prompts/
   goals/
   checklists/
@@ -73,7 +73,7 @@ Documenting the layer before implementation keeps the future CLI honest: it shou
 
 ## How
 
-Follow this workflow when shaping `utCodeAgentCLI/` today.
+Follow this workflow when shaping `codeAgents/utCodeAgentCLI/` today.
 
 1. Start from a repeated CaTDD work pattern.
 2. Identify which parts are already covered by `methodPrompts/`, `slashCommands/`, or `agentSkill/`.
