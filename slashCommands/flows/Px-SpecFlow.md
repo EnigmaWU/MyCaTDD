@@ -16,9 +16,9 @@ P0/P1/P2 flows = category-specific test design and implementation flows
 
 The governing spec is comment-alive verification design: project context, user stories, acceptance criteria, detailed design, US/AC/TC skeletons, test status, product code status, and review decisions.
 
-## Refinements from OpenSpec
+## Refinements from Spec Kit (Round 1) and OpenSpec (Round 2)
 
-Use this list first when explaining or adopting `Px SpecFlow` refinements from [OpenSpec](https://github.com/Fission-AI/OpenSpec).
+Use this list first when explaining or adopting `Px SpecFlow` refinements: treat GitHub Spec Kit as the first-round refinement source, and [OpenSpec](https://github.com/Fission-AI/OpenSpec) as the second-round refinement source.
 
 | Refinement | WHY | HOW in `Px SpecFlow` |
 | --- | --- | --- |
