@@ -15,9 +15,9 @@ fail() {
   exit 1
 }
 
-grep -Fq '## Refinements from Spec Kit (Round 1) and OpenSpec (Round 2)' "$FLOW_DOC" || fail "Px-SpecFlow missing SpecKit/OpenSpec two-round refinements section"
-grep -Fq 'GitHub Spec Kit as the first-round refinement source' "$FLOW_DOC" || fail "Px-SpecFlow must describe Spec Kit as first-round refinement source"
-grep -Fq 'OpenSpec](https://github.com/Fission-AI/OpenSpec) as the second-round refinement source' "$FLOW_DOC" || fail "Px-SpecFlow must describe OpenSpec as second-round refinement source"
+grep -Fq '## Spec Kit Baseline + Refinements from OpenSpec' "$FLOW_DOC" || fail "Px-SpecFlow missing SpecKit baseline plus OpenSpec refinements section"
+grep -Fq 'keep GitHub Spec Kit as the baseline' "$FLOW_DOC" || fail "Px-SpecFlow must keep Spec Kit as baseline"
+grep -Fq 'Do not replace Spec Kit refinement points until a better OpenSpec refinement point is found.' "$FLOW_DOC" || fail "Px-SpecFlow must keep Spec Kit points unless better OpenSpec points are identified"
 grep -Fq 'Govern work with constitution-level project context.' "$FLOW_DOC" || fail "Px-SpecFlow missing constitution-level project context refinement"
 grep -Fq 'Analyze work into independently testable story slices.' "$FLOW_DOC" || fail "Px-SpecFlow missing independently testable story-slice refinement"
 grep -Fq 'Separate `WHAT`/`WHY` from `HOW` with a lightweight plan step.' "$FLOW_DOC" || fail "Px-SpecFlow missing lightweight plan-step refinement"
@@ -31,4 +31,4 @@ grep -Fq 'lightweight implementation plan' "$TAKE_DETAIL_DESIGN" || fail "SPEC_t
 grep -Fq 'clarify/analyze/checklist-style review gate' "$REVIEW_STORY" || fail "SPEC_reviewUserStory must mention clarify/analyze/checklist gate"
 grep -Fq 'parallel-ready implementation checklist' "$DESIGN_TESTS" || fail "SPEC_designUnitTests must mention parallel-ready implementation checklist"
 
-echo "[specflow-openspec-refinements-test] PASSED: SpecFlow documents SpecKit/OpenSpec two-round refinements"
+echo "[specflow-openspec-refinements-test] PASSED: SpecFlow keeps SpecKit baseline and additive OpenSpec refinements"
