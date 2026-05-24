@@ -15,8 +15,8 @@ utCodeAgentCLI [OPTIONS]
 Options:
   --target   <value>   Select the CaTDD work target.
   --behave   <value>   Select the behavior to apply to the target.
-  --diagMethodPrompts  Print method prompts used for this invocation.
-  --diagSlashCommands  Print slash commands used for this invocation.
+  --diagMethodPrompts  Emit DIAG log messages showing which method prompts the agent resolved.
+  --diagSlashCommands  Emit DIAG log messages showing which slash commands the agent resolved.
 ```
 
 ## Argument Reference
@@ -25,8 +25,8 @@ Options:
 | --- | --- | --- | --- | --- |
 | `--target` | string | `TestCase` \| `TestFile` \| `InterfaceFile` \| `ProtocolFile` | yes | Selects the CaTDD artifact or scope the agent should act on. |
 | `--behave` | string | `implTestCase` \| `implTestFile` \| `designTypical` \| `designEdge` \| `designSkeleton` \| `designAllSkeleton` \| `designAndImplTest` | yes | Selects the CaTDD workflow behavior the agent applies to the target. |
-| `--diagMethodPrompts` | flag | — | no | Prints the method prompts resolved for this invocation before executing, then exits. Use for diagnosis and transparency. |
-| `--diagSlashCommands` | flag | — | no | Prints the slash commands resolved for this invocation before executing, then exits. Use for diagnosis and transparency. |
+| `--diagMethodPrompts` | flag | — | no | Emits DIAG-class log messages listing the method prompts the agent resolved for this invocation. Confirms correct CaTDD methodPrompt selection at runtime. |
+| `--diagSlashCommands` | flag | — | no | Emits DIAG-class log messages listing the slash commands the agent resolved for this invocation. Confirms correct CaTDD slashCommand selection at runtime. |
 
 ### `--target` values
 
@@ -79,10 +79,10 @@ utCodeAgentCLI --target TestCase --behave implTestCase
 # Design and implement tests from an interface file
 utCodeAgentCLI --target InterfaceFile --behave designAndImplTest
 
-# Print method prompts used for the invocation (diagnostic, no execution)
+# Emit DIAG log messages showing resolved method prompts during execution
 utCodeAgentCLI --target TestFile --behave designAllSkeleton --diagMethodPrompts
 
-# Print slash commands used for the invocation (diagnostic, no execution)
+# Emit DIAG log messages showing resolved slash commands during execution
 utCodeAgentCLI --target TestFile --behave designAndImplTest --diagSlashCommands
 ```
 
@@ -93,11 +93,10 @@ utCodeAgentCLI --target TestFile --behave designAndImplTest --diagSlashCommands
 - `--target` given an unrecognized value -> Print supported values and exit with a non-zero status code.
 - `--behave` given an unrecognized value -> Print supported values and exit with a non-zero status code.
 - `--target TestCase` combined with `--behave designAllSkeleton` -> Unsupported combination. Print error and exit; `designAllSkeleton` requires a file-level target.
-- `--diagMethodPrompts` and `--diagSlashCommands` both provided -> Print both, then exit before execution.
+- `--diagMethodPrompts` and `--diagSlashCommands` both provided -> Emit DIAG log messages for both during execution.
 
 ## Open Questions
 
-- Should `--diagMethodPrompts` and `--diagSlashCommands` execute the behavior after printing, or always exit early?
 - Should `designEdge` and `designSkeleton` be merged into a single `designCategory <name>` value to support arbitrary CaTDD category names?
 - Should `--target` accept a file path argument in addition to the type selector?
 
