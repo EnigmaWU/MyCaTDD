@@ -83,3 +83,5 @@ Testing/
 # CaTDD SpecCoding local work state
 /.catdd/spec/doingUS/
 /.catdd/spec/WorkingProcessLog.md
+
+book*
