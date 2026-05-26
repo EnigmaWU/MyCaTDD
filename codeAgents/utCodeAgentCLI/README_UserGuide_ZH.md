@@ -11,7 +11,7 @@
 - 设计未来 CaTDD-native CLI agent 的维护者。
 - 捕获重复规划、执行、轨迹或反思模式的开发者。
 - 帮助把稳定工作流转化为未来 CLI 行为的 CodeAgent。
-- 判断哪些内容属于 `utCodeAgentCLI` 而不是 `methodPrompts`、`slashCommands` 或 `agentSkill` 的工具作者。
+- 判断哪些内容属于 `utCodeAgentCLI` 而不是 `methodPrompts` 或 `slashCommands`，以及它与 `agentSkill` 打包路径有何区别的工具作者。
 
 ## 内容
 
@@ -23,8 +23,9 @@
 
 - 来自 `methodPrompts/` 的方法约束。
 - 来自 `slashCommands/` 的可移植命令步骤。
-- 来自 `agentSkill/` 的打包能力。
 - 由 `codeAgents/utCodeAgentCLI/` 负责的目标驱动规划、执行、轨迹收集和反思。
+
+`agentSkill/` 是给 GitHub Copilot 等通用 CodeAgent 使用 CaTDD 的独立打包路径。`utCodeAgentCLI` 不应依赖它。
 
 ## 使用时机
 
@@ -36,7 +37,7 @@
 - 某个未来 CLI 功能需要协调多个 `slashCommands` 步骤。
 - 某个行为应成为 CaTDD-native 自动化，而不是通用 CodeAgent 适配器。
 
-如果行为是稳定的单条命令或流程步骤，请使用 `slashCommands/`。如果行为是面向另一个 agent runtime 的打包能力，请使用 `agentSkill/`。
+如果行为是稳定的单条命令或流程步骤，请使用 `slashCommands/`。如果行为只是通用 CodeAgent 打包，请使用 `agentSkill/`，并把它保持在 CLI 依赖路径之外。
 
 ## 位置
 
@@ -67,7 +68,7 @@ codeAgents/utCodeAgentCLI/
 
 ## 原因
 
-CLI 层应成为 CaTDD 从方法文本、提示词命令或技能包走向 native execution loop 的位置。
+CLI 层应成为 CaTDD 从方法文本或提示词命令走向 native execution loop 的位置。
 
 先记录这一层再实现，可以让未来 CLI 保持诚实：它应编排已有 CaTDD 资产，而不是重新定义方法或绕过命令流程契约。
 
@@ -76,11 +77,11 @@ CLI 层应成为 CaTDD 从方法文本、提示词命令或技能包走向 nativ
 今天塑造 `codeAgents/utCodeAgentCLI/` 时，按以下流程执行。
 
 1. 从一个重复出现的 CaTDD 工作模式开始。
-2. 识别哪些部分已经由 `methodPrompts/`、`slashCommands/` 或 `agentSkill/` 覆盖。
+2. 识别哪些部分已经由 `methodPrompts/` 或 `slashCommands/` 覆盖。
 3. 这里只记录缺失的 CLI 编排职责。
 4. 捕获预期输入、输出、轨迹数据和反思行为。
 5. 将产品或方法不确定性明确写成问题。
-6. 模式稳定后，判断它应成为 CLI 功能、斜杠命令，还是技能包。
+6. 模式稳定后，判断它应成为 CLI 功能还是斜杠命令。
 7. 当文档契约变为可执行约束时，更新测试。
 
 ## Usage Example
@@ -97,7 +98,6 @@ Goal: Capture a future CLI loop that plans one CaTDD test task, executes one com
 Inputs:
 - methodPrompts/README_UserGuide.md
 - slashCommands/README_UserGuide.md
-- agentSkill/README_UserGuide.md
 
 Expected output:
 - A proposed CLI responsibility that does not redefine CaTDD method semantics.
@@ -124,7 +124,7 @@ echo "$WORK_DIR"
 | Execution policy | CLI 必须决定何时运行、停止、询问或继续。 |
 | Trace collection | CLI 必须保留用于审查和改进的证据。 |
 | Reflection | CLI 必须在执行后识别可复用模式或方法缺口。 |
-| Feedback routing | CLI 必须判断改进应进入 `methodPrompts`、`slashCommands` 还是 `agentSkill`。 |
+| Feedback routing | CLI 必须判断改进应进入 `methodPrompts` 还是 `slashCommands`。 |
 
 ## 边界检查清单
 
@@ -132,7 +132,7 @@ echo "$WORK_DIR"
 
 - 这是否超过单个可移植命令？如果不是，使用 `slashCommands/`。
 - 这是否只是方法含义？如果是，使用 `methodPrompts/`。
-- 这是否只是 package metadata 或 reusable skill behavior？如果是，使用 `agentSkill/`。
+- 这是否只是 package metadata 或通用 CodeAgent skill behavior？如果是，把它放在 `agentSkill/`，并保持在 CLI 依赖路径之外。
 - 是否保持 US/AC/TC 可追溯性和 CaTDD 状态纪律？
 - 是否记录 CLI 应收集哪些证据？
 - 是否把不清楚的产品或方法意图保留为明确问题？
@@ -153,6 +153,6 @@ echo "$WORK_DIR"
 
 执行命令流程时，阅读 `slashCommands/README_UserGuide.md`。
 
-使用可复用技能时，阅读 `agentSkill/README_UserGuide.md`。
+处理通用 CodeAgent 技能打包时，阅读 `agentSkill/README_UserGuide.md`；不要把它作为 CLI 依赖。
 
 在本层，只捕获其他层不应负责的未来 CLI 编排职责。

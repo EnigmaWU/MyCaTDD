@@ -11,7 +11,7 @@ Use this guide if you are one of these readers:
 - A maintainer designing the future CaTDD-native CLI agent.
 - A developer capturing recurring planning, execution, trace, or reflection patterns.
 - A CodeAgent helping turn stable workflows into future CLI behavior.
-- A tooling author deciding what belongs in `utCodeAgentCLI` instead of `methodPrompts`, `slashCommands`, or `agentSkill`.
+- A tooling author deciding what belongs in `utCodeAgentCLI` instead of `methodPrompts` or `slashCommands`, and how this differs from `agentSkill` packaging.
 
 ## What
 
@@ -23,8 +23,9 @@ Future CLI behavior should combine:
 
 - Method constraints from `methodPrompts/`.
 - Portable command steps from `slashCommands/`.
-- Packaged capabilities from `agentSkill/`.
 - Goal-driven planning, execution, trace collection, and reflection owned by `codeAgents/utCodeAgentCLI/`.
+
+`agentSkill/` is a separate packaging path for common CodeAgents such as GitHub Copilot to use CaTDD. `utCodeAgentCLI` should not depend on it.
 
 ## When
 
@@ -36,7 +37,7 @@ Work in `codeAgents/utCodeAgentCLI/` when:
 - A future CLI feature should coordinate multiple `slashCommands` steps.
 - A behavior should become CaTDD-native automation rather than a generic CodeAgent adapter.
 
-Use `slashCommands/` when the behavior is a stable single command or flow step. Use `agentSkill/` when the behavior is a packaged capability for another agent runtime.
+Use `slashCommands/` when the behavior is a stable single command or flow step. Use `agentSkill/` only when the behavior is generic CodeAgent packaging, outside the CLI dependency path.
 
 ## Where
 
@@ -67,7 +68,7 @@ Do not add generated runtime output to this directory as source. Keep repeatable
 
 ## Why
 
-The CLI layer should become the place where CaTDD stops being only method text, prompt commands, or packaged skills, and becomes a native execution loop.
+The CLI layer should become the place where CaTDD stops being only method text or prompt commands and becomes a native execution loop.
 
 Documenting the layer before implementation keeps the future CLI honest: it should orchestrate existing CaTDD assets instead of redefining the method or bypassing the command-flow contracts.
 
@@ -76,11 +77,11 @@ Documenting the layer before implementation keeps the future CLI honest: it shou
 Follow this workflow when shaping `codeAgents/utCodeAgentCLI/` today.
 
 1. Start from a repeated CaTDD work pattern.
-2. Identify which parts are already covered by `methodPrompts/`, `slashCommands/`, or `agentSkill/`.
+2. Identify which parts are already covered by `methodPrompts/` or `slashCommands/`.
 3. Write only the missing CLI orchestration responsibility here.
 4. Capture expected inputs, outputs, trace data, and reflection behavior.
 5. Keep product or method uncertainty explicit as questions.
-6. Once the pattern is stable, decide whether it belongs as a CLI feature, a slash command, or a skill package.
+6. Once the pattern is stable, decide whether it belongs as a CLI feature or a slash command.
 7. Update tests when a documented contract becomes enforceable.
 
 ## Usage Example
@@ -97,7 +98,6 @@ Goal: Capture a future CLI loop that plans one CaTDD test task, executes one com
 Inputs:
 - methodPrompts/README_UserGuide.md
 - slashCommands/README_UserGuide.md
-- agentSkill/README_UserGuide.md
 
 Expected output:
 - A proposed CLI responsibility that does not redefine CaTDD method semantics.
@@ -124,7 +124,7 @@ Expected result:
 | Execution policy | The CLI must decide when to run, stop, ask, or continue. |
 | Trace collection | The CLI must preserve evidence for review and improvement. |
 | Reflection | The CLI must identify reusable patterns or method gaps after execution. |
-| Feedback routing | The CLI must decide whether an improvement belongs in `methodPrompts`, `slashCommands`, or `agentSkill`. |
+| Feedback routing | The CLI must decide whether an improvement belongs in `methodPrompts` or `slashCommands`. |
 
 ## Boundary Checklist
 
@@ -132,7 +132,7 @@ Before adding a future CLI artifact, check:
 
 - Is this more than a single portable command? If not, use `slashCommands/`.
 - Is this only method meaning? If yes, use `methodPrompts/`.
-- Is this only package metadata or reusable skill behavior? If yes, use `agentSkill/`.
+- Is this only package metadata or generic CodeAgent skill behavior? If yes, keep it in `agentSkill/`, outside the CLI dependency path.
 - Does it preserve US/AC/TC traceability and CaTDD status discipline?
 - Does it record what evidence the CLI should collect?
 - Does it leave unclear product or method intent as explicit questions?
@@ -153,6 +153,6 @@ For method meaning, read `methodPrompts/README_UserGuide.md`.
 
 For command-flow execution, read `slashCommands/README_UserGuide.md`.
 
-For reusable skills, read `agentSkill/README_UserGuide.md`.
+For generic CodeAgent skill packaging, read `agentSkill/README_UserGuide.md`; do not use it as a CLI dependency.
 
 For this layer, capture only the future CLI orchestration responsibilities that the other layers should not own.
