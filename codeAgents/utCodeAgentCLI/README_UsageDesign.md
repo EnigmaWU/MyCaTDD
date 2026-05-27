@@ -13,10 +13,11 @@ This document captures the CLI interface design for `utCodeAgentCLI`. It is base
 utCodeAgentCLI [OPTIONS]
 
 Options:
-  --target   <value>   Select the CaTDD work target.
-  --behave   <value>   Select the behavior to apply to the target.
-  --diagMethodPrompts  Emit DIAG log messages showing which method prompts the agent resolved.
-  --diagSlashCommands  Emit DIAG log messages showing which slash commands the agent resolved.
+  --target      <value>    Select the CaTDD work target.
+  --behave      <value>    Select the behavior to apply to the target.
+  --reference   <FILEs>   Comma-separated list of reference files the agent should consult.
+  --diagMethodPrompts      Emit DIAG log messages showing which method prompts the agent resolved.
+  --diagSlashCommands      Emit DIAG log messages showing which slash commands the agent resolved.
 ```
 
 ## Argument Reference
@@ -25,6 +26,7 @@ Options:
 | --- | --- | --- | --- | --- |
 | `--target` | string | `TestCase` \| `TestFile` \| `InterfaceFile` \| `ProtocolFile` | yes | Selects the CaTDD artifact or scope the agent should act on. |
 | `--behave` | string | `implTestCase` \| `implTestFile` \| `designTypical` \| `designEdge` \| `designTypicalSkeleton` \| `designEdgeSkeleton` \| `designAllSkeleton` \| `designAndImplTest` | yes | Selects the CaTDD workflow behavior the agent applies to the target. |
+| `--reference` | string | Comma-separated file paths | no | One or more reference files the agent should consult when generating output. Multiple files are separated by commas. Paths may be absolute or relative to the repository root. |
 | `--diagMethodPrompts` | flag | — | no | Emits DIAG-class log messages listing the method prompts the agent resolved for this invocation. Confirms correct CaTDD methodPrompt selection at runtime. |
 | `--diagSlashCommands` | flag | — | no | Emits DIAG-class log messages listing the slash commands the agent resolved for this invocation. Confirms correct CaTDD slashCommand selection at runtime. |
 
@@ -81,6 +83,12 @@ utCodeAgentCLI --target TestCase --behave implTestCase
 # Design and implement tests from an interface file
 utCodeAgentCLI --target InterfaceFile --behave designAndImplTest
 
+# Consult one reference file when implementing a test case
+utCodeAgentCLI --target TestCase --behave implTestCase --reference docs/api-contract.md
+
+# Consult multiple reference files (comma-separated) when designing skeletons
+utCodeAgentCLI --target TestFile --behave designAllSkeleton --reference docs/api.md,docs/schema.md
+
 # Emit DIAG log messages showing resolved method prompts during execution
 utCodeAgentCLI --target TestFile --behave designAllSkeleton --diagMethodPrompts
 
@@ -95,6 +103,8 @@ utCodeAgentCLI --target TestFile --behave designAndImplTest --diagSlashCommands
 - `--target` given an unrecognized value -> Print supported values and exit with a non-zero status code.
 - `--behave` given an unrecognized value -> Print supported values and exit with a non-zero status code.
 - `--target TestCase` combined with `--behave designTypicalSkeleton`, `designEdgeSkeleton`, or `designAllSkeleton` -> Unsupported combination. Print error and exit; skeleton behaviors require a file-level target.
+- `--reference` given a path that does not exist -> Print the missing path and exit with a non-zero status code.
+- `--reference` given an empty string or only commas -> Treat as if `--reference` was not provided; emit a warning.
 - `--diagMethodPrompts` and `--diagSlashCommands` both provided -> Emit DIAG log messages for both during execution.
 
 ## Open Questions
@@ -108,7 +118,7 @@ Run from the repository root to inspect this usage design without changing sourc
 ```bash
 TMP_DOC="$(mktemp -d)/README_UsageDesign.md"
 cp codeAgents/utCodeAgentCLI/README_UsageDesign.md "$TMP_DOC"
-grep -E '^##|--target|--behave|--diag' "$TMP_DOC"
+grep -E '^##|--target|--behave|--reference|--diag' "$TMP_DOC"
 ```
 
 Expected result: the temporary file path is printed, and the grep output shows all CLI argument names and section headings.
