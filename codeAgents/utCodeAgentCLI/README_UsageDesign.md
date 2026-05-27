@@ -1,6 +1,6 @@
 # utCodeAgentCLI Usage Design
 
-This document captures the CLI interface design for `utCodeAgentCLI`. It is based on [`slashCommands/templates/README_UsageDesignTemplate.md`](../slashCommands/templates/README_UsageDesignTemplate.md).
+This document captures the CLI interface design for `utCodeAgentCLI`. It is based on [`slashCommands/templates/README_UsageDesignTemplate.md`](../../slashCommands/templates/README_UsageDesignTemplate.md).
 
 - Story: Usage design for utCodeAgentCLI
 - Source artifact: GitHub issue — "Usage design for utCodeAgentCLI"
@@ -107,7 +107,7 @@ Run from the repository root to inspect this usage design without changing sourc
 
 ```bash
 TMP_DOC="$(mktemp -d)/README_UsageDesign.md"
-cp utCodeAgentCLI/README_UsageDesign.md "$TMP_DOC"
+cp codeAgents/utCodeAgentCLI/README_UsageDesign.md "$TMP_DOC"
 grep -E '^##|--target|--behave|--diag' "$TMP_DOC"
 ```
 
