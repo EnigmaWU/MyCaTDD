@@ -49,6 +49,7 @@ codeAgents/utCodeAgentCLI/
   README_ZH.md
   README_UserGuide.md
   README_UserGuide_ZH.md
+  README_UsageDesign.md
 ```
 
 Recommended future layout:
