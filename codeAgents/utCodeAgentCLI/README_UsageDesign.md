@@ -27,6 +27,46 @@ Options:
 
 ## Argument Reference
 
+### Core Argument Relationships: `--goal`, `--target`, and `--behave`
+
+These three arguments work together to fully specify every invocation. Each answers a different question:
+
+| Argument | Question answered | Role |
+| --- | --- | --- |
+| `--goal` | **Why** is the agent being run? | Provides the task intent as a file. Describes what outcome the user wants from this invocation — e.g. "implement the login test case in auth_test.cpp". |
+| `--target` | **What** CaTDD artifact will the agent act on? | Selects the artifact type — a single test case, a whole test file, an interface file, or a protocol file. Scopes the agent's work to the right CaTDD abstraction level. |
+| `--behave` | **How** should the agent transform the target? | Selects the CaTDD workflow behavior — design a skeleton, implement test code, or both. Determines which CaTDD step is executed. |
+
+**Relationship summary**: `--goal` captures user intent; `--target` scopes the artifact; `--behave` drives the transformation. All three are required and must be consistent with each other.
+
+**Single use** — each argument is meaningful only as part of the required triple. Omitting any one causes the CLI to exit with an error:
+
+```bash
+# ERROR: --target and --behave are missing
+utCodeAgentCLI --goal goals/impl-login-test.md
+
+# ERROR: --goal and --behave are missing
+utCodeAgentCLI --target TestCase
+
+# ERROR: --goal and --target are missing
+utCodeAgentCLI --behave implTestCase
+```
+
+**Combination use** — the three core arguments combine to express a complete CaTDD task:
+
+```bash
+# Goal: implement one test case. Target: a single test case. Behave: add test code.
+utCodeAgentCLI --goal goals/impl-login-test.md --target TestCase --behave implTestCase
+
+# Goal: design all skeletons for a file. Target: a whole test file. Behave: produce US/AC/TC skeletons only.
+utCodeAgentCLI --goal goals/design-auth-tests.md --target TestFile --behave designAllSkeleton
+
+# Goal: generate tests from an interface. Target: an interface file. Behave: design skeletons AND implement test code.
+utCodeAgentCLI --goal goals/impl-from-interface.md --target InterfaceFile --behave designAndImplTest
+```
+
+The goal file records **why** a task was started; `--target` and `--behave` record **what was done** and **how**. Together they form a traceable CaTDD execution record.
+
 | Argument | Type | Values | Required | Description |
 | --- | --- | --- | --- | --- |
 | `--goal` | file path | Any readable file | yes | Path to the goal file that drives the agent's task for this invocation. |
