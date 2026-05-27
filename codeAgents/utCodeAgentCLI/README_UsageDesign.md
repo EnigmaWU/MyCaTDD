@@ -29,43 +29,85 @@ Options:
 
 ### Core Argument Relationships: `--goal`, `--target`, and `--behave`
 
-These three arguments work together to fully specify every invocation. Each answers a different question:
+These three arguments work together to fully specify every invocation. Understanding their individual roles — and why they are separate — requires understanding how CaTDD organizes method meaning and slash commands.
 
-| Argument | Question answered | Role |
+#### Background: methodPrompts vs slashCommands
+
+- **`methodPrompts/`** — defines *what CaTDD means*: the US/AC/TC skeleton contract, category semantics (Typical, Edge, Misuse, Fault, State, Capability, …), TDD status discipline, and risk-driven prioritization. This is the CaTDD method itself. It never changes when you run a different target or behavior.
+- **`slashCommands/`** — defines *how to execute CaTDD steps*: portable command scripts (`UT_designCatSkeleton`, `UT_implTestCase`, `UT_reviewImplTestCase`, …) organized into flows (P0 FuncTestsFlow, P1 DesignTestsFlow, …). Each command calls on methodPrompts for category meaning but handles the step-by-step execution work.
+
+`utCodeAgentCLI` orchestrates both layers. `--target` and `--behave` together tell the CLI which slashCommand(s) to invoke; `--goal` tells the CLI why it is running and provides the per-invocation context that neither layer owns.
+
+#### Definitions
+
+**`--goal <FILE>`** — The task brief for this invocation. Not a User Story.
+
+> A **User Story (US)** in CaTDD lives inside the test file as a structured comment (`@[US]`). It expresses the value a feature delivers to a user role and is a permanent design artifact.
+> A **goal file** is the CLI-level task description that the agent reads before acting. It says what concrete work the agent should complete in this run — e.g. "implement TC-03 of the login test case", "design Edge skeletons for the auth module interface". Goal files are invocation-scoped, not embedded in code.
+
+**`--target <value>`** — The CaTDD artifact the agent will operate on.
+
+> `--target` does **not** say whether the work is design or implementation — that is `--behave`'s job. `--target` scopes *which kind of artifact* the agent reads, updates, or creates:
+> - `TestCase` → a single TC inside a test file (used for TC-by-TC implementation)
+> - `TestFile` → a whole test file (used for skeleton design or full-file implementation)
+> - `InterfaceFile` → a header, API contract, or abstract class (used as the source to derive test skeletons)
+> - `ProtocolFile` → a message format, IDL, or schema (same derivation purpose as InterfaceFile)
+
+**`--behave <value>`** — The CaTDD workflow step to execute.
+
+> `--behave` maps directly to slashCommand operations from `slashCommands/commands/`:
+> - `designTypical` / `designEdge` → invoke `UT_designCatSkeleton` with the matching category (`Cat=Typical`, `Cat=Edge`). Produces a US/AC/TC comment skeleton; no executable test code.
+> - `designTypicalSkeleton` / `designEdgeSkeleton` / `designAllSkeleton` → produce only the skeleton structure for the selected category set. Behave like `UT_designCatSkeleton` but without generating category narrative.
+> - `implTestCase` → invoke `UT_implTestCase`. Writes executable test code for one TC (RED stage).
+> - `implTestFile` → invoke `UT_implTestCase` repeatedly across all TCs in the file.
+> - `designAndImplTest` → run skeleton design followed by `UT_implTestCase` in one step.
+
+#### Relationship summary
+
+| Argument | Question | Maps to |
 | --- | --- | --- |
-| `--goal` | **Why** is the agent being run? | Provides the task intent as a file. Describes what outcome the user wants from this invocation — e.g. "implement the login test case in auth_test.cpp". |
-| `--target` | **What** CaTDD artifact will the agent act on? | Selects the artifact type — a single test case, a whole test file, an interface file, or a protocol file. Scopes the agent's work to the right CaTDD abstraction level. |
-| `--behave` | **How** should the agent transform the target? | Selects the CaTDD workflow behavior — design a skeleton, implement test code, or both. Determines which CaTDD step is executed. |
+| `--goal` | **Why** — what task is the agent completing? | Invocation context file (not a US; not a slashCommand input) |
+| `--target` | **What** — which CaTDD artifact is being acted on? | Input artifact type; determines which files the agent reads/writes |
+| `--behave` | **Which step** — design skeleton, implement test code, or both? | Selects the slashCommand(s) from `slashCommands/commands/`; category meaning comes from `methodPrompts/` |
 
-**Relationship summary**: `--goal` captures user intent; `--target` scopes the artifact; `--behave` drives the transformation. All three are required and must be consistent with each other.
+All three are required and must be consistent with each other.
 
-**Single use** — each argument is meaningful only as part of the required triple. Omitting any one causes the CLI to exit with an error:
+#### Single-argument use (error cases)
+
+Each argument is only meaningful as part of the required triple. Omitting any one causes the CLI to exit with an error:
 
 ```bash
-# ERROR: --target and --behave are missing
+# ERROR: --target and --behave are missing; agent cannot determine artifact or step
 utCodeAgentCLI --goal goals/impl-login-test.md
 
-# ERROR: --goal and --behave are missing
+# ERROR: --goal and --behave are missing; agent has no task context or step
 utCodeAgentCLI --target TestCase
 
-# ERROR: --goal and --target are missing
+# ERROR: --goal and --target are missing; agent has no context and no artifact to act on
 utCodeAgentCLI --behave implTestCase
 ```
 
-**Combination use** — the three core arguments combine to express a complete CaTDD task:
+#### Combination use (correct invocations)
 
 ```bash
-# Goal: implement one test case. Target: a single test case. Behave: add test code.
-utCodeAgentCLI --goal goals/impl-login-test.md --target TestCase --behave implTestCase
+# Design the Typical skeleton from an interface file.
+# --goal: what to produce.  --target: read the interface.  --behave: run UT_designCatSkeleton(Cat=Typical).
+utCodeAgentCLI --goal goals/design-auth-typical.md --target InterfaceFile --behave designTypical
 
-# Goal: design all skeletons for a file. Target: a whole test file. Behave: produce US/AC/TC skeletons only.
-utCodeAgentCLI --goal goals/design-auth-tests.md --target TestFile --behave designAllSkeleton
+# Design all functional skeletons (Typical + Edge + Misuse + Fault) in a test file.
+# --behave designAllSkeleton runs UT_designCatSkeleton for each applicable category.
+utCodeAgentCLI --goal goals/design-all-skeletons.md --target TestFile --behave designAllSkeleton
 
-# Goal: generate tests from an interface. Target: an interface file. Behave: design skeletons AND implement test code.
-utCodeAgentCLI --goal goals/impl-from-interface.md --target InterfaceFile --behave designAndImplTest
+# Implement one test case (RED stage).
+# --target TestCase scopes to a single TC; --behave implTestCase runs UT_implTestCase.
+utCodeAgentCLI --goal goals/impl-login-tc03.md --target TestCase --behave implTestCase
+
+# Design all skeletons AND implement all TCs in one step.
+# Combines UT_designCatSkeleton + UT_implTestCase across the whole file.
+utCodeAgentCLI --goal goals/design-and-impl-auth.md --target InterfaceFile --behave designAndImplTest
 ```
 
-The goal file records **why** a task was started; `--target` and `--behave` record **what was done** and **how**. Together they form a traceable CaTDD execution record.
+The goal file records **why** a task was started. `--target` and `--behave` record **what was acted on** and **which CaTDD step ran**. Together they form a traceable CaTDD execution record that can be replayed or reviewed.
 
 | Argument | Type | Values | Required | Description |
 | --- | --- | --- | --- | --- |
