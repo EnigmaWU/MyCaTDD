@@ -40,10 +40,10 @@ These three arguments work together to fully specify every invocation. Understan
 
 #### Definitions
 
-**`--goal <FILE>`** — The task brief for this invocation. Not a User Story.
+**`--goal <FILE>`** — The User Story file for this invocation's target.
 
-> A **User Story (US)** in CaTDD lives inside the test file as a structured comment (`@[US]`). It expresses the value a feature delivers to a user role and is a permanent design artifact.
-> A **goal file** is the CLI-level task description that the agent reads before acting. It says what concrete work the agent should complete in this run — e.g. "implement TC-03 of the login test case", "design Edge skeletons for the auth module interface". Goal files are invocation-scoped, not embedded in code.
+> The goal file carries the **User Story (US)** that the agent will realize in the `--target` artifact. The `@[US]` comments embedded in the TestFile during a design step are derived directly from what the goal describes — the goal is the *source* of the User Story; the TestFile is its *destination* as a permanent design record.
+> Each goal file is written as a User Story for one target (e.g. "As a logged-in user, I want to reset my password so that I can regain access to my account"). The agent reads it, interprets the US, and writes the corresponding `@[US]` / `@[AC]` / `@[TC]` comment blocks into the target file.
 
 **`--target <value>`** — The CaTDD artifact the agent will operate on.
 
@@ -66,8 +66,8 @@ These three arguments work together to fully specify every invocation. Understan
 
 | Argument | Question | Maps to |
 | --- | --- | --- |
-| `--goal` | **Why** — what task is the agent completing? | Invocation context file (not a US; not a slashCommand input) |
-| `--target` | **What** — which CaTDD artifact is being acted on? | Input artifact type; determines which files the agent reads/writes |
+| `--goal` | **What (US)** — which User Story should the agent realize in the target? | Source of the UserStory; US/AC/TC comments placed in the TestFile are derived from the goal |
+| `--target` | **What artifact** — which CaTDD artifact is being acted on? | Input artifact type; determines which files the agent reads/writes |
 | `--behave` | **Which step** — design skeleton, implement test code, or both? | Selects the slashCommand(s) from `slashCommands/commands/`; category meaning comes from `methodPrompts/` |
 
 All three are required and must be consistent with each other.
@@ -107,11 +107,11 @@ utCodeAgentCLI --goal goals/impl-login-tc03.md --target TestCase --behave implTe
 utCodeAgentCLI --goal goals/design-and-impl-auth.md --target InterfaceFile --behave designAndImplTest
 ```
 
-The goal file records **why** a task was started. `--target` and `--behave` record **what was acted on** and **which CaTDD step ran**. Together they form a traceable CaTDD execution record that can be replayed or reviewed.
+The goal file provides the **User Story** that anchors the run. `--target` names the artifact the US will be realized in. `--behave` names the CaTDD step that transforms the goal's US into structured `@[US]`/`@[AC]`/`@[TC]` comments and/or executable test code in that artifact. Together they form a traceable CaTDD execution record that can be replayed or reviewed.
 
 | Argument | Type | Values | Required | Description |
 | --- | --- | --- | --- | --- |
-| `--goal` | file path | Any readable file | yes | Path to the goal file that drives the agent's task for this invocation. |
+| `--goal` | file path | Any readable file | yes | Path to the goal file that contains the UserStory for this invocation's target. The US/AC/TC comments placed in the TestFile are derived from this file. |
 | `--target` | string | `TestCase` \| `TestFile` \| `InterfaceFile` \| `ProtocolFile` | yes | Selects the CaTDD artifact or scope the agent should act on. |
 | `--behave` | string | `implTestCase` \| `implTestFile` \| `designTypical` \| `designEdge` \| `designTypicalSkeleton` \| `designEdgeSkeleton` \| `designAllSkeleton` \| `designAndImplTest` | yes | Selects the CaTDD workflow behavior the agent applies to the target. |
 | `--reference` | string | Comma-separated file paths | no | One or more reference files the agent should consult when generating output. Multiple files are separated by commas. Paths may be absolute or relative to the repository root. |
