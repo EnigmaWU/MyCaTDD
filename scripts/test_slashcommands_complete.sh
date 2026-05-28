@@ -75,6 +75,14 @@ assert_state_design_source() {
   assert_contains "slashCommands/README_UserGuide.md" "README_ArchDesign.md"
 }
 
+p0_design_commands=(
+  UT_designTypicalSkeleton
+  UT_designEdgeSkeleton
+  UT_designMisuseSkeleton
+  UT_designFaultSkeleton
+  UT_designFuncTestsSkeleton
+)
+
 p1_commands=(
   UT_designStateSkeleton
   UT_designCapabilitySkeleton
@@ -89,6 +97,17 @@ p2_commands=(
   UT_designConfigurationSkeleton
   UT_reviewQualityTestsSkeleton
 )
+
+for command_name in "${p0_design_commands[@]}"; do
+  command_path="slashCommands/commands/P0-FuncTestsFlow/${command_name}.md"
+  readme_command_path="${command_path#slashCommands/}"
+  assert_file "$command_path"
+  assert_contains "$command_path" "# ${command_name}"
+  assert_contains "$command_path" "../../flows/P0-FuncTestsFlow.md"
+  assert_contains "$command_path" "../../../methodPrompts/CaTDD_methodPrompt.md"
+  assert_contains "$command_path" "ONE-MORE-THING: ask developer if something not sure"
+  assert_contains "slashCommands/README_UserGuide.md" "$readme_command_path"
+done
 
 for command_name in "${p1_commands[@]}"; do
   command_path="slashCommands/commands/P1-DesignTestsFlow/${command_name}.md"
@@ -155,4 +174,4 @@ if grep -Fq "Future Command Candidates" "$REPO_ROOT/slashCommands/flows/P2-Quali
   fail "P2 flow still describes completed commands as future candidates"
 fi
 
-echo "[slashcommands-complete-test] PASSED: P1/P2 slash commands are complete and mapped"
+echo "[slashcommands-complete-test] PASSED: P0/P1/P2 slash commands are complete and mapped"

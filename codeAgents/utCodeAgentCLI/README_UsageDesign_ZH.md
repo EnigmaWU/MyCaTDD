@@ -38,7 +38,7 @@ Options:
 #### Background: methodPrompts vs slashCommands
 
 - **`methodPrompts/`** — 定义 *CaTDD 的含义*：US/AC/TC skeleton 契约、category 语义（Typical、Edge、Misuse、Fault、State、Capability、……）、TDD 状态纪律和风险驱动优先级。这是 CaTDD 方法本身。运行不同 target 或 behavior 时，它不改变。
-- **`slashCommands/`** — 定义 *如何执行 CaTDD 步骤*：可移植命令脚本（`UT_designCatSkeleton`、`UT_implTestCase`、`UT_reviewImplTestCase`、……），按 flow 组织（P0 FuncTestsFlow、P1 DesignTestsFlow、……）。每个命令引用 methodPrompts 的 category 含义，但负责具体步骤执行。
+- **`slashCommands/`** — 定义 *如何执行 CaTDD 步骤*：可移植命令脚本（`UT_designTypicalSkeleton`、`UT_implTestCase`、`UT_reviewImplTestCase`、……），按 flow 组织（P0 FuncTestsFlow、P1 DesignTestsFlow、……）。每个命令引用 methodPrompts 的 category 含义，但负责具体步骤执行。
 
 `utCodeAgentCLI` 编排这两层。`--target` 与 `--behave` 一起告诉 CLI 要调用哪些 slashCommand；`--goal` 与 `--input`/`--inputFile` 提供两层本身都不拥有的每次调用上下文。
 
@@ -84,14 +84,15 @@ Options:
 
 **`--behave <value>`** — 要执行或编排的 CaTDD slash-command behavior。
 
-> `--behave` 是一个 behavior selector，会根据 `slashCommands/commands/` 下兼容的 unit-testing slash commands 解析。它可以是 portable UT slash-command 名称，例如 `UT_designCatSkeleton`、`UT_reviewFuncTestsSkeleton`、`UT_tellMeNextImplTest` 或 `UT_implTestCase`，前提是该命令的输入/输出契约能由 `--goal`、`--input`/`--inputFile`、`--target` 和可选 reference 参数满足。
+> `--behave` 是一个 behavior selector，会根据 `slashCommands/commands/` 下兼容的 unit-testing slash commands 解析。它可以是 portable UT slash-command 名称，例如 `UT_designTypicalSkeleton`、`UT_designFuncTestsSkeleton`、`UT_reviewFuncTestsSkeleton`、`UT_tellMeNextImplTest` 或 `UT_implTestCase`，前提是该命令的输入/输出契约能由 `--goal`、`--input`/`--inputFile`、`--target` 和可选 reference 参数满足。
 
 > CLI 也可以为常见的多步骤或参数化 slash-command behavior 提供稳定 alias：
 
-> - `designTypicalSkeleton` / `designEdgeSkeleton` / `designMisuseSkeleton` / `designFaultSkeleton` → 使用匹配的 P0 functional category 调用 `UT_designCatSkeleton`。产出 US/AC/TC skeleton；不产出可执行测试代码。
+> - `designTypicalSkeleton` / `designEdgeSkeleton` / `designMisuseSkeleton` / `designFaultSkeleton` → 调用匹配的显式 P0 FuncTestsFlow skeleton command。产出 US/AC/TC skeleton；不产出可执行测试代码。
+> - `designFuncTestsSkeleton` → 调用 `UT_designFuncTestsSkeleton` 设计完整 P0 Functional 集合：Typical、Edge、Misuse、Fault。只产出 skeleton；不产出可执行测试代码。
 > - `designStateSkeleton` / `designCapabilitySkeleton` / `designConcurrencySkeleton` → 调用匹配的 P1 DesignTestsFlow skeleton command。产出 US/AC/TC skeleton；不产出可执行测试代码。
 > - `designPerformanceSkeleton` / `designRobustSkeleton` / `designCompatibilitySkeleton` / `designConfigurationSkeleton` → 调用匹配的 P2 QualityTestsFlow skeleton command。产出 US/AC/TC skeleton；不产出可执行测试代码。
-> - `designAllSkeleton` → 为所有 P0/P1/P2 CaTDD categories 调用 category skeleton design：Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility、Configuration。只产出 skeleton；不产出可执行测试代码。
+> - `designAllSkeleton` → 为所有 P0/P1/P2 CaTDD categories 调用 P0 Functional、P1 Design、P2 Quality skeleton design：Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility、Configuration。只产出 skeleton；不产出可执行测试代码。
 > - `implTestCase` → 调用 `UT_implTestCase`。为一个 TC 写入可执行测试代码（RED 阶段）。
 > - `implTestFile` → 对文件中的所有 TC 重复调用 `UT_implTestCase`。
 > - `designAndImplTest` → 先运行 skeleton design，然后由 CLI 编排重复调用 `UT_implTestCase` 实现选中或生成的 TCs。
@@ -212,9 +213,11 @@ utCodeAgentCLI \
 | Form | Meaning |
 | --- | --- |
 | `UT_implTestCase` | 直接 portable slash-command 名称。当该命令的输入/输出契约与 `--goal`、`--input`、`--target` 兼容时，CLI 运行匹配命令。 |
+| `UT_designTypicalSkeleton` | 直接 P0 category command 名称。当 target 是 one TestFile，并且 CLI 只应设计 Typical functional coverage 时使用。 |
+| `UT_designFuncTestsSkeleton` | 直接 P0 aggregate command 名称。当 target 是 one TestFile 或 some TestFiles，并且 CLI 应一起设计 Typical、Edge、Misuse、Fault 时使用。 |
 | `UT_reviewFuncTestsSkeleton` | 直接 review command 名称。当 target 是包含 CaTDD skeletons 的 one TestFile 或 some TestFiles 时使用。 |
 | `UT_tellMeNextImplTest` | 直接 next-step command 名称。当 target TestFile 已包含 skeleton TCs，并且 CLI 应选择下一个实现候选时使用。 |
-| `designTypicalSkeleton` | 稳定 CLI alias。CLI 将其解析为带 `Cat=Typical` 的 `UT_designCatSkeleton`。 |
+| `designTypicalSkeleton` | 稳定 CLI alias。CLI 将其解析为 `UT_designTypicalSkeleton`。 |
 | `designAllSkeleton` | 稳定 CLI aggregate alias。CLI 将其解析为适用的 P0/P1/P2 skeleton-design command sequence。 |
 
 ### Common `--behave` aliases
@@ -227,6 +230,7 @@ utCodeAgentCLI \
 | `designEdgeSkeleton` | 只设计 CaTDD **Edge** category 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | `designMisuseSkeleton` | 只设计 CaTDD **Misuse** category 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | `designFaultSkeleton` | 只设计 CaTDD **Fault** category 的 US/AC/TC skeleton。不写入实现测试代码。 |
+| `designFuncTestsSkeleton` | 设计完整 P0 Functional skeleton set：Typical、Edge、Misuse、Fault。不写入实现测试代码。 |
 | `designStateSkeleton` | 只设计 CaTDD **State** category 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | `designCapabilitySkeleton` | 只设计 CaTDD **Capability** category 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | `designConcurrencySkeleton` | 只设计 CaTDD **Concurrency** category 的 US/AC/TC skeleton。不写入实现测试代码。 |
@@ -258,6 +262,7 @@ utCodeAgentCLI \
 | one TestFile | `designEdgeSkeleton` | 在 test file 中放置 Edge-category-only US/AC/TC skeleton。不写入实现测试代码。 |
 | one TestFile | `designMisuseSkeleton` | 在 test file 中放置 Misuse-category-only US/AC/TC skeleton。不写入实现测试代码。 |
 | one TestFile | `designFaultSkeleton` | 在 test file 中放置 Fault-category-only US/AC/TC skeleton。不写入实现测试代码。 |
+| one TestFile | `designFuncTestsSkeleton` | 在 test file 中放置完整 P0 Functional skeleton set：Typical、Edge、Misuse、Fault。不写入实现测试代码。 |
 | one TestFile | P1 category skeleton behavior | 在 test file 中放置 State、Capability 或 Concurrency US/AC/TC skeleton。不写入实现测试代码。 |
 | one TestFile | P2 category skeleton behavior | 在 test file 中放置 Performance、Robust、Compatibility 或 Configuration US/AC/TC skeleton。不写入实现测试代码。 |
 | one TestFile | `designAllSkeleton` | 在 test file 中放置所有 P0/P1/P2 CaTDD categories 的 US/AC/TC skeleton。不写入实现测试代码。 |

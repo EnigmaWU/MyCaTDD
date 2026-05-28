@@ -38,7 +38,7 @@ These arguments work together to fully specify every invocation. Understanding t
 #### Background: methodPrompts vs slashCommands
 
 - **`methodPrompts/`** — defines *what CaTDD means*: the US/AC/TC skeleton contract, category semantics (Typical, Edge, Misuse, Fault, State, Capability, …), TDD status discipline, and risk-driven prioritization. This is the CaTDD method itself. It never changes when you run a different target or behavior.
-- **`slashCommands/`** — defines *how to execute CaTDD steps*: portable command scripts (`UT_designCatSkeleton`, `UT_implTestCase`, `UT_reviewImplTestCase`, …) organized into flows (P0 FuncTestsFlow, P1 DesignTestsFlow, …). Each command calls on methodPrompts for category meaning but handles the step-by-step execution work.
+- **`slashCommands/`** — defines *how to execute CaTDD steps*: portable command scripts (`UT_designTypicalSkeleton`, `UT_implTestCase`, `UT_reviewImplTestCase`, …) organized into flows (P0 FuncTestsFlow, P1 DesignTestsFlow, …). Each command calls on methodPrompts for category meaning but handles the step-by-step execution work.
 
 `utCodeAgentCLI` orchestrates both layers. `--target` and `--behave` together tell the CLI which slashCommand(s) to invoke; `--goal` and `--input`/`--inputFile` provide the per-invocation context that neither layer owns.
 
@@ -84,14 +84,15 @@ The core model is:
 
 **`--behave <value>`** — The CaTDD slash-command behavior to execute or orchestrate.
 
-> `--behave` is a behavior selector resolved against compatible unit-testing slash commands under `slashCommands/commands/`. It may be a portable UT slash-command name, such as `UT_designCatSkeleton`, `UT_reviewFuncTestsSkeleton`, `UT_tellMeNextImplTest`, or `UT_implTestCase`, when that command's input/output contract can be satisfied by `--goal`, `--input`/`--inputFile`, `--target`, and optional reference arguments.
+> `--behave` is a behavior selector resolved against compatible unit-testing slash commands under `slashCommands/commands/`. It may be a portable UT slash-command name, such as `UT_designTypicalSkeleton`, `UT_designFuncTestsSkeleton`, `UT_reviewFuncTestsSkeleton`, `UT_tellMeNextImplTest`, or `UT_implTestCase`, when that command's input/output contract can be satisfied by `--goal`, `--input`/`--inputFile`, `--target`, and optional reference arguments.
 
 > The CLI may also provide stable aliases for common multi-step or parameterized slash-command behaviors:
 
-> - `designTypicalSkeleton` / `designEdgeSkeleton` / `designMisuseSkeleton` / `designFaultSkeleton` → invoke `UT_designCatSkeleton` with the matching P0 functional category. Produces a US/AC/TC skeleton; no executable test code.
+> - `designTypicalSkeleton` / `designEdgeSkeleton` / `designMisuseSkeleton` / `designFaultSkeleton` → invoke the matching explicit P0 FuncTestsFlow skeleton command. Produces a US/AC/TC skeleton; no executable test code.
+> - `designFuncTestsSkeleton` → invoke `UT_designFuncTestsSkeleton` for the full P0 Functional set: Typical, Edge, Misuse, and Fault. Produces skeletons only; no executable test code.
 > - `designStateSkeleton` / `designCapabilitySkeleton` / `designConcurrencySkeleton` → invoke the matching P1 DesignTestsFlow skeleton command. Produces a US/AC/TC skeleton; no executable test code.
 > - `designPerformanceSkeleton` / `designRobustSkeleton` / `designCompatibilitySkeleton` / `designConfigurationSkeleton` → invoke the matching P2 QualityTestsFlow skeleton command. Produces a US/AC/TC skeleton; no executable test code.
-> - `designAllSkeleton` → invoke category skeleton design for all P0/P1/P2 CaTDD categories: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration. Produces skeletons only; no executable test code.
+> - `designAllSkeleton` → invoke P0 Functional, P1 Design, and P2 Quality skeleton design for all P0/P1/P2 CaTDD categories: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration. Produces skeletons only; no executable test code.
 > - `implTestCase` → invoke `UT_implTestCase`. Writes executable test code for one TC (RED stage).
 > - `implTestFile` → invoke `UT_implTestCase` repeatedly across all TCs in the file.
 > - `designAndImplTest` → run skeleton design, then implement selected or generated TCs by repeatedly invoking `UT_implTestCase` under CLI orchestration.
@@ -212,9 +213,11 @@ utCodeAgentCLI \
 | Form | Meaning |
 | --- | --- |
 | `UT_implTestCase` | Direct portable slash-command name. The CLI runs the matching command when its input/output contract is compatible with `--goal`, `--input`, and `--target`. |
+| `UT_designTypicalSkeleton` | Direct P0 category command name. Useful when the target is one TestFile and the CLI should design only Typical functional coverage. |
+| `UT_designFuncTestsSkeleton` | Direct P0 aggregate command name. Useful when the target is one TestFile or some TestFiles and the CLI should design Typical, Edge, Misuse, and Fault together. |
 | `UT_reviewFuncTestsSkeleton` | Direct review command name. Useful when the target is one TestFile or some TestFiles containing CaTDD skeletons. |
 | `UT_tellMeNextImplTest` | Direct next-step command name. Useful when the target TestFile already contains skeleton TCs and the CLI should select the next implementation candidate. |
-| `designTypicalSkeleton` | Stable CLI alias. The CLI resolves it to `UT_designCatSkeleton` with `Cat=Typical`. |
+| `designTypicalSkeleton` | Stable CLI alias. The CLI resolves it to `UT_designTypicalSkeleton`. |
 | `designAllSkeleton` | Stable CLI aggregate alias. The CLI resolves it to the applicable P0/P1/P2 skeleton-design command sequence. |
 
 ### Common `--behave` aliases
@@ -227,6 +230,7 @@ utCodeAgentCLI \
 | `designEdgeSkeleton` | Design a test file of the CaTDD **Edge** category only with US/AC/TC skeleton. No implementation test code is written. |
 | `designMisuseSkeleton` | Design a test file of the CaTDD **Misuse** category only with US/AC/TC skeleton. No implementation test code is written. |
 | `designFaultSkeleton` | Design a test file of the CaTDD **Fault** category only with US/AC/TC skeleton. No implementation test code is written. |
+| `designFuncTestsSkeleton` | Design the full P0 Functional skeleton set: Typical, Edge, Misuse, and Fault. No implementation test code is written. |
 | `designStateSkeleton` | Design a test file of the CaTDD **State** category only with US/AC/TC skeleton. No implementation test code is written. |
 | `designCapabilitySkeleton` | Design a test file of the CaTDD **Capability** category only with US/AC/TC skeleton. No implementation test code is written. |
 | `designConcurrencySkeleton` | Design a test file of the CaTDD **Concurrency** category only with US/AC/TC skeleton. No implementation test code is written. |
@@ -258,6 +262,7 @@ utCodeAgentCLI \
 | one TestFile | `designEdgeSkeleton` | Place an Edge-category-only US/AC/TC skeleton in the test file. No implementation test code. |
 | one TestFile | `designMisuseSkeleton` | Place a Misuse-category-only US/AC/TC skeleton in the test file. No implementation test code. |
 | one TestFile | `designFaultSkeleton` | Place a Fault-category-only US/AC/TC skeleton in the test file. No implementation test code. |
+| one TestFile | `designFuncTestsSkeleton` | Place the full P0 Functional skeleton set in the test file: Typical, Edge, Misuse, and Fault. No implementation test code. |
 | one TestFile | P1 category skeleton behavior | Place a State, Capability, or Concurrency US/AC/TC skeleton in the test file. No implementation test code. |
 | one TestFile | P2 category skeleton behavior | Place a Performance, Robust, Compatibility, or Configuration US/AC/TC skeleton in the test file. No implementation test code. |
 | one TestFile | `designAllSkeleton` | Place US/AC/TC skeletons for all P0/P1/P2 CaTDD categories in the test file. No implementation test code. |

@@ -39,7 +39,14 @@ grep -Fq 'CaTDD 独立用户指南' "$PACKAGE_DIR/references/README_UserGuide_ZH
 [[ -f "$PACKAGE_DIR/slashCommands/README_UserGuide_ZH.md" ]] || fail "missing packaged Chinese slashCommands user guide"
 grep -Fq 'Slash Commands User Guide' "$PACKAGE_DIR/slashCommands/README_UserGuide.md" || fail "packaged slashCommands user guide missing expected title"
 grep -Fq 'Slash Commands 用户指南' "$PACKAGE_DIR/slashCommands/README_UserGuide_ZH.md" || fail "packaged Chinese slashCommands user guide missing expected title"
-[[ -f "$PACKAGE_DIR/slashCommands/commands/P0-FuncTestsFlow/UT_designCatSkeleton.md" ]] || fail "missing packaged P0 slash command"
+for command_name in \
+  UT_designTypicalSkeleton \
+  UT_designEdgeSkeleton \
+  UT_designMisuseSkeleton \
+  UT_designFaultSkeleton \
+  UT_designFuncTestsSkeleton; do
+  [[ -f "$PACKAGE_DIR/slashCommands/commands/P0-FuncTestsFlow/${command_name}.md" ]] || fail "missing packaged P0 slash command: $command_name"
+done
 
 package_symlink_count="$(find "$PACKAGE_DIR" -type l | wc -l | tr -d '[:space:]')"
 [[ "$package_symlink_count" == "0" ]] || fail "packaged skill must be self-contained, found $package_symlink_count symlinks"

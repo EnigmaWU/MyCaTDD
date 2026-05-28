@@ -25,14 +25,17 @@ The flow commands connect existing CodeAgent invocation surfaces to execution st
 ```mermaid
 flowchart LR
     Demo["Existing demo tests"] --> Convert["UT_convertDemoToTypical"]
-    Protocol["Interface or protocol"] --> DesignTypical["UT_designCatSkeleton<br/>Cat=Typical"]
+    Protocol["Interface or protocol"] --> DesignTypical["UT_designTypicalSkeleton"]
+    Protocol --> DesignFunc["UT_designFuncTestsSkeleton<br/>Typical+Edge+Misuse+Fault"]
 
     Convert --> Typical["Typical skeleton"]
     DesignTypical --> Typical
-    Typical --> Edge["UT_designCatSkeleton<br/>Cat=Edge"]
-    Edge --> Misuse["UT_designCatSkeleton<br/>Cat=Misuse"]
-    Misuse --> Fault["UT_designCatSkeleton<br/>Cat=Fault"]
-    Fault --> ReviewSkeleton["UT_reviewFuncTestsSkeleton"]
+    Typical --> Edge["UT_designEdgeSkeleton"]
+    Edge --> Misuse["UT_designMisuseSkeleton"]
+    Misuse --> Fault["UT_designFaultSkeleton"]
+    Fault --> FuncSet["P0 functional skeleton set"]
+    DesignFunc --> FuncSet
+    FuncSet --> ReviewSkeleton["UT_reviewFuncTestsSkeleton"]
 
     ReviewSkeleton --> NextTC["UT_tellMeNextImplTest"]
     NextTC --> Impl["UT_implTestCase"]
@@ -43,11 +46,12 @@ flowchart LR
 ## Command Sequence
 
 1. Use [../commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](../commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) when the starting point is an existing demo test.
-2. Use [../commands/P0-FuncTestsFlow/UT_designCatSkeleton.md](../commands/P0-FuncTestsFlow/UT_designCatSkeleton.md) with `Cat=Typical` when the starting point is an interface or protocol.
-3. Reuse `UT_designCatSkeleton` with `Cat=Edge`, `Cat=Misuse`, and `Cat=Fault` to complete the functional skeleton set.
-4. Use [../commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](../commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) before implementation begins.
-5. Use [../commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md](../commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) to select the next TC.
-6. Use [../commands/P0-FuncTestsFlow/UT_implTestCase.md](../commands/P0-FuncTestsFlow/UT_implTestCase.md) and [../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md](../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) for TC-by-TC execution.
+2. Use [../commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md](../commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) when the starting point is an interface or protocol and the primary valid behavior should be designed first.
+3. Use [../commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md](../commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md), [../commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md](../commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md), and [../commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md](../commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) to complete the P0 functional skeleton set.
+4. Use [../commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md](../commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) when the full Typical, Edge, Misuse, and Fault skeleton set should be designed as one behavior.
+5. Use [../commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](../commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) before implementation begins.
+6. Use [../commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md](../commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) to select the next TC.
+7. Use [../commands/P0-FuncTestsFlow/UT_implTestCase.md](../commands/P0-FuncTestsFlow/UT_implTestCase.md) and [../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md](../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) for TC-by-TC execution.
 
 ## Conflict Guard
 
