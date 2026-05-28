@@ -17,6 +17,7 @@ Options:
   --goalStory               <STRING>  WHY the user wants the goal — inline User Story in natural language.
   --goalStoryFile           <FILE>    WHY in a file — path to a User Story file (alternative to --goalStory).
   --input                   <STRING>  WHAT interface or protocol to be tested and implemented, as an inline string.
+  --inputFile               <FILE>    WHAT from a file — path to a file describing the interface or protocol (alternative to --input).
   --target                  <value>   Select the CaTDD work target artifact type.
   --behave                  <value>   Select the behavior to apply to the target.
   --reference               <FILEs>   Comma-separated list of reference files the agent should consult.
@@ -30,7 +31,7 @@ Options:
 
 ## Argument Reference
 
-### Core Argument Relationships: goal group, `--input`, `--target`, and `--behave`
+### Core Argument Relationships: goal group, `--input`/`--inputFile`, `--target`, and `--behave`
 
 These arguments work together to fully specify every invocation. Understanding their individual roles — and why they are separate — requires understanding how CaTDD organizes method meaning and slash commands.
 
@@ -39,7 +40,7 @@ These arguments work together to fully specify every invocation. Understanding t
 - **`methodPrompts/`** — defines *what CaTDD means*: the US/AC/TC skeleton contract, category semantics (Typical, Edge, Misuse, Fault, State, Capability, …), TDD status discipline, and risk-driven prioritization. This is the CaTDD method itself. It never changes when you run a different target or behavior.
 - **`slashCommands/`** — defines *how to execute CaTDD steps*: portable command scripts (`UT_designCatSkeleton`, `UT_implTestCase`, `UT_reviewImplTestCase`, …) organized into flows (P0 FuncTestsFlow, P1 DesignTestsFlow, …). Each command calls on methodPrompts for category meaning but handles the step-by-step execution work.
 
-`utCodeAgentCLI` orchestrates both layers. `--target` and `--behave` together tell the CLI which slashCommand(s) to invoke; the goal group (`--goal`, `--goalStory`/`--goalStoryFile`) and `--input` provide the per-invocation context that neither layer owns.
+`utCodeAgentCLI` orchestrates both layers. `--target` and `--behave` together tell the CLI which slashCommand(s) to invoke; the goal group (`--goal`, `--goalStory`/`--goalStoryFile`) and `--input`/`--inputFile` provide the per-invocation context that neither layer owns.
 
 #### Definitions
 
@@ -60,6 +61,11 @@ These arguments work together to fully specify every invocation. Understanding t
 
 > Identifies the specific interface or protocol that the agent should derive tests for. The value may be a type name, a function signature, a file path, or a short description — whatever uniquely identifies the interface/protocol artifact within the project. Example: `"AuthService"` or `"src/auth/AuthService.h"`.
 > `--input` complements `--target`: `--target` says *what kind* of artifact (InterfaceFile, ProtocolFile, …); `--input` says *which specific* interface or protocol within that kind.
+> Use `--input` for short identifiers that fit comfortably on the command line.
+
+**`--inputFile <FILE>`** — **WHAT** from a file; an alternative to `--input` for larger or shared interface/protocol descriptions.
+
+> Path to a file containing the full description of the interface or protocol (e.g., a header file, API spec, or schema). Use when the interface description is too long for inline use or is shared across multiple invocations. The file content is treated identically to the value passed via `--input`. Providing both `--input` and `--inputFile` in the same invocation is an error.
 
 **`--target <value>`** — The CaTDD artifact *type* the agent will operate on.
 
@@ -84,11 +90,11 @@ These arguments work together to fully specify every invocation. Understanding t
 | --- | --- | --- |
 | `--goal` | **WHAT** — what outcome does the user want? | Inline natural language task description for the invocation |
 | `--goalStory` / `--goalStoryFile` | **WHY** — what is the User Story behind the goal? | Source of the `@[US]` embedded in the TestFile; permanent design record |
-| `--input` | **WHAT (specific)** — which interface or protocol to test? | Identifies the concrete interface/protocol artifact within the target type |
+| `--input` / `--inputFile` | **WHAT (specific)** — which interface or protocol to test? | Identifies the concrete interface/protocol artifact within the target type; `--inputFile` is the file-based alternative |
 | `--target` | **WHAT (type)** — which CaTDD artifact kind is being acted on? | Artifact type selector; determines which files the agent reads/writes |
 | `--behave` | **HOW** — design skeleton, implement test code, or both? | Selects the slashCommand(s) from `slashCommands/commands/`; category meaning comes from `methodPrompts/` |
 
-`--goal`, `--target`, and `--behave` are required and must be consistent with each other. `--goalStory`/`--goalStoryFile` and `--input` are optional but strongly recommended when working with interface or protocol targets.
+`--goal`, `--target`, and `--behave` are required and must be consistent with each other. `--goalStory`/`--goalStoryFile` and `--input`/`--inputFile` are optional but strongly recommended when working with interface or protocol targets.
 
 #### Single-argument use (error cases)
 
@@ -107,6 +113,11 @@ utCodeAgentCLI --behave designAllSkeleton
 # ERROR: --goalStory and --goalStoryFile cannot both be provided
 utCodeAgentCLI --goal "design login skeletons" --goalStory "As a user..." --goalStoryFile stories/login.md \
   --target InterfaceFile --behave designAllSkeleton
+
+# ERROR: --input and --inputFile cannot both be provided
+utCodeAgentCLI --goal "design login skeletons" \
+  --input "AuthService" --inputFile src/auth/AuthService.h \
+  --target InterfaceFile --behave designAllSkeleton
 ```
 
 #### Combination use (correct invocations)
@@ -119,11 +130,11 @@ utCodeAgentCLI \
   --input "AuthService" \
   --target InterfaceFile --behave designTypical
 
-# Design all functional skeletons using a shared story file.
+# Design all functional skeletons using a shared story file and interface file.
 utCodeAgentCLI \
   --goal "design all skeletons for the payment protocol" \
   --goalStoryFile stories/payment-us.md \
-  --input "src/payment/PaymentProtocol.proto" \
+  --inputFile src/payment/PaymentProtocol.proto \
   --target ProtocolFile --behave designAllSkeleton
 
 # Implement one test case — goal only (no story needed for impl step).
@@ -139,14 +150,15 @@ utCodeAgentCLI \
   --target InterfaceFile --behave designAndImplTest
 ```
 
-`--goal` states **what** the run produces. `--goalStory`/`--goalStoryFile` carry the **why** — the User Story whose `@[US]`/`@[AC]`/`@[TC]` structure will be written into the TestFile. `--input` names **which** interface or protocol; `--target` names **what kind** of artifact; `--behave` names **which CaTDD step** runs. Together they form a traceable CaTDD execution record that can be replayed or reviewed.
+`--goal` states **what** the run produces. `--goalStory`/`--goalStoryFile` carry the **why** — the User Story whose `@[US]`/`@[AC]`/`@[TC]` structure will be written into the TestFile. `--input`/`--inputFile` names **which** interface or protocol (inline or from file); `--target` names **what kind** of artifact; `--behave` names **which CaTDD step** runs. Together they form a traceable CaTDD execution record that can be replayed or reviewed.
 
 | Argument | Type | Values | Required | Description |
 | --- | --- | --- | --- | --- |
 | `--goal` | string | Any natural language string | yes | **WHAT** the user wants — inline task description for this invocation. |
 | `--goalStory` | string | Any natural language string | no | **WHY** — inline User Story that motivates the goal. Source of `@[US]` comments placed in the TestFile. Mutually exclusive with `--goalStoryFile`. |
 | `--goalStoryFile` | file path | Any readable file | no | **WHY** from a file — path to a User Story file. Treated identically to `--goalStory`. Mutually exclusive with `--goalStory`. |
-| `--input` | string | Interface/protocol name or path | no | **WHAT (specific)** — inline identifier of the interface or protocol to be tested and implemented (e.g. `"AuthService"` or `"src/auth/AuthService.h"`). |
+| `--input` | string | Interface/protocol name or path | no | **WHAT (specific)** — inline identifier of the interface or protocol to be tested and implemented (e.g. `"AuthService"` or `"src/auth/AuthService.h"`). Mutually exclusive with `--inputFile`. |
+| `--inputFile` | file path | Any readable file | no | **WHAT (specific)** from a file — path to a file describing the interface or protocol. Treated identically to `--input`. Mutually exclusive with `--input`. |
 | `--target` | string | `TestCase` \| `TestFile` \| `InterfaceFile` \| `ProtocolFile` | yes | Selects the CaTDD artifact *type* the agent should act on. |
 | `--behave` | string | `implTestCase` \| `implTestFile` \| `designTypical` \| `designEdge` \| `designTypicalSkeleton` \| `designEdgeSkeleton` \| `designAllSkeleton` \| `designAndImplTest` | yes | Selects the CaTDD workflow behavior the agent applies to the target. |
 | `--reference` | string | Comma-separated file paths | no | One or more reference files the agent should consult when generating output. Multiple files are separated by commas. Paths may be absolute or relative to the repository root. |
@@ -229,11 +241,11 @@ utCodeAgentCLI \
   --input "src/auth/AuthService.h" \
   --target InterfaceFile --behave designAndImplTest
 
-# Design skeletons for a protocol — story from file, consult a reference
+# Design skeletons for a protocol — story from file, interface from file
 utCodeAgentCLI \
   --goal "design all skeletons for the payment protocol" \
   --goalStoryFile stories/payment-us.md \
-  --input "src/payment/PaymentProtocol.proto" \
+  --inputFile src/payment/PaymentProtocol.proto \
   --target ProtocolFile --behave designAllSkeleton \
   --reference docs/payment-spec.md
 
@@ -277,6 +289,8 @@ utCodeAgentCLI \
 - `--goal` given an empty string -> Print usage and exit with a non-zero status code.
 - `--goalStory` and `--goalStoryFile` both provided -> Print error (mutually exclusive) and exit with a non-zero status code.
 - `--goalStoryFile` given a path that does not exist -> Print the missing path and exit with a non-zero status code.
+- `--input` and `--inputFile` both provided -> Print error (mutually exclusive) and exit with a non-zero status code.
+- `--inputFile` given a path that does not exist -> Print the missing path and exit with a non-zero status code.
 - `--target` missing -> Print usage and exit with a non-zero status code.
 - `--behave` missing -> Print usage and exit with a non-zero status code.
 - `--target` given an unrecognized value -> Print supported values and exit with a non-zero status code.
