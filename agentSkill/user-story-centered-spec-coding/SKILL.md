@@ -67,6 +67,7 @@ README_ErrorDesign.md
 README_ResourceDesign.md
 README_StateDesign.md
 README_PerfDesign.md
+README_CompatDesign.md
 README_DiagnosisDesign.md
 README_VerifyDesign.md
 ```

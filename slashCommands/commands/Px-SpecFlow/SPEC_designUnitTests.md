@@ -16,6 +16,7 @@ Design CaTDD unit test skeletons for the active user story after story and detai
 - `resource_design`: optional project-root `README_ResourceDesign.md` for finite resources, allocation policy, memory, CPU, power, handle, or contention behavior.
 - `state_design`: optional project-root `README_StateDesign.md` for state-machine, concurrency, buffer, or lifecycle behavior.
 - `perf_design`: optional project-root `README_PerfDesign.md` for real-time, latency, throughput, memory, CPU, power, or media quality constraints.
+- `compat_design`: optional project-root `README_CompatDesign.md` for supported versions, platforms, protocols, formats, toolchains, or integration boundaries.
 - `diagnosis_design`: optional project-root `README_DiagnosisDesign.md` for symptoms, logs, counters, traces, debug hooks, and root-cause evidence.
 - `verify_design`: optional project-root `README_VerifyDesign.md` to create or update, using `slashCommands/templates/README_VerifyDesignTemplate.md` when first created.
 - `target_test_files`: test files to create or update.
@@ -33,7 +34,7 @@ Design CaTDD unit test skeletons for the active user story after story and detai
 
 - CaTDD US/AC/TC skeletons in committed test files, linked back to local gitignored active story context and project-root README SPEC docs.
 - Updated project-root verification design in `README_VerifyDesign.md` when test strategy or category coverage changes.
-- Error, resource, state, performance, and diagnostic coverage linked to `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, or `README_DiagnosisDesign.md` when those design surfaces exist.
+- Error, resource, state, performance, compatibility, and diagnostic coverage linked to `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when those design surfaces exist.
 - First-time verification design should be based on `slashCommands/templates/README_VerifyDesignTemplate.md`.
 - A parallel-ready implementation checklist that groups the next execution slices by US/AC/TC, notes dependencies, and highlights validation checkpoints before product-code work starts.
 - Category labels, priority gates, and initial TC status markers.

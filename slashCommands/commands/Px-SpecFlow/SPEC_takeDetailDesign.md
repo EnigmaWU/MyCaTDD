@@ -6,14 +6,14 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This command must inspect the active user story and project context, reason about the design surfaces needed (detail design, error, resource, state, performance, diagnosis), draft or update the relevant project-root README SPEC docs, and verify that acceptance criteria are testable and traceable before finalizing. Embedded software and digital media domain concerns should trigger additional reasoning cycles for error, resource, state, performance, and diagnosis design surfaces.
+**ReACT** — Reasoning + Acting. This command must inspect the active user story and project context, reason about the design surfaces needed (detail design, error, resource, state, performance, compatibility, diagnosis), draft or update the relevant project-root README SPEC docs, and verify that acceptance criteria are testable and traceable before finalizing. Embedded software and digital media domain concerns should trigger additional reasoning cycles for error, resource, state, performance, compatibility, and diagnosis design surfaces.
 
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `projectContext_file`: current project context.
 - `readme_spec_files`: optional project-root `README*` SPEC files to create or update.
-- `readme_spec_templates`: matching templates under `slashCommands/templates/`, such as `README_DetailDesignTemplate.md`, `README_ErrorDesignTemplate.md`, `README_ResourceDesignTemplate.md`, `README_StateDesignTemplate.md`, `README_PerfDesignTemplate.md`, `README_DiagnosisDesignTemplate.md`, `README_VerifyDesignTemplate.md`, and `README_UsageDesignTemplate.md`.
+- `readme_spec_templates`: matching templates under `slashCommands/templates/`, such as `README_DetailDesignTemplate.md`, `README_ErrorDesignTemplate.md`, `README_ResourceDesignTemplate.md`, `README_StateDesignTemplate.md`, `README_PerfDesignTemplate.md`, `README_CompatDesignTemplate.md`, `README_DiagnosisDesignTemplate.md`, `README_VerifyDesignTemplate.md`, and `README_UsageDesignTemplate.md`.
 - `design_target`: optional project-root README SPEC file, API contract, architecture note, or detail design target.
 
 ## Method References
@@ -23,7 +23,7 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 ## Output Contract
 
-- Project-root README SPEC docs as needed, such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_DiagnosisDesign.md`, `README_VerifyDesign.md`, and `README_UsageDesign.md`.
+- Project-root README SPEC docs as needed, such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_VerifyDesign.md`, and `README_UsageDesign.md`.
 - First-time README SPEC docs should be based on the corresponding `slashCommands/templates/README_*Template.md` file.
 - A lightweight implementation plan inside the relevant README SPEC docs, covering technical context, structure decisions, constraints, and verification strategy for the active story.
 - Detailed design notes tied to the active user story in local gitignored `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
@@ -32,7 +32,7 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 ## Prompt Template
 
-Ask the assistant to design behavior and acceptance criteria before tests or product code, updating only the project-root README SPEC docs needed for the active story, keeping `WHAT`/`WHY` traceable to story intent, and capturing the active story's lightweight implementation plan in the resulting design docs. For embedded software or digital video/audio domain work, add error, resource, state, performance, and diagnosis design surfaces when hardware faults, finite resources, hardware lifecycle, real-time scheduling, buffer ownership, media timing, A/V sync, or field-debug evidence constraints are relevant.
+Ask the assistant to design behavior and acceptance criteria before tests or product code, updating only the project-root README SPEC docs needed for the active story, keeping `WHAT`/`WHY` traceable to story intent, and capturing the active story's lightweight implementation plan in the resulting design docs. For embedded software or digital video/audio domain work, add error, resource, state, performance, compatibility, and diagnosis design surfaces when hardware faults, finite resources, hardware lifecycle, real-time scheduling, compatibility matrices, buffer ownership, media timing, A/V sync, or field-debug evidence constraints are relevant.
 
 ## Conflict Guard
 

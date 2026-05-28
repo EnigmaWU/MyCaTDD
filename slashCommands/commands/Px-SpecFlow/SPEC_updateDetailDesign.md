@@ -12,7 +12,7 @@ Revise detailed design and acceptance criteria after story review, implementatio
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `detail_design`: project-root README detail design file or active story design section to update.
-- `readme_spec_files`: optional project-root `README*` SPEC files to create or update using matching `slashCommands/templates/README_*Template.md` files when first created, including `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, or `README_DiagnosisDesign.md` when feedback changes error, resource, state, performance, or diagnosis design.
+- `readme_spec_files`: optional project-root `README*` SPEC files to create or update using matching `slashCommands/templates/README_*Template.md` files when first created, including `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when feedback changes error, resource, state, performance, compatibility, or diagnosis design.
 - `review_feedback`: findings from story, code, test, or CI review.
 
 ## Method References
@@ -23,7 +23,7 @@ Revise detailed design and acceptance criteria after story review, implementatio
 ## Output Contract
 
 - Updated design and acceptance criteria in local gitignored `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
-- Updated `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_DiagnosisDesign.md`, or `README_VerifyDesign.md` when the feedback changes module, error, resource, state, performance, diagnosis, or verification design.
+- Updated `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, or `README_VerifyDesign.md` when the feedback changes module, error, resource, state, performance, compatibility, diagnosis, or verification design.
 - Review-feedback checklist showing what was addressed.
 - Remaining risks and next recommended command.
 

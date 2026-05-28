@@ -16,8 +16,8 @@ Use this command after P0 functional skeletons exist and the component exposes m
 
 ## Preconditions
 
-- Project-root `README_DetailDesign.md` must exist before drafting the Capability skeleton.
-- WARNING: If project-root `README_DetailDesign.md` is missing, stop before drafting the Capability skeleton and warn the developer.
+- Project-root `README_DetailDesign.md` must be confirmed before drafting the Capability skeleton.
+- WARNING: If project-root `README_DetailDesign.md` is missing, ask the developer where the capability design lives or stop before drafting the Capability skeleton.
 - If `README_DetailDesign.md` is stale or incomplete, warn the developer and recommend updating it with `SPEC_takeDetailDesign` or `SPEC_updateDetailDesign` before continuing.
 
 ## Method References
@@ -38,7 +38,7 @@ Use this command after P0 functional skeletons exist and the component exposes m
 Ask the assistant to:
 
 1. Check whether project-root `README_DetailDesign.md` exists before drafting any skeleton content.
-2. If `README_DetailDesign.md` is missing, output a WARNING and stop before drafting the Capability skeleton.
+2. If `README_DetailDesign.md` is missing, output a WARNING and ask the developer where the capability design lives or stop before drafting the Capability skeleton.
 3. Read `README_DetailDesign.md` as the capability design source, then read the functional skeletons for observable behavior links.
 4. Use the Capability method prompt as the category source of truth.
 5. Draft only the Capability skeleton and preserve unrelated categories.

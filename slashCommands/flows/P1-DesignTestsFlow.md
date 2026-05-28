@@ -17,6 +17,15 @@ The flow commands orchestrate execution; category meaning remains in `methodProm
 - P0 functional skeletons exist, especially Typical and Edge.
 - The component has meaningful lifecycle, capacity, or concurrency behavior.
 - The developer wants to design behavior beyond input/output correctness.
+- A P1 design source is confirmed for each category being drafted; P1 MUST have DESIGN before skeleton drafting starts.
+
+## Design Source Gate
+
+P1 is design-gated. Before drafting any P1 skeleton, confirm the category design source and read it as the authority for design decisions. If the design source is missing, ask the developer where the design lives or stop before drafting.
+
+- State: project-root `README_StateDesign.md` or a `State Design` chapter in project-root `README_ArchDesign.md`.
+- Capability: project-root `README_DetailDesign.md`.
+- Concurrency: project-root `README_ResourceDesign.md`.
 
 ## Developer Stories
 
@@ -40,10 +49,10 @@ flowchart LR
 
 ## Command Sequence
 
-1. Use [../commands/P1-DesignTestsFlow/UT_designStateSkeleton.md](../commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) when project-root `README_StateDesign.md` exists and lifecycle, transition, ownership, persistence, or recovery behavior matters. If `README_StateDesign.md` is missing, the command warns and stops before drafting the State skeleton.
+1. Use [../commands/P1-DesignTestsFlow/UT_designStateSkeleton.md](../commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) when project-root `README_StateDesign.md` exists, or project-root `README_ArchDesign.md` contains a `State Design` chapter, and lifecycle, transition, ownership, persistence, or recovery behavior matters. If neither source exists, the command asks the developer where the state design lives or stops before drafting the State skeleton.
 2. Use [../commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md](../commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) when project-root `README_DetailDesign.md` exists and supported, limited, conditional, or unsupported capability boundaries matter. If `README_DetailDesign.md` is missing, the command warns and stops before drafting the Capability skeleton.
 3. Use [../commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md](../commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) when project-root `README_ResourceDesign.md` exists and ordering, interleaving, reentrancy, cancellation, or shared ownership matters. If `README_ResourceDesign.md` is missing, the command warns and stops before drafting the Concurrency skeleton.
-4. Use [../commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md](../commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) before moving to P2 quality coverage or TC-by-TC implementation.
+4. Use [../commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md](../commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) before moving to P2 quality coverage or TC-by-TC implementation, and verify every P1 skeleton is traceable to a confirmed design source.
 
 ## Conflict Guard
 

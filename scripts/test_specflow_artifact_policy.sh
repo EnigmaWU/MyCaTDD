@@ -33,6 +33,7 @@ grep -Fq '`README_ErrorDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs m
 grep -Fq '`README_ResourceDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include resource design README"
 grep -Fq '`README_StateDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include state design README"
 grep -Fq '`README_PerfDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include performance design README"
+grep -Fq '`README_CompatDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include compatibility design README"
 grep -Fq '`README_DiagnosisDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include diagnosis design README"
 grep -Fq '`README_VerifyDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include verify design README"
 grep -Fq 'embedded software and digital video/audio domain work' "$FLOW_DOC" || fail "Px-SpecFlow missing embedded and digital video/audio domain guidance"
@@ -70,6 +71,7 @@ printf '/dist/\n' > "$TARGET_DIR/.gitignore"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/templates/README_ResourceDesignTemplate.md" ]] || fail "installer must install resource design README SPEC template"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/templates/README_StateDesignTemplate.md" ]] || fail "installer must install state design README SPEC template"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/templates/README_PerfDesignTemplate.md" ]] || fail "installer must install perf design README SPEC template"
+[[ -f "$TARGET_DIR/.catdd/slashCommands/templates/README_CompatDesignTemplate.md" ]] || fail "installer must install compatibility design README SPEC template"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/templates/README_DiagnosisDesignTemplate.md" ]] || fail "installer must install diagnosis design README SPEC template"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/templates/README_VerifyDesignTemplate.md" ]] || fail "installer must install verify design README SPEC template"
 
@@ -86,7 +88,7 @@ grep -Fq '# END CaTDD SpecCoding local state' "$TARGET_GITIGNORE" || fail "targe
 
 instructions="$TARGET_DIR/.github/instructions/catdd.instructions.md"
 grep -Fq 'Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `todoUS/`, and `doneUS/`.' "$instructions" || fail "instructions missing commit guidance for shared SpecCoding artifacts"
-grep -Fq 'Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.' "$instructions" || fail "instructions missing project-root README SPEC docs guidance"
+grep -Fq 'Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.' "$instructions" || fail "instructions missing project-root README SPEC docs guidance"
 grep -Fq 'Keep local SpecCoding work state such as `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` gitignored.' "$instructions" || fail "instructions missing gitignore guidance for local SpecCoding state"
 
 echo "[specflow-artifact-policy-test] PASSED: SpecFlow artifact persistence policy is documented and installed"

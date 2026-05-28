@@ -16,8 +16,8 @@ Use this command after P0 functional skeletons exist and the component can be ca
 
 ## Preconditions
 
-- Project-root `README_ResourceDesign.md` must exist before drafting the Concurrency skeleton.
-- WARNING: If project-root `README_ResourceDesign.md` is missing, stop before drafting the Concurrency skeleton and warn the developer.
+- Project-root `README_ResourceDesign.md` must be confirmed before drafting the Concurrency skeleton.
+- WARNING: If project-root `README_ResourceDesign.md` is missing, ask the developer where the concurrency/resource design lives or stop before drafting the Concurrency skeleton.
 - If `README_ResourceDesign.md` is stale or incomplete, warn the developer and recommend updating it with `SPEC_takeDetailDesign` or `SPEC_updateDetailDesign` before continuing.
 
 ## Method References
@@ -38,7 +38,7 @@ Use this command after P0 functional skeletons exist and the component can be ca
 Ask the assistant to:
 
 1. Check whether project-root `README_ResourceDesign.md` exists before drafting any skeleton content.
-2. If `README_ResourceDesign.md` is missing, output a WARNING and stop before drafting the Concurrency skeleton.
+2. If `README_ResourceDesign.md` is missing, output a WARNING and ask the developer where the concurrency/resource design lives or stop before drafting the Concurrency skeleton.
 3. Read `README_ResourceDesign.md` as the resource and contention design source, then read the functional skeletons for observable behavior links.
 4. Use the Concurrency method prompt as the category source of truth.
 5. Draft only the Concurrency skeleton and preserve unrelated categories.

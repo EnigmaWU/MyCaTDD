@@ -33,6 +33,48 @@ assert_design_source() {
   assert_contains "slashCommands/README_UserGuide.md" "$source_doc"
 }
 
+assert_p1_design_source() {
+  local command_path="$1"
+  local source_doc="$2"
+  local template_path="$3"
+  local flow_doc="slashCommands/flows/P1-DesignTestsFlow.md"
+
+  assert_contains "$command_path" "$source_doc"
+  assert_contains "$command_path" "$template_path"
+  assert_contains "$command_path" "WARNING"
+  assert_contains "$command_path" "ask the developer where"
+  assert_contains "$command_path" "or stop before drafting"
+  assert_contains "$flow_doc" "$source_doc"
+  assert_contains "slashCommands/README_UserGuide.md" "$source_doc"
+}
+
+assert_p1_design_gate() {
+  local flow_doc="slashCommands/flows/P1-DesignTestsFlow.md"
+  local review_command="slashCommands/commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md"
+
+  assert_contains "$flow_doc" "P1 MUST have DESIGN before skeleton drafting starts"
+  assert_contains "$flow_doc" "P1 is design-gated"
+  assert_contains "$flow_doc" "ask the developer where the design lives or stop before drafting"
+  assert_contains "$review_command" "P1 MUST have DESIGN"
+  assert_contains "$review_command" "confirmed design source"
+}
+
+assert_state_design_source() {
+  local command_path="slashCommands/commands/P1-DesignTestsFlow/UT_designStateSkeleton.md"
+  local flow_doc="slashCommands/flows/P1-DesignTestsFlow.md"
+
+  assert_contains "$command_path" "README_StateDesign.md"
+  assert_contains "$command_path" "README_ArchDesign.md"
+  assert_contains "$command_path" "\`State Design\` chapter"
+  assert_contains "$command_path" "../../templates/README_StateDesignTemplate.md"
+  assert_contains "$command_path" "WARNING"
+  assert_contains "$command_path" "If neither source exists, output a WARNING and ask the developer where the state design lives or stop before drafting"
+  assert_contains "$flow_doc" "README_StateDesign.md"
+  assert_contains "$flow_doc" "README_ArchDesign.md"
+  assert_contains "slashCommands/README_UserGuide.md" "README_StateDesign.md"
+  assert_contains "slashCommands/README_UserGuide.md" "README_ArchDesign.md"
+}
+
 p1_commands=(
   UT_designStateSkeleton
   UT_designCapabilitySkeleton
@@ -59,21 +101,16 @@ for command_name in "${p1_commands[@]}"; do
   assert_contains "slashCommands/README_UserGuide.md" "$readme_command_path"
 done
 
-assert_design_source \
-  "slashCommands/commands/P1-DesignTestsFlow/UT_designStateSkeleton.md" \
-  "README_StateDesign.md" \
-  "../../templates/README_StateDesignTemplate.md" \
-  "slashCommands/flows/P1-DesignTestsFlow.md"
-assert_design_source \
+assert_p1_design_gate
+assert_state_design_source
+assert_p1_design_source \
   "slashCommands/commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md" \
   "README_DetailDesign.md" \
-  "../../templates/README_DetailDesignTemplate.md" \
-  "slashCommands/flows/P1-DesignTestsFlow.md"
-assert_design_source \
+  "../../templates/README_DetailDesignTemplate.md"
+assert_p1_design_source \
   "slashCommands/commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md" \
   "README_ResourceDesign.md" \
-  "../../templates/README_ResourceDesignTemplate.md" \
-  "slashCommands/flows/P1-DesignTestsFlow.md"
+  "../../templates/README_ResourceDesignTemplate.md"
 
 for command_name in "${p2_commands[@]}"; do
   command_path="slashCommands/commands/P2-QualityTestsFlow/${command_name}.md"
@@ -98,8 +135,8 @@ assert_design_source \
   "slashCommands/flows/P2-QualityTestsFlow.md"
 assert_design_source \
   "slashCommands/commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md" \
-  "README_DetailDesign.md" \
-  "../../templates/README_DetailDesignTemplate.md" \
+  "README_CompatDesign.md" \
+  "../../templates/README_CompatDesignTemplate.md" \
   "slashCommands/flows/P2-QualityTestsFlow.md"
 assert_design_source \
   "slashCommands/commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md" \
