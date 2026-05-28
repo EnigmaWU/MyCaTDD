@@ -50,6 +50,7 @@ codeAgents/utCodeAgentCLI/
   README_UserGuide.md
   README_UserGuide_ZH.md
   README_UsageDesign.md
+  README_UsageDesign_ZH.md
 ```
 
 推荐的未来目录结构：
