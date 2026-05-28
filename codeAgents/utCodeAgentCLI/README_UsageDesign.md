@@ -59,7 +59,7 @@ These arguments work together to fully specify every invocation. Understanding t
 
 **`--input <STRING>`** — **WHAT** interface or protocol to be tested and implemented, as an inline string.
 
-> Identifies the specific interface or protocol that the agent should derive tests for. The value may be a type name, a function signature, a file path, or a short description — whatever uniquely identifies the interface/protocol artifact within the project. Example: `"AuthService"` or `"src/auth/AuthService.h"`.
+> Identifies the specific interface or protocol that the agent should derive tests for. The value is a plain string identifier — a type name, a function signature, or a short natural language description. Example: `"AuthService"` or `"IAuthService::login"`. Do not pass raw file content here; use `--inputFile` to have the CLI read a file and supply its content.
 > `--input` complements `--target`: `--target` says *what kind* of artifact (InterfaceFile, ProtocolFile, …); `--input` says *which specific* interface or protocol within that kind.
 > Use `--input` for short identifiers that fit comfortably on the command line.
 
@@ -146,7 +146,7 @@ utCodeAgentCLI \
 utCodeAgentCLI \
   --goal "design and implement auth interface tests" \
   --goalStory "As an API consumer I want typed auth errors so that I can handle failures reliably" \
-  --input "src/auth/AuthService.h" \
+  --inputFile src/auth/AuthService.h \
   --target InterfaceFile --behave designAndImplTest
 ```
 
@@ -157,7 +157,7 @@ utCodeAgentCLI \
 | `--goal` | string | Any natural language string | yes | **WHAT** the user wants — inline task description for this invocation. |
 | `--goalStory` | string | Any natural language string | no | **WHY** — inline User Story that motivates the goal. Source of `@[US]` comments placed in the TestFile. Mutually exclusive with `--goalStoryFile`. |
 | `--goalStoryFile` | file path | Any readable file | no | **WHY** from a file — path to a User Story file. Treated identically to `--goalStory`. Mutually exclusive with `--goalStory`. |
-| `--input` | string | Interface/protocol name or path | no | **WHAT (specific)** — inline identifier of the interface or protocol to be tested and implemented (e.g. `"AuthService"` or `"src/auth/AuthService.h"`). Mutually exclusive with `--inputFile`. |
+| `--input` | string | Interface/protocol name or identifier | no | **WHAT (specific)** — inline identifier of the interface or protocol to be tested and implemented (e.g. `"AuthService"` or `"IAuthService::login"`). Do not pass a raw file path here; use `--inputFile` instead. Mutually exclusive with `--inputFile`. |
 | `--inputFile` | file path | Any readable file | no | **WHAT (specific)** from a file — path to a file describing the interface or protocol. Treated identically to `--input`. Mutually exclusive with `--input`. |
 | `--target` | string | `TestCase` \| `TestFile` \| `InterfaceFile` \| `ProtocolFile` | yes | Selects the CaTDD artifact *type* the agent should act on. |
 | `--behave` | string | `implTestCase` \| `implTestFile` \| `designTypical` \| `designEdge` \| `designTypicalSkeleton` \| `designEdgeSkeleton` \| `designAllSkeleton` \| `designAndImplTest` | yes | Selects the CaTDD workflow behavior the agent applies to the target. |
@@ -234,11 +234,11 @@ utCodeAgentCLI \
   --goal "implement TC-03 of the login test file" \
   --target TestCase --behave implTestCase
 
-# Design and implement tests from an interface — story from file
+# Design and implement tests from an interface file — story from file
 utCodeAgentCLI \
   --goal "design and implement auth interface tests" \
   --goalStoryFile stories/auth-us.md \
-  --input "src/auth/AuthService.h" \
+  --inputFile src/auth/AuthService.h \
   --target InterfaceFile --behave designAndImplTest
 
 # Design skeletons for a protocol — story from file, interface from file
@@ -277,8 +277,8 @@ utCodeAgentCLI \
 
 # Emit DIAG log messages showing resolved method prompts and slash commands
 utCodeAgentCLI \
-  --goal "design all skeletons for the auth interface" \
-  --input "AuthService" \
+  --goal "design and implement auth interface tests" \
+  --inputFile src/auth/AuthService.h \
   --target InterfaceFile --behave designAndImplTest \
   --diagMethodPrompts --diagSlashCommands
 ```
@@ -290,6 +290,7 @@ utCodeAgentCLI \
 - `--goalStory` and `--goalStoryFile` both provided -> Print error (mutually exclusive) and exit with a non-zero status code.
 - `--goalStoryFile` given a path that does not exist -> Print the missing path and exit with a non-zero status code.
 - `--input` and `--inputFile` both provided -> Print error (mutually exclusive) and exit with a non-zero status code.
+- `--input` given an empty string -> Treat as if `--input` was not provided; emit a warning.
 - `--inputFile` given a path that does not exist -> Print the missing path and exit with a non-zero status code.
 - `--target` missing -> Print usage and exit with a non-zero status code.
 - `--behave` missing -> Print usage and exit with a non-zero status code.
