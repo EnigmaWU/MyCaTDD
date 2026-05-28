@@ -82,9 +82,11 @@ Options:
 > - one TestFile → 例如 `tests/auth_login_test.cpp`
 > - some TestFiles → 例如 `tests/auth_test.cpp,tests/payment_test.cpp`
 
-**`--behave <value>`** — 要执行的 CaTDD 工作流步骤。
+**`--behave <value>`** — 要执行或编排的 CaTDD slash-command behavior。
 
-> `--behave` 直接映射到 `slashCommands/commands/` 中的 slashCommand 操作：
+> `--behave` 是一个 behavior selector，会根据 `slashCommands/commands/` 下兼容的 unit-testing slash commands 解析。它可以是 portable UT slash-command 名称，例如 `UT_designCatSkeleton`、`UT_reviewFuncTestsSkeleton`、`UT_tellMeNextImplTest` 或 `UT_implTestCase`，前提是该命令的输入/输出契约能由 `--goal`、`--input`/`--inputFile`、`--target` 和可选 reference 参数满足。
+
+> CLI 也可以为常见的多步骤或参数化 slash-command behavior 提供稳定 alias：
 
 > - `designTypicalSkeleton` / `designEdgeSkeleton` / `designMisuseSkeleton` / `designFaultSkeleton` → 使用匹配的 P0 functional category 调用 `UT_designCatSkeleton`。产出 US/AC/TC skeleton；不产出可执行测试代码。
 > - `designStateSkeleton` / `designCapabilitySkeleton` / `designConcurrencySkeleton` → 调用匹配的 P1 DesignTestsFlow skeleton command。产出 US/AC/TC skeleton；不产出可执行测试代码。
@@ -102,7 +104,7 @@ Options:
 | `--goalStory` / `--goalStoryFile` | **WHY** — 目标背后的 User Story 是什么？ | 写入 TestFile 的 `@[US]` 来源；永久设计记录 |
 | `--input` / `--inputFile` | **WHAT (source)** — agent 应使用什么来源或上下文？ | 提供 interface/protocol/source/draft 材料；`--inputFile` 是文件形式替代 |
 | `--target` | **WHAT (destination/scope)** — 作用于哪个测试产物范围？ | 选择 one TC in one TestFile、one TestFile 或 some TestFiles |
-| `--behave` | **HOW** — 设计 skeleton、实现测试代码，还是二者都做？ | 从 `slashCommands/commands/` 选择 slashCommand；category 含义来自 `methodPrompts/` |
+| `--behave` | **HOW** — 运行哪个 slash-command behavior？ | 从 `slashCommands/commands/` 选择或 alias slashCommand；category 含义来自 `methodPrompts/` |
 
 `--goal`、`--target`、`--behave` 必填，并且必须彼此一致。当行为需要 target 测试产物之外的源材料时，提供 `--input` 或 `--inputFile` 中的一个。
 
@@ -171,6 +173,11 @@ utCodeAgentCLI \
   --goalStory "As an API consumer I want typed auth errors so that I can handle failures reliably" \
   --inputFile src/auth/AuthService.h \
   --target tests/auth_api_test.cpp --behave designAndImplTest
+
+# 直接把 portable slash command 作为 behavior 运行。
+utCodeAgentCLI \
+  --goal "review the functional skeletons before implementation" \
+  --target tests/auth_api_test.cpp --behave UT_reviewFuncTestsSkeleton
 ```
 
 `--goal` 说明本次运行要产出什么。`--input`/`--inputFile` 说明 CLI 应使用什么来源。`--target` 说明 CLI 应创建、更新或实现哪个测试产物范围。`--behave` 说明运行哪个 CaTDD 步骤。对于会把 `@[US]`/`@[AC]`/`@[TC]` 结构写入 TestFile 的设计步骤，`--goalStory`/`--goalStoryFile` 提供 **why**。这些参数共同形成可回放、可审查的 CaTDD 执行记录。
@@ -183,7 +190,7 @@ utCodeAgentCLI \
 | `--input` | string | Source/context selector | no | **WHAT (source)** — 内联源材料或上下文，例如 `AuthService`、`PaymentProtocol`、`src/auth/AuthService.cpp`。与 `--inputFile` 互斥。 |
 | `--inputFile` | file path | 任意可读文件 | no | **WHAT (source)** 来自文件 — interface file、protocol file、schema、API spec、draft test material 或相关生产源码。与 `--input` 互斥。 |
 | `--target` | string | Test target selector | yes | 选择 test-space target：one TC in one TestFile（`tests/auth_test.cpp::TC-03`）、one TestFile（`tests/auth_test.cpp`）或 some TestFiles（`tests/a_test.cpp,tests/b_test.cpp`）。 |
-| `--behave` | string | `implTestCase` \| `implTestFile` \| `designTypicalSkeleton` \| `designEdgeSkeleton` \| `designMisuseSkeleton` \| `designFaultSkeleton` \| `designStateSkeleton` \| `designCapabilitySkeleton` \| `designConcurrencySkeleton` \| `designPerformanceSkeleton` \| `designRobustSkeleton` \| `designCompatibilitySkeleton` \| `designConfigurationSkeleton` \| `designAllSkeleton` \| `designAndImplTest` | yes | 选择 agent 应应用到 target 的 CaTDD workflow behavior。 |
+| `--behave` | string | Slash-command behavior selector | yes | 选择要应用到 target 的 CaTDD behavior。接受 `slashCommands/commands/` 中兼容的 portable slash-command 名称，也接受 `designAllSkeleton`、`implTestFile`、`designAndImplTest` 等稳定 CLI aliases。 |
 | `--reference` | string | 逗号分隔文件路径 | no | 生成输出时 agent 应参考的一个或多个文件。多个文件用逗号分隔。路径可以是绝对路径或相对仓库根目录路径。 |
 | `--extra-prompt` | string | 逗号分隔文件路径 | no | 内容会被原样追加为本次调用 extra prompt text 的一个或多个文件。多个文件用逗号分隔。 |
 | `--config-file` | file path | 任意可读 YAML 文件 | no | agent 配置文件路径。默认：`{PRJROOT}/CaTDD/utCodeAgentCLI/config.yaml`。 |
@@ -200,7 +207,17 @@ utCodeAgentCLI \
 | `tests/auth_test.cpp` | 一个 TestFile。用于 skeleton design、full-file implementation 或 design and implementation 组合。 |
 | `tests/auth_test.cpp,tests/payment_test.cpp` | 多个 TestFiles。用于对多个测试文件应用同一行为。 |
 
-### `--behave` values
+### `--behave` selector forms
+
+| Form | Meaning |
+| --- | --- |
+| `UT_implTestCase` | 直接 portable slash-command 名称。当该命令的输入/输出契约与 `--goal`、`--input`、`--target` 兼容时，CLI 运行匹配命令。 |
+| `UT_reviewFuncTestsSkeleton` | 直接 review command 名称。当 target 是包含 CaTDD skeletons 的 one TestFile 或 some TestFiles 时使用。 |
+| `UT_tellMeNextImplTest` | 直接 next-step command 名称。当 target TestFile 已包含 skeleton TCs，并且 CLI 应选择下一个实现候选时使用。 |
+| `designTypicalSkeleton` | 稳定 CLI alias。CLI 将其解析为带 `Cat=Typical` 的 `UT_designCatSkeleton`。 |
+| `designAllSkeleton` | 稳定 CLI aggregate alias。CLI 将其解析为适用的 P0/P1/P2 skeleton-design command sequence。 |
+
+### Common `--behave` aliases
 
 | Value | Meaning |
 | --- | --- |
@@ -220,7 +237,7 @@ utCodeAgentCLI \
 | `designAllSkeleton` | 设计所有 P0/P1/P2 CaTDD categories 的 skeleton：Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility、Configuration。US/AC/TC 注释会写入目标 test file，但**不会**写入实现测试代码。 |
 | `designAndImplTest` | 在一个组合步骤中设计所有 category skeletons **并**实现它们的 test cases。产出 US/AC/TC 结构和可执行测试代码。 |
 
-> 具体 category skeleton 值包括 P0 values（`designTypicalSkeleton`、`designEdgeSkeleton`、`designMisuseSkeleton`、`designFaultSkeleton`）、P1 values（`designStateSkeleton`、`designCapabilitySkeleton`、`designConcurrencySkeleton`）和 P2 values（`designPerformanceSkeleton`、`designRobustSkeleton`、`designCompatibilitySkeleton`、`designConfigurationSkeleton`）。
+> 这些 aliases 不是完整 behavior set。只要与所选 test-space `--target` 和提供的 source/context 兼容，`slashCommands/commands/` 中几乎任意兼容的 UT slash command 都可以作为 `--behave` 使用。使用 `--diagSlashCommands` 可以确认 CLI 运行时解析到了哪些 portable command(s)。
 
 ### `--log-level` values
 
@@ -245,8 +262,11 @@ utCodeAgentCLI \
 | one TestFile | P2 category skeleton behavior | 在 test file 中放置 Performance、Robust、Compatibility 或 Configuration US/AC/TC skeleton。不写入实现测试代码。 |
 | one TestFile | `designAllSkeleton` | 在 test file 中放置所有 P0/P1/P2 CaTDD categories 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | one TestFile | `designAndImplTest` | 设计所有 category skeletons 并实现它们。产出 US/AC/TC 结构和可执行测试代码。 |
+| one TestFile | compatible `UT_review*` behavior | 审查选中的 skeleton 或 implementation artifact，不修改无关文件。 |
+| one TestFile | `UT_tellMeNextImplTest` | 从目标 test file 中选择或推荐下一个要实现的 TC。 |
 | some TestFiles | `implTestFile` | 对每个选中的 test file 重复 full-file implementation。 |
 | some TestFiles | any skeleton design behavior | 对每个选中的 test file 应用所选 skeleton design behavior。 |
+| some TestFiles | compatible review behavior | 按所选 slash-command 契约审查每个选中的 test file。 |
 | some TestFiles | `designAndImplTest` | 跨每个选中的 test file 设计 skeletons 并实现生成的 TCs。 |
 
 ## Invocation Examples

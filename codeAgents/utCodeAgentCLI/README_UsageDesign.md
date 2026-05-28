@@ -82,9 +82,11 @@ The core model is:
 > - one TestFile → e.g. `tests/auth_login_test.cpp`
 > - some TestFiles → e.g. `tests/auth_test.cpp,tests/payment_test.cpp`
 
-**`--behave <value>`** — The CaTDD workflow step to execute.
+**`--behave <value>`** — The CaTDD slash-command behavior to execute or orchestrate.
 
-> `--behave` maps directly to slashCommand operations from `slashCommands/commands/`:
+> `--behave` is a behavior selector resolved against compatible unit-testing slash commands under `slashCommands/commands/`. It may be a portable UT slash-command name, such as `UT_designCatSkeleton`, `UT_reviewFuncTestsSkeleton`, `UT_tellMeNextImplTest`, or `UT_implTestCase`, when that command's input/output contract can be satisfied by `--goal`, `--input`/`--inputFile`, `--target`, and optional reference arguments.
+
+> The CLI may also provide stable aliases for common multi-step or parameterized slash-command behaviors:
 
 > - `designTypicalSkeleton` / `designEdgeSkeleton` / `designMisuseSkeleton` / `designFaultSkeleton` → invoke `UT_designCatSkeleton` with the matching P0 functional category. Produces a US/AC/TC skeleton; no executable test code.
 > - `designStateSkeleton` / `designCapabilitySkeleton` / `designConcurrencySkeleton` → invoke the matching P1 DesignTestsFlow skeleton command. Produces a US/AC/TC skeleton; no executable test code.
@@ -102,7 +104,7 @@ The core model is:
 | `--goalStory` / `--goalStoryFile` | **WHY** — what is the User Story behind the goal? | Source of the `@[US]` embedded in the TestFile; permanent design record |
 | `--input` / `--inputFile` | **WHAT (source)** — what source or context should the agent use? | Supplies interface/protocol/source/draft material; `--inputFile` is the file-based alternative |
 | `--target` | **WHAT (destination/scope)** — which test artifact scope is acted on? | Selects one TC in one TestFile, one TestFile, or some TestFiles |
-| `--behave` | **HOW** — design skeleton, implement test code, or both? | Selects the slashCommand(s) from `slashCommands/commands/`; category meaning comes from `methodPrompts/` |
+| `--behave` | **HOW** — which slash-command behavior should run? | Selects or aliases slashCommand(s) from `slashCommands/commands/`; category meaning comes from `methodPrompts/` |
 
 `--goal`, `--target`, and `--behave` are required and must be consistent with each other. Provide exactly one of `--input` or `--inputFile` when the behavior needs source material beyond the target test artifact.
 
@@ -171,6 +173,11 @@ utCodeAgentCLI \
   --goalStory "As an API consumer I want typed auth errors so that I can handle failures reliably" \
   --inputFile src/auth/AuthService.h \
   --target tests/auth_api_test.cpp --behave designAndImplTest
+
+# Run a portable slash command directly as the behavior.
+utCodeAgentCLI \
+  --goal "review the functional skeletons before implementation" \
+  --target tests/auth_api_test.cpp --behave UT_reviewFuncTestsSkeleton
 ```
 
 `--goal` states **what** the run produces. `--input`/`--inputFile` names **what source** the CLI should use. `--target` names **which test artifact scope** the CLI should create, update, or implement. `--behave` names **which CaTDD step** runs. `--goalStory`/`--goalStoryFile` carry the **why** for design steps whose `@[US]`/`@[AC]`/`@[TC]` structure will be written into a TestFile. Together they form a traceable CaTDD execution record that can be replayed or reviewed.
@@ -183,7 +190,7 @@ utCodeAgentCLI \
 | `--input` | string | Source/context selector | no | **WHAT (source)** — inline source material or context, such as `AuthService`, `PaymentProtocol`, or `src/auth/AuthService.cpp`. Mutually exclusive with `--inputFile`. |
 | `--inputFile` | file path | Any readable file | no | **WHAT (source)** from a file — interface file, protocol file, schema, API spec, draft test material, or related production source. Mutually exclusive with `--input`. |
 | `--target` | string | Test target selector | yes | Selects the test-space target: one TC in one TestFile (`tests/auth_test.cpp::TC-03`), one TestFile (`tests/auth_test.cpp`), or some TestFiles (`tests/a_test.cpp,tests/b_test.cpp`). |
-| `--behave` | string | `implTestCase` \| `implTestFile` \| `designTypicalSkeleton` \| `designEdgeSkeleton` \| `designMisuseSkeleton` \| `designFaultSkeleton` \| `designStateSkeleton` \| `designCapabilitySkeleton` \| `designConcurrencySkeleton` \| `designPerformanceSkeleton` \| `designRobustSkeleton` \| `designCompatibilitySkeleton` \| `designConfigurationSkeleton` \| `designAllSkeleton` \| `designAndImplTest` | yes | Selects the CaTDD workflow behavior the agent applies to the target. |
+| `--behave` | string | Slash-command behavior selector | yes | Selects the CaTDD behavior to apply to the target. Accepts compatible portable slash-command names from `slashCommands/commands/` plus stable CLI aliases such as `designAllSkeleton`, `implTestFile`, and `designAndImplTest`. |
 | `--reference` | string | Comma-separated file paths | no | One or more reference files the agent should consult when generating output. Multiple files are separated by commas. Paths may be absolute or relative to the repository root. |
 | `--extra-prompt` | string | Comma-separated file paths | no | One or more files whose content is appended verbatim as extra prompt text for this invocation. Multiple files are separated by commas. |
 | `--config-file` | file path | Any readable YAML file | no | Path to the agent configuration file. Default: `{PRJROOT}/CaTDD/utCodeAgentCLI/config.yaml`. |
@@ -200,7 +207,17 @@ utCodeAgentCLI \
 | `tests/auth_test.cpp` | One TestFile. Use with skeleton design, full-file implementation, or combined design and implementation. |
 | `tests/auth_test.cpp,tests/payment_test.cpp` | Some TestFiles. Use when the same behavior should be applied across multiple test files. |
 
-### `--behave` values
+### `--behave` selector forms
+
+| Form | Meaning |
+| --- | --- |
+| `UT_implTestCase` | Direct portable slash-command name. The CLI runs the matching command when its input/output contract is compatible with `--goal`, `--input`, and `--target`. |
+| `UT_reviewFuncTestsSkeleton` | Direct review command name. Useful when the target is one TestFile or some TestFiles containing CaTDD skeletons. |
+| `UT_tellMeNextImplTest` | Direct next-step command name. Useful when the target TestFile already contains skeleton TCs and the CLI should select the next implementation candidate. |
+| `designTypicalSkeleton` | Stable CLI alias. The CLI resolves it to `UT_designCatSkeleton` with `Cat=Typical`. |
+| `designAllSkeleton` | Stable CLI aggregate alias. The CLI resolves it to the applicable P0/P1/P2 skeleton-design command sequence. |
+
+### Common `--behave` aliases
 
 | Value | Meaning |
 | --- | --- |
@@ -220,7 +237,7 @@ utCodeAgentCLI \
 | `designAllSkeleton` | Design skeletons for all P0/P1/P2 CaTDD categories: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration. US/AC/TC comments are placed in the target test file, but **no implementation test code** is written. |
 | `designAndImplTest` | Design all category skeletons **and** implement their test cases in one combined step. Both US/AC/TC structure and executable test code are produced. |
 
-> The concrete category skeleton values are the P0 values (`designTypicalSkeleton`, `designEdgeSkeleton`, `designMisuseSkeleton`, `designFaultSkeleton`), P1 values (`designStateSkeleton`, `designCapabilitySkeleton`, `designConcurrencySkeleton`), and P2 values (`designPerformanceSkeleton`, `designRobustSkeleton`, `designCompatibilitySkeleton`, `designConfigurationSkeleton`).
+> These aliases are not the complete behavior set. Almost any compatible UT slash command in `slashCommands/commands/` may be used as `--behave` when it fits the selected test-space `--target` and the provided source/context. Use `--diagSlashCommands` to confirm which portable command(s) the CLI resolved at runtime.
 
 ### `--log-level` values
 
@@ -245,8 +262,11 @@ utCodeAgentCLI \
 | one TestFile | P2 category skeleton behavior | Place a Performance, Robust, Compatibility, or Configuration US/AC/TC skeleton in the test file. No implementation test code. |
 | one TestFile | `designAllSkeleton` | Place US/AC/TC skeletons for all P0/P1/P2 CaTDD categories in the test file. No implementation test code. |
 | one TestFile | `designAndImplTest` | Design all category skeletons and implement them. Produces both US/AC/TC structure and executable test code. |
+| one TestFile | compatible `UT_review*` behavior | Review the selected skeleton or implementation artifact without changing unrelated files. |
+| one TestFile | `UT_tellMeNextImplTest` | Select or recommend the next TC to implement from the target test file. |
 | some TestFiles | `implTestFile` | Repeat full-file implementation across each selected test file. |
 | some TestFiles | any skeleton design behavior | Apply the selected skeleton design behavior across each selected test file. |
+| some TestFiles | compatible review behavior | Review each selected test file according to the chosen slash-command contract. |
 | some TestFiles | `designAndImplTest` | Design skeletons and implement generated TCs across each selected test file. |
 
 ## Invocation Examples
