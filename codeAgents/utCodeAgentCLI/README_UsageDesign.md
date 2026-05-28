@@ -10,42 +10,58 @@ This document captures the CLI interface design for `utCodeAgentCLI`. It is base
 ## CLI Interface
 
 ```text
-utCodeAgentCLI [OPTIONS] --goal <FILE>
+utCodeAgentCLI [OPTIONS] --goal <STRING> --target <value> --behave <value>
 
 Options:
-  --goal                    <FILE>    Goal file that drives the agent's task (required).
-  --target                  <value>   Select the CaTDD work target.
+  --goal                    <STRING>  WHAT the user wants — natural language task description (required).
+  --goalStory               <STRING>  WHY the user wants the goal — inline User Story in natural language.
+  --goalStoryFile           <FILE>    WHY in a file — path to a User Story file (alternative to --goalStory).
+  --input                   <STRING>  WHAT interface or protocol to be tested and implemented, as an inline string.
+  --target                  <value>   Select the CaTDD work target artifact type.
   --behave                  <value>   Select the behavior to apply to the target.
-  --reference               <FILEs>  Comma-separated list of reference files the agent should consult.
-  --extra-prompt            <FILEs>  Comma-separated list of files whose content is appended as extra prompt text.
-  --config-file             <FILE>   Path to the agent config file. Default: {PRJROOT}/CaTDD/utCodeAgentCLI/config.yaml.
-  --log-level               <level>  Log verbosity. One of: debug | info | warn | error. Default: info.
-  --interactive-slash-commands       Prompt for confirmation before executing each slash command. Default: false.
-  --diagMethodPrompts                Emit DIAG log messages showing which method prompts the agent resolved.
-  --diagSlashCommands                Emit DIAG log messages showing which slash commands the agent resolved.
+  --reference               <FILEs>   Comma-separated list of reference files the agent should consult.
+  --extra-prompt            <FILEs>   Comma-separated list of files whose content is appended as extra prompt text.
+  --config-file             <FILE>    Path to the agent config file. Default: {PRJROOT}/CaTDD/utCodeAgentCLI/config.yaml.
+  --log-level               <level>   Log verbosity. One of: debug | info | warn | error. Default: info.
+  --interactive-slash-commands        Prompt for confirmation before executing each slash command. Default: false.
+  --diagMethodPrompts                 Emit DIAG log messages showing which method prompts the agent resolved.
+  --diagSlashCommands                 Emit DIAG log messages showing which slash commands the agent resolved.
 ```
 
 ## Argument Reference
 
-### Core Argument Relationships: `--goal`, `--target`, and `--behave`
+### Core Argument Relationships: goal group, `--input`, `--target`, and `--behave`
 
-These three arguments work together to fully specify every invocation. Understanding their individual roles — and why they are separate — requires understanding how CaTDD organizes method meaning and slash commands.
+These arguments work together to fully specify every invocation. Understanding their individual roles — and why they are separate — requires understanding how CaTDD organizes method meaning and slash commands.
 
 #### Background: methodPrompts vs slashCommands
 
 - **`methodPrompts/`** — defines *what CaTDD means*: the US/AC/TC skeleton contract, category semantics (Typical, Edge, Misuse, Fault, State, Capability, …), TDD status discipline, and risk-driven prioritization. This is the CaTDD method itself. It never changes when you run a different target or behavior.
 - **`slashCommands/`** — defines *how to execute CaTDD steps*: portable command scripts (`UT_designCatSkeleton`, `UT_implTestCase`, `UT_reviewImplTestCase`, …) organized into flows (P0 FuncTestsFlow, P1 DesignTestsFlow, …). Each command calls on methodPrompts for category meaning but handles the step-by-step execution work.
 
-`utCodeAgentCLI` orchestrates both layers. `--target` and `--behave` together tell the CLI which slashCommand(s) to invoke; `--goal` tells the CLI why it is running and provides the per-invocation context that neither layer owns.
+`utCodeAgentCLI` orchestrates both layers. `--target` and `--behave` together tell the CLI which slashCommand(s) to invoke; the goal group (`--goal`, `--goalStory`/`--goalStoryFile`) and `--input` provide the per-invocation context that neither layer owns.
 
 #### Definitions
 
-**`--goal <FILE>`** — The User Story file for this invocation's target.
+**`--goal <STRING>`** — **WHAT** the user wants, as an inline natural language string.
 
-> The goal file carries the **User Story (US)** that the agent will realize in the `--target` artifact. The `@[US]` comments embedded in the TestFile during a design step are derived directly from what the goal describes — the goal is the *source* of the User Story; the TestFile is its *destination* as a permanent design record.
-> Each goal file is written as a User Story for one target (e.g. "As a logged-in user, I want to reset my password so that I can regain access to my account"). The agent reads it, interprets the US, and writes the corresponding `@[US]` / `@[AC]` / `@[TC]` comment blocks into the target file.
+> This is the concrete task description for the invocation: what outcome the user wants the agent to produce. It is always a plain string, not a file path. Example: `"design Typical and Edge skeletons for the login interface"`.
 
-**`--target <value>`** — The CaTDD artifact the agent will operate on.
+**`--goalStory <STRING>`** — **WHY** the user wants the goal, as an inline natural language User Story string.
+
+> This is the User Story that motivates the goal. Written in natural language (e.g. `"As a logged-in user I want to reset my password so that I can regain access to my account"`). The `@[US]` comments embedded in the TestFile during a design step are derived from this story — `--goalStory` is the *source* of the User Story; the TestFile is its *destination* as a permanent design record.
+> Use `--goalStory` for short stories that fit comfortably on the command line.
+
+**`--goalStoryFile <FILE>`** — **WHY** from a file; an alternative to `--goalStory` for longer User Stories.
+
+> Path to a file containing the User Story. Use when the story is too long for inline use or is shared across multiple invocations. The file content is treated identically to the value passed via `--goalStory`. Providing both `--goalStory` and `--goalStoryFile` in the same invocation is an error.
+
+**`--input <STRING>`** — **WHAT** interface or protocol to be tested and implemented, as an inline string.
+
+> Identifies the specific interface or protocol that the agent should derive tests for. The value may be a type name, a function signature, a file path, or a short description — whatever uniquely identifies the interface/protocol artifact within the project. Example: `"AuthService"` or `"src/auth/AuthService.h"`.
+> `--input` complements `--target`: `--target` says *what kind* of artifact (InterfaceFile, ProtocolFile, …); `--input` says *which specific* interface or protocol within that kind.
+
+**`--target <value>`** — The CaTDD artifact *type* the agent will operate on.
 
 > `--target` does **not** say whether the work is design or implementation — that is `--behave`'s job. `--target` scopes *which kind of artifact* the agent reads, updates, or creates:
 > - `TestCase` → a single TC inside a test file (used for TC-by-TC implementation)
@@ -64,55 +80,74 @@ These three arguments work together to fully specify every invocation. Understan
 
 #### Relationship summary
 
-| Argument | Question | Maps to |
+| Argument | Question | Role |
 | --- | --- | --- |
-| `--goal` | **What (US)** — which User Story should the agent realize in the target? | Source of the UserStory; US/AC/TC comments placed in the TestFile are derived from the goal |
-| `--target` | **What artifact** — which CaTDD artifact is being acted on? | Input artifact type; determines which files the agent reads/writes |
-| `--behave` | **Which step** — design skeleton, implement test code, or both? | Selects the slashCommand(s) from `slashCommands/commands/`; category meaning comes from `methodPrompts/` |
+| `--goal` | **WHAT** — what outcome does the user want? | Inline natural language task description for the invocation |
+| `--goalStory` / `--goalStoryFile` | **WHY** — what is the User Story behind the goal? | Source of the `@[US]` embedded in the TestFile; permanent design record |
+| `--input` | **WHAT (specific)** — which interface or protocol to test? | Identifies the concrete interface/protocol artifact within the target type |
+| `--target` | **WHAT (type)** — which CaTDD artifact kind is being acted on? | Artifact type selector; determines which files the agent reads/writes |
+| `--behave` | **HOW** — design skeleton, implement test code, or both? | Selects the slashCommand(s) from `slashCommands/commands/`; category meaning comes from `methodPrompts/` |
 
-All three are required and must be consistent with each other.
+`--goal`, `--target`, and `--behave` are required and must be consistent with each other. `--goalStory`/`--goalStoryFile` and `--input` are optional but strongly recommended when working with interface or protocol targets.
 
 #### Single-argument use (error cases)
 
-Each argument is only meaningful as part of the required triple. Omitting any one causes the CLI to exit with an error:
+Omitting any required argument causes the CLI to exit with an error:
 
 ```bash
-# ERROR: --target and --behave are missing; agent cannot determine artifact or step
-utCodeAgentCLI --goal goals/impl-login-test.md
+# ERROR: --target and --behave are missing; agent cannot determine artifact type or step
+utCodeAgentCLI --goal "design Typical skeletons for login"
 
-# ERROR: --goal and --behave are missing; agent has no task context or step
-utCodeAgentCLI --target TestCase
+# ERROR: --goal and --behave are missing; agent has no task description or step
+utCodeAgentCLI --target InterfaceFile
 
-# ERROR: --goal and --target are missing; agent has no context and no artifact to act on
-utCodeAgentCLI --behave implTestCase
+# ERROR: --goal and --target are missing; agent has no task description and no artifact type
+utCodeAgentCLI --behave designAllSkeleton
+
+# ERROR: --goalStory and --goalStoryFile cannot both be provided
+utCodeAgentCLI --goal "design login skeletons" --goalStory "As a user..." --goalStoryFile stories/login.md \
+  --target InterfaceFile --behave designAllSkeleton
 ```
 
 #### Combination use (correct invocations)
 
 ```bash
-# Design the Typical skeleton from an interface file.
-# --goal: what to produce.  --target: read the interface.  --behave: run UT_designCatSkeleton(Cat=Typical).
-utCodeAgentCLI --goal goals/design-auth-typical.md --target InterfaceFile --behave designTypical
+# Design the Typical skeleton from an interface — inline goal and story.
+utCodeAgentCLI \
+  --goal "design Typical skeletons for the auth interface" \
+  --goalStory "As a logged-in user I want to reset my password so that I can regain access" \
+  --input "AuthService" \
+  --target InterfaceFile --behave designTypical
 
-# Design all functional skeletons (Typical + Edge + Misuse + Fault) in a test file.
-# --behave designAllSkeleton runs UT_designCatSkeleton for each applicable category.
-utCodeAgentCLI --goal goals/design-all-skeletons.md --target TestFile --behave designAllSkeleton
+# Design all functional skeletons using a shared story file.
+utCodeAgentCLI \
+  --goal "design all skeletons for the payment protocol" \
+  --goalStoryFile stories/payment-us.md \
+  --input "src/payment/PaymentProtocol.proto" \
+  --target ProtocolFile --behave designAllSkeleton
 
-# Implement one test case (RED stage).
-# --target TestCase scopes to a single TC; --behave implTestCase runs UT_implTestCase.
-utCodeAgentCLI --goal goals/impl-login-tc03.md --target TestCase --behave implTestCase
+# Implement one test case — goal only (no story needed for impl step).
+utCodeAgentCLI \
+  --goal "implement TC-03 of the login test file" \
+  --target TestCase --behave implTestCase
 
 # Design all skeletons AND implement all TCs in one step.
-# Combines UT_designCatSkeleton + UT_implTestCase across the whole file.
-utCodeAgentCLI --goal goals/design-and-impl-auth.md --target InterfaceFile --behave designAndImplTest
+utCodeAgentCLI \
+  --goal "design and implement auth interface tests" \
+  --goalStory "As an API consumer I want typed auth errors so that I can handle failures reliably" \
+  --input "src/auth/AuthService.h" \
+  --target InterfaceFile --behave designAndImplTest
 ```
 
-The goal file provides the **User Story** that anchors the run. `--target` names the artifact the US will be realized in. `--behave` names the CaTDD step that transforms the goal's US into structured `@[US]`/`@[AC]`/`@[TC]` comments and/or executable test code in that artifact. Together they form a traceable CaTDD execution record that can be replayed or reviewed.
+`--goal` states **what** the run produces. `--goalStory`/`--goalStoryFile` carry the **why** — the User Story whose `@[US]`/`@[AC]`/`@[TC]` structure will be written into the TestFile. `--input` names **which** interface or protocol; `--target` names **what kind** of artifact; `--behave` names **which CaTDD step** runs. Together they form a traceable CaTDD execution record that can be replayed or reviewed.
 
 | Argument | Type | Values | Required | Description |
 | --- | --- | --- | --- | --- |
-| `--goal` | file path | Any readable file | yes | Path to the goal file that contains the UserStory for this invocation's target. The US/AC/TC comments placed in the TestFile are derived from this file. |
-| `--target` | string | `TestCase` \| `TestFile` \| `InterfaceFile` \| `ProtocolFile` | yes | Selects the CaTDD artifact or scope the agent should act on. |
+| `--goal` | string | Any natural language string | yes | **WHAT** the user wants — inline task description for this invocation. |
+| `--goalStory` | string | Any natural language string | no | **WHY** — inline User Story that motivates the goal. Source of `@[US]` comments placed in the TestFile. Mutually exclusive with `--goalStoryFile`. |
+| `--goalStoryFile` | file path | Any readable file | no | **WHY** from a file — path to a User Story file. Treated identically to `--goalStory`. Mutually exclusive with `--goalStory`. |
+| `--input` | string | Interface/protocol name or path | no | **WHAT (specific)** — inline identifier of the interface or protocol to be tested and implemented (e.g. `"AuthService"` or `"src/auth/AuthService.h"`). |
+| `--target` | string | `TestCase` \| `TestFile` \| `InterfaceFile` \| `ProtocolFile` | yes | Selects the CaTDD artifact *type* the agent should act on. |
 | `--behave` | string | `implTestCase` \| `implTestFile` \| `designTypical` \| `designEdge` \| `designTypicalSkeleton` \| `designEdgeSkeleton` \| `designAllSkeleton` \| `designAndImplTest` | yes | Selects the CaTDD workflow behavior the agent applies to the target. |
 | `--reference` | string | Comma-separated file paths | no | One or more reference files the agent should consult when generating output. Multiple files are separated by commas. Paths may be absolute or relative to the repository root. |
 | `--extra-prompt` | string | Comma-separated file paths | no | One or more files whose content is appended verbatim as extra prompt text for this invocation. Multiple files are separated by commas. |
@@ -175,41 +210,73 @@ The goal file provides the **User Story** that anchors the run. `--target` names
 ## Invocation Examples
 
 ```bash
-# Design all test skeletons for a test file
-utCodeAgentCLI --goal goals/design-all-skeletons.md --target TestFile --behave designAllSkeleton
+# Design all test skeletons for an interface — with inline story
+utCodeAgentCLI \
+  --goal "design all skeletons for the auth interface" \
+  --goalStory "As an API consumer I want typed auth errors so that I can handle failures reliably" \
+  --input "AuthService" \
+  --target InterfaceFile --behave designAllSkeleton
 
-# Implement a single test case
-utCodeAgentCLI --goal goals/impl-one-testcase.md --target TestCase --behave implTestCase
+# Implement a single test case — goal only
+utCodeAgentCLI \
+  --goal "implement TC-03 of the login test file" \
+  --target TestCase --behave implTestCase
 
-# Design and implement tests from an interface file
-utCodeAgentCLI --goal goals/impl-interface.md --target InterfaceFile --behave designAndImplTest
+# Design and implement tests from an interface — story from file
+utCodeAgentCLI \
+  --goal "design and implement auth interface tests" \
+  --goalStoryFile stories/auth-us.md \
+  --input "src/auth/AuthService.h" \
+  --target InterfaceFile --behave designAndImplTest
 
-# Consult one reference file when implementing a test case
-utCodeAgentCLI --goal goals/impl-one-testcase.md --target TestCase --behave implTestCase --reference docs/api-contract.md
+# Design skeletons for a protocol — story from file, consult a reference
+utCodeAgentCLI \
+  --goal "design all skeletons for the payment protocol" \
+  --goalStoryFile stories/payment-us.md \
+  --input "src/payment/PaymentProtocol.proto" \
+  --target ProtocolFile --behave designAllSkeleton \
+  --reference docs/payment-spec.md
 
 # Consult multiple reference files (comma-separated) when designing skeletons
-utCodeAgentCLI --goal goals/design-all-skeletons.md --target TestFile --behave designAllSkeleton --reference docs/api.md,docs/schema.md
+utCodeAgentCLI \
+  --goal "design all skeletons for the order service" \
+  --input "OrderService" \
+  --target InterfaceFile --behave designAllSkeleton \
+  --reference docs/api.md,docs/schema.md
 
 # Append extra prompt content from a file
-utCodeAgentCLI --goal goals/impl-one-testcase.md --target TestCase --behave implTestCase --extra-prompt prompts/style-guide.md
+utCodeAgentCLI \
+  --goal "implement TC-01 of the login test file" \
+  --target TestCase --behave implTestCase \
+  --extra-prompt prompts/style-guide.md
 
 # Use a custom config file and set log level to debug
-utCodeAgentCLI --goal goals/impl-one-testcase.md --target TestCase --behave implTestCase --config-file ~/.catdd/config.yaml --log-level debug
+utCodeAgentCLI \
+  --goal "implement TC-01 of the login test file" \
+  --target TestCase --behave implTestCase \
+  --config-file ~/.catdd/config.yaml --log-level debug
 
 # Interactively confirm each slash command before execution
-utCodeAgentCLI --goal goals/design-all-skeletons.md --target TestFile --behave designAllSkeleton --interactive-slash-commands
+utCodeAgentCLI \
+  --goal "design all skeletons for the auth interface" \
+  --input "AuthService" \
+  --target InterfaceFile --behave designAllSkeleton \
+  --interactive-slash-commands
 
-# Emit DIAG log messages showing resolved method prompts during execution
-utCodeAgentCLI --goal goals/design-all-skeletons.md --target TestFile --behave designAllSkeleton --diagMethodPrompts
-
-# Emit DIAG log messages showing resolved slash commands during execution
-utCodeAgentCLI --goal goals/design-all-skeletons.md --target TestFile --behave designAndImplTest --diagSlashCommands
+# Emit DIAG log messages showing resolved method prompts and slash commands
+utCodeAgentCLI \
+  --goal "design all skeletons for the auth interface" \
+  --input "AuthService" \
+  --target InterfaceFile --behave designAndImplTest \
+  --diagMethodPrompts --diagSlashCommands
 ```
 
 ## Error and Edge Handling
 
 - `--goal` missing -> Print usage and exit with a non-zero status code.
-- `--goal` given a path that does not exist -> Print the missing path and exit with a non-zero status code.
+- `--goal` given an empty string -> Print usage and exit with a non-zero status code.
+- `--goalStory` and `--goalStoryFile` both provided -> Print error (mutually exclusive) and exit with a non-zero status code.
+- `--goalStoryFile` given a path that does not exist -> Print the missing path and exit with a non-zero status code.
 - `--target` missing -> Print usage and exit with a non-zero status code.
 - `--behave` missing -> Print usage and exit with a non-zero status code.
 - `--target` given an unrecognized value -> Print supported values and exit with a non-zero status code.
@@ -226,6 +293,7 @@ utCodeAgentCLI --goal goals/design-all-skeletons.md --target TestFile --behave d
 
 ## Open Questions
 
+- Should `--input` accept a comma-separated list of interface names for batch operations?
 - Should `--target` accept a file path argument in addition to the type selector?
 - Should `--log-level` support a `trace` level below `debug` for raw prompt/response logging?
 - Should `--interactive-slash-commands` support a timeout for unattended runs?
@@ -237,7 +305,7 @@ Run from the repository root to inspect this usage design without changing sourc
 ```bash
 TMP_DOC="$(mktemp -d)/README_UsageDesign.md"
 cp codeAgents/utCodeAgentCLI/README_UsageDesign.md "$TMP_DOC"
-grep -E '^##|--goal|--target|--behave|--reference|--extra-prompt|--config-file|--log-level|--interactive|--diag' "$TMP_DOC"
+grep -E '^##|--goal|--goalStory|--goalStoryFile|--input|--target|--behave|--reference|--extra-prompt|--config-file|--log-level|--interactive|--diag' "$TMP_DOC"
 ```
 
 Expected result: the temporary file path is printed, and the grep output shows all CLI argument names and section headings.
