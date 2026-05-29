@@ -74,6 +74,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 - `SPEC_*` Copilot prompt wrappers have been installed into `.github/prompts/`.
 - `.catdd/spec/` has been initialized with `pendingNews/`, `todoUS/`, `doingUS/`, and `doneUS/` directories.
 - Pending issue imported: `.catdd/spec/pendingNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md`.
+- Pending issue imported: `.catdd/spec/pendingNews/20260530-design-utCodeAgentCLI-architecture-Issue.md`.
 - Todo user story created: `.catdd/spec/todoUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`.
 - No doing or done user story exists yet.
 
@@ -81,6 +82,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 Run one of these after context review:
 
+- `/SPEC_analyzeIssue` on `.catdd/spec/pendingNews/20260530-design-utCodeAgentCLI-architecture-Issue.md` to turn the imported architecture-design request into a todo work item.
 - `/SPEC_openUserStory` to move the assembled `utCodeAgentCLI` User Story work into active `doingUS/` state.
 - `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
 - `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
