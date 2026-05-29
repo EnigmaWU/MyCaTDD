@@ -80,8 +80,9 @@ Testing/
 /.continue/prompts/SPEC_*.prompt
 /.clinerules/catdd.md
 
-# CaTDD SpecCoding local work state
+book*
+
+# BEGIN CaTDD SpecCoding local state
 /.catdd/spec/doingUS/
 /.catdd/spec/WorkingProcessLog.md
-
-book*
+# END CaTDD SpecCoding local state
