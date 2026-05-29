@@ -86,13 +86,15 @@ The core model is:
 
 > `--behave` is a behavior selector resolved against compatible unit-testing slash commands under `slashCommands/commands/`. It may be a portable UT slash-command name, such as `UT_designTypicalSkeleton`, `UT_designFuncTestsSkeleton`, `UT_reviewFuncTestsSkeleton`, `UT_tellMeNextImplTest`, or `UT_implTestCase`, when that command's input/output contract can be satisfied by `--goal`, `--input`/`--inputFile`, `--target`, and optional reference arguments.
 
-> The CLI may also provide stable aliases for common multi-step or parameterized slash-command behaviors:
+> The CLI may also provide stable aliases for common CLI-friendly slash-command behaviors:
 
 > - `designTypicalSkeleton` / `designEdgeSkeleton` / `designMisuseSkeleton` / `designFaultSkeleton` → invoke the matching explicit P0 FuncTestsFlow skeleton command. Produces a US/AC/TC skeleton; no executable test code.
 > - `designFuncTestsSkeleton` → invoke `UT_designFuncTestsSkeleton` for the full P0 Functional set: Typical, Edge, Misuse, and Fault. Produces skeletons only; no executable test code.
 > - `designStateSkeleton` / `designCapabilitySkeleton` / `designConcurrencySkeleton` → invoke the matching P1 DesignTestsFlow skeleton command. Produces a US/AC/TC skeleton; no executable test code.
 > - `designPerformanceSkeleton` / `designRobustSkeleton` / `designCompatibilitySkeleton` / `designConfigurationSkeleton` → invoke the matching P2 QualityTestsFlow skeleton command. Produces a US/AC/TC skeleton; no executable test code.
 > - `designAllSkeleton` → invoke P0 Functional, P1 Design, and P2 Quality skeleton design for all P0/P1/P2 CaTDD categories: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration. Produces skeletons only; no executable test code.
+> - `reviewFuncTestsSkeleton` → invoke `UT_reviewFuncTestsSkeleton`. Reviews planned P0 Functional skeletons without writing implementation test code.
+> - `tellMeNextImplTest` → invoke `UT_tellMeNextImplTest`. Selects or recommends the next TC to implement from the target TestFile.
 > - `implTestCase` → invoke `UT_implTestCase`. Writes executable test code for one TC (RED stage).
 > - `implTestFile` → invoke `UT_implTestCase` repeatedly across all TCs in the file.
 > - `designAndImplTest` → run skeleton design, then implement selected or generated TCs by repeatedly invoking `UT_implTestCase` under CLI orchestration.
@@ -218,6 +220,8 @@ utCodeAgentCLI \
 | `UT_reviewFuncTestsSkeleton` | Direct review command name. Useful when the target is one TestFile or some TestFiles containing CaTDD skeletons. |
 | `UT_tellMeNextImplTest` | Direct next-step command name. Useful when the target TestFile already contains skeleton TCs and the CLI should select the next implementation candidate. |
 | `designTypicalSkeleton` | Stable CLI alias. The CLI resolves it to `UT_designTypicalSkeleton`. |
+| `reviewFuncTestsSkeleton` | Stable CLI alias. The CLI resolves it to `UT_reviewFuncTestsSkeleton`. |
+| `tellMeNextImplTest` | Stable CLI alias. The CLI resolves it to `UT_tellMeNextImplTest`. |
 | `designAllSkeleton` | Stable CLI aggregate alias. The CLI resolves it to the applicable P0/P1/P2 skeleton-design command sequence. |
 
 ### Common `--behave` aliases
@@ -239,6 +243,8 @@ utCodeAgentCLI \
 | `designCompatibilitySkeleton` | Design a test file of the CaTDD **Compatibility** category only with US/AC/TC skeleton. No implementation test code is written. |
 | `designConfigurationSkeleton` | Design a test file of the CaTDD **Configuration** category only with US/AC/TC skeleton. No implementation test code is written. |
 | `designAllSkeleton` | Design skeletons for all P0/P1/P2 CaTDD categories: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration. US/AC/TC comments are placed in the target test file, but **no implementation test code** is written. |
+| `reviewFuncTestsSkeleton` | Review the P0 Functional skeletons in the target test file or files. No implementation test code is written. |
+| `tellMeNextImplTest` | Select or recommend the next TC to implement from the target TestFile. No implementation test code is written. |
 | `designAndImplTest` | Design all category skeletons **and** implement their test cases in one combined step. Both US/AC/TC structure and executable test code are produced. |
 
 > These aliases are not the complete behavior set. Almost any compatible UT slash command in `slashCommands/commands/` may be used as `--behave` when it fits the selected test-space `--target` and the provided source/context. Use `--diagSlashCommands` to confirm which portable command(s) the CLI resolved at runtime.
@@ -267,8 +273,8 @@ utCodeAgentCLI \
 | one TestFile | P2 category skeleton behavior | Place a Performance, Robust, Compatibility, or Configuration US/AC/TC skeleton in the test file. No implementation test code. |
 | one TestFile | `designAllSkeleton` | Place US/AC/TC skeletons for all P0/P1/P2 CaTDD categories in the test file. No implementation test code. |
 | one TestFile | `designAndImplTest` | Design all category skeletons and implement them. Produces both US/AC/TC structure and executable test code. |
-| one TestFile | compatible `UT_review*` behavior | Review the selected skeleton or implementation artifact without changing unrelated files. |
-| one TestFile | `UT_tellMeNextImplTest` | Select or recommend the next TC to implement from the target test file. |
+| one TestFile | compatible review behavior such as `reviewFuncTestsSkeleton` | Review the selected skeleton or implementation artifact without changing unrelated files. |
+| one TestFile | `tellMeNextImplTest` | Select or recommend the next TC to implement from the target test file. |
 | some TestFiles | `implTestFile` | Repeat full-file implementation across each selected test file. |
 | some TestFiles | any skeleton design behavior | Apply the selected skeleton design behavior across each selected test file. |
 | some TestFiles | compatible review behavior | Review each selected test file according to the chosen slash-command contract. |

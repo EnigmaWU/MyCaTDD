@@ -173,8 +173,8 @@ behavior names 使用的 category shorthand：P0 Functional 表示 Typical、Edg
 | 设计一个 P0 functional category | `designTypicalSkeleton`、`designEdgeSkeleton`、`designMisuseSkeleton` 或 `designFaultSkeleton` | one TestFile | 显式 P0 commands 的稳定 aliases。 |
 | 设计所有 P0 functional categories | `designFuncTestsSkeleton` 或 `UT_designFuncTestsSkeleton` | one TestFile 或 some TestFiles | 只覆盖 Typical、Edge、Misuse、Fault。 |
 | 设计所有 P0/P1/P2 categories | `designAllSkeleton` | one TestFile 或 some TestFiles | 覆盖 functional、design、quality skeleton categories。 |
-| 审查 functional skeletons | `UT_reviewFuncTestsSkeleton` | one TestFile 或 some TestFiles | 直接 portable slash command。 |
-| 选择下一个要实现的 TC | `UT_tellMeNextImplTest` | one TestFile | 直接 portable slash command。 |
+| 审查 functional skeletons | `reviewFuncTestsSkeleton` 或 `UT_reviewFuncTestsSkeleton` | one TestFile 或 some TestFiles | 稳定 alias 或直接 portable slash command。 |
+| 选择下一个要实现的 TC | `tellMeNextImplTest` 或 `UT_tellMeNextImplTest` | one TestFile | 稳定 alias 或直接 portable slash command。 |
 | 实现一个 TC | `implTestCase` 或 `UT_implTestCase` | one TestCase in one TestFile | 为选中的 TC 添加可执行测试代码。 |
 | 实现整个 TestFile | `implTestFile` | one TestFile | CLI 重复执行单 TC 实现步骤。 |
 
@@ -227,7 +227,7 @@ behavior names 使用的 category shorthand：P0 Functional 表示 Typical、Edg
 ```text
 --goal "review P0 functional skeleton coverage before implementation"
 --target tests/auth_api_test.cpp
---behave UT_reviewFuncTestsSkeleton
+--behave reviewFuncTestsSkeleton
 ```
 
 ### IF: You Want The Next TC
@@ -237,7 +237,7 @@ behavior names 使用的 category shorthand：P0 Functional 表示 Typical、Edg
 ```text
 --goal "pick the next auth test case to implement"
 --target tests/auth_api_test.cpp
---behave UT_tellMeNextImplTest
+--behave tellMeNextImplTest
 ```
 
 ### IF: You Want To Implement One TC

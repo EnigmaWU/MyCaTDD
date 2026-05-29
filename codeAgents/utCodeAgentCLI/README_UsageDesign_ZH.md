@@ -86,13 +86,15 @@ Options:
 
 > `--behave` 是一个 behavior selector，会根据 `slashCommands/commands/` 下兼容的 unit-testing slash commands 解析。它可以是 portable UT slash-command 名称，例如 `UT_designTypicalSkeleton`、`UT_designFuncTestsSkeleton`、`UT_reviewFuncTestsSkeleton`、`UT_tellMeNextImplTest` 或 `UT_implTestCase`，前提是该命令的输入/输出契约能由 `--goal`、`--input`/`--inputFile`、`--target` 和可选 reference 参数满足。
 
-> CLI 也可以为常见的多步骤或参数化 slash-command behavior 提供稳定 alias：
+> CLI 也可以为常见的 CLI-friendly slash-command behavior 提供稳定 alias：
 
 > - `designTypicalSkeleton` / `designEdgeSkeleton` / `designMisuseSkeleton` / `designFaultSkeleton` → 调用匹配的显式 P0 FuncTestsFlow skeleton command。产出 US/AC/TC skeleton；不产出可执行测试代码。
 > - `designFuncTestsSkeleton` → 调用 `UT_designFuncTestsSkeleton` 设计完整 P0 Functional 集合：Typical、Edge、Misuse、Fault。只产出 skeleton；不产出可执行测试代码。
 > - `designStateSkeleton` / `designCapabilitySkeleton` / `designConcurrencySkeleton` → 调用匹配的 P1 DesignTestsFlow skeleton command。产出 US/AC/TC skeleton；不产出可执行测试代码。
 > - `designPerformanceSkeleton` / `designRobustSkeleton` / `designCompatibilitySkeleton` / `designConfigurationSkeleton` → 调用匹配的 P2 QualityTestsFlow skeleton command。产出 US/AC/TC skeleton；不产出可执行测试代码。
 > - `designAllSkeleton` → 为所有 P0/P1/P2 CaTDD categories 调用 P0 Functional、P1 Design、P2 Quality skeleton design：Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility、Configuration。只产出 skeleton；不产出可执行测试代码。
+> - `reviewFuncTestsSkeleton` → 调用 `UT_reviewFuncTestsSkeleton`。审查已规划的 P0 Functional skeletons；不写入实现测试代码。
+> - `tellMeNextImplTest` → 调用 `UT_tellMeNextImplTest`。从目标 TestFile 中选择或推荐下一个要实现的 TC。
 > - `implTestCase` → 调用 `UT_implTestCase`。为一个 TC 写入可执行测试代码（RED 阶段）。
 > - `implTestFile` → 对文件中的所有 TC 重复调用 `UT_implTestCase`。
 > - `designAndImplTest` → 先运行 skeleton design，然后由 CLI 编排重复调用 `UT_implTestCase` 实现选中或生成的 TCs。
@@ -218,6 +220,8 @@ utCodeAgentCLI \
 | `UT_reviewFuncTestsSkeleton` | 直接 review command 名称。当 target 是包含 CaTDD skeletons 的 one TestFile 或 some TestFiles 时使用。 |
 | `UT_tellMeNextImplTest` | 直接 next-step command 名称。当 target TestFile 已包含 skeleton TCs，并且 CLI 应选择下一个实现候选时使用。 |
 | `designTypicalSkeleton` | 稳定 CLI alias。CLI 将其解析为 `UT_designTypicalSkeleton`。 |
+| `reviewFuncTestsSkeleton` | 稳定 CLI alias。CLI 将其解析为 `UT_reviewFuncTestsSkeleton`。 |
+| `tellMeNextImplTest` | 稳定 CLI alias。CLI 将其解析为 `UT_tellMeNextImplTest`。 |
 | `designAllSkeleton` | 稳定 CLI aggregate alias。CLI 将其解析为适用的 P0/P1/P2 skeleton-design command sequence。 |
 
 ### Common `--behave` aliases
@@ -239,6 +243,8 @@ utCodeAgentCLI \
 | `designCompatibilitySkeleton` | 只设计 CaTDD **Compatibility** category 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | `designConfigurationSkeleton` | 只设计 CaTDD **Configuration** category 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | `designAllSkeleton` | 设计所有 P0/P1/P2 CaTDD categories 的 skeleton：Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility、Configuration。US/AC/TC 注释会写入目标 test file，但**不会**写入实现测试代码。 |
+| `reviewFuncTestsSkeleton` | 审查目标 test file 或 files 中的 P0 Functional skeletons。不写入实现测试代码。 |
+| `tellMeNextImplTest` | 从目标 TestFile 中选择或推荐下一个要实现的 TC。不写入实现测试代码。 |
 | `designAndImplTest` | 在一个组合步骤中设计所有 category skeletons **并**实现它们的 test cases。产出 US/AC/TC 结构和可执行测试代码。 |
 
 > 这些 aliases 不是完整 behavior set。只要与所选 test-space `--target` 和提供的 source/context 兼容，`slashCommands/commands/` 中几乎任意兼容的 UT slash command 都可以作为 `--behave` 使用。使用 `--diagSlashCommands` 可以确认 CLI 运行时解析到了哪些 portable command(s)。
@@ -267,8 +273,8 @@ utCodeAgentCLI \
 | one TestFile | P2 category skeleton behavior | 在 test file 中放置 Performance、Robust、Compatibility 或 Configuration US/AC/TC skeleton。不写入实现测试代码。 |
 | one TestFile | `designAllSkeleton` | 在 test file 中放置所有 P0/P1/P2 CaTDD categories 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | one TestFile | `designAndImplTest` | 设计所有 category skeletons 并实现它们。产出 US/AC/TC 结构和可执行测试代码。 |
-| one TestFile | compatible `UT_review*` behavior | 审查选中的 skeleton 或 implementation artifact，不修改无关文件。 |
-| one TestFile | `UT_tellMeNextImplTest` | 从目标 test file 中选择或推荐下一个要实现的 TC。 |
+| one TestFile | compatible review behavior such as `reviewFuncTestsSkeleton` | 审查选中的 skeleton 或 implementation artifact，不修改无关文件。 |
+| one TestFile | `tellMeNextImplTest` | 从目标 test file 中选择或推荐下一个要实现的 TC。 |
 | some TestFiles | `implTestFile` | 对每个选中的 test file 重复 full-file implementation。 |
 | some TestFiles | any skeleton design behavior | 对每个选中的 test file 应用所选 skeleton design behavior。 |
 | some TestFiles | compatible review behavior | 按所选 slash-command 契约审查每个选中的 test file。 |

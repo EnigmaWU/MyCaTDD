@@ -173,8 +173,8 @@ Category shorthand used by behavior names: P0 Functional means Typical, Edge, Mi
 | Design one P0 functional category | `designTypicalSkeleton`, `designEdgeSkeleton`, `designMisuseSkeleton`, or `designFaultSkeleton` | one TestFile | Stable aliases for explicit P0 commands. |
 | Design all P0 functional categories | `designFuncTestsSkeleton` or `UT_designFuncTestsSkeleton` | one TestFile or some TestFiles | Covers Typical, Edge, Misuse, and Fault only. |
 | Design all P0/P1/P2 categories | `designAllSkeleton` | one TestFile or some TestFiles | Covers functional, design, and quality skeleton categories. |
-| Review functional skeletons | `UT_reviewFuncTestsSkeleton` | one TestFile or some TestFiles | Direct portable slash command. |
-| Pick the next TC to implement | `UT_tellMeNextImplTest` | one TestFile | Direct portable slash command. |
+| Review functional skeletons | `reviewFuncTestsSkeleton` or `UT_reviewFuncTestsSkeleton` | one TestFile or some TestFiles | Stable alias or direct portable slash command. |
+| Pick the next TC to implement | `tellMeNextImplTest` or `UT_tellMeNextImplTest` | one TestFile | Stable alias or direct portable slash command. |
 | Implement one TC | `implTestCase` or `UT_implTestCase` | one TestCase in one TestFile | Adds executable test code for the selected TC. |
 | Implement a whole TestFile | `implTestFile` | one TestFile | CLI repeats the single-TC implementation step. |
 
@@ -227,7 +227,7 @@ Use this before implementation when the skeletons already exist and you want to 
 ```text
 --goal "review P0 functional skeleton coverage before implementation"
 --target tests/auth_api_test.cpp
---behave UT_reviewFuncTestsSkeleton
+--behave reviewFuncTestsSkeleton
 ```
 
 ### IF: You Want The Next TC
@@ -237,7 +237,7 @@ Use this when a TestFile has multiple skeleton TCs and the CLI should identify t
 ```text
 --goal "pick the next auth test case to implement"
 --target tests/auth_api_test.cpp
---behave UT_tellMeNextImplTest
+--behave tellMeNextImplTest
 ```
 
 ### IF: You Want To Implement One TC
