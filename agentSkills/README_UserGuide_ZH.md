@@ -1,4 +1,4 @@
-# agentSkill 用户指南
+# agentSkills 用户指南
 
 面向将 CaTDD 与 SpecCoding 打包为可复用 agent skills 的开发者与 CodeAgent 的实践指南。
 
@@ -15,7 +15,7 @@
 
 ## 内容
 
-`agentSkill/` 将 CaTDD 与 SpecCoding 技能源码转化为自包含生成包。
+`agentSkills/` 将 CaTDD 与 SpecCoding 技能源码转化为自包含生成包。
 
 生成包包含：
 
@@ -35,14 +35,14 @@
 - 想将 CaTDD 或 user-story-centered SpecCoding 作为可复用 CodeAgent capability 分发。
 - 发布或复制前需要确认生成包是自包含的。
 
-不要把生成的 `agentSkill/dist/` 内容当作真理源来编辑。应从源码重新生成。
+不要把生成的 `agentSkills/dist/` 内容当作真理源来编辑。应从源码重新生成。
 
 ## 位置
 
 技能源码位于：
 
 ```text
-agentSkill/
+agentSkills/
   README.md
   README_ZH.md
   README_UserGuide.md
@@ -59,12 +59,12 @@ agentSkill/
 默认生成输出位于：
 
 ```text
-agentSkill/dist/comment-alive-test-driven-development/
+agentSkills/dist/comment-alive-test-driven-development/
   SKILL.md
   README.md
   references/
   slashCommands/
-agentSkill/dist/user-story-centered-spec-coding/
+agentSkills/dist/user-story-centered-spec-coding/
   SKILL.md
   README.md
   references/
@@ -83,10 +83,10 @@ agentSkill/dist/user-story-centered-spec-coding/
 
 打包 skill 时，按以下流程执行。
 
-1. 编辑对应 `agentSkill/<skill-name>/` 目录下的技能源码。
+1. 编辑对应 `agentSkills/<skill-name>/` 目录下的技能源码。
 2. 将方法资产保留在 `methodPrompts/`，将命令资产保留在 `slashCommands/`。
-3. 在仓库根目录运行 `bash agentSkill/makeSkill.sh` 或 `bash agentSkill/makeSkill.sh <skill-name>`。
-4. 检查 `agentSkill/dist/` 或临时输出路径中的生成包。
+3. 在仓库根目录运行 `bash agentSkills/makeSkill.sh` 或 `bash agentSkills/makeSkill.sh <skill-name>`。
+4. 检查 `agentSkills/dist/` 或临时输出路径中的生成包。
 5. 运行 `bash scripts/test_makeSkill.sh`，确认必需文件存在且没有符号链接。
 6. 提交 authored source、打包脚本变更和测试。不要提交被忽略的生成输出。
 
@@ -96,7 +96,7 @@ agentSkill/dist/user-story-centered-spec-coding/
 
 ```bash
 OUT_ROOT="$(mktemp -d)"
-bash agentSkill/makeSkill.sh --output "$OUT_ROOT"
+bash agentSkills/makeSkill.sh --output "$OUT_ROOT"
 test -f "$OUT_ROOT/comment-alive-test-driven-development/SKILL.md"
 test -f "$OUT_ROOT/comment-alive-test-driven-development/references/README_UserGuide.md"
 test -f "$OUT_ROOT/comment-alive-test-driven-development/slashCommands/README_UserGuide.md"
@@ -108,7 +108,7 @@ echo "$OUT_ROOT"
 
 ```bash
 OUT_ROOT="$(mktemp -d)"
-bash agentSkill/makeSkill.sh user-story-centered-spec-coding --output "$OUT_ROOT"
+bash agentSkills/makeSkill.sh user-story-centered-spec-coding --output "$OUT_ROOT"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/SKILL.md"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/flows/Px-SpecFlow.md"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md"
@@ -126,8 +126,8 @@ echo "$OUT_ROOT"
 
 | Skill | Package command | Purpose |
 | --- | --- | --- |
-| `comment-alive-test-driven-development` | `bash agentSkill/makeSkill.sh` | 将 CaTDD 打包为可复用验证与测试方法论技能。 |
-| `user-story-centered-spec-coding` | `bash agentSkill/makeSkill.sh user-story-centered-spec-coding` | 打包以 user story 为中心的 SpecCoding 生命周期技能。 |
+| `comment-alive-test-driven-development` | `bash agentSkills/makeSkill.sh` | 将 CaTDD 打包为可复用验证与测试方法论技能。 |
+| `user-story-centered-spec-coding` | `bash agentSkills/makeSkill.sh user-story-centered-spec-coding` | 打包以 user story 为中心的 SpecCoding 生命周期技能。 |
 
 ## 打包输出
 
@@ -149,10 +149,10 @@ echo "$OUT_ROOT"
 
 | Path | Treat as |
 | --- | --- |
-| `agentSkill/comment-alive-test-driven-development/` | 技能源码。可以编辑并提交。 |
-| `agentSkill/user-story-centered-spec-coding/` | 技能源码。可以编辑并提交。 |
-| `agentSkill/makeSkill.sh` | 打包逻辑。打包规则变化时可以编辑并提交。 |
-| `agentSkill/dist/` | 生成输出。在本源仓库中本地重建并保持忽略。 |
+| `agentSkills/comment-alive-test-driven-development/` | 技能源码。可以编辑并提交。 |
+| `agentSkills/user-story-centered-spec-coding/` | 技能源码。可以编辑并提交。 |
+| `agentSkills/makeSkill.sh` | 打包逻辑。打包规则变化时可以编辑并提交。 |
+| `agentSkills/dist/` | 生成输出。在本源仓库中本地重建并保持忽略。 |
 
 ## 质量检查清单
 

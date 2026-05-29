@@ -21,7 +21,7 @@ This file is the team-shared SpecCoding context for this repository. Keep stable
 | Method source | `methodPrompts/` | Owns CaTDD semantics, category meanings, US/AC/TC skeleton rules, status discipline, and implementation templates. |
 | Command flow | `slashCommands/` | Owns portable `UT_*` and `SPEC_*` command contracts, flow order, input/output handoff, and tool-neutral execution rules. |
 | Native CLI design | `codeAgents/utCodeAgentCLI/` | Owns the future CaTDD-native CLI execution layer and its goal/input/target/behavior contract. It is currently documentation and design, not a runnable CLI. |
-| Skill packaging | `agentSkill/` | Owns reusable CodeAgent skill packages that reference the canonical method and command assets. |
+| Skill packaging | `agentSkills/` | Owns reusable CodeAgent skill packages that reference the canonical method and command assets. |
 
 ## Installed Project Surface
 

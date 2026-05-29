@@ -86,7 +86,7 @@ A developer who only receives this directory should still be able to:
 - Ask an LLM to generate tests from comments.
 - Keep comments alive as tests and production code evolve.
 
-This file exists so users do not need the repo-level guide, slide deck, installers, `slashCommands`, or `agentSkill` package to begin using the method.
+This file exists so users do not need the repo-level guide, slide deck, installers, `slashCommands`, or `agentSkills` package to begin using the method.
 
 ## How
 

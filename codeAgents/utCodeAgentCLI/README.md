@@ -26,7 +26,7 @@ It keeps a clean execution boundary:
 
 - `methodPrompts` owns method semantics.
 - `slashCommands` owns portable command steps and flows.
-- `agentSkill` packages CaTDD for common CodeAgents such as GitHub Copilot; it is not an upstream dependency of this CLI layer.
+- `agentSkills` packages CaTDD for common CodeAgents such as GitHub Copilot; it is not an upstream dependency of this CLI layer.
 - `utCodeAgentCLI` will own goal-driven planning, execution, trace collection, and reflection when the CLI implementation is added.
 
 This avoids making generic CodeAgent adapters carry CaTDD-specific orchestration logic while still preserving a future path for first-class CaTDD automation.
@@ -55,7 +55,7 @@ It may target many programming languages, but it must preserve CaTDD's comment-a
   - `methodPrompts` for methodological constraints.
   - `slashCommands` for reusable execution units.
 - Separate generic CodeAgent packaging:
-  - `agentSkill` helps common CodeAgents use CaTDD, but `utCodeAgentCLI` should not depend on it.
+  - `agentSkills` helps common CodeAgents use CaTDD, but `utCodeAgentCLI` should not depend on it.
 - Downstream outputs:
   - Executed tasks.
   - Execution traces.

@@ -13,9 +13,9 @@ OUTPUT_ROOT="$SCRIPT_DIR/dist"
 
 usage() {
   cat <<'USAGE'
-Usage: agentSkill/makeSkill.sh [SKILL_NAME] [--output DIR]
+Usage: agentSkills/makeSkill.sh [SKILL_NAME] [--output DIR]
 
-Generate a self-contained skill package under agentSkill/dist by default.
+Generate a self-contained skill package under agentSkills/dist by default.
 
 Supported skills:
   - comment-alive-test-driven-development

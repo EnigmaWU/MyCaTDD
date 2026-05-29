@@ -56,7 +56,7 @@ CaTDD -> does not depend on SpecCoding
 
 ## Packaged References
 
-Run `bash agentSkill/makeSkill.sh user-story-centered-spec-coding` from the repository root to generate a self-contained package under `agentSkill/dist/user-story-centered-spec-coding/`.
+Run `bash agentSkills/makeSkill.sh user-story-centered-spec-coding` from the repository root to generate a self-contained package under `agentSkills/dist/user-story-centered-spec-coding/`.
 
 | File | Purpose |
 | --- | --- |
@@ -74,14 +74,14 @@ Run `bash agentSkill/makeSkill.sh user-story-centered-spec-coding` from the repo
 Generate the distributable SpecCoding skill package from the repository root:
 
 ```bash
-bash agentSkill/makeSkill.sh user-story-centered-spec-coding
+bash agentSkills/makeSkill.sh user-story-centered-spec-coding
 ```
 
 Generate into a temporary output directory for validation:
 
 ```bash
 OUT_ROOT="$(mktemp -d)"
-bash agentSkill/makeSkill.sh user-story-centered-spec-coding --output "$OUT_ROOT"
+bash agentSkills/makeSkill.sh user-story-centered-spec-coding --output "$OUT_ROOT"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/SKILL.md"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/flows/Px-SpecFlow.md"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/templates/README_DetailDesignTemplate.md"

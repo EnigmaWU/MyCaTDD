@@ -26,7 +26,7 @@
 
 - `methodPrompts` 负责方法语义。
 - `slashCommands` 负责可移植命令步骤和流程。
-- `agentSkill` 负责把 CaTDD 打包给 GitHub Copilot 等通用 CodeAgent 使用；它不是本 CLI 层的上游依赖。
+- `agentSkills` 负责把 CaTDD 打包给 GitHub Copilot 等通用 CodeAgent 使用；它不是本 CLI 层的上游依赖。
 - `utCodeAgentCLI` 在 CLI 实现加入后，负责目标驱动规划、执行、轨迹收集和反思。
 
 这样可以避免让通用 CodeAgent 适配器承载 CaTDD 专用编排逻辑，同时保留未来一等 CaTDD 自动化路径。
@@ -55,7 +55,7 @@
   - `methodPrompts` 提供方法约束。
   - `slashCommands` 提供可复用执行单元。
 - 独立的通用 CodeAgent 打包路径：
-  - `agentSkill` 帮助通用 CodeAgent 使用 CaTDD，但 `utCodeAgentCLI` 不应依赖它。
+  - `agentSkills` 帮助通用 CodeAgent 使用 CaTDD，但 `utCodeAgentCLI` 不应依赖它。
 - 下游输出：
   - 已执行任务。
   - 执行轨迹。

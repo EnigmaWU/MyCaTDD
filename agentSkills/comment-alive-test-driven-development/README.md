@@ -96,7 +96,7 @@ Apply comment-alive test-driven development to design tests for this API: <heade
 
 ### Packaged References
 
-The authored skill source keeps only the skill metadata. Run `bash agentSkill/makeSkill.sh` from the repository root to generate a self-contained package under `agentSkill/dist/comment-alive-test-driven-development/`.
+The authored skill source keeps only the skill metadata. Run `bash agentSkills/makeSkill.sh` from the repository root to generate a self-contained package under `agentSkills/dist/comment-alive-test-driven-development/`.
 
 | File | Purpose |
 | ---- | ------- |
@@ -111,10 +111,10 @@ The authored skill source keeps only the skill metadata. Run `bash agentSkill/ma
 Generate the distributable skill package from the repository root:
 
 ```bash
-bash agentSkill/makeSkill.sh
+bash agentSkills/makeSkill.sh
 ```
 
-Expected result: `agentSkill/dist/comment-alive-test-driven-development/` contains `SKILL.md`, `README.md`, copied `references/`, and copied `slashCommands/`, with no symlinks.
+Expected result: `agentSkills/dist/comment-alive-test-driven-development/` contains `SKILL.md`, `README.md`, copied `references/`, and copied `slashCommands/`, with no symlinks.
 
 ## Related Skills
 

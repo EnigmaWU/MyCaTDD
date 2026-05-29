@@ -1,12 +1,12 @@
-# agentSkill
+# agentSkills
 
-`agentSkill` 存放技能源码与生成后的技能包，用于在智能体工作流中复用 CaTDD 与 SpecCoding 能力。
+`agentSkills` 存放技能源码与生成后的技能包，用于在智能体工作流中复用 CaTDD 与 SpecCoding 能力。
 
 本 README 是能力封装层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何打包或消费 CaTDD 与 SpecCoding skills，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
 
 ## What
 
-`agentSkill` 是 CaTDD 四层模型中的可复用能力封装层。
+`agentSkills` 是 CaTDD 四层模型中的可复用能力封装层。
 
 它定义如何把 CaTDD 方法知识与 SpecCoding 工作流知识封装为 CodeAgent 友好的技能：
 
@@ -21,13 +21,13 @@
 
 ## Why
 
-`agentSkill` 存在的原因，是让 CaTDD 与 SpecCoding 可以被智能体复用，而不需要每个智能体都从零发现方法、命令流程、生命周期规则、约束和参考资料。
+`agentSkills` 存在的原因，是让 CaTDD 与 SpecCoding 可以被智能体复用，而不需要每个智能体都从零发现方法、命令流程、生命周期规则、约束和参考资料。
 
 它保持清晰的打包边界：
 
 - `methodPrompts` 负责权威 CaTDD 方法定义。
 - `slashCommands` 负责可移植命令流程执行。
-- `agentSkill` 将这些资产封装为包含范围、约束、输入、输出和验证预期的可复用能力。
+- `agentSkills` 将这些资产封装为包含范围、约束、输入、输出和验证预期的可复用能力。
 - 生成的 `dist/` 包是自包含的，因此可以复制或发布，而不会暴露源码树中的符号链接或重复 authored paths。
 
 ## Supported skills
@@ -41,10 +41,10 @@
 
 技能包应从源码生成，不应手工编辑 `dist/`。
 
-- 编辑对应 `agentSkill/<skill-name>/` 目录下的技能源码。
+- 编辑对应 `agentSkills/<skill-name>/` 目录下的技能源码。
 - 保持参考资料与 `methodPrompts`、`slashCommands` 对齐。
-- 使用 `agentSkill/makeSkill.sh` 生成自包含包。
-- 在本源仓库中保持生成的 `agentSkill/dist/` 输出被忽略。
+- 使用 `agentSkills/makeSkill.sh` 生成自包含包。
+- 在本源仓库中保持生成的 `agentSkills/dist/` 输出被忽略。
 
 ## Typical contents
 

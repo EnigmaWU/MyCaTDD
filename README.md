@@ -15,7 +15,7 @@ Your diagram expresses a four-layer evolution path:
 1. [methodPrompts](methodPrompts/README.md)（方法提示词）
 2. [slashCommands](slashCommands/README.md)（提示词命令）
 3. [utCodeAgentCLI](codeAgents/utCodeAgentCLI/README.md)（单元测试代码智能体）
-4. [agentSkill](agentSkill/README.md)（智能体技能包）
+4. [agentSkills](agentSkills/README.md)（智能体技能包）
 
 It also includes a bidirectional improvement loop:
 
@@ -31,7 +31,7 @@ flowchart LR
   L1["[1] methodPrompts<br/>CaTDD method source"]
   L2["[2] slashCommands<br/>Flow command units"]
   L3["[3] utCodeAgentCLI<br/>CaTDD-native CLI agent"]
-  L4["[4] agentSkill<br/>Reusable skill package"]
+  L4["[4] agentSkills<br/>Reusable skill package"]
 
   L1 -->|method steps| L2
   L1 -->|method constraints| L3
@@ -66,11 +66,11 @@ Brief: this repository's CaTDD-native CLI agent layer. Developers define goals, 
 
 Read more: [codeAgents/utCodeAgentCLI/README.md](codeAgents/utCodeAgentCLI/README.md). Use [codeAgents/utCodeAgentCLI/README_UserGuide.md](codeAgents/utCodeAgentCLI/README_UserGuide.md) for current CLI-layer design guidance.
 
-### [4] [agentSkill](agentSkill/README.md) (skill package)
+### [4] [agentSkills](agentSkills/README.md) (skill package)
 
 Brief: the reusable capability packaging layer. It wraps CaTDD method knowledge into triggerable skills and keeps skill references aligned with the canonical method files.
 
-Read more: [agentSkill/README.md](agentSkill/README.md). Use [agentSkill/README_UserGuide.md](agentSkill/README_UserGuide.md) for packaging and validation steps.
+Read more: [agentSkills/README.md](agentSkills/README.md). Use [agentSkills/README_UserGuide.md](agentSkills/README_UserGuide.md) for packaging and validation steps.
 
 ## CaTDD Spec-Driven Flow
 
@@ -153,7 +153,7 @@ In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/
 2. Read [methodPrompts/README.md](methodPrompts/README.md) when you need the method prompt map.
 3. Read [slashCommands/README.md](slashCommands/README.md) when you want the command layer WHAT/WHY.
 4. Read [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) when you want to generate, install, or run stable method-step commands.
-5. Read [agentSkill/README.md](agentSkill/README.md) when you want the skill package layer WHAT/WHY.
-6. Read [agentSkill/README_UserGuide.md](agentSkill/README_UserGuide.md) when you want to generate or validate reusable skill packages.
+5. Read [agentSkills/README.md](agentSkills/README.md) when you want the skill package layer WHAT/WHY.
+6. Read [agentSkills/README_UserGuide.md](agentSkills/README_UserGuide.md) when you want to generate or validate reusable skill packages.
 7. Read [codeAgents/utCodeAgentCLI/README.md](codeAgents/utCodeAgentCLI/README.md) when you want the CLI agent layer WHAT/WHY.
 8. Read [codeAgents/utCodeAgentCLI/README_UserGuide.md](codeAgents/utCodeAgentCLI/README_UserGuide.md) when you want current CLI-layer design guidance.

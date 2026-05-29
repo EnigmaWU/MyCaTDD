@@ -25,7 +25,7 @@ Downstream layers should treat this directory as the stable method contract:
 
 - **slashCommands** commandize high-frequency method steps for assistants such as Copilot, Cline, Continue, or similar tools.
 - **utCodeAgentCLI** can use it as the CaTDD-native methodology base, then combine it with `slashCommands` for deeper planning and execution.
-- **agentSkill** packages it as a reusable capability for code agents.
+- **agentSkills** packages it as a reusable capability for code agents.
 
 When method intent changes, this layer changes first so every downstream layer inherits the same CaTDD meaning.
 
@@ -67,7 +67,7 @@ Operational prompt-selection steps belong in the standalone user guides, not in 
 - Downstream consumers:
   - `slashCommands` (commandized method steps)
   - `utCodeAgentCLI` (agent execution constraints)
-  - `agentSkill` (packaged reusable capability)
+  - `agentSkills` (packaged reusable capability)
 
 ## Maintenance rule
 

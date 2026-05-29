@@ -25,7 +25,7 @@
 
 - **slashCommands** 将高频方法步骤命令化，供 Copilot、Cline、Continue 或类似助手使用。
 - **utCodeAgentCLI** 可将其作为 CaTDD-native 方法基础，再结合 `slashCommands` 进行更深入的规划与执行。
-- **agentSkill** 将其封装为 code-agent 可复用能力。
+- **agentSkills** 将其封装为 code-agent 可复用能力。
 
 当方法意图发生变化时，先修改这一层，让所有下游层继承同一个 CaTDD 含义。
 
@@ -67,7 +67,7 @@ CaTDD 方法提示词支持两个设计阶段：
 - 下游消费方：
   - `slashCommands`（方法步骤命令化）
   - `utCodeAgentCLI`（智能体执行约束）
-  - `agentSkill`（可复用能力封装）
+  - `agentSkills`（可复用能力封装）
 
 ## 维护规则
 

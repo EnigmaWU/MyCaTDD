@@ -68,7 +68,7 @@ utCodeAgentCLI \
 - 为 CaTDD test workflow 准备 invocation plan 的 CodeAgent。
 - 设计未来 CaTDD-native CLI agent 的维护者。
 - 捕获重复规划、执行、轨迹或反思模式的开发者。
-- 判断哪些内容属于 `utCodeAgentCLI` 而不是 `methodPrompts` 或 `slashCommands`，以及它与 `agentSkill` 打包路径有何区别的工具作者。
+- 判断哪些内容属于 `utCodeAgentCLI` 而不是 `methodPrompts` 或 `slashCommands`，以及它与 `agentSkills` 打包路径有何区别的工具作者。
 
 ## 内容
 
@@ -84,7 +84,7 @@ utCodeAgentCLI \
 - 来自 `slashCommands/` 的可移植命令步骤。
 - 由 `codeAgents/utCodeAgentCLI/` 负责的目标驱动规划、执行、轨迹收集和反思。
 
-`agentSkill/` 是给 GitHub Copilot 等通用 CodeAgent 使用 CaTDD 的独立打包路径。`utCodeAgentCLI` 不应依赖它。
+`agentSkills/` 是给 GitHub Copilot 等通用 CodeAgent 使用 CaTDD 的独立打包路径。`utCodeAgentCLI` 不应依赖它。
 
 ## 使用时机
 
@@ -102,7 +102,7 @@ utCodeAgentCLI \
 - 某个未来 CLI 功能需要协调多个 `slashCommands` 步骤。
 - 某个行为应成为 CaTDD-native 自动化，而不是通用 CodeAgent 适配器。
 
-如果行为是稳定的单条命令或流程步骤，请使用 `slashCommands/`。如果行为只是通用 CodeAgent 打包，请使用 `agentSkill/`，并把它保持在 CLI 依赖路径之外。
+如果行为是稳定的单条命令或流程步骤，请使用 `slashCommands/`。如果行为只是通用 CodeAgent 打包，请使用 `agentSkills/`，并把它保持在 CLI 依赖路径之外。
 
 ## 位置
 
@@ -313,7 +313,7 @@ echo "$WORK_DIR"
 
 - 这是否超过单个可移植命令？如果不是，使用 `slashCommands/`。
 - 这是否只是方法含义？如果是，使用 `methodPrompts/`。
-- 这是否只是 package metadata 或通用 CodeAgent skill behavior？如果是，把它放在 `agentSkill/`，并保持在 CLI 依赖路径之外。
+- 这是否只是 package metadata 或通用 CodeAgent skill behavior？如果是，把它放在 `agentSkills/`，并保持在 CLI 依赖路径之外。
 - 是否保持 US/AC/TC 可追溯性和 CaTDD 状态纪律？
 - 是否记录 CLI 应收集哪些证据？
 - 是否把不清楚的产品或方法意图保留为明确问题？
@@ -336,6 +336,6 @@ echo "$WORK_DIR"
 
 执行命令流程时，阅读 `slashCommands/README_UserGuide.md`。
 
-处理通用 CodeAgent 技能打包时，阅读 `agentSkill/README_UserGuide.md`；不要把它作为 CLI 依赖。
+处理通用 CodeAgent 技能打包时，阅读 `agentSkills/README_UserGuide.md`；不要把它作为 CLI 依赖。
 
 在本层，只捕获其他层不应负责的未来 CLI 编排职责。

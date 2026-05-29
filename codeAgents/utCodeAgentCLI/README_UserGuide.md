@@ -68,7 +68,7 @@ Use this guide if you are one of these readers:
 - A CodeAgent preparing an invocation plan for a CaTDD test workflow.
 - A maintainer designing the future CaTDD-native CLI agent.
 - A developer capturing recurring planning, execution, trace, or reflection patterns.
-- A tooling author deciding what belongs in `utCodeAgentCLI` instead of `methodPrompts` or `slashCommands`, and how this differs from `agentSkill` packaging.
+- A tooling author deciding what belongs in `utCodeAgentCLI` instead of `methodPrompts` or `slashCommands`, and how this differs from `agentSkills` packaging.
 
 ## What
 
@@ -84,7 +84,7 @@ Future CLI behavior should combine:
 - Portable command steps from `slashCommands/`.
 - Goal-driven planning, execution, trace collection, and reflection owned by `codeAgents/utCodeAgentCLI/`.
 
-`agentSkill/` is a separate packaging path for common CodeAgents such as GitHub Copilot to use CaTDD. `utCodeAgentCLI` should not depend on it.
+`agentSkills/` is a separate packaging path for common CodeAgents such as GitHub Copilot to use CaTDD. `utCodeAgentCLI` should not depend on it.
 
 ## When
 
@@ -102,7 +102,7 @@ Work in `codeAgents/utCodeAgentCLI/` when:
 - A future CLI feature should coordinate multiple `slashCommands` steps.
 - A behavior should become CaTDD-native automation rather than a generic CodeAgent adapter.
 
-Use `slashCommands/` when the behavior is a stable single command or flow step. Use `agentSkill/` only when the behavior is generic CodeAgent packaging, outside the CLI dependency path.
+Use `slashCommands/` when the behavior is a stable single command or flow step. Use `agentSkills/` only when the behavior is generic CodeAgent packaging, outside the CLI dependency path.
 
 ## Where
 
@@ -313,7 +313,7 @@ Before adding a future CLI artifact, check:
 
 - Is this more than a single portable command? If not, use `slashCommands/`.
 - Is this only method meaning? If yes, use `methodPrompts/`.
-- Is this only package metadata or generic CodeAgent skill behavior? If yes, keep it in `agentSkill/`, outside the CLI dependency path.
+- Is this only package metadata or generic CodeAgent skill behavior? If yes, keep it in `agentSkills/`, outside the CLI dependency path.
 - Does it preserve US/AC/TC traceability and CaTDD status discipline?
 - Does it record what evidence the CLI should collect?
 - Does it leave unclear product or method intent as explicit questions?
@@ -336,6 +336,6 @@ For method meaning, read `methodPrompts/README_UserGuide.md`.
 
 For command-flow execution, read `slashCommands/README_UserGuide.md`.
 
-For generic CodeAgent skill packaging, read `agentSkill/README_UserGuide.md`; do not use it as a CLI dependency.
+For generic CodeAgent skill packaging, read `agentSkills/README_UserGuide.md`; do not use it as a CLI dependency.
 
 For this layer, capture only the future CLI orchestration responsibilities that the other layers should not own.

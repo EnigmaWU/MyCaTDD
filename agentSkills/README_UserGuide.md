@@ -1,4 +1,4 @@
-# agentSkill User Guide
+# agentSkills User Guide
 
 Practical guide for developers and CodeAgents packaging CaTDD and SpecCoding as reusable agent skills.
 
@@ -15,7 +15,7 @@ Use this guide if you are one of these readers:
 
 ## What
 
-`agentSkill/` turns authored CaTDD and SpecCoding skill source into self-contained generated packages.
+`agentSkills/` turns authored CaTDD and SpecCoding skill source into self-contained generated packages.
 
 The generated package includes:
 
@@ -35,14 +35,14 @@ Generate or validate an agent skill package when:
 - You want to distribute CaTDD or user-story-centered SpecCoding as a reusable CodeAgent capability.
 - You need to confirm the generated package is self-contained before publishing or copying it.
 
-Do not edit generated `agentSkill/dist/` content as the source of truth. Regenerate it from authored sources.
+Do not edit generated `agentSkills/dist/` content as the source of truth. Regenerate it from authored sources.
 
 ## Where
 
 Authored skill source lives under:
 
 ```text
-agentSkill/
+agentSkills/
   README.md
   README_ZH.md
   README_UserGuide.md
@@ -59,12 +59,12 @@ agentSkill/
 Default generated output lives under:
 
 ```text
-agentSkill/dist/comment-alive-test-driven-development/
+agentSkills/dist/comment-alive-test-driven-development/
   SKILL.md
   README.md
   references/
   slashCommands/
-agentSkill/dist/user-story-centered-spec-coding/
+agentSkills/dist/user-story-centered-spec-coding/
   SKILL.md
   README.md
   references/
@@ -83,10 +83,10 @@ This keeps daily repository editing clean while still producing distributable ar
 
 Follow this workflow when packaging a skill.
 
-1. Edit authored skill source under the relevant `agentSkill/<skill-name>/` directory.
+1. Edit authored skill source under the relevant `agentSkills/<skill-name>/` directory.
 2. Keep referenced method assets in `methodPrompts/` and command assets in `slashCommands/`.
-3. Run `bash agentSkill/makeSkill.sh` or `bash agentSkill/makeSkill.sh <skill-name>` from the repository root.
-4. Inspect the generated package under `agentSkill/dist/` or a temporary output path.
+3. Run `bash agentSkills/makeSkill.sh` or `bash agentSkills/makeSkill.sh <skill-name>` from the repository root.
+4. Inspect the generated package under `agentSkills/dist/` or a temporary output path.
 5. Run `bash scripts/test_makeSkill.sh` to confirm required files and no symlinks.
 6. Commit authored source, packaging script changes, and tests. Do not commit ignored generated output.
 
@@ -96,7 +96,7 @@ Run these commands from the repository root to generate the default CaTDD packag
 
 ```bash
 OUT_ROOT="$(mktemp -d)"
-bash agentSkill/makeSkill.sh --output "$OUT_ROOT"
+bash agentSkills/makeSkill.sh --output "$OUT_ROOT"
 test -f "$OUT_ROOT/comment-alive-test-driven-development/SKILL.md"
 test -f "$OUT_ROOT/comment-alive-test-driven-development/references/README_UserGuide.md"
 test -f "$OUT_ROOT/comment-alive-test-driven-development/slashCommands/README_UserGuide.md"
@@ -108,7 +108,7 @@ Generate the user-story-centered SpecCoding package:
 
 ```bash
 OUT_ROOT="$(mktemp -d)"
-bash agentSkill/makeSkill.sh user-story-centered-spec-coding --output "$OUT_ROOT"
+bash agentSkills/makeSkill.sh user-story-centered-spec-coding --output "$OUT_ROOT"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/SKILL.md"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/flows/Px-SpecFlow.md"
 test -f "$OUT_ROOT/user-story-centered-spec-coding/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md"
@@ -126,8 +126,8 @@ Expected result:
 
 | Skill | Package command | Purpose |
 | --- | --- | --- |
-| `comment-alive-test-driven-development` | `bash agentSkill/makeSkill.sh` | Package CaTDD as the reusable verification and testing methodology skill. |
-| `user-story-centered-spec-coding` | `bash agentSkill/makeSkill.sh user-story-centered-spec-coding` | Package the user-story-centered SpecCoding lifecycle skill. |
+| `comment-alive-test-driven-development` | `bash agentSkills/makeSkill.sh` | Package CaTDD as the reusable verification and testing methodology skill. |
+| `user-story-centered-spec-coding` | `bash agentSkills/makeSkill.sh user-story-centered-spec-coding` | Package the user-story-centered SpecCoding lifecycle skill. |
 
 ## Packaging Output
 
@@ -149,10 +149,10 @@ Treat these paths differently:
 
 | Path | Treat as |
 | --- | --- |
-| `agentSkill/comment-alive-test-driven-development/` | Authored source. Edit and commit. |
-| `agentSkill/user-story-centered-spec-coding/` | Authored source. Edit and commit. |
-| `agentSkill/makeSkill.sh` | Packaging logic. Edit and commit when packaging rules change. |
-| `agentSkill/dist/` | Generated output. Rebuild locally and keep ignored in this source repository. |
+| `agentSkills/comment-alive-test-driven-development/` | Authored source. Edit and commit. |
+| `agentSkills/user-story-centered-spec-coding/` | Authored source. Edit and commit. |
+| `agentSkills/makeSkill.sh` | Packaging logic. Edit and commit when packaging rules change. |
+| `agentSkills/dist/` | Generated output. Rebuild locally and keep ignored in this source repository. |
 
 ## Quality Checklist
 

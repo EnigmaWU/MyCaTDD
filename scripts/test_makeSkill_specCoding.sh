@@ -2,9 +2,9 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PACKAGER="$REPO_ROOT/agentSkill/makeSkill.sh"
+PACKAGER="$REPO_ROOT/agentSkills/makeSkill.sh"
 SKILL_NAME="user-story-centered-spec-coding"
-SOURCE_SKILL_DIR="$REPO_ROOT/agentSkill/$SKILL_NAME"
+SOURCE_SKILL_DIR="$REPO_ROOT/agentSkills/$SKILL_NAME"
 OUT_ROOT="$(mktemp -d)"
 
 cleanup() {
@@ -17,10 +17,10 @@ fail() {
   exit 1
 }
 
-[[ -x "$PACKAGER" ]] || fail "missing executable packager: agentSkill/makeSkill.sh"
+[[ -x "$PACKAGER" ]] || fail "missing executable packager: agentSkills/makeSkill.sh"
 [[ -f "$SOURCE_SKILL_DIR/SKILL.md" ]] || fail "missing authored SpecCoding SKILL.md"
 [[ -f "$SOURCE_SKILL_DIR/README.md" ]] || fail "missing authored SpecCoding README.md"
-git -C "$REPO_ROOT" check-ignore -q "agentSkill/dist/$SKILL_NAME/SKILL.md" || fail "generated SpecCoding dist package must be ignored in this source repo"
+git -C "$REPO_ROOT" check-ignore -q "agentSkills/dist/$SKILL_NAME/SKILL.md" || fail "generated SpecCoding dist package must be ignored in this source repo"
 
 "$PACKAGER" "$SKILL_NAME" --output "$OUT_ROOT"
 

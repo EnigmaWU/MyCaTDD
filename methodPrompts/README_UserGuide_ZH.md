@@ -86,7 +86,7 @@ methodPrompts/
 - 让 LLM 根据注释生成测试。
 - 在测试与生产代码演进时保持注释鲜活。
 
-本文件存在的目的，是让使用者不依赖仓库根目录指南、幻灯片、安装脚本、`slashCommands` 或 `agentSkill` 包，也能开始使用 CaTDD 方法。
+本文件存在的目的，是让使用者不依赖仓库根目录指南、幻灯片、安装脚本、`slashCommands` 或 `agentSkills` 包，也能开始使用 CaTDD 方法。
 
 ## 方法
 
