@@ -4,7 +4,7 @@ Created by `/SPEC_analyzeIssue` on 2026-05-30.
 
 ## Source Trace
 
-- Pending issue: [../pendingNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md](../pendingNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md)
+- Analyzed raw issue: [../analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md](../analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md)
 - Source text: `assemble UserStories for utCodeAgentCLI`
 - Area: `codeAgents/utCodeAgentCLI/`
 

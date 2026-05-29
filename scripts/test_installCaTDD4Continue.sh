@@ -26,6 +26,7 @@ git -C "$REPO_ROOT" check-ignore -q .continue/prompts/SPEC_example.prompt || fai
 [[ -f "$TARGET_DIR/.catdd/methodPrompts/README.md" ]] || fail "missing installed methodPrompts"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "missing installed slashCommands"
 [[ -d "$TARGET_DIR/.catdd/spec/pendingNews" ]] || fail "missing .catdd/spec/pendingNews"
+[[ -d "$TARGET_DIR/.catdd/spec/analyzedNews" ]] || fail "missing .catdd/spec/analyzedNews"
 [[ -d "$TARGET_DIR/.catdd/spec/todoUS" ]] || fail "missing .catdd/spec/todoUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doingUS" ]] || fail "missing .catdd/spec/doingUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doneUS" ]] || fail "missing .catdd/spec/doneUS"
@@ -67,6 +68,7 @@ install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"
 grep -Fq 'Continue project rule: `.continue/rules/catdd.md`' "$install_marker" || fail "install marker missing Continue rule location"
 grep -Fq 'Continue prompt wrappers: `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`' "$install_marker" || fail "install marker missing Continue prompt wrapper location"
+grep -Fq 'analyzedNews/' "$install_marker" || fail "install marker missing analyzedNews shared artifact guidance"
 
 target_gitignore="$TARGET_DIR/.gitignore"
 grep -Fq '/.catdd/spec/doingUS/' "$target_gitignore" || fail "target .gitignore missing doingUS local-state rule"
@@ -76,6 +78,7 @@ init_target="$TARGET_DIR/new-continue-project"
 "$INSTALLER" --target "$init_target" --init
 
 [[ -f "$init_target/.catdd/methodPrompts/README.md" ]] || fail "--init target missing installed methodPrompts"
+[[ -d "$init_target/.catdd/spec/analyzedNews" ]] || fail "--init target missing .catdd/spec/analyzedNews"
 [[ -f "$init_target/.continue/rules/catdd.md" ]] || fail "--init target missing Continue rule"
 [[ -f "$init_target/.continue/prompts/UT_convertDemoToTypical.prompt" ]] || fail "--init target missing Continue prompt wrapper"
 

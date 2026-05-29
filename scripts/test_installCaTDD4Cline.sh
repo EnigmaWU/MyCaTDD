@@ -24,6 +24,7 @@ git -C "$REPO_ROOT" check-ignore -q .clinerules/catdd.md || fail "generated Clin
 [[ -f "$TARGET_DIR/.catdd/methodPrompts/README.md" ]] || fail "missing installed methodPrompts"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "missing installed slashCommands"
 [[ -d "$TARGET_DIR/.catdd/spec/pendingNews" ]] || fail "missing .catdd/spec/pendingNews"
+[[ -d "$TARGET_DIR/.catdd/spec/analyzedNews" ]] || fail "missing .catdd/spec/analyzedNews"
 [[ -d "$TARGET_DIR/.catdd/spec/todoUS" ]] || fail "missing .catdd/spec/todoUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doingUS" ]] || fail "missing .catdd/spec/doingUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doneUS" ]] || fail "missing .catdd/spec/doneUS"
@@ -47,6 +48,7 @@ grep -Fq 'UT_* and SPEC_* commands' "$rule" || fail "Cline rule missing command 
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"
 grep -Fq 'Cline project rule: `.clinerules/catdd.md`' "$install_marker" || fail "install marker missing Cline rule location"
+grep -Fq 'analyzedNews/' "$install_marker" || fail "install marker missing analyzedNews shared artifact guidance"
 
 target_gitignore="$TARGET_DIR/.gitignore"
 grep -Fq '/.catdd/spec/doingUS/' "$target_gitignore" || fail "target .gitignore missing doingUS local-state rule"
@@ -56,6 +58,7 @@ init_target="$TARGET_DIR/new-cline-project"
 "$INSTALLER" --target "$init_target" --init
 
 [[ -f "$init_target/.catdd/methodPrompts/README.md" ]] || fail "--init target missing installed methodPrompts"
+[[ -d "$init_target/.catdd/spec/analyzedNews" ]] || fail "--init target missing .catdd/spec/analyzedNews"
 [[ -f "$init_target/.clinerules/catdd.md" ]] || fail "--init target missing Cline rule"
 
 echo "[installCaTDD4Cline-test] PASSED: installed CaTDD Cline assets into temporary target"

@@ -9,7 +9,7 @@ This skill packages the `Px-SpecFlow` lifecycle as a reusable CodeAgent workflow
 It helps a developer or agent move work through:
 
 ```text
-pendingNews -> todoUS -> doingUS -> doneUS
+pendingNews -> analyzedNews + todoUS -> doingUS -> doneUS
 ```
 
 The skill is about story-centered lifecycle orchestration. It is not the CaTDD methodology itself.
@@ -34,6 +34,7 @@ CaTDD -> does not depend on SpecCoding
 | State | Purpose |
 | --- | --- |
 | `pendingNews` | Imported issue, bug, feature request, or product idea waiting for analysis. |
+| `analyzedNews` | Raw issue or feature input already analyzed and preserved as source trace. |
 | `todoUS` | Analyzed user story ready to be opened. |
 | `doingUS` | Active user story under design, test, implementation, or review. |
 | `doneUS` | Completed story after review, commit, CI handling, and closure. |
@@ -42,7 +43,7 @@ CaTDD -> does not depend on SpecCoding
 
 1. Establish or update project context.
 2. Import issue or feature input into pending work.
-3. Analyze pending input into a user story.
+3. Analyze pending input into a user story and archive the raw input in `analyzedNews`.
 4. Open a selected story for active work.
 5. Produce detail design and acceptance criteria.
 6. Review story quality.

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Analyze a pending feature request or enhancement and generate a user story artifact under `.catdd/spec/todoUS/`.
+Analyze a pending feature request or enhancement, generate a user story artifact under `.catdd/spec/todoUS/`, and archive the raw feature input under `.catdd/spec/analyzedNews/`.
 
 ## CoT Pattern
 
@@ -22,12 +22,13 @@ Analyze a pending feature request or enhancement and generate a user story artif
 ## Output Contract
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
+- The source feature moved from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` as a team-shared raw input archive.
 - A feature-focused, independently testable user story slice with user value, priority, acceptance scenarios, edge cases, scope, non-goals, risks, assumptions, and initial acceptance questions.
-- Source trace back to the imported feature artifact.
+- Source trace from the user story back to the archived raw feature artifact.
 
 ## Prompt Template
 
-Ask the assistant to convert raw feature input into a value-oriented, independently testable user story slice without designing implementation details too early.
+Ask the assistant to convert raw feature input into a value-oriented, independently testable user story slice without designing implementation details too early. When the user story is accepted, move the raw feature from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` and update trace links.
 
 ## Conflict Guard
 

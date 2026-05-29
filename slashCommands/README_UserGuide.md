@@ -154,6 +154,7 @@ Commit team-shared artifacts such as:
 
 - `.catdd/spec/projectContext.md`
 - `.catdd/spec/pendingNews/`
+- `.catdd/spec/analyzedNews/`
 - `.catdd/spec/todoUS/`
 - `.catdd/spec/doneUS/`
 - Project-root `README*` docs such as `README_UserGuide.md`, `README_UserStories.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md`

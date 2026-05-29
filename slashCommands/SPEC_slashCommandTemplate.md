@@ -109,6 +109,7 @@ List command parameters using portable placeholders:
 - `{{doing_user_story}}`: active user story file under `.catdd/spec/doingUS/`
 - `{{todo_user_story}}`: selected user story under `.catdd/spec/todoUS/`
 - `{{pending_file}}`: pending issue or feature under `.catdd/spec/pendingNews/`
+- `{{analyzed_file}}`: archived raw issue or feature under `.catdd/spec/analyzedNews/`
 - `{{projectContext_file}}`: `.catdd/spec/projectContext.md`
 - `{{readme_spec_files}}`: one or more project-root `README*.md` SPEC docs
 - `{{related_docs}}`: optional architecture, design, test, or reproduction notes

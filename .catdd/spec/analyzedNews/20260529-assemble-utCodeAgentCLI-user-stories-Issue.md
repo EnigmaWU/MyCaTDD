@@ -13,7 +13,7 @@ assemble UserStories for utCodeAgentCLI
 - Type: issue / planning request.
 - Area: `codeAgents/utCodeAgentCLI/`.
 - Related flow: Px SpecFlow.
-- Current lifecycle state: analyzed into [../todoUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md](../todoUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md).
+- Current lifecycle state: archived after analysis into [../todoUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md](../todoUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md).
 
 ## Preserved Intent
 

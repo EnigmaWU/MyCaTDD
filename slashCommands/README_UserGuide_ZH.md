@@ -154,6 +154,7 @@ bash scripts/test_installCaTDD4Cline.sh
 
 - `.catdd/spec/projectContext.md`
 - `.catdd/spec/pendingNews/`
+- `.catdd/spec/analyzedNews/`
 - `.catdd/spec/todoUS/`
 - `.catdd/spec/doneUS/`
 - 项目根目录 `README*` 文档，例如 `README_UserGuide.md`、`README_UserStories.md`、`README_DetailDesign.md`、`README_VerifyDesign.md`

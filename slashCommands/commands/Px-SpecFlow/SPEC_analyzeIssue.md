@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Analyze a pending issue, bug report, or defect and generate a user story artifact under `.catdd/spec/todoUS/`.
+Analyze a pending issue, bug report, or defect, generate a user story artifact under `.catdd/spec/todoUS/`, and archive the raw issue under `.catdd/spec/analyzedNews/`.
 
 ## CoT Pattern
 
@@ -22,12 +22,13 @@ Analyze a pending issue, bug report, or defect and generate a user story artifac
 ## Output Contract
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
+- The source issue moved from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` as a team-shared raw input archive.
 - An issue-focused, independently testable user story slice with observed behavior, expected behavior, priority, acceptance scenarios, edge cases, scope, non-goals, risks, assumptions, and acceptance questions.
-- Source trace back to the imported issue artifact.
+- Source trace from the user story back to the archived raw issue artifact.
 
 ## Prompt Template
 
-Ask the assistant to convert raw issue input into a repair-oriented, independently testable user story slice without designing implementation details too early.
+Ask the assistant to convert raw issue input into a repair-oriented, independently testable user story slice without designing implementation details too early. When the user story is accepted, move the raw issue from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` and update trace links.
 
 ## Conflict Guard
 
