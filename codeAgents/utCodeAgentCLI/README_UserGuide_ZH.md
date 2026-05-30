@@ -112,6 +112,8 @@ utCodeAgentCLI \
 codeAgents/utCodeAgentCLI/
   README.md
   README_ZH.md
+  README_UserStory.md
+  README_UserStory_ZH.md
   README_UserGuide.md
   README_UserGuide_ZH.md
   README_UsageDesign.md

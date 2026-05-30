@@ -2,7 +2,7 @@
 
 `utCodeAgentCLI` 代表 CaTDD-native CLI 代码智能体执行层。
 
-本 README 是 CLI agent 层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何设计或使用这一层，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
+本 README 是 CLI agent 层的 WHAT / WHY 入口。关于 user intent 和 acceptance criteria，请阅读 [README_UserStory_ZH.md](README_UserStory_ZH.md)。关于 HOW、WHO、WHEN、WHERE 如何设计或使用这一层，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
 
 ## What
 
@@ -43,6 +43,7 @@
 
 ## Typical contents
 
+- 独立 User Story 文档（`README_UserStory.md`、`README_UserStory_ZH.md`）
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
 - 未来的 CLI 任务入口提示词
 - 未来的目标模板与执行检查清单
@@ -69,6 +70,7 @@
 | 文件 | 负责内容 |
 | --- | --- |
 | `README.md` / `README_ZH.md` | WHAT：这一层是什么；WHY：这一层为什么存在。 |
+| `README_UserStory.md` / `README_UserStory_ZH.md` | WHO：谁需要这一层；WHAT：它应提供什么用户价值；以及 detail design 前的 BDD acceptance criteria。 |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW：现在如何设计或使用这一层；WHO：谁使用；WHEN：何时在这一层工作；WHERE：未来资产位于哪里；以及可复制执行的 `Usage Example`。 |
 
 当可运行 CLI 存在后，具体 CLI 命令应记录在独立用户指南中。

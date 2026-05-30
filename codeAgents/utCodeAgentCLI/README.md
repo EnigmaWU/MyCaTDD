@@ -2,7 +2,7 @@
 
 `utCodeAgentCLI` represents the CaTDD-native CLI code-agent execution layer.
 
-This README is the WHAT / WHY entry point for the CLI agent layer. For HOW, WHO, WHEN, and WHERE to design or use this layer, read [README_UserGuide.md](README_UserGuide.md) or [README_UserGuide_ZH.md](README_UserGuide_ZH.md).
+This README is the WHAT / WHY entry point for the CLI agent layer. For user intent and acceptance criteria, read [README_UserStory.md](README_UserStory.md). For HOW, WHO, WHEN, and WHERE to design or use this layer, read [README_UserGuide.md](README_UserGuide.md) or [README_UserGuide_ZH.md](README_UserGuide_ZH.md).
 
 ## What
 
@@ -43,6 +43,7 @@ It may target many programming languages, but it must preserve CaTDD's comment-a
 
 ## Typical contents
 
+- Standalone user-story docs (`README_UserStory.md`, `README_UserStory_ZH.md`)
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
 - Future CLI task entry prompts
 - Future goal templates and execution checklists
@@ -69,6 +70,7 @@ Keep the documentation split clear:
 | File | Owns |
 | --- | --- |
 | `README.md` / `README_ZH.md` | WHAT this layer is and WHY it exists. |
+| `README_UserStory.md` / `README_UserStory_ZH.md` | WHO needs this layer, WHAT user value it should provide, and BDD acceptance criteria before detail design. |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW to design or use this layer today, WHO uses it, WHEN to work in it, WHERE future assets live, and a copy-exec `Usage Example`. |
 
 Operational CLI commands should be documented in the standalone user guides once a runnable CLI exists.

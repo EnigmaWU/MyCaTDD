@@ -10,6 +10,7 @@ pairs=(
   "slashCommands/README.md|slashCommands/README_ZH.md"
   "slashCommands/README_UserGuide.md|slashCommands/README_UserGuide_ZH.md"
   "codeAgents/utCodeAgentCLI/README.md|codeAgents/utCodeAgentCLI/README_ZH.md"
+  "codeAgents/utCodeAgentCLI/README_UserStory.md|codeAgents/utCodeAgentCLI/README_UserStory_ZH.md"
   "codeAgents/utCodeAgentCLI/README_UserGuide.md|codeAgents/utCodeAgentCLI/README_UserGuide_ZH.md"
   "codeAgents/utCodeAgentCLI/README_UsageDesign.md|codeAgents/utCodeAgentCLI/README_UsageDesign_ZH.md"
   "agentSkills/README.md|agentSkills/README_ZH.md"

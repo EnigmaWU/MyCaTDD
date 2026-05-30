@@ -75,15 +75,16 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 - `.catdd/spec/` has been initialized with `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, and `doneUS/` directories.
 - Analyzed raw issue archived: `.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md`.
 - Pending issue imported: `.catdd/spec/pendingNews/20260530-design-utCodeAgentCLI-architecture-Issue.md`.
-- Todo user story created: `.catdd/spec/todoUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`.
-- No doing or done user story exists yet.
+- Todo user story opened into local active work: `.catdd/spec/doingUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`.
+- Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
+- No done user story exists yet.
 
 ## Next Recommended Command
 
 Run one of these after context review:
 
 - `/SPEC_analyzeIssue` on `.catdd/spec/pendingNews/20260530-design-utCodeAgentCLI-architecture-Issue.md` to turn the imported architecture-design request into a todo work item.
-- `/SPEC_openUserStory` to move the assembled `utCodeAgentCLI` User Story work into active `doingUS/` state.
+- Review and refine `codeAgents/utCodeAgentCLI/README_UserStory.md` before starting `/SPEC_takeDetailDesign`.
 - `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
 - `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
 - `/SPEC_updateProjectContext` when any project fact, convention, or guardrail in this file needs correction.
