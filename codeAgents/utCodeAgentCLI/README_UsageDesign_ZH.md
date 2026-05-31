@@ -94,6 +94,9 @@ Options:
 > - `designPerformanceSkeleton` / `designRobustSkeleton` / `designCompatibilitySkeleton` / `designConfigurationSkeleton` → 调用匹配的 P2 QualityTestsFlow skeleton command。产出 US/AC/TC skeleton；不产出可执行测试代码。
 > - `designAllSkeleton` → 为所有 P0/P1/P2 CaTDD categories 调用 P0 Functional、P1 Design、P2 Quality skeleton design：Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility、Configuration。只产出 skeleton；不产出可执行测试代码。
 > - `reviewFuncTestsSkeleton` → 调用 `UT_reviewFuncTestsSkeleton`。审查已规划的 P0 Functional skeletons；不写入实现测试代码。
+> - `reviewDesignTestsSkeleton` → 调用 `UT_reviewDesignTestsSkeleton`。审查已规划的 P1 Design skeletons（State、Capability、Concurrency）；不写入实现测试代码。
+> - `reviewQualityTestsSkeleton` → 调用 `UT_reviewQualityTestsSkeleton`。审查已规划的 P2 Quality skeletons（Performance、Robust、Compatibility、Configuration）；不写入实现测试代码。
+> - `reviewImplTestCase` → 调用 `UT_reviewImplTestCase`。审查一个已实现的 RED test case —— 验证 skeleton 保留情况和测试质量。
 > - `tellMeNextImplTest` → 调用 `UT_tellMeNextImplTest`。从目标 TestFile 中选择或推荐下一个要实现的 TC。
 > - `implTestCase` → 调用 `UT_implTestCase`。为一个 TC 写入可执行测试代码（RED 阶段）。
 > - `implTestFile` → 对文件中的所有 TC 重复调用 `UT_implTestCase`。
@@ -244,6 +247,9 @@ utCodeAgentCLI \
 | `designConfigurationSkeleton` | 只设计 CaTDD **Configuration** category 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | `designAllSkeleton` | 设计所有 P0/P1/P2 CaTDD categories 的 skeleton：Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility、Configuration。US/AC/TC 注释会写入目标 test file，但**不会**写入实现测试代码。 |
 | `reviewFuncTestsSkeleton` | 审查目标 test file 或 files 中的 P0 Functional skeletons。不写入实现测试代码。 |
+| `reviewDesignTestsSkeleton` | 审查目标 test file 或 files 中的 P1 Design skeletons（State、Capability、Concurrency）。不写入实现测试代码。 |
+| `reviewQualityTestsSkeleton` | 审查目标 test file 或 files 中的 P2 Quality skeletons（Performance、Robust、Compatibility、Configuration）。不写入实现测试代码。 |
+| `reviewImplTestCase` | 审查目标中一个已实现的 RED test case。验证 skeleton 保留情况、RED status 正确性和测试结构。不修改文件。 |
 | `tellMeNextImplTest` | 从目标 TestFile 中选择或推荐下一个要实现的 TC。不写入实现测试代码。 |
 | `designAndImplTest` | 在一个组合步骤中设计所有 category skeletons **并**实现它们的 test cases。产出 US/AC/TC 结构和可执行测试代码。 |
 

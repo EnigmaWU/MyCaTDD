@@ -94,6 +94,9 @@ The core model is:
 > - `designPerformanceSkeleton` / `designRobustSkeleton` / `designCompatibilitySkeleton` / `designConfigurationSkeleton` → invoke the matching P2 QualityTestsFlow skeleton command. Produces a US/AC/TC skeleton; no executable test code.
 > - `designAllSkeleton` → invoke P0 Functional, P1 Design, and P2 Quality skeleton design for all P0/P1/P2 CaTDD categories: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration. Produces skeletons only; no executable test code.
 > - `reviewFuncTestsSkeleton` → invoke `UT_reviewFuncTestsSkeleton`. Reviews planned P0 Functional skeletons without writing implementation test code.
+> - `reviewDesignTestsSkeleton` → invoke `UT_reviewDesignTestsSkeleton`. Reviews planned P1 Design skeletons (State, Capability, Concurrency) without writing implementation test code.
+> - `reviewQualityTestsSkeleton` → invoke `UT_reviewQualityTestsSkeleton`. Reviews planned P2 Quality skeletons (Performance, Robust, Compatibility, Configuration) without writing implementation test code.
+> - `reviewImplTestCase` → invoke `UT_reviewImplTestCase`. Reviews one implemented RED test case — verifies skeleton preservation and test quality.
 > - `tellMeNextImplTest` → invoke `UT_tellMeNextImplTest`. Selects or recommends the next TC to implement from the target TestFile.
 > - `implTestCase` → invoke `UT_implTestCase`. Writes executable test code for one TC (RED stage).
 > - `implTestFile` → invoke `UT_implTestCase` repeatedly across all TCs in the file.
@@ -244,6 +247,9 @@ utCodeAgentCLI \
 | `designConfigurationSkeleton` | Design a test file of the CaTDD **Configuration** category only with US/AC/TC skeleton. No implementation test code is written. |
 | `designAllSkeleton` | Design skeletons for all P0/P1/P2 CaTDD categories: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration. US/AC/TC comments are placed in the target test file, but **no implementation test code** is written. |
 | `reviewFuncTestsSkeleton` | Review the P0 Functional skeletons in the target test file or files. No implementation test code is written. |
+| `reviewDesignTestsSkeleton` | Review the P1 Design skeletons (State, Capability, Concurrency) in the target test file or files. No implementation test code is written. |
+| `reviewQualityTestsSkeleton` | Review the P2 Quality skeletons (Performance, Robust, Compatibility, Configuration) in the target test file or files. No implementation test code is written. |
+| `reviewImplTestCase` | Review one implemented RED test case in the target. Verifies skeleton preservation, RED status correctness, and test structure. No file modification. |
 | `tellMeNextImplTest` | Select or recommend the next TC to implement from the target TestFile. No implementation test code is written. |
 | `designAndImplTest` | Design all category skeletons **and** implement their test cases in one combined step. Both US/AC/TC structure and executable test code are produced. |
 
