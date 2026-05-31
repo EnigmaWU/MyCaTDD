@@ -1,6 +1,6 @@
 # {{ProjectName}} Architecture Design
 
-This is the SpecCoding template for project-root `README_ArchDesign.md`. Create or update it from `SPEC_takeDetailDesign` when a story changes architecture, module boundaries, dependencies, data flow, or key decisions.
+This is the SpecCoding template for project-root `README_ArchDesign.md`. Create or update it from `SPEC_takeArchDesign` when a story changes architecture, module boundaries, dependencies, data flow, or key decisions.
 
 ## Context
 

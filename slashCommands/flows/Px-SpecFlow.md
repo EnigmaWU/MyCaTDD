@@ -50,21 +50,35 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 
 Create project-root README SPEC docs only when the project needs that SPEC surface. Keep all `README*` SPEC docs in the target project root so developers and CodeAgents can find shared project and module knowledge quickly.
 
+### 1. Architecture-Oriented (Managed by `SPEC_takeArchDesign`)
+These document global strategies, system-wide boundaries, reliability frameworks, and observability topologies.
+
 | File | Purpose |
 | --- | --- |
-| `README.md` | Project or module overview, ownership, public behavior, and links to deeper SPEC docs. Most manual contents such as "WHAT I HAVE/WANT,WHAT TO MEET/SOLVE" in natural language."|
-| `README_ArchDesign.md` | Architecture design, module boundaries, dependencies, data flow, and key decisions. |
-| `README_UserStories.md` | Project or module-scoped user stories and trace links to `.catdd/spec/todoUS/` or `.catdd/spec/doneUS/`. |
-| `README_UserGuide.md` | User-facing or developer-facing usage guidance. |
-| `README_DetailDesign.md` | Detailed design, acceptance criteria, interfaces, state, and behavior decisions. |
-| `README_ErrorDesign.md` | Error taxonomy, fault handling, recovery policy, degradation, and user-visible failure semantics. |
-| `README_ResourceDesign.md` | Resource ownership, budgets, allocation policy, finite handles, memory, CPU, power, and contention decisions. |
-| `README_StateDesign.md` | State model, lifecycle, ownership, concurrency, and transition decisions. |
-| `README_PerfDesign.md` | Performance budgets, latency, throughput, memory, CPU, power, and quality-of-service decisions. |
-| `README_CompatDesign.md` | Compatibility matrix, supported versions, platforms, protocols, formats, toolchains, and integration boundaries. |
-| `README_DiagnosisDesign.md` | Diagnostic evidence, runtime symptoms, logs, counters, traces, debug hooks, and root-cause routing. |
-| `README_VerifyDesign.md` | Verification design, CaTDD category coverage, US/AC/TC traceability, and test strategy. |
-| `README_UsageDesign.md` | CLI interface design, argument reference, behavior matrix, and usage examples. |
+| `README_ArchDesign.md` | High-level architecture, module decomposition, dependencies, data flow, and key trade-offs. |
+| `README_UsageDesign.md` | Public boundaries, CLI/API contracts, argument parsing rules, and run examples. |
+| `README_ErrorDesign.md` | Fault-tolerance architecture, fail-safe states, watchdogs, and global error taxonomies. |
+| `README_ResourceDesign.md` | Finite resource allocations, memory/CPU/power budgets, DMA, and watchdogs. |
+| `README_PerfDesign.md` | Performance budgets, latency limits, and real-time media scheduling. |
+| `README_CompatDesign.md` | Compatibility boundaries, platform matrices, toolchains, and protocol versions. |
+| `README_DiagnosisDesign.md` | Observability architecture, logging levels, telemetry, and symptom trace maps. |
+| `README_VerifyDesign.md` | Verification and testing topologies, mocking boundaries, and CI test loops. |
+
+### 2. DetailDesign-Oriented (Managed by `SPEC_takeDetailDesign`)
+These document local implementation details, code tactics, and class/API behavior for the active user story.
+
+| File | Purpose |
+| --- | --- |
+| `README_DetailDesign.md` | Detailed class design, API signatures, and data structures for the story. |
+| `README_StateDesign.md` | Local state machines, lifecycle transitions, lock synchronization, and thread concurrency. |
+
+### 3. General & Requirements (Managed by other SPEC steps)
+
+| File | Purpose |
+| --- | --- |
+| `README.md` | Project overview, ownership, manual user statements, and master SPEC directories. |
+| `README_UserStories.md` | Project-scoped user stories and trace links to SpecFlow story directories. |
+| `README_UserGuide.md` | User-facing or developer-facing runtime usage guidance. |
 
 Use matching templates from `slashCommands/templates/` when creating a README SPEC doc for the first time.
 For embedded software and digital video/audio domain work, use `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, and `README_DiagnosisDesign.md` when hardware faults, finite resources, hardware state, real-time behavior, compatibility matrices, buffering, media pipeline timing, A/V sync constraints, or field-debug evidence matter.
@@ -114,7 +128,8 @@ flowchart LR
     Todo --> Open["SPEC_openUserStory"]
     Open --> Doing[".catdd/spec/doingUS/*-UserStory.md"]
 
-    Doing --> Detail["SPEC_takeDetailDesign"]
+    Doing --> Arch["SPEC_takeArchDesign"]
+    Arch --> Detail["SPEC_takeDetailDesign"]
     Detail --> ReadmeDocs["project-root README*.md"]
     Detail --> ReviewStory["SPEC_reviewUserStory"]
     ReviewStory --> QualityStory{"story quality?"}
@@ -143,13 +158,14 @@ flowchart LR
 4. Use [../commands/Px-SpecFlow/SPEC_analyzeIssue.md](../commands/Px-SpecFlow/SPEC_analyzeIssue.md) or [../commands/Px-SpecFlow/SPEC_analyzeFeature.md](../commands/Px-SpecFlow/SPEC_analyzeFeature.md) to convert pending input into a user story in `.catdd/spec/todoUS/` and move the raw input to `.catdd/spec/analyzedNews/`.
 5. Use [../commands/Px-SpecFlow/SPEC_openUserStory.md](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/spec/doingUS/`.
 6. Use [../commands/Px-SpecFlow/SPEC_whatsNextTask.md](../commands/Px-SpecFlow/SPEC_whatsNextTask.md) whenever you need a single next-step recommendation from current state.
-7. Use [../commands/Px-SpecFlow/SPEC_takeDetailDesign.md](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) to produce detailed design and acceptance criteria, including project-root `README*` SPEC docs as needed.
-8. Use [../commands/Px-SpecFlow/SPEC_reviewUserStory.md](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) to gate story and design quality.
-9. Use [../commands/Px-SpecFlow/SPEC_updateDetailDesign.md](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) when the review finds missing or weak design.
-10. Use [../commands/Px-SpecFlow/SPEC_designUnitTests.md](../commands/Px-SpecFlow/SPEC_designUnitTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows.
-11. Use [../commands/Px-SpecFlow/SPEC_implUnitTests.md](../commands/Px-SpecFlow/SPEC_implUnitTests.md), [../commands/Px-SpecFlow/SPEC_implProductCodes.md](../commands/Px-SpecFlow/SPEC_implProductCodes.md), and [../commands/Px-SpecFlow/SPEC_reviewProductCodes.md](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review.
-12. Use [../commands/Px-SpecFlow/SPEC_refactorIssue.md](../commands/Px-SpecFlow/SPEC_refactorIssue.md) when implementation quality fails or design needs to be reworked.
-13. Use [../commands/Px-SpecFlow/SPEC_commitWorks.md](../commands/Px-SpecFlow/SPEC_commitWorks.md), [../commands/Px-SpecFlow/SPEC_triggerCI.md](../commands/Px-SpecFlow/SPEC_triggerCI.md), and [../commands/Px-SpecFlow/SPEC_closeUserStory.md](../commands/Px-SpecFlow/SPEC_closeUserStory.md) to finish the lifecycle.
+7. Use [../commands/Px-SpecFlow/SPEC_takeArchDesign.md](../commands/Px-SpecFlow/SPEC_takeArchDesign.md) to produce high-level architecture design and module boundaries in `README_ArchDesign.md`.
+8. Use [../commands/Px-SpecFlow/SPEC_takeDetailDesign.md](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) to produce detailed design and acceptance criteria, including other project-root `README*` SPEC docs as needed.
+9. Use [../commands/Px-SpecFlow/SPEC_reviewUserStory.md](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) to gate story and design quality.
+10. Use [../commands/Px-SpecFlow/SPEC_updateDetailDesign.md](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) when the review finds missing or weak design.
+11. Use [../commands/Px-SpecFlow/SPEC_designUnitTests.md](../commands/Px-SpecFlow/SPEC_designUnitTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows.
+12. Use [../commands/Px-SpecFlow/SPEC_implUnitTests.md](../commands/Px-SpecFlow/SPEC_implUnitTests.md), [../commands/Px-SpecFlow/SPEC_implProductCodes.md](../commands/Px-SpecFlow/SPEC_implProductCodes.md), and [../commands/Px-SpecFlow/SPEC_reviewProductCodes.md](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review.
+13. Use [../commands/Px-SpecFlow/SPEC_refactorIssue.md](../commands/Px-SpecFlow/SPEC_refactorIssue.md) when implementation quality fails or design needs to be reworked.
+14. Use [../commands/Px-SpecFlow/SPEC_commitWorks.md](../commands/Px-SpecFlow/SPEC_commitWorks.md), [../commands/Px-SpecFlow/SPEC_triggerCI.md](../commands/Px-SpecFlow/SPEC_triggerCI.md), and [../commands/Px-SpecFlow/SPEC_closeUserStory.md](../commands/Px-SpecFlow/SPEC_closeUserStory.md) to finish the lifecycle.
 
 ## Conflict Guard
 
