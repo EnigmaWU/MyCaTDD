@@ -11,20 +11,20 @@ Opened by `/SPEC_openUserStory` on 2026-05-30.
 
 ## Active Work Status
 
-- Status: OPEN.
-- Active state: `.catdd/spec/doingUS/` local gitignored work state.
+- Status: CLOSED.
+- Active state: `.catdd/spec/doneUS/` completed story archive.
 - Opened from: [../todoUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md](../todoUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md)
 - Clarified developer intent: write and assemble `utCodeAgentCLI` User Stories first; do not start detail design yet.
 - Shared UserStory artifact: `codeAgents/utCodeAgentCLI/README_UserStory.md`.
 - Shared UserStory ZH mirror: `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
-- Next recommended action: draft the `utCodeAgentCLI` User Story set, then review the story set before `/SPEC_takeDetailDesign`.
-- Implementation gate: do not implement product code before detail design and story review.
+- Close Trigger: `/SPEC_closeUserStory` manual developer request.
+- Verification Details: Checked via `/SPEC_reviewUserStory` on 2026-05-31 (Result: PASS).
 
 ## Analysis Status
 
-- Status: OPEN.
+- Status: CLOSED.
 - Priority: P0 candidate, because the story set should guide future CLI design and implementation work.
-- Confidence: medium. The intent is clear enough to create a planning story, but the exact story-set scope still needs confirmation before detail design.
+- Confidence: high. The story-set scope has been fully assembled, reviewed, and finalized.
 
 ## Observed Behavior
 
@@ -132,3 +132,16 @@ Out of scope:
 ## Next Recommended Action
 
 Write the `utCodeAgentCLI` User Story set first. Defer `/SPEC_takeDetailDesign` until the UserStories artifact is drafted and ready for review.
+
+## Review Gate Finding
+
+- **Review Date**: 2026-05-31
+- **Review Result**: **PASS**
+- **Clarity**: Outstanding. Role-specific journeys (User, Inventor, Developer) are clearly separated and trace to clear priorities (P0-P2).
+- **Completeness**: Complete coverage of invocation contracts, argument-parsing validations, and behaviour state tables.
+- **Traceability**: Fully traceable back to source trace `20260529-assemble-utCodeAgentCLI-user-stories-Issue.md` and downstream files (`README_UsageDesign.md`, `README_UserGuide.md`).
+- **Testability**: Highly testable. ACs define measurable numeric exit codes (e.g. exit 1 for missing requirements), stderr patterns, and exact state transition preservation guarantees.
+- **Ambiguities & Gaps**: 
+  - Trace output naming convention and unattended CI behavior are flagged as open questions, which are correctly deferred to the subsequent `SPEC_takeDetailDesign` phase.
+  - The implementation status clearly states that `utCodeAgentCLI` is design-only at this stage, avoiding confusion.
+- **Next Recommended Command**: `SPEC_takeDetailDesign` (to define detailed specifications resolving the open design questions).
