@@ -36,12 +36,7 @@ grep -Fq 'Antigravity project rule' "$rule" || fail "Antigravity rule missing ad
 grep -Fq '.catdd/methodPrompts/' "$rule" || fail "Antigravity rule missing methodPrompts location"
 grep -Fq '.catdd/slashCommands/' "$rule" || fail "Antigravity rule missing slashCommands location"
 grep -Fq '.catdd/spec/' "$rule" || fail "Antigravity rule missing spec workspace location"
-grep -Fq '.catdd/agentSkills/dist/' "$rule" || fail "Antigravity rule missing agent skills location"
 grep -Fq 'README_ArchDesign.md' "$rule" || fail "Antigravity rule missing project-root README SPEC docs"
-
-# Verify compiled agent skills
-[[ -f "$TARGET_DIR/.catdd/agentSkills/dist/comment-alive-test-driven-development/SKILL.md" ]] || fail "missing compiled comment-alive TDD skill"
-[[ -f "$TARGET_DIR/.catdd/agentSkills/dist/user-story-centered-spec-coding/SKILL.md" ]] || fail "missing compiled spec-coding skill"
 
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"
@@ -58,6 +53,5 @@ init_target="$TARGET_DIR/new-antigravity-project"
 [[ -f "$init_target/.catdd/methodPrompts/README.md" ]] || fail "--init target missing installed methodPrompts"
 [[ -d "$init_target/.catdd/spec/analyzedNews" ]] || fail "--init target missing .catdd/spec/analyzedNews"
 [[ -f "$init_target/.antigravityrules/catdd.md" ]] || fail "--init target missing Antigravity rule"
-[[ -f "$init_target/.catdd/agentSkills/dist/comment-alive-test-driven-development/SKILL.md" ]] || fail "--init target missing compiled skills"
 
 echo "[installCaTDD4Antigravity-test] PASSED: installed CaTDD Antigravity assets into temporary target"

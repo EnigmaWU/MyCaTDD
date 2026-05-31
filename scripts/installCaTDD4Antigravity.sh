@@ -9,7 +9,7 @@ usage() {
   cat <<'USAGE'
 Usage: scripts/installCaTDD4Antigravity.sh --target DIR [--init]
 
-Install or refresh CaTDD methodPrompts, slashCommands, SpecCoding artifact workspace, Antigravity project rules, and packaged agent skills into a target project.
+Install or refresh CaTDD methodPrompts, slashCommands, SpecCoding artifact workspace, and Antigravity project rules into a target project.
 
 Options:
   --target DIR      Target project directory.
@@ -104,15 +104,10 @@ GITIGNORE
   rm -f "$temp_file"
 }
 
-rm -rf "$CATDD_DIR/methodPrompts" "$CATDD_DIR/slashCommands" "$CATDD_DIR/agentSkills"
+rm -rf "$CATDD_DIR/methodPrompts" "$CATDD_DIR/slashCommands"
 cp -R "$REPO_ROOT/methodPrompts" "$CATDD_DIR/methodPrompts"
 cp -R "$REPO_ROOT/slashCommands" "$CATDD_DIR/slashCommands"
 update_spec_gitignore
-
-# Generate packaged agent skills into the target project
-echo "[installCaTDD4Antigravity] Packaging agent skills..."
-bash "$REPO_ROOT/agentSkills/makeSkill.sh" comment-alive-test-driven-development --output "$CATDD_DIR/agentSkills/dist"
-bash "$REPO_ROOT/agentSkills/makeSkill.sh" user-story-centered-spec-coding --output "$CATDD_DIR/agentSkills/dist"
 
 cat > "$CATDD_DIR/CaTDD_INSTALL.md" <<'MARKER'
 # CaTDD Install Marker
@@ -122,7 +117,6 @@ This directory is managed by `scripts/installCaTDD4Antigravity.sh` from MyCaTDD.
 - `methodPrompts/` is the installed CaTDD method source.
 - `slashCommands/` is the installed portable flow-command source.
 - `spec/` is the installed SpecCoding artifact workspace.
-- `agentSkills/dist/` contains pre-packaged agent skills (load with IsSkillFile: true).
 - Antigravity project rule: `.antigravityrules/catdd.md`.
 - Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
@@ -142,15 +136,11 @@ This is an Antigravity project rule installed by MyCaTDD. Use it when working wi
 - Portable slash command source: `.catdd/slashCommands/`
 - SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
 - SpecCoding artifact workspace: `.catdd/spec/`
-- Reusable Agent Skills (load with IsSkillFile: true):
-  - `.catdd/agentSkills/dist/comment-alive-test-driven-development/SKILL.md`
-  - `.catdd/agentSkills/dist/user-story-centered-spec-coding/SKILL.md`
 - Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
 
 ## Antigravity Behavior
 
-- Treat this file as a thin Antigravity adapter over `.catdd/methodPrompts/`, `.catdd/slashCommands/`, and `.catdd/agentSkills/`.
-- Load the packaged skills under `.catdd/agentSkills/dist/` using the `view_file` tool with `IsSkillFile: true` when starting a CaTDD or SpecCoding task.
+- Treat this file as a thin Antigravity adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Use `.catdd/slashCommands/commands/` for UT_* and SPEC_* commands; read the portable command before acting.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
@@ -167,4 +157,3 @@ echo "[installCaTDD4Antigravity] Method source: .catdd/methodPrompts"
 echo "[installCaTDD4Antigravity] Slash command source: .catdd/slashCommands"
 echo "[installCaTDD4Antigravity] SpecCoding artifacts: .catdd/spec"
 echo "[installCaTDD4Antigravity] Antigravity rule: .antigravityrules/catdd.md"
-echo "[installCaTDD4Antigravity] Packaged agent skills: .catdd/agentSkills/dist"

@@ -145,7 +145,6 @@ The installer creates or refreshes these target-project assets:
 
 - `.catdd/methodPrompts/`: installed CaTDD method source for manual reading and method truth.
 - `.catdd/slashCommands/`: installed portable flow-command source for automation.
-- `.catdd/agentSkills/dist/`: pre-packaged agent skills (e.g. `comment-alive-test-driven-development`, `user-story-centered-spec-coding`) that can be loaded by agent systems using `IsSkillFile: true`.
 - `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md`: Copilot-native thin adapters generated from `slashCommands`.
 - `.github/instructions/catdd.instructions.md`: Copilot instruction file that points agents back to `.catdd/`.
 - `.continue/rules/catdd.md`: Continue project rule that points agents back to `.catdd/`.
