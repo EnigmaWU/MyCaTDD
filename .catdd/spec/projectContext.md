@@ -73,18 +73,22 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 - `SPEC_*` Copilot prompt wrappers have been installed into `.github/prompts/`.
 - `.catdd/spec/` has been initialized with `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, and `doneUS/` directories.
-- Analyzed raw issue archived: `.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md`.
-- Pending issue imported: `.catdd/spec/pendingNews/20260530-design-utCodeAgentCLI-architecture-Issue.md`.
-- Todo user story opened into local active work: `.catdd/spec/doingUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`.
+- Analyzed raw issues archived:
+  - `.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md`
+  - `.catdd/spec/analyzedNews/20260531-add-SPEC_takeArchDesign-command-Issue.md`
+  - `.catdd/spec/analyzedNews/20260530-design-utCodeAgentCLI-architecture-Issue.md`
+- Completed user stories:
+  - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
+  - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
+- Todo user stories opened:
+  - `.catdd/spec/todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md`
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
-- No done user story exists yet.
 
 ## Next Recommended Command
 
 Run one of these after context review:
 
-- `/SPEC_analyzeIssue` on `.catdd/spec/pendingNews/20260530-design-utCodeAgentCLI-architecture-Issue.md` to turn the imported architecture-design request into a todo work item.
-- Review and refine `codeAgents/utCodeAgentCLI/README_UserStory.md` before starting `/SPEC_takeDetailDesign`.
+- `/SPEC_openUserStory` on `.catdd/spec/todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` to move it into local active work (`doingUS`) and start drafting the architecture design.
 - `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
 - `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
 - `/SPEC_updateProjectContext` when any project fact, convention, or guardrail in this file needs correction.
