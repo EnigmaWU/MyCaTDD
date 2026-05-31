@@ -135,17 +135,25 @@ Install or refresh CaTDD into a Cline project with:
 scripts/installCaTDD4Cline.sh --target /path/to/project
 ```
 
+Install or refresh CaTDD into an Antigravity project with:
+
+```bash
+scripts/installCaTDD4Antigravity.sh --target /path/to/project
+```
+
 The installer creates or refreshes these target-project assets:
 
 - `.catdd/methodPrompts/`: installed CaTDD method source for manual reading and method truth.
 - `.catdd/slashCommands/`: installed portable flow-command source for automation.
+- `.catdd/agentSkills/dist/`: pre-packaged agent skills (e.g. `comment-alive-test-driven-development`, `user-story-centered-spec-coding`) that can be loaded by agent systems using `IsSkillFile: true`.
 - `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md`: Copilot-native thin adapters generated from `slashCommands`.
 - `.github/instructions/catdd.instructions.md`: Copilot instruction file that points agents back to `.catdd/`.
 - `.continue/rules/catdd.md`: Continue project rule that points agents back to `.catdd/`.
 - `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`: Continue-native thin prompt adapters generated from `slashCommands`.
 - `.clinerules/catdd.md`: Cline project rule that points agents back to `.catdd/`.
+- `.antigravityrules/catdd.md`: Antigravity project rule that points agents back to `.catdd/`.
 
-In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, `.continue/rules/catdd.md`, `.continue/prompts/UT_*.prompt`, `.continue/prompts/SPEC_*.prompt`, and `.clinerules/catdd.md` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
+In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, `.continue/rules/catdd.md`, `.continue/prompts/UT_*.prompt`, `.continue/prompts/SPEC_*.prompt`, `.clinerules/catdd.md`, and `.antigravityrules/catdd.md` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
 
 ## Quick Start
 

@@ -79,6 +79,7 @@ Testing/
 /.continue/prompts/UT_*.prompt
 /.continue/prompts/SPEC_*.prompt
 /.clinerules/catdd.md
+/.antigravityrules/catdd.md
 
 book*
 
