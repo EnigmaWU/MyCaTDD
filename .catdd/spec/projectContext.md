@@ -77,6 +77,8 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md`
   - `.catdd/spec/analyzedNews/20260531-add-SPEC_takeArchDesign-command-Issue.md`
   - `.catdd/spec/analyzedNews/20260530-design-utCodeAgentCLI-architecture-Issue.md`
+- Pending feature requests imported:
+  - `.catdd/spec/pendingNews/20260602-add-SPEC_reviewDesignGates-commands-Feature.md`
 - Completed user stories:
   - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
   - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
@@ -91,6 +93,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 Run one of these after context review:
 
+- `/SPEC_analyzeFeature` on `.catdd/spec/pendingNews/20260602-add-SPEC_reviewDesignGates-commands-Feature.md` to analyze the architectural and detailed design review gate feature request.
 - `/SPEC_takeDetailDesign` on `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` to convert the architecture into detailed TypeScript-facing contracts, data schemas, and verification design.
 - `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
 - `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
