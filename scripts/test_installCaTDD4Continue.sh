@@ -24,7 +24,8 @@ git -C "$REPO_ROOT" check-ignore -q .continue/prompts/SPEC_example.prompt || fai
 "$INSTALLER" --target "$TARGET_DIR"
 
 verbose_output="$("$INSTALLER" --target "$TARGET_DIR" --verbose 2>&1)"
-grep -Fq '+ mkdir -p ' <<< "$verbose_output" || fail "--verbose output missing detailed action trace"
+grep -Fq '[installCaTDD4Continue] replace: .catdd/methodPrompts' <<< "$verbose_output" || fail "--verbose output missing replace operation trace"
+grep -Fq '[installCaTDD4Continue] patch: .gitignore' <<< "$verbose_output" || fail "--verbose output missing patch operation trace"
 
 [[ -f "$TARGET_DIR/.catdd/methodPrompts/README.md" ]] || fail "missing installed methodPrompts"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "missing installed slashCommands"

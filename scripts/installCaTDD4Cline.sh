@@ -72,6 +72,22 @@ if [[ "$VERBOSE" -eq 1 ]]; then
   set -x
 fi
 
+log_install_operation() {
+  local action="$1"
+  local path="$2"
+  [[ "$VERBOSE" -eq 1 ]] || return 0
+  echo "[installCaTDD4Cline] ${action}: ${path#$TARGET_DIR/}"
+}
+
+log_replace_or_new() {
+  local path="$1"
+  if [[ -e "$path" ]]; then
+    log_install_operation replace "$path"
+  else
+    log_install_operation new "$path"
+  fi
+}
+
 if [[ -e "$CLINE_RULES_DIR" && ! -d "$CLINE_RULES_DIR" ]]; then
   echo "[installCaTDD4Cline] Cannot create .clinerules/catdd.md because .clinerules exists and is not a directory." >&2
   exit 1
@@ -82,9 +98,11 @@ mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DI
 update_spec_gitignore() {
   local gitignore_file="$TARGET_DIR/.gitignore"
   local temp_file
+  local gitignore_exists=0
   temp_file="$(mktemp)"
 
   if [[ -f "$gitignore_file" ]]; then
+    gitignore_exists=1
     awk '
       $0 == "# BEGIN CaTDD SpecCoding local state" { skip = 1; next }
       $0 == "# END CaTDD SpecCoding local state" { skip = 0; next }
@@ -96,6 +114,12 @@ update_spec_gitignore() {
 
   if [[ -s "$temp_file" ]]; then
     perl -0pi -e 's/[ \t\r]*\n+\z/\n/' "$temp_file"
+  fi
+
+  if [[ "$gitignore_exists" -eq 1 ]]; then
+    log_install_operation patch "$gitignore_file"
+  else
+    log_install_operation new "$gitignore_file"
   fi
 
   {
@@ -113,11 +137,14 @@ GITIGNORE
   rm -f "$temp_file"
 }
 
+log_replace_or_new "$CATDD_DIR/methodPrompts"
+log_replace_or_new "$CATDD_DIR/slashCommands"
 rm -rf "$CATDD_DIR/methodPrompts" "$CATDD_DIR/slashCommands"
 cp -R "$REPO_ROOT/methodPrompts" "$CATDD_DIR/methodPrompts"
 cp -R "$REPO_ROOT/slashCommands" "$CATDD_DIR/slashCommands"
 update_spec_gitignore
 
+log_replace_or_new "$CATDD_DIR/CaTDD_INSTALL.md"
 cat > "$CATDD_DIR/CaTDD_INSTALL.md" <<'MARKER'
 # CaTDD Install Marker
 
@@ -134,6 +161,7 @@ This directory is managed by `scripts/installCaTDD4Cline.sh` from MyCaTDD.
 Refresh this project by rerunning the installer from the MyCaTDD repository.
 MARKER
 
+log_replace_or_new "$CLINE_RULES_DIR/catdd.md"
 cat > "$CLINE_RULES_DIR/catdd.md" <<'RULES'
 # CaTDD Cline Project Rule
 
