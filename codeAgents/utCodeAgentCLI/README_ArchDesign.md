@@ -1,0 +1,339 @@
+# utCodeAgentCLI Architecture Design
+
+This document defines the high-level architecture for `utCodeAgentCLI`: a CaTDD-native CLI built on top of a generic, CaTDD-independent `AgentSDK` runtime abstraction.
+
+## Context
+
+- Active story: [../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Requirements index: [README_UserStory.md](README_UserStory.md)
+- USER requirements: [README_UserStory4USER.md](README_UserStory4USER.md)
+- INVENTOR requirements: [README_UserStory4INVENTOR.md](README_UserStory4INVENTOR.md)
+- DEVELOPER requirements: [README_UserStory4DEVELOPER.md](README_UserStory4DEVELOPER.md)
+- CLI contract: [README_UsageDesign.md](README_UsageDesign.md)
+- Startup guide: [README_UserGuide.md](README_UserGuide.md)
+- Method source of truth: [../../methodPrompts/](../../methodPrompts/)
+- Portable command source of truth: [../../slashCommands/](../../slashCommands/)
+
+`utCodeAgentCLI` is not yet a runnable binary. This architecture describes the intended production-ready shape before detail design, unit-test design, or TypeScript implementation begins.
+
+## Who
+
+| Role | Architecture concern |
+| --- | --- |
+| USER | Receives traceable CaTDD test artifacts from a goal, source context, and User Story without learning every low-level command first. |
+| INVENTOR | Verifies the CLI delegates CaTDD semantics to `methodPrompts` and `slashCommands`, never hardcoding method meaning in the CLI. |
+| DEVELOPER | Builds and extends the CLI through explicit parser, planner, runtime-adapter, trace, diagnostics, and control contracts. |
+
+## What
+
+The architecture separates two systems:
+
+1. `AgentSDK`: a generic LLM agent runtime library. It knows about goals, messages, tools, sessions, permissions, traces, hooks, adapters, and execution control. It does not know CaTDD.
+2. `utCodeAgentCLI`: a CaTDD application on top of `AgentSDK`. It parses CLI arguments, resolves CaTDD behaviors to portable slash commands, injects method prompt references, preserves US/AC/TC traceability, and records CaTDD execution traces.
+
+## When
+
+Use this architecture before creating `src/`, runtime adapters, low-level TypeScript interfaces, or executable CLI tests.
+
+Update it whenever requirements add a new runtime target, trace field, execution-control mode, adapter boundary, or CaTDD delegation rule.
+
+## Where
+
+The design belongs in `codeAgents/utCodeAgentCLI/` because it is module-scoped to the future CLI execution layer.
+
+Future implementation files should live under a structure like:
+
+```text
+codeAgents/utCodeAgentCLI/
+  src/
+    cli/
+    catdd/
+    agentsdk/
+    adapters/
+    trace/
+    config/
+  tests/
+  traces/
+```
+
+## Why
+
+The main architecture risk is method drift: a convenient CLI could duplicate CaTDD semantics, invent category meanings, or bypass portable slash-command contracts. The design avoids that by making `AgentSDK` generic and making `utCodeAgentCLI` an orchestrator, not a method owner.
+
+The second risk is runtime lock-in. The CLI must run first as raw TypeScript/Node.js, then adapt to Copilot-native and OpenCode surfaces, while leaving LangGraph and Google ADK as research-informed optional adapters.
+
+## How
+
+High-level execution:
+
+1. Parse and validate `--goal`, `--target`, `--behave`, optional story/source/config/diagnostic flags.
+2. Convert parsed input into a `CatddInvocation` with normalized selectors and state expectations.
+3. Resolve `--behave` to one or more portable `UT_*` slash commands.
+4. Resolve required method prompts by file path; never inline CaTDD category meaning.
+5. Build an `AgentRunPlan` for `AgentSDK`.
+6. Execute the plan through a selected runtime adapter.
+7. Preserve CaTDD skeletons and status transitions through delegated commands.
+8. Write a machine-readable trace for success and execution failure.
+
+## Architecture Goals
+
+- Keep `AgentSDK` CaTDD-independent.
+- Keep all CaTDD method semantics delegated to `methodPrompts/` and `slashCommands/`.
+- Support raw TypeScript/Node.js as the first runtime target.
+- Provide adapter boundaries for GitHub Copilot/MCP, OpenCode, existing CLIs, and future SDKs.
+- Preserve USER traceability from User Story to skeleton to executable RED tests.
+- Provide INVENTOR proof through diagnostic prompt/command resolution.
+- Provide DEVELOPER extension points for auth, audit, auto modules, hooks, and control.
+
+## Requirements Traceability
+
+| Requirement | Architectural support |
+| --- | --- |
+| USER flows | `CliParser`, `InvocationValidator`, `BehaviorRegistry`, and `CatddPlanner` validate arguments, resolve behavior, and route skeleton/review/implementation work through delegated slash commands. |
+| INVENTOR proof | `MethodPromptResolver`, `SlashCommandResolver`, and diagnostic flags expose the exact source prompt and command files used in execution order. |
+| DEVELOPER operation | `RuntimeAdapter`, `ControlPort`, `TraceWriter`, `DiagnosticReporter`, and `LogSink` provide extensible runtime, pause/approval, trace, error, and logging boundaries. |
+
+## External Framework Reference Matrix
+
+| Reference | Useful idea | Architecture influence | Hard dependency? |
+| --- | --- | --- | --- |
+| GitHub Copilot with MCP | Tool/context bridge, toolset control, policy, OAuth/PAT options, and security controls. | Model Copilot as an adapter surface and keep permission/policy concepts in `AuthPort` and `ControlPort`. | No. Required target surface, accessed through an adapter. |
+| OpenCode | Primary agents, subagents, permissions, project/global config, and Plan/Build modes. | Inspire runtime roles, permission profiles, subagent delegation, and command adapter shape. | Adapter target for v1.0 planning. |
+| LangGraph/LangChain | Stateful graph execution, persistence, human-in-the-loop, memory, streaming, and tracing. | Inform future checkpoint/resume, interrupt, and trace visualization design. | No. Optional future adapter or reference. |
+| Google ADK | Production agent sessions, graph workflows, callbacks, plugins, auth, observability, and TypeScript support. | Inform auth, audit, hooks, auto modules, sessions, and deployment-oriented observability. | No. Optional future adapter or reference. |
+| Existing CLIs | stdin/stdout/stderr, exit codes, config files, and environment variables. | Provide `CliProcessAdapter` so `AgentSDK` can call external tools through process boundaries. | Yes for raw TS execution. |
+
+## System Context
+
+```text
+USER / CodeAgent
+  -> utCodeAgentCLI CLI parser
+  -> CatddInvocation validator
+  -> CaTDD planner and behavior resolver
+  -> AgentSDK run plan
+  -> RuntimeAdapter
+  -> slashCommands + methodPrompts
+  -> test files, stdout/stderr, trace files
+```
+
+`methodPrompts/` and `slashCommands/` sit beside the CLI, not below `AgentSDK`. They are CaTDD assets consumed by `utCodeAgentCLI` and passed into agent runs as explicit files and commands.
+
+## Module Boundaries
+
+| Module | Responsibility | Public surface |
+| --- | --- | --- |
+| `cli/` | Parse argv, load config, normalize paths, and produce `CatddInvocation`. | `parseArgv(argv)`, `loadConfig(path)` |
+| `catdd/` | Resolve behavior aliases, method prompts, slash commands, selectors, and state contracts. | `planCatddRun(invocation)` |
+| `agentsdk/` | Provide generic agent execution contracts independent of CaTDD. | `AgentRuntime`, `RuntimeAdapter`, `ToolPort`, `TracePort`, `ControlPort` |
+| `adapters/` | Bridge run plans to raw TypeScript, Copilot/MCP, OpenCode, and process-based CLIs. | `RawTsRuntimeAdapter`, `CopilotRuntimeAdapter`, `OpenCodeRuntimeAdapter`, `CliProcessAdapter` |
+| `trace/` | Write machine-readable traces for success and execution failure. | `TraceWriter`, `TraceSchema` |
+| `diagnostics/` | Format actionable errors, warnings, diagnostic logs, and suggestions. | `DiagnosticReporter`, `SuggestionEngine` |
+
+## AgentSDK Programming Interface
+
+`AgentSDK` is the generic library boundary. It may be implemented in TypeScript first, but its concepts should stay portable.
+
+### Core Interfaces
+
+```ts
+export interface AgentRuntime {
+  run(plan: AgentRunPlan, context: AgentRunContext): Promise<AgentRunResult>;
+}
+
+export interface RuntimeAdapter {
+  prepare(plan: AgentRunPlan, context: AgentRunContext): Promise<PreparedRun>;
+  execute(prepared: PreparedRun, control: ControlPort): Promise<AgentRunResult>;
+}
+
+export interface AgentRunPlan {
+  goal: string;
+  steps: AgentRunStep[];
+  requiredTools: ToolRef[];
+  tracePolicy: TracePolicy;
+}
+```
+
+Exact TypeScript types, error classes, and module names belong to later detail design.
+
+### Auth/Audit/Auto/Hooks/Control Ports
+
+| Port | Responsibility | CaTDD awareness |
+| --- | --- | --- |
+| `AuthPort` | Provide runtime credentials, token lookup, inherited context, OAuth/PAT integration, or no-auth local mode. | None. |
+| `AuditPort` | Record actor, adapter, command, target, timestamp, policy decision, and trace ID. | None; receives labels from `utCodeAgentCLI`. |
+| `AutoPort` | Register enterprise automation modules for policy checks, exports, or organization-specific automation. | None by default. |
+| `HookPort` | Register lifecycle callbacks such as `pre-parse`, `post-plan`, `pre-step`, `post-step`, `on-failure`, and `pre-trace-write`. | None. |
+| `ControlPort` | Pause, approve, skip, abort, checkpoint, resume, timeout, and cancel execution. | None. |
+
+## Runtime Adaptations
+
+### Raw TypeScript Runtime
+
+The first implementation target is a Node.js TypeScript CLI that reads local files, executes portable slash-command steps through an internal runner or process adapter, writes deterministic traces, and has no required external agent runtime.
+
+### GitHub Copilot And MCP Adapter
+
+The Copilot adapter targets Copilot-native surfaces through prompt wrappers and MCP-compatible tool/context bridges. It must keep prompt wrappers thin, expose toolsets explicitly, respect host policy, and require `ControlPort` approval for sensitive actions unless policy marks them safe.
+
+### OpenCode Adapter
+
+The OpenCode adapter maps `AgentSDK` plans to OpenCode concepts: Plan-like read-only mode for analysis/review, Build-like full-access mode for skeleton/implementation, permission profiles for tool access, optional subagent delegation, and project-level configuration generated from `CatddInvocation`.
+
+### LangGraph Reference Adapter
+
+LangGraph is not required, but its graph model informs future long-running workflow design: parse, plan, resolve, execute, review, trace, and reflect stages can become graph nodes, with persistence and interrupts supporting checkpoint/resume.
+
+### Google ADK Reference Adapter
+
+Google ADK is a research reference for production agent concerns. Its sessions, runtime config, callbacks, plugins, observability, tool authentication, and TypeScript support inform `ControlPort`, `HookPort`, `AutoPort`, `AuditPort`, and `TracePort` design.
+
+### Existing CLI Adapter
+
+`CliProcessAdapter` lets `AgentSDK` call external command-line programs through stdin/stdout/stderr capture, exit-code mapping, timeout, cancellation, environment control, working-directory control, and redaction before trace/audit persistence.
+
+## Data Flow
+
+```text
+argv
+  -> CliParser
+  -> CatddInvocation
+  -> InvocationValidator
+  -> BehaviorRegistry
+  -> MethodPromptResolver + SlashCommandResolver
+  -> CatddRunPlan
+  -> AgentRunPlan
+  -> RuntimeAdapter.execute()
+  -> slashCommands/methodPrompts/test files
+  -> TraceWriter + stdout/stderr + exit code
+```
+
+Failure flow:
+
+```text
+execution error
+  -> DiagnosticReporter
+  -> TraceWriter records failure point
+  -> ControlPort decides stop/skip/abort when interactive
+  -> process exit code
+```
+
+## Execution Trace Model
+
+Each run writes a machine-readable JSON or YAML trace with at least:
+
+| Field | Purpose |
+| --- | --- |
+| `traceVersion` | Schema version for forward compatibility. |
+| `timestamp` | Run start time. |
+| `invocation` | Original command string and normalized arguments. |
+| `workspace` | Repository root, config file, and working directory. |
+| `resolvedMethodPrompts` | Method prompt file paths and the reason each was used. |
+| `resolvedSlashCommands` | Slash command names, paths, and execution order. |
+| `steps` | Step status, duration, adapter, approval decision, and error if any. |
+| `files` | Files read, written, or skipped. |
+| `tcTransitions` | TC-ID, category, before status, after status, and owning file. |
+| `exit` | Exit code, outcome, duration, and failure point. |
+
+Trace redaction is required. Secrets, tokens, and raw LLM responses must be redacted or separately gated before persistence.
+
+## State And Control Model
+
+`utCodeAgentCLI` observes the CaTDD file-state model from requirements:
+
+```text
+EMPTY -> DESIGNED -> PARTIAL -> FULLY_RED -> ALL_GREEN
+```
+
+`AgentSDK` controls generic run state:
+
+```text
+created -> prepared -> running -> waiting_for_approval -> completed
+                              \-> failed
+                              \-> aborted
+                              \-> skipped
+```
+
+The bridge rule is strict: CaTDD statuses (`PLANNED`, `RED`, `GREEN`) belong to test files and delegated commands; generic run states belong to `AgentSDK` and adapters.
+
+## Cross-Cutting Concerns
+
+| Concern | Owner | Rule |
+| --- | --- | --- |
+| Auth | `AgentSDK` + adapter | Use inherited runtime credentials or configured providers; never write raw secrets to traces. |
+| Audit | `AgentSDK` | Record actor, adapter, command, target, policy decision, trace ID, and timestamp. |
+| Auto | `AgentSDK` extension point | Enterprise automation can add policy checks or exports, but must not mutate CaTDD semantics. |
+| Hooks | `HookPort` | Support lifecycle points such as `pre-parse`, `post-plan`, `pre-step`, `post-step`, `on-failure`, and `pre-trace-write`. |
+| Control | `ControlPort` | Pause, approve, skip, abort, checkpoint, resume, timeout, and cancel execution. |
+| Diagnostics | `utCodeAgentCLI` + `AgentSDK` | Separate user-facing errors from inventor/developer diagnostics such as resolved prompt and command paths. |
+
+## Dependencies
+
+| Dependency | Direction | Reason | Risk |
+| --- | --- | --- | --- |
+| `utCodeAgentCLI -> methodPrompts` | Read-only file dependency | Resolve CaTDD category and method meaning. | Missing or stale prompt files block execution. |
+| `utCodeAgentCLI -> slashCommands` | Read-only/execute dependency | Run portable CaTDD behaviors. | Command contract drift requires resolver diagnostics. |
+| `utCodeAgentCLI -> AgentSDK` | Application calls generic runtime. | Keep runtime adapters out of CaTDD logic. | Boundary can blur if CaTDD terms leak into SDK. |
+| `AgentSDK -> RuntimeAdapter` | Interface dependency. | Support raw TS, Copilot/MCP, OpenCode, and future runtimes. | Adapter mismatch or incomplete capabilities. |
+| `TraceWriter -> filesystem` | Write dependency. | Persist machine-readable run records. | Trace paths and redaction policy need detail design. |
+
+## Key Decisions
+
+| Decision | Rationale | Status |
+| --- | --- | --- |
+| Introduce `AgentSDK` as a generic layer below `utCodeAgentCLI`. | Keeps LLM runtime concerns reusable and CaTDD-independent. | Proposed. |
+| Make raw TypeScript/Node.js the first runtime. | Satisfies the story assumption and avoids early dependency lock-in. | Proposed. |
+| Treat Copilot/MCP and OpenCode as adapter targets. | Meets compatibility goals while preserving CLI core. | Proposed. |
+| Treat LangGraph and Google ADK as research references first. | They inform graph, session, callback, and observability design without becoming required dependencies. | Proposed. |
+| Keep CaTDD semantics out of `AgentSDK`. | Satisfies INVENTOR method-delegation requirements. | Accepted. |
+| Persist traces on success and execution failure. | Satisfies traceability and audit requirements. | Accepted. |
+
+## Risks And Constraints
+
+- Adapter drift: Copilot, OpenCode, LangGraph, and ADK APIs can change.
+- Method drift: CLI implementation may accidentally hardcode CaTDD semantics.
+- Trace leakage: traces may capture sensitive paths, prompts, or tokens.
+- Runtime overhead: adapter indirection may add latency.
+- Ambiguous source-depth expectations: Copilot SDK and OpenCode compatibility depth still need detail-design decisions.
+
+## Non-Goals
+
+- Implement the CLI binary.
+- Define exact TypeScript class layout or package names.
+- Write unit tests or US/AC/TC test skeletons.
+- Redefine CaTDD categories, status discipline, or method prompt content.
+- Replace `slashCommands/` with `utCodeAgentCLI` logic.
+- Choose final enterprise auth or audit storage infrastructure.
+
+## Usage Example
+
+Run this from the repository root to verify this architecture document and its Chinese mirror have matching heading structure:
+
+```bash
+awk '/^#{1,6} /{print length($1), $1}' codeAgents/utCodeAgentCLI/README_ArchDesign.md > /tmp/ut-arch-en.headings
+awk '/^#{1,6} /{print length($1), $1}' codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md > /tmp/ut-arch-zh.headings
+diff -u /tmp/ut-arch-en.headings /tmp/ut-arch-zh.headings
+```
+
+Expected result: `diff` prints no output and exits with code 0.
+
+## Review Checklist
+
+- Architecture decisions trace to the active user story and role-specific requirements.
+- `AgentSDK` has no CaTDD method knowledge.
+- `utCodeAgentCLI` delegates CaTDD semantics to `methodPrompts/` and `slashCommands/`.
+- Raw TS, Copilot/MCP, OpenCode, existing CLI, LangGraph, and Google ADK positions are explicit.
+- Auth, audit, auto, hooks, and control have clear extension points.
+- Trace fields cover success, execution failure, command resolution, file writes, and TC status transitions.
+- EN/ZH heading structure matches.
+
+## Open Questions
+
+- Should `AgentSDK` live inside `codeAgents/utCodeAgentCLI/src/agentsdk/` first, or become a separate package once the API stabilizes?
+- Should trace output default to `codeAgents/utCodeAgentCLI/traces/`, `.catdd/traces/`, or a user-configured path?
+- Which Copilot integration depth is required first: prompt-wrapper execution, MCP tools, VS Code extension integration, or GitHub Models usage?
+- Which OpenCode surface is required first: command adapter, provider abstraction, workflow compatibility, or shared agent runtime?
+- Should LangGraph and Google ADK become optional adapters in v1.x, or remain reference architectures only?
+
+## Next Step
+
+Run `/SPEC_takeDetailDesign` on the active story to turn this architecture into detailed TypeScript-facing contracts, data schemas, and verification design.

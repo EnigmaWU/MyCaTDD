@@ -83,14 +83,15 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 - Todo user stories waiting:
   - None currently.
 - Active user stories opened:
-  - `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` for drafting `utCodeAgentCLI` architecture design.
+  - `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` for `utCodeAgentCLI` architecture design; architecture draft created.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
+- Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`.
 
 ## Next Recommended Command
 
 Run one of these after context review:
 
-- `/SPEC_takeArchDesign` on `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` to draft `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `README_ArchDesign_ZH.md`.
+- `/SPEC_takeDetailDesign` on `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` to convert the architecture into detailed TypeScript-facing contracts, data schemas, and verification design.
 - `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
 - `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
 - `/SPEC_updateProjectContext` when any project fact, convention, or guardrail in this file needs correction.

@@ -14,7 +14,8 @@ Opened by `/SPEC_openUserStory` on 2026-06-02.
 - Status: OPEN.
 - Active state: `.catdd/spec/doingUS/` active story.
 - Opened from: [../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
-- Next recommended command: `/SPEC_takeArchDesign`.
+- Architecture design draft: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`.
+- Next recommended command: `/SPEC_takeDetailDesign`.
 
 ## Analysis Status
 
@@ -116,4 +117,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_takeArchDesign` to draft `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `README_ArchDesign_ZH.md` from this active story.
+Run `/SPEC_takeDetailDesign` to turn `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `README_ArchDesign_ZH.md` into detailed TypeScript-facing contracts, data schemas, and verification design.

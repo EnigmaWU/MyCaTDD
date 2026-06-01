@@ -71,6 +71,7 @@
 | --- | --- |
 | `README.md` / `README_ZH.md` | WHAT：这一层是什么；WHY：这一层为什么存在。 |
 | `README_UserStory.md` / `README_UserStory_ZH.md` | WHO：谁需要这一层；WHAT：它应提供什么用户价值；以及 detail design 前的 BDD acceptance criteria。 |
+| `README_ArchDesign.md` / `README_ArchDesign_ZH.md` | 高层模块架构、runtime adapter 边界、AgentSDK 分离、trace/audit/control 设计，以及关键 trade-offs。 |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW：现在如何设计或使用这一层；WHO：谁使用；WHEN：何时在这一层工作；WHERE：未来资产位于哪里；以及可复制执行的 `Usage Example`。 |
 
 当可运行 CLI 存在后，具体 CLI 命令应记录在独立用户指南中。
