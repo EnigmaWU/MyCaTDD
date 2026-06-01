@@ -156,12 +156,12 @@ Commit team-shared artifacts such as:
 - `.catdd/spec/pendingNews/`
 - `.catdd/spec/analyzedNews/`
 - `.catdd/spec/todoUS/`
+- `.catdd/spec/doingUS/`
 - `.catdd/spec/doneUS/`
 - Project-root `README*` docs such as `README_UserGuide.md`, `README_UserStories.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md`
 
-Keep local work-in-progress artifacts gitignored, especially:
+Keep local trace artifacts gitignored, especially:
 
-- `.catdd/spec/doingUS/`
 - `.catdd/spec/WorkingProcessLog.md`
 
 The installers manage the `.gitignore` rules for those local artifacts.

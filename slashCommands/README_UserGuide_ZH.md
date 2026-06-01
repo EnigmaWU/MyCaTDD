@@ -156,12 +156,12 @@ bash scripts/test_installCaTDD4Cline.sh
 - `.catdd/spec/pendingNews/`
 - `.catdd/spec/analyzedNews/`
 - `.catdd/spec/todoUS/`
+- `.catdd/spec/doingUS/`
 - `.catdd/spec/doneUS/`
 - 项目根目录 `README*` 文档，例如 `README_UserGuide.md`、`README_UserStories.md`、`README_DetailDesign.md`、`README_VerifyDesign.md`
 
-保持本地进行中的工作产物被 gitignore，尤其是：
+保持本地过程追踪产物被 gitignore，尤其是：
 
-- `.catdd/spec/doingUS/`
 - `.catdd/spec/WorkingProcessLog.md`
 
 安装器会维护这些本地产物的 `.gitignore` 规则。

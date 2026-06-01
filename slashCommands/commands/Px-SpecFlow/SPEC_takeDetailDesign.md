@@ -23,10 +23,10 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 ## Output Contract
 
-- Project-root Detailed-oriented README SPEC docs as needed: `README_DetailDesign.md` and `README_StateDesign.md`.
+- Project-root README SPEC docs as needed: `README_DetailDesign.md` and `README_StateDesign.md`.
 - First-time README SPEC docs should be based on the corresponding `slashCommands/templates/README_*Template.md` file.
 - A lightweight implementation plan inside the relevant README SPEC docs, covering technical context, structure decisions, constraints, and verification strategy for the active story.
-- Detailed design notes tied to the active user story in local gitignored `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
+- Detailed design notes tied to the active user story in team-shared `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
 - Acceptance criteria that can be converted into CaTDD US/AC/TC skeletons.
 - Explicit assumptions, constraints, and unresolved questions.
 

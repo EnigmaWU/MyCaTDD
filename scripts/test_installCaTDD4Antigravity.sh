@@ -44,7 +44,7 @@ grep -Fq 'Antigravity project rule: `.antigravityrules/catdd.md`' "$install_mark
 grep -Fq 'analyzedNews/' "$install_marker" || fail "install marker missing analyzedNews shared artifact guidance"
 
 target_gitignore="$TARGET_DIR/.gitignore"
-grep -Fq '/.catdd/spec/doingUS/' "$target_gitignore" || fail "target .gitignore missing doingUS local-state rule"
+! grep -Fq '/.catdd/spec/doingUS/' "$target_gitignore" || fail "target .gitignore must not ignore doingUS team-shared state"
 grep -Fq '/.catdd/spec/WorkingProcessLog.md' "$target_gitignore" || fail "target .gitignore missing WorkingProcessLog local-state rule"
 
 init_target="$TARGET_DIR/new-antigravity-project"

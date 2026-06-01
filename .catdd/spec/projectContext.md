@@ -40,7 +40,7 @@ After self-install with `scripts/installCaTDD4Copilot.sh --target "$PWD" --init 
 - Do not redefine CaTDD method semantics in `slashCommands/`, `codeAgents/`, or native prompt wrappers; refer back to `methodPrompts/`.
 - Treat native wrappers as thin, regenerable adapters over `.catdd/slashCommands/` or `slashCommands/`.
 - Commit shared SpecCoding artifacts such as `.catdd/spec/projectContext.md`, pending imported work, analyzed raw input archives, todo user stories, done user stories, and stable project-root `README*` SPEC docs.
-- Keep local SpecCoding work state gitignored: `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md`.
+- Keep local SpecCoding work-state trace gitignored: `.catdd/spec/WorkingProcessLog.md`.
 - `SPEC_*` commands may orchestrate `UT_*` commands, but must not replace P0/P1/P2 category rules.
 
 ## Current Design Decisions

@@ -20,7 +20,7 @@ Prepare and commit completed work after story, tests, product code, and review p
 
 ## Output Contract
 
-- Commit scope summary for team-shared artifacts, tests, and product code; exclude local gitignored `.catdd/spec/doingUS/` and `.catdd/spec/WorkingProcessLog.md` state.
+- Commit scope summary for team-shared artifacts, tests, and product code; include `.catdd/spec/doingUS/` updates when relevant and exclude local gitignored `.catdd/spec/WorkingProcessLog.md`.
 - Structured commit message with what, how, and why.
 - Next recommended command: `SPEC_triggerCI`.
 

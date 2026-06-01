@@ -22,7 +22,7 @@ Review the active user story, detailed design, and acceptance criteria before te
 
 ## Output Contract
 
-- Review result recorded against local gitignored `.catdd/spec/doingUS/` work state: pass, revise design, or ask developer.
+- Review result recorded against team-shared `.catdd/spec/doingUS/` work state: pass, revise design, or ask developer.
 - Missing acceptance criteria, ambiguity, README SPEC doc gaps, edge cases, measurable outcomes, and risk list from a clarify/analyze/checklist-style review gate.
 - Next recommended command: `SPEC_designUnitTests` or `SPEC_updateDetailDesign`.
 

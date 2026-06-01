@@ -84,6 +84,5 @@ Testing/
 book*
 
 # BEGIN CaTDD SpecCoding local state
-/.catdd/spec/doingUS/
 /.catdd/spec/WorkingProcessLog.md
 # END CaTDD SpecCoding local state
