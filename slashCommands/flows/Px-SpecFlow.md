@@ -95,7 +95,7 @@ SpecFlow lifecycle state lives under `.catdd/spec/`. Shared `README*` SPEC docs 
 | `.catdd/spec/pendingNews/` | Team-shared | Commit imported work items that should be visible to the team. |
 | `.catdd/spec/analyzedNews/` | Team-shared | Commit raw imported issues or features after analysis so `pendingNews/` stays only for waiting input. |
 | `.catdd/spec/todoUS/` | Team-shared | Commit analyzed user stories that are ready to be picked up. |
-| `.catdd/spec/doingUS/` | Local work state | Gitignore active user stories because they represent one developer's current progress. |
+| `.catdd/spec/doingUS/` | Team-shared | Commit active user stories so in-progress work can move across machines and stay visible to teammates. |
 | `.catdd/spec/doneUS/` | Team-shared | Commit completed story records after review, verification, and close. |
 | `README*.md` | Team-shared | Commit project-root SPEC docs such as README, architecture design, user stories, user guide, detail design, error design, resource design, state design, performance design, compatibility design, diagnosis design, and verify design as needed. |
 | `.catdd/spec/WorkingProcessLog.md` | Local work state | Gitignore personal command traces, temporary decisions, and unresolved local notes. |
@@ -103,7 +103,6 @@ SpecFlow lifecycle state lives under `.catdd/spec/`. Shared `README*` SPEC docs 
 Recommended target-project `.gitignore` rules:
 
 ```gitignore
-/.catdd/spec/doingUS/
 /.catdd/spec/WorkingProcessLog.md
 ```
 

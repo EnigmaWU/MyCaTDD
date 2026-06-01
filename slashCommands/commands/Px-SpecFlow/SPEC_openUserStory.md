@@ -21,13 +21,13 @@ Move a selected user story from `.catdd/spec/todoUS/` into `.catdd/spec/doingUS/
 
 ## Output Contract
 
-- A `.catdd/spec/doingUS/*-UserStory.md` local gitignored work state file.
+- A `.catdd/spec/doingUS/*-UserStory.md` team-shared active work file.
 - Status marker showing the story is open.
 - Initial next-step recommendation, usually `SPEC_takeDetailDesign`.
 
 ## Prompt Template
 
-Ask the assistant to preserve story traceability, copy or move only the selected story into local active work state, and start a clear active-work status section.
+Ask the assistant to preserve story traceability, copy or move only the selected story into shared active work state, and start a clear active-work status section.
 
 ## Conflict Guard
 

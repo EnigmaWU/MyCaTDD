@@ -22,7 +22,7 @@ Revise detailed design and acceptance criteria after story review, implementatio
 
 ## Output Contract
 
-- Updated design and acceptance criteria in local gitignored `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
+- Updated design and acceptance criteria in team-shared `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
 - Updated `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, or `README_VerifyDesign.md` when the feedback changes module, error, resource, state, performance, compatibility, diagnosis, or verification design.
 - Review-feedback checklist showing what was addressed.
 - Remaining risks and next recommended command.
