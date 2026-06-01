@@ -25,6 +25,15 @@ Import an issue, bug report, defect, or support problem into `.catdd/spec/pendin
 - Preserved source text or a traceable summary.
 - Clear labels for issue, bug, defect, regression, refactor, or research input.
 
+## Subagent Recommendation
+
+When invoked during an active chat conversation — for example, when a new issue surfaces mid-session — prefer delegating this command to a subagent so the current conversation context is not occupied.
+
+- Capture the issue source text or URL and the relevant project context from the current session.
+- Pass them as inputs to the subagent.
+- Let the subagent write the pending artifact and report the output file name on completion.
+- Continue the current conversation without waiting for the subagent to finish.
+
 ## Prompt Template
 
 Ask the assistant to preserve issue intent, normalize metadata, capture observed/expected behavior when available, and avoid analysis beyond lightweight classification.

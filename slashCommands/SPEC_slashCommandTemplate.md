@@ -102,6 +102,19 @@ Repeat until the output artifact is complete and the output contract is satisfie
 4. Report the artifact produced, assumptions made, and next recommended command.
 5. Avoid product-specific, editor-specific, model-specific, or language-specific behavior unless explicitly supplied as input.
 
+## Subagent Recommendation
+
+Include this section when the command is suitable for background delegation during an active conversation.
+
+State whether this command should be delegated to a subagent and explain when delegation is preferable:
+
+- **When to delegate**: describe the mid-conversation trigger (for example, a new issue or idea surfaces while other work is in progress).
+- **What to capture**: list the context the caller should pass as subagent inputs (for example, source text or URL and relevant project context).
+- **What to expect back**: describe what the subagent reports on completion (for example, the output file name).
+- **Caller behavior**: state that the main conversation may continue without waiting for the subagent to finish.
+
+Omit this section for commands that must run synchronously or whose output is immediately needed by the next step in the flow.
+
 ## Input Contract
 
 List command parameters using portable placeholders:

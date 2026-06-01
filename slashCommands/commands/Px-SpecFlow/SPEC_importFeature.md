@@ -25,6 +25,15 @@ Import a feature request, enhancement idea, product request, or developer propos
 - Preserved source text or a traceable summary.
 - Clear labels for feature, enhancement, experiment, refactor, or research input.
 
+## Subagent Recommendation
+
+When invoked during an active chat conversation — for example, when a new idea or feature request surfaces mid-session — prefer delegating this command to a subagent so the current conversation context is not occupied.
+
+- Capture the feature source text or URL and the relevant project context from the current session.
+- Pass them as inputs to the subagent.
+- Let the subagent write the pending artifact and report the output file name on completion.
+- Continue the current conversation without waiting for the subagent to finish.
+
 ## Prompt Template
 
 Ask the assistant to preserve feature intent, normalize metadata, capture user value when available, and avoid design or implementation analysis beyond lightweight classification.
