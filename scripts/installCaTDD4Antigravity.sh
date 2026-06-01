@@ -4,16 +4,18 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET_DIR=""
 INIT=0
+VERBOSE=0
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/installCaTDD4Antigravity.sh --target DIR [--init]
+Usage: scripts/installCaTDD4Antigravity.sh --target DIR [--init] [--verbose]
 
 Install or refresh CaTDD methodPrompts, slashCommands, SpecCoding artifact workspace, and Antigravity project rules into a target project.
 
 Options:
   --target DIR      Target project directory.
   --init            Create the target directory if it does not exist.
+  --verbose         Print detailed action steps for diagnosis.
   -h, --help        Show this help.
 USAGE
 }
@@ -27,6 +29,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --init)
       INIT=1
+      shift
+      ;;
+    --verbose)
+      VERBOSE=1
       shift
       ;;
     -h|--help)
@@ -61,6 +67,10 @@ TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
 CATDD_DIR="$TARGET_DIR/.catdd"
 SPEC_DIR="$CATDD_DIR/spec"
 ANTIGRAVITY_RULES_DIR="$TARGET_DIR/.antigravityrules"
+
+if [[ "$VERBOSE" -eq 1 ]]; then
+  set -x
+fi
 
 if [[ -e "$ANTIGRAVITY_RULES_DIR" && ! -d "$ANTIGRAVITY_RULES_DIR" ]]; then
   echo "[installCaTDD4Antigravity] Cannot create .antigravityrules/catdd.md because .antigravityrules exists and is not a directory." >&2

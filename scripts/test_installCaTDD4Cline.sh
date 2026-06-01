@@ -21,6 +21,9 @@ git -C "$REPO_ROOT" check-ignore -q .clinerules/catdd.md || fail "generated Clin
 
 "$INSTALLER" --target "$TARGET_DIR"
 
+verbose_output="$("$INSTALLER" --target "$TARGET_DIR" --verbose 2>&1)"
+grep -Fq '+ mkdir -p ' <<< "$verbose_output" || fail "--verbose output missing detailed action trace"
+
 [[ -f "$TARGET_DIR/.catdd/methodPrompts/README.md" ]] || fail "missing installed methodPrompts"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "missing installed slashCommands"
 [[ -d "$TARGET_DIR/.catdd/spec/pendingNews" ]] || fail "missing .catdd/spec/pendingNews"

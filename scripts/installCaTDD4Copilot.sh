@@ -5,10 +5,11 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET_DIR=""
 CLEAN_PROMPTS=0
 INIT=0
+VERBOSE=0
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/installCaTDD4Copilot.sh --target DIR [--clean-prompts] [--init]
+Usage: scripts/installCaTDD4Copilot.sh --target DIR [--clean-prompts] [--init] [--verbose]
 
 Install or refresh CaTDD methodPrompts, slashCommands, and Copilot-native prompt wrappers into a target project.
 
@@ -16,6 +17,7 @@ Options:
   --target DIR      Target project directory.
   --clean-prompts   Remove existing generated UT_*.prompt.md and SPEC_*.prompt.md files before regenerating Copilot wrappers.
   --init            Create the target directory if it does not exist.
+  --verbose         Print detailed action steps for diagnosis.
   -h, --help        Show this help.
 USAGE
 }
@@ -33,6 +35,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --init)
       INIT=1
+      shift
+      ;;
+    --verbose)
+      VERBOSE=1
       shift
       ;;
     -h|--help)
@@ -69,6 +75,10 @@ SPEC_DIR="$CATDD_DIR/spec"
 GITHUB_DIR="$TARGET_DIR/.github"
 PROMPTS_DIR="$GITHUB_DIR/prompts"
 INSTRUCTIONS_DIR="$GITHUB_DIR/instructions"
+
+if [[ "$VERBOSE" -eq 1 ]]; then
+  set -x
+fi
 
 mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/doneUS" "$PROMPTS_DIR" "$INSTRUCTIONS_DIR"
 

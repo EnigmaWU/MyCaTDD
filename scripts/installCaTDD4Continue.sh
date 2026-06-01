@@ -5,10 +5,11 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET_DIR=""
 CLEAN_PROMPTS=0
 INIT=0
+VERBOSE=0
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/installCaTDD4Continue.sh --target DIR [--clean-prompts] [--init]
+Usage: scripts/installCaTDD4Continue.sh --target DIR [--clean-prompts] [--init] [--verbose]
 
 Install or refresh CaTDD methodPrompts, slashCommands, SpecCoding artifact workspace, Continue project rules, and Continue prompt wrappers into a target project.
 
@@ -16,6 +17,7 @@ Options:
   --target DIR      Target project directory.
   --clean-prompts   Remove existing generated UT_*.prompt and SPEC_*.prompt files before regenerating Continue wrappers.
   --init            Create the target directory if it does not exist.
+  --verbose         Print detailed action steps for diagnosis.
   -h, --help        Show this help.
 USAGE
 }
@@ -33,6 +35,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --init)
       INIT=1
+      shift
+      ;;
+    --verbose)
+      VERBOSE=1
       shift
       ;;
     -h|--help)
@@ -68,6 +74,10 @@ CATDD_DIR="$TARGET_DIR/.catdd"
 SPEC_DIR="$CATDD_DIR/spec"
 CONTINUE_RULES_DIR="$TARGET_DIR/.continue/rules"
 CONTINUE_PROMPTS_DIR="$TARGET_DIR/.continue/prompts"
+
+if [[ "$VERBOSE" -eq 1 ]]; then
+  set -x
+fi
 
 mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/doneUS" "$CONTINUE_RULES_DIR" "$CONTINUE_PROMPTS_DIR"
 
