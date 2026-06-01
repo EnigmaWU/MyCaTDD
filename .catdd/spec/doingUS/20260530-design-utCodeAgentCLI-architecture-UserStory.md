@@ -1,6 +1,7 @@
 # User Story: Design utCodeAgentCLI Architecture
 
 Created by `/SPEC_analyzeIssue` on 2026-06-01.
+Opened by `/SPEC_openUserStory` on 2026-06-02.
 
 ## Source Trace
 
@@ -10,8 +11,10 @@ Created by `/SPEC_analyzeIssue` on 2026-06-01.
 
 ## Active Work Status
 
-- Status: TODO.
-- Active state: `.catdd/spec/todoUS/` todo story.
+- Status: OPEN.
+- Active state: `.catdd/spec/doingUS/` active story.
+- Opened from: [../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Next recommended command: `/SPEC_takeArchDesign`.
 
 ## Analysis Status
 
@@ -113,4 +116,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Open this User Story via `/SPEC_openUserStory` to move it from `.catdd/spec/todoUS/` to `.catdd/spec/doingUS/` and begin drafting the architecture design.
+Run `/SPEC_takeArchDesign` to draft `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `README_ArchDesign_ZH.md` from this active story.

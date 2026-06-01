@@ -39,7 +39,7 @@ After self-install with `scripts/installCaTDD4Copilot.sh --target "$PWD" --init 
 - Keep English and Chinese README mirrors aligned by heading structure.
 - Do not redefine CaTDD method semantics in `slashCommands/`, `codeAgents/`, or native prompt wrappers; refer back to `methodPrompts/`.
 - Treat native wrappers as thin, regenerable adapters over `.catdd/slashCommands/` or `slashCommands/`.
-- Commit shared SpecCoding artifacts such as `.catdd/spec/projectContext.md`, pending imported work, analyzed raw input archives, todo user stories, done user stories, and stable project-root `README*` SPEC docs.
+- Commit shared SpecCoding artifacts such as `.catdd/spec/projectContext.md`, pending imported work, analyzed raw input archives, todo user stories, active doing user stories, done user stories, and stable project-root `README*` SPEC docs.
 - Keep local SpecCoding work-state trace gitignored: `.catdd/spec/WorkingProcessLog.md`.
 - `SPEC_*` commands may orchestrate `UT_*` commands, but must not replace P0/P1/P2 category rules.
 
@@ -80,15 +80,17 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 - Completed user stories:
   - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
   - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
-- Todo user stories opened:
-  - `.catdd/spec/todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md`
+- Todo user stories waiting:
+  - None currently.
+- Active user stories opened:
+  - `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` for drafting `utCodeAgentCLI` architecture design.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 
 ## Next Recommended Command
 
 Run one of these after context review:
 
-- `/SPEC_openUserStory` on `.catdd/spec/todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` to move it into local active work (`doingUS`) and start drafting the architecture design.
+- `/SPEC_takeArchDesign` on `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` to draft `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `README_ArchDesign_ZH.md`.
 - `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
 - `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
 - `/SPEC_updateProjectContext` when any project fact, convention, or guardrail in this file needs correction.
