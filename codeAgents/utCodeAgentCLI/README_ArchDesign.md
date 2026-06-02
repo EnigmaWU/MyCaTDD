@@ -120,83 +120,94 @@ Px-SpecFlow treats architecture-oriented SPEC docs as a family. This story does 
 
 ## Architecture Views
 
-The initial architecture was too list-shaped. This revision adds C4-style views because architecture review needs stable viewpoints: who uses the system, which containers own responsibilities, which components own decisions, and where runtime state moves.
+The initial architecture was too list-shaped. This revision adds Mermaid-renderable C4-style views because architecture review needs stable viewpoints: who uses the system, which containers own responsibilities, which components own decisions, and where runtime state moves.
 
 ### C4 Level 1: System Context View
 
-```text
-USER / CodeAgent
-  -> utCodeAgentCLI
-      -> methodPrompts/        source of CaTDD method semantics
-      -> slashCommands/        source of portable UT_* execution contracts
-      -> AgentSDK              generic agent runtime boundary
-          -> Raw TypeScript runtime
-          -> Copilot/MCP adapter
-          -> OpenCode adapter
-          -> Existing CLI adapter
-      -> Test files            US/AC/TC skeletons and RED/GREEN status
-      -> Trace/Audit outputs   machine-readable run evidence
+```mermaid
+flowchart LR
+  actor["USER / CodeAgent"] --> cli["utCodeAgentCLI"]
+  cli --> methodPrompts["methodPrompts/<br/>CaTDD method semantics"]
+  cli --> slashCommands["slashCommands/<br/>portable UT_* execution contracts"]
+  cli --> agentSdk["AgentSDK<br/>generic agent runtime boundary"]
+  agentSdk --> rawTs["Raw TypeScript runtime"]
+  agentSdk --> copilot["Copilot/MCP adapter"]
+  agentSdk --> openCode["OpenCode adapter"]
+  agentSdk --> existingCli["Existing CLI adapter"]
+  cli --> testFiles["Target CaTDD TestFiles<br/>US/AC/TC skeletons and RED/GREEN status"]
+  cli --> traceAudit["Trace/Audit outputs<br/>machine-readable run evidence"]
 ```
+
+`Target CaTDD TestFiles` means the repository test artifact files that delegated `UT_*` commands read or write. They are not a runtime dependency of `AgentSDK`; they are CaTDD work products where US/AC/TC comments and RED/GREEN test status live.
 
 ### C4 Level 2: Container View
 
-```text
-utCodeAgentCLI process
-  cli container
-    - argv parsing, config loading, path normalization
-  CaTDD application container
-    - behavior resolution, method prompt resolution, slash-command resolution
-  command execution container
-    - per-command approval, adapter invocation, result normalization
-  AgentSDK library container
-    - generic runtime, auth, audit, hooks, control, tool and adapter ports
-  trace and diagnostics container
-    - trace event collection, redaction, structured diagnostics
+```mermaid
+flowchart TB
+  subgraph process["utCodeAgentCLI process"]
+    cliContainer["cli container<br/>argv parsing, config loading, path normalization"]
+    catddContainer["CaTDD application container<br/>behavior resolution, method prompt resolution, slash-command resolution"]
+    executorContainer["command execution container<br/>per-command approval, adapter invocation, result normalization"]
+    traceContainer["trace and diagnostics container<br/>trace event collection, redaction, structured diagnostics"]
+  end
+
+  agentSdkContainer["AgentSDK library container<br/>generic runtime, auth, audit, hooks, control, tool and adapter ports"]
+
+  cliContainer --> catddContainer --> executorContainer --> agentSdkContainer
+  executorContainer --> traceContainer
+  agentSdkContainer --> traceContainer
 ```
 
 ### C4 Level 3: Component View
 
-```text
-CliParser
-  -> InvocationValidator
-  -> BehaviorRegistry
-  -> MethodPromptResolver + SlashCommandResolver
-  -> CatddPlanner
-  -> SlashCommandExecutor
-  -> AgentRunPlanBuilder
-  -> AgentRuntime + RuntimeAdapter
-  -> TraceEventCollector
-  -> TraceWriter + DiagnosticReporter
+```mermaid
+flowchart LR
+  cliParser["CliParser"] --> invocationValidator["InvocationValidator"]
+  invocationValidator --> behaviorRegistry["BehaviorRegistry"]
+  behaviorRegistry --> resolvers["MethodPromptResolver + SlashCommandResolver"]
+  resolvers --> catddPlanner["CatddPlanner"]
+  catddPlanner --> slashExecutor["SlashCommandExecutor"]
+  slashExecutor --> runPlanBuilder["AgentRunPlanBuilder"]
+  runPlanBuilder --> runtime["AgentRuntime + RuntimeAdapter"]
+  runtime --> traceCollector["TraceEventCollector"]
+  traceCollector --> outputs["TraceWriter + DiagnosticReporter"]
 ```
 
 `SlashCommandExecutor` is the explicit bridge between CaTDD planning and generic runtime execution. It owns command-level approval, adapter invocation, result normalization, and command failure boundaries. It does not own CaTDD category meaning.
 
 ### Runtime Execution View
 
-```text
-parse argv
-  -> validate invocation and file state expectation
-  -> resolve method prompts and slash commands
-  -> build ordered command steps
-  -> for each step:
-       ControlPort asks approve/skip/abort when interactive
-       SlashCommandExecutor invokes RuntimeAdapter
-       RuntimeAdapter returns StepResult
-       TraceEventCollector records command, files, status transitions, and error
-  -> TraceWriter persists success or execution failure
-  -> stdout/stderr and process exit code are emitted
+```mermaid
+flowchart TB
+  parse["parse argv"] --> validate["validate invocation and file state expectation"]
+  validate --> resolve["resolve method prompts and slash commands"]
+  resolve --> plan["build ordered command steps"]
+  plan --> approval["ControlPort asks approve/skip/abort when interactive"]
+  approval --> execute["SlashCommandExecutor invokes RuntimeAdapter"]
+  execute --> stepResult["RuntimeAdapter returns StepResult"]
+  stepResult --> collect["TraceEventCollector records command, files, status transitions, and error"]
+  collect --> persist["TraceWriter persists success or execution failure"]
+  persist --> exit["stdout/stderr and process exit code are emitted"]
 ```
 
 ### Deployment View
 
-| Deployment mode | Runtime boundary | Primary adapter | Notes |
-| --- | --- | --- | --- |
-| Raw TypeScript | Local Node.js process | `RawTsRuntimeAdapter` + `CliProcessAdapter` | First implementation target; no external agent runtime required. |
-| Copilot-native | Copilot host plus MCP/tool surface | `CopilotRuntimeAdapter` | Uses host policy and credentials; still delegates CaTDD semantics to files. |
-| OpenCode | OpenCode agent process/config | `OpenCodeRuntimeAdapter` | Maps review/design/implementation to permissioned modes. |
-| Existing CLI | Child process boundary | `CliProcessAdapter` | Captures stdout/stderr/exit codes and redacts before trace/audit persistence. |
+```mermaid
+flowchart TB
+  cli["utCodeAgentCLI"] --> raw["Raw TypeScript<br/>Local Node.js process<br/>RawTsRuntimeAdapter + CliProcessAdapter"]
+  cli --> copilot["Copilot-native<br/>Copilot host plus MCP/tool surface<br/>CopilotRuntimeAdapter"]
+  cli --> openCode["OpenCode<br/>OpenCode agent process/config<br/>OpenCodeRuntimeAdapter"]
+  cli --> processCli["Existing CLI<br/>Child process boundary<br/>CliProcessAdapter"]
 
-## System Context
+  raw --> traces["local trace output"]
+  copilot --> hostPolicy["host policy and credentials"]
+  openCode --> permissions["permissioned modes"]
+  processCli --> redaction["stdout/stderr/exit-code capture and redaction"]
+```
+
+## Execution Context
+
+This section complements the C4 Level 1 view. C4 Level 1 shows the system boundary; this execution context shows the path of one `utCodeAgentCLI` invocation after that boundary is established.
 
 ```text
 USER / CodeAgent
@@ -206,7 +217,7 @@ USER / CodeAgent
   -> AgentSDK run plan
   -> RuntimeAdapter
   -> slashCommands + methodPrompts
-  -> test files, stdout/stderr, trace files
+  -> Target CaTDD TestFiles, stdout/stderr, trace files
 ```
 
 `methodPrompts/` and `slashCommands/` sit beside the CLI, not below `AgentSDK`. They are CaTDD assets consumed by `utCodeAgentCLI` and passed into agent runs as explicit files and commands.
@@ -431,7 +442,7 @@ Expected result: `diff` prints no output and exits with code 0.
 - `AgentSDK` has no CaTDD method knowledge.
 - `utCodeAgentCLI` delegates CaTDD semantics to `methodPrompts/` and `slashCommands/`.
 - Raw TS, Copilot/MCP, OpenCode, existing CLI, LangGraph, and Google ADK positions are explicit.
-- C4-style context, container, component, runtime, and deployment views are present.
+- Mermaid-renderable C4-style context, container, component, runtime, and deployment views are present.
 - Px-SpecFlow architecture-oriented surfaces are covered, delegated, deferred, or marked not applicable.
 - Auth, audit, auto, hooks, and control have clear extension points.
 - Trace fields cover success, execution failure, command resolution, file writes, and TC status transitions.

@@ -31,39 +31,50 @@ Declare how this architecture design handles the architecture-oriented SPEC surf
 
 ## Architecture Views
 
-Use C4-style views or an equivalent explicit view model. Keep views high-level; detailed class/interface design belongs in `README_DetailDesign.md`.
+Use Mermaid-renderable C4-style views or an equivalent explicit view model. Keep views high-level; detailed class/interface design belongs in `README_DetailDesign.md`.
 
 ### C4 Level 1: System Context View
 
-```text
-{{Primary actor}} -> {{System}} -> {{External system or dependency}}
+```mermaid
+flowchart LR
+  actor["{{Primary actor}}"] --> system["{{System}}"]
+  system --> dependency["{{External system or dependency}}"]
 ```
 
 ### C4 Level 2: Container View
 
-```text
-{{System}}
-  {{Container 1}} -> {{Container 2}} -> {{Container 3}}
+```mermaid
+flowchart TB
+  subgraph system["{{System}}"]
+    container1["{{Container 1}}"] --> container2["{{Container 2}}"] --> container3["{{Container 3}}"]
+  end
 ```
 
 ### C4 Level 3: Component View
 
-```text
-{{Container}}
-  {{Component 1}} -> {{Component 2}} -> {{Component 3}}
+```mermaid
+flowchart LR
+  subgraph container["{{Container}}"]
+    component1["{{Component 1}}"] --> component2["{{Component 2}}"] --> component3["{{Component 3}}"]
+  end
 ```
 
 ### Runtime Execution View
 
-```text
-{{Trigger}} -> {{Decision point}} -> {{Runtime step}} -> {{State/trace output}}
+```mermaid
+flowchart LR
+  trigger["{{Trigger}}"] --> decision["{{Decision point}}"] --> runtimeStep["{{Runtime step}}"] --> output["{{State/trace output}}"]
 ```
 
 ### Deployment View
 
-| Deployment Mode | Runtime Boundary | Primary Adapter | Notes |
-| --- | --- | --- | --- |
-| {{Mode}} | {{Boundary}} | {{Adapter}} | {{Constraint/trade-off}} |
+```mermaid
+flowchart TB
+  system["{{System}}"] --> mode["{{Deployment Mode}}"]
+  mode --> boundary["{{Runtime Boundary}}"]
+  boundary --> adapter["{{Primary Adapter}}"]
+  adapter --> notes["{{Constraint/trade-off}}"]
+```
 
 ## Module Boundaries
 
@@ -125,7 +136,7 @@ Expected result: the temporary file shows architecture sections for views, bound
 ## Review Checklist
 
 - Architecture decisions are traceable to a user story or project constraint.
-- C4-style context, container, component, runtime, and deployment views are present or explicitly marked not applicable.
+- Mermaid-renderable C4-style context, container, component, runtime, and deployment views are present or explicitly marked not applicable.
 - Px-SpecFlow architecture-oriented surfaces are covered, delegated, deferred, or marked not applicable.
 - Module boundaries are explicit enough for implementation and review.
 - Dependency direction and risks are visible.

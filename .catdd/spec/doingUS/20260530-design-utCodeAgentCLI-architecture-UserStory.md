@@ -35,7 +35,7 @@ A comprehensive, modular architecture design document is available under `codeAg
 3. Adaptability mechanisms of AgentSDK to run standalone (raw TS runtime), target existing SDKs (e.g., GitHub Copilot SDK, OpenCode), or adapt to existing CLIs.
 4. Forward-looking architectural considerations in AgentSDK for authentication (auth), auditing (audit), pluggable automation (auto) for enterprise usage, lifecycle extension hooks (hooks), and execution/session control (control).
 5. Extension contracts, interface definitions, and data flow.
-6. C4-style architecture views showing system context, container ownership, component ownership, runtime execution flow, and deployment/runtime boundaries.
+6. Mermaid-renderable C4-style architecture views showing system context, container ownership, component ownership, runtime execution flow, and deployment/runtime boundaries.
 7. Px-SpecFlow architecture-oriented surface coverage that states whether usage, error, resource, performance, compatibility, diagnosis, verification, and state concerns are covered in ArchDesign, delegated to existing docs, deferred, or not applicable.
 
 ## User Story
@@ -81,7 +81,7 @@ A reviewer can inspect `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `REA
 ### AC-6: Architecture View Coverage
 - **Given** the architecture design must be reviewable before detailed design,
 - **When** the architecture design is drafted,
-- **Then** it includes C4-style or equivalent explicit architecture views for system context, containers, components, runtime execution, and deployment/runtime boundaries,
+- **Then** it includes Mermaid-renderable C4-style or equivalent explicit architecture views for system context, containers, components, runtime execution, and deployment/runtime boundaries,
 - **And** each view identifies the owning module or runtime boundary responsible for CaTDD delegation, generic AgentSDK execution, slash-command invocation, trace capture, and interactive control.
 
 ### AC-7: Px-SpecFlow Architecture Surface Coverage
@@ -97,7 +97,7 @@ In scope:
 - Designing the generic, CaTDD-independent "AgentSDK" layer, its programming interface (auth, audit, auto, hooks, control), and its adaptations to raw runtimes, existing SDKs, and existing CLIs.
 - Designing how the CaTDD-native `utCodeAgentCLI` integrates with `AgentSDK` and delegates core verification/slash flows to `methodPrompts` and `slashCommands`.
 - Specifying architectural strategies within AgentSDK for authentication (auth), auditing (audit), pluggable enterprise automation (auto), lifecycle extension hooks (hooks), and session control (control).
-- Adding C4-style architecture views or an equivalent explicit view model that makes system, container, component, runtime, and deployment boundaries reviewable.
+- Adding Mermaid-renderable C4-style architecture views or an equivalent explicit view model that makes system, container, component, runtime, and deployment boundaries reviewable.
 - Mapping Px-SpecFlow architecture-oriented SPEC surfaces to covered, delegated, deferred, or not-applicable status.
 - Creating `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `README_ArchDesign_ZH.md`.
 
