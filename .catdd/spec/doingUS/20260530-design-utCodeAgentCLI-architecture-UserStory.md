@@ -36,6 +36,7 @@ A comprehensive, modular architecture design document is available under `codeAg
 4. Forward-looking architectural considerations in AgentSDK for authentication (auth), auditing (audit), pluggable automation (auto) for enterprise usage, lifecycle extension hooks (hooks), and execution/session control (control).
 5. Extension contracts, interface definitions, and data flow.
 6. C4-style architecture views showing system context, container ownership, component ownership, runtime execution flow, and deployment/runtime boundaries.
+7. Px-SpecFlow architecture-oriented surface coverage that states whether usage, error, resource, performance, compatibility, diagnosis, verification, and state concerns are covered in ArchDesign, delegated to existing docs, deferred, or not applicable.
 
 ## User Story
 
@@ -83,6 +84,12 @@ A reviewer can inspect `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `REA
 - **Then** it includes C4-style or equivalent explicit architecture views for system context, containers, components, runtime execution, and deployment/runtime boundaries,
 - **And** each view identifies the owning module or runtime boundary responsible for CaTDD delegation, generic AgentSDK execution, slash-command invocation, trace capture, and interactive control.
 
+### AC-7: Px-SpecFlow Architecture Surface Coverage
+- **Given** Px-SpecFlow defines multiple architecture-oriented SPEC surfaces,
+- **When** the architecture design is drafted,
+- **Then** it states how `README_UsageDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_VerifyDesign.md`, and relevant state design sources are covered, delegated, deferred, or marked not applicable,
+- **And** it explicitly marks embedded and digital media architecture points as not applicable unless the story introduces those domains.
+
 ## Scope
 
 In scope:
@@ -91,6 +98,7 @@ In scope:
 - Designing how the CaTDD-native `utCodeAgentCLI` integrates with `AgentSDK` and delegates core verification/slash flows to `methodPrompts` and `slashCommands`.
 - Specifying architectural strategies within AgentSDK for authentication (auth), auditing (audit), pluggable enterprise automation (auto), lifecycle extension hooks (hooks), and session control (control).
 - Adding C4-style architecture views or an equivalent explicit view model that makes system, container, component, runtime, and deployment boundaries reviewable.
+- Mapping Px-SpecFlow architecture-oriented SPEC surfaces to covered, delegated, deferred, or not-applicable status.
 - Creating `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `README_ArchDesign_ZH.md`.
 
 Out of scope:

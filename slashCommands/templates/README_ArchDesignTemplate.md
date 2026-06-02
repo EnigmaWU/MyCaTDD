@@ -14,6 +14,21 @@ This is the SpecCoding template for project-root `README_ArchDesign.md`. Create 
 - {{Goal 2}}
 - {{Constraint}}
 
+## Px-SpecFlow Architecture-Oriented Coverage
+
+Declare how this architecture design handles the architecture-oriented SPEC surfaces defined by Px-SpecFlow. Mark each concern as covered here, delegated to an existing document, deferred to a later SPEC doc, or not applicable.
+
+| Surface | Handling | Follow-up Trigger |
+| --- | --- | --- |
+| `README_UsageDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
+| `README_ErrorDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
+| `README_ResourceDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
+| `README_PerfDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
+| `README_CompatDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
+| `README_DiagnosisDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
+| `README_VerifyDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
+| `README_StateDesign.md` or ArchDesign state chapter | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
+
 ## Architecture Views
 
 Use C4-style views or an equivalent explicit view model. Keep views high-level; detailed class/interface design belongs in `README_DetailDesign.md`.
@@ -111,5 +126,6 @@ Expected result: the temporary file shows architecture sections for views, bound
 
 - Architecture decisions are traceable to a user story or project constraint.
 - C4-style context, container, component, runtime, and deployment views are present or explicitly marked not applicable.
+- Px-SpecFlow architecture-oriented surfaces are covered, delegated, deferred, or marked not applicable.
 - Module boundaries are explicit enough for implementation and review.
 - Dependency direction and risks are visible.

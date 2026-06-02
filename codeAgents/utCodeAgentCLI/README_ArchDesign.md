@@ -85,6 +85,21 @@ High-level execution:
 - Provide INVENTOR proof through diagnostic prompt/command resolution.
 - Provide DEVELOPER extension points for auth, audit, auto modules, hooks, and control.
 
+## Px-SpecFlow Architecture-Oriented Coverage
+
+Px-SpecFlow treats architecture-oriented SPEC docs as a family. This story does not need every companion document yet, but the architecture must state which concerns are covered here, delegated to existing docs, deferred, or not applicable.
+
+| Surface | Current handling | Follow-up trigger |
+| --- | --- | --- |
+| `README_UsageDesign.md` | Existing CLI contract. This ArchDesign consumes it as parser and behavior-selector input instead of redefining argument syntax. | Update UsageDesign when CLI syntax, aliases, or error cases change. |
+| `README_ErrorDesign.md` | Covered at architecture level by failure flow, `DiagnosticReporter`, `ControlPort`, exit codes, and execution-failure traces. | Create a separate ErrorDesign when error taxonomy, recovery policy, or user-facing code tables stabilize. |
+| `README_ResourceDesign.md` | Minimal for a local CLI. Current resource boundaries are timeout, cancellation, trace file growth, redaction, and child-process lifecycle. | Create when memory, CPU, concurrency, quota, cache, or filesystem budgets become acceptance criteria. |
+| `README_PerfDesign.md` | Captured as runtime/adapter overhead risk; no latency or throughput budget is accepted yet. | Create when command latency, large-repository scaling, or runtime startup budgets become requirements. |
+| `README_CompatDesign.md` | Covered by runtime adapter and deployment views for raw TypeScript, Copilot/MCP, OpenCode, and existing CLI processes. | Create when Node.js version, OS matrix, Copilot/OpenCode version, or protocol compatibility must be locked. |
+| `README_DiagnosisDesign.md` | Covered by diagnostics, trace schema, audit labels, redaction, and resolved prompt/command reporting. | Create when log levels, telemetry schema, symptom maps, or field-debug workflow become explicit requirements. |
+| `README_VerifyDesign.md` | Covered at topology level by method-prompt/slash-command delegation and review checklist expectations. | Create during detail/test design when mock boundaries, CI loops, and US/AC/TC verification matrices are defined. |
+| `README_StateDesign.md` or ArchDesign state chapter | Covered by `State And Control Model`, which is enough for P1 state-skeleton consumers at this architecture gate. | Split into `README_StateDesign.md` if lifecycle/state machines become larger than this architecture chapter. |
+
 ## Requirements Traceability
 
 | Requirement | Architectural support |
@@ -301,6 +316,12 @@ command or adapter error
   -> process exit code
 ```
 
+## Embedded And Digital Media Architecture Points
+
+Not applicable for `utCodeAgentCLI` v1 architecture. There is no MCU, RTOS, DMA, power domain, media pipeline, buffer topology, sample format, or A/V sync boundary in scope.
+
+The nearest architectural equivalents are child-process boundaries, filesystem trace outputs, adapter timeouts, cancellation, and command-control checkpoints; those are covered by the runtime, state/control, resource, and trace sections above.
+
 ## Execution Trace Model
 
 Each run writes a machine-readable JSON or YAML trace with at least:
@@ -411,6 +432,7 @@ Expected result: `diff` prints no output and exits with code 0.
 - `utCodeAgentCLI` delegates CaTDD semantics to `methodPrompts/` and `slashCommands/`.
 - Raw TS, Copilot/MCP, OpenCode, existing CLI, LangGraph, and Google ADK positions are explicit.
 - C4-style context, container, component, runtime, and deployment views are present.
+- Px-SpecFlow architecture-oriented surfaces are covered, delegated, deferred, or marked not applicable.
 - Auth, audit, auto, hooks, and control have clear extension points.
 - Trace fields cover success, execution failure, command resolution, file writes, and TC status transitions.
 - EN/ZH heading structure matches.

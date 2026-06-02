@@ -85,6 +85,21 @@ codeAgents/utCodeAgentCLI/
 - 通过 diagnostic prompt/command resolution 给 INVENTOR 提供证明。
 - 为 DEVELOPER 提供 auth、audit、auto modules、hooks 与 control 的 extension points。
 
+## Px-SpecFlow Architecture-Oriented Coverage
+
+Px-SpecFlow 将 architecture-oriented SPEC docs 视为一个文档族。本 story 还不需要每个 companion document，但 architecture 必须说明哪些 concern 已在这里覆盖、委托给已有文档、延后，或不适用。
+
+| Surface | Current handling | Follow-up trigger |
+| --- | --- | --- |
+| `README_UsageDesign.md` | 已存在的 CLI contract。本 ArchDesign 将其作为 parser 与 behavior-selector input 消费，而不重新定义 argument syntax。 | 当 CLI syntax、aliases 或 error cases 变化时更新 UsageDesign。 |
+| `README_ErrorDesign.md` | 通过 failure flow、`DiagnosticReporter`、`ControlPort`、exit codes 与 execution-failure traces 在 architecture level 覆盖。 | 当 error taxonomy、recovery policy 或 user-facing code tables 稳定时创建单独 ErrorDesign。 |
+| `README_ResourceDesign.md` | 对 local CLI 而言较轻。当前 resource boundaries 是 timeout、cancellation、trace file growth、redaction 与 child-process lifecycle。 | 当 memory、CPU、concurrency、quota、cache 或 filesystem budgets 成为 acceptance criteria 时创建。 |
+| `README_PerfDesign.md` | 作为 runtime/adapter overhead risk 捕获；当前尚未接受 latency 或 throughput budget。 | 当 command latency、large-repository scaling 或 runtime startup budgets 成为 requirements 时创建。 |
+| `README_CompatDesign.md` | 通过 raw TypeScript、Copilot/MCP、OpenCode 与 existing CLI processes 的 runtime adapter 与 deployment views 覆盖。 | 当 Node.js version、OS matrix、Copilot/OpenCode version 或 protocol compatibility 必须锁定时创建。 |
+| `README_DiagnosisDesign.md` | 通过 diagnostics、trace schema、audit labels、redaction 与 resolved prompt/command reporting 覆盖。 | 当 log levels、telemetry schema、symptom maps 或 field-debug workflow 成为明确 requirements 时创建。 |
+| `README_VerifyDesign.md` | 通过 method-prompt/slash-command delegation 与 review checklist expectations 在 topology level 覆盖。 | 在 detail/test design 阶段定义 mock boundaries、CI loops 与 US/AC/TC verification matrices 时创建。 |
+| `README_StateDesign.md` or ArchDesign state chapter | 由 `State And Control Model` 覆盖；这足以供 architecture gate 阶段的 P1 state-skeleton consumers 使用。 | 如果 lifecycle/state machines 超出本 architecture chapter 的承载范围，则拆分到 `README_StateDesign.md`。 |
+
 ## Requirements Traceability
 
 | Requirement | 架构支持 |
@@ -301,6 +316,12 @@ command or adapter error
   -> process exit code
 ```
 
+## Embedded And Digital Media Architecture Points
+
+`utCodeAgentCLI` v1 architecture 不适用。当前 scope 内没有 MCU、RTOS、DMA、power domain、media pipeline、buffer topology、sample format 或 A/V sync boundary。
+
+最接近的 architecture equivalents 是 child-process boundaries、filesystem trace outputs、adapter timeouts、cancellation 与 command-control checkpoints；这些已由上面的 runtime、state/control、resource 与 trace sections 覆盖。
+
 ## Execution Trace Model
 
 每次 run 至少写入包含以下字段的 machine-readable JSON 或 YAML trace：
@@ -411,6 +432,7 @@ Expected result：`diff` 不输出内容，并以 code 0 退出。
 - `utCodeAgentCLI` 将 CaTDD semantics 委托给 `methodPrompts/` 与 `slashCommands/`。
 - Raw TS、Copilot/MCP、OpenCode、existing CLI、LangGraph 与 Google ADK 定位明确。
 - 存在 C4-style context、container、component、runtime 与 deployment views。
+- Px-SpecFlow architecture-oriented surfaces 已覆盖、委托、延后或标记为不适用。
 - Auth、audit、auto、hooks 与 control 有清晰 extension points。
 - Trace fields 覆盖 success、execution failure、command resolution、file writes 与 TC status transitions。
 - EN/ZH heading structure 一致。
