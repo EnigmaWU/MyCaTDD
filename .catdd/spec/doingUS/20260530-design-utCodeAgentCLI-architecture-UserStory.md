@@ -15,7 +15,15 @@ Opened by `/SPEC_openUserStory` on 2026-06-02.
 - Active state: `.catdd/spec/doingUS/` active story.
 - Opened from: [../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
 - Architecture design draft: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`.
+- Architecture review gate: `/SPEC_reviewArchDesign` PASS on 2026-06-03.
 - Next recommended command: `/SPEC_takeDetailDesign`.
+
+## Architecture Review Status
+
+- Review command: `/SPEC_reviewArchDesign`.
+- Finding: PASS.
+- Evidence: `README_ArchDesign.md` and `README_ArchDesign_ZH.md` cover the active story requirements, preserve AgentSDK/CaTDD separation, define Mermaid-renderable C4-style views, map Px-SpecFlow architecture-oriented surfaces, cover trace/control/error paths, and keep EN/ZH heading structure aligned.
+- Non-blocking follow-ups: resolve open questions about package placement, trace output default, Copilot/OpenCode integration depth, and whether LangGraph/Google ADK become optional adapters during `/SPEC_takeDetailDesign`.
 
 ## Analysis Status
 

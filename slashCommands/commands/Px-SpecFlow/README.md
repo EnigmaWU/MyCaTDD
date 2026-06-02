@@ -18,7 +18,10 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_analyzeFeature.md](SPEC_analyzeFeature.md) | Analyze pending feature input, archive raw input, and generate a value-oriented user story. |
 | [SPEC_whatsNextTask.md](SPEC_whatsNextTask.md) | Recommend the next SpecCoding task from current lifecycle state. |
 | [SPEC_openUserStory.md](SPEC_openUserStory.md) | Move a selected user story into active work. |
+| [SPEC_takeArchDesign.md](SPEC_takeArchDesign.md) | Produce high-level architecture design and module boundaries. |
+| [SPEC_reviewArchDesign.md](SPEC_reviewArchDesign.md) | Review architecture quality before detailed design begins. |
 | [SPEC_takeDetailDesign.md](SPEC_takeDetailDesign.md) | Produce detailed design and acceptance criteria. |
+| [SPEC_reviewDetailDesign.md](SPEC_reviewDetailDesign.md) | Review detailed design quality before final story readiness review. |
 | [SPEC_reviewUserStory.md](SPEC_reviewUserStory.md) | Review story, acceptance criteria, and design readiness. |
 | [SPEC_updateDetailDesign.md](SPEC_updateDetailDesign.md) | Revise detail design after review feedback. |
 | [SPEC_designUnitTests.md](SPEC_designUnitTests.md) | Design CaTDD unit test skeletons for the active story. |

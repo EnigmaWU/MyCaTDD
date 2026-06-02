@@ -1,6 +1,7 @@
 # User Story: Add SPEC_reviewArchDesign and SPEC_reviewDetailDesign portable slash commands
 
 Created by `/SPEC_analyzeFeature` on 2026-06-03.
+Opened by `/SPEC_openUserStory` on 2026-06-03.
 
 ## Source Trace
 
@@ -10,8 +11,17 @@ Created by `/SPEC_analyzeFeature` on 2026-06-03.
 
 ## Active Work Status
 
-- Status: TODO.
-- Active state: `.catdd/spec/todoUS/` todo story.
+- Status: OPEN.
+- Active state: `.catdd/spec/doingUS/` active story.
+- Opened from: [../todoUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md](../todoUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md)
+- Next recommended command: `/SPEC_takeDetailDesign` is not needed for this command-contract story; implement the command specs and update `Px-SpecFlow.md` directly, then run `/SPEC_reviewArchDesign` on the current `utCodeAgentCLI` architecture design.
+
+## Implementation Status
+
+- Added command specs: `slashCommands/commands/Px-SpecFlow/SPEC_reviewArchDesign.md` and `slashCommands/commands/Px-SpecFlow/SPEC_reviewDetailDesign.md`.
+- Updated flow: `slashCommands/flows/Px-SpecFlow.md` now gates `SPEC_takeArchDesign` with `SPEC_reviewArchDesign` before `SPEC_takeDetailDesign`, and gates `SPEC_takeDetailDesign` with `SPEC_reviewDetailDesign` before final `SPEC_reviewUserStory` readiness review.
+- Updated discovery map: `slashCommands/commands/Px-SpecFlow/README.md` lists `SPEC_takeArchDesign`, `SPEC_reviewArchDesign`, and `SPEC_reviewDetailDesign` in sequence.
+- Applied review gate: `/SPEC_reviewArchDesign` PASS recorded on `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` for the current `utCodeAgentCLI` architecture design.
 
 ## Analysis Status
 
