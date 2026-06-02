@@ -95,13 +95,91 @@ High-level execution:
 
 ## External Framework Reference Matrix
 
-| Reference | Useful idea | Architecture influence | Hard dependency? |
+| Reference | Goal parsing | Command routing | State execution | Decision for utCodeAgentCLI |
+| --- | --- | --- | --- | --- |
+| GitHub Copilot with MCP | The host chat surface gathers goals and context; MCP tools expose additional context but do not replace CLI parsing. | Tool calls route through MCP servers and toolsets under host policy. | Host session and tool-call state are external; CaTDD file state remains in the workspace. | Treat Copilot/MCP as an adapter surface. Keep `CliParser`, `CatddPlanner`, and CaTDD state rules local. |
+| OpenCode | Agent mode and prompt context shape the goal; project/global config can specialize behavior. | Agent/tool permissions and Plan/Build modes constrain command execution. | Session state lives in OpenCode; file and TC state still belong to the target test files. | Map review behaviors to read-only Plan-like mode and design/implementation behaviors to Build-like mode. |
+| LangGraph/LangChain | Graph input state can model normalized invocation and goal context. | Edges route between parse, plan, approve, execute, trace, and recover nodes. | Durable graph state, interrupts, and replay can model long-running execution. | Use as a future reference for checkpoint/resume and visual trace design, not a v1 hard dependency. |
+| Google ADK | Runtime config, sessions, and agents can receive normalized goals. | Graph workflows, callbacks, plugins, and tools route work across agents. | Sessions, memory, cancellation, and observability support production execution state. | Use as a reference for `AuthPort`, `AuditPort`, `HookPort`, `AutoPort`, and `ControlPort`. |
+| Existing CLIs | argv and environment carry the normalized goal and context. | Process invocation routes to one external command at a time. | Exit codes and stdout/stderr are the observable state boundary. | Provide `CliProcessAdapter` for raw TypeScript execution and external tool integration. |
+
+## Architecture Views
+
+The initial architecture was too list-shaped. This revision adds C4-style views because architecture review needs stable viewpoints: who uses the system, which containers own responsibilities, which components own decisions, and where runtime state moves.
+
+### C4 Level 1: System Context View
+
+```text
+USER / CodeAgent
+  -> utCodeAgentCLI
+      -> methodPrompts/        source of CaTDD method semantics
+      -> slashCommands/        source of portable UT_* execution contracts
+      -> AgentSDK              generic agent runtime boundary
+          -> Raw TypeScript runtime
+          -> Copilot/MCP adapter
+          -> OpenCode adapter
+          -> Existing CLI adapter
+      -> Test files            US/AC/TC skeletons and RED/GREEN status
+      -> Trace/Audit outputs   machine-readable run evidence
+```
+
+### C4 Level 2: Container View
+
+```text
+utCodeAgentCLI process
+  cli container
+    - argv parsing, config loading, path normalization
+  CaTDD application container
+    - behavior resolution, method prompt resolution, slash-command resolution
+  command execution container
+    - per-command approval, adapter invocation, result normalization
+  AgentSDK library container
+    - generic runtime, auth, audit, hooks, control, tool and adapter ports
+  trace and diagnostics container
+    - trace event collection, redaction, structured diagnostics
+```
+
+### C4 Level 3: Component View
+
+```text
+CliParser
+  -> InvocationValidator
+  -> BehaviorRegistry
+  -> MethodPromptResolver + SlashCommandResolver
+  -> CatddPlanner
+  -> SlashCommandExecutor
+  -> AgentRunPlanBuilder
+  -> AgentRuntime + RuntimeAdapter
+  -> TraceEventCollector
+  -> TraceWriter + DiagnosticReporter
+```
+
+`SlashCommandExecutor` is the explicit bridge between CaTDD planning and generic runtime execution. It owns command-level approval, adapter invocation, result normalization, and command failure boundaries. It does not own CaTDD category meaning.
+
+### Runtime Execution View
+
+```text
+parse argv
+  -> validate invocation and file state expectation
+  -> resolve method prompts and slash commands
+  -> build ordered command steps
+  -> for each step:
+       ControlPort asks approve/skip/abort when interactive
+       SlashCommandExecutor invokes RuntimeAdapter
+       RuntimeAdapter returns StepResult
+       TraceEventCollector records command, files, status transitions, and error
+  -> TraceWriter persists success or execution failure
+  -> stdout/stderr and process exit code are emitted
+```
+
+### Deployment View
+
+| Deployment mode | Runtime boundary | Primary adapter | Notes |
 | --- | --- | --- | --- |
-| GitHub Copilot with MCP | Tool/context bridge, toolset control, policy, OAuth/PAT options, and security controls. | Model Copilot as an adapter surface and keep permission/policy concepts in `AuthPort` and `ControlPort`. | No. Required target surface, accessed through an adapter. |
-| OpenCode | Primary agents, subagents, permissions, project/global config, and Plan/Build modes. | Inspire runtime roles, permission profiles, subagent delegation, and command adapter shape. | Adapter target for v1.0 planning. |
-| LangGraph/LangChain | Stateful graph execution, persistence, human-in-the-loop, memory, streaming, and tracing. | Inform future checkpoint/resume, interrupt, and trace visualization design. | No. Optional future adapter or reference. |
-| Google ADK | Production agent sessions, graph workflows, callbacks, plugins, auth, observability, and TypeScript support. | Inform auth, audit, hooks, auto modules, sessions, and deployment-oriented observability. | No. Optional future adapter or reference. |
-| Existing CLIs | stdin/stdout/stderr, exit codes, config files, and environment variables. | Provide `CliProcessAdapter` so `AgentSDK` can call external tools through process boundaries. | Yes for raw TS execution. |
+| Raw TypeScript | Local Node.js process | `RawTsRuntimeAdapter` + `CliProcessAdapter` | First implementation target; no external agent runtime required. |
+| Copilot-native | Copilot host plus MCP/tool surface | `CopilotRuntimeAdapter` | Uses host policy and credentials; still delegates CaTDD semantics to files. |
+| OpenCode | OpenCode agent process/config | `OpenCodeRuntimeAdapter` | Maps review/design/implementation to permissioned modes. |
+| Existing CLI | Child process boundary | `CliProcessAdapter` | Captures stdout/stderr/exit codes and redacts before trace/audit persistence. |
 
 ## System Context
 
@@ -125,6 +203,7 @@ USER / CodeAgent
 | `cli/` | Parse argv, load config, normalize paths, and produce `CatddInvocation`. | `parseArgv(argv)`, `loadConfig(path)` |
 | `catdd/` | Resolve behavior aliases, method prompts, slash commands, selectors, and state contracts. | `planCatddRun(invocation)` |
 | `agentsdk/` | Provide generic agent execution contracts independent of CaTDD. | `AgentRuntime`, `RuntimeAdapter`, `ToolPort`, `TracePort`, `ControlPort` |
+| `executor/` | Invoke resolved slash-command steps through runtime adapters, enforce per-command control, and normalize command results. | `SlashCommandExecutor`, `StepResult`, `CommandResultNormalizer` |
 | `adapters/` | Bridge run plans to raw TypeScript, Copilot/MCP, OpenCode, and process-based CLIs. | `RawTsRuntimeAdapter`, `CopilotRuntimeAdapter`, `OpenCodeRuntimeAdapter`, `CliProcessAdapter` |
 | `trace/` | Write machine-readable traces for success and execution failure. | `TraceWriter`, `TraceSchema` |
 | `diagnostics/` | Format actionable errors, warnings, diagnostic logs, and suggestions. | `DiagnosticReporter`, `SuggestionEngine` |
@@ -201,19 +280,24 @@ argv
   -> BehaviorRegistry
   -> MethodPromptResolver + SlashCommandResolver
   -> CatddRunPlan
+  -> SlashCommandExecutor
   -> AgentRunPlan
+  -> ControlPort approval gate
   -> RuntimeAdapter.execute()
-  -> slashCommands/methodPrompts/test files
+  -> StepResult + FileChangeSet + TcTransitionSet
+  -> TraceEventCollector
   -> TraceWriter + stdout/stderr + exit code
 ```
 
 Failure flow:
 
 ```text
-execution error
+command or adapter error
+  -> SlashCommandExecutor marks failed step
   -> DiagnosticReporter
-  -> TraceWriter records failure point
+  -> TraceEventCollector records failure point and completed steps
   -> ControlPort decides stop/skip/abort when interactive
+  -> TraceWriter persists execution-failure trace
   -> process exit code
 ```
 
@@ -236,6 +320,8 @@ Each run writes a machine-readable JSON or YAML trace with at least:
 
 Trace redaction is required. Secrets, tokens, and raw LLM responses must be redacted or separately gated before persistence.
 
+`TraceEventCollector` receives normalized events from `SlashCommandExecutor` and runtime adapters. It compares pre-step and post-step file observations for TC status transitions, records which delegated command produced the change, and passes redacted structured data to `TraceWriter`.
+
 ## State And Control Model
 
 `utCodeAgentCLI` observes the CaTDD file-state model from requirements:
@@ -254,6 +340,8 @@ created -> prepared -> running -> waiting_for_approval -> completed
 ```
 
 The bridge rule is strict: CaTDD statuses (`PLANNED`, `RED`, `GREEN`) belong to test files and delegated commands; generic run states belong to `AgentSDK` and adapters.
+
+Ownership is split deliberately: `catdd/` validates the expected file state before planning, delegated slash commands produce CaTDD artifacts, `executor/` observes before/after command results, and `trace/` records the resulting `tcTransitions`. No `AgentSDK` type should contain CaTDD category definitions or TC status rules.
 
 ## Cross-Cutting Concerns
 
@@ -322,6 +410,7 @@ Expected result: `diff` prints no output and exits with code 0.
 - `AgentSDK` has no CaTDD method knowledge.
 - `utCodeAgentCLI` delegates CaTDD semantics to `methodPrompts/` and `slashCommands/`.
 - Raw TS, Copilot/MCP, OpenCode, existing CLI, LangGraph, and Google ADK positions are explicit.
+- C4-style context, container, component, runtime, and deployment views are present.
 - Auth, audit, auto, hooks, and control have clear extension points.
 - Trace fields cover success, execution failure, command resolution, file writes, and TC status transitions.
 - EN/ZH heading structure matches.

@@ -1,6 +1,6 @@
 # {{ProjectName}} Architecture Design
 
-This is the SpecCoding template for project-root `README_ArchDesign.md`. Create or update it from `SPEC_takeArchDesign` when a story changes architecture, module boundaries, dependencies, data flow, or key decisions.
+This is the SpecCoding template for project-root `README_ArchDesign.md`. Create or update it from `SPEC_takeArchDesign` when a story changes architecture views, module boundaries, dependencies, data flow, runtime placement, or key decisions.
 
 ## Context
 
@@ -13,6 +13,42 @@ This is the SpecCoding template for project-root `README_ArchDesign.md`. Create 
 - {{Goal 1}}
 - {{Goal 2}}
 - {{Constraint}}
+
+## Architecture Views
+
+Use C4-style views or an equivalent explicit view model. Keep views high-level; detailed class/interface design belongs in `README_DetailDesign.md`.
+
+### C4 Level 1: System Context View
+
+```text
+{{Primary actor}} -> {{System}} -> {{External system or dependency}}
+```
+
+### C4 Level 2: Container View
+
+```text
+{{System}}
+  {{Container 1}} -> {{Container 2}} -> {{Container 3}}
+```
+
+### C4 Level 3: Component View
+
+```text
+{{Container}}
+  {{Component 1}} -> {{Component 2}} -> {{Component 3}}
+```
+
+### Runtime Execution View
+
+```text
+{{Trigger}} -> {{Decision point}} -> {{Runtime step}} -> {{State/trace output}}
+```
+
+### Deployment View
+
+| Deployment Mode | Runtime Boundary | Primary Adapter | Notes |
+| --- | --- | --- | --- |
+| {{Mode}} | {{Boundary}} | {{Adapter}} | {{Constraint/trade-off}} |
 
 ## Module Boundaries
 
@@ -69,10 +105,11 @@ cp slashCommands/templates/README_ArchDesignTemplate.md "$TMP_DOC"
 sed -n '1,100p' "$TMP_DOC"
 ```
 
-Expected result: the temporary file shows architecture sections for boundaries, dependencies, data flow, and decisions.
+Expected result: the temporary file shows architecture sections for views, boundaries, dependencies, data flow, and decisions.
 
 ## Review Checklist
 
 - Architecture decisions are traceable to a user story or project constraint.
+- C4-style context, container, component, runtime, and deployment views are present or explicitly marked not applicable.
 - Module boundaries are explicit enough for implementation and review.
 - Dependency direction and risks are visible.

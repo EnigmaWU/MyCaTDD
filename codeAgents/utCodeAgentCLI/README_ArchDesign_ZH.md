@@ -95,13 +95,91 @@ codeAgents/utCodeAgentCLI/
 
 ## External Framework Reference Matrix
 
-| Reference | 有用思想 | 对架构的影响 | 是否硬依赖 |
+| Reference | Goal parsing | Command routing | State execution | Decision for utCodeAgentCLI |
+| --- | --- | --- | --- | --- |
+| GitHub Copilot with MCP | Host chat surface 收集 goal 与 context；MCP tools 提供额外 context，但不取代 CLI parsing。 | Tool calls 通过 MCP servers 与 toolsets 路由，并受 host policy 约束。 | Host session 与 tool-call state 属于外部；CaTDD file state 仍属于 workspace。 | 将 Copilot/MCP 视为 adapter surface。`CliParser`、`CatddPlanner` 与 CaTDD state rules 保持本地。 |
+| OpenCode | Agent mode 与 prompt context 塑造 goal；project/global config 可特化 behavior。 | Agent/tool permissions 与 Plan/Build modes 约束 command execution。 | Session state 位于 OpenCode；file 与 TC state 仍属于目标 test files。 | 将 review behaviors 映射到 read-only Plan-like mode，将 design/implementation behaviors 映射到 Build-like mode。 |
+| LangGraph/LangChain | Graph input state 可建模 normalized invocation 与 goal context。 | Edges 在 parse、plan、approve、execute、trace、recover nodes 之间路由。 | Durable graph state、interrupts 与 replay 可建模 long-running execution。 | 作为 checkpoint/resume 与 visual trace design 的未来参考，不作为 v1 hard dependency。 |
+| Google ADK | Runtime config、sessions 与 agents 可接收 normalized goals。 | Graph workflows、callbacks、plugins 与 tools 在 agents 间路由工作。 | Sessions、memory、cancellation 与 observability 支持 production execution state。 | 作为 `AuthPort`、`AuditPort`、`HookPort`、`AutoPort` 与 `ControlPort` 的参考。 |
+| Existing CLIs | argv 与 environment 承载 normalized goal 与 context。 | Process invocation 一次路由到一个 external command。 | Exit codes 与 stdout/stderr 是可观察 state boundary。 | 为 raw TypeScript execution 与外部工具集成提供 `CliProcessAdapter`。 |
+
+## Architecture Views
+
+初版 architecture 太像模块清单。本次修订增加 C4-style views，因为 architecture review 需要稳定视角：谁使用系统、哪些 containers 拥有哪些职责、哪些 components 拥有决策，以及 runtime state 在哪里流动。
+
+### C4 Level 1: System Context View
+
+```text
+USER / CodeAgent
+  -> utCodeAgentCLI
+      -> methodPrompts/        CaTDD method semantics 的来源
+      -> slashCommands/        portable UT_* execution contracts 的来源
+      -> AgentSDK              generic agent runtime boundary
+          -> Raw TypeScript runtime
+          -> Copilot/MCP adapter
+          -> OpenCode adapter
+          -> Existing CLI adapter
+      -> Test files            US/AC/TC skeletons 与 RED/GREEN status
+      -> Trace/Audit outputs   machine-readable run evidence
+```
+
+### C4 Level 2: Container View
+
+```text
+utCodeAgentCLI process
+  cli container
+    - argv parsing, config loading, path normalization
+  CaTDD application container
+    - behavior resolution, method prompt resolution, slash-command resolution
+  command execution container
+    - per-command approval, adapter invocation, result normalization
+  AgentSDK library container
+    - generic runtime, auth, audit, hooks, control, tool and adapter ports
+  trace and diagnostics container
+    - trace event collection, redaction, structured diagnostics
+```
+
+### C4 Level 3: Component View
+
+```text
+CliParser
+  -> InvocationValidator
+  -> BehaviorRegistry
+  -> MethodPromptResolver + SlashCommandResolver
+  -> CatddPlanner
+  -> SlashCommandExecutor
+  -> AgentRunPlanBuilder
+  -> AgentRuntime + RuntimeAdapter
+  -> TraceEventCollector
+  -> TraceWriter + DiagnosticReporter
+```
+
+`SlashCommandExecutor` 是 CaTDD planning 与 generic runtime execution 之间的明确桥梁。它负责 command-level approval、adapter invocation、result normalization 与 command failure boundaries，但不拥有 CaTDD category meaning。
+
+### Runtime Execution View
+
+```text
+parse argv
+  -> validate invocation and file state expectation
+  -> resolve method prompts and slash commands
+  -> build ordered command steps
+  -> for each step:
+       ControlPort asks approve/skip/abort when interactive
+       SlashCommandExecutor invokes RuntimeAdapter
+       RuntimeAdapter returns StepResult
+       TraceEventCollector records command, files, status transitions, and error
+  -> TraceWriter persists success or execution failure
+  -> stdout/stderr and process exit code are emitted
+```
+
+### Deployment View
+
+| Deployment mode | Runtime boundary | Primary adapter | Notes |
 | --- | --- | --- | --- |
-| GitHub Copilot with MCP | Tool/context bridge、toolset control、policy、OAuth/PAT options 与 security controls。 | 将 Copilot 建模为 adapter surface，并将 permission/policy 概念保留在 `AuthPort` 与 `ControlPort` 中。 | 否。它是目标 surface，通过 adapter 访问。 |
-| OpenCode | Primary agents、subagents、permissions、project/global config 与 Plan/Build modes。 | 启发 runtime roles、permission profiles、subagent delegation 与 command adapter shape。 | v1.0 planning 的 adapter target。 |
-| LangGraph/LangChain | Stateful graph execution、persistence、human-in-the-loop、memory、streaming 与 tracing。 | 启发未来 checkpoint/resume、interrupt 与 trace visualization design。 | 否。可选 future adapter 或 reference。 |
-| Google ADK | Production agent sessions、graph workflows、callbacks、plugins、auth、observability 与 TypeScript support。 | 启发 auth、audit、hooks、auto modules、sessions 与 deployment-oriented observability。 | 否。可选 future adapter 或 reference。 |
-| Existing CLIs | stdin/stdout/stderr、exit codes、config files 与 environment variables。 | 提供 `CliProcessAdapter`，让 `AgentSDK` 通过 process boundaries 调用外部工具。 | 是，用于 raw TS execution。 |
+| Raw TypeScript | Local Node.js process | `RawTsRuntimeAdapter` + `CliProcessAdapter` | 第一个实现目标；不要求外部 agent runtime。 |
+| Copilot-native | Copilot host plus MCP/tool surface | `CopilotRuntimeAdapter` | 使用 host policy 与 credentials；CaTDD semantics 仍委托给文件。 |
+| OpenCode | OpenCode agent process/config | `OpenCodeRuntimeAdapter` | 将 review/design/implementation 映射到带 permission 的 modes。 |
+| Existing CLI | Child process boundary | `CliProcessAdapter` | 捕获 stdout/stderr/exit codes，并在 trace/audit persistence 前 redacts。 |
 
 ## System Context
 
@@ -125,6 +203,7 @@ USER / CodeAgent
 | `cli/` | 解析 argv，加载 config，规范化 paths，并产生 `CatddInvocation`。 | `parseArgv(argv)`, `loadConfig(path)` |
 | `catdd/` | 解析 behavior aliases、method prompts、slash commands、selectors 与 state contracts。 | `planCatddRun(invocation)` |
 | `agentsdk/` | 提供不依赖 CaTDD 的通用 agent execution contracts。 | `AgentRuntime`, `RuntimeAdapter`, `ToolPort`, `TracePort`, `ControlPort` |
+| `executor/` | 通过 runtime adapters 调用 resolved slash-command steps，执行 per-command control，并规范化 command results。 | `SlashCommandExecutor`, `StepResult`, `CommandResultNormalizer` |
 | `adapters/` | 将 run plans 连接到 raw TypeScript、Copilot/MCP、OpenCode 与 process-based CLIs。 | `RawTsRuntimeAdapter`, `CopilotRuntimeAdapter`, `OpenCodeRuntimeAdapter`, `CliProcessAdapter` |
 | `trace/` | 为成功与 execution failure 写入 machine-readable traces。 | `TraceWriter`, `TraceSchema` |
 | `diagnostics/` | 格式化 actionable errors、warnings、diagnostic logs 与 suggestions。 | `DiagnosticReporter`, `SuggestionEngine` |
@@ -201,19 +280,24 @@ argv
   -> BehaviorRegistry
   -> MethodPromptResolver + SlashCommandResolver
   -> CatddRunPlan
+  -> SlashCommandExecutor
   -> AgentRunPlan
+  -> ControlPort approval gate
   -> RuntimeAdapter.execute()
-  -> slashCommands/methodPrompts/test files
+  -> StepResult + FileChangeSet + TcTransitionSet
+  -> TraceEventCollector
   -> TraceWriter + stdout/stderr + exit code
 ```
 
 Failure flow:
 
 ```text
-execution error
+command or adapter error
+  -> SlashCommandExecutor marks failed step
   -> DiagnosticReporter
-  -> TraceWriter records failure point
+  -> TraceEventCollector records failure point and completed steps
   -> ControlPort decides stop/skip/abort when interactive
+  -> TraceWriter persists execution-failure trace
   -> process exit code
 ```
 
@@ -236,6 +320,8 @@ execution error
 
 Trace redaction 是必需项。Secrets、tokens 与 raw LLM responses 必须在持久化前 redacted，或受单独 gate 控制。
 
+`TraceEventCollector` 从 `SlashCommandExecutor` 与 runtime adapters 接收 normalized events。它比较 step 前后的 file observations 来生成 TC status transitions，记录哪个 delegated command 产生了变化，并将 redacted structured data 交给 `TraceWriter`。
+
 ## State And Control Model
 
 `utCodeAgentCLI` 遵守 requirements 中的 CaTDD file-state model：
@@ -254,6 +340,8 @@ created -> prepared -> running -> waiting_for_approval -> completed
 ```
 
 桥接规则必须严格：CaTDD statuses（`PLANNED`、`RED`、`GREEN`）属于 test files 与 delegated commands；generic run states 属于 `AgentSDK` 与 adapters。
+
+Ownership 被刻意拆分：`catdd/` 在 planning 前验证 expected file state，delegated slash commands 产生 CaTDD artifacts，`executor/` 观察 command 前后结果，`trace/` 记录得到的 `tcTransitions`。任何 `AgentSDK` type 都不应包含 CaTDD category definitions 或 TC status rules。
 
 ## Cross-Cutting Concerns
 
@@ -322,6 +410,7 @@ Expected result：`diff` 不输出内容，并以 code 0 退出。
 - `AgentSDK` 没有 CaTDD method knowledge。
 - `utCodeAgentCLI` 将 CaTDD semantics 委托给 `methodPrompts/` 与 `slashCommands/`。
 - Raw TS、Copilot/MCP、OpenCode、existing CLI、LangGraph 与 Google ADK 定位明确。
+- 存在 C4-style context、container、component、runtime 与 deployment views。
 - Auth、audit、auto、hooks 与 control 有清晰 extension points。
 - Trace fields 覆盖 success、execution failure、command resolution、file writes 与 TC status transitions。
 - EN/ZH heading structure 一致。
