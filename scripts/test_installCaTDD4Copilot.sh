@@ -60,6 +60,14 @@ done
 [[ ! -e "$TARGET_DIR/.github/prompts/SPEC_importWorkItem.prompt.md" ]] || fail "old SPEC_importWorkItem prompt should not be installed"
 [[ ! -e "$TARGET_DIR/.github/prompts/SPEC_analyzeWorkItem.prompt.md" ]] || fail "old SPEC_analyzeWorkItem prompt should not be installed"
 
+install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
+grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$install_marker" || fail "install marker missing version line in YYYYMMDD.HH format"
+
+# Verify replacement detection: re-running installer on same target reports same-version replacement
+replacement_output="$("$INSTALLER" --target "$TARGET_DIR" --clean-prompts 2>&1)"
+grep -Fq '] version:' <<< "$replacement_output" || fail "installer missing version action output on reinstall"
+grep -Fq '(same version, replacement)' <<< "$replacement_output" || fail "reinstall should report same-version replacement"
+
 init_target="$TARGET_DIR/new-project"
 "$INSTALLER" --target "$init_target" --init --clean-prompts
 

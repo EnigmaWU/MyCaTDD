@@ -75,6 +75,26 @@ SPEC_DIR="$CATDD_DIR/spec"
 CONTINUE_RULES_DIR="$TARGET_DIR/.continue/rules"
 CONTINUE_PROMPTS_DIR="$TARGET_DIR/.continue/prompts"
 
+# Compute version from the latest git commit in the MyCaTDD source repo
+CATDD_VERSION="$(git -C "$REPO_ROOT" log -1 --format='%ad' --date='format:%Y%m%d.%H' 2>/dev/null || echo 'unknown')"
+
+# Read currently installed version before overwriting
+INSTALLED_VERSION=""
+if [[ -f "$CATDD_DIR/CaTDD_INSTALL.md" ]]; then
+  INSTALLED_VERSION="$(sed -n 's/^- Installed version: //p' "$CATDD_DIR/CaTDD_INSTALL.md" | head -1)"
+fi
+
+# Report version action
+if [[ -z "$INSTALLED_VERSION" ]]; then
+  echo "[installCaTDD4Continue] version: $CATDD_VERSION (fresh install)"
+elif [[ "$INSTALLED_VERSION" == "$CATDD_VERSION" ]]; then
+  echo "[installCaTDD4Continue] version: $CATDD_VERSION (same version, replacement)"
+elif [[ "$CATDD_VERSION" > "$INSTALLED_VERSION" ]]; then
+  echo "[installCaTDD4Continue] version: $INSTALLED_VERSION -> $CATDD_VERSION (upgrade)"
+else
+  echo "[installCaTDD4Continue] version: $INSTALLED_VERSION -> $CATDD_VERSION (downgrade)"
+fi
+
 if [[ "$VERBOSE" -eq 1 ]]; then
   set -x
 fi
@@ -147,9 +167,8 @@ cp -R "$REPO_ROOT/slashCommands" "$CATDD_DIR/slashCommands"
 update_spec_gitignore
 
 log_replace_or_new "$CATDD_DIR/CaTDD_INSTALL.md"
-cat > "$CATDD_DIR/CaTDD_INSTALL.md" <<'MARKER'
-# CaTDD Install Marker
-
+printf '# CaTDD Install Marker\n\n- Installed version: %s\n\n' "$CATDD_VERSION" > "$CATDD_DIR/CaTDD_INSTALL.md"
+cat >> "$CATDD_DIR/CaTDD_INSTALL.md" <<'MARKER'
 This directory is managed by `scripts/installCaTDD4Continue.sh` from MyCaTDD.
 
 - `methodPrompts/` is the installed CaTDD method source.

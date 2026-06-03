@@ -73,6 +73,12 @@ install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 grep -Fq 'Continue project rule: `.continue/rules/catdd.md`' "$install_marker" || fail "install marker missing Continue rule location"
 grep -Fq 'Continue prompt wrappers: `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`' "$install_marker" || fail "install marker missing Continue prompt wrapper location"
 grep -Fq 'analyzedNews/' "$install_marker" || fail "install marker missing analyzedNews shared artifact guidance"
+grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$install_marker" || fail "install marker missing version line in YYYYMMDD.HH format"
+
+# Verify replacement detection: re-running installer on same target reports same-version replacement
+replacement_output="$("$INSTALLER" --target "$TARGET_DIR" 2>&1)"
+grep -Fq '] version:' <<< "$replacement_output" || fail "installer missing version action output on reinstall"
+grep -Fq '(same version, replacement)' <<< "$replacement_output" || fail "reinstall should report same-version replacement"
 
 target_gitignore="$TARGET_DIR/.gitignore"
 ! grep -Fq '/.catdd/spec/doingUS/' "$target_gitignore" || fail "target .gitignore must not ignore doingUS team-shared state"
