@@ -84,16 +84,16 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 - Completed user stories:
   - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
   - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
+  - `.catdd/spec/doneUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md`
 - Todo user stories waiting:
   - None currently.
 - Active user stories opened:
-  - `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` for `utCodeAgentCLI` architecture design; architecture draft created.
   - `.catdd/spec/doingUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md` for adding `SPEC_reviewArchDesign` and `SPEC_reviewDetailDesign` gates to Px-SpecFlow; command specs and flow wiring drafted.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes Mermaid-renderable C4-style architecture views and Px-SpecFlow architecture-oriented surface coverage for usage, error, resource, performance, compatibility, diagnosis, verification, state, and embedded/media applicability.
 - Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03.
 - Shared module DetailDesign doc created: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`; latest draft includes TypeScript-facing parser, planner, executor, adapter, trace, diagnostics, state, error, and verification contracts; `/SPEC_reviewDetailDesign` PASS recorded on 2026-06-04.
-- Current `utCodeAgentCLI` story/design readiness has `/SPEC_reviewUserStory` PASS recorded on 2026-06-04.
+- Current `utCodeAgentCLI` story/design readiness has `/SPEC_reviewUserStory` PASS recorded on 2026-06-04 and the story itself is archived in `doneUS/`.
 
 ## Next Recommended Command
 

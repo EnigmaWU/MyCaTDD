@@ -2,6 +2,7 @@
 
 Created by `/SPEC_analyzeIssue` on 2026-06-01.
 Opened by `/SPEC_openUserStory` on 2026-06-02.
+Closed on 2026-06-04 after verified review, commit, and completion of the clear-intent gate.
 
 ## Source Trace
 
@@ -9,16 +10,18 @@ Opened by `/SPEC_openUserStory` on 2026-06-02.
 - Raw source text: `do ArchDesign of utCodeAgentCLI based on UsageDesign/UserGuide/UserStory, and reference GitHub Copilot/SDK, OpenCode, LangChain/Graph,Google AgentSDK, ... , etc, then do our own architectural: prefer use TS, adapt to raw TS,CopilotSDK,OpenCode at least`
 - Area: `codeAgents/utCodeAgentCLI/`
 
-## Active Work Status
+## Completed Work Status
 
-- Status: OPEN.
-- Active state: `.catdd/spec/doingUS/` active story.
-- Opened from: [../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Status: CLOSED.
+- Active state: `.catdd/spec/doneUS/` completed story archive.
+- Closed from: `.catdd/spec/doingUS/`
 - Architecture design draft: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`.
 - Architecture review gate: `/SPEC_reviewArchDesign` PASS on 2026-06-03.
 - Detail design draft: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`.
 - Detail design review gate: `/SPEC_reviewDetailDesign` PASS on 2026-06-04.
+- Mutual intent gate: `/SPEC_clearStoryIntent` completed before design to align developer and CodeAgent intent.
 - Story/design readiness review gate: `/SPEC_reviewUserStory` PASS on 2026-06-04.
+- Completion commit: `25ac8b3 spec: add clear story intent gate`.
 - Next recommended command: `/SPEC_designUnitTests`.
 
 ## Architecture Review Status
@@ -45,7 +48,7 @@ Opened by `/SPEC_openUserStory` on 2026-06-02.
 
 ## Analysis Status
 
-- Status: TODO.
+- Status: CLOSED.
 - Priority: P1 — important (needed for v1.0).
 - Confidence: high.
 
