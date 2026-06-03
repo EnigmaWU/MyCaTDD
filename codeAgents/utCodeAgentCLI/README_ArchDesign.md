@@ -458,4 +458,4 @@ Expected result: `diff` prints no output and exits with code 0.
 
 ## Next Step
 
-Run `/SPEC_takeDetailDesign` on the active story to turn this architecture into detailed TypeScript-facing contracts, data schemas, and verification design.
+Run `/SPEC_reviewUserStory` on the active story now that [README_DetailDesign.md](README_DetailDesign.md) has passed detail-design review.

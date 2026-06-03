@@ -97,6 +97,7 @@ Options:
 > - `reviewDesignTestsSkeleton` → 调用 `UT_reviewDesignTestsSkeleton`。审查已规划的 P1 Design skeletons（State、Capability、Concurrency）；不写入实现测试代码。
 > - `reviewQualityTestsSkeleton` → 调用 `UT_reviewQualityTestsSkeleton`。审查已规划的 P2 Quality skeletons（Performance、Robust、Compatibility、Configuration）；不写入实现测试代码。
 > - `reviewImplTestCase` → 调用 `UT_reviewImplTestCase`。审查一个已实现的 RED test case —— 验证 skeleton 保留情况和测试质量。
+> - `reviewImplTestFile` → 对 one TestFile 中的每个 RED/GREEN TC 重复调用 `UT_reviewImplTestCase`。PLANNED TCs 会被跳过并汇总。不修改文件。
 > - `tellMeNextImplTest` → 调用 `UT_tellMeNextImplTest`。从目标 TestFile 中选择或推荐下一个要实现的 TC。
 > - `implTestCase` → 调用 `UT_implTestCase`。为一个 TC 写入可执行测试代码（RED 阶段）。
 > - `implTestFile` → 对文件中的所有 TC 重复调用 `UT_implTestCase`。
@@ -224,6 +225,7 @@ utCodeAgentCLI \
 | `UT_tellMeNextImplTest` | 直接 next-step command 名称。当 target TestFile 已包含 skeleton TCs，并且 CLI 应选择下一个实现候选时使用。 |
 | `designTypicalSkeleton` | 稳定 CLI alias。CLI 将其解析为 `UT_designTypicalSkeleton`。 |
 | `reviewFuncTestsSkeleton` | 稳定 CLI alias。CLI 将其解析为 `UT_reviewFuncTestsSkeleton`。 |
+| `reviewImplTestFile` | 稳定 CLI orchestration alias。CLI 跨 one TestFile 中已实现的 TCs 重复调用 `UT_reviewImplTestCase`，并汇总 skipped PLANNED TCs。 |
 | `tellMeNextImplTest` | 稳定 CLI alias。CLI 将其解析为 `UT_tellMeNextImplTest`。 |
 | `designAllSkeleton` | 稳定 CLI aggregate alias。CLI 将其解析为适用的 P0/P1/P2 skeleton-design command sequence。 |
 
@@ -250,6 +252,7 @@ utCodeAgentCLI \
 | `reviewDesignTestsSkeleton` | 审查目标 test file 或 files 中的 P1 Design skeletons（State、Capability、Concurrency）。不写入实现测试代码。 |
 | `reviewQualityTestsSkeleton` | 审查目标 test file 或 files 中的 P2 Quality skeletons（Performance、Robust、Compatibility、Configuration）。不写入实现测试代码。 |
 | `reviewImplTestCase` | 审查目标中一个已实现的 RED test case。验证 skeleton 保留情况、RED status 正确性和测试结构。不修改文件。 |
+| `reviewImplTestFile` | 通过重复调用 `UT_reviewImplTestCase`，审查 target TestFile 中每个已实现的 RED/GREEN test case；PLANNED TCs 被跳过并汇总。不修改文件。 |
 | `tellMeNextImplTest` | 从目标 TestFile 中选择或推荐下一个要实现的 TC。不写入实现测试代码。 |
 | `designAndImplTest` | 在一个组合步骤中设计所有 category skeletons **并**实现它们的 test cases。产出 US/AC/TC 结构和可执行测试代码。 |
 
@@ -280,6 +283,7 @@ utCodeAgentCLI \
 | one TestFile | `designAllSkeleton` | 在 test file 中放置所有 P0/P1/P2 CaTDD categories 的 US/AC/TC skeleton。不写入实现测试代码。 |
 | one TestFile | `designAndImplTest` | 设计所有 category skeletons 并实现它们。产出 US/AC/TC 结构和可执行测试代码。 |
 | one TestFile | compatible review behavior such as `reviewFuncTestsSkeleton` | 审查选中的 skeleton 或 implementation artifact，不修改无关文件。 |
+| one TestFile | `reviewImplTestFile` | 通过重复调用 `UT_reviewImplTestCase` 审查文件中的每个 RED/GREEN TC；跳过 PLANNED TCs 并输出 file-level summary。 |
 | one TestFile | `tellMeNextImplTest` | 从目标 test file 中选择或推荐下一个要实现的 TC。 |
 | some TestFiles | `implTestFile` | 对每个选中的 test file 重复 full-file implementation。 |
 | some TestFiles | any skeleton design behavior | 对每个选中的 test file 应用所选 skeleton design behavior。 |

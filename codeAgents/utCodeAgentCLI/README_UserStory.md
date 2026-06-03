@@ -57,6 +57,7 @@ The CLI owns `PLANNED → RED`. `RED → GREEN` is user-owned — CLI reads GREE
 | `reviewDesignTestsSkeleton` | DESIGNED or PARTIAL | No change | No change |
 | `reviewQualityTestsSkeleton` | DESIGNED or PARTIAL | No change | No change |
 | `reviewImplTestCase` | Target TC is RED or GREEN | No change | No change |
+| `reviewImplTestFile` | DESIGNED, PARTIAL, FULLY_RED, or ALL_GREEN | No change | No change |
 | `tellMeNextImplTest` | Has ≥1 PLANNED TC | No change | No change |
 | `implTestCase` | Target TC is PLANNED | Target TC → RED | PARTIAL or FULLY_RED |
 | `implTestFile` | Has ≥1 PLANNED TC | All PLANNED → RED | FULLY_RED |

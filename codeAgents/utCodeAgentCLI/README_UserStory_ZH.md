@@ -57,6 +57,7 @@ CLI 负责 `PLANNED → RED`。`RED → GREEN` 由用户负责 —— CLI 可读
 | `reviewDesignTestsSkeleton` | DESIGNED 或 PARTIAL | 不变 | 不变 |
 | `reviewQualityTestsSkeleton` | DESIGNED 或 PARTIAL | 不变 | 不变 |
 | `reviewImplTestCase` | 目标 TC 为 RED 或 GREEN | 不变 | 不变 |
+| `reviewImplTestFile` | DESIGNED, PARTIAL, FULLY_RED 或 ALL_GREEN | 不变 | 不变 |
 | `tellMeNextImplTest` | 存在 ≥1 个 PLANNED TC | 不变 | 不变 |
 | `implTestCase` | 目标 TC 为 PLANNED | 目标 TC → RED | PARTIAL 或 FULLY_RED |
 | `implTestFile` | 存在 ≥1 个 PLANNED TC | 所有 PLANNED → RED | FULLY_RED |

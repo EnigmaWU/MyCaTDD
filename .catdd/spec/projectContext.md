@@ -91,12 +91,13 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes Mermaid-renderable C4-style architecture views and Px-SpecFlow architecture-oriented surface coverage for usage, error, resource, performance, compatibility, diagnosis, verification, state, and embedded/media applicability.
 - Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03.
+- Shared module DetailDesign doc created: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`; latest draft includes TypeScript-facing parser, planner, executor, adapter, trace, diagnostics, state, error, and verification contracts; `/SPEC_reviewDetailDesign` PASS recorded on 2026-06-04.
 
 ## Next Recommended Command
 
 Run one of these after context review:
 
-- `/SPEC_takeDetailDesign` on `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` to convert the PASS-reviewed architecture into detailed TypeScript-facing contracts, data schemas, and verification design.
+- `/SPEC_reviewUserStory` on `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` to gate final story/design readiness before CaTDD unit-test skeleton design.
 - `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
 - `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
 - `/SPEC_updateProjectContext` when any project fact, convention, or guardrail in this file needs correction.

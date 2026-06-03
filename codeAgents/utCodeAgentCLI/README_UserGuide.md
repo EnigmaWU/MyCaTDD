@@ -114,6 +114,10 @@ codeAgents/utCodeAgentCLI/
   README_ZH.md
   README_UserStory.md
   README_UserStory_ZH.md
+  README_ArchDesign.md
+  README_ArchDesign_ZH.md
+  README_DetailDesign.md
+  README_DetailDesign_ZH.md
   README_UserGuide.md
   README_UserGuide_ZH.md
   README_UsageDesign.md
@@ -161,10 +165,12 @@ Use this path when a user starts with a CaTDD need and wants a `utCodeAgentCLI` 
 
 1. Stay in this UserGuide to choose the practical path and likely `--behave`.
 2. Open [README_UsageDesign.md](README_UsageDesign.md) only when strict parser syntax, selector details, or exhaustive error rules matter.
-3. Open `slashCommands/README_UserGuide.md` only when you need to inspect the portable command contract behind a `UT_*` behavior.
-4. Open `methodPrompts/README_UserGuide.md` only when you need method meaning; do not redefine category semantics here.
-5. Open [README.md](README.md) only when you need layer-level WHAT/WHY background.
-6. Write or update the smallest CLI-layer note needed to explain orchestration, trace, reflection, or policy.
+3. Open [README_ArchDesign.md](README_ArchDesign.md) when module boundaries, adapter boundaries, or AgentSDK separation matter.
+4. Open [README_DetailDesign.md](README_DetailDesign.md) when TypeScript contracts, data schemas, state transitions, trace schema, or implementation plan matter.
+5. Open `slashCommands/README_UserGuide.md` only when you need to inspect the portable command contract behind a `UT_*` behavior.
+6. Open `methodPrompts/README_UserGuide.md` only when you need method meaning; do not redefine category semantics here.
+7. Open [README.md](README.md) only when you need layer-level WHAT/WHY background.
+8. Write or update the smallest CLI-layer note needed to explain orchestration, trace, reflection, or policy.
 
 ## Behavior Selection Guide
 
@@ -179,6 +185,7 @@ Category shorthand used by behavior names: P0 Functional means Typical, Edge, Mi
 | Pick the next TC to implement | `tellMeNextImplTest` or `UT_tellMeNextImplTest` | one TestFile | Stable alias or direct portable slash command. |
 | Implement one TC | `implTestCase` or `UT_implTestCase` | one TestCase in one TestFile | Adds executable test code for the selected TC. |
 | Implement a whole TestFile | `implTestFile` | one TestFile | CLI repeats the single-TC implementation step. |
+| Review all implemented TCs in a TestFile | `reviewImplTestFile` | one TestFile | CLI repeats `UT_reviewImplTestCase` for RED/GREEN TCs and skips PLANNED TCs. |
 
 Use direct `UT_*` command names when the caller wants a specific portable command. Use stable aliases when the caller wants CLI-friendly behavior names that may expand into one or more portable commands.
 

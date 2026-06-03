@@ -114,6 +114,10 @@ codeAgents/utCodeAgentCLI/
   README_ZH.md
   README_UserStory.md
   README_UserStory_ZH.md
+  README_ArchDesign.md
+  README_ArchDesign_ZH.md
+  README_DetailDesign.md
+  README_DetailDesign_ZH.md
   README_UserGuide.md
   README_UserGuide_ZH.md
   README_UsageDesign.md
@@ -161,10 +165,12 @@ CLI 层应成为 CaTDD 从方法文本或提示词命令走向 native execution 
 
 1. 先留在本 UserGuide 中选择实践路径和可能的 `--behave`。
 2. 只有在 strict parser syntax、selector details 或完整错误规则很重要时，才打开 [README_UsageDesign_ZH.md](README_UsageDesign_ZH.md)。
-3. 只有在需要检查某个 `UT_*` behavior 背后的 portable command contract 时，才打开 `slashCommands/README_UserGuide_ZH.md`。
-4. 只有在需要 method meaning 时，才打开 `methodPrompts/README_UserGuide_ZH.md`；不要在这里重新定义 category semantics。
-5. 只有在需要层级 WHAT/WHY 背景时，才打开 [README.md](README.md)。
-6. 编写或更新最小的 CLI-layer 说明，用于解释 orchestration、trace、reflection 或 policy。
+3. 当 module boundaries、adapter boundaries 或 AgentSDK separation 很重要时，打开 [README_ArchDesign_ZH.md](README_ArchDesign_ZH.md)。
+4. 当 TypeScript contracts、data schemas、state transitions、trace schema 或 implementation plan 很重要时，打开 [README_DetailDesign_ZH.md](README_DetailDesign_ZH.md)。
+5. 只有在需要检查某个 `UT_*` behavior 背后的 portable command contract 时，才打开 `slashCommands/README_UserGuide_ZH.md`。
+6. 只有在需要 method meaning 时，才打开 `methodPrompts/README_UserGuide_ZH.md`；不要在这里重新定义 category semantics。
+7. 只有在需要层级 WHAT/WHY 背景时，才打开 [README.md](README.md)。
+8. 编写或更新最小的 CLI-layer 说明，用于解释 orchestration、trace、reflection 或 policy。
 
 ## Behavior Selection Guide
 
@@ -179,6 +185,7 @@ behavior names 使用的 category shorthand：P0 Functional 表示 Typical、Edg
 | 选择下一个要实现的 TC | `tellMeNextImplTest` 或 `UT_tellMeNextImplTest` | one TestFile | 稳定 alias 或直接 portable slash command。 |
 | 实现一个 TC | `implTestCase` 或 `UT_implTestCase` | one TestCase in one TestFile | 为选中的 TC 添加可执行测试代码。 |
 | 实现整个 TestFile | `implTestFile` | one TestFile | CLI 重复执行单 TC 实现步骤。 |
+| 审查 TestFile 中所有已实现 TCs | `reviewImplTestFile` | one TestFile | CLI 对 RED/GREEN TCs 重复调用 `UT_reviewImplTestCase`，并跳过 PLANNED TCs。 |
 
 当调用者需要某个具体 portable command 时，使用直接 `UT_*` command names。当调用者需要 CLI-friendly behavior names，并且这些名称未来可能展开为一条或多条 portable commands 时，使用稳定 aliases。
 

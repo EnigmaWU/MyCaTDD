@@ -458,4 +458,4 @@ Expected result：`diff` 不输出内容，并以 code 0 退出。
 
 ## Next Step
 
-在活动 story 上运行 `/SPEC_takeDetailDesign`，将本架构转化为 TypeScript-facing contracts、data schemas 和 verification design。
+现在 [README_DetailDesign_ZH.md](README_DetailDesign_ZH.md) 已通过 detail-design review，下一步是在活动 story 上运行 `/SPEC_reviewUserStory`。

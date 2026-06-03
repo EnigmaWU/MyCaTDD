@@ -97,6 +97,7 @@ The core model is:
 > - `reviewDesignTestsSkeleton` → invoke `UT_reviewDesignTestsSkeleton`. Reviews planned P1 Design skeletons (State, Capability, Concurrency) without writing implementation test code.
 > - `reviewQualityTestsSkeleton` → invoke `UT_reviewQualityTestsSkeleton`. Reviews planned P2 Quality skeletons (Performance, Robust, Compatibility, Configuration) without writing implementation test code.
 > - `reviewImplTestCase` → invoke `UT_reviewImplTestCase`. Reviews one implemented RED test case — verifies skeleton preservation and test quality.
+> - `reviewImplTestFile` → invoke `UT_reviewImplTestCase` repeatedly for each RED/GREEN TC in one TestFile. PLANNED TCs are skipped with a summary. No file is modified.
 > - `tellMeNextImplTest` → invoke `UT_tellMeNextImplTest`. Selects or recommends the next TC to implement from the target TestFile.
 > - `implTestCase` → invoke `UT_implTestCase`. Writes executable test code for one TC (RED stage).
 > - `implTestFile` → invoke `UT_implTestCase` repeatedly across all TCs in the file.
@@ -224,6 +225,7 @@ utCodeAgentCLI \
 | `UT_tellMeNextImplTest` | Direct next-step command name. Useful when the target TestFile already contains skeleton TCs and the CLI should select the next implementation candidate. |
 | `designTypicalSkeleton` | Stable CLI alias. The CLI resolves it to `UT_designTypicalSkeleton`. |
 | `reviewFuncTestsSkeleton` | Stable CLI alias. The CLI resolves it to `UT_reviewFuncTestsSkeleton`. |
+| `reviewImplTestFile` | Stable CLI orchestration alias. The CLI repeats `UT_reviewImplTestCase` across implemented TCs in one TestFile and summarizes skipped PLANNED TCs. |
 | `tellMeNextImplTest` | Stable CLI alias. The CLI resolves it to `UT_tellMeNextImplTest`. |
 | `designAllSkeleton` | Stable CLI aggregate alias. The CLI resolves it to the applicable P0/P1/P2 skeleton-design command sequence. |
 
@@ -250,6 +252,7 @@ utCodeAgentCLI \
 | `reviewDesignTestsSkeleton` | Review the P1 Design skeletons (State, Capability, Concurrency) in the target test file or files. No implementation test code is written. |
 | `reviewQualityTestsSkeleton` | Review the P2 Quality skeletons (Performance, Robust, Compatibility, Configuration) in the target test file or files. No implementation test code is written. |
 | `reviewImplTestCase` | Review one implemented RED test case in the target. Verifies skeleton preservation, RED status correctness, and test structure. No file modification. |
+| `reviewImplTestFile` | Review every implemented RED/GREEN test case in a target TestFile by repeating `UT_reviewImplTestCase`; PLANNED TCs are skipped and summarized. No file modification. |
 | `tellMeNextImplTest` | Select or recommend the next TC to implement from the target TestFile. No implementation test code is written. |
 | `designAndImplTest` | Design all category skeletons **and** implement their test cases in one combined step. Both US/AC/TC structure and executable test code are produced. |
 
@@ -280,6 +283,7 @@ utCodeAgentCLI \
 | one TestFile | `designAllSkeleton` | Place US/AC/TC skeletons for all P0/P1/P2 CaTDD categories in the test file. No implementation test code. |
 | one TestFile | `designAndImplTest` | Design all category skeletons and implement them. Produces both US/AC/TC structure and executable test code. |
 | one TestFile | compatible review behavior such as `reviewFuncTestsSkeleton` | Review the selected skeleton or implementation artifact without changing unrelated files. |
+| one TestFile | `reviewImplTestFile` | Review every RED/GREEN TC in the file by repeating `UT_reviewImplTestCase`; skip PLANNED TCs and report file-level summary. |
 | one TestFile | `tellMeNextImplTest` | Select or recommend the next TC to implement from the target test file. |
 | some TestFiles | `implTestFile` | Repeat full-file implementation across each selected test file. |
 | some TestFiles | any skeleton design behavior | Apply the selected skeleton design behavior across each selected test file. |

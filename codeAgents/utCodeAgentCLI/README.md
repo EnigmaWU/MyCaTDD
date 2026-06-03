@@ -45,6 +45,7 @@ It may target many programming languages, but it must preserve CaTDD's comment-a
 
 - Standalone user-story docs (`README_UserStory.md`, `README_UserStory_ZH.md`)
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
+- Architecture and detail design docs (`README_ArchDesign.md`, `README_DetailDesign.md`, and ZH mirrors)
 - Future CLI task entry prompts
 - Future goal templates and execution checklists
 - Future trace collection and reflection-loop design notes
@@ -72,6 +73,7 @@ Keep the documentation split clear:
 | `README.md` / `README_ZH.md` | WHAT this layer is and WHY it exists. |
 | `README_UserStory.md` / `README_UserStory_ZH.md` | WHO needs this layer, WHAT user value it should provide, and BDD acceptance criteria before detail design. |
 | `README_ArchDesign.md` / `README_ArchDesign_ZH.md` | High-level module architecture, runtime adapter boundaries, AgentSDK separation, trace/audit/control design, and key trade-offs. |
+| `README_DetailDesign.md` / `README_DetailDesign_ZH.md` | TypeScript-facing contracts, data schemas, state transitions, error handling, implementation plan, and verification strategy. |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW to design or use this layer today, WHO uses it, WHEN to work in it, WHERE future assets live, and a copy-exec `Usage Example`. |
 
 Operational CLI commands should be documented in the standalone user guides once a runnable CLI exists.

@@ -16,14 +16,25 @@ Opened by `/SPEC_openUserStory` on 2026-06-02.
 - Opened from: [../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../todoUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
 - Architecture design draft: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`.
 - Architecture review gate: `/SPEC_reviewArchDesign` PASS on 2026-06-03.
-- Next recommended command: `/SPEC_takeDetailDesign`.
+- Detail design draft: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`.
+- Detail design review gate: `/SPEC_reviewDetailDesign` PASS on 2026-06-04.
+- Next recommended command: `/SPEC_reviewUserStory`.
 
 ## Architecture Review Status
 
 - Review command: `/SPEC_reviewArchDesign`.
 - Finding: PASS.
 - Evidence: `README_ArchDesign.md` and `README_ArchDesign_ZH.md` cover the active story requirements, preserve AgentSDK/CaTDD separation, define Mermaid-renderable C4-style views, map Px-SpecFlow architecture-oriented surfaces, cover trace/control/error paths, and keep EN/ZH heading structure aligned.
-- Non-blocking follow-ups: resolve open questions about package placement, trace output default, Copilot/OpenCode integration depth, and whether LangGraph/Google ADK become optional adapters during `/SPEC_takeDetailDesign`.
+- Non-blocking follow-ups: package placement, trace output default, and LangGraph/Google ADK positioning are resolved in the detail-design draft; Copilot/OpenCode integration depth remains an implementation-planning question.
+
+## Detail Design Status
+
+- Design command: `/SPEC_takeDetailDesign`.
+- Status: REVIEWED on 2026-06-04.
+- Review command: `/SPEC_reviewDetailDesign`.
+- Finding: PASS.
+- Output: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`.
+- Evidence: detail design resolves architecture follow-ups into module layout, TypeScript-facing parser/planner/executor/adapter/trace contracts, data schemas, state transitions, error handling, implementation plan, verification strategy, assumptions, and open questions. Review also resolved the `US-USER-10` / `reviewImplTestFile` gap by documenting it as a stable CLI orchestration alias over repeated `UT_reviewImplTestCase` calls.
 
 ## Analysis Status
 
@@ -141,4 +152,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_takeDetailDesign` to turn `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `README_ArchDesign_ZH.md` into detailed TypeScript-facing contracts, data schemas, and verification design.
+Run `/SPEC_reviewUserStory` to gate final story/design readiness before CaTDD unit-test skeleton design.

@@ -45,6 +45,7 @@
 
 - 独立 User Story 文档（`README_UserStory.md`、`README_UserStory_ZH.md`）
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
+- 架构与详细设计文档（`README_ArchDesign.md`、`README_DetailDesign.md` 及 ZH mirrors）
 - 未来的 CLI 任务入口提示词
 - 未来的目标模板与执行检查清单
 - 未来的轨迹收集与反思回路设计记录
@@ -72,6 +73,7 @@
 | `README.md` / `README_ZH.md` | WHAT：这一层是什么；WHY：这一层为什么存在。 |
 | `README_UserStory.md` / `README_UserStory_ZH.md` | WHO：谁需要这一层；WHAT：它应提供什么用户价值；以及 detail design 前的 BDD acceptance criteria。 |
 | `README_ArchDesign.md` / `README_ArchDesign_ZH.md` | 高层模块架构、runtime adapter 边界、AgentSDK 分离、trace/audit/control 设计，以及关键 trade-offs。 |
+| `README_DetailDesign.md` / `README_DetailDesign_ZH.md` | 面向 TypeScript 的 contracts、data schemas、state transitions、error handling、implementation plan 与 verification strategy。 |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW：现在如何设计或使用这一层；WHO：谁使用；WHEN：何时在这一层工作；WHERE：未来资产位于哪里；以及可复制执行的 `Usage Example`。 |
 
 当可运行 CLI 存在后，具体 CLI 命令应记录在独立用户指南中。
