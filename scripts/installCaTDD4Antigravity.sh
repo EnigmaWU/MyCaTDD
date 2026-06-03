@@ -99,7 +99,8 @@ fi
 # Y/n confirmation
 if [[ "$YES" -eq 0 ]]; then
   read -r -p "[installCaTDD4Antigravity] Proceed with installation? [Y/n]: " _confirm
-  case "${_confirm,,}" in
+  _confirm_lc="$(printf '%s' "$_confirm" | tr '[:upper:]' '[:lower:]')"
+  case "$_confirm_lc" in
     n|no)
       echo "[installCaTDD4Antigravity] Installation cancelled."
       exit 0
