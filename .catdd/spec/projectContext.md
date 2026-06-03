@@ -42,6 +42,7 @@ After self-install with `scripts/installCaTDD4Copilot.sh --target "$PWD" --init 
 - Commit shared SpecCoding artifacts such as `.catdd/spec/projectContext.md`, pending imported work, analyzed raw input archives, todo user stories, active doing user stories, done user stories, and stable project-root `README*` SPEC docs.
 - Keep local SpecCoding work-state trace gitignored: `.catdd/spec/WorkingProcessLog.md`.
 - `SPEC_*` commands may orchestrate `UT_*` commands, but must not replace P0/P1/P2 category rules.
+- `SPEC_clearStoryIntent` is the early mutual-intent gate after `SPEC_openUserStory`; it records developer intent and CodeAgent intent before design begins. It does not replace the final `SPEC_reviewUserStory` readiness gate after detail design.
 
 ## Current Design Decisions
 
