@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET_DIR=""
-CUSTOM_DIR=".huayancoder"
+CUSTOM_DIR=".customCodeAgent"
 CLEAN_PROMPTS=0
 INIT=0
 VERBOSE=0
@@ -18,7 +18,7 @@ and custom rule/prompt wrappers into a target project.
 
 Options:
   --target DIR      Target project directory.
-  --custom-dir NAME Custom subdir name under target (default: .huayancoder).
+  --custom-dir NAME Custom subdir name under target (default: .customCodeAgent).
   --clean-prompts   Remove existing generated UT_*.prompt and SPEC_*.prompt files before regenerating wrappers.
   --init            Create the target directory if it does not exist.
   --verbose         Print detailed action steps for diagnosis.
@@ -75,7 +75,7 @@ fi
 
 CUSTOM_DIR="${CUSTOM_DIR%/}"
 if [[ -z "$CUSTOM_DIR" ]] || [[ "$CUSTOM_DIR" == "." ]] || [[ "$CUSTOM_DIR" == ".." ]] || [[ "$CUSTOM_DIR" == /* ]] || [[ "$CUSTOM_DIR" == *"/"* ]]; then
-  echo "[installCaTDD4Custom] --custom-dir must be a single relative subdir name (example: .huayancoder)" >&2
+  echo "[installCaTDD4Custom] --custom-dir must be a single relative subdir name (example: .customCodeAgent)" >&2
   exit 2
 fi
 

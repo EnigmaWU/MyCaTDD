@@ -17,9 +17,9 @@ fail() {
 
 [[ -x "$INSTALLER" ]] || fail "missing executable installer: scripts/installCaTDD4Custom.sh"
 
-git -C "$REPO_ROOT" check-ignore -q .huayancoder/rules/catdd.md || fail "generated default custom rule must be ignored in this source repo"
-git -C "$REPO_ROOT" check-ignore -q .huayancoder/prompts/UT_example.prompt || fail "generated default custom UT prompt wrappers must be ignored in this source repo"
-git -C "$REPO_ROOT" check-ignore -q .huayancoder/prompts/SPEC_example.prompt || fail "generated default custom SPEC prompt wrappers must be ignored in this source repo"
+git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/rules/catdd.md || fail "generated default custom rule must be ignored in this source repo"
+git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/prompts/UT_example.prompt || fail "generated default custom UT prompt wrappers must be ignored in this source repo"
+git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/prompts/SPEC_example.prompt || fail "generated default custom SPEC prompt wrappers must be ignored in this source repo"
 
 "$INSTALLER" --target "$TARGET_DIR" --yes
 
@@ -35,19 +35,19 @@ grep -Fq '[installCaTDD4Custom] patch: .gitignore' <<< "$verbose_output" || fail
 [[ -d "$TARGET_DIR/.catdd/spec/doingUS" ]] || fail "missing .catdd/spec/doingUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doneUS" ]] || fail "missing .catdd/spec/doneUS"
 
-rule="$TARGET_DIR/.huayancoder/rules/catdd.md"
+rule="$TARGET_DIR/.customCodeAgent/rules/catdd.md"
 [[ -f "$rule" ]] || fail "missing default custom CaTDD rule"
 grep -Fq 'custom project rule' "$rule" || fail "custom rule missing adapter identity"
 grep -Fq '.catdd/methodPrompts/' "$rule" || fail "custom rule missing methodPrompts location"
 grep -Fq '.catdd/slashCommands/' "$rule" || fail "custom rule missing slashCommands location"
-grep -Fq '.huayancoder/prompts/' "$rule" || fail "custom rule missing custom prompt location"
+grep -Fq '.customCodeAgent/prompts/' "$rule" || fail "custom rule missing custom prompt location"
 grep -Fq '.catdd/spec/' "$rule" || fail "custom rule missing spec workspace location"
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"
-prompt_count="$(find "$TARGET_DIR/.huayancoder/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' \) | wc -l | tr -d '[:space:]')"
+prompt_count="$(find "$TARGET_DIR/.customCodeAgent/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' \) | wc -l | tr -d '[:space:]')"
 [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count custom prompt wrappers, got $prompt_count"
 
-sample_prompt="$TARGET_DIR/.huayancoder/prompts/UT_convertDemoToTypical.prompt"
+sample_prompt="$TARGET_DIR/.customCodeAgent/prompts/UT_convertDemoToTypical.prompt"
 [[ -f "$sample_prompt" ]] || fail "missing custom sample prompt: UT_convertDemoToTypical.prompt"
 grep -Fq 'name: UT_convertDemoToTypical' "$sample_prompt" || fail "custom sample prompt missing command name"
 grep -Fq 'description: Run CaTDD slash command UT_convertDemoToTypical' "$sample_prompt" || fail "custom sample prompt missing description"
@@ -56,8 +56,8 @@ grep -Fq '.catdd/methodPrompts/README.md' "$sample_prompt" || fail "custom sampl
 
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"
-grep -Fq 'Custom project rule: `.huayancoder/rules/catdd.md`' "$install_marker" || fail "install marker missing custom rule location"
-grep -Fq 'Continue-format prompt wrappers: `.huayancoder/prompts/UT_*.prompt` and `.huayancoder/prompts/SPEC_*.prompt`' "$install_marker" || fail "install marker missing custom prompt wrapper location"
+grep -Fq 'Custom project rule: `.customCodeAgent/rules/catdd.md`' "$install_marker" || fail "install marker missing custom rule location"
+grep -Fq 'Continue-format prompt wrappers: `.customCodeAgent/prompts/UT_*.prompt` and `.customCodeAgent/prompts/SPEC_*.prompt`' "$install_marker" || fail "install marker missing custom prompt wrapper location"
 grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$install_marker" || fail "install marker missing version line in YYYYMMDD.HH format"
 
 replacement_output="$("$INSTALLER" --target "$TARGET_DIR" --yes 2>&1)"
