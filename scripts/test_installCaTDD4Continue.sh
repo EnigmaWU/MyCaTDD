@@ -21,9 +21,9 @@ git -C "$REPO_ROOT" check-ignore -q .continue/rules/catdd.md || fail "generated 
 git -C "$REPO_ROOT" check-ignore -q .continue/prompts/UT_example.prompt || fail "generated Continue UT prompt wrappers must be ignored in this source repo"
 git -C "$REPO_ROOT" check-ignore -q .continue/prompts/SPEC_example.prompt || fail "generated Continue SPEC prompt wrappers must be ignored in this source repo"
 
-"$INSTALLER" --target "$TARGET_DIR"
+"$INSTALLER" --target "$TARGET_DIR" --yes
 
-verbose_output="$("$INSTALLER" --target "$TARGET_DIR" --verbose 2>&1)"
+verbose_output="$("$INSTALLER" --target "$TARGET_DIR" --verbose --yes 2>&1)"
 grep -Fq '[installCaTDD4Continue] replace: .catdd/methodPrompts' <<< "$verbose_output" || fail "--verbose output missing replace operation trace"
 grep -Fq '[installCaTDD4Continue] patch: .gitignore' <<< "$verbose_output" || fail "--verbose output missing patch operation trace"
 
@@ -73,13 +73,19 @@ install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 grep -Fq 'Continue project rule: `.continue/rules/catdd.md`' "$install_marker" || fail "install marker missing Continue rule location"
 grep -Fq 'Continue prompt wrappers: `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`' "$install_marker" || fail "install marker missing Continue prompt wrapper location"
 grep -Fq 'analyzedNews/' "$install_marker" || fail "install marker missing analyzedNews shared artifact guidance"
+grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$install_marker" || fail "install marker missing version line in YYYYMMDD.HH format"
+
+# Verify replacement detection: re-running installer on same target reports same-version replacement
+replacement_output="$("$INSTALLER" --target "$TARGET_DIR" --yes 2>&1)"
+grep -Fq '] version:' <<< "$replacement_output" || fail "installer missing version action output on reinstall"
+grep -Fq '(same version, replacement)' <<< "$replacement_output" || fail "reinstall should report same-version replacement"
 
 target_gitignore="$TARGET_DIR/.gitignore"
 ! grep -Fq '/.catdd/spec/doingUS/' "$target_gitignore" || fail "target .gitignore must not ignore doingUS team-shared state"
 grep -Fq '/.catdd/spec/WorkingProcessLog.md' "$target_gitignore" || fail "target .gitignore missing WorkingProcessLog local-state rule"
 
 init_target="$TARGET_DIR/new-continue-project"
-"$INSTALLER" --target "$init_target" --init
+"$INSTALLER" --target "$init_target" --init --yes
 
 [[ -f "$init_target/.catdd/methodPrompts/README.md" ]] || fail "--init target missing installed methodPrompts"
 [[ -d "$init_target/.catdd/spec/analyzedNews" ]] || fail "--init target missing .catdd/spec/analyzedNews"

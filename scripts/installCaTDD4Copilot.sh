@@ -6,10 +6,11 @@ TARGET_DIR=""
 CLEAN_PROMPTS=0
 INIT=0
 VERBOSE=0
+YES=0
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/installCaTDD4Copilot.sh --target DIR [--clean-prompts] [--init] [--verbose]
+Usage: scripts/installCaTDD4Copilot.sh --target DIR [--clean-prompts] [--init] [--verbose] [--yes]
 
 Install or refresh CaTDD methodPrompts, slashCommands, and Copilot-native prompt wrappers into a target project.
 
@@ -18,6 +19,7 @@ Options:
   --clean-prompts   Remove existing generated UT_*.prompt.md and SPEC_*.prompt.md files before regenerating Copilot wrappers.
   --init            Create the target directory if it does not exist.
   --verbose         Print detailed action steps for diagnosis.
+  --yes, -y         Skip the Y/n confirmation prompt (non-interactive / scripted use).
   -h, --help        Show this help.
 USAGE
 }
@@ -39,6 +41,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --verbose)
       VERBOSE=1
+      shift
+      ;;
+    --yes|-y)
+      YES=1
       shift
       ;;
     -h|--help)
@@ -75,6 +81,39 @@ SPEC_DIR="$CATDD_DIR/spec"
 GITHUB_DIR="$TARGET_DIR/.github"
 PROMPTS_DIR="$GITHUB_DIR/prompts"
 INSTRUCTIONS_DIR="$GITHUB_DIR/instructions"
+
+# Compute version from the latest git commit in the MyCaTDD source repo
+CATDD_VERSION="$(git -C "$REPO_ROOT" log -1 --format='%ad' --date='format:%Y%m%d.%H' 2>/dev/null || echo 'unknown')"
+
+# Read currently installed version before overwriting
+INSTALLED_VERSION=""
+if [[ -f "$CATDD_DIR/CaTDD_INSTALL.md" ]]; then
+  INSTALLED_VERSION="$(sed -n 's/^- Installed version: //p' "$CATDD_DIR/CaTDD_INSTALL.md" | head -1)"
+fi
+
+# Report version action
+if [[ -z "$INSTALLED_VERSION" ]]; then
+  echo "[installCaTDD4Copilot] version: $CATDD_VERSION (fresh install)"
+elif [[ "$INSTALLED_VERSION" == "$CATDD_VERSION" ]] \
+  || [[ "$CATDD_VERSION" == "unknown" ]] \
+  || [[ "$INSTALLED_VERSION" == "unknown" ]]; then
+  echo "[installCaTDD4Copilot] version: $CATDD_VERSION (same version, replacement)"
+elif [[ "$CATDD_VERSION" > "$INSTALLED_VERSION" ]]; then
+  echo "[installCaTDD4Copilot] version: $INSTALLED_VERSION -> $CATDD_VERSION (upgrade)"
+else
+  echo "[installCaTDD4Copilot] version: $INSTALLED_VERSION -> $CATDD_VERSION (downgrade)"
+fi
+
+# Y/n confirmation
+if [[ "$YES" -eq 0 ]]; then
+  read -r -p "[installCaTDD4Copilot] Proceed with installation? [Y/n]: " _confirm
+  case "${_confirm,,}" in
+    n|no)
+      echo "[installCaTDD4Copilot] Installation cancelled."
+      exit 0
+      ;;
+  esac
+fi
 
 if [[ "$VERBOSE" -eq 1 ]]; then
   set -x
@@ -148,9 +187,8 @@ cp -R "$REPO_ROOT/slashCommands" "$CATDD_DIR/slashCommands"
 update_spec_gitignore
 
 log_replace_or_new "$CATDD_DIR/CaTDD_INSTALL.md"
-cat > "$CATDD_DIR/CaTDD_INSTALL.md" <<'MARKER'
-# CaTDD Install Marker
-
+printf '# CaTDD Install Marker\n\n- Installed version: %s\n\n' "$CATDD_VERSION" > "$CATDD_DIR/CaTDD_INSTALL.md"
+cat >> "$CATDD_DIR/CaTDD_INSTALL.md" <<'MARKER'
 This directory is managed by `scripts/installCaTDD4Copilot.sh` from MyCaTDD.
 
 - `methodPrompts/` is the installed CaTDD method source.
