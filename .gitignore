@@ -80,6 +80,9 @@ Testing/
 /.continue/prompts/SPEC_*.prompt
 /.clinerules/catdd.md
 /.antigravityrules/catdd.md
+/.huayancoder/rules/catdd.md
+/.huayancoder/prompts/UT_*.prompt
+/.huayancoder/prompts/SPEC_*.prompt
 
 book*
 
