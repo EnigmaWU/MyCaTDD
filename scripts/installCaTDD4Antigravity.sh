@@ -5,10 +5,11 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET_DIR=""
 INIT=0
 VERBOSE=0
+YES=0
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/installCaTDD4Antigravity.sh --target DIR [--init] [--verbose]
+Usage: scripts/installCaTDD4Antigravity.sh --target DIR [--init] [--verbose] [--yes]
 
 Install or refresh CaTDD methodPrompts, slashCommands, SpecCoding artifact workspace, and Antigravity project rules into a target project.
 
@@ -16,6 +17,7 @@ Options:
   --target DIR      Target project directory.
   --init            Create the target directory if it does not exist.
   --verbose         Print detailed action steps for diagnosis.
+  --yes, -y         Skip the Y/n confirmation prompt (non-interactive / scripted use).
   -h, --help        Show this help.
 USAGE
 }
@@ -33,6 +35,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --verbose)
       VERBOSE=1
+      shift
+      ;;
+    --yes|-y)
+      YES=1
       shift
       ;;
     -h|--help)
@@ -88,6 +94,17 @@ elif [[ "$CATDD_VERSION" > "$INSTALLED_VERSION" ]]; then
   echo "[installCaTDD4Antigravity] version: $INSTALLED_VERSION -> $CATDD_VERSION (upgrade)"
 else
   echo "[installCaTDD4Antigravity] version: $INSTALLED_VERSION -> $CATDD_VERSION (downgrade)"
+fi
+
+# Y/n confirmation
+if [[ "$YES" -eq 0 ]]; then
+  read -r -p "[installCaTDD4Antigravity] Proceed with installation? [Y/n]: " _confirm
+  case "${_confirm,,}" in
+    n|no)
+      echo "[installCaTDD4Antigravity] Installation cancelled."
+      exit 0
+      ;;
+  esac
 fi
 
 if [[ "$VERBOSE" -eq 1 ]]; then

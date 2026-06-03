@@ -19,9 +19,9 @@ fail() {
 
 git -C "$REPO_ROOT" check-ignore -q .antigravityrules/catdd.md || fail "generated Antigravity rule must be ignored in this source repo"
 
-"$INSTALLER" --target "$TARGET_DIR"
+"$INSTALLER" --target "$TARGET_DIR" --yes
 
-verbose_output="$("$INSTALLER" --target "$TARGET_DIR" --verbose 2>&1)"
+verbose_output="$("$INSTALLER" --target "$TARGET_DIR" --verbose --yes 2>&1)"
 grep -Fq '[installCaTDD4Antigravity] replace: .catdd/methodPrompts' <<< "$verbose_output" || fail "--verbose output missing replace operation trace"
 grep -Fq '[installCaTDD4Antigravity] patch: .gitignore' <<< "$verbose_output" || fail "--verbose output missing patch operation trace"
 
@@ -49,7 +49,7 @@ grep -Fq 'analyzedNews/' "$install_marker" || fail "install marker missing analy
 grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$install_marker" || fail "install marker missing version line in YYYYMMDD.HH format"
 
 # Verify replacement detection: re-running installer on same target reports same-version replacement
-replacement_output="$("$INSTALLER" --target "$TARGET_DIR" 2>&1)"
+replacement_output="$("$INSTALLER" --target "$TARGET_DIR" --yes 2>&1)"
 grep -Fq '] version:' <<< "$replacement_output" || fail "installer missing version action output on reinstall"
 grep -Fq '(same version, replacement)' <<< "$replacement_output" || fail "reinstall should report same-version replacement"
 
@@ -58,7 +58,7 @@ target_gitignore="$TARGET_DIR/.gitignore"
 grep -Fq '/.catdd/spec/WorkingProcessLog.md' "$target_gitignore" || fail "target .gitignore missing WorkingProcessLog local-state rule"
 
 init_target="$TARGET_DIR/new-antigravity-project"
-"$INSTALLER" --target "$init_target" --init
+"$INSTALLER" --target "$init_target" --init --yes
 
 [[ -f "$init_target/.catdd/methodPrompts/README.md" ]] || fail "--init target missing installed methodPrompts"
 [[ -d "$init_target/.catdd/spec/analyzedNews" ]] || fail "--init target missing .catdd/spec/analyzedNews"

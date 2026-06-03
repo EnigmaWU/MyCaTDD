@@ -6,10 +6,11 @@ TARGET_DIR=""
 CLEAN_PROMPTS=0
 INIT=0
 VERBOSE=0
+YES=0
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/installCaTDD4Continue.sh --target DIR [--clean-prompts] [--init] [--verbose]
+Usage: scripts/installCaTDD4Continue.sh --target DIR [--clean-prompts] [--init] [--verbose] [--yes]
 
 Install or refresh CaTDD methodPrompts, slashCommands, SpecCoding artifact workspace, Continue project rules, and Continue prompt wrappers into a target project.
 
@@ -18,6 +19,7 @@ Options:
   --clean-prompts   Remove existing generated UT_*.prompt and SPEC_*.prompt files before regenerating Continue wrappers.
   --init            Create the target directory if it does not exist.
   --verbose         Print detailed action steps for diagnosis.
+  --yes, -y         Skip the Y/n confirmation prompt (non-interactive / scripted use).
   -h, --help        Show this help.
 USAGE
 }
@@ -39,6 +41,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --verbose)
       VERBOSE=1
+      shift
+      ;;
+    --yes|-y)
+      YES=1
       shift
       ;;
     -h|--help)
@@ -95,6 +101,17 @@ elif [[ "$CATDD_VERSION" > "$INSTALLED_VERSION" ]]; then
   echo "[installCaTDD4Continue] version: $INSTALLED_VERSION -> $CATDD_VERSION (upgrade)"
 else
   echo "[installCaTDD4Continue] version: $INSTALLED_VERSION -> $CATDD_VERSION (downgrade)"
+fi
+
+# Y/n confirmation
+if [[ "$YES" -eq 0 ]]; then
+  read -r -p "[installCaTDD4Continue] Proceed with installation? [Y/n]: " _confirm
+  case "${_confirm,,}" in
+    n|no)
+      echo "[installCaTDD4Continue] Installation cancelled."
+      exit 0
+      ;;
+  esac
 fi
 
 if [[ "$VERBOSE" -eq 1 ]]; then

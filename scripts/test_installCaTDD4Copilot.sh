@@ -17,9 +17,9 @@ fail() {
 
 [[ -x "$INSTALLER" ]] || fail "missing executable installer: scripts/installCaTDD4Copilot.sh"
 
-"$INSTALLER" --target "$TARGET_DIR" --clean-prompts
+"$INSTALLER" --target "$TARGET_DIR" --clean-prompts --yes
 
-verbose_output="$("$INSTALLER" --target "$TARGET_DIR" --clean-prompts --verbose 2>&1)"
+verbose_output="$("$INSTALLER" --target "$TARGET_DIR" --clean-prompts --verbose --yes 2>&1)"
 grep -Fq '[installCaTDD4Copilot] replace: .catdd/methodPrompts' <<< "$verbose_output" || fail "--verbose output missing replace operation trace"
 grep -Fq '[installCaTDD4Copilot] patch: .gitignore' <<< "$verbose_output" || fail "--verbose output missing patch operation trace"
 
@@ -64,12 +64,12 @@ install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$install_marker" || fail "install marker missing version line in YYYYMMDD.HH format"
 
 # Verify replacement detection: re-running installer on same target reports same-version replacement
-replacement_output="$("$INSTALLER" --target "$TARGET_DIR" --clean-prompts 2>&1)"
+replacement_output="$("$INSTALLER" --target "$TARGET_DIR" --clean-prompts --yes 2>&1)"
 grep -Fq '] version:' <<< "$replacement_output" || fail "installer missing version action output on reinstall"
 grep -Fq '(same version, replacement)' <<< "$replacement_output" || fail "reinstall should report same-version replacement"
 
 init_target="$TARGET_DIR/new-project"
-"$INSTALLER" --target "$init_target" --init --clean-prompts
+"$INSTALLER" --target "$init_target" --init --clean-prompts --yes
 
 [[ -f "$init_target/.catdd/methodPrompts/README.md" ]] || fail "--init target missing installed methodPrompts"
 [[ -f "$init_target/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "--init target missing installed slashCommands"
