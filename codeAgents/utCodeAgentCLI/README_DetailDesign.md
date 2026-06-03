@@ -399,4 +399,4 @@ Expected result: `diff` prints no output and exits with code 0.
 
 ## Next Step
 
-Run `/SPEC_reviewUserStory` to gate final story/design readiness before CaTDD unit-test skeleton design.
+Run `/SPEC_designUnitTests` to design CaTDD unit-test skeletons for the approved story, architecture, and detail design.

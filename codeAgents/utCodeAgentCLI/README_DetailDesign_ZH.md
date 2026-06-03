@@ -399,4 +399,4 @@ Expected result：`diff` 不输出内容，并以 code 0 退出。
 
 ## Next Step
 
-运行 `/SPEC_reviewUserStory`，在进入 CaTDD unit-test skeleton design 之前 gate final story/design readiness。
+运行 `/SPEC_designUnitTests`，为已批准的 story、architecture 与 detail design 设计 CaTDD unit-test skeletons。

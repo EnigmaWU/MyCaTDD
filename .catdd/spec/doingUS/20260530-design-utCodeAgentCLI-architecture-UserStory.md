@@ -18,7 +18,8 @@ Opened by `/SPEC_openUserStory` on 2026-06-02.
 - Architecture review gate: `/SPEC_reviewArchDesign` PASS on 2026-06-03.
 - Detail design draft: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`.
 - Detail design review gate: `/SPEC_reviewDetailDesign` PASS on 2026-06-04.
-- Next recommended command: `/SPEC_reviewUserStory`.
+- Story/design readiness review gate: `/SPEC_reviewUserStory` PASS on 2026-06-04.
+- Next recommended command: `/SPEC_designUnitTests`.
 
 ## Architecture Review Status
 
@@ -35,6 +36,12 @@ Opened by `/SPEC_openUserStory` on 2026-06-02.
 - Finding: PASS.
 - Output: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`.
 - Evidence: detail design resolves architecture follow-ups into module layout, TypeScript-facing parser/planner/executor/adapter/trace contracts, data schemas, state transitions, error handling, implementation plan, verification strategy, assumptions, and open questions. Review also resolved the `US-USER-10` / `reviewImplTestFile` gap by documenting it as a stable CLI orchestration alias over repeated `UT_reviewImplTestCase` calls.
+
+## Story Review Status
+
+- Review command: `/SPEC_reviewUserStory`.
+- Finding: PASS.
+- Evidence: active story acceptance scenarios are traceable to the approved ArchDesign and reviewed DetailDesign; acceptance criteria are measurable as documentation, mirror, architecture-view, delegation, traceability, adapter-boundary, and design-contract checks; remaining Copilot/OpenCode depth questions are implementation-planning choices and do not block CaTDD unit-test skeleton design.
 
 ## Analysis Status
 
@@ -152,4 +159,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_reviewUserStory` to gate final story/design readiness before CaTDD unit-test skeleton design.
+Run `/SPEC_designUnitTests` to design CaTDD unit-test skeletons for the approved story, architecture, and detail design.
