@@ -87,7 +87,9 @@ fi
 # Report version action
 if [[ -z "$INSTALLED_VERSION" ]]; then
   echo "[installCaTDD4Continue] version: $CATDD_VERSION (fresh install)"
-elif [[ "$INSTALLED_VERSION" == "$CATDD_VERSION" ]]; then
+elif [[ "$INSTALLED_VERSION" == "$CATDD_VERSION" ]] \
+  || [[ "$CATDD_VERSION" == "unknown" ]] \
+  || [[ "$INSTALLED_VERSION" == "unknown" ]]; then
   echo "[installCaTDD4Continue] version: $CATDD_VERSION (same version, replacement)"
 elif [[ "$CATDD_VERSION" > "$INSTALLED_VERSION" ]]; then
   echo "[installCaTDD4Continue] version: $INSTALLED_VERSION -> $CATDD_VERSION (upgrade)"
