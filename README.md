@@ -14,15 +14,16 @@ Your diagram expresses a four-layer evolution path:
 
 1. [methodPrompts](methodPrompts/README.md)（方法提示词）
 2. [slashCommands](slashCommands/README.md)（提示词命令）
-3. [utCodeAgentCLI](codeAgents/utCodeAgentCLI/README.md)（单元测试代码智能体）
+3. [codeAgents](codeAgents/README.md)（CaTDD 代码智能体容器，含 ut/spec）
 4. [agentSkills](agentSkills/README.md)（智能体技能包）
 
 It also includes a bidirectional improvement loop:
 
-- [1] is applied into [2] and [3]
-- [4] packages [1] into reusable agent capabilities
-- Practices from [2] and [3] feed improvements back into [1]
-- Task planning and reflection in [3] further improve [2]
+- [1] is used by [2] and [3]
+- [2] is used by [3]
+- [2] feeds back to [1] to improve method quality
+- [3] feeds back to [2] and [1] to adjust behaviors
+- [4] is for other code agents (such as Copilot/Cline), not for CaTDD's [3]
 
 Relationship diagram:
 
@@ -30,18 +31,19 @@ Relationship diagram:
 flowchart LR
   L1["[1] methodPrompts<br/>CaTDD method source"]
   L2["[2] slashCommands<br/>Flow command units"]
-  L3["[3] utCodeAgentCLI<br/>CaTDD-native CLI agent"]
-  L4["[4] agentSkills<br/>Reusable skill package"]
+  L3["[3] codeAgents<br/>CaTDD-native CLI agents (ut/spec)"]
+  L4["[4] agentSkills<br/>Reusable skills for other code agents"]
+  L5["Other code agents<br/>Copilot / Cline / ..."]
 
   L1 -->|method steps| L2
-  L1 -->|method constraints| L3
-  L1 -->|canonical references| L4
-  L2 -->|reusable commands| L3
-  L4 -->|packaged capability| L2
-  L4 -->|packaged capability| L3
-  L2 -.->|practice feedback| L1
-  L3 -.->|execution feedback| L1
-  L3 -.->|planning feedback| L2
+  L1 -->|method source| L3
+  L2 -->|flow commands| L3
+  L2 -.->|quality feedback| L1
+  L3 -.->|behavior feedback| L2
+  L3 -.->|behavior feedback| L1
+  L1 -->|references| L4
+  L2 -->|flow assets| L4
+  L4 -->|packaged skills| L5
 ```
 
 This README is organized around that main storyline.
@@ -60,15 +62,15 @@ Brief: the code-agent-agnostic flow connector layer. It turns stable CaTDD metho
 
 Read more: [slashCommands/README.md](slashCommands/README.md). Use [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) for generator, installer, flow, and command usage.
 
-### [3] [utCodeAgentCLI](codeAgents/utCodeAgentCLI/README.md) (code agent)
+### [3] [codeAgents](codeAgents/README.md) (code agents)
 
-Brief: this repository's CaTDD-native CLI agent layer. Developers define goals, then the agent plans, executes, collects traces, and reflects using [1] and [2].
+Brief: this repository's CaTDD-native CLI agent container layer. It holds `utCodeAgentCLI` and `specCodeAgentCLI`. Developers define goals, then agents plan, execute, collect traces, and reflect using [1] and [2].
 
-Read more: [codeAgents/utCodeAgentCLI/README.md](codeAgents/utCodeAgentCLI/README.md). Use [codeAgents/utCodeAgentCLI/README_UserGuide.md](codeAgents/utCodeAgentCLI/README_UserGuide.md) for current CLI-layer design guidance.
+Read more: [codeAgents/README.md](codeAgents/README.md), [codeAgents/utCodeAgentCLI/README.md](codeAgents/utCodeAgentCLI/README.md), and [codeAgents/specCodeAgentCLI/README.md](codeAgents/specCodeAgentCLI/README.md). Use [codeAgents/utCodeAgentCLI/README_UserGuide.md](codeAgents/utCodeAgentCLI/README_UserGuide.md) for current available CLI-layer usage guidance.
 
 ### [4] [agentSkills](agentSkills/README.md) (skill package)
 
-Brief: the reusable capability packaging layer. It wraps CaTDD method knowledge into triggerable skills and keeps skill references aligned with the canonical method files.
+Brief: the reusable capability packaging layer for other code agents (such as Copilot/Cline). It wraps CaTDD method and flow knowledge into triggerable skills, but is not used by CaTDD-native `codeAgents`.
 
 Read more: [agentSkills/README.md](agentSkills/README.md). Use [agentSkills/README_UserGuide.md](agentSkills/README_UserGuide.md) for packaging and validation steps.
 
