@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Move a selected user story from `.catdd/spec/todoUS/` into `.catdd/spec/doingUS/` and prepare it for detailed design.
+Move a selected user story from `.catdd/spec/todoUS/` into `.catdd/spec/doingUS/` and prepare it for planning.
 
 ## CoT Pattern
 
@@ -23,14 +23,14 @@ Move a selected user story from `.catdd/spec/todoUS/` into `.catdd/spec/doingUS/
 
 - A `.catdd/spec/doingUS/*-UserStory.md` team-shared active work file.
 - Status marker showing the story is open.
-- Initial next-step recommendation, usually `SPEC_takeDetailDesign`.
+- Initial next-step recommendation, usually `SPEC_takePlan`.
 
 ## Prompt Template
 
-Ask the assistant to preserve story traceability, copy or move only the selected story into shared active work state, and start a clear active-work status section.
+Ask the assistant to preserve story traceability, copy or move only the selected story into shared active work state, start a clear active-work status section, and route the story to `SPEC_takePlan` before design or implementation starts.
 
 ## Conflict Guard
 
-Opening a story does not mean implementation may begin. Detail design and review still gate implementation.
+Opening a story does not mean implementation may begin. `SPEC_takePlan` must decide whether intent clearing, architecture design, detail design, review, or direct test design is next.
 
 ONE-MORE-THING: ask developer if something not sure
