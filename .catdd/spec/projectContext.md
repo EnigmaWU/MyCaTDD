@@ -78,6 +78,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md`
   - `.catdd/spec/analyzedNews/20260531-add-SPEC_takeArchDesign-command-Issue.md`
   - `.catdd/spec/analyzedNews/20260530-design-utCodeAgentCLI-architecture-Issue.md`
+  - `.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md`
   - `.catdd/spec/analyzedNews/20260602-add-SPEC_reviewDesignGates-commands-Feature.md`
 - Pending feature requests imported:
   - None currently.
@@ -89,6 +90,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - None currently.
 - Active user stories opened:
   - `.catdd/spec/doingUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md` for adding `SPEC_reviewArchDesign` and `SPEC_reviewDetailDesign` gates to Px-SpecFlow; command specs and flow wiring drafted.
+  - `.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md` for deciding TypeScript/Python/Go as `utCodeAgentCLI` primary runtime language and recording a formal ADR.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes Mermaid-renderable C4-style architecture views and Px-SpecFlow architecture-oriented surface coverage for usage, error, resource, performance, compatibility, diagnosis, verification, state, and embedded/media applicability.
 - Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03.
@@ -99,7 +101,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 Run one of these after context review:
 
-- `/SPEC_designUnitTests` on `.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md` to design CaTDD unit-test skeletons for the approved story, architecture, and detail design.
+- `/SPEC_takePlan` on `.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md` to choose the next planned step for the runtime-language architecture decision and ADR story.
 - `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
 - `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
 - `/SPEC_updateProjectContext` when any project fact, convention, or guardrail in this file needs correction.
