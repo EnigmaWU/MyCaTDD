@@ -14,7 +14,20 @@ This document defines the high-level architecture for `utCodeAgentCLI`: a CaTDD-
 - Method source of truth: [../../methodPrompts/](../../methodPrompts/)
 - Portable command source of truth: [../../slashCommands/](../../slashCommands/)
 
-`utCodeAgentCLI` is not yet a runnable binary. This architecture describes the intended production-ready shape before detail design, unit-test design, or TypeScript implementation begins.
+`utCodeAgentCLI` is not yet a runnable binary. This architecture describes the intended production-ready shape before detail design, unit-test design, or runtime implementation begins.
+
+## Architecture Decision: Runtime Language
+
+`utCodeAgentCLI` runtime language is under active review. The current candidates are **TypeScript on Node.js**, **Python**, and **Go**.
+
+Reasoning summary:
+
+- The runtime language should fit the current repository’s documentation and adapter model.
+- The runtime language should minimize friction for local file orchestration, command routing, and machine-readable trace generation.
+- The runtime language should preserve a clean adapter boundary so future Copilot, OpenCode, or other runtime surfaces can be added without changing CaTDD semantics.
+- The runtime language should keep the eventual V1 implementation realistic for the team to build, test, and maintain.
+
+See [ADRs/ADR_RuntimeLanguage.md](ADRs/ADR_RuntimeLanguage.md) for the full decision record.
 
 ## Who
 
@@ -60,7 +73,7 @@ codeAgents/utCodeAgentCLI/
 
 The main architecture risk is method drift: a convenient CLI could duplicate CaTDD semantics, invent category meanings, or bypass portable slash-command contracts. The design avoids that by making `AgentSDK` generic and making `utCodeAgentCLI` an orchestrator, not a method owner.
 
-The second risk is runtime lock-in. The CLI must run first as raw TypeScript/Node.js, then adapt to Copilot-native and OpenCode surfaces, while leaving LangGraph and Google ADK as research-informed optional adapters.
+The second risk is runtime lock-in. The CLI may need to support raw TypeScript/Node.js, Python, or Go depending on the final decision, then adapt to Copilot-native and OpenCode surfaces, while leaving LangGraph and Google ADK as research-informed optional adapters.
 
 ## How
 
@@ -79,7 +92,7 @@ High-level execution:
 
 - Keep `AgentSDK` CaTDD-independent.
 - Keep all CaTDD method semantics delegated to `methodPrompts/` and `slashCommands/`.
-- Support raw TypeScript/Node.js as the first runtime target.
+- Support a runtime shape that can host raw TypeScript/Node.js, Python, or Go depending on the reviewed tradeoff.
 - Provide adapter boundaries for GitHub Copilot/MCP, OpenCode, existing CLIs, and future SDKs.
 - Preserve USER traceability from User Story to skeleton to executable RED tests.
 - Provide INVENTOR proof through diagnostic prompt/command resolution.
@@ -272,9 +285,9 @@ Exact TypeScript types, error classes, and module names belong to later detail d
 
 ## Runtime Adaptations
 
-### Raw TypeScript Runtime
+### Runtime Candidate
 
-The first implementation target is a Node.js TypeScript CLI that reads local files, executes portable slash-command steps through an internal runner or process adapter, writes deterministic traces, and has no required external agent runtime.
+One candidate implementation target is a Node.js TypeScript CLI that reads local files, executes portable slash-command steps through an internal runner or process adapter, writes deterministic traces, and has no required external agent runtime. Other candidates, including Python and Go, should be compared against this shape before the V1 choice is fixed.
 
 ### GitHub Copilot And MCP Adapter
 
@@ -401,11 +414,21 @@ Ownership is split deliberately: `catdd/` validates the expected file state befo
 | Decision | Rationale | Status |
 | --- | --- | --- |
 | Introduce `AgentSDK` as a generic layer below `utCodeAgentCLI`. | Keeps LLM runtime concerns reusable and CaTDD-independent. | Proposed. |
-| Make raw TypeScript/Node.js the first runtime. | Satisfies the story assumption and avoids early dependency lock-in. | Proposed. |
+| Compare TypeScript/Node.js, Python, and Go before fixing the V1 runtime. | Keeps the implementation choice open until tradeoffs are reviewed. | Proposed. |
 | Treat Copilot/MCP and OpenCode as adapter targets. | Meets compatibility goals while preserving CLI core. | Proposed. |
 | Treat LangGraph and Google ADK as research references first. | They inform graph, session, callback, and observability design without becoming required dependencies. | Proposed. |
 | Keep CaTDD semantics out of `AgentSDK`. | Satisfies INVENTOR method-delegation requirements. | Accepted. |
 | Persist traces on success and execution failure. | Satisfies traceability and audit requirements. | Accepted. |
+
+## Runtime Language ADR Summary
+
+The runtime-language decision is now recorded as an ADR and intentionally compares the implementation choices instead of assuming one.
+
+| Candidate | Evaluation summary | Outcome |
+| --- | --- | --- |
+| TypeScript / Node.js | Strong fit for the current repo’s TypeScript-facing docs, local file orchestration, trace generation, and adapter-first CLI design, but it still needs to be weighed against implementation cost and team workflow fit. | Candidate |
+| Python | Strong scripting ecosystem and fast orchestration ergonomics, but it would widen the gap against the current TypeScript-facing design docs. | Candidate |
+| Go | Strong binary/runtime simplicity and a compact deployment story, but it would likely require the largest architecture and tooling shift for an orchestration-heavy CLI. | Candidate |
 
 ## Risks And Constraints
 
@@ -414,6 +437,7 @@ Ownership is split deliberately: `catdd/` validates the expected file state befo
 - Trace leakage: traces may capture sensitive paths, prompts, or tokens.
 - Runtime overhead: adapter indirection may add latency.
 - Ambiguous source-depth expectations: Copilot SDK and OpenCode compatibility depth still need detail-design decisions.
+- Future runtime portability still depends on keeping `AgentSDK` portable even before the final runtime is chosen.
 
 ## Non-Goals
 

@@ -1,6 +1,6 @@
 # utCodeAgentCLI Detail Design
 
-This document turns the PASS-reviewed architecture into TypeScript-facing contracts, data schemas, state transitions, and verification strategy for the future `utCodeAgentCLI` implementation. It is based on [`slashCommands/templates/README_DetailDesignTemplate.md`](../../slashCommands/templates/README_DetailDesignTemplate.md).
+This document turns the architecture into implementation-facing contracts, data schemas, state transitions, and verification strategy for the future `utCodeAgentCLI` implementation. It is based on [`slashCommands/templates/README_DetailDesignTemplate.md`](../../slashCommands/templates/README_DetailDesignTemplate.md).
 
 ## Story Context
 
@@ -11,7 +11,7 @@ This document turns the PASS-reviewed architecture into TypeScript-facing contra
 - Method source of truth: [../../methodPrompts/](../../methodPrompts/)
 - Portable command source of truth: [../../slashCommands/](../../slashCommands/)
 
-The detail design keeps the architecture decisions intact: `AgentSDK` is generic and CaTDD-independent; `utCodeAgentCLI` parses user intent, resolves CaTDD behaviors to delegated assets, invokes a runtime adapter, and records traces.
+The detail design keeps the architecture decisions intact: `AgentSDK` is generic and CaTDD-independent; `utCodeAgentCLI` parses user intent, resolves CaTDD behaviors to delegated assets, invokes a runtime adapter, and records traces. The final implementation language remains subject to the runtime-language ADR.
 
 ## Who
 
@@ -23,7 +23,7 @@ The detail design keeps the architecture decisions intact: `AgentSDK` is generic
 
 ## What
 
-`utCodeAgentCLI` will be implemented as a local TypeScript/Node.js CLI first. The v1 detail design includes:
+`utCodeAgentCLI` will be implemented as a local CLI first, using whichever runtime language is selected by the runtime-language ADR. The v1 detail design includes:
 
 - CLI argument parsing and validation.
 - Behavior resolution from CLI aliases or direct `UT_*` names to portable slash commands.
@@ -90,7 +90,7 @@ Execution flow:
 | Reveal resolved prompts and commands. | `US-INVENTOR-03` | Diagnostic flags expose file paths and resolution reasons. |
 | Produce actionable errors. | `US-DEV-01` | Errors name the argument/path/state and suggest corrections. |
 | Support logging and interactive control. | `US-DEV-02`, `US-DEV-03` | `LogSink` and `ControlPort` are explicit dependencies. |
-| Support replaceable runtimes. | `US-DEV-04` | Default adapter is raw TypeScript/process based; Copilot/OpenCode adapters are later implementations. |
+| Support replaceable runtimes. | `US-DEV-04` | Default adapter is the first chosen runtime/process based; Copilot/OpenCode adapters are later implementations. |
 
 ## Acceptance Criteria
 
@@ -362,15 +362,15 @@ Not applicable for `utCodeAgentCLI` v1. There is no interrupt, driver, buffer, m
 
 ## Assumptions
 
-- First implementation language is TypeScript on Node.js.
-- First runtime is local raw TypeScript/process execution.
+- First implementation language is the runtime selected by the ADR.
+- First runtime is local raw process execution using the chosen runtime adapter.
 - Copilot/MCP and OpenCode are adapter targets after the raw runtime contract is stable.
 - LangGraph and Google ADK remain reference architectures until a later story asks for optional adapters.
 - Default trace output is module-local under `codeAgents/utCodeAgentCLI/traces/`.
 
 ## Open Questions
 
-- Which package manager and test runner should the first TypeScript implementation use?
+- Which package manager and test runner should the chosen implementation use?
 - Should installed-target traces later default to `.catdd/traces/` instead of the module-local trace directory?
 - Should prompt-wrapper execution or MCP tool execution be the first Copilot adapter surface?
 - Should OpenCode support start as a command adapter or provider abstraction?

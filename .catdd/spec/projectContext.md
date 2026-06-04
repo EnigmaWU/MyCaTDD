@@ -90,10 +90,10 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - None currently.
 - Active user stories opened:
   - `.catdd/spec/doingUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md` for adding `SPEC_reviewArchDesign` and `SPEC_reviewDetailDesign` gates to Px-SpecFlow; command specs and flow wiring drafted.
-  - `.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md` for deciding TypeScript/Python/Go as `utCodeAgentCLI` primary runtime language and recording a formal ADR; paired planning artifact created at `.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md`.
+  - `.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md` for deciding TypeScript/Python/Go as `utCodeAgentCLI` primary runtime language and recording a formal ADR; architecture draft now exists in `codeAgents/utCodeAgentCLI/README_ArchDesign.md`, `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`, and `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
-- Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes Mermaid-renderable C4-style architecture views and Px-SpecFlow architecture-oriented surface coverage for usage, error, resource, performance, compatibility, diagnosis, verification, state, and embedded/media applicability.
-- Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03.
+- Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes the runtime-language tradeoff review across TypeScript/Node.js, Python, and Go, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented surface coverage, and an ADR link for the runtime choice.
+- Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03; the runtime-language ADR story is awaiting review of the updated architecture draft.
 - Shared module DetailDesign doc created: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`; latest draft includes TypeScript-facing parser, planner, executor, adapter, trace, diagnostics, state, error, and verification contracts; `/SPEC_reviewDetailDesign` PASS recorded on 2026-06-04.
 - Current `utCodeAgentCLI` story/design readiness has `/SPEC_reviewUserStory` PASS recorded on 2026-06-04 and the story itself is archived in `doneUS/`.
 
@@ -101,7 +101,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 Run one of these after context review:
 
-- `/SPEC_takeArchDesign` on `.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md` to draft the runtime-language architecture decision and ADR for `utCodeAgentCLI`.
+- `/SPEC_reviewArchDesign` on `.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md` to review the runtime-language architecture decision and ADR for `utCodeAgentCLI`.
 - `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
 - `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
 - `/SPEC_updateProjectContext` when any project fact, convention, or guardrail in this file needs correction.

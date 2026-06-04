@@ -15,7 +15,8 @@ Opened by `/SPEC_openUserStory` on 2026-06-04.
 - Active state: `.catdd/spec/doingUS/` active story.
 - Opened from: [../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - Planning artifact: [20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md](20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md).
-- Next recommended command: `/SPEC_takeArchDesign`.
+- Architecture decision draft: `codeAgents/utCodeAgentCLI/README_ArchDesign.md`, `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`, and `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
+- Next recommended command: `/SPEC_reviewArchDesign`.
 
 ## Analysis Status
 

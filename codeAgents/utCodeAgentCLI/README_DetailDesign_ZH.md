@@ -1,6 +1,6 @@
 # utCodeAgentCLI 详细设计
 
-本文将已通过 review 的 architecture 转换为未来 `utCodeAgentCLI` implementation 可使用的 TypeScript-facing contracts、data schemas、state transitions 与 verification strategy。本文基于 [`slashCommands/templates/README_DetailDesignTemplate.md`](../../slashCommands/templates/README_DetailDesignTemplate.md)。
+本文将 architecture 转换为未来 `utCodeAgentCLI` implementation 可使用的 implementation-facing contracts、data schemas、state transitions 与 verification strategy。本文基于 [`slashCommands/templates/README_DetailDesignTemplate.md`](../../slashCommands/templates/README_DetailDesignTemplate.md)。
 
 ## Story Context
 
@@ -11,7 +11,7 @@
 - Method source of truth: [../../methodPrompts/](../../methodPrompts/)
 - Portable command source of truth: [../../slashCommands/](../../slashCommands/)
 
-本 detail design 保持 architecture 决策不变：`AgentSDK` 是 generic 且 CaTDD-independent；`utCodeAgentCLI` 解析 user intent，将 CaTDD behaviors 解析到 delegated assets，调用 runtime adapter，并记录 traces。
+本 detail design 保持 architecture 决策不变：`AgentSDK` 是 generic 且 CaTDD-independent；`utCodeAgentCLI` 解析 user intent，将 CaTDD behaviors 解析到 delegated assets，调用 runtime adapter，并记录 traces。最终实现语言仍取决于运行时语言 ADR。
 
 ## Who
 
@@ -23,7 +23,7 @@
 
 ## What
 
-`utCodeAgentCLI` 将首先实现为 local TypeScript/Node.js CLI。v1 detail design 包括：
+`utCodeAgentCLI` 将首先实现为 local CLI，具体使用哪种运行时语言由运行时语言 ADR 决定。v1 detail design 包括：
 
 - CLI argument parsing and validation。
 - 从 CLI aliases 或 direct `UT_*` names 到 portable slash commands 的 behavior resolution。
@@ -90,7 +90,7 @@ Execution flow：
 | Reveal resolved prompts and commands. | `US-INVENTOR-03` | Diagnostic flags 暴露 file paths 与 resolution reasons。 |
 | Produce actionable errors. | `US-DEV-01` | Errors 命名 argument/path/state 并给出 corrections。 |
 | Support logging and interactive control. | `US-DEV-02`, `US-DEV-03` | `LogSink` 与 `ControlPort` 是明确 dependencies。 |
-| Support replaceable runtimes. | `US-DEV-04` | Default adapter 是 raw TypeScript/process based；Copilot/OpenCode adapters 属于后续 implementation。 |
+| Support replaceable runtimes. | `US-DEV-04` | Default adapter 是最终选定 runtime/process based；Copilot/OpenCode adapters 属于后续 implementation。 |
 
 ## Acceptance Criteria
 
@@ -362,15 +362,15 @@ CLI 只能通过 delegated slash-command execution 写入 `PLANNED -> RED`。它
 
 ## Assumptions
 
-- First implementation language is TypeScript on Node.js。
-- First runtime is local raw TypeScript/process execution。
+- First implementation language is ADR 最终选定的运行时。
+- First runtime is local raw process execution，使用最终选定的 runtime adapter。
 - Copilot/MCP and OpenCode are adapter targets after the raw runtime contract is stable。
 - LangGraph and Google ADK remain reference architectures until a later story asks for optional adapters。
 - Default trace output is module-local under `codeAgents/utCodeAgentCLI/traces/`。
 
 ## Open Questions
 
-- Which package manager and test runner should the first TypeScript implementation use?
+- Which package manager and test runner should the chosen implementation use?
 - Should installed-target traces later default to `.catdd/traces/` instead of the module-local trace directory?
 - Should prompt-wrapper execution or MCP tool execution be the first Copilot adapter surface?
 - Should OpenCode support start as a command adapter or provider abstraction?
