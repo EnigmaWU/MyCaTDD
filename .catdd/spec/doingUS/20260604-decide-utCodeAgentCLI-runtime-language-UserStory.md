@@ -14,7 +14,8 @@ Opened by `/SPEC_openUserStory` on 2026-06-04.
 - Status: OPEN.
 - Active state: `.catdd/spec/doingUS/` active story.
 - Opened from: [../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
-- Next recommended command: `/SPEC_takePlan`.
+- Planning artifact: [20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md](20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md).
+- Next recommended command: `/SPEC_takeArchDesign`.
 
 ## Analysis Status
 
@@ -114,4 +115,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_takePlan` to decide whether intent clearing, architecture update, or detail design update should execute first for this ADR decision story.
+Run `/SPEC_takeArchDesign` to draft the runtime-language architecture decision and ADR for `utCodeAgentCLI`.
