@@ -66,7 +66,7 @@ Read more: [slashCommands/README.md](slashCommands/README.md). Use [slashCommand
 
 Brief: this repository's CaTDD-native CLI agent container layer. It holds `utCodeAgentCLI` and `specCodeAgentCLI`. Developers define goals, then agents plan, execute, collect traces, and reflect using [1] and [2].
 
-Read more: [codeAgents/README.md](codeAgents/README.md), [codeAgents/utCodeAgentCLI/README.md](codeAgents/utCodeAgentCLI/README.md), and [codeAgents/specCodeAgentCLI/README.md](codeAgents/specCodeAgentCLI/README.md). Use [codeAgents/utCodeAgentCLI/README_UserGuide.md](codeAgents/utCodeAgentCLI/README_UserGuide.md) for current available CLI-layer usage guidance.
+Read more: [codeAgents/README.md](codeAgents/README.md), [codeAgents/utCodeAgentCLI/README.md](codeAgents/utCodeAgentCLI/README.md), and [codeAgents/specCodeAgentCLI/README.md](codeAgents/specCodeAgentCLI/README.md). Use [codeAgents/utCodeAgentCLI/README_UserGuide.md](codeAgents/utCodeAgentCLI/README_UserGuide.md) for current available CLI-layer usage guidance (`specCodeAgentCLI` currently provides a layer README only).
 
 ### [4] [agentSkills](agentSkills/README.md) (skill package)
 
