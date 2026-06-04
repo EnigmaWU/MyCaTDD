@@ -115,6 +115,8 @@ Recommended target-project `.gitignore` rules:
 
 ## Flow Diagram
 
+### Part 1: Pre-Story (up to SPEC_openUserStory)
+
 ```mermaid
 flowchart LR
     Init["SPEC_initProjectContext"] --> Context[".catdd/spec/projectContext.md"]
@@ -132,7 +134,13 @@ flowchart LR
     AnalyzeFeature --> Analyzed
 
     Todo --> Open["SPEC_openUserStory"]
-    Open --> Doing[".catdd/spec/doingUS/*-UserStory.md"]
+```
+
+### Part 2: Active Story Lifecycle (after SPEC_openUserStory)
+
+```mermaid
+flowchart LR
+    Open["SPEC_openUserStory"] --> Doing[".catdd/spec/doingUS/*-UserStory.md"]
     Doing --> ClearIntent["SPEC_clearStoryIntent"]
     Doing --> Plan["SPEC_takePlan"]
     ClearIntent --> QualityIntent{"intent aligned?"}
@@ -166,8 +174,7 @@ flowchart LR
     QualityCode -- "NO" --> Refactor["SPEC_refactorIssue"]
     Refactor --> UpdateDetail
     QualityCode -- "YES" --> Commit["SPEC_commitWorks"]
-    Commit --> CI["SPEC_triggerCI"]
-    CI --> Close["SPEC_closeUserStory"]
+    Commit --> Close["SPEC_closeUserStory"]
     Close --> Done[".catdd/spec/doneUS/*-UserStory.md"]
     Close --> DonePlan[".catdd/spec/doneUS/*-PLANING.md"]
 ```
