@@ -4,6 +4,8 @@
 
 Review high-level architecture design immediately after `SPEC_takeArchDesign` and before `SPEC_takeDetailDesign`, so architecture boundary mistakes are found before detailed class, API, or test design begins.
 
+Model guidance: use a SOTA reasoning-capable LLM for this command (for example, GPT-5.5-xHigh) because approving or rejecting architecture requires deep thinking about system boundaries, competing constraints, and complex trade-offs.
+
 ## CoT Pattern
 
 **ReACT** — Reasoning + Acting. This command must inspect the active user story, `projectContext.md`, `README_ArchDesign.md`, and the matching ZH mirror when present; reason about architecture completeness, traceability, module boundaries, runtime adapters, and design risks; then produce a PASS, REVISE, or ASK finding with actionable evidence.
@@ -44,6 +46,8 @@ Review high-level architecture design immediately after `SPEC_takeArchDesign` an
 ## Prompt Template
 
 Ask the assistant to review the high-level architecture against the active story, project context, and architecture documents, report PASS/REVISE/ASK findings first, and prevent `SPEC_takeDetailDesign` unless the architecture can support the detailed design work.
+
+When possible, prefer a SOTA high-reasoning model (for example, GPT-5.5-xHigh) for this review so trade-off risks and boundary mistakes are not missed.
 
 ## Conflict Guard
 

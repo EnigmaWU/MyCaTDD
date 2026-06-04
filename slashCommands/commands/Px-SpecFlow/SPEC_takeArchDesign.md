@@ -4,6 +4,8 @@
 
 Create or update high-level architecture design for the active user story, defining architecture views, architecture-oriented SPEC surface coverage, component decomposition, module boundaries, dependencies, data flows, and key technical trade-offs before detailed class or API design begins.
 
+Model guidance: use a SOTA reasoning-capable LLM for this command (for example, GPT-5.5-xHigh) because architecture design requires deep thinking across competing constraints and complex trade-off analysis.
+
 ## CoT Pattern
 
 **ReACT** — Reasoning + Acting. This command must inspect the active user story, requirements (e.g. `README_UserStory.md` / `doingUS/`), and project context, reason about the structural decomposition and adapter boundaries, draft or update the project-root `README_ArchDesign.md`, and verify that component structures are traceable to requirements and fit the project guidelines before finalizing. Include Mermaid-renderable C4-style architecture views (system context, container, component, runtime execution, and deployment) or explicitly mark a view as not applicable. Also declare how Px-SpecFlow architecture-oriented surfaces (`README_UsageDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_VerifyDesign.md`, and relevant state design sources) are covered, delegated, deferred, or not applicable. For embedded software or digital video/audio domain work, add hardware boundaries, RTOS task structures, media pipelines, and synchronization boundaries to the architecture design.
@@ -32,6 +34,8 @@ Create or update high-level architecture design for the active user story, defin
 ## Prompt Template
 
 Ask the assistant to design the high-level system structure, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented SPEC surface coverage, module boundaries, and component dependencies before detailed design or test skeletons, updating the project-root `README_ArchDesign.md`, and keeping architecture decisions traceable to the active user story. For embedded or digital video/audio work, ensure task boundaries, hardware boundaries, buffer topologies, and sample format parameters are designed where relevant.
+
+When possible, prefer a SOTA high-reasoning model (for example, GPT-5.5-xHigh) for this step to improve decision quality on architectural alternatives and trade-offs.
 
 ## Conflict Guard
 

@@ -16,6 +16,35 @@ P0/P1/P2 flows = category-specific test design and implementation flows
 
 The governing spec is comment-alive verification design: project context, user stories, acceptance criteria, detailed design, US/AC/TC skeletons, test status, product code status, and review decisions.
 
+## Model Tier Guidance
+
+Use the smallest model tier that preserves decision quality for the current command. Developers and CodeAgents should reserve SOTA reasoning models for system-level architecture decisions, use high-performance models for multi-artifact reasoning and design/review work, and use flash-speed models for deterministic lifecycle movement or narrow implementation tasks.
+
+| Default tier | Use for | Px-SpecFlow commands |
+| --- | --- | --- |
+| SOTA reasoning, such as GPT-5.5-xHigh | Architecture work that decides or approves system boundaries, dependency direction, runtime placement, quality trade-offs, and cross-module constraints. | `SPEC_takeArchDesign`, `SPEC_reviewArchDesign` |
+| High Performance | Requirements analysis, intent alignment, planning, local design, review gates, test design, code review, and correction routing where quality depends on reasoning across several artifacts. | `SPEC_initProjectContext`, `SPEC_updateProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_clearStoryIntent`, `SPEC_takePlan`, `SPEC_whatsNextTask`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_updateDetailDesign`, `SPEC_reviewUserStory`, `SPEC_designUnitTests`, `SPEC_reviewProductCodes`, `SPEC_refactorIssue` |
+| Flash Speed | Deterministic import, move, commit, CI-summary, close, or small test-driven implementation steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_openUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_commitWorks`, `SPEC_triggerCI`, `SPEC_closeUserStory` |
+
+Escalate from High Performance or Flash Speed to SOTA when the command exposes architecture-significant uncertainty: competing non-functional requirements, safety/security risk, real-time or embedded constraints, concurrency boundaries, data migration, compatibility matrices, or irreversible module/API ownership decisions.
+
+## Usage Example
+
+For architecture work, choose a SOTA reasoning model before running:
+
+```text
+/SPEC_takeArchDesign
+/SPEC_reviewArchDesign
+```
+
+For deterministic lifecycle movement, flash-speed models are usually enough:
+
+```text
+/SPEC_importIssue
+/SPEC_openUserStory
+/SPEC_closeUserStory
+```
+
 ## Refinements from GitHub Spec Kit
 
 Use this list first when explaining or adopting `Px SpecFlow` refinements from GitHub's Spec Kit.
