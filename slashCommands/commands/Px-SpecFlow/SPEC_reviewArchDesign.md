@@ -8,11 +8,11 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This command must inspect the active user story, `projectContext.md`, `README_ArchDesign.md`, and the matching ZH mirror when present; reason about architecture completeness, traceability, module boundaries, runtime adapters, and design risks; then produce a PASS, REVISE, or ASK finding with actionable evidence.
+**ReACT** — Reasoning + Acting. This command must inspect the architecture-changing active user story, `projectContext.md`, `README_ArchDesign.md`, and the matching ZH mirror when present; reason about architecture completeness, traceability, module boundaries, runtime adapters, and design risks; then produce a PASS, REVISE, or ASK finding with actionable evidence. When the architecture document already reflects earlier architecture work, review whether the current story is correctly represented as an architecture-changing update instead of requiring every opened story to appear as an architecture trace owner.
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `.catdd/spec/doingUS/` that creates or changes architecture decisions, architecture boundaries, deployment/runtime strategy, or architecture-oriented SPEC surfaces.
 - `projectContext_file`: current project context.
 - `readme_arch_design`: project-root or module-scoped `README_ArchDesign.md`.
 - `readme_arch_design_zh`: optional matching `README_ArchDesign_ZH.md` mirror.
@@ -26,7 +26,7 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 ## Output Contract
 
 - Review finding: `PASS`, `REVISE`, or `ASK`.
-- Evidence for each finding, grounded in the active story, project context, architecture document, and mirror document when present.
+- Evidence for each finding, grounded in the architecture-changing story, project context, architecture document, and mirror document when present.
 - Checks for module boundaries, dependency direction, AgentSDK/CaTDD separation, runtime adaptation strategy, trace/audit/control coverage, Mermaid-renderable architecture views, and Px-SpecFlow architecture-oriented surface coverage.
 - If `PASS`: next recommended command is `SPEC_takeDetailDesign`.
 - If `REVISE`: next recommended command is `SPEC_takeArchDesign` to update the architecture design before detailed design begins.
@@ -34,7 +34,7 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 
 ## Review Checklist
 
-- Architecture decisions trace to the active story and `projectContext.md`.
+- Architecture decisions trace to the architecture-changing story or explicitly listed architecture-changing baseline/update stories, and to `projectContext.md`.
 - C4-style architecture views are Mermaid-renderable or explicitly marked not applicable.
 - Module boundaries are clear enough to drive detail design.
 - CaTDD method semantics remain delegated to `methodPrompts/` and `slashCommands/`.
@@ -45,7 +45,7 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 
 ## Prompt Template
 
-Ask the assistant to review the high-level architecture against the active story, project context, and architecture documents, report PASS/REVISE/ASK findings first, and prevent `SPEC_takeDetailDesign` unless the architecture can support the detailed design work.
+Ask the assistant to review the high-level architecture against the architecture-changing story, project context, and architecture documents, report PASS/REVISE/ASK findings first, and prevent `SPEC_takeDetailDesign` unless the architecture can support the detailed design work. Do not require unrelated opened stories that merely consume existing architecture to appear as architecture trace owners.
 
 When possible, prefer a SOTA high-reasoning model (for example, GPT-5.5-xHigh) for this review so trade-off risks and boundary mistakes are not missed.
 
