@@ -23,6 +23,24 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
 - [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
 
+## Skill Integration Policy
+
+- Skill-first rule: if relevant architecture skills exist in the workspace, use them for this review.
+- Preferred skills and usage:
+	- `design-architecture-viewpoints` to strengthen viewpoint completeness and inter-view consistency findings.
+	- `apply-architectural-tactics` to evaluate measurable quality scenarios, tactic adequacy, and architecture tradeoff points.
+	- `document-architectural-decisions` to validate ADR completeness (alternatives, argument, implications, decision state, trace links).
+- Builtin fallback rule: if one or more relevant skills are unavailable, review with the learned builtin-skill gate set covering: boundary clarity, dependency direction, runtime/deployment clarity, measurable quality scenario coverage, and ADR traceability for architecture-changing decisions.
+- Completion rule: the review must remain executable and decisive without skill loading. Skills are preferred when present; builtin-skill behavior is mandatory fallback.
+
+### Builtin Skill Gates (when skills are unavailable)
+
+- Viewpoint gate: FAIL if stakeholder concerns are not represented in architecture views.
+- Consistency gate: FAIL if major cross-view contradictions are found (module ownership, runtime placement, boundary direction).
+- Quality gate: REVISE if fewer than three measurable quality scenarios are documented.
+- Tradeoff gate: REVISE if decisions lack explicit sensitivity/tradeoff analysis.
+- Decision gate: REVISE if architecture-significant decisions lack alternatives, rationale, implications, or trace links.
+
 ## Output Contract
 
 - Review finding: `PASS`, `REVISE`, or `ASK`.

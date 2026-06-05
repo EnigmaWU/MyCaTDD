@@ -22,6 +22,24 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
 - [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
 
+## Skill Integration Policy
+
+- Skill-first rule: if relevant architecture skills exist in the workspace, use them for this command execution.
+- Preferred skills and usage:
+	- `design-architecture-viewpoints` for stakeholder-to-viewpoint mapping, view coverage depth, and inter-view consistency checks.
+	- `apply-architectural-tactics` for ASR extraction, measurable quality-attribute scenarios, tactic selection, and tradeoff clarity.
+	- `document-architectural-decisions` for ADR-quality alternatives/argument/implication structure when architecture-significant choices are made.
+- Builtin fallback rule: if one or more relevant skills are unavailable, apply the learned builtin-skill checklist in this command covering: stakeholders and concerns, C4-style views, at least three measurable quality scenarios, explicit tradeoffs/risks, and decision traceability.
+- Completion rule: command completion must not depend on skill availability. Skills are preferred when present; builtin-skill behavior is mandatory fallback.
+
+### Builtin Skill Checklist (when skills are unavailable)
+
+- Viewpoint builtin: identify at least three stakeholder groups, map each to concerns, and cover them in Context/Container/Component/Deployment views.
+- Consistency builtin: explicitly check Context vs Functional boundaries, Functional vs Development ownership, and Concurrency vs Deployment placement.
+- Tactics builtin: define at least three measurable quality scenarios using `Source, Stimulus, Environment, Response, Response Measure`.
+- Tradeoff builtin: record at least two sensitivity points and two tradeoff points for major design decisions.
+- Decision builtin: when architecture-significant choices exist, include alternatives, selected option, argument, implications, and trace links.
+
 ## Output Contract
 
 - Project-root `README_ArchDesign.md` containing high-level architecture goals, module boundaries, dependencies, data flow, key decisions, and risks.

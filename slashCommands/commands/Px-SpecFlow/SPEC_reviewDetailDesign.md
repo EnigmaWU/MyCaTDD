@@ -23,6 +23,24 @@ Review detailed design immediately after `SPEC_takeDetailDesign` and before `SPE
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
 - [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
 
+## Skill Integration Policy
+
+- Skill-first rule: if relevant architecture skills exist in the workspace, use them for this detail-design review.
+- Preferred skills and usage:
+	- `design-architecture-viewpoints` to verify detail design does not violate architecture viewpoint boundaries and deployment/concurrency assumptions.
+	- `apply-architectural-tactics` to verify quality-attribute tactics remain valid at detail level and are not lost in implementation-facing design.
+	- `document-architectural-decisions` to trigger ADR advice when detail choices cross into architecture-significant decisions.
+- Builtin fallback rule: if one or more relevant skills are unavailable, review with the learned builtin-skill gate set covering: API/schema explicitness, state/resource/error/compatibility constraints, and AC-to-US/AC/TC conversion readiness.
+- Completion rule: this review command must remain operational without skill loading. Skills are preferred when present; builtin-skill behavior is mandatory fallback.
+
+### Builtin Skill Gates (when skills are unavailable)
+
+- Boundary gate: FAIL if detailed design violates approved architecture boundaries or ownership direction.
+- API/state gate: REVISE if APIs, schemas, or state transitions are ambiguous or untestable.
+- Constraint gate: REVISE if resource/error/compatibility/performance constraints are missing for impacted components.
+- Quality continuity gate: REVISE if architecture quality scenarios are not reflected in detail design decisions.
+- Testability gate: FAIL if acceptance criteria cannot be translated into CaTDD US/AC/TC skeleton design.
+
 ## Output Contract
 
 - Review finding: `PASS`, `REVISE`, or `ASK`.

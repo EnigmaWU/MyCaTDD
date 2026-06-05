@@ -21,6 +21,24 @@ Create or update detailed design and acceptance criteria for the active user sto
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
 - [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
 
+## Skill Integration Policy
+
+- Skill-first rule: if relevant architecture skills exist in the workspace, use them to shape detailed design output quality.
+- Preferred skills and usage:
+	- `design-architecture-viewpoints` to check detail-level consistency with approved architecture views and ownership boundaries.
+	- `apply-architectural-tactics` to carry architecture quality scenarios into concrete detail constraints and implementation guidance.
+	- `document-architectural-decisions` when detail-level design choices become architecture-significant and require ADR promotion.
+- Builtin fallback rule: if one or more relevant skills are unavailable, apply the learned builtin-skill detail checklist covering: API contract clarity, state transition ownership, resource/error constraints, and AC-to-test conversion readiness.
+- Completion rule: lack of skill availability must not block generation of complete detailed design artifacts. Skills are preferred when present; builtin-skill behavior is mandatory fallback.
+
+### Builtin Skill Checklist (when skills are unavailable)
+
+- Detail-view builtin: map each architecture boundary to concrete API/module ownership in detailed design.
+- State builtin: document local state transitions, ownership, and invalid transition handling.
+- Constraint builtin: document error/resource/compatibility/performance constraints that affect implementation choices.
+- Tactics carryover builtin: preserve architecture quality scenarios as detail-level acceptance constraints.
+- Verification builtin: ensure each acceptance criterion is convertible to CaTDD US/AC/TC skeletons.
+
 ## Output Contract
 
 - Project-root README SPEC docs as needed: `README_DetailDesign.md` and `README_StateDesign.md`.
