@@ -4,7 +4,8 @@
 
 ## Context
 
-- Active story: [../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Architecture baseline story: [../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Architecture-changing update story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - Requirements index: [README_UserStory_ZH.md](README_UserStory_ZH.md)
 - USER requirements: [README_UserStory4USER_ZH.md](README_UserStory4USER_ZH.md)
 - INVENTOR requirements: [README_UserStory4INVENTOR_ZH.md](README_UserStory4INVENTOR_ZH.md)
@@ -481,4 +482,6 @@ Expected result：`diff` 不输出内容，并以 code 0 退出。
 
 ## Next Step
 
-现在 [README_DetailDesign_ZH.md](README_DetailDesign_ZH.md) 已通过 detail-design review，下一步是在活动 story 上运行 `/SPEC_reviewUserStory`。
+如果某个 story 会修改本架构，请先运行 `/SPEC_reviewArchDesign`，再进入 `/SPEC_takeDetailDesign`。
+
+如果某个 story 只是消费本架构，请继续执行该 story 自己计划中的下一条 SPEC 步骤，而不要把它当作 architecture trace owner。

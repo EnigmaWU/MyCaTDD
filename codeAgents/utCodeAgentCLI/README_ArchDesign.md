@@ -4,7 +4,8 @@ This document defines the high-level architecture for `utCodeAgentCLI`: a CaTDD-
 
 ## Context
 
-- Active story: [../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Architecture baseline story: [../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Architecture-changing update story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - Requirements index: [README_UserStory.md](README_UserStory.md)
 - USER requirements: [README_UserStory4USER.md](README_UserStory4USER.md)
 - INVENTOR requirements: [README_UserStory4INVENTOR.md](README_UserStory4INVENTOR.md)
@@ -482,4 +483,6 @@ Expected result: `diff` prints no output and exits with code 0.
 
 ## Next Step
 
-Run `/SPEC_reviewUserStory` on the active story now that [README_DetailDesign.md](README_DetailDesign.md) has passed detail-design review.
+For a story that changes this architecture, run `/SPEC_reviewArchDesign` before `/SPEC_takeDetailDesign`.
+
+For a story that only consumes this architecture, continue with that story's own planned next SPEC step instead of treating it as an architecture trace owner.
