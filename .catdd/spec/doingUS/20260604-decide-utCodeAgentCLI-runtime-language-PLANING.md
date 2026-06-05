@@ -41,7 +41,7 @@ Created by `/SPEC_takePlan` on 2026-06-04.
 - Next command: `/SPEC_reviewArchDesign`.
 - Primary target: review the updated architecture decision artifact for `utCodeAgentCLI` runtime language.
 - Expected review scope: TypeScript vs Python vs Go decision, primary v1 language, adapter consequences, non-goals, risks, and rationale.
-- Expected documentation impact: confirm `codeAgents/utCodeAgentCLI/README_ArchDesign.md`, `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`, and `codeAgents/utCodeAgentCLI/ADR_RuntimeLanguage.md` are ready for the story review gate.
+- Expected documentation impact: confirm `codeAgents/utCodeAgentCLI/README_ArchDesign.md`, `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`, and `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md` are ready for the story review gate.
 
 ## Rationale
 

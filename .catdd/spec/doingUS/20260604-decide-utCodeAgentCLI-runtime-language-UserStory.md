@@ -16,7 +16,8 @@ Opened by `/SPEC_openUserStory` on 2026-06-04.
 - Opened from: [../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - Planning artifact: [20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md](20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md).
 - Architecture decision draft: `codeAgents/utCodeAgentCLI/README_ArchDesign.md`, `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`, and `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
-- Next recommended command: `/SPEC_reviewArchDesign`.
+- Runtime decision: DECIDED — TypeScript/Node.js for V1 (PoC), Go pre-selected for V2 (production distribution); Python evaluated and not selected.
+- Next recommended command: `/SPEC_takeDetailDesign`.
 
 ## Analysis Status
 

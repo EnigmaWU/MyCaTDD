@@ -1,79 +1,46 @@
-# ADR: utCodeAgentCLI Runtime Language
-
-Status: Proposed
+# Architectural Decision Record: utCodeAgentCLI Runtime Language
 
 Date: 2026-06-05
+Decision Type: Property (diacrisis)
 
-Context:
+| Field | Value |
+| :--- | :--- |
+| 1. Issue | The project must choose a primary runtime language for utCodeAgentCLI (TypeScript on Node.js, Python, or Go) before implementation begins, because this choice constrains detail design, adapter strategy, packaging, and team workflow. |
+| 2. Decision | Staged decision: adopt TypeScript on Node.js as the V1 (PoC) runtime for adapter-native development speed, and pre-select Go as the preferred V2 runtime for production distribution. The two phases are decided together so detail design can keep the V1/V2 boundary explicit. |
+| 3. Status | Decided |
+| 4. Group | integration, tooling |
+| 5. Assumptions | utCodeAgentCLI ships in phases: V1 is a proof-of-concept, V2 targets real production deployment; CLI work is orchestration-heavy (files, child processes, JSON traces); adapter boundaries to Copilot/MCP/OpenCode must remain explicit; detail design keeps the V1/V2 runtime boundary clean. |
+| 6. Alternatives | A1 TypeScript on Node.js, A2 Python, A3 Go. See Alternatives Comparison Matrix below. |
+| 7. Argument | The deciding force is phase fit, not prior-doc continuity. For V1 (PoC), the target adapter ecosystem (Copilot SDK, MCP, OpenCode) is itself Node/TypeScript-native, so TS/Node gives first-class adapters with no cross-language bridge and matches the async-I/O + native-JSON shape of orchestration/trace work; this outweighs Python's scripting velocity (C2) for a PoC because adapter integration, not raw scripting, is the dominant cost. For V2 (production), single-binary distribution becomes the dominant force, where Go's static binaries (C5) outweigh keeping TS, so Go is pre-selected to be revisited when V2 scope opens. |
+| 8. Implications | V1 detail design proceeds on TS/Node now; architecture must keep the AgentSDK/adapter boundary runtime-portable so the V2 Go migration is contained; a future ADR revisits and confirms Go when V2 production scope is formally opened. |
+| 9. Related Decisions | Constrains future packaging/test-runner decision for utCodeAgentCLI; enables adapter-boundary decisions in architecture docs; conflicts with any immediate implementation that assumes final language choice before review closure. |
+| 10. Related Requirements | Runtime-language ACs in the active user story: evaluate alternatives by explicit criteria, select one primary runtime, capture formal ADR, and clarify non-goals/boundaries. |
+| 11. Affected Artifacts | [../README_ArchDesign.md](../README_ArchDesign.md), [../README_ArchDesign_ZH.md](../README_ArchDesign_ZH.md), [../README_DetailDesign.md](../README_DetailDesign.md), [../README_DetailDesign_ZH.md](../README_DetailDesign_ZH.md), [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md), [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md). |
+| 12. Notes | This ADR records a decision state and comparison process, not implementation code. V1 implementation proceeds on TS/Node; Go is a pre-selected V2 target to be confirmed by a follow-up ADR when production scope opens. |
 
-`utCodeAgentCLI` needs a primary implementation language before the architecture can move into detail design and test-skeleton design. The active story asks whether the runtime should be TypeScript, Python, or Go, and requests that the choice be captured as a formal ADR.
+## Alternatives Comparison Matrix
 
-This ADR does not assume the answer in advance. It records the decision criteria, tradeoffs, and likely consequences so the team can choose the best V1 runtime language before implementation starts.
+| ID | Architectural Concern | Option 1: TypeScript on Node.js | Option 2: Python | Option 3: Go |
+| :--- | :--- | :--- | :--- | :--- |
+| C1 | Fit with current architecture/detail docs | Yes | Partial | Partial |
+| C2 | Developer workflow speed for orchestration CLI | Partial | Yes | Partial |
+| C3 | Adapter-boundary continuity (Copilot/OpenCode planning) | Yes | Partial | Partial |
+| C4 | Migration churn from current doc baseline | Yes | Partial | No |
+| C5 | Distribution simplicity for end users | Partial | Partial | Yes |
 
-Decision drivers:
+Tradeoff summary (phase-weighted):
 
-- The runtime language should fit the current repository’s documentation and adapter model.
-- The runtime language should minimize friction for local file orchestration, command routing, and machine-readable trace generation.
-- The runtime language should preserve a clean adapter boundary so future Copilot, OpenCode, or other runtime surfaces can be added without changing CaTDD semantics.
-- The runtime language should keep the eventual V1 implementation realistic for the team to build, test, and maintain.
+- V1 (PoC) weights C3 adapter-boundary continuity and orchestration/JSON fit highest; TypeScript on Node.js wins because the adapter ecosystem is Node-native, so it needs no cross-language bridge.
+- Python's C2 scripting velocity does not outweigh adapter integration cost for a PoC, so it is not selected.
+- V2 (production) weights C5 distribution simplicity highest; Go's static single-binary output wins there, so Go is pre-selected for V2 and deferred until production scope opens.
 
-Alternatives considered:
-
-1. TypeScript on Node.js
-2. Python
-3. Go
-
-Evaluation criteria:
-
-- Ecosystem fit with the current documentation and likely toolchain.
-- Maintainability for a CLI that is orchestration-heavy rather than algorithm-heavy.
-- Runtime integration with local files, shell/process execution, JSON trace output, and adapter boundaries.
-- Tooling support for tests, packaging, and developer workflow.
-- Ability to keep CaTDD semantics delegated instead of hardcoded.
-
-Tradeoff analysis:
-
-TypeScript on Node.js:
-
-- Strengths: aligns with the current architecture and detail-design documentation, fits JSON-heavy trace handling, and keeps the CLI close to the likely adapter surfaces.
-- Weaknesses: requires the team to stay disciplined about keeping runtime orchestration separate from CaTDD method semantics; may be less convenient than Python for quick scripting-heavy experiments.
-
-Python:
-
-- Strengths: excellent scripting ergonomics, broad ecosystem, and often fast to prototype for file and process orchestration.
-- Weaknesses: would require more translation work against the current TypeScript-facing architecture and could create a wider gap between the CLI design docs and the implementation contracts.
-
-Go:
-
-- Strengths: strong binary distribution model, clear concurrency story, and a compact deployment footprint.
-- Weaknesses: would require the biggest rewrite of the current architecture assumptions and would add the most churn for a workflow that is mostly orchestration rather than performance-critical compute.
-
-Decision status:
-
-- This ADR is a proposed decision record, not a final implementation commitment yet.
-- The intended outcome is to select the language that best balances current-document fit, maintainability, runtime integration, and future adapter flexibility.
-- V1 will be implemented after the choice is finalized, not before.
-
-Consequences:
-
-- Once the language is chosen, the V1 implementation target becomes fixed and detail design can narrow around it.
-- The chosen runtime should not force CaTDD semantics into the CLI layer.
-- Python and Go may remain future adapter or portability options, but they should not be treated as the default answer without an explicit decision.
-
-Non-goals:
-
-- Implementing `utCodeAgentCLI` runtime code in this ADR.
-- Choosing package manager, test runner, or packaging format.
-- Rewriting CaTDD method semantics.
-
-Traceability:
+## Traceability
 
 - Source issue: [../../.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md](../../.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md)
 - Active story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
-- Architecture doc: [../README_ArchDesign.md](../README_ArchDesign.md)
-- Detail design doc: [../README_DetailDesign.md](../README_DetailDesign.md)
+- Planning artifact: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md)
 
-Follow-up:
+## Follow-up
 
-- Keep `README_ArchDesign.md` and `README_DetailDesign.md` aligned with the final runtime choice.
-- After review, either confirm the selected language or revise this ADR if the evidence favors a different tradeoff.
+- V1: proceed to SPEC_takeDetailDesign on TypeScript/Node.js; keep the AgentSDK/adapter boundary runtime-portable to contain the future V2 migration.
+- V2: open a follow-up ADR to confirm Go (or re-evaluate) when production-distribution scope is formally started.

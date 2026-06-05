@@ -18,7 +18,7 @@ This document defines the high-level architecture for `utCodeAgentCLI`: a CaTDD-
 
 ## Architecture Decision: Runtime Language
 
-`utCodeAgentCLI` runtime language is under active review. The current candidates are **TypeScript on Node.js**, **Python**, and **Go**.
+`utCodeAgentCLI` adopts a staged runtime decision: **TypeScript on Node.js for V1 (PoC)** and **Go pre-selected for V2 (production distribution)**. **Python** was evaluated and not selected.
 
 Reasoning summary:
 
@@ -287,7 +287,7 @@ Exact TypeScript types, error classes, and module names belong to later detail d
 
 ### Runtime Candidate
 
-One candidate implementation target is a Node.js TypeScript CLI that reads local files, executes portable slash-command steps through an internal runner or process adapter, writes deterministic traces, and has no required external agent runtime. Other candidates, including Python and Go, should be compared against this shape before the V1 choice is fixed.
+The V1 implementation target is a Node.js TypeScript CLI that reads local files, executes portable slash-command steps through an internal runner or process adapter, writes deterministic traces, and has no required external agent runtime. This runtime is chosen for V1 because the target adapter ecosystem (Copilot SDK, MCP, OpenCode) is Node/TypeScript-native, giving first-class adapters with no cross-language bridge. Go is pre-selected for V2 to gain single-binary production distribution; the AgentSDK/adapter boundary is kept runtime-portable so the V2 migration stays contained.
 
 ### GitHub Copilot And MCP Adapter
 
@@ -413,22 +413,22 @@ Ownership is split deliberately: `catdd/` validates the expected file state befo
 
 | Decision | Rationale | Status |
 | --- | --- | --- |
-| Introduce `AgentSDK` as a generic layer below `utCodeAgentCLI`. | Keeps LLM runtime concerns reusable and CaTDD-independent. | Proposed. |
-| Compare TypeScript/Node.js, Python, and Go before fixing the V1 runtime. | Keeps the implementation choice open until tradeoffs are reviewed. | Proposed. |
-| Treat Copilot/MCP and OpenCode as adapter targets. | Meets compatibility goals while preserving CLI core. | Proposed. |
+| Introduce `AgentSDK` as a generic layer below `utCodeAgentCLI`. | Keeps LLM runtime concerns reusable and CaTDD-independent. | Accepted. |
+| Adopt TypeScript/Node.js for V1 and pre-select Go for V2. | V1 favors adapter-native PoC speed; V2 favors single-binary production distribution. | Accepted. |
+| Treat Copilot/MCP and OpenCode as adapter targets. | Meets compatibility goals while preserving CLI core. | Accepted. |
 | Treat LangGraph and Google ADK as research references first. | They inform graph, session, callback, and observability design without becoming required dependencies. | Proposed. |
 | Keep CaTDD semantics out of `AgentSDK`. | Satisfies INVENTOR method-delegation requirements. | Accepted. |
 | Persist traces on success and execution failure. | Satisfies traceability and audit requirements. | Accepted. |
 
 ## Runtime Language ADR Summary
 
-The runtime-language decision is now recorded as an ADR and intentionally compares the implementation choices instead of assuming one.
+The runtime-language decision is recorded as an ADR with a staged outcome: TS/Node for V1, Go pre-selected for V2.
 
 | Candidate | Evaluation summary | Outcome |
 | --- | --- | --- |
-| TypeScript / Node.js | Strong fit for the current repo’s TypeScript-facing docs, local file orchestration, trace generation, and adapter-first CLI design, but it still needs to be weighed against implementation cost and team workflow fit. | Candidate |
-| Python | Strong scripting ecosystem and fast orchestration ergonomics, but it would widen the gap against the current TypeScript-facing design docs. | Candidate |
-| Go | Strong binary/runtime simplicity and a compact deployment story, but it would likely require the largest architecture and tooling shift for an orchestration-heavy CLI. | Candidate |
+| TypeScript / Node.js | Adapter-native (Copilot/MCP/OpenCode), strong fit for local file orchestration, trace generation, and adapter-first CLI design; lowest integration cost for a PoC. | Selected for V1 |
+| Python | Strong scripting ecosystem and fast orchestration ergonomics, but adapter integration would require cross-language bridging that outweighs scripting velocity for this CLI. | Not selected |
+| Go | Strong binary/runtime simplicity and a compact deployment story; best fit for production single-binary distribution. | Pre-selected for V2 |
 
 ## Risks And Constraints
 

@@ -11,7 +11,7 @@ This document turns the architecture into implementation-facing contracts, data 
 - Method source of truth: [../../methodPrompts/](../../methodPrompts/)
 - Portable command source of truth: [../../slashCommands/](../../slashCommands/)
 
-The detail design keeps the architecture decisions intact: `AgentSDK` is generic and CaTDD-independent; `utCodeAgentCLI` parses user intent, resolves CaTDD behaviors to delegated assets, invokes a runtime adapter, and records traces. The final implementation language remains subject to the runtime-language ADR.
+The detail design keeps the architecture decisions intact: `AgentSDK` is generic and CaTDD-independent; `utCodeAgentCLI` parses user intent, resolves CaTDD behaviors to delegated assets, invokes a runtime adapter, and records traces. Per the runtime-language ADR, V1 is implemented in TypeScript on Node.js, with Go pre-selected for V2 production distribution.
 
 ## Who
 
@@ -23,7 +23,7 @@ The detail design keeps the architecture decisions intact: `AgentSDK` is generic
 
 ## What
 
-`utCodeAgentCLI` will be implemented as a local CLI first, using whichever runtime language is selected by the runtime-language ADR. The v1 detail design includes:
+`utCodeAgentCLI` will be implemented as a local CLI first, in TypeScript on Node.js as decided by the runtime-language ADR. The v1 detail design includes:
 
 - CLI argument parsing and validation.
 - Behavior resolution from CLI aliases or direct `UT_*` names to portable slash commands.
@@ -59,6 +59,15 @@ codeAgents/utCodeAgentCLI/
 ```
 
 `AgentSDK` starts inside `src/agentsdk/` so contracts can stabilize beside the CLI. A later package split is allowed only after adapter and trace APIs are proven by tests.
+
+### V2 Go Portability Boundary
+
+V1 ships in TypeScript on Node.js, but the runtime-language ADR pre-selects Go for V2 production distribution. To keep that future migration contained, V1 detail design must hold a clean portability boundary:
+
+- Keep the `AgentSDK` runtime/adapter contracts language-neutral in shape (no Node-only types leaking across the `RuntimeAdapter`, `TracePort`, `ControlPort`, or `HookPort` boundaries).
+- Keep CaTDD semantics delegated to `methodPrompts/` and `slashCommands/` files, not embedded in TS code, so a Go rewrite reuses the same portable assets.
+- Keep the trace schema (`traceVersion`-stamped JSON/YAML) implementation-independent so V2 Go output stays compatible.
+- Treat Node-specific concerns (process spawning, fs access, module loading) as adapter-local so only adapters, not core orchestration, need rewriting for Go.
 
 ## Why
 

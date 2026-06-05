@@ -11,7 +11,7 @@
 - Method source of truth: [../../methodPrompts/](../../methodPrompts/)
 - Portable command source of truth: [../../slashCommands/](../../slashCommands/)
 
-本 detail design 保持 architecture 决策不变：`AgentSDK` 是 generic 且 CaTDD-independent；`utCodeAgentCLI` 解析 user intent，将 CaTDD behaviors 解析到 delegated assets，调用 runtime adapter，并记录 traces。最终实现语言仍取决于运行时语言 ADR。
+本 detail design 保持 architecture 决策不变：`AgentSDK` 是 generic 且 CaTDD-independent；`utCodeAgentCLI` 解析 user intent，将 CaTDD behaviors 解析到 delegated assets，调用 runtime adapter，并记录 traces。根据运行时语言 ADR，V1 使用 TypeScript on Node.js 实现，V2 生产分发预选 Go。
 
 ## Who
 
@@ -23,7 +23,7 @@
 
 ## What
 
-`utCodeAgentCLI` 将首先实现为 local CLI，具体使用哪种运行时语言由运行时语言 ADR 决定。v1 detail design 包括：
+`utCodeAgentCLI` 将首先实现为 local CLI，根据运行时语言 ADR 使用 TypeScript on Node.js。v1 detail design 包括：
 
 - CLI argument parsing and validation。
 - 从 CLI aliases 或 direct `UT_*` names 到 portable slash commands 的 behavior resolution。
@@ -59,6 +59,15 @@ codeAgents/utCodeAgentCLI/
 ```
 
 `AgentSDK` 先位于 `src/agentsdk/`，便于 contracts 在 CLI 旁边稳定下来。只有当 adapter 与 trace APIs 经过 tests 证明后，才允许后续拆分为独立 package。
+
+### V2 Go Portability Boundary
+
+V1 使用 TypeScript on Node.js 发布，但运行时语言 ADR 为 V2 生产分发预选 Go。为使该迁移成本受控，V1 detail design 必须保持清晰的可移植边界：
+
+- 保持 `AgentSDK` runtime/adapter contracts 在形状上语言中立（不让 Node-only 类型泄漏过 `RuntimeAdapter`、`TracePort`、`ControlPort` 或 `HookPort` 边界）。
+- 保持 CaTDD semantics 委托给 `methodPrompts/` 与 `slashCommands/` 文件，而非嵌入 TS 代码，使 Go 重写能复用同一批 portable assets。
+- 保持 trace schema（带 `traceVersion` 的 JSON/YAML）与实现无关，使 V2 Go 输出保持兼容。
+- 将 Node 特定关注（process spawning、fs access、module loading）限定在 adapter 局部，使只有 adapters（而非核心编排）需要为 Go 重写。
 
 ## Why
 
