@@ -11,17 +11,23 @@ Opened by `/SPEC_openUserStory` on 2026-06-04.
 
 ## Active Work Status
 
-- Status: OPEN.
-- Active state: `.catdd/spec/doingUS/` active story.
+- Status: CLOSED.
+- Active state: `.catdd/spec/doneUS/` completed story.
 - Opened from: [../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - Planning artifact: [20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md](20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md).
 - Architecture decision draft: `codeAgents/utCodeAgentCLI/README_ArchDesign.md`, `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`, and `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
 - Runtime decision: DECIDED — TypeScript/Node.js for V1 (PoC), Go pre-selected for V2 (production distribution); Python evaluated and not selected.
-- Next recommended command: `/SPEC_takeDetailDesign`.
+- Next recommended command: none (closed by `/SPEC_closeUserStory` on 2026-06-06).
+
+## Closure Summary
+
+- Closed by: `/SPEC_closeUserStory` on 2026-06-06.
+- Commit reference: `1febe8c` (`spec: strengthen runtime-language design review readiness`).
+- Verification summary: `scripts/check_readme_mirror.sh` PASSED; `scripts/test_documentation_contract.sh` PASSED.
 
 ## Analysis Status
 
-- Status: TODO.
+- Status: DONE.
 - Priority: P1 — important (blocks implementation stack selection and ADR capture).
 - Confidence: medium-high.
 
