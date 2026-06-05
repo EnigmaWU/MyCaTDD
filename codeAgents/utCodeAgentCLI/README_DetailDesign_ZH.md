@@ -4,7 +4,7 @@
 
 ## Story Context
 
-- Story: [../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - Architecture: [README_ArchDesign_ZH.md](README_ArchDesign_ZH.md)
 - Usage contract: [README_UsageDesign_ZH.md](README_UsageDesign_ZH.md)
 - Requirements index: [README_UserStory_ZH.md](README_UserStory_ZH.md)
@@ -408,4 +408,4 @@ Expected result：`diff` 不输出内容，并以 code 0 退出。
 
 ## Next Step
 
-运行 `/SPEC_designUnitTests`，为已批准的 story、architecture 与 detail design 设计 CaTDD unit-test skeletons。
+运行 `/SPEC_reviewUserStory`，先基于已更新的 architecture 与 detail design 进行 story readiness 评审，再进入任何 coding 或 test-generation 命令。

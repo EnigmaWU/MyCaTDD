@@ -4,7 +4,7 @@ This document turns the architecture into implementation-facing contracts, data 
 
 ## Story Context
 
-- Story: [../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - Architecture: [README_ArchDesign.md](README_ArchDesign.md)
 - Usage contract: [README_UsageDesign.md](README_UsageDesign.md)
 - Requirements index: [README_UserStory.md](README_UserStory.md)
@@ -408,4 +408,4 @@ Expected result: `diff` prints no output and exits with code 0.
 
 ## Next Step
 
-Run `/SPEC_designUnitTests` to design CaTDD unit-test skeletons for the approved story, architecture, and detail design.
+Run `/SPEC_reviewUserStory` to review story readiness against the updated architecture and detail design before any coding or test-generation command.

@@ -431,6 +431,32 @@ The runtime-language decision is recorded as an ADR with a staged outcome: TS/No
 | Python | Strong scripting ecosystem and fast orchestration ergonomics, but adapter integration would require cross-language bridging that outweighs scripting velocity for this CLI. | Not selected |
 | Go | Strong binary/runtime simplicity and a compact deployment story; best fit for production single-binary distribution. | Pre-selected for V2 |
 
+## Quality Attribute Scenarios (Measured)
+
+| ID | Source | Stimulus | Environment | Response | Response Measure |
+| --- | --- | --- | --- | --- | --- |
+| QAS-1 Modifiability | Maintainer | Add a new runtime adapter target (for example, new host/runtime surface). | Normal development with existing `AgentSDK` contracts. | Add adapter with no CaTDD semantic changes and no cross-module contract rewrite. | `AgentSDK` core files changed <= 2 files; no `methodPrompts/` or `slashCommands/` semantic edits required. |
+| QAS-2 Diagnosability | Developer | A delegated slash-command step fails in CI or local execution. | Runtime failure during command execution. | System emits structured trace and actionable diagnostics with failure point and completed steps. | Trace includes failed step ID, command path, and error summary in <= 10 seconds from failure detection. |
+| QAS-3 Runtime Resilience | Operator/Developer | Interactive run receives abort/timeout/cancel during multi-step execution. | Local or hosted adapter execution under control events. | Execution stops safely, preserves completed-step evidence, and avoids invalid TC status mutation. | 100% of interrupted runs persist an execution-failure trace and no illegal TC transition is recorded. |
+
+## Sensitivity And Tradeoff Points
+
+### Sensitivity Points
+
+- Adapter boundary strictness in `AgentSDK` is sensitive for modifiability and migration cost.
+- Trace schema completeness is sensitive for diagnosability and post-failure recovery speed.
+
+### Tradeoff Points
+
+- Rich diagnostics and trace detail improve diagnosability, but can increase runtime overhead and redaction complexity.
+- Strong adapter decoupling improves portability and long-term evolution, but increases upfront interface design complexity.
+
+## Inter-View Consistency Log
+
+- Context vs Container: external runtime surfaces in Context view (Raw TS, Copilot/MCP, OpenCode, Existing CLI) are represented by adapter/runtime containers.
+- Functional/Component vs Development: component responsibilities (`CliParser`, `CatddPlanner`, `SlashCommandExecutor`, `TraceWriter`) map to module boundaries under `src/cli`, `src/catdd`, `src/executor`, and `src/trace`.
+- Concurrency/Execution vs Deployment: runtime execution and control/approval flow map to deployment targets and adapter boundaries without changing CaTDD semantic ownership.
+
 ## Risks And Constraints
 
 - Adapter drift: Copilot, OpenCode, LangGraph, and ADK APIs can change.
@@ -463,7 +489,7 @@ Expected result: `diff` prints no output and exits with code 0.
 
 ## Review Checklist
 
-- Architecture decisions trace to the active user story and role-specific requirements.
+- Architecture decisions trace to architecture-changing baseline/update stories and role-specific requirements.
 - `AgentSDK` has no CaTDD method knowledge.
 - `utCodeAgentCLI` delegates CaTDD semantics to `methodPrompts/` and `slashCommands/`.
 - Raw TS, Copilot/MCP, OpenCode, existing CLI, LangGraph, and Google ADK positions are explicit.
