@@ -26,6 +26,7 @@ Revise detailed design and acceptance criteria after story review, implementatio
 - Updated `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, or `README_VerifyDesign.md` when the feedback changes module, error, resource, state, performance, compatibility, diagnosis, or verification design.
 - Review-feedback checklist showing what was addressed.
 - Remaining risks and next recommended command.
+- Next recommended command after any update is `SPEC_reviewDetailDesign` so updated design is always re-gated before downstream steps.
 
 ## Prompt Template
 
@@ -34,5 +35,6 @@ Ask the assistant to make the minimum design change needed to address feedback w
 ## Conflict Guard
 
 Do not hide unresolved quality failures. Keep them visible until a later review passes.
+Never bypass `SPEC_reviewDetailDesign` after this update step.
 
 ONE-MORE-THING: ask developer if something not sure

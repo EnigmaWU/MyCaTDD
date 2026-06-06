@@ -57,6 +57,6 @@ When possible, prefer a SOTA high-reasoning model (for example, GPT-5.5-xHigh) f
 
 ## Conflict Guard
 
-Do not start low-level detailed design, test writing, or coding from this command. Route to `SPEC_takeDetailDesign` next.
+Do not start low-level detailed design, test writing, or coding from this command. Route to `SPEC_reviewArchDesign` next.
 
 ONE-MORE-THING: ask developer if something not sure

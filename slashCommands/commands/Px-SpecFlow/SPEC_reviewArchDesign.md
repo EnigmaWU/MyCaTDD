@@ -47,7 +47,7 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 - Evidence for each finding, grounded in the architecture-changing story, project context, architecture document, and mirror document when present.
 - Checks for module boundaries, dependency direction, AgentSDK/CaTDD separation, runtime adaptation strategy, trace/audit/control coverage, Mermaid-renderable architecture views, and Px-SpecFlow architecture-oriented surface coverage.
 - If `PASS`: next recommended command is `SPEC_takeDetailDesign`.
-- If `REVISE`: next recommended command is `SPEC_takeArchDesign` to update the architecture design before detailed design begins.
+- If `REVISE`: next recommended command is `SPEC_updateArchDesign` to revise the architecture design before detailed design begins.
 - If `ASK`: stop and ask the developer for the missing product, architecture, or review decision.
 
 ## Review Checklist

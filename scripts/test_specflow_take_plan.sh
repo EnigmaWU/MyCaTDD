@@ -8,6 +8,7 @@ OPEN_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md"
 CLEAR_INTENT="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_clearStoryIntent.md"
 TAKE_PLAN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_makePlan.md"
 CLOSE_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md"
+UPDATE_ARCH="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_updateArchDesign.md"
 USER_GUIDE="$REPO_ROOT/slashCommands/README_UserGuide.md"
 
 fail() {
@@ -16,6 +17,7 @@ fail() {
 }
 
 [[ -f "$TAKE_PLAN" ]] || fail "missing SPEC_makePlan command"
+[[ -f "$UPDATE_ARCH" ]] || fail "missing SPEC_updateArchDesign command"
 
 grep -Fq '# SPEC_makePlan' "$TAKE_PLAN" || fail "SPEC_makePlan command must declare its heading"
 grep -Fq '.catdd/spec/doingUS/*-TASKs.md' "$TAKE_PLAN" || fail "SPEC_makePlan must create a paired TASKs artifact in doingUS"
@@ -35,5 +37,15 @@ grep -Fq '.catdd/spec/doingUS/*-TASKs.md' "$FLOW_DOC" || fail "Px-SpecFlow must 
 grep -Fq '.catdd/spec/doneUS/*-TASKs.md' "$FLOW_DOC" || fail "Px-SpecFlow must document the completed TASKs artifact"
 grep -Fq 'PlanChoice -- "need arch" --> Arch["SPEC_takeArchDesign"]' "$FLOW_DOC" || fail "Px-SpecFlow must route planning to architecture design when needed"
 grep -Fq 'PlanChoice -- "story is test-ready" --> DesignTests["SPEC_designUnitTests"]' "$FLOW_DOC" || fail "Px-SpecFlow must allow planning to route directly to unit-test design"
+grep -Fq 'Arch --> ReviewArch["SPEC_reviewArchDesign"]' "$FLOW_DOC" || fail "Px-SpecFlow must always review architecture after take"
+grep -Fq 'QualityArch -- "NO" --> UpdateArch["SPEC_updateArchDesign"]' "$FLOW_DOC" || fail "Px-SpecFlow must route failed architecture review to SPEC_updateArchDesign"
+grep -Fq 'UpdateArch --> ReviewArch' "$FLOW_DOC" || fail "Px-SpecFlow must always review architecture after update"
+grep -Fq 'Detail --> ReviewDetail["SPEC_reviewDetailDesign"]' "$FLOW_DOC" || fail "Px-SpecFlow must always review detail design after take"
+grep -Fq 'UpdateDetail --> ReviewDetail' "$FLOW_DOC" || fail "Px-SpecFlow must always review detail design after update"
+
+grep -Fq 'Route to `SPEC_reviewDetailDesign` first.' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeDetailDesign.md" || fail "SPEC_takeDetailDesign must route to SPEC_reviewDetailDesign"
+grep -Fq 'Route to `SPEC_reviewArchDesign` next.' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeArchDesign.md" || fail "SPEC_takeArchDesign must route to SPEC_reviewArchDesign"
+grep -Fq 'Next recommended command after any update is `SPEC_reviewDetailDesign`' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_updateDetailDesign.md" || fail "SPEC_updateDetailDesign must route to SPEC_reviewDetailDesign"
+grep -Fq 'Next recommended command after any update is `SPEC_reviewArchDesign`' "$UPDATE_ARCH" || fail "SPEC_updateArchDesign must route to SPEC_reviewArchDesign"
 
 echo "[specflow-take-plan-test] PASSED: SPEC_makePlan is wired into SpecFlow"

@@ -54,6 +54,6 @@ Ask the assistant to design localized implementation details, class layouts, sta
 
 ## Conflict Guard
 
-Do not start coding from this command. Route to `SPEC_reviewUserStory` first.
+Do not start coding from this command. Route to `SPEC_reviewDetailDesign` first.
 
 ONE-MORE-THING: ask developer if something not sure
