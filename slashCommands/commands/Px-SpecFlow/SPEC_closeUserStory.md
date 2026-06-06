@@ -23,7 +23,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 ## Output Contract
 
 - A `.catdd/spec/doneUS/*-UserStory.md` team-shared completed story artifact.
-- A paired `.catdd/spec/doneUS/*-TASKs.md` team-shared task artifact when the story was planned through `SPEC_takePlan`.
+- A paired `.catdd/spec/doneUS/*-TASKs.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
 - Local `.catdd/spec/doingUS/` work state removed or marked closed after the completed artifact is created.
 - Completion summary with traceability to source issue or feature, project-root README SPEC docs, tests, code, commit, and CI.
 - Remaining follow-up work, if any.

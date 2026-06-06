@@ -1,4 +1,4 @@
-# SPEC_takePlan
+# SPEC_makePlan
 
 ## Purpose
 
@@ -27,13 +27,14 @@ Create or update the task artifact paired with the active user story and decide 
 - A team-shared `.catdd/spec/doingUS/*-TASKs.md` task artifact coupled with the opened user story.
 - The task artifact records the active story, current readiness, skipped or satisfied prerequisites, candidate next steps, selected next step, and rationale.
 - The task artifact uses Markdown checkbox tasks: `[ ]` for pending work, `[x]` for satisfied or completed work.
+- After creating or updating the artifact, print the current TASKs checklist in the command response so developers can see `[ ]` and `[x]` status immediately.
 - The selected next command should be one of `SPEC_clearStoryIntent`, `SPEC_takeArchDesign`, `SPEC_takeDetailDesign`, `SPEC_reviewUserStory`, or `SPEC_designUnitTests`, depending on what the opened story actually needs next.
 - Explicit notes about whether architecture design, detail design, review, or direct unit-test design can be skipped because existing artifacts are already sufficient.
 - Open questions or blockers that must be resolved before the selected next command can run safely.
 
 ## Prompt Template
 
-Ask the assistant to examine the opened story, create or update the paired `*-TASKs.md` artifact in `.catdd/spec/doingUS/`, express the work as Markdown checkbox tasks, compare the realistic next lifecycle options, and choose the next `SPEC_*` command that best fits the story's current readiness without inventing missing design or skipping needed checks.
+Ask the assistant to examine the opened story, create or update the paired `*-TASKs.md` artifact in `.catdd/spec/doingUS/`, express the work as Markdown checkbox tasks, print the checklist after planning is made, compare the realistic next lifecycle options, and choose the next `SPEC_*` command that best fits the story's current readiness without inventing missing design or skipping needed checks.
 
 ## Conflict Guard
 

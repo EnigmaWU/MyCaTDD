@@ -1,6 +1,6 @@
 # TASKs: Decide utCodeAgentCLI Runtime Language and ADR
 
-Created by `/SPEC_takePlan` on 2026-06-04.
+Created by `/SPEC_makePlan` on 2026-06-04.
 
 ## Active Story
 

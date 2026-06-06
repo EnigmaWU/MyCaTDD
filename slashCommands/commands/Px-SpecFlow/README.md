@@ -18,7 +18,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_analyzeFeature.md](SPEC_analyzeFeature.md) | Analyze pending feature input, archive raw input, and generate a value-oriented user story. |
 | [SPEC_whatsNextTask.md](SPEC_whatsNextTask.md) | Recommend the next SpecCoding task from current lifecycle state. |
 | [SPEC_openUserStory.md](SPEC_openUserStory.md) | Move a selected user story into active work. |
-| [SPEC_takePlan.md](SPEC_takePlan.md) | Create the active story TASKs artifact and choose the next SPEC step. |
+| [SPEC_makePlan.md](SPEC_makePlan.md) | Create the active story TASKs artifact and choose the next SPEC step. |
 | [SPEC_clearStoryIntent.md](SPEC_clearStoryIntent.md) | Clear mutual developer and CodeAgent intent before design starts. |
 | [SPEC_takeArchDesign.md](SPEC_takeArchDesign.md) | Produce high-level architecture design and module boundaries. |
 | [SPEC_reviewArchDesign.md](SPEC_reviewArchDesign.md) | Review architecture quality before detailed design begins. |

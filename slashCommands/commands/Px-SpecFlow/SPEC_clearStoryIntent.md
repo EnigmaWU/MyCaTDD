@@ -26,7 +26,7 @@ Clear the mutual intent between the developer and CodeAgent for an opened user s
 - A `Mutual Intent Contract` recorded in the team-shared active story under `.catdd/spec/doingUS/`.
 - The contract states developer intent, CodeAgent intent, in-scope work, out-of-scope work, success signal, assumptions, and open questions.
 - Review result: `CLEARED`, `REVISE`, or `ASK`.
-- If `CLEARED`: next recommended command is `SPEC_takePlan`, which decides whether the story needs architecture design, detail design, review, or can go directly to unit-test design.
+- If `CLEARED`: next recommended command is `SPEC_makePlan`, which decides whether the story needs architecture design, detail design, review, or can go directly to unit-test design.
 - If `REVISE`: update the active story intent, scope, acceptance scenarios, or questions, then rerun `SPEC_clearStoryIntent`.
 - If `ASK`: stop and ask the developer for the missing intent decision before design begins.
 

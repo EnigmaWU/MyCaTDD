@@ -43,7 +43,7 @@ grep -Fq 'name: SPEC_openUserStory' "$spec_sample" || fail "SPEC sample prompt m
 grep -Fq 'slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md' "$spec_sample" || fail "SPEC sample missing source command reference"
 grep -Fq 'methodPrompts' "$spec_sample" || fail "SPEC sample prompt missing methodPrompts source-of-truth reference"
 
-for command_name in SPEC_importIssue SPEC_importFeature SPEC_analyzeIssue SPEC_analyzeFeature SPEC_whatsNextTask SPEC_takePlan; do
+for command_name in SPEC_importIssue SPEC_importFeature SPEC_analyzeIssue SPEC_analyzeFeature SPEC_whatsNextTask SPEC_makePlan; do
   command_prompt="$OUT_DIR/${command_name}.prompt"
   [[ -f "$command_prompt" ]] || fail "missing generated prompt: ${command_name}.prompt"
   grep -Fq "name: ${command_name}" "$command_prompt" || fail "${command_name} prompt missing Continue name"
