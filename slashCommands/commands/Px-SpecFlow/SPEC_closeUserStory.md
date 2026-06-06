@@ -6,7 +6,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 
 ## CoT Pattern
 
-**Linear** — Direct execution. Given verified commit and CI evidence, this command moves the story artifact to done state deterministically. If any lifecycle gate (review, commit, CI) remains unresolved, the observation stops and asks the developer instead of closing.
+**Linear** — Direct execution. Given verified commit and CI evidence, this command moves the story artifact to done state deterministically and normalizes story-specific trace links to the done location. If any lifecycle gate (review, commit, CI) remains unresolved, the observation stops and asks the developer instead of closing.
 
 ## Inputs
 
@@ -25,6 +25,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 - A `.catdd/spec/doneUS/*-UserStory.md` team-shared completed story artifact.
 - A paired `.catdd/spec/doneUS/*-TASKs.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
 - Local `.catdd/spec/doingUS/` work state removed or marked closed after the completed artifact is created.
+- Story-specific references that still point to `.catdd/spec/doingUS/` are updated to `.catdd/spec/doneUS/` after closure so trace paths remain valid.
 - Completion summary with traceability to source issue or feature, project-root README SPEC docs, tests, code, commit, and CI.
 - Remaining follow-up work, if any.
 
@@ -35,5 +36,6 @@ Ask the assistant to close only verified work and preserve enough history for la
 ## Conflict Guard
 
 Do not close if product intent, acceptance criteria, tests, review, commit, or CI status remains unresolved.
+Do not leave stale story-specific trace links pointing to `.catdd/spec/doingUS/` after closure.
 
 ONE-MORE-THING: ask developer if something not sure
