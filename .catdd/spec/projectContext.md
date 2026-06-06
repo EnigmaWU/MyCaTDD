@@ -73,24 +73,31 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 ## SpecFlow Lifecycle State
 
 - `SPEC_*` Copilot prompt wrappers have been installed into `.github/prompts/`.
-- `.catdd/spec/` has been initialized with `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, and `doneUS/` directories.
+- `.catdd/spec/` lifecycle currently has `pendingNews/`, `analyzedNews/`, `todoUS/`, and `doneUS/`; `doingUS/` is absent when no story is actively opened.
 - Analyzed raw issues archived:
   - `.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md`
   - `.catdd/spec/analyzedNews/20260531-add-SPEC_takeArchDesign-command-Issue.md`
   - `.catdd/spec/analyzedNews/20260530-design-utCodeAgentCLI-architecture-Issue.md`
   - `.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md`
   - `.catdd/spec/analyzedNews/20260602-add-SPEC_reviewDesignGates-commands-Feature.md`
-- Pending feature requests imported:
-  - None currently.
+- `.catdd/spec/analyzedNews/20260606-treat-updates-as-issue-first-Issue.md`
+- Pending issues imported:
+  - `.catdd/spec/pendingNews/20260531-add-SPEC_assembleRequirements-command-Issue.md`
+  - `.catdd/spec/pendingNews/20260531-add-SPEC_updateRequirement-command-Issue.md`
+  - `.catdd/spec/pendingNews/20260531-add-SPEC_verifyRequirement-command-Issue.md`
+  - `.catdd/spec/pendingNews/20260531-add-UT_reviewImplTestFile-slash-command-Issue.md`
+  - `.catdd/spec/pendingNews/20260531-create-installCaTDD-Skill4XYZ-installer-Issue.md`
 - Completed user stories:
   - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
   - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
   - `.catdd/spec/doneUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md`
+  - `.catdd/spec/doneUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md`
+  - `.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md`
+  - `.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md`
 - Todo user stories waiting:
   - None currently.
 - Active user stories opened:
-  - `.catdd/spec/doingUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md` for adding `SPEC_reviewArchDesign` and `SPEC_reviewDetailDesign` gates to Px-SpecFlow; command specs and flow wiring drafted.
-  - `.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md` for deciding TypeScript/Python/Go as `utCodeAgentCLI` primary runtime language and recording a formal ADR; architecture draft now exists in `codeAgents/utCodeAgentCLI/README_ArchDesign.md`, `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`, and `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
+  - None currently.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes the runtime-language tradeoff review across TypeScript/Node.js, Python, and Go, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented surface coverage, and an ADR link for the runtime choice.
 - Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03; the runtime-language ADR is now DECIDED: TypeScript/Node.js for V1 (PoC) and Go pre-selected for V2 (production distribution), Python evaluated and not selected. ADR status updated to Decided in `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
@@ -99,12 +106,9 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 ## Next Recommended Command
 
-Run one of these after context review:
+Run this next after context review:
 
-- `/SPEC_reviewArchDesign` on `.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md` to review the runtime-language architecture decision and ADR for `utCodeAgentCLI`.
-- `/SPEC_importIssue` when another work item starts from a bug, issue, defect, or corrective task.
-- `/SPEC_importFeature` when another work item starts from a feature idea, enhancement, or design improvement.
-- `/SPEC_updateProjectContext` when any project fact, convention, or guardrail in this file needs correction.
+- `/SPEC_analyzeIssue` to convert one pending issue in `.catdd/spec/pendingNews/` into a traceable todo user story and move its raw input into `.catdd/spec/analyzedNews/`.
 
 ## Assumptions To Confirm
 
