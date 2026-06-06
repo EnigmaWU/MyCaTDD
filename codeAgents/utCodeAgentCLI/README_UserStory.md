@@ -8,7 +8,7 @@ This is the master requirements index. Role-specific stories are in companion fi
 | --- | --- | --- |
 | **USER** | [README_UserStory4USER.md](README_UserStory4USER.md) | 10 requirements — guided discovery (NEW-USER) and surgical control (EXPERIENCED-USER) |
 | **INVENTOR** | [README_UserStory4INVENTOR.md](README_UserStory4INVENTOR.md) | 3 requirements — method delegation, traceability, and diagnostic proof |
-| **DEVELOPER** | [README_UserStory4DEVELOPER.md](README_UserStory4DEVELOPER.md) | 4 requirements — error messages, logging, interactive mode, adapter interface |
+| **DEVELOPER** | [README_UserStory4DEVELOPER.md](README_UserStory4DEVELOPER.md) | 5 requirements — error messages, logging, interactive mode, adapter interface, reliability and safety policy execution |
 
 > **Implementation status**: `utCodeAgentCLI` does not yet have a runnable binary. The [UsageDesign](README_UsageDesign.md) specifies the CLI interface contract. The [UserGuide](README_UserGuide.md) documents invocation-plan patterns.
 
@@ -109,6 +109,7 @@ US-USER-01 (parse & validate)
 US-INVENTOR-01 → required by U02, U05, U06, U08, U09, U10
 US-INVENTOR-03 → runtime proof of US-INVENTOR-01
 US-DEV-04 → P2, independent
+US-DEV-05 → executable reliability/safety contract coverage for ASR-R1..R6
 ```
 
 ---
@@ -137,6 +138,8 @@ US-DEV-04 → P2, independent
 | [README.md](README.md) | WHAT/WHY of the CLI layer. |
 | `methodPrompts/` | Category semantics (US-INVENTOR-01). Required by all design/implementation. |
 | `slashCommands/` | Portable command execution (US-INVENTOR-01). Every `--behave` resolves here. |
+| [ASRs/ASR_AgenticReliabilityContracts.md](ASRs/ASR_AgenticReliabilityContracts.md) | Architecture-significant reliability/safety requirements that are implemented as executable US/AC through US-DEV-05. |
+| [ADRs/ADR_AgenticReliabilityPolicy.md](ADRs/ADR_AgenticReliabilityPolicy.md) | Decision defaults for ASR-R1..R6; constrains runtime behavior and acceptance checks in US-DEV-05. |
 | [../../.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md](../../.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md) | Original request. |
 
 ---

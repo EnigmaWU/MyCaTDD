@@ -82,3 +82,46 @@
 - **Given** no custom adapter is configured
 - **When** the CLI runs
 - **Then** a built-in default adapter executes slash commands directly
+
+---
+
+### US-DEV-05 [P1] — Execute ASR reliability and safety policy deterministically
+
+**As a** DEVELOPER, **I want** ASR-derived reliability and safety policies to be executable and verifiable at CLI runtime, **so that** architecture contracts are enforced as final-delivery behavior instead of static documentation.
+
+#### AC-01: Retry/correction budget exhaustion is deterministic (ASR-R1)
+- **Given** a step keeps failing with retry-eligible transient errors
+- **When** retry and correction budgets are exhausted
+- **Then** the CLI stops retrying that step
+- **And** the trace records budget exhaustion and escalation outcome
+
+#### AC-02: Unknown `--behave` uses diagnostics fallback with clear exit (ASR-R2)
+- **Given** `--behave` is unknown or unsupported
+- **When** behavior resolution runs
+- **Then** the CLI does not silently coerce behavior
+- **And** it prints supported behavior values and exits with argument-error code
+
+#### AC-03: Failure class routing is explicit and testable (ASR-R3)
+- **Given** one transient failure and one permanent failure case
+- **When** execution handles each case
+- **Then** transient failure follows retry-eligible routing
+- **And** permanent failure bypasses retry and fails fast with diagnostics
+
+#### AC-04: Step-scoped rollback or compensation boundary is enforced (ASR-R4)
+- **Given** a multi-step run fails after at least one completed step
+- **When** failure handling executes
+- **Then** the CLI preserves the last consistent step boundary
+- **And** it blocks further mutating steps and writes compensation-oriented failure trace details
+
+#### AC-05: Non-interactive escalation is deterministic and CI-safe (ASR-R5)
+- **Given** non-interactive mode and policy escalation conditions are reached
+- **When** control handling evaluates escalation
+- **Then** the CLI force-aborts with non-zero exit
+- **And** trace includes an explicit non-interactive escalation tag
+
+#### AC-06: Shell safety and sensitive-path protection are enforced (ASR-R6)
+- **Given** command execution attempts include allowed and sensitive paths
+- **When** execution and trace persistence run
+- **Then** only allowlisted execution surfaces are used
+- **And** sensitive paths are denied by default unless policy-approved
+- **And** token-like secrets are redacted in persisted traces

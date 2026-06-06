@@ -82,3 +82,46 @@
 - **Given** 未配置自定义 adapter
 - **When** CLI 运行
 - **Then** 内置默认 adapter 直接执行 slash command
+
+---
+
+### US-DEV-05 [P1] — 以确定性方式执行 ASR 可靠性与安全策略
+
+**作为** DEVELOPER，**我希望** ASR 派生的可靠性与安全策略在 CLI 运行时可执行、可验证，**以便** 架构契约成为最终交付行为而不仅是静态文档。
+
+#### AC-01：重试/修正预算耗尽后的行为必须确定（ASR-R1）
+- **Given** 某 step 持续出现可重试的瞬时错误
+- **When** 重试与修正预算耗尽
+- **Then** CLI 停止对该 step 的进一步重试
+- **And** trace 记录预算耗尽与升级结果
+
+#### AC-02：未知 `--behave` 走 diagnostics fallback 并明确退出（ASR-R2）
+- **Given** `--behave` 未知或不受支持
+- **When** 行为解析执行
+- **Then** CLI 不得静默容错或自动改写行为
+- **And** 输出受支持行为列表并以参数错误码退出
+
+#### AC-03：失败分类路由明确且可测试（ASR-R3）
+- **Given** 一个瞬时错误场景与一个永久错误场景
+- **When** 执行流程处理两类错误
+- **Then** 瞬时错误走可重试路由
+- **And** 永久错误跳过重试并快速失败且输出诊断
+
+#### AC-04：强制 step 级回滚或补偿边界（ASR-R4）
+- **Given** 多步骤运行在至少一个 step 完成后失败
+- **When** 失败处理执行
+- **Then** CLI 保持最后一致的 step 边界
+- **And** 阻断后续会修改状态的步骤，并写入补偿式 failure trace 细节
+
+#### AC-05：非交互升级在 CI 中确定且可预期（ASR-R5）
+- **Given** 非交互模式且满足升级触发条件
+- **When** 控制逻辑评估升级
+- **Then** CLI 强制中止并返回非零退出码
+- **And** trace 包含明确的非交互升级标记
+
+#### AC-06：执行 shell 安全与敏感路径保护（ASR-R6）
+- **Given** 命令执行尝试同时涉及允许路径与敏感路径
+- **When** 执行与 trace 持久化运行
+- **Then** 仅允许 allowlist 中的执行面
+- **And** 敏感路径默认拒绝，除非策略显式放行
+- **And** 持久化 trace 中对 token-like secrets 执行脱敏

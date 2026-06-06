@@ -8,7 +8,7 @@ utCodeAgentCLI 是 CaTDD-native CLI，将自然语言目标、源代码和 User 
 | --- | --- | --- |
 | **USER** | [README_UserStory4USER_ZH.md](README_UserStory4USER_ZH.md) | 10 个需求 —— 引导式发现（NEW-USER）与精确控制（EXPERIENCED-USER） |
 | **INVENTOR** | [README_UserStory4INVENTOR_ZH.md](README_UserStory4INVENTOR_ZH.md) | 3 个需求 —— 方法委托、可追溯性与诊断证明 |
-| **DEVELOPER** | [README_UserStory4DEVELOPER_ZH.md](README_UserStory4DEVELOPER_ZH.md) | 4 个需求 —— 错误信息、日志、交互模式、adapter 接口 |
+| **DEVELOPER** | [README_UserStory4DEVELOPER_ZH.md](README_UserStory4DEVELOPER_ZH.md) | 5 个需求 —— 错误信息、日志、交互模式、adapter 接口、可靠性与安全策略执行 |
 
 > **实现状态**：`utCodeAgentCLI` 尚无可运行的 binary。[UsageDesign](README_UsageDesign_ZH.md) 定义 CLI 接口契约。[UserGuide](README_UserGuide_ZH.md) 记录 invocation plan 模式。
 
@@ -111,6 +111,7 @@ US-USER-01（解析与验证）
 US-INVENTOR-01 → U02, U05, U06, U08, U09, U10 所需
 US-INVENTOR-03 → US-INVENTOR-01 的运行时证明
 US-DEV-04 → P2, 独立
+US-DEV-05 → ASR-R1..R6 的可执行可靠性/安全契约覆盖
 ```
 
 ---
@@ -139,6 +140,8 @@ US-DEV-04 → P2, 独立
 | [README_ZH.md](README_ZH.md) | CLI 层的 WHAT/WHY。 |
 | `methodPrompts/` | Category 语义（US-INVENTOR-01）。所有设计/实现所需。 |
 | `slashCommands/` | 可移植命令执行（US-INVENTOR-01）。每个 `--behave` 解析至此。 |
+| [ASRs/ASR_AgenticReliabilityContracts.md](ASRs/ASR_AgenticReliabilityContracts.md) | 架构关键可靠性/安全需求，通过 US-DEV-05 以可执行 US/AC 形式落地。 |
+| [ADRs/ADR_AgenticReliabilityPolicy.md](ADRs/ADR_AgenticReliabilityPolicy.md) | ASR-R1..R6 的决策默认值，约束 US-DEV-05 的运行时行为与验收检查。 |
 | [../../.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md](../../.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md) | 原始请求。 |
 
 ---

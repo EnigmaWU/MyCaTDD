@@ -4,10 +4,12 @@ This document turns the architecture into implementation-facing contracts, data 
 
 ## Story Context
 
-- Story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
+- Story: [../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
 - Architecture: [README_ArchDesign.md](README_ArchDesign.md)
 - Usage contract: [README_UsageDesign.md](README_UsageDesign.md)
 - Requirements index: [README_UserStory.md](README_UserStory.md)
+- ASR source: [ASRs/ASR_AgenticReliabilityContracts.md](ASRs/ASR_AgenticReliabilityContracts.md)
+- ADR source: [ADRs/ADR_AgenticReliabilityPolicy.md](ADRs/ADR_AgenticReliabilityPolicy.md)
 - Method source of truth: [../../methodPrompts/](../../methodPrompts/)
 - Portable command source of truth: [../../slashCommands/](../../slashCommands/)
 
@@ -100,6 +102,7 @@ Execution flow:
 | Produce actionable errors. | `US-DEV-01` | Errors name the argument/path/state and suggest corrections. |
 | Support logging and interactive control. | `US-DEV-02`, `US-DEV-03` | `LogSink` and `ControlPort` are explicit dependencies. |
 | Support replaceable runtimes. | `US-DEV-04` | Default adapter is the first chosen runtime/process based; Copilot/OpenCode adapters are later implementations. |
+| Enforce ASR reliability and safety policy defaults at runtime. | `US-DEV-05`, `ASR-R1`..`ASR-R6`, `ADR_AgenticReliabilityPolicy` | Runtime policy must be deterministic for retry budget, fallback routing, failure taxonomy, escalation, and sensitive-path control. |
 
 ## Acceptance Criteria
 
@@ -114,6 +117,12 @@ Execution flow:
 | DD-AC-07 | A custom runtime adapter is configured. | Command execution starts. | Executor invokes the adapter through the generic interface. | `RuntimeAdapter` receives command path, normalized invocation, and context. |
 | DD-AC-08 | `reviewImplTestFile` targets one TestFile. | Behavior resolution runs. | The CLI builds a read-only sequence that invokes `UT_reviewImplTestCase` for each RED/GREEN TC and skips PLANNED TCs with a summary. | `BehaviorRegistry` treats `reviewImplTestFile` as a stable orchestration alias, not a new CaTDD method. |
 | DD-AC-09 | EN/ZH detail design docs exist. | Mirror check runs. | Heading structure matches. | Keep sections synchronized when updating design. |
+| DD-AC-10 | Transient retries exceed policy budget. | Executor applies policy decisions. | Retry stops deterministically and escalation metadata is emitted. | Add retry-budget state and escalation reason codes in execution result. |
+| DD-AC-11 | `--behave` is unsupported. | Behavior resolution executes. | Diagnostics fallback returns supported values and argument-error exit. | Add fallback contract in resolver result type; forbid silent coercion. |
+| DD-AC-12 | A permanent failure is detected. | Failure classification runs. | Retry is skipped and fail-fast route is chosen. | Add explicit `failureClass` in step result and classifier rules. |
+| DD-AC-13 | A run fails after mutating step(s). | Compensation boundary handling runs. | Further mutating steps are blocked; trace records last consistent step boundary. | Add step snapshot records and compensation marker in trace schema. |
+| DD-AC-14 | Non-interactive execution hits escalation trigger. | Control handling runs. | Forced abort with deterministic exit and escalation tag. | Add non-interactive escalation mode in `ControlPort` contract. |
+| DD-AC-15 | Step targets a sensitive path without policy approval. | Safety policy check runs before execution and trace write. | Step is denied and secret-like values are redacted in diagnostics/trace. | Add sensitive-path gate and redaction classification before adapter execution. |
 
 ## Interface Design
 
@@ -127,6 +136,8 @@ Execution flow:
 | `resolveSlashCommands(behavior)` | `ResolvedBehavior` | `ResolvedSlashCommand[]` | Throws `AssetResolutionError` naming missing command paths. |
 | `planCatddRun(invocation)` | `CatddInvocation` | `CatddRunPlan` | Fails before execution if target shape and behavior are incompatible. |
 | `execute(plan, context)` | `CatddRunPlan`, `CliExecutionContext` | `ExecutionResult` | Writes failure trace for execution errors after planning succeeds. |
+| `classifyFailure(error)` | `RuntimeError` | `FailureClass` (`TRANSIENT` or `PERMANENT`) | Returns `PERMANENT` when classification confidence is low to avoid unsafe retries. |
+| `evaluateStepPolicy(step, state)` | `AgentRunStep`, `PolicyState` | `PolicyDecision` | Denies execution when retry budget or sensitive-path policy is violated. |
 | `RuntimeAdapter.execute(step, context, control)` | `AgentRunStep`, `AgentRunContext`, `ControlPort` | `StepResult` | Returns structured failure instead of throwing for expected runtime failures. |
 | `TraceWriter.write(trace)` | `RunTrace` | `TraceWriteResult` | Redacts secrets and fails closed if trace cannot be safely written. |
 
@@ -305,6 +316,7 @@ export interface TraceTcTransition {
 | `CatddRunPlan` | `catdd/` | Created before execution. | All command paths and prompt paths are resolvable. |
 | `AgentRunPlan` | `agentsdk/` | Created from `CatddRunPlan`. | Contains generic execution steps only. |
 | `StepResult` | `executor/` + adapter | Created per command step. | Expected failures are structured, not hidden in logs. |
+| `PolicyState` | `executor/` | Created at run start and updated per step. | Tracks retry counts, correction loops, escalation flags, and denied-sensitive-path attempts. |
 | `RunTrace` | `trace/` | Created during execution and written at exit. | Secrets and raw sensitive content are redacted. |
 
 ## State Machine
@@ -339,6 +351,10 @@ Not applicable for `utCodeAgentCLI` v1. There is no interrupt, driver, buffer, m
 | Conflicting exclusive args | Exit code 1; stderr names both arguments and states the conflict. |
 | Missing file path | Exit code 1; stderr includes argument name and resolved path. |
 | Unknown behavior | Exit code 1; stderr lists valid aliases/direct command names and nearest suggestion. |
+| Retry budget exhausted | No further retries for that step; escalation reason is emitted and trace is persisted. |
+| Failure classified as PERMANENT | Skip retry path and fail fast with classification details in diagnostics. |
+| Non-interactive escalation condition met | Forced abort with deterministic non-zero exit and `ESCALATED_NON_INTERACTIVE` trace tag. |
+| Sensitive path access without policy approval | Step denied before adapter execution; diagnostics identify denied path class without leaking secrets. |
 | Target/behavior mismatch | Exit code 1; stderr explains required target shape and suggests valid combinations. |
 | Missing method prompt or slash command | Exit code 1; stderr names missing asset path; no fallback semantic copy is used. |
 | Interactive skip | Step is skipped; trace records skipped command and reason. |
@@ -357,7 +373,8 @@ Not applicable for `utCodeAgentCLI` v1. There is no interrupt, driver, buffer, m
 | 4 | `agentsdk/` generic interfaces and raw adapter. | Type tests or unit tests proving no CaTDD category definitions in SDK. |
 | 5 | `executor/` plan execution with `ControlPort`. | Tests for approve, skip, abort, and structured step failures. |
 | 6 | `trace/` schema, collector, and writer. | JSON schema tests for success and execution failure traces. |
-| 7 | End-to-end dry-run fixture. | CLI-level test from valid invocation to planned command sequence and trace. |
+| 7 | Reliability policy layer (`classifyFailure`, `evaluateStepPolicy`, sensitive-path gate). | Unit tests for ASR-R1..R6 behavior and deterministic non-interactive escalation. |
+| 8 | End-to-end dry-run fixture. | CLI-level test from valid invocation to planned command sequence and trace. |
 
 ## Verification Strategy
 
@@ -368,6 +385,7 @@ Not applicable for `utCodeAgentCLI` v1. There is no interrupt, driver, buffer, m
 - Validate `RunTrace` with a JSON schema parser.
 - Use fixture test files to verify observed TC transition extraction.
 - Add adapter contract tests using an in-memory fake adapter before adding Copilot/OpenCode adapters.
+- Add policy tests for retry budget exhaustion, failure classification, unknown-behavior fallback, sensitive-path denial, and escalation behavior in interactive and non-interactive modes.
 
 ## Assumptions
 
@@ -383,6 +401,7 @@ Not applicable for `utCodeAgentCLI` v1. There is no interrupt, driver, buffer, m
 - Should installed-target traces later default to `.catdd/traces/` instead of the module-local trace directory?
 - Should prompt-wrapper execution or MCP tool execution be the first Copilot adapter surface?
 - Should OpenCode support start as a command adapter or provider abstraction?
+- Should `.npmrc`, `.netrc`, `*.p12`, `*.jks`, and other repo-local credential-bearing patterns be included in the default sensitive-path deny list for v1?
 
 ## Usage Example
 

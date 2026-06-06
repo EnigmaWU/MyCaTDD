@@ -82,3 +82,11 @@ Live trace of every acceptance criterion. Mark `[x]` when verified against imple
 ## US-DEV-04 — Runtime adapter interface
 - [ ] AC-01  Adapter implements CliRuntimeAdapter → calls invoke() with full context
 - [ ] AC-02  No custom adapter → built-in default adapter executes directly
+
+## US-DEV-05 — Execute ASR reliability and safety policy deterministically
+- [ ] AC-01  Retry/correction budget exhaustion → deterministic stop + trace escalation outcome
+- [ ] AC-02  Unknown --behave → diagnostics fallback + argument-error exit
+- [ ] AC-03  Transient vs permanent failure class routing → retry-eligible vs fail-fast behavior
+- [ ] AC-04  Multi-step failure → step-consistency boundary preserved + mutating steps blocked
+- [ ] AC-05  Non-interactive escalation → force abort + explicit escalation trace tag
+- [ ] AC-06  Shell safety policy enforced → allowlist execution + sensitive-path deny + trace redaction

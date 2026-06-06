@@ -400,6 +400,45 @@ Ownership is split deliberately: `catdd/` validates the expected file state befo
 | Control | `ControlPort` | Pause, approve, skip, abort, checkpoint, resume, timeout, and cancel execution. |
 | Diagnostics | `utCodeAgentCLI` + `AgentSDK` | Separate user-facing errors from inventor/developer diagnostics such as resolved prompt and command paths. |
 
+## Architecture Feedback Resolution (2026-06-07)
+
+This revision addresses follow-up architecture feedback from the active story [../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md) and keeps the story design-oriented-only.
+
+Primary trace artifacts for this revision:
+
+- ASR source: [ASRs/ASR_AgenticReliabilityContracts.md](ASRs/ASR_AgenticReliabilityContracts.md)
+- ADR source: [ADRs/ADR_AgenticReliabilityPolicy.md](ADRs/ADR_AgenticReliabilityPolicy.md)
+
+### Explicit Reliability And Safety Contracts
+
+| Contract area | Architecture contract |
+| --- | --- |
+| Retry and iteration budget | See ASR-R1 and ADR v1 defaults. `SlashCommandExecutor` owns bounded retry/correction behavior and deterministic budget exhaustion routing. |
+| Unknown `--behave` fallback | See ASR-R2 and ADR fallback decision. `BehaviorRegistry` rejects silent coercion and routes unknown behavior to diagnostics fallback with explicit argument-error exit. |
+| Failure taxonomy and routing | See ASR-R3 and ADR taxonomy decision. Failure classes are explicit and routing is class-dependent (retry-eligible vs immediate fail). |
+| Snapshot and rollback boundary | See ASR-R4 and ADR boundary decision. Failure handling uses step-scoped consistency boundary and compensation-oriented stop behavior. |
+| Escalation threshold and non-interactive behavior | See ASR-R5 and ADR escalation decision. Escalation triggers are explicit and non-interactive behavior is deterministic. |
+| Shell safety and sensitive-file protection | See ASR-R6 and ADR safety decision. Execution is allowlist-first with sensitive-path deny-by-default and trace redaction constraints. |
+
+### Architecture Feedback Checklist
+
+| Feedback item | Status | Notes |
+| --- | --- | --- |
+| Add explicit retry and iteration limits | Addressed | Added numeric budgets and deterministic exhaustion behavior. |
+| Add fallback route for unknown `--behave` | Addressed | Added diagnostics-only fallback with explicit argument error exit. |
+| Add transient vs permanent failure routing | Addressed | Added two-class taxonomy and routing policy. |
+| Add rollback or compensation boundary | Addressed | Added step-scoped snapshot and compensation boundary. |
+| Add escalation threshold policy | Addressed | Added interactive and non-interactive escalation behavior. |
+| Add shell safety and sensitive-file policy | Addressed | Added allowlist execution and sensitive-path protection policy. |
+| Freeze story as design-oriented-only unless scope expands | Addressed | This revision remains architecture-contract-only; no implementation scope was added. |
+| Final numeric thresholds tuning by runtime evidence | Deferred | Keep current defaults for architecture gate; calibrate in detail design and test evidence. |
+
+### Remaining Risks
+
+- Retry and loop defaults may require adjustment after empirical CI/runtime evidence.
+- Adapter capability differences may require per-adapter policy compatibility notes in detail design.
+- Sensitive-path policy may need repository-specific expansion beyond the initial baseline.
+
 ## Dependencies
 
 | Dependency | Direction | Reason | Risk |

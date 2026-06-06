@@ -4,10 +4,12 @@
 
 ## Story Context
 
-- Story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
+- Story: [../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
 - Architecture: [README_ArchDesign_ZH.md](README_ArchDesign_ZH.md)
 - Usage contract: [README_UsageDesign_ZH.md](README_UsageDesign_ZH.md)
 - Requirements index: [README_UserStory_ZH.md](README_UserStory_ZH.md)
+- ASR source: [ASRs/ASR_AgenticReliabilityContracts.md](ASRs/ASR_AgenticReliabilityContracts.md)
+- ADR source: [ADRs/ADR_AgenticReliabilityPolicy.md](ADRs/ADR_AgenticReliabilityPolicy.md)
 - Method source of truth: [../../methodPrompts/](../../methodPrompts/)
 - Portable command source of truth: [../../slashCommands/](../../slashCommands/)
 
@@ -100,6 +102,7 @@ Execution flow：
 | Produce actionable errors. | `US-DEV-01` | Errors 命名 argument/path/state 并给出 corrections。 |
 | Support logging and interactive control. | `US-DEV-02`, `US-DEV-03` | `LogSink` 与 `ControlPort` 是明确 dependencies。 |
 | Support replaceable runtimes. | `US-DEV-04` | Default adapter 是最终选定 runtime/process based；Copilot/OpenCode adapters 属于后续 implementation。 |
+| Enforce ASR reliability and safety policy defaults at runtime. | `US-DEV-05`, `ASR-R1`..`ASR-R6`, `ADR_AgenticReliabilityPolicy` | 运行时策略必须在重试预算、fallback 路由、失败分类、升级行为和敏感路径控制上保持确定性。 |
 
 ## Acceptance Criteria
 
@@ -114,6 +117,12 @@ Execution flow：
 | DD-AC-07 | A custom runtime adapter is configured. | Command execution starts. | Executor invokes the adapter through the generic interface. | `RuntimeAdapter` receives command path, normalized invocation, and context. |
 | DD-AC-08 | `reviewImplTestFile` targets one TestFile. | Behavior resolution runs. | CLI 构建 read-only sequence，对每个 RED/GREEN TC 调用 `UT_reviewImplTestCase`，并跳过 PLANNED TCs，最后输出 summary。 | `BehaviorRegistry` 将 `reviewImplTestFile` 视为 stable orchestration alias，而不是新的 CaTDD method。 |
 | DD-AC-09 | EN/ZH detail design docs exist. | Mirror check runs. | Heading structure matches. | Keep sections synchronized when updating design. |
+| DD-AC-10 | 瞬时重试超出策略预算。 | Executor 应用策略决策。 | 重试确定性停止，并输出升级元数据。 | 在执行结果中增加重试预算状态与升级原因码。 |
+| DD-AC-11 | `--behave` 不受支持。 | Behavior resolution 执行。 | Diagnostics fallback 返回支持值并以参数错误退出。 | 在 resolver 结果类型中加入 fallback 契约，禁止静默容错。 |
+| DD-AC-12 | 检测到永久失败。 | Failure classification 执行。 | 跳过重试并走快速失败路径。 | 在 step result 中增加 `failureClass` 与分类规则。 |
+| DD-AC-13 | 运行在已有修改步骤后失败。 | Compensation boundary handling 执行。 | 阻断后续会修改状态的步骤；trace 记录最后一致步骤边界。 | 在 trace schema 中增加 step snapshot 与补偿标记。 |
+| DD-AC-14 | 非交互执行命中升级触发条件。 | Control handling 执行。 | 强制中止并返回确定性退出码与升级标记。 | 在 `ControlPort` 契约中增加非交互升级模式。 |
+| DD-AC-15 | 步骤在无策略批准时访问敏感路径。 | 执行前策略检查运行。 | 在 adapter 执行前拒绝步骤，且 diagnostics/trace 对 secret-like 内容脱敏。 | 在 adapter 执行前增加敏感路径 gate 与 redaction 分类。 |
 
 ## Interface Design
 
@@ -127,6 +136,8 @@ Execution flow：
 | `resolveSlashCommands(behavior)` | `ResolvedBehavior` | `ResolvedSlashCommand[]` | Throws `AssetResolutionError` naming missing command paths. |
 | `planCatddRun(invocation)` | `CatddInvocation` | `CatddRunPlan` | Fails before execution if target shape and behavior are incompatible. |
 | `execute(plan, context)` | `CatddRunPlan`, `CliExecutionContext` | `ExecutionResult` | Writes failure trace for execution errors after planning succeeds. |
+| `classifyFailure(error)` | `RuntimeError` | `FailureClass` (`TRANSIENT` or `PERMANENT`) | 当分类置信度不足时返回 `PERMANENT`，避免不安全重试。 |
+| `evaluateStepPolicy(step, state)` | `AgentRunStep`, `PolicyState` | `PolicyDecision` | 当重试预算或敏感路径策略违规时拒绝执行。 |
 | `RuntimeAdapter.execute(step, context, control)` | `AgentRunStep`, `AgentRunContext`, `ControlPort` | `StepResult` | Returns structured failure instead of throwing for expected runtime failures. |
 | `TraceWriter.write(trace)` | `RunTrace` | `TraceWriteResult` | Redacts secrets and fails closed if trace cannot be safely written. |
 
@@ -305,6 +316,7 @@ export interface TraceTcTransition {
 | `CatddRunPlan` | `catdd/` | Created before execution. | All command paths and prompt paths are resolvable. |
 | `AgentRunPlan` | `agentsdk/` | Created from `CatddRunPlan`. | Contains generic execution steps only. |
 | `StepResult` | `executor/` + adapter | Created per command step. | Expected failures are structured, not hidden in logs. |
+| `PolicyState` | `executor/` | 在 run 开始时创建并按 step 更新。 | 跟踪重试计数、修正循环、升级标记与敏感路径拒绝次数。 |
 | `RunTrace` | `trace/` | Created during execution and written at exit. | Secrets and raw sensitive content are redacted. |
 
 ## State Machine
@@ -339,6 +351,10 @@ CLI 只能通过 delegated slash-command execution 写入 `PLANNED -> RED`。它
 | Conflicting exclusive args | Exit code 1；stderr 命名两个 arguments 并说明 conflict。 |
 | Missing file path | Exit code 1；stderr 包含 argument name 与 resolved path。 |
 | Unknown behavior | Exit code 1；stderr 列出 valid aliases/direct command names 与 nearest suggestion。 |
+| Retry budget exhausted | 该步骤不再重试；输出升级原因并持久化 trace。 |
+| Failure classified as PERMANENT | 跳过重试路径并快速失败，同时输出分类细节。 |
+| Non-interactive escalation condition met | 强制中止，确定性非零退出，并写入 `ESCALATED_NON_INTERACTIVE` trace tag。 |
+| Sensitive path access without policy approval | 在 adapter 执行前拒绝步骤；diagnostics 标识被拒绝路径类别但不泄露 secrets。 |
 | Target/behavior mismatch | Exit code 1；stderr 解释 required target shape 并建议 valid combinations。 |
 | Missing method prompt or slash command | Exit code 1；stderr 命名 missing asset path；不使用 fallback semantic copy。 |
 | Interactive skip | Step 被 skipped；trace 记录 skipped command 与 reason。 |
@@ -357,7 +373,8 @@ CLI 只能通过 delegated slash-command execution 写入 `PLANNED -> RED`。它
 | 4 | `agentsdk/` generic interfaces and raw adapter. | Type tests or unit tests proving no CaTDD category definitions in SDK. |
 | 5 | `executor/` plan execution with `ControlPort`. | Tests for approve, skip, abort, and structured step failures. |
 | 6 | `trace/` schema, collector, and writer. | JSON schema tests for success and execution failure traces. |
-| 7 | End-to-end dry-run fixture. | CLI-level test from valid invocation to planned command sequence and trace. |
+| 7 | Reliability policy layer (`classifyFailure`, `evaluateStepPolicy`, sensitive-path gate). | Unit tests for ASR-R1..R6 behavior and deterministic non-interactive escalation. |
+| 8 | End-to-end dry-run fixture. | CLI-level test from valid invocation to planned command sequence and trace. |
 
 ## Verification Strategy
 
@@ -368,6 +385,7 @@ CLI 只能通过 delegated slash-command execution 写入 `PLANNED -> RED`。它
 - Validate `RunTrace` with a JSON schema parser。
 - Use fixture test files to verify observed TC transition extraction。
 - Add adapter contract tests using an in-memory fake adapter before adding Copilot/OpenCode adapters。
+- Add policy tests for retry budget exhaustion, failure classification, unknown-behavior fallback, sensitive-path denial, and escalation behavior in interactive and non-interactive modes。
 
 ## Assumptions
 
@@ -383,6 +401,7 @@ CLI 只能通过 delegated slash-command execution 写入 `PLANNED -> RED`。它
 - Should installed-target traces later default to `.catdd/traces/` instead of the module-local trace directory?
 - Should prompt-wrapper execution or MCP tool execution be the first Copilot adapter surface?
 - Should OpenCode support start as a command adapter or provider abstraction?
+- Should `.npmrc`, `.netrc`, `*.p12`, `*.jks`, and other repo-local credential-bearing patterns be included in the default sensitive-path deny list for v1?
 
 ## Usage Example
 

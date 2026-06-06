@@ -82,3 +82,11 @@
 ## US-DEV-04 — 运行时 adapter 接口
 - [ ] AC-01  Adapter 实现 CliRuntimeAdapter → 调用 invoke() 含完整上下文
 - [ ] AC-02  无自定义 adapter → 内置默认 adapter 直接执行
+
+## US-DEV-05 — 以确定性方式执行 ASR 可靠性与安全策略
+- [ ] AC-01  重试/修正预算耗尽 → 确定性停止 + trace 记录升级结果
+- [ ] AC-02  Unknown --behave → diagnostics fallback + 参数错误退出
+- [ ] AC-03  瞬时/永久失败分类路由 → 可重试与快速失败行为可区分
+- [ ] AC-04  多步骤失败 → 保留 step 一致性边界 + 阻断后续状态修改
+- [ ] AC-05  非交互升级 → 强制中止 + trace 明确升级标记
+- [ ] AC-06  Shell 安全策略执行 → allowlist 执行 + 敏感路径拒绝 + trace 脱敏

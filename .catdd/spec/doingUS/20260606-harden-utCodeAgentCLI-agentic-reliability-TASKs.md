@@ -1,6 +1,7 @@
 # TASKs: Harden utCodeAgentCLI Agentic Reliability Contracts
 
 Created by `/SPEC_makePlan` on 2026-06-06.
+Updated by `/SPEC_makePlan` on 2026-06-07.
 
 ## Active Story
 
@@ -12,10 +13,11 @@ Created by `/SPEC_makePlan` on 2026-06-06.
 
 - [x] Confirm the story intent is clear enough to proceed without `SPEC_clearStoryIntent`.
 - [x] Confirm the current architecture already covers adjacent runtime, control, and trace concepts but still lacks the six explicit reliability contracts.
-- [ ] Revise `codeAgents/utCodeAgentCLI/README_ArchDesign.md` with explicit contracts for retry limits, router fallback, failure taxonomy, rollback boundary, escalation policy, and shell safety.
-- [ ] Review the updated architecture against the skill-derived agentic-pattern guardrails.
-- [ ] Update detail design only if architecture review reveals required downstream contract changes.
-- [ ] Run story readiness review after architecture and any required detail updates pass review.
+- [x] Revise `codeAgents/utCodeAgentCLI/README_ArchDesign.md` with explicit contracts for retry limits, router fallback, failure taxonomy, rollback boundary, escalation policy, and shell safety.
+- [x] Review the updated architecture against the skill-derived agentic-pattern guardrails.
+- [x] Update detail design only if architecture review reveals required downstream contract changes.
+- [x] Run story readiness review after architecture and any required detail updates pass review.
+- [ ] If story readiness passes after design updates, close as design-oriented-only work (`SPEC_commitWorks` -> `SPEC_closeUserStory`) unless new implementation scope is explicitly added.
 
 ## Readiness Snapshot
 
@@ -43,6 +45,7 @@ Created by `/SPEC_makePlan` on 2026-06-06.
 - Next command: `/SPEC_updateArchDesign`.
 - Primary target: revise `codeAgents/utCodeAgentCLI/README_ArchDesign.md` to make the six reliability and safety contracts explicit.
 - Expected follow-up after revision: `/SPEC_reviewArchDesign`.
+- Story orientation after design: design-oriented only by default; move to implementation-oriented flow only if the story scope is explicitly expanded.
 - Expected documentation impact: architecture updates should stay traceable to [20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md) and may trigger targeted `README_DetailDesign.md` updates only if architecture review requires them.
 
 ## Rationale
