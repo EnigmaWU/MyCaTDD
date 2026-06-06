@@ -11,10 +11,16 @@ Opened by `/SPEC_openUserStory` on 2026-06-03.
 
 ## Active Work Status
 
-- Status: OPEN.
-- Active state: `.catdd/spec/doingUS/` active story.
+- Status: CLOSED.
+- Active state: `.catdd/spec/doneUS/` completed story.
 - Opened from: [../todoUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md](../todoUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md)
-- Next recommended command: `/SPEC_takeDetailDesign` is not needed for this command-contract story; implement the command specs and update `Px-SpecFlow.md` directly, then run `/SPEC_reviewArchDesign` on the current `utCodeAgentCLI` architecture design.
+- Next recommended command: none (closed by `/SPEC_closeUserStory` on 2026-06-06).
+
+## Closure Summary
+
+- Closed by: `/SPEC_closeUserStory` on 2026-06-06.
+- Commit references: `41d24e8` (`spec: add design review gates`), `b4e583d` (`Refine SPEC architecture trace ownership`), `e3dad2d` (`Add skill-first builtin fallback policy`).
+- Verification summary: `scripts/test_slashcommands_complete.sh` PASSED; `scripts/test_makeSlashCmd4Copilot.sh` PASSED; `scripts/test_installCaTDD4Copilot.sh` PASSED.
 
 ## Implementation Status
 
@@ -25,7 +31,7 @@ Opened by `/SPEC_openUserStory` on 2026-06-03.
 
 ## Analysis Status
 
-- Status: TODO.
+- Status: DONE.
 - Priority: P0 — required to enforce the "review each action" philosophy for incoming design work.
 - Confidence: High. The requirements and positioning of these review gates are clear.
 
