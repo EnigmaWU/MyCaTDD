@@ -33,7 +33,6 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_reviewProductCodes.md](SPEC_reviewProductCodes.md) | Review implementation quality and traceability. |
 | [SPEC_refactorIssue.md](SPEC_refactorIssue.md) | Route failed quality back through design or implementation. |
 | [SPEC_commitWorks.md](SPEC_commitWorks.md) | Prepare and commit completed work. |
-| [SPEC_triggerCI.md](SPEC_triggerCI.md) | Trigger or verify CI after commit. |
 | [SPEC_closeUserStory.md](SPEC_closeUserStory.md) | Move completed story to done state. |
 
 ## Contract
