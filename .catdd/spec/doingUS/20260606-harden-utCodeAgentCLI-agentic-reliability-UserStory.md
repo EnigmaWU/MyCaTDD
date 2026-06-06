@@ -1,6 +1,7 @@
 # User Story: Harden utCodeAgentCLI Agentic Reliability Contracts
 
 Created by `/SPEC_analyzeIssue` on 2026-06-06.
+Opened by `/SPEC_openUserStory` on 2026-06-06.
 
 ## Source Trace
 
@@ -10,11 +11,14 @@ Created by `/SPEC_analyzeIssue` on 2026-06-06.
 - Reviewed target: `codeAgents/utCodeAgentCLI/README_ArchDesign.md`
 - Area: `codeAgents/utCodeAgentCLI/`
 
-## Analysis Status
+## Active Work Status
 
-- Status: TODO.
+- Status: OPEN.
+- Active state: `.catdd/spec/doingUS/`.
+- Opened from: [../todoUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../todoUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
 - Priority: P1 - important (architecture contract hardening before implementation detail expansion).
 - Confidence: medium-high.
+- Next recommended command: `/SPEC_makePlan`.
 
 ## Observed Behavior
 
@@ -134,4 +138,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_openUserStory` to move this story into active work.
+Run `/SPEC_makePlan` to create the paired `.catdd/spec/doingUS/*-TASKs.md` artifact and decide the next lifecycle step.
