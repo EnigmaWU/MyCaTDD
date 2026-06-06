@@ -11,7 +11,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `doing_plan_file`: optional active `.catdd/spec/doingUS/*-PLANING.md` planning artifact paired with the story.
+- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-TASKs.md` task artifact paired with the story.
 - `readme_spec_files`: optional project-root `README*` SPEC files updated by the story.
 - `commit_ref`: completed commit.
 - `ci_summary`: CI result or accepted verification summary.
@@ -23,7 +23,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 ## Output Contract
 
 - A `.catdd/spec/doneUS/*-UserStory.md` team-shared completed story artifact.
-- A paired `.catdd/spec/doneUS/*-PLANING.md` team-shared planning artifact when the story was planned through `SPEC_takePlan`.
+- A paired `.catdd/spec/doneUS/*-TASKs.md` team-shared task artifact when the story was planned through `SPEC_takePlan`.
 - Local `.catdd/spec/doingUS/` work state removed or marked closed after the completed artifact is created.
 - Completion summary with traceability to source issue or feature, project-root README SPEC docs, tests, code, commit, and CI.
 - Remaining follow-up work, if any.

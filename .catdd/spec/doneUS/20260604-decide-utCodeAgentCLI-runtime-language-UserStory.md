@@ -14,7 +14,7 @@ Opened by `/SPEC_openUserStory` on 2026-06-04.
 - Status: CLOSED.
 - Active state: `.catdd/spec/doneUS/` completed story.
 - Opened from: [../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../todoUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
-- Planning artifact: [20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md](20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md).
+- TASKs artifact: [20260604-decide-utCodeAgentCLI-runtime-language-TASKs.md](20260604-decide-utCodeAgentCLI-runtime-language-TASKs.md).
 - Architecture decision draft: `codeAgents/utCodeAgentCLI/README_ArchDesign.md`, `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`, and `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
 - Runtime decision: DECIDED — TypeScript/Node.js for V1 (PoC), Go pre-selected for V2 (production distribution); Python evaluated and not selected.
 - Next recommended command: none (closed by `/SPEC_closeUserStory` on 2026-06-06).

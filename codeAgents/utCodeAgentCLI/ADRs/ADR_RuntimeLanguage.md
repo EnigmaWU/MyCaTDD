@@ -15,7 +15,7 @@ Decision Type: Property (diacrisis)
 | 8. Implications | V1 detail design proceeds on TS/Node now; architecture must keep the AgentSDK/adapter boundary runtime-portable so the V2 Go migration is contained; a future ADR revisits and confirms Go when V2 production scope is formally opened. |
 | 9. Related Decisions | Constrains future packaging/test-runner decision for utCodeAgentCLI; enables adapter-boundary decisions in architecture docs; conflicts with any immediate implementation that assumes final language choice before review closure. |
 | 10. Related Requirements | Runtime-language ACs in the active user story: evaluate alternatives by explicit criteria, select one primary runtime, capture formal ADR, and clarify non-goals/boundaries. |
-| 11. Affected Artifacts | [../README_ArchDesign.md](../README_ArchDesign.md), [../README_ArchDesign_ZH.md](../README_ArchDesign_ZH.md), [../README_DetailDesign.md](../README_DetailDesign.md), [../README_DetailDesign_ZH.md](../README_DetailDesign_ZH.md), [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md), [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md). |
+| 11. Affected Artifacts | [../README_ArchDesign.md](../README_ArchDesign.md), [../README_ArchDesign_ZH.md](../README_ArchDesign_ZH.md), [../README_DetailDesign.md](../README_DetailDesign.md), [../README_DetailDesign_ZH.md](../README_DetailDesign_ZH.md), [../../.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md), [../../.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-TASKs.md](../../.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-TASKs.md). |
 | 12. Notes | This ADR records a decision state and comparison process, not implementation code. V1 implementation proceeds on TS/Node; Go is a pre-selected V2 target to be confirmed by a follow-up ADR when production scope opens. |
 
 ## Alternatives Comparison Matrix
@@ -38,7 +38,7 @@ Tradeoff summary (phase-weighted):
 
 - Source issue: [../../.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md](../../.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md)
 - Active story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
-- Planning artifact: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-PLANING.md)
+- TASKs artifact: [../../.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-TASKs.md](../../.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-TASKs.md)
 
 ## Follow-up
 

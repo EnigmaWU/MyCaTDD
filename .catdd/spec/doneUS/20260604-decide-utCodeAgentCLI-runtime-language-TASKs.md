@@ -1,4 +1,4 @@
-# Planning: Decide utCodeAgentCLI Runtime Language and ADR
+# TASKs: Decide utCodeAgentCLI Runtime Language and ADR
 
 Created by `/SPEC_takePlan` on 2026-06-04.
 
@@ -8,14 +8,17 @@ Created by `/SPEC_takePlan` on 2026-06-04.
 - Source issue: [../analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md](../analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md)
 - Area: `codeAgents/utCodeAgentCLI/`
 
-## Current Readiness
+## Task Checklist
 
-- Story is opened in `.catdd/spec/doingUS/`.
-- Developer intent is clear enough to plan: decide TypeScript vs Python vs Go for `utCodeAgentCLI` and record a formal ADR.
-- Existing architecture and detail design already assume TypeScript/Node.js, and that assumption is now captured as a standalone architecture decision.
-- A formal ADR file now exists for this decision.
+- [x] Confirm the story intent is clear enough to proceed without `SPEC_clearStoryIntent`.
+- [x] Capture the runtime-language decision as architecture evidence instead of leaving TypeScript as an implicit assumption.
+- [x] Produce and review the ADR and architecture updates for TypeScript vs Python vs Go.
+- [x] Update detail design so the V1 TypeScript choice and V2 Go portability boundary stay explicit.
+- [x] Run story readiness review before closing the story.
+- [x] Close the story after commit and verification.
+- [ ] Revisit the V2 Go production-distribution decision when that scope is formally opened.
 
-## Prerequisite Assessment
+## Readiness Snapshot
 
 | Prerequisite | Status | Rationale |
 | --- | --- | --- |
