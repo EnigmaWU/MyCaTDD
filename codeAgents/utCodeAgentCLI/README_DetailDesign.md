@@ -4,7 +4,7 @@ This document turns the architecture into implementation-facing contracts, data 
 
 ## Story Context
 
-- Story: [../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
+- Story: [../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
 - Architecture: [README_ArchDesign.md](README_ArchDesign.md)
 - Usage contract: [README_UsageDesign.md](README_UsageDesign.md)
 - Requirements index: [README_UserStory.md](README_UserStory.md)

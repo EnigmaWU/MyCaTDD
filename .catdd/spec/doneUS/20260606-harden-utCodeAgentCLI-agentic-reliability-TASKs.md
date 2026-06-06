@@ -17,7 +17,14 @@ Updated by `/SPEC_makePlan` on 2026-06-07.
 - [x] Review the updated architecture against the skill-derived agentic-pattern guardrails.
 - [x] Update detail design only if architecture review reveals required downstream contract changes.
 - [x] Run story readiness review after architecture and any required detail updates pass review.
-- [ ] If story readiness passes after design updates, close as design-oriented-only work (`SPEC_commitWorks` -> `SPEC_closeUserStory`) unless new implementation scope is explicitly added.
+- [x] If story readiness passes after design updates, close as design-oriented-only work (`SPEC_commitWorks` -> `SPEC_closeUserStory`) unless new implementation scope is explicitly added.
+
+## Completion Summary
+
+- Completion mode: design-oriented-only story closure.
+- Commit reference: `2999e7f`.
+- Close command: `/SPEC_closeUserStory` on 2026-06-07.
+- Follow-up: no implementation scope added; open a new story if runtime policy implementation is later required.
 
 ## Readiness Snapshot
 

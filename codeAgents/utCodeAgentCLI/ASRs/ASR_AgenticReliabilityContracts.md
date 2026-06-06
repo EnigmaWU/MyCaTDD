@@ -9,7 +9,7 @@ This ASR set defines architecture-level reliability and safety requirements for 
 
 ## Source Trace
 
-- Active story: [../../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
+- Active story: [../../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
 - Source issue: [../../../.catdd/spec/analyzedNews/20260606-treat-updates-as-issue-first-Issue.md](../../../.catdd/spec/analyzedNews/20260606-treat-updates-as-issue-first-Issue.md)
 - Architecture document: [../README_ArchDesign.md](../README_ArchDesign.md)
 

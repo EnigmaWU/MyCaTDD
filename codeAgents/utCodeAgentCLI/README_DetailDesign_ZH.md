@@ -4,7 +4,7 @@
 
 ## Story Context
 
-- Story: [../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
+- Story: [../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
 - Architecture: [README_ArchDesign_ZH.md](README_ArchDesign_ZH.md)
 - Usage contract: [README_UsageDesign_ZH.md](README_UsageDesign_ZH.md)
 - Requirements index: [README_UserStory_ZH.md](README_UserStory_ZH.md)

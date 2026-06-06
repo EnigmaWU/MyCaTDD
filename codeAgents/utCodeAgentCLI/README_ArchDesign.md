@@ -402,7 +402,7 @@ Ownership is split deliberately: `catdd/` validates the expected file state befo
 
 ## Architecture Feedback Resolution (2026-06-07)
 
-This revision addresses follow-up architecture feedback from the active story [../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md) and keeps the story design-oriented-only.
+This revision addresses follow-up architecture feedback from the active story [../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md) and keeps the story design-oriented-only.
 
 Primary trace artifacts for this revision:
 

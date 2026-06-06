@@ -13,12 +13,19 @@ Opened by `/SPEC_openUserStory` on 2026-06-06.
 
 ## Active Work Status
 
-- Status: OPEN.
-- Active state: `.catdd/spec/doingUS/`.
+- Status: CLOSED.
+- Active state: `.catdd/spec/doneUS/` completed story.
 - Opened from: [../todoUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../todoUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
 - Priority: P1 - important (architecture contract hardening before implementation detail expansion).
 - Confidence: medium-high.
-- Next recommended command: `/SPEC_makePlan`.
+- TASKs artifact: [20260606-harden-utCodeAgentCLI-agentic-reliability-TASKs.md](20260606-harden-utCodeAgentCLI-agentic-reliability-TASKs.md).
+- Next recommended command: none (closed by `/SPEC_closeUserStory` on 2026-06-07).
+
+## Closure Summary
+
+- Closed by: `/SPEC_closeUserStory` on 2026-06-07.
+- Commit reference: `2999e7f` (`spec(utCodeAgentCLI): harden reliability design contracts for story 20260606`).
+- Verification summary: architecture review PASS; detail design review PASS; story readiness review PASS; mirror checks passed in commit hook.
 
 ## Observed Behavior
 

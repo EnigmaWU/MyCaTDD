@@ -29,8 +29,8 @@ Decision Type: Property and process-control
 
 ## Traceability
 
-- Active story: [../../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
-- TASKs: [../../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-TASKs.md](../../../.catdd/spec/doingUS/20260606-harden-utCodeAgentCLI-agentic-reliability-TASKs.md)
+- Active story: [../../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md](../../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md)
+- TASKs: [../../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-TASKs.md](../../../.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-TASKs.md)
 
 ### ASR -> US/AC Binding
 
