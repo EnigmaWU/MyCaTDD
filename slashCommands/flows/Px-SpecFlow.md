@@ -24,7 +24,7 @@ Use the smallest model tier that preserves decision quality for the current comm
 | --- | --- | --- |
 | SOTA reasoning, such as GPT-5.5-xHigh | Architecture work that decides or approves system boundaries, dependency direction, runtime placement, quality trade-offs, and cross-module constraints. | `SPEC_takeArchDesign`, `SPEC_reviewArchDesign` |
 | High Performance | Requirements analysis, intent alignment, planning, local design, review gates, test design, code review, and correction routing where quality depends on reasoning across several artifacts. | `SPEC_initProjectContext`, `SPEC_updateProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_clearStoryIntent`, `SPEC_makePlan`, `SPEC_whatsNextTask`, `SPEC_takeArchDesign`, `SPEC_reviewArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_updateDetailDesign`, `SPEC_reviewUserStory`, `SPEC_designUnitTests`, `SPEC_reviewProductCodes`, `SPEC_refactorIssue` |
-| Flash Speed | Deterministic import, move, commit, close, or small test-driven implementation steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_openUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
+| Flash Speed | Deterministic import, move, commit, close, or small test-driven implementation steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
 
 Escalate from High Performance or Flash Speed to SOTA when the command exposes architecture-significant uncertainty: competing non-functional requirements, safety/security risk, real-time or embedded constraints, concurrency boundaries, data migration, compatibility matrices, or irreversible module/API ownership decisions.
 
@@ -41,6 +41,7 @@ For deterministic lifecycle movement, flash-speed models are usually enough:
 
 ```text
 /SPEC_importIssue
+/SPEC_importUserStory
 /SPEC_openUserStory
 /SPEC_closeUserStory
 ```
@@ -52,7 +53,7 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 | Refinement | WHY | HOW in `Px SpecFlow` |
 | --- | --- | --- |
 | Govern work with constitution-level project context. | Spec Kit starts with project principles so later spec, plan, and task decisions do not drift. | Treat `.catdd/spec/projectContext.md` as the shared constitution-like guardrail. `SPEC_initProjectContext` and `SPEC_updateProjectContext` should record stable principles, constraints, quality gates, and team conventions before story work continues. |
-| Analyze work into independently testable story slices. | Spec Kit's spec template asks for prioritized user stories plus an independent test, which makes MVP scope and user value explicit. | `SPEC_analyzeIssue` and `SPEC_analyzeFeature` should produce `.catdd/spec/todoUS/` stories that include actor, value, priority, independent-test intent, acceptance scenarios, edge cases, risks, and open questions instead of only a loose summary. They should move the raw input from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` so traceability is preserved without leaving analyzed work in the pending inbox. |
+| Analyze work into independently testable story slices. | Spec Kit's spec template asks for prioritized user stories plus an independent test, which makes MVP scope and user value explicit. | `SPEC_analyzeIssue` and `SPEC_analyzeFeature` should produce `.catdd/spec/todoUS/` stories that include actor, value, priority, independent-test intent, acceptance scenarios, edge cases, risks, and open questions instead of only a loose summary. `SPEC_importUserStory` is a direct queue for already structured US/AC input and writes `.catdd/spec/todoUS/` without analysis. Analysis should move issue/feature raw input from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` so traceability is preserved without leaving analyzed work in the pending inbox. |
 | Clear developer and CodeAgent story intent before design. | A story can look complete while the developer and CodeAgent still infer different scope, non-goals, or success evidence. Clearing both sides before design prevents expensive architecture and detail-design drift. | Use `SPEC_clearStoryIntent` after `SPEC_openUserStory` when the active story still needs scope alignment. Record a `Mutual Intent Contract` in the active story before planning starts. The contract states developer intent, CodeAgent intent, in-scope work, out-of-scope work, success signal, assumptions, and open questions. If intent is not aligned, ask or revise the active story before `SPEC_makePlan` begins. |
 | Separate `WHAT`/`WHY` from `HOW` with a lightweight plan step. | Spec Kit keeps product intent in `spec.md` and delays technical choices to `plan.md`, reducing premature design decisions. | Keep user-story intent in the story artifact, then use `SPEC_makePlan` to create a paired `.catdd/spec/doingUS/*-TASKs.md` artifact that expresses next work as Markdown checkbox tasks and decides whether the active story is intent-clearing, design-oriented, or implementation-oriented. For design-oriented work, distinguish initial architecture/detail design (`SPEC_take*Design`) from follow-up design revision (`SPEC_update*Design`). Detailed technical choices still land in project-root `README*` SPEC docs when later commands require them. |
 | Run a clarify/analyze/checklist gate before implementation. | Spec Kit surfaces ambiguity, inconsistency, and missing coverage before coding so rework happens early. | Use `SPEC_reviewArchDesign` after architecture design, `SPEC_reviewDetailDesign` after detail design, and `SPEC_reviewUserStory` as the final pre-test readiness gate. Route failed architecture reviews to `SPEC_updateArchDesign`; route failed detail/story reviews to `SPEC_updateDetailDesign` instead of skipping ahead. |
@@ -61,6 +62,7 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 ## Developer Stories
 
 - As a Developer, when I receive an issue or feature request, I want to import and analyze it into a user story so that work starts from a traceable spec artifact.
+- As a Developer, when I receive an already structured user story, I want to queue it directly into todo stories so that I can open and execute it without redundant analysis.
 - As a Developer, when I open a user story, I want to drive detail design, acceptance criteria, tests, implementation, review, CI, and closure through explicit commands so that no lifecycle step is hidden in chat.
 - As a Developer, when a CodeAgent starts active story work, I want both sides to clear intent before design so that the agent does not optimize for the wrong scope or success signal.
 - As a Developer, when quality is not met, I want the flow to route back to design, tests, product code, or refactoring so that SpecCoding remains iterative.
@@ -71,12 +73,15 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 - `.catdd/spec/projectContext.md`: project facts, constraints, conventions, and current operating context.
 - `.catdd/spec/pendingNews/YYYYMMDD-*.md`: imported issues or feature requests waiting for analysis.
 - `.catdd/spec/analyzedNews/YYYYMMDD-*.md`: raw issue or feature inputs already analyzed and preserved as source trace.
-- `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`: analyzed user stories waiting to be opened.
+- `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`: analyzed user stories and directly imported structured user stories waiting to be opened.
 - `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`: active user stories under design, test, implementation, or review.
 - `.catdd/spec/doingUS/YYYYMMDD-TASKs.md`: team-shared task artifact paired with the active story, recording the next required `SPEC_*` steps and rationale as Markdown checkbox tasks.
 - `Mutual Intent Contract`: a section inside the active doing story that records developer intent, CodeAgent intent, scope, non-goals, success signal, assumptions, and open questions before design begins.
 - `.catdd/spec/doneUS/YYYYMMDD-UserStory.md`: completed user stories after review, commit, and CI.
 - `.catdd/spec/doneUS/YYYYMMDD-TASKs.md`: completed task artifact preserved beside the closed story for later diagnosis.
+- `<module-or-submodule>/README_UserStory.md`: canonical formalized requirement source for that module scope.
+- `<module-or-submodule>/README_UserGuide.md`: paired usage context for the same module scope.
+- `<module-or-submodule>/README_ArchDesign.md` and `<module-or-submodule>/README_DetailDesign.md`: design artifacts derived from and traceable to the module `README_UserStory.md` IDs.
 - `README*.md`: project-root SPEC docs created as needed for overview, architecture, stories, guide, detail design, and verification design.
 - `.catdd/spec/WorkingProcessLog.md`: optional trace log for decisions, command transitions, and unresolved questions.
 
@@ -128,7 +133,7 @@ SpecFlow lifecycle state lives under `.catdd/spec/`. Shared `README*` SPEC docs 
 | `.catdd/spec/projectContext.md` | Team-shared | Commit stable project context so teammates and CodeAgents use the same facts. |
 | `.catdd/spec/pendingNews/` | Team-shared | Commit imported work items that should be visible to the team. |
 | `.catdd/spec/analyzedNews/` | Team-shared | Commit raw imported issues or features after analysis so `pendingNews/` stays only for waiting input. |
-| `.catdd/spec/todoUS/` | Team-shared | Commit analyzed user stories that are ready to be picked up. |
+| `.catdd/spec/todoUS/` | Team-shared | Commit analyzed user stories and directly imported structured user stories that are ready to be picked up. |
 | `.catdd/spec/doingUS/` | Team-shared | Commit active user stories so in-progress work can move across machines and stay visible to teammates. |
 | `.catdd/spec/doingUS/*-TASKs.md` | Team-shared | Commit the active task artifact paired with the opened user story so the next SPEC steps stay explicit, checkable, and diagnosable. |
 | `.catdd/spec/doneUS/` | Team-shared | Commit completed story records after review, verification, and close. |
@@ -152,9 +157,11 @@ flowchart LR
     UpdateContext["SPEC_updateProjectContext"] --> Context
     Context --> ImportIssue["SPEC_importIssue"]
     Context --> ImportFeature["SPEC_importFeature"]
+    Context --> ImportUserStory["SPEC_importUserStory"]
 
     ImportIssue --> Pending[".catdd/spec/pendingNews/*.md"]
     ImportFeature --> Pending
+    ImportUserStory --> Todo
     Pending --> AnalyzeIssue["SPEC_analyzeIssue"]
     Pending --> AnalyzeFeature["SPEC_analyzeFeature"]
     AnalyzeIssue --> Todo[".catdd/spec/todoUS/*-UserStory.md"]
@@ -234,22 +241,23 @@ flowchart TB
 1. Use [../commands/Px-SpecFlow/SPEC_initProjectContext.md](../commands/Px-SpecFlow/SPEC_initProjectContext.md) to create the first project context.
 2. Use [../commands/Px-SpecFlow/SPEC_updateProjectContext.md](../commands/Px-SpecFlow/SPEC_updateProjectContext.md) whenever project facts, constraints, or conventions change.
 3. Use [../commands/Px-SpecFlow/SPEC_importIssue.md](../commands/Px-SpecFlow/SPEC_importIssue.md) or [../commands/Px-SpecFlow/SPEC_importFeature.md](../commands/Px-SpecFlow/SPEC_importFeature.md) to import issue or feature input into `.catdd/spec/pendingNews/`.
-4. Use [../commands/Px-SpecFlow/SPEC_analyzeIssue.md](../commands/Px-SpecFlow/SPEC_analyzeIssue.md) or [../commands/Px-SpecFlow/SPEC_analyzeFeature.md](../commands/Px-SpecFlow/SPEC_analyzeFeature.md) to convert pending input into a user story in `.catdd/spec/todoUS/` and move the raw input to `.catdd/spec/analyzedNews/`.
-5. Use [../commands/Px-SpecFlow/SPEC_openUserStory.md](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/spec/doingUS/`.
-6. Optionally use [../commands/Px-SpecFlow/SPEC_clearStoryIntent.md](../commands/Px-SpecFlow/SPEC_clearStoryIntent.md) when developer intent and CodeAgent intent still need to be aligned before planning.
-7. Use [../commands/Px-SpecFlow/SPEC_makePlan.md](../commands/Px-SpecFlow/SPEC_makePlan.md) to create the paired `.catdd/spec/doingUS/*-TASKs.md` artifact, express the work as Markdown checkbox tasks, distinguish intent-clearing, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next required `SPEC_*` step for the opened story.
-8. Use [../commands/Px-SpecFlow/SPEC_whatsNextTask.md](../commands/Px-SpecFlow/SPEC_whatsNextTask.md) whenever you need a single next-step recommendation from current state.
-9. Use [../commands/Px-SpecFlow/SPEC_takeArchDesign.md](../commands/Px-SpecFlow/SPEC_takeArchDesign.md) to produce initial high-level architecture design and module boundaries in `README_ArchDesign.md` when the plan says initial architecture work is needed.
-10. Use [../commands/Px-SpecFlow/SPEC_reviewArchDesign.md](../commands/Px-SpecFlow/SPEC_reviewArchDesign.md) to gate architecture quality before detailed design begins.
-11. Use [../commands/Px-SpecFlow/SPEC_updateArchDesign.md](../commands/Px-SpecFlow/SPEC_updateArchDesign.md) for follow-up architecture revision when architecture review, story-level feedback, or an opened update story identifies missing or weak architecture design.
-12. Use [../commands/Px-SpecFlow/SPEC_takeDetailDesign.md](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) to produce initial detailed design and acceptance criteria, including other project-root `README*` SPEC docs as needed.
-13. Use [../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md](../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md) to gate detailed design quality before final story readiness review.
-14. Use [../commands/Px-SpecFlow/SPEC_reviewUserStory.md](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) to gate final story and design readiness before test design when the plan still requires a readiness review.
-15. Use [../commands/Px-SpecFlow/SPEC_updateDetailDesign.md](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) for follow-up detail revision when detail or story review finds missing or weak design.
-16. Use [../commands/Px-SpecFlow/SPEC_designUnitTests.md](../commands/Px-SpecFlow/SPEC_designUnitTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows, when the plan says the story is test-ready.
-17. Use [../commands/Px-SpecFlow/SPEC_implUnitTests.md](../commands/Px-SpecFlow/SPEC_implUnitTests.md), [../commands/Px-SpecFlow/SPEC_implProductCodes.md](../commands/Px-SpecFlow/SPEC_implProductCodes.md), and [../commands/Px-SpecFlow/SPEC_reviewProductCodes.md](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review.
-18. Use [../commands/Px-SpecFlow/SPEC_refactorIssue.md](../commands/Px-SpecFlow/SPEC_refactorIssue.md) when implementation quality fails or design needs to be reworked.
-19. Use [../commands/Px-SpecFlow/SPEC_commitWorks.md](../commands/Px-SpecFlow/SPEC_commitWorks.md) and [../commands/Px-SpecFlow/SPEC_closeUserStory.md](../commands/Px-SpecFlow/SPEC_closeUserStory.md) to finish the lifecycle.
+4. Use [../commands/Px-SpecFlow/SPEC_importUserStory.md](../commands/Px-SpecFlow/SPEC_importUserStory.md) to queue existing structured user-story input directly into `.catdd/spec/todoUS/`; prefer each module or submodule `README_UserStory.md` paired with `README_UserGuide.md` as the source.
+5. Use [../commands/Px-SpecFlow/SPEC_analyzeIssue.md](../commands/Px-SpecFlow/SPEC_analyzeIssue.md) or [../commands/Px-SpecFlow/SPEC_analyzeFeature.md](../commands/Px-SpecFlow/SPEC_analyzeFeature.md) to convert pending issue/feature input into a user story in `.catdd/spec/todoUS/` and move the raw input to `.catdd/spec/analyzedNews/`.
+6. Use [../commands/Px-SpecFlow/SPEC_openUserStory.md](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/spec/doingUS/`.
+7. Optionally use [../commands/Px-SpecFlow/SPEC_clearStoryIntent.md](../commands/Px-SpecFlow/SPEC_clearStoryIntent.md) when developer intent and CodeAgent intent still need to be aligned before planning.
+8. Use [../commands/Px-SpecFlow/SPEC_makePlan.md](../commands/Px-SpecFlow/SPEC_makePlan.md) to create the paired `.catdd/spec/doingUS/*-TASKs.md` artifact, express the work as Markdown checkbox tasks, distinguish intent-clearing, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next required `SPEC_*` step for the opened story.
+9. Use [../commands/Px-SpecFlow/SPEC_whatsNextTask.md](../commands/Px-SpecFlow/SPEC_whatsNextTask.md) whenever you need a single next-step recommendation from current state.
+10. Use [../commands/Px-SpecFlow/SPEC_takeArchDesign.md](../commands/Px-SpecFlow/SPEC_takeArchDesign.md) to produce initial high-level architecture design and module boundaries in `README_ArchDesign.md` when the plan says initial architecture work is needed.
+11. Use [../commands/Px-SpecFlow/SPEC_reviewArchDesign.md](../commands/Px-SpecFlow/SPEC_reviewArchDesign.md) to gate architecture quality before detailed design begins.
+12. Use [../commands/Px-SpecFlow/SPEC_updateArchDesign.md](../commands/Px-SpecFlow/SPEC_updateArchDesign.md) for follow-up architecture revision when architecture review, story-level feedback, or an opened update story identifies missing or weak architecture design.
+13. Use [../commands/Px-SpecFlow/SPEC_takeDetailDesign.md](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) to produce initial detailed design and acceptance criteria, including other project-root `README*` SPEC docs as needed.
+14. Use [../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md](../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md) to gate detailed design quality before final story readiness review.
+15. Use [../commands/Px-SpecFlow/SPEC_reviewUserStory.md](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) to gate final story and design readiness before test design when the plan still requires a readiness review.
+16. Use [../commands/Px-SpecFlow/SPEC_updateDetailDesign.md](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) for follow-up detail revision when detail or story review finds missing or weak design.
+17. Use [../commands/Px-SpecFlow/SPEC_designUnitTests.md](../commands/Px-SpecFlow/SPEC_designUnitTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows, when the plan says the story is test-ready.
+18. Use [../commands/Px-SpecFlow/SPEC_implUnitTests.md](../commands/Px-SpecFlow/SPEC_implUnitTests.md), [../commands/Px-SpecFlow/SPEC_implProductCodes.md](../commands/Px-SpecFlow/SPEC_implProductCodes.md), and [../commands/Px-SpecFlow/SPEC_reviewProductCodes.md](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review.
+19. Use [../commands/Px-SpecFlow/SPEC_refactorIssue.md](../commands/Px-SpecFlow/SPEC_refactorIssue.md) when implementation quality fails or design needs to be reworked.
+20. Use [../commands/Px-SpecFlow/SPEC_commitWorks.md](../commands/Px-SpecFlow/SPEC_commitWorks.md) and [../commands/Px-SpecFlow/SPEC_closeUserStory.md](../commands/Px-SpecFlow/SPEC_closeUserStory.md) to finish the lifecycle.
 
 ## Conflict Guard
 
