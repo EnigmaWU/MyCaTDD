@@ -12,7 +12,8 @@
 - [x] P0 test skeleton file created: `codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts`
 - [x] Open questions remain only if implementation discovers mismatch in argument contract details
 - [x] Lifecycle command completed: `/SPEC_designUnitTests`
-- [ ] Next lifecycle command: `/SPEC_implUnitTests`
+- [x] Lifecycle command completed: `/SPEC_implUnitTests` for P0 Functional slices
+- [ ] Next lifecycle command: `/SPEC_implProductCodes`
 
 ## Current Readiness
 
@@ -41,12 +42,18 @@ The active story is an imported P0 user-story slice for CLI argument validation.
 
 ## Parallel-Ready Implementation Checklist
 
-- [ ] Slice A (Typical): implement `TC-ARG-001`, `TC-ARG-002`, `TC-ARG-003` in RED sequence.
-- [ ] Slice B (Edge): implement `TC-ARG-004`, `TC-ARG-005` after Slice A is stable.
-- [ ] Slice C (Misuse): implement `TC-ARG-006`, `TC-ARG-007` after Slice A is stable.
-- [ ] Slice D (Fault): implement `TC-ARG-008` to `TC-ARG-012` after Slice A is stable.
-- [ ] Checkpoint 1: verify stderr assertion style is consistent across all implemented TCs.
-- [ ] Checkpoint 2: verify AC trace tags remain intact after each TC implementation.
+- [x] Slice A (Typical): implemented `TC-ARG-001`, `TC-ARG-002`, `TC-ARG-003` in RED sequence.
+- [x] Slice B (Edge): implemented `TC-ARG-004`, `TC-ARG-005` after Slice A stabilized.
+- [x] Slice C (Misuse): implemented `TC-ARG-006`, `TC-ARG-007` after Slice A stabilized.
+- [x] Slice D (Fault): implemented `TC-ARG-008` to `TC-ARG-012` after Slice A stabilized.
+- [x] Checkpoint 1: stderr assertion style is consistent across Typical and Edge implemented TCs.
+- [x] Checkpoint 2: AC trace tags remain intact after all P0 implementation slices.
+
+## Post-Implementation Readiness
+
+- [x] All P0 Functional TCs for `US-USER-01` are now in RED state.
+- [x] Remaining P1/P2 coverage is intentionally deferred.
+- [ ] Product-code implementation is now unblocked by test design for this story.
 
 ## Checklist
 
