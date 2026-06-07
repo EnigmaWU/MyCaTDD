@@ -80,14 +80,14 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/analyzedNews/20260530-design-utCodeAgentCLI-architecture-Issue.md`
   - `.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md`
   - `.catdd/spec/analyzedNews/20260602-add-SPEC_reviewDesignGates-commands-Feature.md`
-- `.catdd/spec/analyzedNews/20260606-treat-updates-as-issue-first-Issue.md`
+  - `.catdd/spec/analyzedNews/20260606-treat-updates-as-issue-first-Issue.md`
+  - `.catdd/spec/analyzedNews/20260608-rename-CaTDD-ImplTemplate-and-add-ts-template-Issue.md`
 - Pending issues imported:
   - `.catdd/spec/pendingNews/20260531-add-SPEC_assembleRequirements-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-add-SPEC_updateRequirement-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-add-SPEC_verifyRequirement-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-add-UT_reviewImplTestFile-slash-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-create-installCaTDD-Skill4XYZ-installer-Issue.md`
-  - `.catdd/spec/pendingNews/20260608-rename-CaTDD-ImplTemplate-and-add-ts-template-Issue.md`
   - `.catdd/spec/pendingNews/20260608-why-SPEC-designUnitTests-not-UT-doXYZ-in-P0-FuncTestFlow-Issue.md`
 - Completed user stories:
   - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
@@ -98,10 +98,20 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md`
   - `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md`
   - `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-TASKs.md`
+  - `.catdd/spec/doneUS/20260608-methodPrompts-template-rename-and-typescript-design-and-impl-UserStory.md`
+  - `.catdd/spec/doneUS/20260608-methodPrompts-template-rename-and-typescript-design-and-impl-TASKs.md`
 - Todo user stories waiting:
-  - None currently.
-- Active user stories opened:
-  - None currently.
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-DEV-01-UserStory.md`
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-DEV-05-UserStory.md`
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md`
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-INVENTOR-02-UserStory.md`
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-02-UserStory.md`
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-03-UserStory.md`
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-04-UserStory.md`
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-05-UserStory.md`
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-09-UserStory.md`
+  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-10-UserStory.md`
+- Active user stories opened: none.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes the runtime-language tradeoff review across TypeScript/Node.js, Python, and Go, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented surface coverage, and an ADR link for the runtime choice.
 - Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03; the runtime-language ADR is now DECIDED: TypeScript/Node.js for V1 (PoC) and Go pre-selected for V2 (production distribution), Python evaluated and not selected. ADR status updated to Decided in `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
