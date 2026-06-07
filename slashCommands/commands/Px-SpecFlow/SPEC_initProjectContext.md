@@ -23,7 +23,7 @@ Create the first `.catdd/spec/projectContext.md` for a target project before Spe
 
 - A `.catdd/spec/projectContext.md` team-shared persistent artifact with project facts, constraints, code conventions, test conventions, constitution-level guardrails, and open questions.
 - A list of assumptions that must be confirmed by the developer.
-- Next recommended command: `SPEC_importIssue`, `SPEC_importFeature`, or `SPEC_updateProjectContext`.
+- Next recommended command: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, or `SPEC_updateProjectContext`.
 
 ## Prompt Template
 

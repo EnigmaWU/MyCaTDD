@@ -49,6 +49,7 @@ grep -Fq 'README_PerfDesign.md' "$rule" || fail "Continue rule missing performan
 grep -Fq 'README_CompatDesign.md' "$rule" || fail "Continue rule missing compatibility design README SPEC doc"
 grep -Fq 'README_DiagnosisDesign.md' "$rule" || fail "Continue rule missing diagnosis design README SPEC doc"
 grep -Fq 'SPEC_importIssue' "$rule" || fail "Continue rule missing SPEC command guidance"
+grep -Fq 'SPEC_importUserStory' "$rule" || fail "Continue rule missing user-story import guidance"
 grep -Fq 'UT_* and SPEC_* commands' "$rule" || fail "Continue rule missing command family guidance"
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"

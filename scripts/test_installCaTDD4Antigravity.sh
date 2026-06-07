@@ -41,6 +41,7 @@ grep -Fq '.catdd/methodPrompts/' "$rule" || fail "Antigravity rule missing metho
 grep -Fq '.catdd/slashCommands/' "$rule" || fail "Antigravity rule missing slashCommands location"
 grep -Fq '.catdd/spec/' "$rule" || fail "Antigravity rule missing spec workspace location"
 grep -Fq 'README_ArchDesign.md' "$rule" || fail "Antigravity rule missing project-root README SPEC docs"
+grep -Fq 'SPEC_importUserStory' "$rule" || fail "Antigravity rule missing user-story import guidance"
 
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"

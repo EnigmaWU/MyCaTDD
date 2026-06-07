@@ -42,6 +42,7 @@ grep -Fq '.catdd/methodPrompts/' "$rule" || fail "custom rule missing methodProm
 grep -Fq '.catdd/slashCommands/' "$rule" || fail "custom rule missing slashCommands location"
 grep -Fq '.customCodeAgent/prompts/' "$rule" || fail "custom rule missing custom prompt location"
 grep -Fq '.catdd/spec/' "$rule" || fail "custom rule missing spec workspace location"
+grep -Fq 'SPEC_importUserStory' "$rule" || fail "custom rule missing user-story import guidance"
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"
 prompt_count="$(find "$TARGET_DIR/.customCodeAgent/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' \) | wc -l | tr -d '[:space:]')"

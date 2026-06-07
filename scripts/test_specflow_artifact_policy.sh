@@ -65,8 +65,8 @@ fi
 git -C "$REPO_ROOT" check-ignore -q .catdd/spec/WorkingProcessLog.md || fail "source .gitignore must ignore local .catdd/spec/WorkingProcessLog.md"
 
 printf '/dist/\n' > "$TARGET_DIR/.gitignore"
-"$INSTALLER" --target "$TARGET_DIR" --clean-prompts >/dev/null
-"$INSTALLER" --target "$TARGET_DIR" --clean-prompts >/dev/null
+"$INSTALLER" --target "$TARGET_DIR" --clean-prompts --yes >/dev/null
+"$INSTALLER" --target "$TARGET_DIR" --clean-prompts --yes >/dev/null
 
 [[ -d "$TARGET_DIR/.catdd/spec" ]] || fail "installer must create .catdd/spec workspace"
 [[ -d "$TARGET_DIR/.catdd/spec/pendingNews" ]] || fail "installer must create .catdd/spec/pendingNews"

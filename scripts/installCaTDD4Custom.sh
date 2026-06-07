@@ -248,7 +248,7 @@ This is a custom project rule installed by MyCaTDD. Use it when working with CaT
 - Keep SpecCoding lifecycle state under \`.catdd/spec/\`.
 - Commit team-shared artifacts such as \`.catdd/spec/projectContext.md\`, \`.catdd/spec/pendingNews/\`, \`.catdd/spec/analyzedNews/\`, \`.catdd/spec/todoUS/\`, \`.catdd/spec/doingUS/\`, \`.catdd/spec/doneUS/\`, and project-root \`README*\` SPEC docs.
 - Keep local work state such as \`.catdd/spec/WorkingProcessLog.md\` gitignored.
-- Prefer explicit SpecFlow intake commands: \`SPEC_importIssue\`, \`SPEC_importFeature\`, \`SPEC_analyzeIssue\`, and \`SPEC_analyzeFeature\`.
+- Prefer explicit SpecFlow intake commands: \`SPEC_importIssue\`, \`SPEC_importFeature\`, \`SPEC_importUserStory\`, \`SPEC_analyzeIssue\`, and \`SPEC_analyzeFeature\`.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
 
 ONE-MORE-THING: ask developer if something not sure

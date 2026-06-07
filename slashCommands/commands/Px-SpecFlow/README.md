@@ -14,6 +14,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_updateProjectContext.md](SPEC_updateProjectContext.md) | Refresh project context after facts change. |
 | [SPEC_importIssue.md](SPEC_importIssue.md) | Import issue, bug, defect, or support problem into pending work. |
 | [SPEC_importFeature.md](SPEC_importFeature.md) | Import feature request, enhancement, or product idea into pending work. |
+| [SPEC_importUserStory.md](SPEC_importUserStory.md) | Import existing structured user story or AC slices directly into todo stories. |
 | [SPEC_analyzeIssue.md](SPEC_analyzeIssue.md) | Analyze pending issue input, archive raw input, and generate a repair-oriented user story. |
 | [SPEC_analyzeFeature.md](SPEC_analyzeFeature.md) | Analyze pending feature input, archive raw input, and generate a value-oriented user story. |
 | [SPEC_whatsNextTask.md](SPEC_whatsNextTask.md) | Recommend the next SpecCoding task from current lifecycle state. |

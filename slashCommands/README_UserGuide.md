@@ -186,6 +186,7 @@ The installers manage the `.gitignore` rules for those local artifacts.
 | Create checkbox TASKs and choose the next SPEC step for an opened user story | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | Clear developer and CodeAgent story intent | [commands/Px-SpecFlow/SPEC_clearStoryIntent.md](commands/Px-SpecFlow/SPEC_clearStoryIntent.md) |
 | Revise architecture design after architecture-review feedback | [commands/Px-SpecFlow/SPEC_updateArchDesign.md](commands/Px-SpecFlow/SPEC_updateArchDesign.md) |
+| Import an existing structured User Story or AC slice | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | Convert demo tests into CaTDD Typical skeleton | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
 | Design Typical skeleton from interface/protocol | [commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |
 | Design Edge skeleton from interface/protocol and valid behavior boundaries | [commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md](commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md) |
