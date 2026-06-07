@@ -18,7 +18,7 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` slice `US-USE
 - Active state: `.catdd/spec/doingUS/` shared active work.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_implProductCodes`.
+- Next recommended command: `/SPEC_closeUserStory`.
 
 ## Story
 
@@ -96,4 +96,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_implProductCodes` to implement product code against the RED P0 test cases.
+Run `/SPEC_closeUserStory` to archive this completed story after commit.

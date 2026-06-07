@@ -9,9 +9,7 @@ type InvocationResult = {
 	dispatchedBehavior?: string;
 };
 
-function validateInvocation(_argv: string[]): InvocationResult {
-	throw new Error("TODO: implement utCodeAgentCLI parser and invocation validator");
-}
+const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 
 //=================================================================================================
 // [P0 Functional] / [Typical] Design Skeleton

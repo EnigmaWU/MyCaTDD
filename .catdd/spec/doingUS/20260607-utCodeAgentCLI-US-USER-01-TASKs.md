@@ -13,20 +13,24 @@
 - [x] Open questions remain only if implementation discovers mismatch in argument contract details
 - [x] Lifecycle command completed: `/SPEC_designUnitTests`
 - [x] Lifecycle command completed: `/SPEC_implUnitTests` for P0 Functional slices
-- [ ] Next lifecycle command: `/SPEC_implProductCodes`
+- [x] Lifecycle command completed: `/SPEC_implProductCodes`
+- [x] Lifecycle command completed: `/SPEC_refactorIssue` (runtime wiring fix)
+- [x] Lifecycle command completed: `/SPEC_reviewProductCodes` (pass)
+- [x] Lifecycle command completed: `/SPEC_commitWorks`
+- [ ] Next lifecycle command: `/SPEC_closeUserStory`
 
 ## Current Readiness
 
 - Orientation: implementation-oriented work.
-- Readiness: unit-test design complete for P0 Functional categories.
+- Readiness: P0 unit-test implementation and product-code implementation are complete for review.
 - Skipped prerequisite: no requirement rewrite needed.
 - Skipped prerequisite: no new architecture or detail design gate is needed before the next step.
 
 ## Candidate Next Steps
 
-- `/SPEC_implUnitTests` for the opened story.
-- `/SPEC_reviewUserStory` only if the requirement slice changes.
-- `/SPEC_updateUserStory` only if the module `README_UserStory.md` or `README_UserGuide.md` must change.
+- `/SPEC_reviewProductCodes` for the opened story.
+- `/SPEC_refactorIssue` only if review finds quality or scope defects.
+- `/SPEC_commitWorks` only after product-code review passes.
 
 ## Rejected Next Steps
 
@@ -38,7 +42,7 @@
 
 ## Rationale
 
-The active story is an imported P0 user-story slice for CLI argument validation. Requirement and design readiness were already available, so this step produced P0 CaTDD skeletons and a verification design artifact. The smallest correct next step is implementing selected PLANNED TCs in RED order via `SPEC_implUnitTests`.
+The active story is an imported P0 user-story slice for CLI argument validation. Requirement and design readiness were already available, then P0 CaTDD tests were implemented to RED state and product validator code was added in batch mode. The smallest correct next step is `SPEC_reviewProductCodes` before any commit/close transition.
 
 ## Parallel-Ready Implementation Checklist
 
@@ -53,7 +57,23 @@ The active story is an imported P0 user-story slice for CLI argument validation.
 
 - [x] All P0 Functional TCs for `US-USER-01` are now in RED state.
 - [x] Remaining P1/P2 coverage is intentionally deferred.
-- [ ] Product-code implementation is now unblocked by test design for this story.
+- [x] Product-code implementation is now unblocked by test design for this story.
+
+## Product Code Implementation Result
+
+- [x] Production validator implemented: `codeAgents/utCodeAgentCLI/src/cli/invocationValidator.ts`.
+- [x] Test-to-product wiring updated: `codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts` now calls module validator.
+- [x] Traceability preserved: implementation covers AC-01..AC-05 via TC-ARG-001..TC-ARG-012 assertions.
+- [x] Static verification completed: file diagnostics clean and `git diff --check` clean.
+- [x] Runtime verification executed: `node --test codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts`.
+
+## Product Code Review Result
+
+- [x] Previous review status: FAIL (runtime module resolution issue).
+- [x] Refactor resolution applied: validator module export mode aligned with test runtime loading.
+- [x] Verification rerun: `node --test codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts` passed (12/12).
+- [x] Final review decision: PASS for current story scope.
+- [x] Route decision: continue to `SPEC_commitWorks`.
 
 ## Checklist
 
