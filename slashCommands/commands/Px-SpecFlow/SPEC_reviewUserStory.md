@@ -2,16 +2,18 @@
 
 ## Purpose
 
-Review the active user story, detailed design, and acceptance criteria before test design begins.
+Review the active user story, module requirement docs, usage guidance, and acceptance criteria after requirement-oriented updates.
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This command must inspect the story and design artifacts, reason about clarity, completeness, traceability, and testability, produce a review finding, and verify that the finding is actionable before reporting. The reasoning loop routes to a design revision when criteria cannot be tested.
+**ReACT** — Reasoning + Acting. This command must inspect the story and requirement artifacts, reason about clarity, completeness, traceability, and testability, produce a review finding, and verify that the finding is actionable before reporting. The reasoning loop routes to requirement revision when intent, usage guidance, or acceptance criteria cannot be tested.
 
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `detail_design`: design section or project-root README SPEC docs updated by `SPEC_takeDetailDesign`.
+- `module_user_story_doc`: module or submodule `README_UserStory.md` updated by `SPEC_updateUserStory`.
+- `module_user_guide_doc`: paired module or submodule `README_UserGuide.md` updated by `SPEC_updateUserStory`.
+- `detail_design`: optional design section or project-root README SPEC docs when reviewing transfer from requirement-oriented work into design-oriented work.
 - `readme_spec_files`: optional project-root `README*` SPEC files relevant to the story.
 - `projectContext_file`: current project context.
 
@@ -22,16 +24,18 @@ Review the active user story, detailed design, and acceptance criteria before te
 
 ## Output Contract
 
-- Review result recorded against team-shared `.catdd/spec/doingUS/` work state: pass, revise design, or ask developer.
+- Review result recorded against team-shared `.catdd/spec/doingUS/` work state: pass, revise requirements, transfer to design-oriented work, close requirement-only work, or ask developer.
 - Missing acceptance criteria, ambiguity, README SPEC doc gaps, edge cases, measurable outcomes, and risk list from a clarify/analyze/checklist-style review gate.
-- Next recommended command: `SPEC_designUnitTests` or `SPEC_updateDetailDesign`.
+- Next recommended command: `SPEC_updateUserStory`, `SPEC_commitWorks`, `SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, or `SPEC_updateDetailDesign`.
 
 ## Prompt Template
 
-Ask the assistant to run a clarify/analyze/checklist-style review gate over clarity, completeness, traceability, testability, measurable outcomes, and consistency with project context.
+Ask the assistant to run a clarify/analyze/checklist-style review gate over requirement clarity, completeness, traceability, testability, measurable outcomes, usage-guide consistency, and consistency with project context.
 
 ## Conflict Guard
 
 Do not approve a story when acceptance criteria cannot be tested through CaTDD skeletons.
+Do not route directly from requirement review to unit-test design; transfer to design-oriented work first when architecture or detail design is still needed.
+Do not use this command as the automatic gate after `SPEC_reviewDetailDesign`; detail-design review owns that design gate.
 
 ONE-MORE-THING: ask developer if something not sure
