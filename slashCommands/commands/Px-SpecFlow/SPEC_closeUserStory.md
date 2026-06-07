@@ -29,7 +29,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 - Project-context sync policy is applied after closure:
 	- Minor lifecycle impact (for example only story file movement or link normalization): remind the developer to run `SPEC_updateProjectContext`.
 	- Major lifecycle impact (for example next-command recommendation changes, pending/todo/doing/done summary changes, or project rules/constraints changed by this story): run `SPEC_updateProjectContext` in the same progress flow before declaring closure complete.
-- Completion summary with traceability to source issue or feature, project-root README SPEC docs, tests, code, commit, and CI.
+- Completion summary with traceability to source issue, feature, or imported user-story input, project-root README SPEC docs, tests, code, commit, and CI.
 - Remaining follow-up work, if any.
 
 ## Prompt Template
