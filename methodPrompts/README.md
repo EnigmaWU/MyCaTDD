@@ -48,7 +48,7 @@ Default classification order:
 - Master method specification (`CaTDD_methodPrompt.md`)
 - Category-specific method prompts (`CaTDD_methodPrompt4Cat-*.md`)
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
-- Implementation template (`CaTDD_ImplTemplate.cxx`)
+- Implementation template (`CaTDD_designAndImplTemplate.cxx`)
 
 ## Documentation boundary
 

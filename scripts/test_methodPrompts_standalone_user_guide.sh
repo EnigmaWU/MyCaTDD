@@ -25,7 +25,7 @@ grep -Fq '## Why' "$GUIDE" || fail "standalone guide missing Why section"
 grep -Fq '## How' "$GUIDE" || fail "standalone guide missing How section"
 grep -Fq '## Usage Example' "$GUIDE" || fail "standalone guide missing copy-exec Usage Example section"
 
-grep -Fq 'methodPrompts/CaTDD_ImplTemplate.cxx' "$GUIDE" || fail "standalone guide missing template copy command"
+grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.cxx' "$GUIDE" || fail "standalone guide missing template copy command"
 grep -Fq 'CaTDD_methodPrompt.md' "$GUIDE" || fail "standalone guide missing master method prompt reference"
 grep -Fq 'CaTDD_methodPrompt4Cat-Typical.md' "$GUIDE" || fail "standalone guide missing category prompt reference"
 grep -Fq 'P0 Functional' "$GUIDE" || fail "standalone guide missing priority framework"
@@ -33,7 +33,7 @@ grep -Fq 'US/AC/TC' "$GUIDE" || fail "standalone guide missing US/AC/TC guidance
 
 grep -Fq '## 使用者' "$GUIDE_ZH" || fail "Chinese standalone guide missing 使用者 section"
 grep -Fq '## Usage Example' "$GUIDE_ZH" || fail "Chinese standalone guide missing copy-exec Usage Example section"
-grep -Fq 'methodPrompts/CaTDD_ImplTemplate.cxx' "$GUIDE_ZH" || fail "Chinese standalone guide missing template copy command"
+grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.cxx' "$GUIDE_ZH" || fail "Chinese standalone guide missing template copy command"
 grep -Fq 'CaTDD_methodPrompt4Cat-Typical.md' "$GUIDE_ZH" || fail "Chinese standalone guide missing category prompt reference"
 grep -Fq 'P0 Functional' "$GUIDE_ZH" || fail "Chinese standalone guide missing priority framework"
 

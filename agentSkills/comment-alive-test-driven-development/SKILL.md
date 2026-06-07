@@ -159,7 +159,7 @@ For each TC in priority order (P0 first):
 - Packaged `references/README_UserGuide.md` — Standalone CaTDD user guide copied from `methodPrompts/README_UserGuide.md`.
 - Packaged `references/README_UserGuide_ZH.md` — Chinese standalone CaTDD user guide copied from `methodPrompts/README_UserGuide_ZH.md`.
 - Packaged `references/CaTDD_methodPrompt.md` — Complete methodology specification with priority framework, category definitions, design skeletons, quality gates, and context-specific priority adjustments.
-- Packaged `references/CaTDD_ImplTemplate.cxx` — C++ implementation template showing the complete CaTDD file structure (copy and adapt for any language).
+- Packaged `references/CaTDD_designAndImplTemplate.cxx` — C++ implementation template showing the complete CaTDD file structure (copy and adapt for any language).
 - Packaged `slashCommands` — Shared slash command materials and user guides copied from repository `slashCommands/` when `agentSkills/makeSkill.sh` generates the distributable skill package.
 
 ## Validation

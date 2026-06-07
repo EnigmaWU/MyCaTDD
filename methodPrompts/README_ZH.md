@@ -48,7 +48,7 @@ CaTDD 方法提示词支持两个设计阶段：
 - 主方法规范（`CaTDD_methodPrompt.md`）
 - 分类方法提示词（`CaTDD_methodPrompt4Cat-*.md`）
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
-- 实现模板（`CaTDD_ImplTemplate.cxx`）
+- 实现模板（`CaTDD_designAndImplTemplate.cxx`）
 
 ## 文档边界
 

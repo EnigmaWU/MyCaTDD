@@ -140,7 +140,7 @@ Each generated package contains:
 | `references/README_UserGuide.md` | Standalone CaTDD method user guide copied from `methodPrompts/`. |
 | `references/README_UserGuide_ZH.md` | Chinese standalone CaTDD method user guide copied from `methodPrompts/`. |
 | `references/CaTDD_methodPrompt.md` | Canonical CaTDD method contract copied from `methodPrompts/`. |
-| `references/CaTDD_ImplTemplate.cxx` | Complete CaTDD test-file template copied from `methodPrompts/`. |
+| `references/CaTDD_designAndImplTemplate.cxx` | Complete CaTDD test-file template copied from `methodPrompts/`. |
 | `slashCommands/` | Portable command flows and user guides copied from `slashCommands/`. |
 
 ## Source vs Dist

@@ -71,7 +71,7 @@ methodPrompts/
   CaTDD_methodPrompt4Cat-Compatibility.md
   CaTDD_methodPrompt4Cat-Configuration.md
   CaTDD_methodPrompt4Cat-DemoExample.md
-  CaTDD_ImplTemplate.cxx
+  CaTDD_designAndImplTemplate.cxx
 ```
 
 ## Why
@@ -94,7 +94,7 @@ Follow this workflow when starting a CaTDD test file.
 
 1. Read `README.md` to choose the relevant method prompt.
 2. Read `CaTDD_methodPrompt.md` for the full method contract.
-3. Copy `CaTDD_ImplTemplate.cxx` or adapt its section structure to your language.
+3. Copy `CaTDD_designAndImplTemplate.cxx` or adapt its section structure to your language.
 4. Capture Stage-0 free drafts: scenarios, examples, risks, and open questions.
 5. Classify drafts into categories using the priority order below.
 6. Write US/AC/TC comments inside the test file before implementing code.
@@ -109,7 +109,7 @@ Run these commands from a target project that contains `methodPrompts/`:
 
 ```bash
 mkdir -p Test
-cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
 
 Then ask your CodeAgent or use the method prompts manually:
@@ -155,7 +155,7 @@ Use this default priority order unless project risk says otherwise.
 | Design cross-platform, version, or integration checks | `CaTDD_methodPrompt4Cat-Compatibility.md` |
 | Design feature-flag, configuration, or environment variation | `CaTDD_methodPrompt4Cat-Configuration.md` |
 | Design documentation-oriented demos and examples | `CaTDD_methodPrompt4Cat-DemoExample.md` |
-| Start a C++ test file from a complete skeleton | `CaTDD_ImplTemplate.cxx` |
+| Start a C++ test file from a complete skeleton | `CaTDD_designAndImplTemplate.cxx` |
 
 ## Comment Skeleton
 

@@ -71,7 +71,7 @@ methodPrompts/
   CaTDD_methodPrompt4Cat-Compatibility.md
   CaTDD_methodPrompt4Cat-Configuration.md
   CaTDD_methodPrompt4Cat-DemoExample.md
-  CaTDD_ImplTemplate.cxx
+  CaTDD_designAndImplTemplate.cxx
 ```
 
 ## 原因
@@ -94,7 +94,7 @@ methodPrompts/
 
 1. 阅读 `README.md`，选择相关方法提示词。
 2. 阅读 `CaTDD_methodPrompt.md`，了解完整方法契约。
-3. 复制 `CaTDD_ImplTemplate.cxx`，或把其中的分区结构适配到你的语言。
+3. 复制 `CaTDD_designAndImplTemplate.cxx`，或把其中的分区结构适配到你的语言。
 4. 捕获 Stage-0 自由草稿：场景、示例、风险与开放问题。
 5. 根据下面的优先级顺序，将草稿归类。
 6. 在实现代码之前，把 US/AC/TC 注释写进测试文件。
@@ -109,7 +109,7 @@ methodPrompts/
 
 ```bash
 mkdir -p Test
-cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
 
 然后让 CodeAgent 执行，或手工使用方法提示词：
@@ -155,7 +155,7 @@ Preserve US/AC/TC traceability and leave unclear product intent as questions.
 | 设计跨平台、版本或集成检查 | `CaTDD_methodPrompt4Cat-Compatibility.md` |
 | 设计功能开关、配置或环境变化 | `CaTDD_methodPrompt4Cat-Configuration.md` |
 | 设计面向文档的演示和示例 | `CaTDD_methodPrompt4Cat-DemoExample.md` |
-| 从完整骨架开始编写 C++ 测试文件 | `CaTDD_ImplTemplate.cxx` |
+| 从完整骨架开始编写 C++ 测试文件 | `CaTDD_designAndImplTemplate.cxx` |
 
 ## 注释骨架
 

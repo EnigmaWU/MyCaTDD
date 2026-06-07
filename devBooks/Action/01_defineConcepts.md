@@ -97,7 +97,7 @@ What it contains:
 
 - **`CaTDD_methodPrompt4Cat-*.md`** — Category-specific method prompts. Each of the 12 test categories (Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, Configuration, Demo/Example) has its own deep-dive prompt that CodeAgents can reference when working within that category.
 
-- **`CaTDD_ImplTemplate.cxx`** — A C++ implementation template that demonstrates the complete CaTDD file structure. Despite using C++ syntax, the template is language-agnostic in concept: any language can adopt the OVERVIEW → DESIGN → IMPLEMENTATION → TODO structure.
+- **`CaTDD_designAndImplTemplate.cxx`** — A C++ implementation template that demonstrates the complete CaTDD file structure. Despite using C++ syntax, the template is language-agnostic in concept: any language can adopt the OVERVIEW → DESIGN → IMPLEMENTATION → TODO structure.
 
 - **Standalone user guides** — `README_UserGuide.md` and `README_UserGuide_ZH.md` explain HOW to use method prompts, WHO uses them, WHEN to apply them, and WHERE to place them. They exist so someone can use just this directory without reading the entire repository.
 

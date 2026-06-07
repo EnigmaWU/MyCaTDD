@@ -140,7 +140,7 @@ echo "$OUT_ROOT"
 | `references/README_UserGuide.md` | 从 `methodPrompts/` 复制的 CaTDD 独立方法用户指南。 |
 | `references/README_UserGuide_ZH.md` | 从 `methodPrompts/` 复制的中文 CaTDD 独立方法用户指南。 |
 | `references/CaTDD_methodPrompt.md` | 从 `methodPrompts/` 复制的权威 CaTDD 方法契约。 |
-| `references/CaTDD_ImplTemplate.cxx` | 从 `methodPrompts/` 复制的完整 CaTDD 测试文件模板。 |
+| `references/CaTDD_designAndImplTemplate.cxx` | 从 `methodPrompts/` 复制的完整 CaTDD 测试文件模板。 |
 | `slashCommands/` | 从 `slashCommands/` 复制的可移植命令流程和用户指南。 |
 
 ## 源码与生成包

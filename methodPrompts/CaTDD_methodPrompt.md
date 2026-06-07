@@ -817,7 +817,7 @@ Copy this block into your test files to track progress:
 
 ### When Starting a New Test Module
 
-1. **Copy the template** (`methodPrompts/CaTDD_ImplTemplate.cxx`)
+1. **Copy the template** (`methodPrompts/CaTDD_designAndImplTemplate.cxx`)
 2. **Fill in OVERVIEW section**: What you're testing and why
 3. **Freely draft ideas**: Capture test scenarios without format
 4. **Define coverage matrix**: Identify test dimensions

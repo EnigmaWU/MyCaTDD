@@ -86,7 +86,7 @@ required_sources=(
   "$REPO_ROOT/methodPrompts/README_UserGuide.md"
   "$REPO_ROOT/methodPrompts/README_UserGuide_ZH.md"
   "$REPO_ROOT/methodPrompts/CaTDD_methodPrompt.md"
-  "$REPO_ROOT/methodPrompts/CaTDD_ImplTemplate.cxx"
+  "$REPO_ROOT/methodPrompts/CaTDD_designAndImplTemplate.cxx"
   "$REPO_ROOT/slashCommands"
 )
 
@@ -106,7 +106,7 @@ legacy_source_links=(
   "$SOURCE_SKILL_DIR/slashCommands"
   "$SOURCE_SKILL_DIR/references/README_UserGuide.md"
   "$SOURCE_SKILL_DIR/references/CaTDD_methodPrompt.md"
-  "$SOURCE_SKILL_DIR/references/CaTDD_ImplTemplate.cxx"
+  "$SOURCE_SKILL_DIR/references/CaTDD_designAndImplTemplate.cxx"
   "$SOURCE_SKILL_DIR/references/CaTDD-UserGuide-PPT.md"
   "$SOURCE_SKILL_DIR/references/CaTDD-UserGuide-PPT-ZH_CN.md"
   "$SOURCE_SKILL_DIR/references/CaTDD_UserGuide.md"
@@ -133,7 +133,7 @@ cp "$SOURCE_SKILL_DIR/README.md" "$DIST_SKILL_DIR/README.md"
 cp "$REPO_ROOT/methodPrompts/README_UserGuide.md" "$DIST_SKILL_DIR/references/README_UserGuide.md"
 cp "$REPO_ROOT/methodPrompts/README_UserGuide_ZH.md" "$DIST_SKILL_DIR/references/README_UserGuide_ZH.md"
 cp "$REPO_ROOT/methodPrompts/CaTDD_methodPrompt.md" "$DIST_SKILL_DIR/references/CaTDD_methodPrompt.md"
-cp "$REPO_ROOT/methodPrompts/CaTDD_ImplTemplate.cxx" "$DIST_SKILL_DIR/references/CaTDD_ImplTemplate.cxx"
+cp "$REPO_ROOT/methodPrompts/CaTDD_designAndImplTemplate.cxx" "$DIST_SKILL_DIR/references/CaTDD_designAndImplTemplate.cxx"
 cp -R "$REPO_ROOT/slashCommands" "$DIST_SKILL_DIR/slashCommands"
 
 dist_symlink_count="$(find "$DIST_SKILL_DIR" -type l | wc -l | tr -d '[:space:]')"

@@ -103,7 +103,7 @@ Use this guide as the user-facing entry point for CaTDD. Use the linked layer RE
 ### 1. Copy the Template
 
 ```bash
-cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
 
 Run this command from the repository root so `methodPrompts/` resolves correctly.
@@ -901,7 +901,7 @@ Ready to write your first CaTDD test file? Follow this checklist:
 ### ✅ Step 1: Copy Template
 
 ```bash
-cp methodPrompts/CaTDD_ImplTemplate.cxx Test/UT_YourFeature.cxx
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature.cxx
 ```
 
 If your project does not have a `Test/` directory, create one or adjust the destination path.
@@ -1248,7 +1248,7 @@ P3: Demo/Example
 - **Method standalone user guide**: See [methodPrompts/README_UserGuide.md](methodPrompts/README_UserGuide.md) or [methodPrompts/README_UserGuide_ZH.md](methodPrompts/README_UserGuide_ZH.md)
 - **Methodology Deep Dive**: See [methodPrompts/CaTDD_methodPrompt.md](methodPrompts/CaTDD_methodPrompt.md)
 - **Category method prompts**: See [methodPrompts/README.md](methodPrompts/README.md) for the full category prompt map
-- **Code Template**: See [methodPrompts/CaTDD_ImplTemplate.cxx](methodPrompts/CaTDD_ImplTemplate.cxx)
+- **Code Template**: See [methodPrompts/CaTDD_designAndImplTemplate.cxx](methodPrompts/CaTDD_designAndImplTemplate.cxx)
 - **Slash command layer**: See [slashCommands/README.md](slashCommands/README.md)
 - **Slash command user guide**: See [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) or [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)
 - **CLI agent layer**: See [codeAgents/utCodeAgentCLI/README.md](codeAgents/utCodeAgentCLI/README.md)
