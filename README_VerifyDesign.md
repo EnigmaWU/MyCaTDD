@@ -6,7 +6,7 @@ This document captures verification strategy and US/AC/TC traceability for activ
 
 - Story: US-USER-01 Parse and Validate CLI Arguments
 - Detail design: [codeAgents/utCodeAgentCLI/README_DetailDesign.md](codeAgents/utCodeAgentCLI/README_DetailDesign.md)
-- Active story artifact: [.catdd/spec/doingUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md](.catdd/spec/doingUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md)
+- Completed story artifact: [.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md](.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md)
 - Target test files: [codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts](codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts)
 
 ## Testing Definition

@@ -87,6 +87,8 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/pendingNews/20260531-add-SPEC_verifyRequirement-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-add-UT_reviewImplTestFile-slash-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-create-installCaTDD-Skill4XYZ-installer-Issue.md`
+  - `.catdd/spec/pendingNews/20260608-rename-CaTDD-ImplTemplate-and-add-ts-template-Issue.md`
+  - `.catdd/spec/pendingNews/20260608-why-SPEC-designUnitTests-not-UT-doXYZ-in-P0-FuncTestFlow-Issue.md`
 - Completed user stories:
   - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
   - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
@@ -94,6 +96,8 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/doneUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md`
   - `.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md`
   - `.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md`
+  - `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md`
+  - `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-TASKs.md`
 - Todo user stories waiting:
   - None currently.
 - Active user stories opened:
@@ -103,6 +107,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 - Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03; the runtime-language ADR is now DECIDED: TypeScript/Node.js for V1 (PoC) and Go pre-selected for V2 (production distribution), Python evaluated and not selected. ADR status updated to Decided in `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
 - Shared module DetailDesign doc created: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`; latest draft includes TypeScript-facing parser, planner, executor, adapter, trace, diagnostics, state, error, and verification contracts; `/SPEC_reviewDetailDesign` PASS recorded on 2026-06-04.
 - Current `utCodeAgentCLI` story/design readiness has `/SPEC_reviewUserStory` PASS recorded on 2026-06-04 and the story itself is archived in `doneUS/`.
+- `US-USER-01` lifecycle was completed on 2026-06-08: `/SPEC_reviewProductCodes` PASS, `/SPEC_commitWorks` commit `3a98908`, CaTDD category correction commit `90268f7`, and closure through `/SPEC_closeUserStory`.
 
 ## Next Recommended Command
 

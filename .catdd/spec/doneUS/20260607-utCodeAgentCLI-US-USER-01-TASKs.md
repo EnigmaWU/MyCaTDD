@@ -2,7 +2,7 @@
 
 - [x] Active story: [20260607-utCodeAgentCLI-US-USER-01-UserStory.md](20260607-utCodeAgentCLI-US-USER-01-UserStory.md)
 - [x] Requirement source traced to module `README_UserStory.md` plus paired `README_UserGuide.md`
-- [x] Story is open in `.catdd/spec/doingUS/`
+- [x] Story is closed in `.catdd/spec/doneUS/`
 - [x] Requirement-oriented update needed: no, the imported story already carries the current requirement slice
 - [x] Requirement review needed: no additional `SPEC_reviewUserStory` gate is required for this imported story slice
 - [x] Architecture readiness present: `codeAgents/utCodeAgentCLI/README_ArchDesign.md`
@@ -17,7 +17,8 @@
 - [x] Lifecycle command completed: `/SPEC_refactorIssue` (runtime wiring fix)
 - [x] Lifecycle command completed: `/SPEC_reviewProductCodes` (pass)
 - [x] Lifecycle command completed: `/SPEC_commitWorks`
-- [ ] Next lifecycle command: `/SPEC_closeUserStory`
+- [x] Lifecycle command completed: `/SPEC_closeUserStory`
+- [ ] Next lifecycle command: `/SPEC_analyzeIssue`
 
 ## Current Readiness
 
@@ -46,11 +47,10 @@ The active story is an imported P0 user-story slice for CLI argument validation.
 
 ## Parallel-Ready Implementation Checklist
 
-- [x] Slice A (Typical): implemented `TC-ARG-001`, `TC-ARG-002`, `TC-ARG-003` in RED sequence.
-- [x] Slice B (Edge): implemented `TC-ARG-004`, `TC-ARG-005` after Slice A stabilized.
-- [x] Slice C (Misuse): implemented `TC-ARG-006`, `TC-ARG-007` after Slice A stabilized.
-- [x] Slice D (Fault): implemented `TC-ARG-008` to `TC-ARG-012` after Slice A stabilized.
-- [x] Checkpoint 1: stderr assertion style is consistent across Typical and Edge implemented TCs.
+- [x] Slice A (Typical / ValidFunc): implemented `TC-ARG-005` as the valid dispatch-readiness path.
+- [x] Slice B (Misuse / InvalidFunc): implemented `TC-ARG-001` to `TC-ARG-004`, plus `TC-ARG-006` and `TC-ARG-007`, for caller contract violations.
+- [x] Slice C (Fault / InvalidFunc): implemented `TC-ARG-008` to `TC-ARG-012` for deterministic missing file-path checks.
+- [x] Checkpoint 1: stderr assertion style is consistent across Misuse and Fault implemented TCs.
 - [x] Checkpoint 2: AC trace tags remain intact after all P0 implementation slices.
 
 ## Post-Implementation Readiness
@@ -74,6 +74,12 @@ The active story is an imported P0 user-story slice for CLI argument validation.
 - [x] Verification rerun: `node --test codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts` passed (12/12).
 - [x] Final review decision: PASS for current story scope.
 - [x] Route decision: continue to `SPEC_commitWorks`.
+
+## Close Normalization Result
+
+- [x] Done artifact normalized after CaTDD category review: `TC-ARG-005` is Typical/ValidFunc; missing required args, unknown `--behave`, and exclusive-pair conflicts are Misuse/InvalidFunc; missing file-path checks remain Fault/InvalidFunc.
+- [x] Latest supporting commit: `90268f7`.
+- [x] Next command selected after closure: `/SPEC_analyzeIssue`.
 
 ## Checklist
 

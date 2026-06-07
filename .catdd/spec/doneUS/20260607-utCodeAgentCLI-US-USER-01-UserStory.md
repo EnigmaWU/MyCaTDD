@@ -14,11 +14,11 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` slice `US-USE
 
 ## Active Work Status
 
-- Status: OPEN.
-- Active state: `.catdd/spec/doingUS/` shared active work.
+- Status: CLOSED.
+- Active state: `.catdd/spec/doneUS/` completed artifact.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_closeUserStory`.
+- Next recommended command: `/SPEC_analyzeIssue`.
 
 ## Story
 
@@ -96,4 +96,11 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_closeUserStory` to archive this completed story after commit.
+Run `/SPEC_analyzeIssue` on one pending issue to continue the next story cycle.
+
+## Closure Summary
+
+- Product code and tests committed in `3a98908`.
+- CaTDD P0 Functional category trace corrected in `90268f7` so `TC-ARG-005` is Typical/ValidFunc, argument contract violations are Misuse/InvalidFunc, and missing path checks remain Fault/InvalidFunc.
+- Verification summary: `node --test codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts` passed (12/12).
+- Story artifacts moved from `doingUS` to `doneUS`.
