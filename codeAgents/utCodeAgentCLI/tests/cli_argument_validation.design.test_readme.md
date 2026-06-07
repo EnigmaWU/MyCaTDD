@@ -10,9 +10,8 @@ Implemented, passing (GREEN in local node test run).
 - User Story: `US-USER-01`.
 - Acceptance Criteria: `AC-01`, `AC-02`, `AC-03`, `AC-04`, `AC-05`.
 - Test Cases:
-  - `TC-ARG-001`..`TC-ARG-003` (Typical, required args)
-  - `TC-ARG-004`..`TC-ARG-005` (Edge, behavior list and valid dispatch)
-  - `TC-ARG-006`..`TC-ARG-007` (Misuse, exclusive pair conflicts)
+  - `TC-ARG-005` (Typical / ValidFunc, valid dispatch)
+  - `TC-ARG-001`..`TC-ARG-004`, `TC-ARG-006`..`TC-ARG-007` (Misuse / InvalidFunc, caller contract violations)
   - `TC-ARG-008`..`TC-ARG-012` (Fault, missing path validations)
 - Product code path under test:
   - `codeAgents/utCodeAgentCLI/src/cli/invocationValidator.ts`

@@ -29,9 +29,9 @@ Design P0 Functional coverage first for argument validation because this story i
 
 | Priority | Category | Scope | Required Now | Notes |
 | --- | --- | --- | --- | --- |
-| P0 | Functional: Typical | Parser required-arg checks | Yes | Covers missing `--goal`, `--target`, `--behave`. |
-| P0 | Functional: Edge | Behavior-name boundary and valid pass-through | Yes | Covers unknown behavior alternatives and valid invocation success. |
-| P0 | Functional: Misuse | Exclusive-pair misuse checks | Yes | Covers conflicting story/input flags. |
+| P0 | Functional: Typical | Valid invocation success path | Yes | Covers `TC-ARG-005` valid dispatch readiness. |
+| P0 | Functional: Edge | Valid boundary or mode variation | No | No valid edge scenario is specified in this story slice. |
+| P0 | Functional: Misuse | Invalid caller argument contract checks | Yes | Covers missing required args, unknown `--behave`, and conflicting story/input flags. |
 | P0 | Functional: Fault | File-path failure handling | Yes | Covers nonexistent file-path arguments. |
 | P1 | Design: State/Capability/Concurrency | Parser/validator internals | No | Defer until runtime state model requires dedicated tests. |
 | P2 | Quality: Performance/Robust/Compatibility/Configuration | CLI quality envelopes | No | Defer until executable implementation baseline exists. |
@@ -40,24 +40,25 @@ Design P0 Functional coverage first for argument validation because this story i
 
 | US | AC | TC | Test File | Status |
 | --- | --- | --- | --- | --- |
-| US-USER-01 | AC-01 | TC-ARG-001 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-01 | TC-ARG-002 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-01 | TC-ARG-003 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-03 | TC-ARG-004 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-05 | TC-ARG-005 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-02 | TC-ARG-006 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-02 | TC-ARG-007 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-04 | TC-ARG-008 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-04 | TC-ARG-009 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-04 | TC-ARG-010 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-04 | TC-ARG-011 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
-| US-USER-01 | AC-04 | TC-ARG-012 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | PLANNED |
+| US-USER-01 | AC-01 | TC-ARG-001 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-01 | TC-ARG-002 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-01 | TC-ARG-003 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-03 | TC-ARG-004 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-05 | TC-ARG-005 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-02 | TC-ARG-006 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-02 | TC-ARG-007 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-008 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-009 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-010 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-011 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-012 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
 
 ## Test Case Design Notes
 
 ```text
 TC-ARG-004:
   @[Name]: verifyBehaviorList_byUnknownBehave_expectAllValidAlternatives
+  @[Category]: Misuse
   @[Purpose]: Ensure unknown behavior values produce deterministic guidance.
   @[Brief]: Invoke parser/validator with invalid --behave and inspect stderr plus exit code.
   @[Expect]: Exit code 1 and list of valid behavior alternatives.
@@ -93,10 +94,10 @@ Run from repository root to inspect the designed skeleton file:
 sed -n '1,220p' codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts
 ```
 
-Expected result: P0 Typical/Edge/Misuse/Fault skeleton sections with `@[US]`, `@[AC]`, `@[TC]`, `@[Category]`, and `@[Status:PLANNED]` tags.
+Expected result: P0 Typical/Misuse/Fault skeleton sections with `@[US]`, `@[AC]`, `@[TC]`, `@[Category]`, and `@[Status]: GREEN` tags.
 
 ## Review Checklist
 
-- P0 Functional coverage is complete before P1/P2 promotion.
+- P0 Functional classification follows the methodPrompts formula: ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault).
 - Every TC traces to AC and US-USER-01.
 - Deferred coverage reasons are explicit.
