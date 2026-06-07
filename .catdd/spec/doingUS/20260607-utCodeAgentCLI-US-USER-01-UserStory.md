@@ -18,7 +18,7 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` slice `US-USE
 - Active state: `.catdd/spec/doingUS/` shared active work.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_makePlan`.
+- Next recommended command: `/SPEC_implUnitTests`.
 
 ## Story
 
@@ -96,4 +96,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_makePlan` to decide whether the next step is requirement clarification, design, or implementation.
+Run `/SPEC_implUnitTests` to implement selected PLANNED P0 test cases in RED order.
