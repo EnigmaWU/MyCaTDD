@@ -25,6 +25,10 @@ grep -Fq 'Run a clarify/analyze/checklist gate before implementation.' "$FLOW_DO
 grep -Fq 'Make execution slices explicit, ordered, and parallel-aware.' "$FLOW_DOC" || fail "Px-SpecFlow missing task-slice refinement"
 
 grep -Fq 'constitution-level guardrails' "$INIT_CONTEXT" || fail "SPEC_initProjectContext must mention constitution-level guardrails"
+grep -Fq 'default_lang' "$INIT_CONTEXT" || fail "SPEC_initProjectContext must define default_lang input"
+grep -Fq 'US_EN' "$INIT_CONTEXT" || fail "SPEC_initProjectContext must name US_EN as a valid default_lang choice"
+grep -Fq 'ZH_CN' "$INIT_CONTEXT" || fail "SPEC_initProjectContext must name ZH_CN as a valid default_lang choice"
+grep -Fq 'ask the developer' "$INIT_CONTEXT" || fail "SPEC_initProjectContext must instruct asking the developer for default_lang when not provided"
 grep -Fq 'independently testable' "$ANALYZE_ISSUE" || fail "SPEC_analyzeIssue must require independently testable story output"
 grep -Fq 'independently testable' "$ANALYZE_FEATURE" || fail "SPEC_analyzeFeature must require independently testable story output"
 grep -Fq '# SPEC_clearStoryIntent' "$CLEAR_STORY_INTENT" || fail "SPEC_clearStoryIntent command must exist"
