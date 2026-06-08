@@ -13,7 +13,7 @@ Create the first `.catdd/spec/projectContext.md` for a target project before Spe
 - `project_root`: target project directory.
 - `known_constraints`: language, framework, test framework, architecture, product goals, and team conventions.
 - `existing_docs`: optional README, architecture notes, issue templates, or test docs.
-- `default_lang`: developer's preferred language for all subsequent SpecCoding progress. Choose `US_EN` (English) or `ZH_CN` (Chinese). If not provided, ask the developer before proceeding.
+- `default_lang`: developer's preferred language for all subsequent SpecCoding progress, including artifact content, questions, comments, and summaries. Choose `US_EN` (English) or `ZH_CN` (Chinese). If not provided, ask the developer before proceeding.
 
 ## Method References
 
@@ -28,7 +28,7 @@ Create the first `.catdd/spec/projectContext.md` for a target project before Spe
 
 ## Prompt Template
 
-Ask the assistant to read the provided project material, summarize stable context and constitution-level guardrails, mark unknowns explicitly, and avoid inventing product or architecture decisions. Before drafting the context artifact, ask the developer which language (`US_EN` for English or `ZH_CN` for Chinese) should be used as the `default_lang` for all subsequent SpecCoding progress if this has not been provided as input.
+Ask the assistant to read the provided project material, summarize stable context and constitution-level guardrails, mark unknowns explicitly, and avoid inventing product or architecture decisions. Before drafting the context artifact, ask the developer which language should be used as `default_lang` for all subsequent SpecCoding progress: `US_EN` for English or `ZH_CN` for Chinese. Only skip this question if `default_lang` has already been provided as input.
 
 ## Conflict Guard
 
