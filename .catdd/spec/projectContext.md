@@ -112,8 +112,8 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-05-UserStory.md`
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-09-UserStory.md`
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-10-UserStory.md`
-  - `.catdd/spec/todoUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md`
-- Active user stories opened: none.
+- Active user stories opened:
+  - `.catdd/spec/doingUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md`
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes the runtime-language tradeoff review across TypeScript/Node.js, Python, and Go, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented surface coverage, and an ADR link for the runtime choice.
 - Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03; the runtime-language ADR is now DECIDED: TypeScript/Node.js for V1 (PoC) and Go pre-selected for V2 (production distribution), Python evaluated and not selected. ADR status updated to Decided in `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
@@ -125,7 +125,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 Run this next after context review:
 
-- `/SPEC_openUserStory` for `.catdd/spec/todoUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md` to start the merged SPEC-vs-UT skeleton alignment story.
+- `/SPEC_takeDetailDesign` for `.catdd/spec/doingUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md` to design the SPEC-to-UT routing rules and TypeScript test redesign approach.
 
 ## Assumptions To Confirm
 
