@@ -82,14 +82,14 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/analyzedNews/20260602-add-SPEC_reviewDesignGates-commands-Feature.md`
   - `.catdd/spec/analyzedNews/20260606-treat-updates-as-issue-first-Issue.md`
   - `.catdd/spec/analyzedNews/20260608-rename-CaTDD-ImplTemplate-and-add-ts-template-Issue.md`
+  - `.catdd/spec/analyzedNews/20260608-why-SPEC-designUnitTests-not-UT-doXYZ-in-P0-FuncTestFlow-Issue.md`
+  - `.catdd/spec/analyzedNews/20260609-refactor-US-USER-01-with-UT-designFuncTestsSkeleton-Issue.md`
 - Pending issues imported:
   - `.catdd/spec/pendingNews/20260531-add-SPEC_assembleRequirements-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-add-SPEC_updateRequirement-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-add-SPEC_verifyRequirement-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-add-UT_reviewImplTestFile-slash-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-create-installCaTDD-Skill4XYZ-installer-Issue.md`
-  - `.catdd/spec/pendingNews/20260608-why-SPEC-designUnitTests-not-UT-doXYZ-in-P0-FuncTestFlow-Issue.md`
-  - `.catdd/spec/pendingNews/20260609-refactor-US-USER-01-with-UT-designFuncTestsSkeleton-Issue.md`
 - Completed user stories:
   - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
   - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
@@ -112,6 +112,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-05-UserStory.md`
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-09-UserStory.md`
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-10-UserStory.md`
+  - `.catdd/spec/todoUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md`
 - Active user stories opened: none.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes the runtime-language tradeoff review across TypeScript/Node.js, Python, and Go, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented surface coverage, and an ADR link for the runtime choice.
@@ -124,7 +125,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 Run this next after context review:
 
-- `/SPEC_analyzeIssue` to convert one pending issue in `.catdd/spec/pendingNews/` into a traceable todo user story and move its raw input into `.catdd/spec/analyzedNews/`.
+- `/SPEC_openUserStory` for `.catdd/spec/todoUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md` to start the merged SPEC-vs-UT skeleton alignment story.
 
 ## Assumptions To Confirm
 
