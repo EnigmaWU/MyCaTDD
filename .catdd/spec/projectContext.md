@@ -89,6 +89,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/pendingNews/20260531-add-UT_reviewImplTestFile-slash-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-create-installCaTDD-Skill4XYZ-installer-Issue.md`
   - `.catdd/spec/pendingNews/20260608-why-SPEC-designUnitTests-not-UT-doXYZ-in-P0-FuncTestFlow-Issue.md`
+  - `.catdd/spec/pendingNews/20260609-refactor-US-USER-01-with-UT-designFuncTestsSkeleton-Issue.md`
 - Completed user stories:
   - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
   - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
