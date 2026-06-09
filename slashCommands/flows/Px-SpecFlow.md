@@ -115,7 +115,7 @@ These document local implementation details, code tactics, and class/API behavio
 | `README_DetailDesign.md` | Detailed class design, API signatures, and data structures for the story. |
 | `README_StateDesign.md` | Local state machines, lifecycle transitions, lock synchronization, and thread concurrency. |
 
-### 3. General & Requirements (Managed by other SPEC steps)
+### 3. General & Requirements (Created by DEVELOPER first, later updated by `SPEC_updateUserStory` and `SPEC_reviewUserStory`)
 
 | File | Purpose |
 | --- | --- |
