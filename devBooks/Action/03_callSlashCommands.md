@@ -335,15 +335,17 @@ Px-SpecFlow is the largest and most important flow because it orchestrates the f
 
 ```
 pendingNews → todoUS → doingUS → doneUS
+                         ↘ abortUS for unsafe active stories
 ```
 
-Every work item moves through four stages:
+Every work item normally moves through four stages, with `abortUS` preserving active stories that should not continue in place:
 
 | Stage | Directory | Meaning |
 |---|---|---|
 | **pendingNews** | `.catdd/spec/pendingNews/` | Work waiting to be analyzed. Raw issues, feature requests, imported user stories. |
 | **todoUS** | `.catdd/spec/todoUS/` | Work analyzed and ready to pick up. Structured user stories with acceptance criteria candidates. |
 | **doingUS** | `.catdd/spec/doingUS/` | Active work in progress. Opened user stories going through design, test, or implementation. |
+| **abortUS** | `.catdd/spec/abortUS/` | Aborted active work preserved for later analysis or a next-round improvement input. |
 | **doneUS** | `.catdd/spec/doneUS/` | Completed work. Reviewed, committed, CI-passed stories. |
 
 ### The Full Command Sequence
@@ -422,8 +424,8 @@ The complete SpecFlow lifecycle has 21+ commands organized into three phases:
    │     Reviews implementation quality                    │
    │                                                       │
    │     If review FAILS:                                  │
-   │ 20. SPEC_refactorIssue                               │
-   │     Routes back to design, tests, or product code     │
+   │ 20. SPEC_abortUserStory (when unsafe to continue)     │
+   │     Moves active story to abortUS for later analysis  │
    └─────────────────────────────────────────────────────┘
 
 21. SPEC_commitWorks
@@ -633,8 +635,8 @@ Px-SpecFlow provides explicit model tier guidance — use the smallest model tha
 | Tier | Purpose | SPEC Commands |
 |---|---|---|
 | **SOTA reasoning** | Architecture decisions, system boundaries, quality trade-offs, irreversible choices | `SPEC_takeArchDesign`, `SPEC_reviewArchDesign` |
-| **High Performance** | Multi-artifact reasoning, design, review, planning | `SPEC_initProjectContext`, `SPEC_analyzeIssue`, `SPEC_makePlan`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_designUnitTests`, `SPEC_reviewProductCodes`, `SPEC_refactorIssue` |
-| **Flash Speed** | Deterministic moves, imports, commits, closures | `SPEC_importIssue`, `SPEC_openUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
+| **High Performance** | Multi-artifact reasoning, design, review, planning | `SPEC_initProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeUserStory`, `SPEC_makePlan`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_designUnitTests`, `SPEC_reviewProductCodes` |
+| **Flash Speed** | Deterministic artifact moves, imports, commits, closures | `SPEC_importIssue`, `SPEC_openUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
 
 **Escalation rule**: Move from lower to higher tier when the command reveals architecture-significant uncertainty: competing non-functional requirements, safety/security risk, real-time constraints, concurrency boundaries, or irreversible API decisions.
 

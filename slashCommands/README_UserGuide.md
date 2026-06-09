@@ -157,6 +157,7 @@ Commit team-shared artifacts such as:
 - `.catdd/spec/analyzedNews/`
 - `.catdd/spec/todoUS/`
 - `.catdd/spec/doingUS/`
+- `.catdd/spec/abortUS/`
 - `.catdd/spec/doneUS/`
 - Project-root `README*` docs such as `README_UserGuide.md`, `README_UserStories.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md`
 
@@ -185,6 +186,7 @@ The installers manage the `.gitignore` rules for those local artifacts.
 | Tell me what SpecCoding task to do next | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | Create checkbox TASKs and choose the next SPEC step for an opened user story | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | Clear developer and CodeAgent story intent | [commands/Px-SpecFlow/SPEC_clearStoryIntent.md](commands/Px-SpecFlow/SPEC_clearStoryIntent.md) |
+| Abort an unsafe active user story for later analysis or next-round improvement | [commands/Px-SpecFlow/SPEC_abortUserStory.md](commands/Px-SpecFlow/SPEC_abortUserStory.md) |
 | Revise architecture design after architecture-review feedback | [commands/Px-SpecFlow/SPEC_updateArchDesign.md](commands/Px-SpecFlow/SPEC_updateArchDesign.md) |
 | Import an existing structured User Story or AC slice | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | Convert demo tests into CaTDD Typical skeleton | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |

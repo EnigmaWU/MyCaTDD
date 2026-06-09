@@ -14,7 +14,7 @@
 - [x] Lifecycle command completed: `/SPEC_designUnitTests`
 - [x] Lifecycle command completed: `/SPEC_implUnitTests` for P0 Functional slices
 - [x] Lifecycle command completed: `/SPEC_implProductCodes`
-- [x] Lifecycle command completed: `/SPEC_refactorIssue` (runtime wiring fix)
+- [x] Lifecycle command completed: runtime wiring correction loop (legacy command superseded by abort/next-round routing)
 - [x] Lifecycle command completed: `/SPEC_reviewProductCodes` (pass)
 - [x] Lifecycle command completed: `/SPEC_commitWorks`
 - [x] Lifecycle command completed: `/SPEC_closeUserStory`
@@ -30,7 +30,7 @@
 ## Candidate Next Steps
 
 - `/SPEC_reviewProductCodes` for the opened story.
-- `/SPEC_refactorIssue` only if review finds quality or scope defects.
+- Abort or next-round issue import only if review finds quality or scope defects that should not continue in the current active story.
 - `/SPEC_commitWorks` only after product-code review passes.
 
 ## Rejected Next Steps

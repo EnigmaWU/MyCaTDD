@@ -23,8 +23,8 @@ Use the smallest model tier that preserves decision quality for the current comm
 | Default tier | Use for | Px-SpecFlow commands |
 | --- | --- | --- |
 | SOTA reasoning, such as GPT-5.5-xHigh | Architecture work that decides or approves system boundaries, dependency direction, runtime placement, quality trade-offs, and cross-module constraints. | `SPEC_takeArchDesign`, `SPEC_reviewArchDesign` |
-| High Performance | Requirements analysis, intent alignment, planning, requirement updates, local design, review gates, test design, code review, and correction routing where quality depends on reasoning across several artifacts. | `SPEC_initProjectContext`, `SPEC_updateProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_clearStoryIntent`, `SPEC_makePlan`, `SPEC_updateUserStory`, `SPEC_whatsNextTask`, `SPEC_takeArchDesign`, `SPEC_reviewArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_updateDetailDesign`, `SPEC_reviewUserStory`, `SPEC_designUnitTests`, `SPEC_reviewProductCodes`, `SPEC_refactorIssue` |
-| Flash Speed | Deterministic import, move, commit, close, or small test-driven implementation steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
+| High Performance | Requirements analysis, intent alignment, planning, requirement updates, local design, review gates, test design, code review, and correction routing where quality depends on reasoning across several artifacts. | `SPEC_initProjectContext`, `SPEC_updateProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_analyzeUserStory`, `SPEC_clearStoryIntent`, `SPEC_makePlan`, `SPEC_updateUserStory`, `SPEC_whatsNextTask`, `SPEC_takeArchDesign`, `SPEC_reviewArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_updateDetailDesign`, `SPEC_reviewUserStory`, `SPEC_designUnitTests`, `SPEC_reviewProductCodes` |
+| Flash Speed | Deterministic import, move, abort, commit, close, or small test-driven implementation steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
 
 Escalate from High Performance or Flash Speed to SOTA when the command exposes architecture-significant uncertainty: competing non-functional requirements, safety/security risk, real-time or embedded constraints, concurrency boundaries, data migration, compatibility matrices, or irreversible module/API ownership decisions.
 
@@ -43,6 +43,7 @@ For deterministic lifecycle movement, flash-speed models are usually enough:
 /SPEC_importIssue
 /SPEC_importUserStory
 /SPEC_openUserStory
+/SPEC_abortUserStory
 /SPEC_closeUserStory
 ```
 
@@ -66,7 +67,7 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 - As a Developer, when I open a user story, I want to update requirement docs first when the plan is requirement-oriented, then either close after story review or hand off to design-oriented work.
 - As a Developer, when I open a user story, I want to drive detail design, acceptance criteria, tests, implementation, review, CI, and closure through explicit commands so that no lifecycle step is hidden in chat.
 - As a Developer, when a CodeAgent starts active story work, I want both sides to clear intent before design so that the agent does not optimize for the wrong scope or success signal.
-- As a Developer, when quality is not met, I want the flow to route back to design, tests, product code, or refactoring so that SpecCoding remains iterative.
+- As a Developer, when an active story exposes a wrong scope, invalid assumptions, or quality problem that should not be patched in place, I want to abort the story into preserved history so the next improvement round can be analyzed deliberately.
 - As a Developer, when I forget where I paused or I am new to SpecFlow, I want a command that tells me the next task from current artifacts so I can continue without guessing.
 
 ## Artifacts
@@ -78,6 +79,8 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 - `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`: active user stories under design, test, implementation, or review.
 - `.catdd/spec/doingUS/YYYYMMDD-TASKs.md`: team-shared task artifact paired with the active story, recording the next required `SPEC_*` steps and rationale as Markdown checkbox tasks.
 - `Mutual Intent Contract`: a section inside the active doing story that records developer intent, CodeAgent intent, scope, non-goals, success signal, assumptions, and open questions before design begins.
+- `.catdd/spec/abortUS/YYYYMMDD-UserStory.md`: aborted active user stories preserved for later analysis, re-import, or next-round improvement planning.
+- `.catdd/spec/abortUS/YYYYMMDD-TASKs.md`: aborted task artifact preserved beside the aborted story when the story was planned through `SPEC_makePlan`.
 - `.catdd/spec/doneUS/YYYYMMDD-UserStory.md`: completed user stories after review, commit, and CI.
 - `.catdd/spec/doneUS/YYYYMMDD-TASKs.md`: completed task artifact preserved beside the closed story for later diagnosis.
 - `<module-or-submodule>/README_UserStory.md`: canonical formalized requirement source for that module scope.
@@ -137,6 +140,8 @@ SpecFlow lifecycle state lives under `.catdd/spec/`. Shared `README*` SPEC docs 
 | `.catdd/spec/todoUS/` | Team-shared | Commit analyzed user stories and directly imported structured user stories that are ready to be picked up. |
 | `.catdd/spec/doingUS/` | Team-shared | Commit active user stories so in-progress work can move across machines and stay visible to teammates. |
 | `.catdd/spec/doingUS/*-TASKs.md` | Team-shared | Commit the active task artifact paired with the opened user story so the next SPEC steps stay explicit, checkable, and diagnosable. |
+| `.catdd/spec/abortUS/` | Team-shared | Commit aborted active stories when the current scope or assumptions are no longer safe to continue in place. |
+| `.catdd/spec/abortUS/*-TASKs.md` | Team-shared | Commit the aborted task artifact beside the aborted story for later analysis or next-round improvement planning. |
 | `.catdd/spec/doneUS/` | Team-shared | Commit completed story records after review, verification, and close. |
 | `.catdd/spec/doneUS/*-TASKs.md` | Team-shared | Commit the completed task artifact beside the closed user story for later diagnosis. |
 | `README*.md` | Team-shared | Commit project-root SPEC docs such as README, architecture design, user stories, user guide, detail design, error design, resource design, state design, performance design, compatibility design, diagnosis design, and verify design as needed. |
@@ -192,6 +197,7 @@ flowchart TB
     UpdateStory --> ReviewReqStory["SPEC_reviewUserStory"]
     ReviewReqStory --> ReqQuality{"story quality?"}
     ReqQuality -- "NO" --> UpdateStory
+    ReqQuality -- "abort" --> Abort2a["SPEC_abortUserStory"]
     ReqQuality -- "YES" --> ReqTail{"after requirement update?"}
     ReqTail -- "requirement-oriented only" --> CommitReq["SPEC_commitWorks"]
     CommitReq --> CloseReq["SPEC_closeUserStory"]
@@ -206,18 +212,23 @@ flowchart TB
     Arch --> ReviewArch["SPEC_reviewArchDesign"]
     ReviewArch --> QualityArch{"architecture quality?"}
     QualityArch -- "NO" --> UpdateArch["SPEC_updateArchDesign"]
+    QualityArch -- "abort" --> Abort2a
     UpdateArch --> ReviewArch
     QualityArch -- "YES" --> Detail
     Detail --> ReadmeDocs["project-root README*.md"]
     Detail --> ReviewDetail["SPEC_reviewDetailDesign"]
     ReviewDetail --> QualityDetail{"detail quality?"}
     QualityDetail -- "NO" --> UpdateDetail["SPEC_updateDetailDesign"]
+    QualityDetail -- "abort" --> Abort2a
     QualityDetail -- "YES" --> TailChoice{"after design, what story type?"}
     UpdateDetail --> ReviewDetail
     TailChoice -- "design-oriented only" --> CommitDesign["SPEC_commitWorks"]
     CommitDesign --> CloseDesign["SPEC_closeUserStory"]
     CloseDesign --> DoneDesign[".catdd/spec/doneUS/*-UserStory.md"]
     TailChoice -- "implementation follows" --> DesignReady["handoff to Part 2.b"]
+    Abort2a --> AbortUS2a[".catdd/spec/abortUS/*-UserStory.md"]
+    AbortUS2a -. "later re-analysis" .-> AnalyzeAbort2a["SPEC_analyzeUserStory"]
+    AbortUS2a -. "new improvement input" .-> ImportIssue2a["SPEC_importIssue"]
 ```
 
 ### Part 2.b: Implementation-Oriented Active Story Lifecycle
@@ -228,6 +239,7 @@ This diagram starts only after `SPEC_makePlan` classifies the story as implement
 flowchart TB
     Part2b["from SPEC_makePlan or Part 2.a"] --> ImplementationChoice{"implementation readiness?"}
     ImplementationChoice -- "design needs rework" --> ReviewStoryRef["return to Part 2.a SPEC_updateDetailDesign"]
+    ImplementationChoice -- "abort" --> Abort2b["SPEC_abortUserStory"]
     ImplementationChoice -- "story is test-ready" --> DesignTests["SPEC_designUnitTests"]
 
     DesignTests --> ImplTests["SPEC_implUnitTests"]
@@ -235,12 +247,15 @@ flowchart TB
     ImplCode --> ReviewCode["SPEC_reviewProductCodes"]
     ReviewCode --> QualityCode{"code quality?"}
 
-    QualityCode -- "NO" --> Refactor["SPEC_refactorIssue"]
-    Refactor --> DesignRework["return to Part 2.a follow-up detail revision"]
+    QualityCode -- "NO, fix in current story" --> DesignRework["return to Part 2.a follow-up detail revision"]
+    QualityCode -- "NO, abort current story" --> Abort2b
     QualityCode -- "YES" --> Commit["SPEC_commitWorks"]
     Commit --> Close["SPEC_closeUserStory"]
     Close --> Done[".catdd/spec/doneUS/*-UserStory.md"]
     Close --> DoneTasks[".catdd/spec/doneUS/*-TASKs.md"]
+    Abort2b --> AbortUS2b[".catdd/spec/abortUS/*-UserStory.md"]
+    AbortUS2b -. "later re-analysis" .-> AnalyzeAbort2b["SPEC_analyzeUserStory"]
+    AbortUS2b -. "new improvement input" .-> ImportIssue2b["SPEC_importIssue"]
 ```
 
 ## Command Sequence
@@ -264,7 +279,7 @@ flowchart TB
 17. Use [../commands/Px-SpecFlow/SPEC_updateDetailDesign.md](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) for follow-up detail revision when detail review finds missing or weak design.
 18. Use [../commands/Px-SpecFlow/SPEC_designUnitTests.md](../commands/Px-SpecFlow/SPEC_designUnitTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows, when the plan says the story is test-ready.
 19. Use [../commands/Px-SpecFlow/SPEC_implUnitTests.md](../commands/Px-SpecFlow/SPEC_implUnitTests.md), [../commands/Px-SpecFlow/SPEC_implProductCodes.md](../commands/Px-SpecFlow/SPEC_implProductCodes.md), and [../commands/Px-SpecFlow/SPEC_reviewProductCodes.md](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review.
-20. Use [../commands/Px-SpecFlow/SPEC_refactorIssue.md](../commands/Px-SpecFlow/SPEC_refactorIssue.md) when implementation quality fails or design needs to be reworked.
+20. Use [../commands/Px-SpecFlow/SPEC_abortUserStory.md](../commands/Px-SpecFlow/SPEC_abortUserStory.md) from Part 2.a or Part 2.b when the active story has a blocking scope, assumption, design, test, or product-quality problem that should be preserved rather than continued in place. After aborting, either use `SPEC_analyzeUserStory` to analyze the aborted story for a later story round or use `SPEC_importIssue` to create a new improvement/refinement input.
 21. Use [../commands/Px-SpecFlow/SPEC_commitWorks.md](../commands/Px-SpecFlow/SPEC_commitWorks.md) and [../commands/Px-SpecFlow/SPEC_closeUserStory.md](../commands/Px-SpecFlow/SPEC_closeUserStory.md) to finish the lifecycle, then enforce the close-commit checkpoint when close-generated lifecycle/meta files were changed.
 
 ## Conflict Guard
@@ -275,5 +290,6 @@ flowchart TB
 - Do not start design when developer intent and CodeAgent intent are not cleared for the active story.
 - After `SPEC_makePlan`, use `SPEC_take*Design` only for initial design work and `SPEC_update*Design` only for follow-up design revision against existing design evidence, review feedback, or story-level design gaps.
 - Every design-producing step (`SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_updateDetailDesign`) must be followed by its review gate before downstream lifecycle steps.
+- Use `SPEC_abortUserStory` instead of continuing an active story when the discovered problem changes the story's intent, invalidates its assumptions, or needs a new analysis/improvement round.
 - Pre-close `SPEC_commitWorks` covers implementation/design artifacts; close-generated lifecycle/meta changes may require an immediate additional `SPEC_commitWorks` checkpoint before closure is complete.
 - If product intent is unclear, keep the user story open and ask the developer instead of inventing requirements.

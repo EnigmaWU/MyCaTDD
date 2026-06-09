@@ -1,6 +1,6 @@
 ---
 name: user-story-centered-spec-coding
-description: 'Use when: driving a user story through SpecCoding from issue or feature input to detail design, acceptance criteria, testing, implementation, review, commit, CI, and closure. Helps with: user-story-centered SpecCoding using Px-SpecFlow lifecycle artifacts such as pendingNews, todoUS, doingUS, and doneUS. Applies to: feature delivery, bug repair, work-item analysis, story-centered design, SpecFlow orchestration, and CodeAgent-guided implementation. CaTDD is the default UnitTesting method, but typical TDD or project-specific testing methods may be used when requested.'
+description: 'Use when: driving a user story through SpecCoding from issue or feature input to detail design, acceptance criteria, testing, implementation, review, commit, CI, closure, or abort. Helps with: user-story-centered SpecCoding using Px-SpecFlow lifecycle artifacts such as pendingNews, todoUS, doingUS, abortUS, and doneUS. Applies to: feature delivery, bug repair, work-item analysis, story-centered design, SpecFlow orchestration, and CodeAgent-guided implementation. CaTDD is the default UnitTesting method, but typical TDD or project-specific testing methods may be used when requested.'
 ---
 
 # User-Story-Centered SpecCoding
@@ -19,6 +19,7 @@ This skill orchestrates delivery around a user story lifecycle:
 
 ```text
 pendingNews -> todoUS -> doingUS -> doneUS
+                         \-> abortUS for unsafe active stories
 ```
 
 It owns lifecycle orchestration, not CaTDD method semantics.
@@ -169,8 +170,9 @@ If the testing method is unclear, default UnitTesting to CaTDD and explicitly no
 
 1. Use `SPEC_implProductCodes` intent to implement product code that satisfies tests.
 2. Use `SPEC_reviewProductCodes` intent to review implementation quality and traceability.
-3. If quality fails, use `SPEC_refactorIssue` intent to route back to design, tests, product code, or refactoring.
-4. Keep the active story open until quality gates are satisfied.
+3. If quality fails but the current story remains valid, route back to the needed design, test, or product-code step.
+4. If the current story's scope, assumptions, or intent are no longer safe, use `SPEC_abortUserStory` intent to move it to `.catdd/spec/abortUS/` for later analysis or next-round improvement.
+5. Keep the active story open until quality gates are satisfied or explicitly aborted.
 
 ### Phase 7: Commit, CI, and Closure
 

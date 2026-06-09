@@ -10,6 +10,7 @@ It helps a developer or agent move work through:
 
 ```text
 pendingNews -> analyzedNews + todoUS -> doingUS -> doneUS
+									  \-> abortUS for unsafe active stories
 ```
 
 The skill is about story-centered lifecycle orchestration. It is not the CaTDD methodology itself.
@@ -37,6 +38,7 @@ CaTDD -> does not depend on SpecCoding
 | `analyzedNews` | Raw issue or feature input already analyzed and preserved as source trace. |
 | `todoUS` | Analyzed user story ready to be opened. |
 | `doingUS` | Active user story under design, test, implementation, or review. |
+| `abortUS` | Aborted active story preserved for re-analysis or next-round improvement. |
 | `doneUS` | Completed story after review, commit, CI handling, and closure. |
 
 ## Core Flow
@@ -50,7 +52,7 @@ CaTDD -> does not depend on SpecCoding
 7. Design unit tests, defaulting to CaTDD when no other testing method is requested.
 8. Implement tests and product code.
 9. Review product code and traceability.
-10. Route quality failures back to the correct phase.
+10. Route quality failures back to the correct phase, or abort unsafe active stories into `abortUS`.
 11. Commit completed work.
 12. Trigger or verify CI.
 13. Close the user story and move it to done.

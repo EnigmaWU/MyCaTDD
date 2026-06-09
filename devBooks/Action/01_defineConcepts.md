@@ -133,7 +133,7 @@ These two agents together form a pipeline: spec → ut → results.
 
 1. **`comment-alive-test-driven-development`** — The CaTDD testing methodology packaged as a skill. It includes WHO/WHAT/WHEN/WHERE/WHY sections, phase-by-phase execution instructions, input/output contracts, constraints, and validation rules. When a developer says "use CaTDD" to a CodeAgent, this skill provides the agent with everything it needs.
 
-2. **`user-story-centered-spec-coding`** — The SpecCoding lifecycle orchestration packaged as a skill. It covers the full story lifecycle: pendingNews → todoUS → doingUS → doneUS, with CaTDD as the default unit-testing method.
+2. **`user-story-centered-spec-coding`** — The SpecCoding lifecycle orchestration packaged as a skill. It covers the full story lifecycle: pendingNews → todoUS → doingUS → doneUS, with abortUS preserving unsafe active stories for later analysis, and CaTDD as the default unit-testing method.
 
 The packaging script `makeSkill.sh` generates self-contained distributable packages by copying references from methodPrompts and slashCommands. The authored source is the durable asset; generated packages are build output.
 

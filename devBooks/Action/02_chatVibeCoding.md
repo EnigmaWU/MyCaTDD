@@ -17,7 +17,7 @@ In CaTDD terminology, using `methodPrompts` directly in a CodeAgent chat is **Vi
 | **Definition** | Flexible, method-guided LLM conversation | Structured flow with explicit lifecycle commands |
 | **Method source** | methodPrompts directly | slashCommands (wrapping methodPrompts) |
 | **Control** | Developer drives the conversation | Flow commands drive the lifecycle |
-| **Artifacts** | Comments, test files, code — ad hoc | SpecFlow artifacts: pendingNews, todoUS, doingUS, doneUS |
+| **Artifacts** | Comments, test files, code — ad hoc | SpecFlow artifacts: pendingNews, todoUS, doingUS, abortUS, doneUS |
 | **Traceability** | Optional, depends on developer | Mandatory, enforced by flow |
 | **When to use** | Exploration, drafting, brainstorming, quick fixes | Structured delivery, team work, reproducible workflows |
 | **Command invocation** | Developer types free-form prompts | Developer invokes `/UT_*` or `/SPEC_*` commands |
@@ -208,7 +208,7 @@ The choice between VibeCoding and SpecCoding is a spectrum, not a binary switch.
 - You need to pause and resume work across days
 - The scope is large (5+ User Stories, 20+ test cases)
 - You want reproducible `/UT_*` and `/SPEC_*` command sequences
-- Stakeholders need visibility into progress (pendingNews → todoUS → doingUS → doneUS)
+- Stakeholders need visibility into progress (pendingNews → todoUS → doingUS → doneUS, or abortUS when an active story should not continue)
 
 ### The Natural Transition Point
 

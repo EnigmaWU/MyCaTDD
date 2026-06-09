@@ -26,6 +26,7 @@ grep -Fq '[installCaTDD4Copilot] patch: .gitignore' <<< "$verbose_output" || fai
 [[ -f "$TARGET_DIR/.catdd/methodPrompts/README.md" ]] || fail "missing installed methodPrompts"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "missing installed slashCommands"
 [[ -d "$TARGET_DIR/.catdd/spec/analyzedNews" ]] || fail "missing .catdd/spec/analyzedNews"
+[[ -d "$TARGET_DIR/.catdd/spec/abortUS" ]] || fail "missing .catdd/spec/abortUS"
 [[ -f "$TARGET_DIR/.github/instructions/catdd.instructions.md" ]] || fail "missing Copilot CaTDD instruction file"
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"

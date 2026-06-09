@@ -49,6 +49,7 @@ grep -Fq 'CaTDD is the default UnitTesting method' "$PACKAGE_DIR/SKILL.md" || fa
 grep -Fq 'CaTDD does not depend on this SpecCoding flow' "$PACKAGE_DIR/SKILL.md" || fail "SpecCoding skill must preserve CaTDD independence"
 grep -Fq 'user-story-centered SpecCoding' "$PACKAGE_DIR/README.md" || fail "SpecCoding README missing concept name"
 grep -Fq 'pendingNews -> analyzedNews + todoUS -> doingUS -> doneUS' "$PACKAGE_DIR/README.md" || fail "SpecCoding README missing user story lifecycle"
+grep -Fq '\-> abortUS for unsafe active stories' "$PACKAGE_DIR/README.md" || fail "SpecCoding README missing abortUS lifecycle branch"
 
 package_symlink_count="$(find "$PACKAGE_DIR" -type l | wc -l | tr -d '[:space:]')"
 [[ "$package_symlink_count" == "0" ]] || fail "packaged SpecCoding skill must be self-contained, found $package_symlink_count symlinks"

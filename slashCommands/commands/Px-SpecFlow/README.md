@@ -4,7 +4,7 @@ This directory contains `SPEC_*` command templates for the CaTDD SpecCoding life
 
 `SPEC_*` commands orchestrate issue, story, design, test, implementation, review, CI, and closure work. They are flow commands, not CaTDD category definitions. Method semantics remain in `methodPrompts`.
 
-Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/doneUS/`, project-root `README*` SPEC docs, tests, and product code. Keep local-only traces such as `.catdd/spec/WorkingProcessLog.md` gitignored.
+Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, project-root `README*` SPEC docs, tests, and product code. Keep local-only traces such as `.catdd/spec/WorkingProcessLog.md` gitignored.
 
 ## Command Map
 
@@ -17,6 +17,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_importUserStory.md](SPEC_importUserStory.md) | Import existing structured user story or AC slices directly into todo stories. |
 | [SPEC_analyzeIssue.md](SPEC_analyzeIssue.md) | Analyze pending issue input, archive raw input, and generate a repair-oriented user story. |
 | [SPEC_analyzeFeature.md](SPEC_analyzeFeature.md) | Analyze pending feature input, archive raw input, and generate a value-oriented user story. |
+| [SPEC_analyzeUserStory.md](SPEC_analyzeUserStory.md) | Re-analyze aborted story evidence into a later todo story. |
 | [SPEC_whatsNextTask.md](SPEC_whatsNextTask.md) | Recommend the next SpecCoding task from current lifecycle state. |
 | [SPEC_openUserStory.md](SPEC_openUserStory.md) | Move a selected user story into active work. |
 | [SPEC_makePlan.md](SPEC_makePlan.md) | Create the active story TASKs artifact and choose the next SPEC step. |
@@ -33,7 +34,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_implUnitTests.md](SPEC_implUnitTests.md) | Implement selected test cases. |
 | [SPEC_implProductCodes.md](SPEC_implProductCodes.md) | Implement product code to satisfy tests. |
 | [SPEC_reviewProductCodes.md](SPEC_reviewProductCodes.md) | Review implementation quality and traceability. |
-| [SPEC_refactorIssue.md](SPEC_refactorIssue.md) | Route failed quality back through design or implementation. |
+| [SPEC_abortUserStory.md](SPEC_abortUserStory.md) | Move an unsafe active story to abortUS for later analysis or next-round improvement. |
 | [SPEC_commitWorks.md](SPEC_commitWorks.md) | Prepare and commit completed work. |
 | [SPEC_closeUserStory.md](SPEC_closeUserStory.md) | Move completed story to done state. |
 

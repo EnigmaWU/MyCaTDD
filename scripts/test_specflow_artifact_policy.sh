@@ -22,6 +22,7 @@ grep -Fq '`.catdd/spec/pendingNews/` | Team-shared | Commit' "$FLOW_DOC" || fail
 grep -Fq '`.catdd/spec/analyzedNews/` | Team-shared | Commit' "$FLOW_DOC" || fail "analyzedNews must be documented under .catdd/spec as committed analyzed raw input archive"
 grep -Fq '`.catdd/spec/todoUS/` | Team-shared | Commit' "$FLOW_DOC" || fail "todoUS must be documented under .catdd/spec as committed shared backlog"
 grep -Fq '`.catdd/spec/doingUS/` | Team-shared | Commit' "$FLOW_DOC" || fail "doingUS must be documented under .catdd/spec as committed team-shared active state"
+grep -Fq '`.catdd/spec/abortUS/` | Team-shared | Commit' "$FLOW_DOC" || fail "abortUS must be documented under .catdd/spec as committed aborted story state"
 grep -Fq '`.catdd/spec/doneUS/` | Team-shared | Commit' "$FLOW_DOC" || fail "doneUS must be documented under .catdd/spec as committed shared history"
 grep -Fq '`.catdd/spec/WorkingProcessLog.md` | Local work state | Gitignore' "$FLOW_DOC" || fail "WorkingProcessLog must be documented under .catdd/spec as ignored local work state"
 grep -Fq '`README*.md` | Team-shared | Commit' "$FLOW_DOC" || fail "project-root README SPEC docs must be documented as committed shared artifacts"
@@ -41,6 +42,7 @@ grep -Fq 'embedded software and digital video/audio domain work' "$FLOW_DOC" || 
 
 grep -Fq 'team-shared persistent artifact' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_initProjectContext.md" || fail "SPEC_initProjectContext must mark projectContext as team-shared persistent output"
 grep -Fq 'team-shared active work file' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md" || fail "SPEC_openUserStory must mark doingUS as team-shared active work state"
+grep -Fq 'team-shared aborted story artifact' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_abortUserStory.md" || fail "SPEC_abortUserStory must mark abortUS as team-shared aborted output"
 grep -Fq 'team-shared completed story artifact' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md" || fail "SPEC_closeUserStory must mark doneUS as team-shared completed output"
 grep -Fq 'Project-root README SPEC docs as needed' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeDetailDesign.md" || fail "SPEC_takeDetailDesign must create or update project-root README SPEC docs as needed"
 grep -Fq 'Updated project-root verification design in `README_VerifyDesign.md`' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md" || fail "SPEC_designUnitTests must update project-root verification design when coverage changes"
@@ -62,6 +64,9 @@ fi
 if git -C "$REPO_ROOT" check-ignore -q .catdd/spec/doingUS/example.md; then
   fail "source .gitignore must allow committed .catdd/spec/doingUS artifacts"
 fi
+if git -C "$REPO_ROOT" check-ignore -q .catdd/spec/abortUS/example.md; then
+  fail "source .gitignore must allow committed .catdd/spec/abortUS artifacts"
+fi
 git -C "$REPO_ROOT" check-ignore -q .catdd/spec/WorkingProcessLog.md || fail "source .gitignore must ignore local .catdd/spec/WorkingProcessLog.md"
 
 printf '/dist/\n' > "$TARGET_DIR/.gitignore"
@@ -73,6 +78,7 @@ printf '/dist/\n' > "$TARGET_DIR/.gitignore"
 [[ -d "$TARGET_DIR/.catdd/spec/analyzedNews" ]] || fail "installer must create .catdd/spec/analyzedNews"
 [[ -d "$TARGET_DIR/.catdd/spec/todoUS" ]] || fail "installer must create .catdd/spec/todoUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doingUS" ]] || fail "installer must create .catdd/spec/doingUS"
+[[ -d "$TARGET_DIR/.catdd/spec/abortUS" ]] || fail "installer must create .catdd/spec/abortUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doneUS" ]] || fail "installer must create .catdd/spec/doneUS"
 [[ ! -d "$TARGET_DIR/.catdd/spec/modules" ]] || fail "installer must not create .catdd/spec/modules because README SPEC docs belong in project root"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/templates/README_DetailDesignTemplate.md" ]] || fail "installer must install detail design README SPEC template"
@@ -96,7 +102,7 @@ grep -Fq '# END CaTDD SpecCoding local state' "$TARGET_GITIGNORE" || fail "targe
 [[ "$(grep -Fc '/.catdd/spec/WorkingProcessLog.md' "$TARGET_GITIGNORE")" == "1" ]] || fail "target .gitignore must contain exactly one WorkingProcessLog rule"
 
 instructions="$TARGET_DIR/.github/instructions/catdd.instructions.md"
-grep -Fq 'Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, and `doneUS/`.' "$instructions" || fail "instructions missing commit guidance for shared SpecCoding artifacts"
+grep -Fq 'Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `abortUS/`, and `doneUS/`.' "$instructions" || fail "instructions missing commit guidance for shared SpecCoding artifacts"
 grep -Fq 'Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.' "$instructions" || fail "instructions missing project-root README SPEC docs guidance"
 grep -Fq 'Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.' "$instructions" || fail "instructions missing gitignore guidance for local SpecCoding state"
 
