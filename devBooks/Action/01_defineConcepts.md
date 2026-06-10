@@ -553,13 +553,13 @@ Keep all tests for a component in one file. Use TEST suites to organize by categ
 
 All test files in a `Test/` directory:
 
-- `UT_ComponentFreelyDrafts.cxx` — Exploration and idea capture
-- `UT_ComponentTypical.cxx` — Core workflows
-- `UT_ComponentEdge.cxx` — Edge cases, boundaries, limits
-- `UT_ComponentState.cxx` — State transitions
-- `UT_ComponentConcurrency.cxx` — Thread safety
-- `UT_ComponentMisuse.cxx` — API abuse patterns
-- `UT_ComponentFault.cxx` — Error handling and recovery
+- `UT_Component_FreelyDrafts.cxx` — Exploration and idea capture
+- `UT_Component_Typical.cxx` — Core workflows
+- `UT_Component_Edge.cxx` — Edge cases, boundaries, limits
+- `UT_Component_Misuse.cxx` — API abuse patterns
+- `UT_Component_Fault.cxx` — Error handling and recovery
+- `UT_Component_State.cxx` — State transitions
+- `UT_Component_Concurrency.cxx` — Thread safety
 - Common utilities in `_UT_Common.h`
 
 Mature, stable tests move from exploration files to category-specific files.

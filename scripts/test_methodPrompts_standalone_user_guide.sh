@@ -6,6 +6,9 @@ METHOD_DIR="$REPO_ROOT/methodPrompts"
 GUIDE="$METHOD_DIR/README_UserGuide.md"
 GUIDE_ZH="$METHOD_DIR/README_UserGuide_ZH.md"
 MAIN_GUIDE="$REPO_ROOT/README_UserGuide.md"
+MASTER_PROMPT="$METHOD_DIR/CaTDD_methodPrompt.md"
+CXX_TEMPLATE="$METHOD_DIR/CaTDD_designAndImplTemplate.cxx"
+TS_TEMPLATE="$METHOD_DIR/CaTDD_designAndImplTemplate.ts"
 
 fail() {
   echo "[methodPrompts-standalone-guide-test] $*" >&2
@@ -26,6 +29,9 @@ grep -Fq '## How' "$GUIDE" || fail "standalone guide missing How section"
 grep -Fq '## Usage Example' "$GUIDE" || fail "standalone guide missing copy-exec Usage Example section"
 
 grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.cxx' "$GUIDE" || fail "standalone guide missing template copy command"
+grep -Fq 'Test/UT_YourFeature_Typical.cxx' "$GUIDE" || fail "standalone guide missing category-explicit UT filename example"
+grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.ts' "$GUIDE" || fail "standalone guide missing TypeScript template copy command"
+grep -Fq 'Test/UT_YourFeature_Typical.ts' "$GUIDE" || fail "standalone guide missing TypeScript category-explicit UT filename example"
 grep -Fq 'CaTDD_methodPrompt.md' "$GUIDE" || fail "standalone guide missing master method prompt reference"
 grep -Fq 'CaTDD_methodPrompt4Cat-Typical.md' "$GUIDE" || fail "standalone guide missing category prompt reference"
 grep -Fq 'P0 Functional' "$GUIDE" || fail "standalone guide missing priority framework"
@@ -34,8 +40,17 @@ grep -Fq 'US/AC/TC' "$GUIDE" || fail "standalone guide missing US/AC/TC guidance
 grep -Fq '## 使用者' "$GUIDE_ZH" || fail "Chinese standalone guide missing 使用者 section"
 grep -Fq '## Usage Example' "$GUIDE_ZH" || fail "Chinese standalone guide missing copy-exec Usage Example section"
 grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.cxx' "$GUIDE_ZH" || fail "Chinese standalone guide missing template copy command"
+grep -Fq 'Test/UT_YourFeature_Typical.cxx' "$GUIDE_ZH" || fail "Chinese standalone guide missing category-explicit UT filename example"
+grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.ts' "$GUIDE_ZH" || fail "Chinese standalone guide missing TypeScript template copy command"
+grep -Fq 'Test/UT_YourFeature_Typical.ts' "$GUIDE_ZH" || fail "Chinese standalone guide missing TypeScript category-explicit UT filename example"
 grep -Fq 'CaTDD_methodPrompt4Cat-Typical.md' "$GUIDE_ZH" || fail "Chinese standalone guide missing category prompt reference"
 grep -Fq 'P0 Functional' "$GUIDE_ZH" || fail "Chinese standalone guide missing priority framework"
+
+grep -Fq 'UT_<Feature>_<Category>.<ext>' "$MASTER_PROMPT" || fail "master method prompt missing canonical category-explicit UT naming pattern"
+grep -Fq 'UT_<Feature>_<Category>.cxx' "$CXX_TEMPLATE" || fail "C++ template missing category-explicit UT naming guidance"
+grep -Fq 'UT_<Feature>_<Category>.ts' "$TS_TEMPLATE" || fail "TypeScript template missing category-explicit UT naming guidance"
+grep -Fq 'Test/UT_YourFeature_Typical.cxx' "$MAIN_GUIDE" || fail "main user guide missing category-explicit UT filename example"
+grep -Fq 'Test/UT_YourFeature_Typical.ts' "$MAIN_GUIDE" || fail "main user guide missing TypeScript category-explicit UT filename example"
 
 grep -Fq 'This README is the WHAT / WHY entry point' "$METHOD_DIR/README.md" || fail "methodPrompts README must own WHAT/WHY"
 grep -Fq 'HOW, WHO, WHEN, and WHERE' "$METHOD_DIR/README.md" || fail "methodPrompts README must delegate HOW/WHO/WHEN/WHERE to UserGuide"

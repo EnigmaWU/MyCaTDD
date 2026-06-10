@@ -109,20 +109,25 @@ methodPrompts/
 
 ```bash
 mkdir -p Test
-cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature.cxx
+# C++ target
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature_Typical.cxx
+# TypeScript target
+cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/UT_YourFeature_Typical.ts
 ```
+
+类别专属测试文件使用 `UT_<Feature>_<Category>.<ext>`，例如 `UT_YourFeature_Typical.cxx`、`UT_YourFeature_Typical.ts` 或 `UT_YourFeature_Edge.ts`。
 
 然后让 CodeAgent 执行，或手工使用方法提示词：
 
 ```text
 Read methodPrompts/README_UserGuide_ZH.md and methodPrompts/CaTDD_methodPrompt.md.
-Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/UT_YourFeature.cxx.
+Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/UT_YourFeature_Typical.cxx or Test/UT_YourFeature_Typical.ts.
 Preserve US/AC/TC traceability and leave unclear product intent as questions.
 ```
 
 预期结果：
 
-- `Test/UT_YourFeature.cxx` 包含 OVERVIEW 分区。
+- `Test/UT_YourFeature_Typical.cxx` 或 `Test/UT_YourFeature_Typical.ts` 包含 OVERVIEW 分区。
 - 它包含带有 US/AC/TC 注释的 UNIT TESTING DESIGN 分区。
 - 它包含可进入 Red-Green TDD 的 UNIT TESTING IMPLEMENTATION 分区。
 - 它包含所选 TC 的 TODO/TRACKING 状态标记。

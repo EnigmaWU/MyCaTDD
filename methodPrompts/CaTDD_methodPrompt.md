@@ -850,15 +850,19 @@ Copy this block into your test files to track progress:
 **Multi-File Strategy** (larger projects - used in IOC project)
 
 - All test files in `Test/` directory
-- Start with `UT_ComponentFreelyDrafts.cxx` for exploration
+- Use `UT_<Feature>_<Category>.<ext>` for category-specific test files so the filename exposes the CaTDD category before the file is opened
+- Start with `UT_Component_FreelyDrafts.cxx` for exploration
 - Move to category-specific files as tests mature:
-  - `UT_ComponentTypical.cxx` - Core workflows
-  - `UT_ComponentEdge.cxx` - Edge cases, boundary values, and limits
-  - `UT_ComponentState.cxx` - State transitions
-  - `UT_ComponentConcurrency.cxx` - Thread safety
+  - `UT_Component_Typical.cxx` - Core workflows
+  - `UT_Component_Edge.cxx` - Edge cases, boundary values, and limits
+  - `UT_Component_Misuse.cxx` - API abuse patterns
+  - `UT_Component_Fault.cxx` - Error handling and recovery
+  - `UT_Component_State.cxx` - State transitions
+  - `UT_Component_Concurrency.cxx` - Thread safety
   - etc.
 - Common utilities in `Test/_UT_IOC_Common.h`
 - Data fixtures can use dedicated files (e.g., `Test/DataTypicalAutoAccept.h`)
+- The same category token rule applies across languages, e.g., `UT_Component_Typical.ts` for a TypeScript test target.
 
 ### For LLM/AI Assistance
 

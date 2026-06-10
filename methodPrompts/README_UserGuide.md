@@ -109,20 +109,25 @@ Run these commands from a target project that contains `methodPrompts/`:
 
 ```bash
 mkdir -p Test
-cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature.cxx
+# C++ target
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature_Typical.cxx
+# TypeScript target
+cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/UT_YourFeature_Typical.ts
 ```
+
+Use `UT_<Feature>_<Category>.<ext>` for category-specific files, such as `UT_YourFeature_Typical.cxx`, `UT_YourFeature_Typical.ts`, or `UT_YourFeature_Edge.ts`.
 
 Then ask your CodeAgent or use the method prompts manually:
 
 ```text
 Read methodPrompts/README_UserGuide.md and methodPrompts/CaTDD_methodPrompt.md.
-Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/UT_YourFeature.cxx.
+Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/UT_YourFeature_Typical.cxx or Test/UT_YourFeature_Typical.ts.
 Preserve US/AC/TC traceability and leave unclear product intent as questions.
 ```
 
 Expected result:
 
-- `Test/UT_YourFeature.cxx` has an OVERVIEW section.
+- `Test/UT_YourFeature_Typical.cxx` or `Test/UT_YourFeature_Typical.ts` has an OVERVIEW section.
 - It has a UNIT TESTING DESIGN section with US/AC/TC comments.
 - It has a UNIT TESTING IMPLEMENTATION section ready for Red-Green TDD.
 - It has TODO/TRACKING status markers for the selected TCs.

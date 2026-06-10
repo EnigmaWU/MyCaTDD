@@ -6,7 +6,7 @@
 //   This template embodies Test-Driven Development with rich, structured comments.
 //
 // USAGE:
-//   1. Copy this file to create new UT_*.ts test file
+//   1. Copy this file to create new UT_<Feature>_<Category>.ts test file
 //   2. Fill in OVERVIEW: what you're testing and why
 //   3. Draft ideas freely in comments
 //   4. Structure into US/AC/TC format

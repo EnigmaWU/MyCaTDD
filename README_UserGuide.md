@@ -103,8 +103,13 @@ Use this guide as the user-facing entry point for CaTDD. Use the linked layer RE
 ### 1. Copy the Template
 
 ```bash
-cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature.cxx
+# C++ target
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature_Typical.cxx
+# TypeScript target
+cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/UT_YourFeature_Typical.ts
 ```
+
+Use `UT_<Feature>_<Category>.<ext>` for category-specific test files, such as `UT_YourFeature_Typical.cxx`, `UT_YourFeature_Typical.ts`, or `UT_YourFeature_Edge.ts`.
 
 Run this command from the repository root so `methodPrompts/` resolves correctly.
 If your project does not have a `Test/` directory, create one or adjust the destination path.
@@ -901,8 +906,13 @@ Ready to write your first CaTDD test file? Follow this checklist:
 ### ✅ Step 1: Copy Template
 
 ```bash
-cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature.cxx
+# C++ target
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature_Typical.cxx
+# TypeScript target
+cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/UT_YourFeature_Typical.ts
 ```
+
+Use `UT_<Feature>_<Category>.<ext>` for category-specific test files, such as `UT_YourFeature_Typical.cxx`, `UT_YourFeature_Typical.ts`, or `UT_YourFeature_Edge.ts`.
 
 If your project does not have a `Test/` directory, create one or adjust the destination path.
 

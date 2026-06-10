@@ -553,13 +553,13 @@ CaTDD 根据项目规模支持两种组织策略：
 
 所有测试文件放在 `Test/` 目录中：
 
-- `UT_ComponentFreelyDrafts.cxx` — 探索与想法捕获
-- `UT_ComponentTypical.cxx` — 核心工作流
-- `UT_ComponentEdge.cxx` — 边界情况、边界值、极限
-- `UT_ComponentState.cxx` — 状态转换
-- `UT_ComponentConcurrency.cxx` — 线程安全
-- `UT_ComponentMisuse.cxx` — API 滥用模式
-- `UT_ComponentFault.cxx` — 错误处理与恢复
+- `UT_Component_FreelyDrafts.cxx` — 探索与想法捕获
+- `UT_Component_Typical.cxx` — 核心工作流
+- `UT_Component_Edge.cxx` — 边界情况、边界值、极限
+- `UT_Component_Misuse.cxx` — API 滥用模式
+- `UT_Component_Fault.cxx` — 错误处理与恢复
+- `UT_Component_State.cxx` — 状态转换
+- `UT_Component_Concurrency.cxx` — 线程安全
 - 公共工具放在 `_UT_Common.h`
 
 成熟、稳定的测试从探索文件迁移到按类别划分的文件。
