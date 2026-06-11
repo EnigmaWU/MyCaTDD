@@ -7,7 +7,7 @@ This document captures verification strategy and US/AC/TC traceability for activ
 - Story: US-USER-01 Parse and Validate CLI Arguments
 - Detail design: [codeAgents/utCodeAgentCLI/README_DetailDesign.md](codeAgents/utCodeAgentCLI/README_DetailDesign.md)
 - Completed story artifact: [.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md](.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md)
-- Target test files: [codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts](codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts)
+- Target test files: [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts), [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts), [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts), [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts)
 
 ## Testing Definition
 
@@ -29,10 +29,10 @@ Design P0 Functional coverage first for argument validation because this story i
 
 | Priority | Category | Scope | Required Now | Notes |
 | --- | --- | --- | --- | --- |
-| P0 | Functional: Typical | Valid invocation success path | Yes | Covers `TC-ARG-005` valid dispatch readiness. |
-| P0 | Functional: Edge | Valid boundary or mode variation | No | No valid edge scenario is specified in this story slice. |
-| P0 | Functional: Misuse | Invalid caller argument contract checks | Yes | Covers missing required args, unknown `--behave`, and conflicting story/input flags. |
-| P0 | Functional: Fault | File-path failure handling | Yes | Covers nonexistent file-path arguments. |
+| P0 | Functional: Typical | Valid invocation success path | Yes | Covers `TC-ARG-005` in `UT_US-USER-01-Typical.ts`. |
+| P0 | Functional: Edge | Valid boundary or mode variation | No | Skeleton present in `UT_US-USER-01-Edge.ts`; no valid edge scenario is specified in this story slice. |
+| P0 | Functional: Misuse | Invalid caller argument contract checks | Yes | Covers missing required args, unknown `--behave`, and conflicting story/input flags in `UT_US-USER-01-Misuse.ts`. |
+| P0 | Functional: Fault | File-path failure handling | Yes | Covers nonexistent file-path arguments in `UT_US-USER-01-Fault.ts`. |
 | P1 | Design: State/Capability/Concurrency | Parser/validator internals | No | Defer until runtime state model requires dedicated tests. |
 | P2 | Quality: Performance/Robust/Compatibility/Configuration | CLI quality envelopes | No | Defer until executable implementation baseline exists. |
 
@@ -40,18 +40,18 @@ Design P0 Functional coverage first for argument validation because this story i
 
 | US | AC | TC | Test File | Status |
 | --- | --- | --- | --- | --- |
-| US-USER-01 | AC-01 | TC-ARG-001 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-01 | TC-ARG-002 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-01 | TC-ARG-003 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-03 | TC-ARG-004 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-05 | TC-ARG-005 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-02 | TC-ARG-006 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-02 | TC-ARG-007 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-008 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-009 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-010 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-011 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-012 | codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts | GREEN |
+| US-USER-01 | AC-01 | TC-ARG-001 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-01 | TC-ARG-002 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-01 | TC-ARG-003 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-03 | TC-ARG-004 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-05 | TC-ARG-005 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts | GREEN |
+| US-USER-01 | AC-02 | TC-ARG-006 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-02 | TC-ARG-007 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-008 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-009 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-010 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-011 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
+| US-USER-01 | AC-04 | TC-ARG-012 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
 
 ## Test Case Design Notes
 
@@ -91,10 +91,10 @@ digital video/audio points:
 Run from repository root to inspect the designed skeleton file:
 
 ```bash
-sed -n '1,220p' codeAgents/utCodeAgentCLI/tests/cli_argument_validation.design.test.ts
+sed -n '1,220p' codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts
 ```
 
-Expected result: P0 Typical/Misuse/Fault skeleton sections with `@[US]`, `@[AC]`, `@[TC]`, `@[Category]`, and `@[Status]: GREEN` tags.
+Expected result: category-specific CaTDD UnitTesting files with `@[US]`, `@[AC]`, `@[TC]`, `@[Category]`, and `@[Status]: GREEN` tags where executable TCs exist.
 
 ## Review Checklist
 

@@ -125,7 +125,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 Run this next after context review:
 
-- `/SPEC_takeDetailDesign` for `.catdd/spec/doingUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md` to design the SPEC-to-UT routing rules and TypeScript test redesign approach.
+- `/SPEC_implProductCodes` for `.catdd/spec/doingUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md` to update command/flow documentation so future `SPEC_designUnitTests` runs use matching `UT_designXYZ` commands, language templates, and category-specific UnitTesting file output.
 
 ## Assumptions To Confirm
 
