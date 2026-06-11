@@ -81,7 +81,7 @@ ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .cat
 ```
 
 - If a lifecycle directory is absent, record that absence instead of inventing an empty state. Current check on 2026-06-11 found `.catdd/spec/abortUS/` absent.
-- Current lifecycle summary from the latest filesystem check: `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, and `doneUS/` exist; `doingUS/` is empty; no active story is opened.
+- Current lifecycle summary from the latest filesystem check: `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, and `doneUS/` exist; `doingUS/` now contains `20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md`; that story is open.
 - Use `/SPEC_whatsNextTask` or the live `ls -lrt` inventory to choose the next lifecycle file, rather than reading a stale filename list from this project context.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes the runtime-language tradeoff review across TypeScript/Node.js, Python, and Go, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented surface coverage, and an ADR link for the runtime choice.
@@ -95,7 +95,7 @@ ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .cat
 
 Run this next after context review:
 
-- `/SPEC_analyzeIssue` for pending imported work, starting with `.catdd/spec/pendingNews/20260611-add-emoji-to-designAndImplTemplate-key-states-Issue.md` if that is the next priority.
+- `/SPEC_designUnitTests` for active story `20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md`.
 
 ## Assumptions To Confirm
 

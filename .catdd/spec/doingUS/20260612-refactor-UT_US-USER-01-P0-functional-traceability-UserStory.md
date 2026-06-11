@@ -1,29 +1,70 @@
 # User Story: refactor UT_US-USER-01 under mandatory CaTDD P0 traceability
 
 Created by `/SPEC_analyzeIssue` on 2026-06-12.
+Opened by `/SPEC_openUserStory` on 2026-06-12.
 
 ## Source Trace
 
-- Raw issue archive: [../analyzedNews/20260612-refactor-unit-testing-of-UT_US-USER-01-under-CaTDD-Issue.md](../analyzedNews/20260612-refactor-unit-testing-of-UT_US-USER-01-under-CaTDD-Issue.md)
-- Authoritative story source: [../../../codeAgents/utCodeAgentCLI/README_UserStory4USER.md](../../../codeAgents/utCodeAgentCLI/README_UserStory4USER.md)
-- Module verification design: [../../../codeAgents/utCodeAgentCLI/README_VerifyDesign.md](../../../codeAgents/utCodeAgentCLI/README_VerifyDesign.md)
+- [20260612-refactor-unit-testing-of-UT_US-USER-01-under-CaTDD-Issue.md](../analyzedNews/20260612-refactor-unit-testing-of-UT_US-USER-01-under-CaTDD-Issue.md)
+- [README_UserStory4USER.md](../../../codeAgents/utCodeAgentCLI/README_UserStory4USER.md)
+- [README_VerifyDesign.md](../../../codeAgents/utCodeAgentCLI/README_VerifyDesign.md)
 - Related tests:
-  - [../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts](../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts)
-  - [../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts](../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts)
-  - [../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts](../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts)
-  - [../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts](../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts)
-- Related command: [../../../slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md](../../../slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md)
-- Related command: [../../../slashCommands/commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md](../../../slashCommands/commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md)
-- Method source: [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- Language template: [../../../methodPrompts/CaTDD_designAndImplTemplate.ts](../../../methodPrompts/CaTDD_designAndImplTemplate.ts)
+  - [UT_US-USER-01-Typical.ts](../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts)
+  - [UT_US-USER-01-Edge.ts](../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts)
+  - [UT_US-USER-01-Misuse.ts](../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts)
+  - [UT_US-USER-01-Fault.ts](../../../codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts)
+- [SPEC_designUnitTests.md](../../../slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md)
+- [UT_designFuncTestsSkeleton.md](../../../slashCommands/commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md)
+- [CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [CaTDD_designAndImplTemplate.ts](../../../methodPrompts/CaTDD_designAndImplTemplate.ts)
 
 ## Active Work Status
 
-- Status: TODO.
-- Active state: `.catdd/spec/todoUS/` ready for `SPEC_openUserStory`.
+- Status: OPEN.
+- Active state: `.catdd/spec/doingUS/` active work in progress.
+- Opened from: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md](../todoUS/20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md)
 - Priority: P1 - affects verification design correctness and CaTDD lifecycle consistency.
 - Confidence: medium-high.
-- Next recommended command: `/SPEC_openUserStory`.
+- TASKs artifact: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md](20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md).
+- Next recommended command: `/SPEC_designUnitTests`.
+
+## Mutual Intent Contract
+
+### Developer Intent
+
+- Goal: refactor the `UT_US-USER-01` unit-testing surface for `utCodeAgentCLI` so it explicitly satisfies the new CaTDD P0 Functional traceability rules.
+- Why: future readers and agents must be able to audit `US-USER-01` coverage, SUT selection, and AC-to-TC mapping without relying on implicit historical context.
+
+### CodeAgent Intent
+
+- Goal: keep the `utCodeAgentCLI` CLI-validation behavior unchanged while making the P0 Functional test design and verification docs explicitly traceable.
+- Why: the story should strengthen CaTDD auditability and lifecycle clarity, not alter the product behavior under test.
+
+### In Scope
+
+- Preserve `US-USER-01`, `AC-01..AC-05`, and the `utCodeAgentCLI` SUT.
+- Make SUT declaration explicit in the story-linked verification surface.
+- Ensure each AC has at least one TC and the P0 Functional category intent remains visible.
+- Update `README_VerifyDesign.md` and related test-story comments only if needed to keep traceability explicit.
+
+### Out of Scope
+
+- Changing `utCodeAgentCLI` argument-validation behavior.
+- Expanding the redesign to unrelated `UT_US-*` stories.
+- Redefining CaTDD P0 Functional semantics or adding new slash commands.
+
+### Success Signal
+
+- A reviewer can inspect the story artifacts and see `utCodeAgentCLI` named as SUT, `US-USER-01` traceability preserved, each AC backed by at least one TC, and the focused Node test command still GREEN.
+
+### Assumptions
+
+- `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` remains the authoritative AC source.
+- The TypeScript test files remain the target surface.
+
+### Open Questions
+
+- Does the Edge category need a real executable TC, or should the story explicitly document a traceable non-required Edge decision before completion?
 
 ## Story
 
@@ -151,4 +192,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_openUserStory` to move this analyzed story into `.catdd/spec/doingUS/`.
+Run `/SPEC_designUnitTests` to redesign the `UT_US-USER-01` UnitTesting surface before implementation or refactor edits begin.
