@@ -14,6 +14,8 @@ Px SpecFlow = repeatable SpecCoding lifecycle over that method
 P0/P1/P2 flows = category-specific test design and implementation flows
 ```
 
+`SPEC_*` commands own lifecycle orchestration: story state, readiness gates, cross-category coverage selection, traceability, review, commit, and closure. `UT_*` commands own category-level test mechanics: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration skeleton design or implementation steps. When a `SPEC_*` command such as `SPEC_designUnitTests` needs category skeletons, it should use matching `UT_designXYZ` command contracts when they exist and record that provenance instead of silently drafting category shapes from memory.
+
 The governing spec is comment-alive verification design: project context, user stories, acceptance criteria, detailed design, US/AC/TC skeletons, test status, product code status, and review decisions.
 
 ## Model Tier Guidance
@@ -242,7 +244,12 @@ flowchart TB
     ImplementationChoice -- "abort" --> Abort2b["SPEC_abortUserStory"]
     ImplementationChoice -- "story is test-ready" --> DesignTests["SPEC_designUnitTests"]
 
-    DesignTests --> ImplTests["SPEC_implUnitTests"]
+    DesignTests --> UTDesign{"matching UT_designXYZ exists?"}
+    UTDesign -- "YES" --> CategoryDesign["use UT_designXYZ contract"]
+    UTDesign -- "NO, clear intent" --> MethodFallback["explicit methodPrompts fallback"]
+    UTDesign -- "NO, unclear intent" --> DetailGap["return to Part 2.a SPEC_updateDetailDesign"]
+    CategoryDesign --> ImplTests["SPEC_implUnitTests"]
+    MethodFallback --> ImplTests
     ImplTests --> ImplCode["SPEC_implProductCodes"]
     ImplCode --> ReviewCode["SPEC_reviewProductCodes"]
     ReviewCode --> QualityCode{"code quality?"}

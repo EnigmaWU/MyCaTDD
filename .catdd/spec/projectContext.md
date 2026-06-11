@@ -125,7 +125,7 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 Run this next after context review:
 
-- `/SPEC_implProductCodes` for `.catdd/spec/doingUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md` to update command/flow documentation so future `SPEC_designUnitTests` runs use matching `UT_designXYZ` commands, language templates, and category-specific UnitTesting file output.
+- `/SPEC_closeUserStory` for `.catdd/spec/doingUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md` to move the committed active story and TASKs into `doneUS/`.
 
 ## Assumptions To Confirm
 

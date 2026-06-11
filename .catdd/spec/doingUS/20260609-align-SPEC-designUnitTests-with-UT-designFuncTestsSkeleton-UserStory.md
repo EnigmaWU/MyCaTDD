@@ -323,6 +323,38 @@ Designed by `/SPEC_designUnitTests` on 2026-06-10.
 - Focused validation command: `node --test codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts`.
 - Validation result: 12 executable tests passed after split; the Edge design skeleton file also loaded successfully.
 
+## Product Code Implementation Result
+
+Implemented by `/SPEC_implProductCodes` on 2026-06-11.
+
+- Updated `slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md` so the command contract requires inspecting existing `UT_design*Skeleton` command contracts before drafting category skeletons directly.
+- Added category-command routing rules for full P0 Functional, individual P0 categories, P1 Design categories, and P2 Quality categories.
+- Added explicit fallback behavior: record the missing `UT_designXYZ` command as a gap, use `methodPrompts` only when category intent is clear, and ask the developer when intent is unclear.
+- Added language-template selection and provenance rules so target-language CaTDD design+implementation templates are used when available.
+- Updated `slashCommands/flows/Px-SpecFlow.md` to clarify SPEC lifecycle orchestration versus UT category-design mechanics and to show the `SPEC_designUnitTests` handoff to matching `UT_designXYZ` contracts.
+- Updated `slashCommands/flows/P0-FuncTestsFlow.md` to clarify that `UT_designFuncTestsSkeleton` owns full P0 skeleton design and remains design-only.
+- Verification: `bash scripts/test_slashcommands_complete.sh` passed.
+
+## Product Code Review Result
+
+Reviewed by `/SPEC_reviewProductCodes` on 2026-06-11.
+
+- Review finding: PASS.
+- Correctness check: PASS. `SPEC_designUnitTests.md` now requires matching `UT_design*Skeleton` command contract inspection before direct skeleton drafting and records the fallback rule when no matching command exists.
+- Traceability check: PASS. The implementation maps to AC-01 through AC-03 and preserves the AC-04 through AC-06 UnitTesting evidence from the split `UT_US-USER-01-*.ts` files.
+- Scope check: PASS. The changes are limited to command/flow documentation and lifecycle records; no CLI validator behavior or CaTDD category semantics changed.
+- Minimality check: PASS. The patch updates the controlling command contract and the two relevant flow docs without adding new command names or unrelated behavior.
+- Verification evidence: `bash scripts/test_slashcommands_complete.sh`, `bash scripts/test_documentation_contract.sh`, `node --test codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts`, and `git diff --check` passed.
+- Review note: the imported pending issue `20260611-add-emoji-to-designAndImplTemplate-key-states-Issue.md` is unrelated to this product-code review scope and remains pending for later `/SPEC_analyzeIssue`.
+
+## Commit Works Result
+
+Prepared by `/SPEC_commitWorks` on 2026-06-11.
+
+- Commit scope: command/flow documentation for `SPEC_designUnitTests`, active story/TASK lifecycle records, and `.catdd/spec/projectContext.md`.
+- Excluded from this commit: unrelated pending issue `.catdd/spec/pendingNews/20260611-add-emoji-to-designAndImplTemplate-key-states-Issue.md`.
+- Verification summary: `bash scripts/test_slashcommands_complete.sh`, `bash scripts/test_documentation_contract.sh`, split `UT_US-USER-01-*.ts` tests, and `git diff --check` passed before commit.
+
 ## Next Recommended Action
 
-Run `/SPEC_implProductCodes` to update command/flow documentation so future `SPEC_designUnitTests` executions preserve the SPEC-to-UT and language-template rules captured by this story.
+Run `/SPEC_closeUserStory` to move the active story and TASKs to `doneUS/` after the reviewed commit is created.

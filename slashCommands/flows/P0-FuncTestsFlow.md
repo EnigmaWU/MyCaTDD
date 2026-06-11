@@ -14,6 +14,8 @@ InvalidFunc = Misuse + Fault
 
 The flow commands connect existing CodeAgent invocation surfaces to execution steps; category meaning remains in `methodPrompts`.
 
+When `SPEC_designUnitTests` identifies P0 Functional coverage for an active story, this flow provides the matching category-design contracts. `SPEC_designUnitTests` remains the story-level orchestration command, while `UT_designFuncTestsSkeleton` owns the full Typical, Edge, Misuse, and Fault skeleton design contract and the category-specific `UT_design*Skeleton` commands own their individual skeleton contracts. These commands are design steps; executable test bodies still belong to later implementation flow.
+
 ## Developer Stories
 
 - As a Developer, when I have demo tests, I want to convert them into CaTDD functional skeletons so that existing examples become living verification design.
@@ -59,3 +61,4 @@ flowchart LR
 - `UT_convertDemoToTypical` extracts core behavior from demo tests into `P0 Functional / Typical` skeletons.
 - Category semantics must come from `methodPrompts/CaTDD_methodPrompt4Cat-*.md`.
 - Commands must stay language agnostic. Use C++ names such as `UT_FeatureX-Typical.cxx` only as examples.
+- `UT_designFuncTestsSkeleton` and the category-specific `UT_design*Skeleton` commands own skeleton design, not executable implementation bodies.

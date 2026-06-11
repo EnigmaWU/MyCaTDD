@@ -15,7 +15,10 @@
 - [x] Lifecycle command completed: `/SPEC_reviewDetailDesign`
 - [x] Lifecycle command completed: `/SPEC_reviewUserStory`
 - [x] Lifecycle command completed: `/SPEC_designUnitTests`
-- [ ] Lifecycle command pending: `/SPEC_implProductCodes`
+- [x] Lifecycle command completed: `/SPEC_implProductCodes`
+- [x] Lifecycle command completed: `/SPEC_reviewProductCodes`
+- [x] Lifecycle command completed: `/SPEC_commitWorks`
+- [ ] Lifecycle command pending: `/SPEC_closeUserStory`
 
 ## Current Readiness
 
@@ -76,7 +79,7 @@ This story is not a simple test-only refactor. It changes the documented behavio
 - [x] Slice F (P0 completeness): keep Typical, Edge, Misuse, and Fault skeleton sections visible, with Edge explicitly N/A for this story.
 - [x] Slice G (behavior preservation): keep `TC-ARG-001..TC-ARG-012` assertions intact.
 - [x] Checkpoint 1: category-specific UnitTesting files remain GREEN.
-- [ ] Checkpoint 2: command/flow documentation is updated to make this behavior repeatable.
+- [x] Checkpoint 2: command/flow documentation is updated to make this behavior repeatable.
 
 ## Detail Design Questions Resolved
 
@@ -106,11 +109,11 @@ This story is not a simple test-only refactor. It changes the documented behavio
 
 ## Future Implementation Checkpoints
 
-- [ ] Checkpoint 1: command/flow docs explain SPEC orchestration versus UT category design.
-- [ ] Checkpoint 2: `SPEC_designUnitTests` contract requires matching `UT_designXYZ` command use when available.
+- [x] Checkpoint 1: command/flow docs explain SPEC orchestration versus UT category design.
+- [x] Checkpoint 2: `SPEC_designUnitTests` contract requires matching `UT_designXYZ` command use when available.
 - [x] Checkpoint 3: TypeScript test redesign uses `methodPrompts/CaTDD_designAndImplTemplate.ts` as the language template.
 - [x] Checkpoint 4: `node --test codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts` remains GREEN.
-- [ ] Checkpoint 5: verification-design artifact ownership is explicit: module-scoped verification lives under the module; root verification design is repository-wide only when needed.
+- [x] Checkpoint 5: verification-design artifact ownership is explicit: module-scoped verification lives under the module; root verification design is repository-wide only when needed.
 - [x] Checkpoint 6: detail design review passes before implementation or test redesign begins.
 - [x] Checkpoint 7: user story review passes before test/refactor skeleton design begins.
 
@@ -128,3 +131,6 @@ This story is not a simple test-only refactor. It changes the documented behavio
 - [x] P0 CaTDD skeletons designed.
 - [x] Module verification design updated.
 - [x] UnitTesting file redesigned and validated GREEN.
+- [x] Product command/flow documentation implemented.
+- [x] Product command/flow documentation reviewed.
+- [x] Reviewed command/flow documentation committed.
