@@ -73,51 +73,16 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 ## SpecFlow Lifecycle State
 
 - `SPEC_*` Copilot prompt wrappers have been installed into `.github/prompts/`.
-- `.catdd/spec/` lifecycle currently has `pendingNews/`, `analyzedNews/`, `todoUS/`, and `doneUS/`; `doingUS/` is absent when no story is actively opened.
-- Analyzed raw issues archived:
-  - `.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md`
-  - `.catdd/spec/analyzedNews/20260531-add-SPEC_takeArchDesign-command-Issue.md`
-  - `.catdd/spec/analyzedNews/20260530-design-utCodeAgentCLI-architecture-Issue.md`
-  - `.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md`
-  - `.catdd/spec/analyzedNews/20260602-add-SPEC_reviewDesignGates-commands-Feature.md`
-  - `.catdd/spec/analyzedNews/20260606-treat-updates-as-issue-first-Issue.md`
-  - `.catdd/spec/analyzedNews/20260608-rename-CaTDD-ImplTemplate-and-add-ts-template-Issue.md`
-  - `.catdd/spec/analyzedNews/20260608-why-SPEC-designUnitTests-not-UT-doXYZ-in-P0-FuncTestFlow-Issue.md`
-  - `.catdd/spec/analyzedNews/20260609-refactor-US-USER-01-with-UT-designFuncTestsSkeleton-Issue.md`
-- Pending issues imported:
-  - `.catdd/spec/pendingNews/20260531-add-SPEC_assembleRequirements-command-Issue.md`
-  - `.catdd/spec/pendingNews/20260531-add-SPEC_updateRequirement-command-Issue.md`
-  - `.catdd/spec/pendingNews/20260531-add-SPEC_verifyRequirement-command-Issue.md`
-  - `.catdd/spec/pendingNews/20260531-add-UT_reviewImplTestFile-slash-command-Issue.md`
-  - `.catdd/spec/pendingNews/20260531-create-installCaTDD-Skill4XYZ-installer-Issue.md`
-  - `.catdd/spec/pendingNews/20260609-utCodeAgentCLI-supports-skill-but-not-agentSkills-Issue.md`
-  - `.catdd/spec/pendingNews/20260609-ut-designXyzSkeleton-use-language-template-first-design-style-Issue.md`
-  - `.catdd/spec/pendingNews/20260611-add-emoji-to-designAndImplTemplate-key-states-Issue.md`
-- Completed user stories:
-  - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
-  - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
-  - `.catdd/spec/doneUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md`
-  - `.catdd/spec/doneUS/20260602-add-SPEC_reviewDesignGates-commands-UserStory.md`
-  - `.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md`
-  - `.catdd/spec/doneUS/20260606-harden-utCodeAgentCLI-agentic-reliability-UserStory.md`
-  - `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md`
-  - `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-TASKs.md`
-  - `.catdd/spec/doneUS/20260608-methodPrompts-template-rename-and-typescript-design-and-impl-UserStory.md`
-  - `.catdd/spec/doneUS/20260608-methodPrompts-template-rename-and-typescript-design-and-impl-TASKs.md`
-  - `.catdd/spec/doneUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md`
-  - `.catdd/spec/doneUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-TASKs.md`
-- Todo user stories waiting:
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-DEV-01-UserStory.md`
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-DEV-05-UserStory.md`
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md`
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-INVENTOR-02-UserStory.md`
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-02-UserStory.md`
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-03-UserStory.md`
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-04-UserStory.md`
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-05-UserStory.md`
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-09-UserStory.md`
-  - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-10-UserStory.md`
-- Active user stories opened: none; `.catdd/spec/doingUS/` is currently empty.
+- Do not maintain duplicated file lists for `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `doneUS/`, or `abortUS/` in this file. They drift too easily.
+- Before updating lifecycle state, run a live directory inventory and use that output as the source of truth:
+
+```bash
+ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/doneUS .catdd/spec/abortUS
+```
+
+- If a lifecycle directory is absent, record that absence instead of inventing an empty state. Current check on 2026-06-11 found `.catdd/spec/abortUS/` absent.
+- Current lifecycle summary from the latest filesystem check: `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, and `doneUS/` exist; `doingUS/` is empty; no active story is opened.
+- Use `/SPEC_whatsNextTask` or the live `ls -lrt` inventory to choose the next lifecycle file, rather than reading a stale filename list from this project context.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes the runtime-language tradeoff review across TypeScript/Node.js, Python, and Go, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented surface coverage, and an ADR link for the runtime choice.
 - Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03; the runtime-language ADR is now DECIDED: TypeScript/Node.js for V1 (PoC) and Go pre-selected for V2 (production distribution), Python evaluated and not selected. ADR status updated to Decided in `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
