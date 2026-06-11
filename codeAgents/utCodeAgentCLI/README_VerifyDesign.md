@@ -4,8 +4,8 @@ This document captures module-scoped verification strategy and US/AC/TC traceabi
 
 ## Story and Design Inputs
 
-- Active story: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md](../../.catdd/spec/doingUS/20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md)
-- Active TASKs: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md](../../.catdd/spec/doingUS/20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md)
+- Closed story: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md](../../.catdd/spec/doneUS/20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md)
+- Closed TASKs: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md](../../.catdd/spec/doneUS/20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md)
 - [README_ArchDesign.md](README_ArchDesign.md)
 - [README_DetailDesign.md](README_DetailDesign.md)
 - [SPEC_designUnitTests.md](../../slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md)

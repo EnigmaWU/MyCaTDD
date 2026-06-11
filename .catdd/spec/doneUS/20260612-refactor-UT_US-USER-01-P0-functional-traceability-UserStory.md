@@ -2,6 +2,7 @@
 
 Created by `/SPEC_analyzeIssue` on 2026-06-12.
 Opened by `/SPEC_openUserStory` on 2026-06-12.
+Closed by `/SPEC_closeUserStory` on 2026-06-12.
 
 ## Source Trace
 
@@ -20,13 +21,16 @@ Opened by `/SPEC_openUserStory` on 2026-06-12.
 
 ## Active Work Status
 
-- Status: OPEN.
-- Active state: `.catdd/spec/doingUS/` active work in progress.
+- Status: CLOSED.
+- Active state: `.catdd/spec/doneUS/` completed story archive.
 - Opened from: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md](../todoUS/20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md)
+- Closed from: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md](../doingUS/20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md)
 - Priority: P1 - affects verification design correctness and CaTDD lifecycle consistency.
 - Confidence: medium-high.
 - TASKs artifact: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md](20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md).
-- Next recommended command: `/SPEC_commitWorks`.
+- Commit reference: `25389e6` (`impl UT_US-USER-01 with subprocess SUT boundary`).
+- Verification summary: `node --test` focused suite passed (`13 pass, 0 fail`).
+- Next recommended command: `/SPEC_analyzeIssue`.
 
 ## Mutual Intent Contract
 
@@ -192,4 +196,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_commitWorks` to checkpoint the reviewed subprocess-based SUT implementation slice.
+Run `/SPEC_analyzeIssue` for pending imported work.
