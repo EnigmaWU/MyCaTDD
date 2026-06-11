@@ -21,11 +21,11 @@ Merged analysis from two related pending issues:
 
 ## Active Work Status
 
-- Status: OPEN.
-- Active state: `.catdd/spec/doingUS/` active work in progress.
+- Status: CLOSED.
+- Active state: `.catdd/spec/doneUS/` completed work.
 - Priority: P2 - improves process clarity, CaTDD consistency, and maintainability.
 - Confidence: high.
-- Next recommended command: `/SPEC_implProductCodes`.
+- Next recommended command: `/SPEC_analyzeIssue` for pending imported work.
 
 ## Story
 
@@ -355,6 +355,15 @@ Prepared by `/SPEC_commitWorks` on 2026-06-11.
 - Excluded from this commit: unrelated pending issue `.catdd/spec/pendingNews/20260611-add-emoji-to-designAndImplTemplate-key-states-Issue.md`.
 - Verification summary: `bash scripts/test_slashcommands_complete.sh`, `bash scripts/test_documentation_contract.sh`, split `UT_US-USER-01-*.ts` tests, and `git diff --check` passed before commit.
 
+## Close User Story Result
+
+Closed by `/SPEC_closeUserStory` on 2026-06-11.
+
+- Pre-close commit: `8714e7f Clarify SPEC to UT skeleton routing`.
+- Close action: moved paired story and TASK artifacts from `.catdd/spec/doingUS/` to `.catdd/spec/doneUS/`.
+- Project-context sync: `/SPEC_updateProjectContext` was applied in-flow using `ls -lrt .catdd/spec/pendingNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/doneUS` as the lifecycle file-list source.
+- Close-commit checkpoint: close-generated moves and project-context updates require their own commit; do not treat `8714e7f` as covering these close changes.
+
 ## Next Recommended Action
 
-Run `/SPEC_closeUserStory` to move the active story and TASKs to `doneUS/` after the reviewed commit is created.
+Run `/SPEC_analyzeIssue` for pending imported work, starting with `.catdd/spec/pendingNews/20260611-add-emoji-to-designAndImplTemplate-key-states-Issue.md` if that is the next priority.

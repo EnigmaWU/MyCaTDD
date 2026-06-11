@@ -90,6 +90,9 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/pendingNews/20260531-add-SPEC_verifyRequirement-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-add-UT_reviewImplTestFile-slash-command-Issue.md`
   - `.catdd/spec/pendingNews/20260531-create-installCaTDD-Skill4XYZ-installer-Issue.md`
+  - `.catdd/spec/pendingNews/20260609-utCodeAgentCLI-supports-skill-but-not-agentSkills-Issue.md`
+  - `.catdd/spec/pendingNews/20260609-ut-designXyzSkeleton-use-language-template-first-design-style-Issue.md`
+  - `.catdd/spec/pendingNews/20260611-add-emoji-to-designAndImplTemplate-key-states-Issue.md`
 - Completed user stories:
   - `.catdd/spec/doneUS/20260530-assemble-utCodeAgentCLI-user-stories-UserStory.md`
   - `.catdd/spec/doneUS/20260531-add-SPEC_takeArchDesign-command-UserStory.md`
@@ -101,6 +104,8 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-TASKs.md`
   - `.catdd/spec/doneUS/20260608-methodPrompts-template-rename-and-typescript-design-and-impl-UserStory.md`
   - `.catdd/spec/doneUS/20260608-methodPrompts-template-rename-and-typescript-design-and-impl-TASKs.md`
+  - `.catdd/spec/doneUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md`
+  - `.catdd/spec/doneUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-TASKs.md`
 - Todo user stories waiting:
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-DEV-01-UserStory.md`
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-DEV-05-UserStory.md`
@@ -112,20 +117,20 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-05-UserStory.md`
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-09-UserStory.md`
   - `.catdd/spec/todoUS/20260607-utCodeAgentCLI-US-USER-10-UserStory.md`
-- Active user stories opened:
-  - `.catdd/spec/doingUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md`
+- Active user stories opened: none; `.catdd/spec/doingUS/` is currently empty.
 - Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
 - Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes the runtime-language tradeoff review across TypeScript/Node.js, Python, and Go, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented surface coverage, and an ADR link for the runtime choice.
 - Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03; the runtime-language ADR is now DECIDED: TypeScript/Node.js for V1 (PoC) and Go pre-selected for V2 (production distribution), Python evaluated and not selected. ADR status updated to Decided in `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
 - Shared module DetailDesign doc created: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`; latest draft includes TypeScript-facing parser, planner, executor, adapter, trace, diagnostics, state, error, and verification contracts; `/SPEC_reviewDetailDesign` PASS recorded on 2026-06-04.
 - Current `utCodeAgentCLI` story/design readiness has `/SPEC_reviewUserStory` PASS recorded on 2026-06-04 and the story itself is archived in `doneUS/`.
 - `US-USER-01` lifecycle was completed on 2026-06-08: `/SPEC_reviewProductCodes` PASS, `/SPEC_commitWorks` commit `3a98908`, CaTDD category correction commit `90268f7`, and closure through `/SPEC_closeUserStory`.
+- `SPEC_designUnitTests` to `UT_designFuncTestsSkeleton` alignment lifecycle was completed on 2026-06-11: category-specific `UT_US-USER-01-*.ts` UnitTesting split, `/SPEC_reviewProductCodes` PASS, `/SPEC_commitWorks` commit `8714e7f`, and closure through `/SPEC_closeUserStory`.
 
 ## Next Recommended Command
 
 Run this next after context review:
 
-- `/SPEC_closeUserStory` for `.catdd/spec/doingUS/20260609-align-SPEC-designUnitTests-with-UT-designFuncTestsSkeleton-UserStory.md` to move the committed active story and TASKs into `doneUS/`.
+- `/SPEC_analyzeIssue` for pending imported work, starting with `.catdd/spec/pendingNews/20260611-add-emoji-to-designAndImplTemplate-key-states-Issue.md` if that is the next priority.
 
 ## Assumptions To Confirm
 

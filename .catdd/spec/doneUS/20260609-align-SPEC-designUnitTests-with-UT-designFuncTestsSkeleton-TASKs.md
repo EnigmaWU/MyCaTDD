@@ -4,7 +4,7 @@
 - [x] Requirement source traced to analyzed issues:
   - `../analyzedNews/20260608-why-SPEC-designUnitTests-not-UT-doXYZ-in-P0-FuncTestFlow-Issue.md`
   - `../analyzedNews/20260609-refactor-US-USER-01-with-UT-designFuncTestsSkeleton-Issue.md`
-- [x] Story is open in `.catdd/spec/doingUS/`
+- [x] Story is closed in `.catdd/spec/doneUS/`
 - [x] Mutual intent cleared: SPEC orchestrates story lifecycle; UT owns category-level skeleton mechanics
 - [x] Requirement-oriented update needed: no module `README_UserStory.md` or paired `README_UserGuide.md` rewrite is required before planning
 - [x] Requirement review needed: no separate `SPEC_reviewUserStory` gate is required before initial detail design
@@ -18,7 +18,7 @@
 - [x] Lifecycle command completed: `/SPEC_implProductCodes`
 - [x] Lifecycle command completed: `/SPEC_reviewProductCodes`
 - [x] Lifecycle command completed: `/SPEC_commitWorks`
-- [ ] Lifecycle command pending: `/SPEC_closeUserStory`
+- [x] Lifecycle command completed: `/SPEC_closeUserStory`
 
 ## Current Readiness
 
@@ -134,3 +134,4 @@ This story is not a simple test-only refactor. It changes the documented behavio
 - [x] Product command/flow documentation implemented.
 - [x] Product command/flow documentation reviewed.
 - [x] Reviewed command/flow documentation committed.
+- [x] Story and TASKs moved to `doneUS/` and project context updated from actual lifecycle directory listings.
