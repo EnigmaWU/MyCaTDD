@@ -21,14 +21,13 @@ declare function require(moduleName: string): any;
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { runUtCodeAgentCli } = require("./runUtCodeAgentCli.ts");
 
 type InvocationResult = {
 	exitCode: number;
 	stderr: string;
-	dispatchedBehavior?: string;
+	stdout: string;
 };
-
-const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF OVERVIEW OF THIS UNIT TESTING FILE===============================================
@@ -45,6 +44,9 @@ const { validateInvocation } = require("../src/cli/invocationValidator.ts");
  * KEY CONCEPTS:
  *   - Misuse: caller violates named CLI preconditions.
  *   - InvalidFunc: P0 Functional behavior that should fail safely and clearly.
+ *
+ * SUT:
+ *   - utCodeAgentCLI, executed as a subprocess.
  */
 //======>END OF OVERVIEW OF THIS UNIT TESTING FILE=================================================
 
@@ -103,6 +105,7 @@ const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 // @[Intent]: Reject invalid CLI caller behavior with explicit diagnostics.
 // @[UseWhen]: Required arguments are missing, malformed, unknown, or mutually exclusive.
 // @[AvoidWhen]: Caller input is valid and the failure comes from filesystem/resource/runtime faults.
+// @[SUT]: utCodeAgentCLI
 // @[US]: US-USER-01
 // @[AC]: AC-01, AC-02, AC-03
 // @[SourceSPEC]: SPEC_designUnitTests
@@ -121,7 +124,7 @@ const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 // @[Purpose]: Fail fast when --goal is missing and explain why it is required.
 // @[Expect]: Exit code 1, stderr names --goal and requirement reason.
 test("TC-ARG-001 verifyRequiredGoal_byMissingGoal_expectExit1AndGoalHint", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--target",
 		"tests/auth_login_test.cpp",
 		"--behave",
@@ -143,7 +146,7 @@ test("TC-ARG-001 verifyRequiredGoal_byMissingGoal_expectExit1AndGoalHint", () =>
 // @[Purpose]: Fail fast when --target is missing with actionable diagnostic text.
 // @[Expect]: Exit code 1, stderr names --target and requirement reason.
 test("TC-ARG-002 verifyRequiredTarget_byMissingTarget_expectExit1AndTargetHint", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--behave",
@@ -165,7 +168,7 @@ test("TC-ARG-002 verifyRequiredTarget_byMissingTarget_expectExit1AndTargetHint",
 // @[Purpose]: Fail fast when --behave is missing with valid behavior guidance.
 // @[Expect]: Exit code 1, stderr names --behave and requirement reason.
 test("TC-ARG-003 verifyRequiredBehave_byMissingBehave_expectExit1AndBehaveHint", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",
@@ -187,7 +190,7 @@ test("TC-ARG-003 verifyRequiredBehave_byMissingBehave_expectExit1AndBehaveHint",
 // @[Purpose]: Unknown --behave must fail with deterministic alternatives listing.
 // @[Expect]: Exit code 1 and stderr lists all valid --behave values.
 test("TC-ARG-004 verifyBehaviorList_byUnknownBehave_expectAllValidAlternatives", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",
@@ -211,7 +214,7 @@ test("TC-ARG-004 verifyBehaviorList_byUnknownBehave_expectAllValidAlternatives",
 // @[Purpose]: Reject combined --goalStory and --goalStoryFile usage.
 // @[Expect]: Exit code 1 and stderr names both conflicting args.
 test("TC-ARG-006 verifyGoalStoryConflict_byBothStoryInputs_expectExclusivePairError", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",
@@ -240,7 +243,7 @@ test("TC-ARG-006 verifyGoalStoryConflict_byBothStoryInputs_expectExclusivePairEr
 // @[Purpose]: Reject combined --input and --inputFile usage.
 // @[Expect]: Exit code 1 and stderr names both conflicting args.
 test("TC-ARG-007 verifyInputConflict_byBothInputSources_expectExclusivePairError", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",

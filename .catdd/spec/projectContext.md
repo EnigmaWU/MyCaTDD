@@ -95,7 +95,7 @@ ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .cat
 
 Run this next after context review:
 
-- `/SPEC_designUnitTests` for active story `20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md`.
+- `/SPEC_commitWorks` for active story `20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md`.
 
 ## Assumptions To Confirm
 

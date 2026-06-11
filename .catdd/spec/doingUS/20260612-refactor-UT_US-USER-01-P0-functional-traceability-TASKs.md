@@ -10,7 +10,10 @@
 - [x] Requirement review needed: no separate `SPEC_reviewUserStory` gate is required before UnitTesting design because authoritative ACs remain unchanged
 - [x] Architecture readiness needed: no architecture command is required because this story does not change runtime boundaries, adapters, or module ownership
 - [x] Detail design readiness needed: no detail-design command is required before UnitTesting design because existing architecture/detail docs already cover the CLI validation surface
-- [x] Selected next lifecycle command: `/SPEC_designUnitTests`
+- [x] Lifecycle command completed: `/SPEC_designUnitTests`
+- [x] Lifecycle command completed: `/SPEC_implUnitTests`
+- [x] Lifecycle command completed: `/SPEC_reviewProductCodes`
+- [x] Selected next lifecycle command: `/SPEC_commitWorks`
 
 ## Current Readiness
 
@@ -24,10 +27,10 @@
 
 ## Candidate Next Steps
 
-- `/SPEC_designUnitTests` to redesign the `UT_US-USER-01` UnitTesting surface under mandatory P0 Functional traceability, explicit SUT declaration, and `UT_designFuncTestsSkeleton` semantics.
+- `/SPEC_commitWorks` to checkpoint the reviewed subprocess-boundary implementation slice.
 - `/SPEC_updateUserStory` only if a later review discovers that `US-USER-01` AC wording itself must change.
 - `/SPEC_updateDetailDesign` only if UnitTesting design reveals a missing design contract outside the test/verification surface.
-- `/SPEC_implUnitTests` after the UnitTesting design is explicit enough to edit tests safely.
+- `/SPEC_implUnitTests` only if a later review or verification failure requires another executable refactor pass.
 
 ## Rejected Next Steps
 
@@ -38,35 +41,34 @@
 - `/SPEC_updateArchDesign` because no existing architecture review gap is being closed.
 - `/SPEC_takeDetailDesign` because the story uses existing module detail design and narrows to UnitTesting traceability.
 - `/SPEC_updateDetailDesign` because no detail-design gap is known before UnitTesting design.
-- `/SPEC_implUnitTests` because test edits should not start before the UnitTesting redesign records the SUT, AC/TC mapping, P0 categories, and Edge decision.
 - `/SPEC_implProductCodes` because product behavior changes are out of scope.
 
 ## Selected Next Step
 
-- [x] Next lifecycle command selected: `/SPEC_designUnitTests`.
+- [x] Next lifecycle command selected: `/SPEC_commitWorks`.
 
 ## Rationale
 
-The active story is not asking for new user-facing requirements or product CLI behavior. It applies already-updated CaTDD method rules to the existing `UT_US-USER-01` test and verification surface. The smallest safe next step is therefore `SPEC_designUnitTests`: it can decide the traceable Edge handling, record `SUT: utCodeAgentCLI`, preserve `AC-01..AC-05`, and prepare any later `SPEC_implUnitTests` work without jumping straight into edits.
+The active story is not asking for new user-facing requirements or product CLI behavior. It applies already-updated CaTDD method rules to the existing `UT_US-USER-01` test and verification surface. `SPEC_implUnitTests` and `SPEC_reviewProductCodes` are now complete: executable tests run the `utCodeAgentCLI` SUT as a subprocess, the minimal CLI entrypoint delegates to the validator, and focused verification remains GREEN. The smallest safe next step is therefore `SPEC_commitWorks`.
 
-The Edge category question is a UnitTesting design decision, not a blocker to planning. The design step must not invent new product behavior. If no valid Edge behavior is present in the authoritative AC source, the design should record a traceable non-required Edge decision that does not appear as dangling AC/TC coverage.
+The Edge category question is resolved at design level. The authoritative AC source defines no valid boundary case, so Edge remains visible in the P0 set as a non-required category decision rather than as fake AC/TC coverage.
 
 ## Planned UnitTesting Design Checklist
 
-- [ ] Run `/SPEC_designUnitTests` for the active story.
-- [ ] Declare `SUT: utCodeAgentCLI` in the relevant `UT_US-USER-01` test design overview or equivalent shared overview.
-- [ ] Preserve authoritative `US-USER-01` and `AC-01..AC-05` from [README_UserStory4USER.md](../../../codeAgents/utCodeAgentCLI/README_UserStory4USER.md).
-- [ ] Ensure each `AC-01..AC-05` maps to at least one TC.
-- [ ] Preserve `TC-ARG-*` IDs unless a trace-equivalent replacement is explicitly documented.
-- [ ] Make the P0 Functional category set visible: Typical, Edge, Misuse, and Fault.
-- [ ] Resolve Edge handling as either a valid Edge TC or a traceable non-required Edge decision.
-- [ ] Keep `UT_designFuncTestsSkeleton` provenance explicit.
-- [ ] Update [README_VerifyDesign.md](../../../codeAgents/utCodeAgentCLI/README_VerifyDesign.md) if traceability, SUT declaration, or Edge handling changes.
-- [ ] Keep the focused Node test command GREEN after later implementation/refactor work.
+- [x] Run `/SPEC_designUnitTests` for the active story.
+- [x] Declare `SUT: utCodeAgentCLI` in the relevant `UT_US-USER-01` test design overview or equivalent shared overview.
+- [x] Preserve authoritative `US-USER-01` and `AC-01..AC-05` from [README_UserStory4USER.md](../../../codeAgents/utCodeAgentCLI/README_UserStory4USER.md).
+- [x] Ensure each `AC-01..AC-05` maps to at least one TC.
+- [x] Preserve `TC-ARG-*` IDs unless a trace-equivalent replacement is explicitly documented.
+- [x] Make the P0 Functional category set visible: Typical, Edge, Misuse, and Fault.
+- [x] Resolve Edge handling as a traceable non-required Edge decision.
+- [x] Keep `UT_designFuncTestsSkeleton` provenance explicit.
+- [x] Update [README_VerifyDesign.md](../../../codeAgents/utCodeAgentCLI/README_VerifyDesign.md) for traceability, SUT declaration, and Edge handling.
+- [x] Keep the focused Node test command GREEN after design-surface updates.
 
 ## Open Questions
 
-- [ ] During `/SPEC_designUnitTests`, decide whether the Edge category receives a real executable TC or is documented as traceably non-required for `US-USER-01`.
+- [x] During `/SPEC_designUnitTests`, decide that Edge is documented as traceably non-required for `US-USER-01`.
 
 ## Checklist
 
@@ -76,7 +78,8 @@ The Edge category question is a UnitTesting design decision, not a blocker to pl
 - [x] Candidate next steps compared.
 - [x] Rejected next steps recorded.
 - [x] Next command selected.
-- [ ] UnitTesting design completed.
-- [ ] UnitTesting implementation/refactor completed.
-- [ ] Focused tests validated GREEN.
+- [x] UnitTesting design completed.
+- [x] UnitTesting implementation/refactor completed.
+- [x] Focused tests validated GREEN.
+- [x] Product code review completed.
 - [ ] Story reviewed, committed, and closed.

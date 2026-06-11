@@ -21,14 +21,13 @@ declare function require(moduleName: string): any;
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { runUtCodeAgentCli } = require("./runUtCodeAgentCli.ts");
 
 type InvocationResult = {
 	exitCode: number;
 	stderr: string;
-	dispatchedBehavior?: string;
+	stdout: string;
 };
-
-const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF OVERVIEW OF THIS UNIT TESTING FILE===============================================
@@ -45,6 +44,9 @@ const { validateInvocation } = require("../src/cli/invocationValidator.ts");
  * KEY CONCEPTS:
  *   - Fault: caller shape is valid, but filesystem dependency is missing.
  *   - InvalidFunc: P0 Functional behavior that should fail safely and clearly.
+ *
+ * SUT:
+ *   - utCodeAgentCLI, executed as a subprocess.
  */
 //======>END OF OVERVIEW OF THIS UNIT TESTING FILE=================================================
 
@@ -99,6 +101,7 @@ const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 // @[Intent]: Validate missing filesystem dependencies are surfaced with path-level diagnostics.
 // @[UseWhen]: Caller shape is valid but referenced file-path dependencies are missing.
 // @[AvoidWhen]: Use Misuse for missing required args, unknown behavior names, or conflicting flags.
+// @[SUT]: utCodeAgentCLI
 // @[US]: US-USER-01
 // @[AC]: AC-04
 // @[SourceSPEC]: SPEC_designUnitTests
@@ -117,7 +120,7 @@ const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 // @[Purpose]: Missing --inputFile should fail before behavior dispatch.
 // @[Expect]: Exit code 1 and stderr includes missing inputFile path.
 test("TC-ARG-008 verifyMissingInputFile_byNonexistentPath_expectPathNamedError", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",
@@ -143,7 +146,7 @@ test("TC-ARG-008 verifyMissingInputFile_byNonexistentPath_expectPathNamedError",
 // @[Purpose]: Missing --goalStoryFile should fail with direct path reporting.
 // @[Expect]: Exit code 1 and stderr includes missing goalStoryFile path.
 test("TC-ARG-009 verifyMissingGoalStoryFile_byNonexistentPath_expectPathNamedError", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",
@@ -169,7 +172,7 @@ test("TC-ARG-009 verifyMissingGoalStoryFile_byNonexistentPath_expectPathNamedErr
 // @[Purpose]: Missing --reference path should fail and identify the bad path.
 // @[Expect]: Exit code 1 and stderr includes missing reference path.
 test("TC-ARG-010 verifyMissingReference_byNonexistentPath_expectPathNamedError", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",
@@ -195,7 +198,7 @@ test("TC-ARG-010 verifyMissingReference_byNonexistentPath_expectPathNamedError",
 // @[Purpose]: Missing --extra-prompt path should fail and identify the bad path.
 // @[Expect]: Exit code 1 and stderr includes missing extra-prompt path.
 test("TC-ARG-011 verifyMissingExtraPrompt_byNonexistentPath_expectPathNamedError", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",
@@ -221,7 +224,7 @@ test("TC-ARG-011 verifyMissingExtraPrompt_byNonexistentPath_expectPathNamedError
 // @[Purpose]: Missing --config-file path should fail and identify the bad path.
 // @[Expect]: Exit code 1 and stderr includes missing config-file path.
 test("TC-ARG-012 verifyMissingConfigFile_byNonexistentPath_expectPathNamedError", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",

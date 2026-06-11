@@ -28,7 +28,10 @@
  *
  * KEY CONCEPTS:
  *   - Edge: valid but unusual values, limits, or mode variations.
- *   - No Edge TC: US-USER-01 acceptance criteria do not define a valid boundary case.
+ *   - Non-required Edge category: US-USER-01 acceptance criteria do not define a valid boundary case.
+ *
+ * SUT:
+ *   - utCodeAgentCLI.
  */
 //======>END OF OVERVIEW OF THIS UNIT TESTING FILE=================================================
 
@@ -48,6 +51,8 @@
  * DESIGN DECISION:
  *   US-USER-01 has no valid Edge acceptance criterion. Unknown --behave and missing required
  *   args are caller contract violations, so they belong to Misuse rather than Edge.
+ *   This file remains part of the full P0 Functional set as a traceable non-required category
+ *   decision, not as dangling AC/TC coverage.
  */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,6 +70,7 @@
 //======>BEGIN OF ACCEPTANCE CRITERIA DESIGN=======================================================
 /**
  * No AC in US-USER-01 describes valid edge behavior.
+ * Edge therefore has no linked AC/TC in this story and is recorded as non-required.
  */
 //=======>END OF ACCEPTANCE CRITERIA DESIGN========================================================
 
@@ -72,6 +78,7 @@
 //======>BEGIN OF TEST CASES DESIGN================================================================
 /**
  * No executable Edge TC is required for US-USER-01.
+ * This is a category decision record, not a partial skeleton waiting for implementation.
  */
 //======>END OF TEST CASES DESIGN==================================================================
 //======>END OF UNIT TESTING DESIGN================================================================
@@ -84,20 +91,21 @@
 //=================================================================================================
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Edge
-// @[Intent]: Record that no valid edge behavior is specified for US-USER-01.
+// @[Intent]: Record that Edge is a traceable non-required category for US-USER-01.
 // @[UseWhen]: A valid boundary value, valid limit, or valid mode variation exists.
 // @[AvoidWhen]: The condition is invalid caller behavior or external missing dependency.
+// @[SUT]: utCodeAgentCLI
 // @[US]: US-USER-01
 // @[AC]: N/A
 // @[SourceSPEC]: SPEC_designUnitTests
 // @[SourceUT]: UT_designEdgeSkeleton
 // @[Template]: methodPrompts/CaTDD_designAndImplTemplate.ts
-// @[TC]: N/A - no Edge TC required by this story
+// @[TC]: N/A - non-required Edge category decision for this story
 //=================================================================================================
 
 //======>END OF UNIT TESTING IMPLEMENTATION=======================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
-// N/A [US-USER-01] No valid Edge TC is specified by the story.
+// N/A [US-USER-01] Edge is explicitly non-required because the authoritative AC set defines no valid boundary case.
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

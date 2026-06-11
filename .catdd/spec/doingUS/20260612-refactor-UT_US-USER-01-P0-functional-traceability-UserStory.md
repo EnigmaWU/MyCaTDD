@@ -26,7 +26,7 @@ Opened by `/SPEC_openUserStory` on 2026-06-12.
 - Priority: P1 - affects verification design correctness and CaTDD lifecycle consistency.
 - Confidence: medium-high.
 - TASKs artifact: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md](20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md).
-- Next recommended command: `/SPEC_designUnitTests`.
+- Next recommended command: `/SPEC_commitWorks`.
 
 ## Mutual Intent Contract
 
@@ -192,4 +192,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_designUnitTests` to redesign the `UT_US-USER-01` UnitTesting surface before implementation or refactor edits begin.
+Run `/SPEC_commitWorks` to checkpoint the reviewed subprocess-based SUT implementation slice.

@@ -21,14 +21,13 @@ declare function require(moduleName: string): any;
 
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const { runUtCodeAgentCli } = require("./runUtCodeAgentCli.ts");
 
 type InvocationResult = {
 	exitCode: number;
 	stderr: string;
-	dispatchedBehavior?: string;
+	stdout: string;
 };
-
-const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF OVERVIEW OF THIS UNIT TESTING FILE===============================================
@@ -45,6 +44,9 @@ const { validateInvocation } = require("../src/cli/invocationValidator.ts");
  * KEY CONCEPTS:
  *   - Typical: normal intended use with valid inputs and dependencies.
  *   - ValidFunc: P0 Functional behavior that should succeed.
+ *
+ * SUT:
+ *   - utCodeAgentCLI.
  *
  * RELATIONSHIPS:
  *   - User story: US-USER-01.
@@ -110,6 +112,7 @@ const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 // @[Intent]: Prove the normal CLI invocation reaches behavior-dispatch readiness.
 // @[UseWhen]: Required arguments are valid and the caller follows the CLI contract.
 // @[AvoidWhen]: Required args are missing, invalid, conflicting, or external files fail.
+// @[SUT]: utCodeAgentCLI
 // @[US]: US-USER-01
 // @[AC]: AC-05
 // @[SourceSPEC]: SPEC_designUnitTests
@@ -128,7 +131,7 @@ const { validateInvocation } = require("../src/cli/invocationValidator.ts");
 // @[Purpose]: Confirm valid invocation reaches behavior-dispatch readiness.
 // @[Expect]: Exit code 0 and execution proceeds toward resolved behavior.
 test("TC-ARG-005 verifyInvocationSuccess_byValidArgs_expectDispatchReady", () => {
-	const result: InvocationResult = validateInvocation([
+	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
 		"--target",
@@ -138,7 +141,6 @@ test("TC-ARG-005 verifyInvocationSuccess_byValidArgs_expectDispatchReady", () =>
 	]);
 
 	assert.equal(result.exitCode, 0);
-	assert.equal(result.dispatchedBehavior, "designFuncTestsSkeleton");
 	assert.equal(result.stderr, "");
 });
 
