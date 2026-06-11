@@ -26,7 +26,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 
 - A `.catdd/spec/doneUS/*-UserStory.md` team-shared completed story artifact.
 - A paired `.catdd/spec/doneUS/*-TASKs.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
-- Local `.catdd/spec/doingUS/` work state removed or marked closed after the completed artifact is created.
+- Local `.catdd/spec/doingUS/` work state is removed after the completed artifact is created; do not keep a duplicate closed copy in doingUS.
 - Story-specific references that still point to `.catdd/spec/doingUS/` are updated to `.catdd/spec/doneUS/` after closure so trace paths remain valid.
 - Project-context sync policy is applied after closure:
 	- Minor lifecycle impact (for example only story file movement or link normalization): remind the developer to run `SPEC_updateProjectContext`.
@@ -47,6 +47,7 @@ Ask the assistant to close only verified work, preserve enough history for later
 
 Do not close if product intent, acceptance criteria, tests, review, commit, or CI status remains unresolved.
 Do not leave stale story-specific trace links pointing to `.catdd/spec/doingUS/` after closure.
+Do not leave the same story ID under both `.catdd/spec/doingUS/` and `.catdd/spec/doneUS/`.
 Do not mark closure complete after major lifecycle impact until `SPEC_updateProjectContext` has been executed or explicitly delegated to the developer.
 Do not mark closure complete when close-generated file changes remain uncommitted.
 Do not treat the pre-close `commit_ref` as sufficient evidence for close-generated changes.
