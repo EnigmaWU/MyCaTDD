@@ -26,6 +26,8 @@ Use this command when a developer wants the full functional skeleton set from on
 
 - A complete P0 Functional skeleton set with Typical, Edge, Misuse, and Fault sections.
 - Category-specific `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]` entries.
+- Traceability cardinality gate: each `@[US]` has >=1 linked `@[AC]`, and each `@[AC]` has >=1 linked `@[TC]`.
+- Explicit SUT declaration in the test-file overview (for example: `SUT: utCodeAgentCLI`).
 - No executable implementation test code.
 
 ## Prompt Template
@@ -43,5 +45,6 @@ Ask the assistant to:
 ## Conflict Guard
 
 This command designs P0 Functional coverage only. It should not design P1/P2 categories or implement tests.
+Do not leave partially mapped skeletons where any US lacks AC links or any AC lacks TC links.
 
 ONE-MORE-THING: ask developer if something not sure

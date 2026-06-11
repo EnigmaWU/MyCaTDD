@@ -43,6 +43,13 @@ Default classification order:
 - P2 Quality: Performance -> Robust -> Compatibility -> Configuration
 - P3 Addons: Demo/Example
 
+## Mandatory traceability constraints
+
+- P0 functional design should cover the full `Typical -> Edge -> Misuse -> Fault` set by default unless the developer explicitly limits scope.
+- Each US must map to at least 1 AC.
+- Each AC must map to at least 1 TC.
+- Design outputs must explicitly declare the SUT in the test-file overview (for example: `SUT: utCodeAgentCLI`).
+
 ## Typical contents
 
 - Master method specification (`CaTDD_methodPrompt.md`)

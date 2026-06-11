@@ -43,6 +43,13 @@ CaTDD 方法提示词支持两个设计阶段：
 - P2 质量型：Performance -> Robust -> Compatibility -> Configuration
 - P3 附加型：Demo/Example
 
+## 强制追溯约束
+
+- P0 功能设计默认应完整覆盖 `Typical -> Edge -> Misuse -> Fault`，除非开发者明确限制范围。
+- 每个 US 至少对应 1 个 AC。
+- 每个 AC 至少对应 1 个 TC。
+- 设计产出必须在测试文件 Overview 中显式声明 SUT（例如：`SUT: utCodeAgentCLI`）。
+
 ## 典型内容
 
 - 主方法规范（`CaTDD_methodPrompt.md`）

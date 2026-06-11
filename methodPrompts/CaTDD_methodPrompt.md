@@ -131,6 +131,13 @@ Stage-1: Classifying Design
 - At least 1 TC per AC, add more for edge cases
 - Keep ≤3 key assertions per test (add separate tests if needed)
 
+### Mandatory Traceability Constraints
+
+- P0 Functional design must include the full category set in order: `Typical -> Edge -> Misuse -> Fault` unless the developer explicitly limits scope.
+- Each US must map to at least 1 AC.
+- Each AC must map to at least 1 TC.
+- Design output must declare the SUT explicitly in the test-file overview section (for example: `SUT: utCodeAgentCLI`).
+
 ### Phase 3: Implementation
 
 **Step 7: Prioritize & Track Status**

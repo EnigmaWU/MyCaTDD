@@ -286,6 +286,8 @@ flowchart TB
 
 - `Px SpecFlow` 仅定义生命周期编排；CaTDD 方法语义保留在 `methodPrompts` 中。
 - `SPEC_*` 命令可以调用 `UT_*` 命令，但不得替代 P0/P1/P2 类别规则。
+- `SPEC_designUnitTests` 与 `UT_design*Skeleton` 设计结果必须满足追溯闭合：每个 US 至少有 1 个 AC，每个 AC 至少有 1 个 TC。
+- `SPEC_designUnitTests` 与 `UT_design*Skeleton` 设计结果必须在测试文件 Overview 中显式声明 SUT。
 - 在需求导向型工作中，`SPEC_updateUserStory` 之后不得跳过 `SPEC_reviewUserStory`。
 - 当开发者意图与 CodeAgent 意图未对活跃故事澄清时，不得开始设计。
 - 在 `SPEC_makePlan` 之后，仅在初始设计工作时使用 `SPEC_take*Design`，仅在依赖现有设计证据、审查反馈或故事级设计差距的后续设计修订时使用 `SPEC_update*Design`。

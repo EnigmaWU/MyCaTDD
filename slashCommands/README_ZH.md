@@ -62,6 +62,12 @@
 
 未来的 Addons/Demo 命令应使用 `P3 Addons`，以保持与 `methodPrompts` 一致。
 
+## 追溯与 SUT 约束
+
+- `SPEC_designUnitTests` 与相关 `UT_design*Skeleton` 命令应强制满足最小追溯基数：每个 US 至少有 1 个 AC，每个 AC 至少有 1 个 TC。
+- 测试设计产出必须在测试文件 Overview 中显式声明 SUT（例如：`SUT: utCodeAgentCLI`）。
+- 若存在未闭合追溯（US 无 AC 或 AC 无 TC），命令应阻止该设计结果作为完成态。
+
 ## Typical contents
 
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）

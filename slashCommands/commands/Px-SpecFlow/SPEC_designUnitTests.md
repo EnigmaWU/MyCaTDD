@@ -34,6 +34,8 @@ Design CaTDD unit test skeletons for the active user story after story and detai
 ## Output Contract
 
 - CaTDD US/AC/TC skeletons in committed test files, linked back to local gitignored active story context and project-root README SPEC docs.
+- Enforced minimum traceability cardinality: each US has >=1 AC, and each AC has >=1 TC.
+- Explicit SUT declaration in each designed test-file overview section.
 - Updated project-root verification design in `README_VerifyDesign.md` when test strategy or category coverage changes.
 - Error, resource, state, performance, compatibility, and diagnostic coverage linked to `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when those design surfaces exist.
 - First-time verification design should be based on `slashCommands/templates/README_VerifyDesignTemplate.md`.
@@ -67,5 +69,7 @@ Ask the assistant to enter P0/P1/P2 test design flows as needed, use matching `U
 ## Conflict Guard
 
 Do not skip P0 Functional coverage before promoting design or quality categories. Do not handcraft a category skeleton directly when a matching `UT_designXYZ` command contract exists.
+Do not finish with dangling traceability: reject outputs where any US has no AC or any AC has no TC.
+Do not omit SUT declaration in designed test-file overview comments.
 
 ONE-MORE-THING: ask developer if something not sure
