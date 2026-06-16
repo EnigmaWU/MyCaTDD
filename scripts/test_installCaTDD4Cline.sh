@@ -73,4 +73,22 @@ init_target="$TARGET_DIR/new-cline-project"
 [[ -d "$init_target/.catdd/spec/analyzedNews" ]] || fail "--init target missing .catdd/spec/analyzedNews"
 [[ -f "$init_target/.clinerules/catdd.md" ]] || fail "--init target missing Cline rule"
 
+# Verify generated Cline Skills
+skills_dir="$TARGET_DIR/.cline/skills"
+[[ -d "$skills_dir" ]] || fail "missing .cline/skills directory"
+[[ -d "$skills_dir/SPEC_importIssue" ]] || fail "missing SPEC_importIssue skill"
+[[ -d "$skills_dir/UT_designTypicalSkeleton" ]] || fail "missing UT_designTypicalSkeleton skill"
+[[ -f "$skills_dir/SPEC_importIssue/SKILL.md" ]] || fail "missing SKILL.md in SPEC_importIssue skill"
+grep -Fq 'name: SPEC_importIssue' "$skills_dir/SPEC_importIssue/SKILL.md" || fail "SKILL.md missing command name"
+grep -Fq 'description: Import an issue' "$skills_dir/SPEC_importIssue/SKILL.md" || fail "SKILL.md missing meaningful description"
+grep -Fq 'slashCommands/commands/Px-SpecFlow/SPEC_importIssue.md' "$skills_dir/SPEC_importIssue/SKILL.md" || fail "SKILL.md missing source command reference"
+grep -Fq '.catdd/slashCommands/commands/' "$skills_dir/SPEC_importIssue/SKILL.md" || fail "SKILL.md missing .catdd path reference"
+# Count skill directories (one per portable command)
+skill_count=$(find "$skills_dir" -maxdepth 1 -type d | wc -l)
+[[ "$skill_count" -ge 40 ]] || fail "expected at least 40 skill directories, got $skill_count"
+
+# Verify --clean-prompts works (triggers generator with --clean)
+clean_output="$("$INSTALLER" --target "$TARGET_DIR" --clean-prompts --yes 2>&1)"
+grep -Fq 'Generated 46 Cline Skill wrappers' <<< "$clean_output" || fail "--clean-prompts did not trigger skills generation"
+
 echo "[installCaTDD4Cline-test] PASSED: installed CaTDD Cline assets into temporary target"

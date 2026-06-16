@@ -83,6 +83,7 @@ Testing/
 /.customCodeAgent/rules/catdd.md
 /.customCodeAgent/prompts/UT_*.prompt
 /.customCodeAgent/prompts/SPEC_*.prompt
+/.cline/skills/
 
 book*
 

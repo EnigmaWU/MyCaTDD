@@ -3,18 +3,20 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET_DIR=""
+CLEAN_PROMPTS=0
 INIT=0
 VERBOSE=0
 YES=0
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/installCaTDD4Cline.sh --target DIR [--init] [--verbose] [--yes]
+Usage: scripts/installCaTDD4Cline.sh --target DIR [--clean-prompts] [--init] [--verbose] [--yes]
 
-Install or refresh CaTDD methodPrompts, slashCommands, SpecCoding artifact workspace, and Cline project rules into a target project.
+Install or refresh CaTDD methodPrompts, slashCommands, SpecCoding artifact workspace, Cline project rules, and Cline Skills into a target project.
 
 Options:
   --target DIR      Target project directory.
+  --clean-prompts   Remove existing generated Cline Skill directories before regenerating wrappers.
   --init            Create the target directory if it does not exist.
   --verbose         Print detailed action steps for diagnosis.
   --yes, -y         Skip the Y/n confirmation prompt (non-interactive / scripted use).
@@ -28,6 +30,10 @@ while [[ $# -gt 0 ]]; do
       [[ $# -ge 2 ]] || { echo "[installCaTDD4Cline] --target requires a directory" >&2; exit 2; }
       TARGET_DIR="$2"
       shift 2
+      ;;
+    --clean-prompts)
+      CLEAN_PROMPTS=1
+      shift
       ;;
     --init)
       INIT=1
@@ -73,6 +79,7 @@ TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
 CATDD_DIR="$TARGET_DIR/.catdd"
 SPEC_DIR="$CATDD_DIR/spec"
 CLINE_RULES_DIR="$TARGET_DIR/.clinerules"
+CLINE_SKILLS_DIR="$TARGET_DIR/.cline/skills"
 
 # Compute version from the latest git commit in the MyCaTDD source repo
 CATDD_VERSION="$(git -C "$REPO_ROOT" log -1 --format='%ad' --date='format:%Y%m%d.%H' 2>/dev/null || echo 'unknown')"
@@ -133,7 +140,7 @@ if [[ -e "$CLINE_RULES_DIR" && ! -d "$CLINE_RULES_DIR" ]]; then
   exit 1
 fi
 
-mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/abortUS" "$SPEC_DIR/doneUS" "$CLINE_RULES_DIR"
+mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/abortUS" "$SPEC_DIR/doneUS" "$CLINE_RULES_DIR" "$CLINE_SKILLS_DIR"
 
 update_spec_gitignore() {
   local gitignore_file="$TARGET_DIR/.gitignore"
@@ -193,6 +200,7 @@ This directory is managed by `scripts/installCaTDD4Cline.sh` from MyCaTDD.
 - `slashCommands/` is the installed portable flow-command source.
 - `spec/` is the installed SpecCoding artifact workspace.
 - Cline project rule: `.clinerules/catdd.md`.
+- Cline Skills: `.cline/skills/*/` (triggered as `/UT_*` and `/SPEC_*` Cline slash commands).
 - Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
 - Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
@@ -228,8 +236,21 @@ This is a Cline project rule installed by MyCaTDD. Use it when working with CaTD
 ONE-MORE-THING: ask developer if something not sure
 RULES
 
+generator_args=(
+  --source-dir "$CATDD_DIR/slashCommands/commands"
+  --workspace-root "$TARGET_DIR"
+  --output "$CLINE_SKILLS_DIR"
+)
+
+if [[ "$CLEAN_PROMPTS" -eq 1 ]]; then
+  generator_args+=(--clean)
+fi
+
+bash "$REPO_ROOT/scripts/makeSlashCmd4Cline.sh" "${generator_args[@]}"
+
 echo "[installCaTDD4Cline] Installed CaTDD for Cline into $TARGET_DIR"
 echo "[installCaTDD4Cline] Method source: .catdd/methodPrompts"
 echo "[installCaTDD4Cline] Slash command source: .catdd/slashCommands"
 echo "[installCaTDD4Cline] SpecCoding artifacts: .catdd/spec"
 echo "[installCaTDD4Cline] Cline rule: .clinerules/catdd.md"
+echo "[installCaTDD4Cline] Cline skills: .cline/skills"
