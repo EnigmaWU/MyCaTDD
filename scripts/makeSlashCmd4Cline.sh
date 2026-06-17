@@ -94,7 +94,7 @@ OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
 
 # Clean mode: remove existing generated skill directories
 if [[ "$CLEAN" -eq 1 ]]; then
-  for existing in "$OUTPUT_DIR"/UT_* "$OUTPUT_DIR"/SPEC_*; do
+  for existing in "$OUTPUT_DIR"/ut-* "$OUTPUT_DIR"/spec-*; do
     [[ -d "$existing" ]] && rm -rf "$existing"
   done
 fi
@@ -103,7 +103,11 @@ generated_count=0
 
 while IFS= read -r source_file; do
   command_file="$(basename "$source_file")"
-  command_name="${command_file%.md}"
+  # Derive the Cline skill name from the command filename
+  raw_name="${command_file%.md}"
+  # Cline enforces: "Skill name may only contain lowercase letters, numbers, and hyphens."
+  # So convert: SPEC_importIssue -> spec-import-issue, UT_designTypicalSkeleton -> ut-design-typical-skeleton
+  command_name="$(printf '%s' "$raw_name" | sed 's/\([a-z0-9]\)\([A-Z]\)/\1-\2/g' | tr '[:upper:]' '[:lower:]' | tr '_' '-')"
   flow_name="$(basename "$(dirname "$source_file")")"
   rel_source="$(rel_to_workspace "$source_file")"
   rel_method_index="$(rel_to_workspace "$METHOD_ROOT/README.md")"
