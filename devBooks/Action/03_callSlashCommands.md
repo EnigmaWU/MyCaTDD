@@ -635,7 +635,7 @@ Px-SpecFlow provides explicit model tier guidance — use the smallest model tha
 | Tier | Purpose | SPEC Commands |
 |---|---|---|
 | **SOTA reasoning** | Architecture decisions, system boundaries, quality trade-offs, irreversible choices | `SPEC_takeArchDesign`, `SPEC_reviewArchDesign` |
-| **High Performance** | Multi-artifact reasoning, design, review, planning | `SPEC_initProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeUserStory`, `SPEC_makePlan`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_designUnitTests`, `SPEC_reviewProductCodes` |
+| **High Performance** | Multi-artifact reasoning, design, review, planning | `SPEC_initProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeAbortedUserStory`, `SPEC_makePlan`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_designUnitTests`, `SPEC_reviewProductCodes` |
 | **Flash Speed** | Deterministic artifact moves, imports, commits, closures | `SPEC_importIssue`, `SPEC_openUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
 
 **Escalation rule**: Move from lower to higher tier when the command reveals architecture-significant uncertainty: competing non-functional requirements, safety/security risk, real-time constraints, concurrency boundaries, or irreversible API decisions.

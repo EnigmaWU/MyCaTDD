@@ -196,7 +196,7 @@ Px-SpecFlow 的创新超越了 Spec Kit 和 OpenSpec 所提供的范畴：
 
 **2. 相互意图契约。** Spec Kit 和 OpenSpec 都没有在开始设计前对齐人类与 LLM 意图的机制。CaTDD 的 `SPEC_clearStoryIntent` 记录一个契约：开发者认为故事是什么，CodeAgent 推断出什么，范围内工作，范围外工作，成功信号，假设和开放问题。意图未对齐，设计不开始。
 
-**3. `SPEC_abortUserStory` — 显式的失败保留。** 当活跃故事存在阻塞性的范围问题、无效假设或不应就地修补的质量问题时，CaTDD 将故事中止到 `abortUS/` 中作为保留历史。中止生命周期反馈到 `SPEC_analyzeUserStory` 或 `SPEC_importIssue`，以便进行深思熟虑的重新分析。Spec Kit 和 OpenSpec 都没有显式的中止并保留路径。
+**3. `SPEC_abortUserStory` — 显式的失败保留。** 当活跃故事存在阻塞性的范围问题、无效假设或不应就地修补的质量问题时，CaTDD 将故事中止到 `abortUS/` 中作为保留历史。中止生命周期反馈到 `SPEC_analyzeAbortedUserStory` 或 `SPEC_importIssue`，以便进行深思熟虑的重新分析。Spec Kit 和 OpenSpec 都没有显式的中止并保留路径。
 
 **4. `SPEC_makePlan` — 工作导向分类。** 在任何下游工作之前，`SPEC_makePlan` 将故事分类为四种导向之一：意图澄清、需求导向、设计导向或实现导向。它区分初始设计（`SPEC_take*Design`）与后续修订（`SPEC_update*Design`）。它创建配对的 `*-TASKs.md` 制品，以 Markdown 复选框任务的形式展示所需的下一步步骤。
 
