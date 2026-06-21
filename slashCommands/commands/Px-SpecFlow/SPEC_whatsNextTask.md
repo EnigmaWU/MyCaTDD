@@ -14,6 +14,7 @@ Recommend the next SpecCoding task when a developer is new to the flow or resumi
 - `pending_news_files`: optional `.catdd/spec/pendingNews/*.md`.
 - `todo_user_story_files`: optional `.catdd/spec/todoUS/*-UserStory.md`.
 - `doing_user_story_files`: optional `.catdd/spec/doingUS/*-UserStory.md`.
+- `suspended_user_story_files`: optional `.catdd/spec/suspendUS/*-UserStory.md`.
 - `done_user_story_files`: optional `.catdd/spec/doneUS/*-UserStory.md`.
 - `working_log`: optional `.catdd/spec/WorkingProcessLog.md`.
 

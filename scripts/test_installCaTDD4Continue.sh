@@ -35,6 +35,7 @@ grep -Fq '[installCaTDD4Continue] patch: .gitignore' <<< "$verbose_output" || fa
 [[ -d "$TARGET_DIR/.catdd/spec/analyzedNews" ]] || fail "missing .catdd/spec/analyzedNews"
 [[ -d "$TARGET_DIR/.catdd/spec/todoUS" ]] || fail "missing .catdd/spec/todoUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doingUS" ]] || fail "missing .catdd/spec/doingUS"
+[[ -d "$TARGET_DIR/.catdd/spec/suspendUS" ]] || fail "missing .catdd/spec/suspendUS"
 [[ -d "$TARGET_DIR/.catdd/spec/abortUS" ]] || fail "missing .catdd/spec/abortUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doneUS" ]] || fail "missing .catdd/spec/doneUS"
 
@@ -95,6 +96,7 @@ init_target="$TARGET_DIR/new-continue-project"
 [[ -f "$init_target/README_UbiLang.md" ]] || fail "--init target missing installed project-root README_UbiLang.md"
 [[ -f "$init_target/README_UbiLang_ZH.md" ]] || fail "--init target missing installed project-root README_UbiLang_ZH.md"
 [[ -d "$init_target/.catdd/spec/analyzedNews" ]] || fail "--init target missing .catdd/spec/analyzedNews"
+[[ -d "$init_target/.catdd/spec/suspendUS" ]] || fail "--init target missing .catdd/spec/suspendUS"
 [[ -f "$init_target/.continue/rules/catdd.md" ]] || fail "--init target missing Continue rule"
 [[ -f "$init_target/.continue/prompts/UT_convertDemoToTypical.prompt" ]] || fail "--init target missing Continue prompt wrapper"
 

@@ -12,7 +12,7 @@ Refresh `.catdd/spec/projectContext.md` when project facts, constraints, convent
 
 - `projectContext_file`: existing project context.
 - `change_source`: commit, discussion, issue, architecture decision, review result, or new project document.
-- `lifecycle_dirs`: optional `.catdd/spec/pendingNews`, `.catdd/spec/analyzedNews`, `.catdd/spec/todoUS`, `.catdd/spec/doingUS`, `.catdd/spec/doneUS`, and `.catdd/spec/abortUS` directories when refreshing SpecFlow lifecycle state.
+- `lifecycle_dirs`: optional `.catdd/spec/pendingNews`, `.catdd/spec/analyzedNews`, `.catdd/spec/todoUS`, `.catdd/spec/doingUS`, `.catdd/spec/suspendUS`, `.catdd/spec/doneUS`, and `.catdd/spec/abortUS` directories when refreshing SpecFlow lifecycle state.
 
 ## Method References
 
@@ -22,7 +22,7 @@ Refresh `.catdd/spec/projectContext.md` when project facts, constraints, convent
 ## Output Contract
 
 - Updated `.catdd/spec/projectContext.md` team-shared persistent artifact with only confirmed changes.
-- If `SpecFlow Lifecycle State` is updated, evidence that current lifecycle directories were read from the filesystem before editing, for example `ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/doneUS .catdd/spec/abortUS` or an equivalent directory listing.
+- If `SpecFlow Lifecycle State` is updated, evidence that current lifecycle directories were read from the filesystem before editing, for example `ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/suspendUS .catdd/spec/doneUS .catdd/spec/abortUS` or an equivalent directory listing.
 - A short change log describing what changed and why.
 - Open questions for uncertain project intent.
 
@@ -33,7 +33,7 @@ When the update touches `SpecFlow Lifecycle State`, do not rely on chat memory, 
 Recommended command:
 
 ```bash
-ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/doneUS .catdd/spec/abortUS
+ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/suspendUS .catdd/spec/doneUS .catdd/spec/abortUS
 ```
 
 If one of those directories does not exist, record the absence explicitly instead of inventing an empty or populated state. Do not paste exhaustive pending, analyzed, todo, doing, done, or abort file lists into `projectContext.md`; those lists drift and should come from the live directory command. Preserve stable project facts that are not lifecycle inventory.

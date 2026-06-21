@@ -4,7 +4,7 @@ This directory contains `SPEC_*` command templates for the CaTDD SpecCoding life
 
 `SPEC_*` commands orchestrate issue, story, design, test, implementation, review, CI, and closure work. They are flow commands, not CaTDD category definitions. Method semantics remain in `methodPrompts`.
 
-Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, project-root `README*` SPEC docs, tests, and product code. Keep local-only traces such as `.catdd/spec/WorkingProcessLog.md` gitignored.
+Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, project-root `README*` SPEC docs, tests, and product code. Keep local-only traces such as `.catdd/spec/WorkingProcessLog.md` gitignored.
 
 ## Command Map
 
@@ -34,6 +34,8 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_implUnitTests.md](SPEC_implUnitTests.md) | Implement selected test cases. |
 | [SPEC_implProductCodes.md](SPEC_implProductCodes.md) | Implement product code to satisfy tests. |
 | [SPEC_reviewProductCodes.md](SPEC_reviewProductCodes.md) | Review implementation quality and traceability. |
+| [SPEC_suspendUserStory.md](SPEC_suspendUserStory.md) | Suspend an active story into suspendUS while preserving a durable work reference. |
+| [SPEC_resumeUserStory.md](SPEC_resumeUserStory.md) | Resume a suspended story back into active work. |
 | [SPEC_abortUserStory.md](SPEC_abortUserStory.md) | Move an unsafe active story to abortUS for later analysis or next-round improvement. |
 | [SPEC_commitWorks.md](SPEC_commitWorks.md) | Prepare and commit completed work. |
 | [SPEC_closeUserStory.md](SPEC_closeUserStory.md) | Move completed story to done state. |

@@ -137,7 +137,7 @@ if [[ -e "$ANTIGRAVITY_RULES_DIR" && ! -d "$ANTIGRAVITY_RULES_DIR" ]]; then
   exit 1
 fi
 
-mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/abortUS" "$SPEC_DIR/doneUS" "$ANTIGRAVITY_RULES_DIR"
+mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/suspendUS" "$SPEC_DIR/abortUS" "$SPEC_DIR/doneUS" "$ANTIGRAVITY_RULES_DIR"
 
 update_spec_gitignore() {
   local gitignore_file="$TARGET_DIR/.gitignore"
@@ -211,7 +211,7 @@ This directory is managed by `scripts/installCaTDD4Antigravity.sh` from MyCaTDD.
 - `spec/` is the installed SpecCoding artifact workspace.
 - Antigravity project rule: `.antigravityrules/catdd.md`.
 - `README_UbiLang.md` and `README_UbiLang_ZH.md` at project root are the installed CaTDD ubiquitous-language glossaries.
-- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `abortUS/`, and `doneUS/`.
+- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
 - Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
 
@@ -239,7 +239,7 @@ This is an Antigravity project rule installed by MyCaTDD. Use it when working wi
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Use `.catdd/slashCommands/commands/` for UT_* and SPEC_* commands; read the portable command before acting.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
-- Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
+- Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
 - Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
 - Prefer explicit SpecFlow intake commands: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_analyzeIssue`, and `SPEC_analyzeFeature`.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.

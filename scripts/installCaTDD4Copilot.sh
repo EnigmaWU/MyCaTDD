@@ -140,7 +140,7 @@ log_replace_or_new() {
   fi
 }
 
-mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/abortUS" "$SPEC_DIR/doneUS" "$PROMPTS_DIR" "$INSTRUCTIONS_DIR"
+mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/suspendUS" "$SPEC_DIR/abortUS" "$SPEC_DIR/doneUS" "$PROMPTS_DIR" "$INSTRUCTIONS_DIR"
 
 update_spec_gitignore() {
   local gitignore_file="$TARGET_DIR/.gitignore"
@@ -214,7 +214,7 @@ This directory is managed by `scripts/installCaTDD4Copilot.sh` from MyCaTDD.
 - `spec/` is the installed SpecCoding artifact workspace.
 - `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` files are generated Copilot adapters.
 - `README_UbiLang.md` and `README_UbiLang_ZH.md` at project root are the installed CaTDD ubiquitous-language glossaries.
-- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `abortUS/`, and `doneUS/`.
+- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
 - Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
 
@@ -234,7 +234,7 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
-- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `abortUS/`, and `doneUS/`.
+- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
 - Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.

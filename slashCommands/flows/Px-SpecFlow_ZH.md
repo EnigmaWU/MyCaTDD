@@ -24,7 +24,7 @@ P0/P1/P2 flows = category-specific test design and implementation flows
 | --- | --- | --- |
 | SOTA reasoning，如 GPT-5.5-xHigh | 涉及决定或审批系统边界、依赖方向、运行时放置、质量权衡以及跨模块约束的架构工作。 | `SPEC_takeArchDesign`、`SPEC_reviewArchDesign` |
 | High Performance | 需求分析、意图对齐、规划、需求更新、局部设计、审查关卡、测试设计、代码审查以及质量取决于跨多个制品推理的修正路由。 | `SPEC_initProjectContext`、`SPEC_updateProjectContext`、`SPEC_analyzeIssue`、`SPEC_analyzeFeature`、`SPEC_analyzeAbortedUserStory`、`SPEC_clearStoryIntent`、`SPEC_makePlan`、`SPEC_updateUserStory`、`SPEC_whatsNextTask`、`SPEC_takeArchDesign`、`SPEC_reviewArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_reviewDetailDesign`、`SPEC_updateDetailDesign`、`SPEC_reviewUserStory`、`SPEC_designUnitTests`、`SPEC_reviewProductCodes` |
-| Flash Speed | 确定性的导入、移动、中止、提交、关闭，或当所需输入制品已明确时的小型测试驱动实现步骤。 | `SPEC_importIssue`、`SPEC_importFeature`、`SPEC_importUserStory`、`SPEC_openUserStory`、`SPEC_abortUserStory`、`SPEC_implUnitTests`、`SPEC_implProductCodes`、`SPEC_commitWorks`、`SPEC_closeUserStory` |
+| Flash Speed | 确定性的导入、移动、挂起、恢复、中止、提交、关闭，或当所需输入制品已明确时的小型测试驱动实现步骤。 | `SPEC_importIssue`、`SPEC_importFeature`、`SPEC_importUserStory`、`SPEC_openUserStory`、`SPEC_suspendUserStory`、`SPEC_resumeUserStory`、`SPEC_abortUserStory`、`SPEC_implUnitTests`、`SPEC_implProductCodes`、`SPEC_commitWorks`、`SPEC_closeUserStory` |
 
 当命令暴露出架构级别的不确定性时，从 High Performance 或 Flash Speed 升级到 SOTA 级别：竞争性的非功能需求、安全/安保风险、实时或嵌入式约束、并发边界、数据迁移、兼容性矩阵或不可逆的模块/API 所有权决策。
 
@@ -78,6 +78,8 @@ P0/P1/P2 flows = category-specific test design and implementation flows
 - `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`：等待被开启的已分析用户故事和直接导入的结构化用户故事。
 - `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`：处于设计、测试、实现或审查阶段的活跃用户故事。
 - `.catdd/spec/doingUS/YYYYMMDD-TASKs.md`：团队共享的任务制品，与活跃故事配对，以 Markdown 复选框任务的形式记录下一步所需的 `SPEC_*` 步骤和理由。
+- `.catdd/spec/suspendUS/YYYYMMDD-UserStory.md`：已挂起的活跃用户故事，保留可恢复的持久工作引用（例如 git 分支或 worktree）。
+- `.catdd/spec/suspendUS/YYYYMMDD-TASKs.md`：当故事通过 `SPEC_makePlan` 制定了计划时，与挂起故事并排保留的挂起任务制品。
 - `相互意图契约 (Mutual Intent Contract)`：活跃 doing 故事中的一个部分，在设计开始前记录开发者意图、CodeAgent 意图、范围、非目标、成功信号、假设和开放问题。
 - `.catdd/spec/abortUS/YYYYMMDD-UserStory.md`：已中止的活跃用户故事，保留供后续分析、重新导入或下一轮改进规划。
 - `.catdd/spec/abortUS/YYYYMMDD-TASKs.md`：当故事通过 `SPEC_makePlan` 制定了计划时，与中止故事并排保留的已中止任务制品。
@@ -140,6 +142,8 @@ SpecFlow 生命周期状态位于 `.catdd/spec/` 下。共享的 `README*` SPEC 
 | `.catdd/spec/todoUS/` | 团队共享 | 提交已准备好被领取的已分析用户故事和直接导入的结构化用户故事。 |
 | `.catdd/spec/doingUS/` | 团队共享 | 提交活跃用户故事，使进行中的工作可在不同机器间移动，并对团队成员保持可见。 |
 | `.catdd/spec/doingUS/*-TASKs.md` | 团队共享 | 提交与已开启用户故事配对的活跃任务制品，使下一步 SPEC 步骤保持显式、可检查、可诊断。 |
+| `.catdd/spec/suspendUS/` | 团队共享 | 提交挂起的活跃故事，并保留可恢复的持久引用。 |
+| `.catdd/spec/suspendUS/*-TASKs.md` | 团队共享 | 与挂起故事并排提交挂起任务制品，确保恢复路径可追溯。 |
 | `.catdd/spec/abortUS/` | 团队共享 | 提交已中止的活跃故事，当当前范围或假设不再适合继续进行时。 |
 | `.catdd/spec/abortUS/*-TASKs.md` | 团队共享 | 与中止故事并排提交已中止的任务制品，供后续分析或下一轮改进规划。 |
 | `.catdd/spec/doneUS/` | 团队共享 | 提交审查、验证和关闭后的已完成故事记录。 |
@@ -203,6 +207,10 @@ flowchart TB
     CommitReq --> CloseReq["SPEC_closeUserStory"]
     CloseReq --> DoneReq[".catdd/spec/doneUS/*-UserStory.md"]
     ReqTail -- "design-oriented next" --> DesignChoice
+    Doing --> Suspend["SPEC_suspendUserStory"]
+    Suspend --> SuspendUS[".catdd/spec/suspendUS/*-UserStory.md"]
+    SuspendUS -. "later resume with durable reference" .-> Resume["SPEC_resumeUserStory"]
+    Resume --> Doing
     PlanChoice -- "design-oriented" --> DesignChoice{"design state?"}
     PlanChoice -- "implementation-oriented" --> Part2b["continue to Part 2.b"]
     DesignChoice -- "initial arch" --> Arch["SPEC_takeArchDesign"]
@@ -239,6 +247,7 @@ flowchart TB
 flowchart TB
     Part2b["from SPEC_makePlan or Part 2.a"] --> ImplementationChoice{"implementation readiness?"}
     ImplementationChoice -- "design needs rework" --> ReviewStoryRef["return to Part 2.a SPEC_updateDetailDesign"]
+    ImplementationChoice -- "pause work" --> Suspend
     ImplementationChoice -- "abort" --> Abort2b["SPEC_abortUserStory"]
     ImplementationChoice -- "story is test-ready" --> DesignTests["SPEC_designUnitTests"]
 
@@ -279,8 +288,10 @@ flowchart TB
 17. 使用 [../commands/Px-SpecFlow/SPEC_updateDetailDesign.md](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) 进行后续详细设计修订，当详细审查发现缺失或薄弱的设计时。
 18. 使用 [../commands/Px-SpecFlow/SPEC_designUnitTests.md](../commands/Px-SpecFlow/SPEC_designUnitTests.md) 进入 CaTDD 测试设计，通常通过 P0/P1/P2 流程，当计划表明故事已为测试准备好时。
 19. 使用 [../commands/Px-SpecFlow/SPEC_implUnitTests.md](../commands/Px-SpecFlow/SPEC_implUnitTests.md)、[../commands/Px-SpecFlow/SPEC_implProductCodes.md](../commands/Px-SpecFlow/SPEC_implProductCodes.md) 和 [../commands/Px-SpecFlow/SPEC_reviewProductCodes.md](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) 进行测试优先的执行和审查。
-20. 使用 [../commands/Px-SpecFlow/SPEC_abortUserStory.md](../commands/Px-SpecFlow/SPEC_abortUserStory.md)，从第二部分 a 或第二部分 b，当活跃故事存在阻塞性的范围、假设、设计、测试或产品质量问题，应被保留而非继续就地修补时。中止后，或者使用 `SPEC_analyzeAbortedUserStory` 分析已中止的故事以供后续故事轮次，或者使用 `SPEC_importIssue` 创建新的改进/细化输入。
-21. 使用 [../commands/Px-SpecFlow/SPEC_commitWorks.md](../commands/Px-SpecFlow/SPEC_commitWorks.md) 和 [../commands/Px-SpecFlow/SPEC_closeUserStory.md](../commands/Px-SpecFlow/SPEC_closeUserStory.md) 完成生命周期，然后当关闭生成的元/生命周期文件发生变更时，强制进行 close-commit 检查点。
+20. 使用 [../commands/Px-SpecFlow/SPEC_suspendUserStory.md](../commands/Px-SpecFlow/SPEC_suspendUserStory.md)，当活跃工作需要暂停且必须保留可恢复的持久引用（例如 git 分支或 worktree）时。
+21. 使用 [../commands/Px-SpecFlow/SPEC_resumeUserStory.md](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) 将挂起故事恢复到活跃工作态并继续执行。
+22. 使用 [../commands/Px-SpecFlow/SPEC_abortUserStory.md](../commands/Px-SpecFlow/SPEC_abortUserStory.md)，从第二部分 a 或第二部分 b，当活跃故事存在阻塞性的范围、假设、设计、测试或产品质量问题，应被保留而非继续就地修补时。中止后，或者使用 `SPEC_analyzeAbortedUserStory` 分析已中止的故事以供后续故事轮次，或者使用 `SPEC_importIssue` 创建新的改进/细化输入。
+23. 使用 [../commands/Px-SpecFlow/SPEC_commitWorks.md](../commands/Px-SpecFlow/SPEC_commitWorks.md) 和 [../commands/Px-SpecFlow/SPEC_closeUserStory.md](../commands/Px-SpecFlow/SPEC_closeUserStory.md) 完成生命周期，然后当关闭生成的元/生命周期文件发生变更时，强制进行 close-commit 检查点。
 
 ## 冲突防护 (Conflict Guard)
 
@@ -290,6 +301,7 @@ flowchart TB
 - `SPEC_designUnitTests` 与 `UT_design*Skeleton` 设计结果必须在测试文件 Overview 中显式声明 SUT。
 - 在需求导向型工作中，`SPEC_updateUserStory` 之后不得跳过 `SPEC_reviewUserStory`。
 - 当开发者意图与 CodeAgent 意图未对活跃故事澄清时，不得开始设计。
+- 当需要后续恢复已改动的活跃工作时，不得在没有持久恢复引用（例如 git 分支或 worktree）的情况下挂起故事。
 - 在 `SPEC_makePlan` 之后，仅在初始设计工作时使用 `SPEC_take*Design`，仅在依赖现有设计证据、审查反馈或故事级设计差距的后续设计修订时使用 `SPEC_update*Design`。
 - 每个设计产出步骤（`SPEC_takeArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_updateDetailDesign`）之后必须经过其审查关卡，然后才能进行下游生命周期步骤。
 - 当发现的问题改变了故事的意图、使其假设无效或需要新的分析/改进轮次时，使用 `SPEC_abortUserStory` 而非继续活跃故事。

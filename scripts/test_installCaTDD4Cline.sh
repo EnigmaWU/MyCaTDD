@@ -33,6 +33,7 @@ grep -Fq '[installCaTDD4Cline] patch: .gitignore' <<< "$verbose_output" || fail 
 [[ -d "$TARGET_DIR/.catdd/spec/analyzedNews" ]] || fail "missing .catdd/spec/analyzedNews"
 [[ -d "$TARGET_DIR/.catdd/spec/todoUS" ]] || fail "missing .catdd/spec/todoUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doingUS" ]] || fail "missing .catdd/spec/doingUS"
+[[ -d "$TARGET_DIR/.catdd/spec/suspendUS" ]] || fail "missing .catdd/spec/suspendUS"
 [[ -d "$TARGET_DIR/.catdd/spec/abortUS" ]] || fail "missing .catdd/spec/abortUS"
 [[ -d "$TARGET_DIR/.catdd/spec/doneUS" ]] || fail "missing .catdd/spec/doneUS"
 
@@ -75,6 +76,7 @@ init_target="$TARGET_DIR/new-cline-project"
 [[ -f "$init_target/README_UbiLang.md" ]] || fail "--init target missing installed project-root README_UbiLang.md"
 [[ -f "$init_target/README_UbiLang_ZH.md" ]] || fail "--init target missing installed project-root README_UbiLang_ZH.md"
 [[ -d "$init_target/.catdd/spec/analyzedNews" ]] || fail "--init target missing .catdd/spec/analyzedNews"
+[[ -d "$init_target/.catdd/spec/suspendUS" ]] || fail "--init target missing .catdd/spec/suspendUS"
 [[ -f "$init_target/.clinerules/catdd.md" ]] || fail "--init target missing Cline rule"
 
 # Verify generated Cline Skills
@@ -93,6 +95,8 @@ skill_count=$(find "$skills_dir" -maxdepth 1 -mindepth 1 -type d | wc -l)
 
 # Verify --clean-prompts works (triggers generator with --clean)
 clean_output="$("$INSTALLER" --target "$TARGET_DIR" --clean-prompts --yes 2>&1)"
-grep -Fq 'Generated 46 Cline Skill wrappers' <<< "$clean_output" || fail "--clean-prompts did not trigger skills generation"
+source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"
+expected_wrappers="Generated ${source_count} Cline Skill wrappers"
+grep -Fq "$expected_wrappers" <<< "$clean_output" || fail "--clean-prompts did not trigger skills generation"
 
 echo "[installCaTDD4Cline-test] PASSED: installed CaTDD Cline assets into temporary target"

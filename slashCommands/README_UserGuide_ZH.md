@@ -157,6 +157,7 @@ bash scripts/test_installCaTDD4Cline.sh
 - `.catdd/spec/analyzedNews/`
 - `.catdd/spec/todoUS/`
 - `.catdd/spec/doingUS/`
+- `.catdd/spec/suspendUS/`
 - `.catdd/spec/abortUS/`
 - `.catdd/spec/doneUS/`
 - 项目根目录 `README*` 文档，例如 `README_UserGuide.md`、`README_UserStories.md`、`README_DetailDesign.md`、`README_VerifyDesign.md`
@@ -185,6 +186,8 @@ bash scripts/test_installCaTDD4Cline.sh
 | 告诉我当前 SpecCoding 下一步该做什么 | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | 为已打开的 user story 规划下一条 SPEC 步骤 | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | 澄清开发者与 CodeAgent 的 story intent | [commands/Px-SpecFlow/SPEC_clearStoryIntent.md](commands/Px-SpecFlow/SPEC_clearStoryIntent.md) |
+| 挂起活跃 user story 并保留可恢复的持久工作引用 | [commands/Px-SpecFlow/SPEC_suspendUserStory.md](commands/Px-SpecFlow/SPEC_suspendUserStory.md) |
+| 将挂起 user story 恢复回活跃工作态 | [commands/Px-SpecFlow/SPEC_resumeUserStory.md](commands/Px-SpecFlow/SPEC_resumeUserStory.md) |
 | 中止不宜继续的 active user story，保留给后续分析或下一轮改进 | [commands/Px-SpecFlow/SPEC_abortUserStory.md](commands/Px-SpecFlow/SPEC_abortUserStory.md) |
 | 导入已有结构化 User Story 或 AC 切片 | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |

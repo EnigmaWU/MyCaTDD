@@ -32,6 +32,7 @@ grep -Fq 'scripts/makeSlashCmd4Continue.sh --clean' "$GUIDE" || fail "slashComma
 grep -Fq 'flows/P0-FuncTestsFlow.md' "$GUIDE" || fail "slashCommands user guide missing flow map"
 grep -Fq 'commands/P0-FuncTestsFlow/UT_implTestCase.md' "$GUIDE" || fail "slashCommands user guide missing command map"
 grep -Fq '.catdd/spec/doingUS/' "$GUIDE" || fail "slashCommands user guide missing local SpecCoding artifact policy"
+grep -Fq '.catdd/spec/suspendUS/' "$GUIDE" || fail "slashCommands user guide missing suspended SpecCoding artifact policy"
 grep -Fq '.catdd/spec/abortUS/' "$GUIDE" || fail "slashCommands user guide missing aborted SpecCoding artifact policy"
 
 grep -Fq '## 使用者' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing 使用者 section"
