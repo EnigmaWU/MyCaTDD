@@ -2,7 +2,7 @@
 
 Practical guide for developers and CodeAgents using `slashCommands/` to run CaTDD as repeatable SpecCoding workflows.
 
-For WHAT this layer is and WHY it exists, read [README.md](README.md). This guide focuses on HOW to use it, WHO uses it, WHEN to choose it, and WHERE the assets live.
+For WHAT this layer is and WHY it exists, read [README](README.md). This guide focuses on HOW to use it, WHO uses it, WHEN to choose it, and WHERE the assets live.
 
 ## Who
 
@@ -76,7 +76,7 @@ It also protects the method boundary: `methodPrompts` owns CaTDD meaning, `slash
 
 Follow this workflow when using `slashCommands/`.
 
-1. Read [README.md](README.md) for the WHAT/WHY layer contract.
+1. Read [README](README.md) for the WHAT/WHY layer contract.
 2. Choose a flow from the Flow Map below.
 3. Read the flow document to understand the command order and expected handoff.
 4. If using a target project, install CaTDD with the adapter script for your CodeAgent.
@@ -172,46 +172,46 @@ The installers manage the `.gitignore` rules for those local artifacts.
 
 | Flow | Purpose | Start here |
 | --- | --- | --- |
-| Px SpecFlow | Drive SpecCoding from project context and work item to reviewed, committed story | [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) |
-| P0 FuncTestsFlow | Convert or design functional test skeletons, then implement TC-by-TC | [flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md) |
-| P1 DesignTestsFlow | Extend stable functional coverage into design-gated State, Capability, and Concurrency skeletons | [flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md) |
-| P2 QualityTestsFlow | Extend stable behavior into Performance, Robust, Compatibility, and Configuration | [flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md) |
+| Px SpecFlow | Drive SpecCoding from project context and work item to reviewed, committed story | [Px-SpecFlow](flows/Px-SpecFlow.md) |
+| P0 FuncTestsFlow | Convert or design functional test skeletons, then implement TC-by-TC | [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md) |
+| P1 DesignTestsFlow | Extend stable functional coverage into design-gated State, Capability, and Concurrency skeletons | [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md) |
+| P2 QualityTestsFlow | Extend stable behavior into Performance, Robust, Compatibility, and Configuration | [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md) |
 
 ## Command Map
 
 | Developer need | Command template |
 | --- | --- |
-| Create or revise a portable SPEC slash command | [SPEC_slashCommandTemplate.md](SPEC_slashCommandTemplate.md) |
-| Create or revise a portable UT slash command | [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md) |
-| Drive a full SpecCoding lifecycle | [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md) |
-| Tell me what SpecCoding task to do next | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
-| Create checkbox TASKs and choose the next SPEC step for an opened user story | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
-| Clear developer and CodeAgent story intent | [commands/Px-SpecFlow/SPEC_clearStoryIntent.md](commands/Px-SpecFlow/SPEC_clearStoryIntent.md) |
-| Suspend an active user story while preserving durable work references | [commands/Px-SpecFlow/SPEC_suspendUserStory.md](commands/Px-SpecFlow/SPEC_suspendUserStory.md) |
-| Resume a suspended user story back into active work | [commands/Px-SpecFlow/SPEC_resumeUserStory.md](commands/Px-SpecFlow/SPEC_resumeUserStory.md) |
-| Abort an unsafe active user story for later analysis or next-round improvement | [commands/Px-SpecFlow/SPEC_abortUserStory.md](commands/Px-SpecFlow/SPEC_abortUserStory.md) |
-| Patch effective installed-project CaTDD modifications back to original CaTDD | [commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md](commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md) |
-| Revise architecture design after architecture-review feedback | [commands/Px-SpecFlow/SPEC_updateArchDesign.md](commands/Px-SpecFlow/SPEC_updateArchDesign.md) |
-| Import an existing structured User Story or AC slice | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
-| Convert demo tests into CaTDD Typical skeleton | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
-| Design Typical skeleton from interface/protocol | [commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |
-| Design Edge skeleton from interface/protocol and valid behavior boundaries | [commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md](commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md) |
-| Design Misuse skeleton from invalid caller behavior | [commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md](commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md) |
-| Design Fault skeleton from failure behavior | [commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md](commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) |
-| Design the full P0 Functional skeleton set | [commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) |
-| Review the functional skeleton set before implementation | [commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
-| Select the next test case from existing skeletons | [commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
-| Implement the selected test case | [commands/P0-FuncTestsFlow/UT_implTestCase.md](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
-| Review the implemented test case | [commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
-| Design State skeleton coverage from `README_StateDesign.md` or `README_ArchDesign.md` `State Design` chapter | [commands/P1-DesignTestsFlow/UT_designStateSkeleton.md](commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) |
-| Design Capability skeleton coverage from `README_DetailDesign.md` | [commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md](commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) |
-| Design Concurrency skeleton coverage from `README_ResourceDesign.md` | [commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md](commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) |
-| Review P1 design skeleton coverage | [commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md](commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) |
-| Design Performance skeleton coverage from `README_PerfDesign.md` | [commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md](commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md) |
-| Design Robust skeleton coverage from `README_ErrorDesign.md` | [commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
-| Design Compatibility skeleton coverage from `README_CompatDesign.md` | [commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
-| Design Configuration skeleton coverage from `README_DetailDesign.md` | [commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
-| Review P2 quality skeleton coverage | [commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
+| Create or revise a portable SPEC slash command | [SPEC_slashCommandTemplate](SPEC_slashCommandTemplate.md) |
+| Create or revise a portable UT slash command | [UT_slashCommandTemplate](UT_slashCommandTemplate.md) |
+| Drive a full SpecCoding lifecycle | [Px-SpecFlow](commands/Px-SpecFlow/README.md) |
+| Tell me what SpecCoding task to do next | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
+| Create checkbox TASKs and choose the next SPEC step for an opened user story | [SPEC_makePlan](commands/Px-SpecFlow/SPEC_makePlan.md) |
+| Clear developer and CodeAgent story intent | [SPEC_clearStoryIntent](commands/Px-SpecFlow/SPEC_clearStoryIntent.md) |
+| Suspend an active user story while preserving durable work references | [SPEC_suspendUserStory](commands/Px-SpecFlow/SPEC_suspendUserStory.md) |
+| Resume a suspended user story back into active work | [SPEC_resumeUserStory](commands/Px-SpecFlow/SPEC_resumeUserStory.md) |
+| Abort an unsafe active user story for later analysis or next-round improvement | [SPEC_abortUserStory](commands/Px-SpecFlow/SPEC_abortUserStory.md) |
+| Patch effective installed-project CaTDD modifications back to original CaTDD | [SPEC_patchOriginalCaTDD](commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md) |
+| Revise architecture design after architecture-review feedback | [SPEC_updateArchDesign](commands/Px-SpecFlow/SPEC_updateArchDesign.md) |
+| Import an existing structured User Story or AC slice | [SPEC_importUserStory](commands/Px-SpecFlow/SPEC_importUserStory.md) |
+| Convert demo tests into CaTDD Typical skeleton | [UT_convertDemoToTypical](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
+| Design Typical skeleton from interface/protocol | [UT_designTypicalSkeleton](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |
+| Design Edge skeleton from interface/protocol and valid behavior boundaries | [UT_designEdgeSkeleton](commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md) |
+| Design Misuse skeleton from invalid caller behavior | [UT_designMisuseSkeleton](commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md) |
+| Design Fault skeleton from failure behavior | [UT_designFaultSkeleton](commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) |
+| Design the full P0 Functional skeleton set | [UT_designFuncTestsSkeleton](commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) |
+| Review the functional skeleton set before implementation | [UT_reviewFuncTestsSkeleton](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
+| Select the next test case from existing skeletons | [UT_tellMeNextImplTest](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
+| Implement the selected test case | [UT_implTestCase](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
+| Review the implemented test case | [UT_reviewImplTestCase](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
+| Design State skeleton coverage from `README_StateDesign.md` or `README_ArchDesign.md` `State Design` chapter | [UT_designStateSkeleton](commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) |
+| Design Capability skeleton coverage from `README_DetailDesign.md` | [UT_designCapabilitySkeleton](commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) |
+| Design Concurrency skeleton coverage from `README_ResourceDesign.md` | [UT_designConcurrencySkeleton](commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) |
+| Review P1 design skeleton coverage | [UT_reviewDesignTestsSkeleton](commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) |
+| Design Performance skeleton coverage from `README_PerfDesign.md` | [UT_designPerformanceSkeleton](commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md) |
+| Design Robust skeleton coverage from `README_ErrorDesign.md` | [UT_designRobustSkeleton](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
+| Design Compatibility skeleton coverage from `README_CompatDesign.md` | [UT_designCompatibilitySkeleton](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
+| Design Configuration skeleton coverage from `README_DetailDesign.md` | [UT_designConfigurationSkeleton](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
+| Review P2 quality skeleton coverage | [UT_reviewQualityTestsSkeleton](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
 
 ## Quality Checklist
 
