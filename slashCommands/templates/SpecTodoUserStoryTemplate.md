@@ -3,6 +3,9 @@
 > **Story ID:** US-{{n}} | **State:** todo | **Priority:** <!-- filled from Priority section below -->
 > **Source:** `.catdd/spec/analyzedNews/{{YYYYMMDD-original}}.md`
 > **Correction of:** <!-- present only for SPEC_analyzeAbortedUserStory: abortUS/YYYYMMDD-UserStory.md -->
+> **Parent Story:** <!-- present only for sub-UserStory: `.catdd/spec/todoUS/{{parent}}.md` -->
+> **CaTDD Class:** {{P0 Functional / P1 Design / P2 Quality / P3 Addons}}
+> **Primary Category:** {{Typical / Edge / Misuse / Fault / State / Capability / Concurrency / Performance / Robust / Compatibility / Configuration / DemoExample}}
 > **Created:** {{YYYY-MM-DD}}
 
 ---
@@ -55,10 +58,13 @@
 
 ## Acceptance Criteria
 
-<!-- How: 3-7 scenarios. Happy path first, then alternate, then error. One behavior per scenario.
-     For each scenario: state the governing Rule, give concrete Examples, list open Questions.
-     Keep it fast — don't debate Gherkin syntax during discovery. If too many Rules, consider
-     splitting the story. (→ SKILL: write-user-story + facilitate-example-mapping) -->
+<!-- How: For a P0 Functional main UserStory, use this section for Typical behavior first:
+     the main acceptance criteria and core scenarios that prove the user-visible capability works.
+     Keep 3-7 scenarios, one behavior per scenario. Happy path first, then important alternate
+     Typical paths. Put P0 Edge/Misuse/Fault in the second-part AC section below.
+     If a concern is P1 Design or P2 Quality, do not force it into this AC list: create a
+     sub-UserStory from this story when it is needed now, or raise an Initial Acceptance Question
+     when the team must decide whether to split it. (→ SKILL: write-user-story + facilitate-example-mapping) -->
 
 ### Scenario 1: {{Happy Path Title}}
 
@@ -73,7 +79,7 @@
 
 **Open Questions:** {{or "None"}}
 
-### Scenario 2: {{Alternate / Error Path Title}}
+### Scenario 2: {{Alternate Typical Path Title}}
 
 **Rule:** {{business rule or constraint}}
 **Given** {{precondition}}
@@ -103,15 +109,48 @@
 
 ---
 
-## Edge Cases & Error Paths
+## P0 Functional Second-Part Acceptance Criteria
 
-<!-- How: From scenario discovery + model gap analysis. What if input is empty? What if network fails?
-     What if user is logged out? What if timeout occurs? One row per edge case.
-     (→ SKILL: write-user-story + elicit-requirements-models) -->
+<!-- How: For P0 Functional stories, keep Typical in the main Acceptance Criteria section above.
+     Use this second part for P0 Functional coverage that sharpens the same story without changing
+     its primary intent:
+     - Edge = unusual but valid inputs, options, limits, or lifecycle states.
+     - Misuse = invalid caller behavior or API contract violation.
+     - Fault = dependency, resource, or runtime failure while the caller behavior is valid.
+     Do not put P1 Design (State/Capability/Concurrency) or P2 Quality
+     (Performance/Robust/Compatibility/Configuration) here. Split those into sub-UserStories or
+     record them as open questions. (→ SKILL: write-user-story + elicit-requirements-models) -->
 
-| # | Condition | Expected Behavior | Status |
-|---|---|---|---|
-| 1 | {{edge condition}} | {{how the system should respond}} | {{draft / needs clarification}} |
+### Edge (ValidFunc)
+
+| # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
+|---|---|---|---|---|---|
+| E{{n}} | {{valid boundary, option, limit, or lifecycle variation}} | {{how the system should respond}} | {{Scenario / AS reference}} | {{verifyOperation_byCondition_expectOutcome}} | {{draft / needs clarification}} |
+
+### Misuse (InvalidFunc)
+
+| # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
+|---|---|---|---|---|---|
+| M{{n}} | {{caller violates API contract or uses invalid input/state}} | {{how the system should reject or protect}} | {{Scenario / AS reference}} | {{verifyOperation_byMisuse_expectRejection}} | {{draft / needs clarification}} |
+
+### Fault (InvalidFunc)
+
+| # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
+|---|---|---|---|---|---|
+| F{{n}} | {{dependency, resource, or runtime failure under valid caller behavior}} | {{cleanup, diagnostic, or deterministic failure behavior}} | {{Scenario / AS reference}} | {{verifyOperation_byFault_expectGracefulFailure}} | {{draft / needs clarification}} |
+
+---
+
+## Sub-UserStory Candidates
+
+<!-- How: Preserve important non-P0 concerns without polluting the main story. If a P1/P2 concern
+     is required for the current release or changes the main acceptance decision, create a
+     sub-UserStory with Parent Story pointing here. If the need is uncertain, add it as an Initial
+     Acceptance Question and keep the candidate row as trace evidence. -->
+
+| Candidate | CaTDD Class / Category | Why It Is Not In Main AC | Recommendation | Status |
+|---|---|---|---|---|
+| {{sub-story candidate}} | {{P1 Design: State/Capability/Concurrency or P2 Quality: Performance/Robust/Compatibility/Configuration}} | {{reason this is not P0 Typical/Edge/Misuse/Fault}} | {{create sub-UserStory / ask acceptance question / defer}} | {{open / deferred / created}} |
 
 ---
 
@@ -140,13 +179,15 @@
 ## Initial Acceptance Questions
 
 <!-- Gate: story is NOT ready for SPEC_openUserStory if any question is open.
+     P1/P2 split questions may be open only if they do not block the P0 story; otherwise decide or
+     create the sub-UserStory before opening this story.
      (→ SPEC_analyzeFeature Conflict Guard) -->
 
 | # | Question | Raised By | Status |
 |---|---|---|---|
 | 1 | {{question}} | {{model gap / ambiguity hunt / business rule}} | {{open / answered}} |
 
-**Gate:** If any question is open, this story is NOT ready for `SPEC_openUserStory`.
+**Gate:** This story is READY for `SPEC_openUserStory` only when all blocking acceptance questions are answered. Non-blocking P1/P2 follow-up questions may remain only if they are explicitly traced in Sub-UserStory Candidates.
 
 ---
 
@@ -168,6 +209,8 @@
 |---|---|
 | This story → Raw input | `.catdd/spec/analyzedNews/{{file}}` |
 | Project story index | `README_UserStories.md` |
+| Parent story | `.catdd/spec/todoUS/{{parent-story-file}}` |
+| Sub-UserStory candidates | `.catdd/spec/todoUS/{{sub-story-file-or-candidate}}` |
 | This story ID | US-{{n}} |
 
 ---
