@@ -148,25 +148,14 @@ bash scripts/test_installCaTDD4Cline.sh
 
 ## SpecCoding 产物策略
 
-在目标项目中使用 SpecCoding 时，生命周期状态放在 `.catdd/spec/` 下，共享的 `README*` SPEC 文档放在项目根目录。
+本用户指南保持简洁。完整的产物策略以 [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) 为准。
 
-应提交团队共享产物，例如：
+快速规则：
 
-- `.catdd/spec/projectContext.md`
-- `.catdd/spec/pendingNews/`
-- `.catdd/spec/analyzedNews/`
-- `.catdd/spec/todoUS/`
-- `.catdd/spec/doingUS/`
-- `.catdd/spec/suspendUS/`
-- `.catdd/spec/abortUS/`
-- `.catdd/spec/doneUS/`
-- 项目根目录 `README*` 文档，例如 `README_UserGuide.md`、`README_UserStories.md`、`README_DetailDesign.md`、`README_VerifyDesign.md`
-
-保持本地过程追踪产物被 gitignore，尤其是：
-
-- `.catdd/spec/WorkingProcessLog.md`
-
-安装器会维护这些本地产物的 `.gitignore` 规则。
+- 团队共享生命周期状态位于 `.catdd/spec/` 并应提交：`.catdd/spec/doingUS/`、`.catdd/spec/suspendUS/`、`.catdd/spec/abortUS/` 及其他生命周期目录。
+- 团队共享的 `README*` SPEC 文档位于项目根目录并应提交。
+- 本地过程追踪保持 gitignore：`.catdd/spec/WorkingProcessLog.md`。
+- 若本指南与细节策略出现差异，以 [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) 的详细生命周期规则为准。
 
 ## 流程地图
 
@@ -179,25 +168,17 @@ bash scripts/test_installCaTDD4Cline.sh
 
 ## 命令地图
 
+仅保留关键命令。完整的分流程命令地图请查看 [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md)、[flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md)、[flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md)、[flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md)。
+
 | Developer need | Command template |
 | --- | --- |
+| 创建或修订可移植的 SPEC 斜杠命令 | [SPEC_slashCommandTemplate.md](SPEC_slashCommandTemplate.md) |
 | 创建或修订可移植的 UT 斜杠命令 | [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md) |
 | 驱动完整 SpecCoding 生命周期 | [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md) |
 | 告诉我当前 SpecCoding 下一步该做什么 | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | 为已打开的 user story 规划下一条 SPEC 步骤 | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
-| 澄清开发者与 CodeAgent 的 story intent | [commands/Px-SpecFlow/SPEC_clearStoryIntent.md](commands/Px-SpecFlow/SPEC_clearStoryIntent.md) |
-| 挂起活跃 user story 并保留可恢复的持久工作引用 | [commands/Px-SpecFlow/SPEC_suspendUserStory.md](commands/Px-SpecFlow/SPEC_suspendUserStory.md) |
-| 将挂起 user story 恢复回活跃工作态 | [commands/Px-SpecFlow/SPEC_resumeUserStory.md](commands/Px-SpecFlow/SPEC_resumeUserStory.md) |
-| 中止不宜继续的 active user story，保留给后续分析或下一轮改进 | [commands/Px-SpecFlow/SPEC_abortUserStory.md](commands/Px-SpecFlow/SPEC_abortUserStory.md) |
-| 将已安装项目中有效的 CaTDD 元文件改进回补到原始 CaTDD | [commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md](commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md) |
 | 导入已有结构化 User Story 或 AC 切片 | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
-| 基于 interface/protocol 设计 Typical 骨架 | [commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |
-| 基于 interface/protocol 和有效边界设计 Edge 骨架 | [commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md](commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md) |
-| 基于无效调用者行为设计 Misuse 骨架 | [commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md](commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md) |
-| 基于故障行为设计 Fault 骨架 | [commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md](commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) |
-| 设计完整 P0 Functional 骨架集合 | [commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) |
-| 实现前审查功能测试骨架集合 | [commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
 | 从已有骨架中选择下一个测试用例 | [commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
 | 实现已选择的测试用例 | [commands/P0-FuncTestsFlow/UT_implTestCase.md](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
 | 审查已实现的测试用例 | [commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
