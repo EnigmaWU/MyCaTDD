@@ -37,6 +37,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_suspendUserStory.md](SPEC_suspendUserStory.md) | Suspend an active story into suspendUS while preserving a durable work reference. |
 | [SPEC_resumeUserStory.md](SPEC_resumeUserStory.md) | Resume a suspended story back into active work. |
 | [SPEC_abortUserStory.md](SPEC_abortUserStory.md) | Move an unsafe active story to abortUS for later analysis or next-round improvement. |
+| [SPEC_patchOriginalCaTDD.md](SPEC_patchOriginalCaTDD.md) | Patch effective installed-project CaTDD modifications back to the original CaTDD repository. |
 | [SPEC_commitWorks.md](SPEC_commitWorks.md) | Prepare and commit completed work. |
 | [SPEC_closeUserStory.md](SPEC_closeUserStory.md) | Move completed story to done state. |
 

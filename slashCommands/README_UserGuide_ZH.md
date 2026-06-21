@@ -189,6 +189,7 @@ bash scripts/test_installCaTDD4Cline.sh
 | 挂起活跃 user story 并保留可恢复的持久工作引用 | [commands/Px-SpecFlow/SPEC_suspendUserStory.md](commands/Px-SpecFlow/SPEC_suspendUserStory.md) |
 | 将挂起 user story 恢复回活跃工作态 | [commands/Px-SpecFlow/SPEC_resumeUserStory.md](commands/Px-SpecFlow/SPEC_resumeUserStory.md) |
 | 中止不宜继续的 active user story，保留给后续分析或下一轮改进 | [commands/Px-SpecFlow/SPEC_abortUserStory.md](commands/Px-SpecFlow/SPEC_abortUserStory.md) |
+| 将已安装项目中有效的 CaTDD 元文件改进回补到原始 CaTDD | [commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md](commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md) |
 | 导入已有结构化 User Story 或 AC 切片 | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
 | 基于 interface/protocol 设计 Typical 骨架 | [commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |

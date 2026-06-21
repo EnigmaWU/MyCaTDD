@@ -190,6 +190,7 @@ The installers manage the `.gitignore` rules for those local artifacts.
 | Suspend an active user story while preserving durable work references | [commands/Px-SpecFlow/SPEC_suspendUserStory.md](commands/Px-SpecFlow/SPEC_suspendUserStory.md) |
 | Resume a suspended user story back into active work | [commands/Px-SpecFlow/SPEC_resumeUserStory.md](commands/Px-SpecFlow/SPEC_resumeUserStory.md) |
 | Abort an unsafe active user story for later analysis or next-round improvement | [commands/Px-SpecFlow/SPEC_abortUserStory.md](commands/Px-SpecFlow/SPEC_abortUserStory.md) |
+| Patch effective installed-project CaTDD modifications back to original CaTDD | [commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md](commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md) |
 | Revise architecture design after architecture-review feedback | [commands/Px-SpecFlow/SPEC_updateArchDesign.md](commands/Px-SpecFlow/SPEC_updateArchDesign.md) |
 | Import an existing structured User Story or AC slice | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | Convert demo tests into CaTDD Typical skeleton | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
