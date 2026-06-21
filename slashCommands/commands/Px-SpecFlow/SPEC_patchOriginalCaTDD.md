@@ -20,8 +20,8 @@ Patch effective CaTDD meta-file improvements from an installed project back to t
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
-- [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
+- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [methodPrompts](../../../methodPrompts/README.md)
 
 ## Output Contract
 
