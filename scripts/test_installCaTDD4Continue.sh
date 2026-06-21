@@ -29,6 +29,8 @@ grep -Fq '[installCaTDD4Continue] patch: .gitignore' <<< "$verbose_output" || fa
 
 [[ -f "$TARGET_DIR/.catdd/methodPrompts/README.md" ]] || fail "missing installed methodPrompts"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "missing installed slashCommands"
+[[ -f "$TARGET_DIR/README_UbiLang.md" ]] || fail "missing installed project-root README_UbiLang.md"
+[[ -f "$TARGET_DIR/README_UbiLang_ZH.md" ]] || fail "missing installed project-root README_UbiLang_ZH.md"
 [[ -d "$TARGET_DIR/.catdd/spec/pendingNews" ]] || fail "missing .catdd/spec/pendingNews"
 [[ -d "$TARGET_DIR/.catdd/spec/analyzedNews" ]] || fail "missing .catdd/spec/analyzedNews"
 [[ -d "$TARGET_DIR/.catdd/spec/todoUS" ]] || fail "missing .catdd/spec/todoUS"
@@ -90,6 +92,8 @@ init_target="$TARGET_DIR/new-continue-project"
 "$INSTALLER" --target "$init_target" --init --yes
 
 [[ -f "$init_target/.catdd/methodPrompts/README.md" ]] || fail "--init target missing installed methodPrompts"
+[[ -f "$init_target/README_UbiLang.md" ]] || fail "--init target missing installed project-root README_UbiLang.md"
+[[ -f "$init_target/README_UbiLang_ZH.md" ]] || fail "--init target missing installed project-root README_UbiLang_ZH.md"
 [[ -d "$init_target/.catdd/spec/analyzedNews" ]] || fail "--init target missing .catdd/spec/analyzedNews"
 [[ -f "$init_target/.continue/rules/catdd.md" ]] || fail "--init target missing Continue rule"
 [[ -f "$init_target/.continue/prompts/UT_convertDemoToTypical.prompt" ]] || fail "--init target missing Continue prompt wrapper"

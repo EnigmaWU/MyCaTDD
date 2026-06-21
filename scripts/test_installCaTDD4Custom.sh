@@ -29,6 +29,8 @@ grep -Fq '[installCaTDD4Custom] patch: .gitignore' <<< "$verbose_output" || fail
 
 [[ -f "$TARGET_DIR/.catdd/methodPrompts/README.md" ]] || fail "missing installed methodPrompts"
 [[ -f "$TARGET_DIR/.catdd/slashCommands/UT_slashCommandTemplate.md" ]] || fail "missing installed slashCommands"
+[[ -f "$TARGET_DIR/README_UbiLang.md" ]] || fail "missing installed project-root README_UbiLang.md"
+[[ -f "$TARGET_DIR/README_UbiLang_ZH.md" ]] || fail "missing installed project-root README_UbiLang_ZH.md"
 [[ -d "$TARGET_DIR/.catdd/spec/pendingNews" ]] || fail "missing .catdd/spec/pendingNews"
 [[ -d "$TARGET_DIR/.catdd/spec/analyzedNews" ]] || fail "missing .catdd/spec/analyzedNews"
 [[ -d "$TARGET_DIR/.catdd/spec/todoUS" ]] || fail "missing .catdd/spec/todoUS"
@@ -68,6 +70,8 @@ grep -Fq '(same version, replacement)' <<< "$replacement_output" || fail "reinst
 
 custom_target="$TARGET_DIR/custom-dir-target"
 "$INSTALLER" --target "$custom_target" --custom-dir .myagent --init --yes
+[[ -f "$custom_target/README_UbiLang.md" ]] || fail "--custom-dir target missing installed project-root README_UbiLang.md"
+[[ -f "$custom_target/README_UbiLang_ZH.md" ]] || fail "--custom-dir target missing installed project-root README_UbiLang_ZH.md"
 [[ -f "$custom_target/.myagent/rules/catdd.md" ]] || fail "--custom-dir target missing custom rule"
 [[ -f "$custom_target/.myagent/prompts/UT_convertDemoToTypical.prompt" ]] || fail "--custom-dir target missing custom prompt wrapper"
 

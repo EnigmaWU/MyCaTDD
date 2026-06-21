@@ -5,6 +5,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 pairs=(
   "README.md|README_ZH.md"
+  "README_UbiLang.md|README_UbiLang_ZH.md"
   "methodPrompts/README.md|methodPrompts/README_ZH.md"
   "methodPrompts/README_UserGuide.md|methodPrompts/README_UserGuide_ZH.md"
   "slashCommands/README.md|slashCommands/README_ZH.md"

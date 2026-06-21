@@ -48,6 +48,8 @@ flowchart LR
 
 This README is organized around that main storyline.
 
+For canonical terminology across all layers and installed target projects, see [README_UbiLang.md](README_UbiLang.md).
+
 ## Four Layers of Assets and Responsibilities
 
 ### [1] [methodPrompts](methodPrompts/README.md) (method prompts)

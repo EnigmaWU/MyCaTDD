@@ -72,6 +72,7 @@ Keep the documentation split clear:
 | --- | --- |
 | `README.md` / `README_ZH.md` | WHAT this layer is and WHY it exists. |
 | `README_UserStory.md` / `README_UserStory_ZH.md` | WHO needs this layer, WHAT user value it should provide, and BDD acceptance criteria before detail design. |
+| `README_UbiLang.md` | Shared domain vocabulary (roles, states, category/tier terms, behavior naming) used across story/design/implementation docs. |
 | `README_ArchDesign.md` / `README_ArchDesign_ZH.md` | High-level module architecture, runtime adapter boundaries, AgentSDK separation, trace/audit/control design, and key trade-offs. |
 | `README_DetailDesign.md` / `README_DetailDesign_ZH.md` | TypeScript-facing contracts, data schemas, state transitions, error handling, implementation plan, and verification strategy. |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW to design or use this layer today, WHO uses it, WHEN to work in it, WHERE future assets live, and a copy-exec `Usage Example`. |

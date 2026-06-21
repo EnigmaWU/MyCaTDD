@@ -114,6 +114,7 @@ codeAgents/utCodeAgentCLI/
   README_ZH.md
   README_UserStory.md
   README_UserStory_ZH.md
+  README_UbiLang.md
   README_ArchDesign.md
   README_ArchDesign_ZH.md
   README_DetailDesign.md
@@ -165,12 +166,13 @@ Use this path when a user starts with a CaTDD need and wants a `utCodeAgentCLI` 
 
 1. Stay in this UserGuide to choose the practical path and likely `--behave`.
 2. Open [README_UsageDesign.md](README_UsageDesign.md) only when strict parser syntax, selector details, or exhaustive error rules matter.
-3. Open [README_ArchDesign.md](README_ArchDesign.md) when module boundaries, adapter boundaries, or AgentSDK separation matter.
-4. Open [README_DetailDesign.md](README_DetailDesign.md) when TypeScript contracts, data schemas, state transitions, trace schema, or implementation plan matter.
-5. Open `slashCommands/README_UserGuide.md` only when you need to inspect the portable command contract behind a `UT_*` behavior.
-6. Open `methodPrompts/README_UserGuide.md` only when you need method meaning; do not redefine category semantics here.
-7. Open [README.md](README.md) only when you need layer-level WHAT/WHY background.
-8. Write or update the smallest CLI-layer note needed to explain orchestration, trace, reflection, or policy.
+3. Open [README_UbiLang.md](README_UbiLang.md) when term meaning is ambiguous (roles, status/state words, category/tier names, behavior labels).
+4. Open [README_ArchDesign.md](README_ArchDesign.md) when module boundaries, adapter boundaries, or AgentSDK separation matter.
+5. Open [README_DetailDesign.md](README_DetailDesign.md) when TypeScript contracts, data schemas, state transitions, trace schema, or implementation plan matter.
+6. Open `slashCommands/README_UserGuide.md` only when you need to inspect the portable command contract behind a `UT_*` behavior.
+7. Open `methodPrompts/README_UserGuide.md` only when you need method meaning; do not redefine category semantics here.
+8. Open [README.md](README.md) only when you need layer-level WHAT/WHY background.
+9. Write or update the smallest CLI-layer note needed to explain orchestration, trace, reflection, or policy.
 
 ## Behavior Selection Guide
 
