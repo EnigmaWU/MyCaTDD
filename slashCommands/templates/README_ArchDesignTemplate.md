@@ -1,12 +1,28 @@
 # {{ProjectName}} Architecture Design
 
-This is the SpecCoding template for project-root `README_ArchDesign.md`. Create or update it from `SPEC_takeArchDesign` when a story changes architecture views, module boundaries, dependencies, data flow, runtime placement, or key decisions.
+This is the SpecCoding template for project-root `README_ArchDesign.md`. Create or update it from `SPEC_takeArchDesign` when a story changes module-context architecture, consuming-system context, architecture views, module boundaries, dependencies, data flow, runtime placement, or key decisions.
 
 ## Context
 
 - Story link: {{.catdd/spec/doingUS/YYYYMMDD-UserStory.md or todo/done link}}
 - Related overview: [README.md](README.md)
 - Related detail design: [README_DetailDesign.md](README_DetailDesign.md)
+
+## Module Context
+
+| Item | Description |
+| --- | --- |
+| Target module | {{Module name}} |
+| Module mission | {{What this module owns and why it exists}} |
+| Public surface | {{API/commands/events exposed by this module}} |
+| Out-of-module responsibilities | {{What this module explicitly does not own}} |
+
+## Consuming-System Context
+
+| Consumer System | Interaction | Contract Boundary | Failure/Trust Boundary |
+| --- | --- | --- | --- |
+| {{System A}} | {{How it uses this module}} | {{API/protocol/version boundary}} | {{error propagation, retry, ownership}} |
+| {{System B}} | {{How it uses this module}} | {{API/protocol/version boundary}} | {{error propagation, retry, ownership}} |
 
 ## Architecture Goals
 

@@ -1,12 +1,26 @@
 # {{ProjectName}} User Stories
 
-This is the SpecCoding template for project-root `README_UserStories.md`. Create or update it from `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_openUserStory`, or `SPEC_takeDetailDesign` when project or module stories need a shared index.
+This is the SpecCoding template for project-root `README_UserStories.md`. This file is the mandatory project-level ledger for user story lifecycle state (TODO/DOING/DONE) and acceptance criteria trace/status.
 
-## Story Index
+## Story Ledger
+
+### TODO / DOING Stories
 
 | Story ID | Title | State | Source | Trace Link |
 | --- | --- | --- | --- | --- |
-| US-{{n}} | {{Story title}} | {{pending/todo/doing/done}} | {{Issue/feature/input}} | {{.catdd/spec path}} |
+| US-{{n}} | {{Story title}} | {{todo/doing}} | {{Issue/feature/input}} | {{.catdd/spec/todoUS or doingUS path}} |
+
+### SUSPENDED Stories
+
+| Story ID | Title | Suspended On | Resume Reference | Trace Link |
+| --- | --- | --- | --- | --- |
+| US-{{n}} | {{Story title}} | {{YYYY-MM-DD}} | {{git branch / worktree}} | {{.catdd/spec/suspendUS path}} |
+
+### DONE Stories
+
+| Story ID | Title | Closed On | Evidence | Trace Link |
+| --- | --- | --- | --- | --- |
+| US-{{n}} | {{Story title}} | {{YYYY-MM-DD}} | {{commit/CI/review reference}} | {{.catdd/spec/doneUS path}} |
 
 ## Active Story
 
@@ -16,18 +30,28 @@ US-{{n}}: As a {{role}},
          So that {{value}}.
 ```
 
-## Acceptance Criteria Summary
+## Acceptance Criteria Ledger
 
-| AC ID | Story | Given | When | Then | Status |
+| AC ID | Story | Given | When | Then | Status | Verification Trace |
 | --- | --- | --- | --- | --- | --- |
-| AC-{{n}} | US-{{n}} | {{context}} | {{action}} | {{observable result}} | {{draft/reviewed/verified}} |
+| AC-{{n}} | US-{{n}} | {{context}} | {{action}} | {{observable result}} | {{draft/reviewed/verified}} | {{TC ID / test file / review evidence}} |
 
 ## Lifecycle Links
 
 - Pending input: `.catdd/spec/pendingNews/{{file}}`
 - Todo story: `.catdd/spec/todoUS/{{file}}`
 - Active story: `.catdd/spec/doingUS/{{file}}`
+- Suspended story: `.catdd/spec/suspendUS/{{file}}`
 - Done story: `.catdd/spec/doneUS/{{file}}`
+
+## Sync Rules
+
+- Keep each opened story in TODO/DOING until closure is complete.
+- Move a story to SUSPENDED only when a durable resume reference (such as a git branch or worktree) exists.
+- Move a story to DONE only when closure evidence exists (review + commit + CI or accepted equivalent).
+- Keep AC status aligned with story lifecycle and verification evidence.
+- Do not leave story ID state mismatches between this ledger and `.catdd/spec/*US/` artifacts.
+- Do not close or update a story whose ledger state is SUSPENDED until it has been resumed via `SPEC_resumeUserStory`.
 
 ## Traceability Notes
 
@@ -49,4 +73,4 @@ Expected result: the temporary file shows a user-story index, acceptance criteri
 
 ## Maintenance Rule
 
-Keep this file as the shared story index. Keep active work details in `.catdd/spec/doingUS/` until the story is ready to close.
+Keep this file as the mandatory project-level ledger for TODO/DOING/DONE and AC status. Keep active work details in `.catdd/spec/doingUS/` until the story is ready to close.
