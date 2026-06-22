@@ -25,6 +25,7 @@ Revise high-level architecture design after architecture review feedback, story-
 
 - Updated architecture design in `README_ArchDesign.md` (and optional mirror when present).
 - Updated architecture decisions, boundaries, dependencies, and tradeoff notes tied to the review feedback.
+- Updated module-context and consuming-system context sections when the revision affects module responsibilities, interfaces, or integration boundaries.
 - Architecture-feedback checklist showing what was addressed, deferred, or still open.
 - Remaining risks and next recommended command.
 - Next recommended command after any update is `SPEC_reviewArchDesign` so revised architecture is always re-gated before detailed design or downstream steps.

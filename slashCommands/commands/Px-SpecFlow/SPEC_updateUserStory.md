@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Update requirement-oriented story artifacts for an active story by revising module or submodule `README_UserStory.md` and paired `README_UserGuide.md` before design or implementation proceeds.
+Update requirement-oriented story artifacts for an active story by revising project-root `README_UserStories.md` (TODO/DONE + AC trace/status ledger) and paired `README_UserGuide.md` before design or implementation proceeds. Module or submodule `README_UserStory.md` may also be updated when the project uses module-local requirement docs.
 
 ## CoT Pattern
 
@@ -11,7 +11,8 @@ Update requirement-oriented story artifacts for an active story by revising modu
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `module_user_story_doc`: module or submodule `README_UserStory.md` to update.
+- `project_user_stories_doc`: project-root `README_UserStories.md` to update as the authoritative TODO/DONE and AC ledger.
+- `module_user_story_doc`: optional module or submodule `README_UserStory.md` to update when module-local requirement docs are used.
 - `module_user_guide_doc`: paired module or submodule `README_UserGuide.md` to align with the updated user story.
 - `update_scope`: optional scope hint such as specific `US-*` or `AC-*` IDs.
 - `projectContext_file`: optional project context.
@@ -23,7 +24,8 @@ Update requirement-oriented story artifacts for an active story by revising modu
 
 ## Output Contract
 
-- Updated module or submodule `README_UserStory.md` with requirement-level revisions and stable US/AC trace IDs.
+- Updated project-root `README_UserStories.md` with requirement-level revisions, TODO/DONE state synchronization, and stable US/AC trace IDs.
+- Updated module or submodule `README_UserStory.md` when module-local requirement docs are used.
 - Updated paired `README_UserGuide.md` aligned to the revised requirement intent and usage behavior.
 - Explicit trace links from the active doing story to updated requirement docs.
 - Requirement-update checklist describing what changed and what remains open.
@@ -31,11 +33,12 @@ Update requirement-oriented story artifacts for an active story by revising modu
 
 ## Prompt Template
 
-Ask the assistant to apply minimum requirement-level updates to `README_UserStory.md` and paired `README_UserGuide.md`, preserve US/AC traceability, and avoid architecture/detail-design expansion.
+Ask the assistant to apply minimum requirement-level updates to project `README_UserStories.md` and paired `README_UserGuide.md` (plus module `README_UserStory.md` when applicable), preserve US/AC traceability and TODO/DONE consistency, and avoid architecture/detail-design expansion.
 
 ## Conflict Guard
 
 Do not invent new product scope outside the active story intent.
+Do not update `README_UserStories.md` for a story whose ledger state is SUSPENDED; require `SPEC_resumeUserStory` first to resume before updating.
 Do not move this step into architecture or detail-design decisions; route those to design-oriented commands.
 Do not skip `SPEC_reviewUserStory` after updating requirement artifacts.
 

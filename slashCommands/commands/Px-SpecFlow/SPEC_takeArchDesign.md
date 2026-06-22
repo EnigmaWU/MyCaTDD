@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Create or update high-level architecture design for the architecture-changing active user story, defining architecture views, architecture-oriented SPEC surface coverage, component decomposition, module boundaries, dependencies, data flows, and key technical trade-offs before detailed class or API design begins.
+Create or update high-level architecture design for the architecture-changing active user story, defining module-context architecture and consuming-system context, architecture views, architecture-oriented SPEC surface coverage, component decomposition, module boundaries, dependencies, data flows, and key technical trade-offs before detailed class or API design begins.
 
 Model guidance: use a SOTA reasoning-capable LLM for this command (for example, GPT-5.5-xHigh) because architecture design requires deep thinking across competing constraints and complex trade-off analysis.
 
@@ -43,6 +43,8 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 ## Output Contract
 
 - Project-root `README_ArchDesign.md` containing high-level architecture goals, module boundaries, dependencies, data flow, key decisions, and risks.
+- Explicit module-context section: module responsibility, owned boundaries, public surface, and interaction contracts with systems that use this module.
+- Explicit consuming-system context section: upstream/downstream systems, integration responsibilities, and trust/failure boundaries.
 - Architecture views, at minimum Mermaid-renderable C4-style system context, container, component, runtime execution, and deployment views, unless a view is explicitly not applicable.
 - Architecture-oriented SPEC surface coverage, declaring whether usage, error, resource, performance, compatibility, diagnosis, verification, and state concerns are covered here, delegated, deferred, or not applicable.
 - Created `README_ArchDesign.md` must be based on the `slashCommands/templates/README_ArchDesignTemplate.md` template.

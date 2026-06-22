@@ -148,25 +148,14 @@ bash scripts/test_installCaTDD4Cline.sh
 
 ## SpecCoding Artifact Policy
 
-For SpecCoding work inside a target project, keep lifecycle state under `.catdd/spec/` and keep shared `README*` SPEC docs in the project root.
+UserGuide keeps this short. The detailed artifact policy is defined in [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md).
 
-Commit team-shared artifacts such as:
+Quick rules:
 
-- `.catdd/spec/projectContext.md`
-- `.catdd/spec/pendingNews/`
-- `.catdd/spec/analyzedNews/`
-- `.catdd/spec/todoUS/`
-- `.catdd/spec/doingUS/`
-- `.catdd/spec/suspendUS/`
-- `.catdd/spec/abortUS/`
-- `.catdd/spec/doneUS/`
-- Project-root `README*` docs such as `README_UserGuide.md`, `README_UserStories.md`, `README_DetailDesign.md`, and `README_VerifyDesign.md`
-
-Keep local trace artifacts gitignored, especially:
-
-- `.catdd/spec/WorkingProcessLog.md`
-
-The installers manage the `.gitignore` rules for those local artifacts.
+- Team-shared lifecycle state lives under `.catdd/spec/` and should be committed: `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, and other lifecycle directories.
+- Team-shared `README*` SPEC docs live in the project root and should be committed.
+- Local process trace stays gitignored: `.catdd/spec/WorkingProcessLog.md`.
+- If policy details and this guide ever diverge, follow [Px-SpecFlow](flows/Px-SpecFlow.md) as the source of detailed lifecycle rules.
 
 ## Flow Map
 
@@ -179,6 +168,8 @@ The installers manage the `.gitignore` rules for those local artifacts.
 
 ## Command Map
 
+Key commands only. For full flow-specific command maps, use [Px-SpecFlow](commands/Px-SpecFlow/README.md), [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md), [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md), and [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md).
+
 | Developer need | Command template |
 | --- | --- |
 | Create or revise a portable SPEC slash command | [SPEC_slashCommandTemplate](SPEC_slashCommandTemplate.md) |
@@ -186,32 +177,11 @@ The installers manage the `.gitignore` rules for those local artifacts.
 | Drive a full SpecCoding lifecycle | [Px-SpecFlow](commands/Px-SpecFlow/README.md) |
 | Tell me what SpecCoding task to do next | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | Create checkbox TASKs and choose the next SPEC step for an opened user story | [SPEC_makePlan](commands/Px-SpecFlow/SPEC_makePlan.md) |
-| Clear developer and CodeAgent story intent | [SPEC_clearStoryIntent](commands/Px-SpecFlow/SPEC_clearStoryIntent.md) |
-| Suspend an active user story while preserving durable work references | [SPEC_suspendUserStory](commands/Px-SpecFlow/SPEC_suspendUserStory.md) |
-| Resume a suspended user story back into active work | [SPEC_resumeUserStory](commands/Px-SpecFlow/SPEC_resumeUserStory.md) |
-| Abort an unsafe active user story for later analysis or next-round improvement | [SPEC_abortUserStory](commands/Px-SpecFlow/SPEC_abortUserStory.md) |
-| Patch effective installed-project CaTDD modifications back to original CaTDD | [SPEC_patchOriginalCaTDD](commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md) |
-| Revise architecture design after architecture-review feedback | [SPEC_updateArchDesign](commands/Px-SpecFlow/SPEC_updateArchDesign.md) |
 | Import an existing structured User Story or AC slice | [SPEC_importUserStory](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | Convert demo tests into CaTDD Typical skeleton | [UT_convertDemoToTypical](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
-| Design Typical skeleton from interface/protocol | [UT_designTypicalSkeleton](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |
-| Design Edge skeleton from interface/protocol and valid behavior boundaries | [UT_designEdgeSkeleton](commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md) |
-| Design Misuse skeleton from invalid caller behavior | [UT_designMisuseSkeleton](commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md) |
-| Design Fault skeleton from failure behavior | [UT_designFaultSkeleton](commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) |
-| Design the full P0 Functional skeleton set | [UT_designFuncTestsSkeleton](commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) |
-| Review the functional skeleton set before implementation | [UT_reviewFuncTestsSkeleton](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
 | Select the next test case from existing skeletons | [UT_tellMeNextImplTest](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
 | Implement the selected test case | [UT_implTestCase](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
 | Review the implemented test case | [UT_reviewImplTestCase](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
-| Design State skeleton coverage from `README_StateDesign.md` or `README_ArchDesign.md` `State Design` chapter | [UT_designStateSkeleton](commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) |
-| Design Capability skeleton coverage from `README_DetailDesign.md` | [UT_designCapabilitySkeleton](commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) |
-| Design Concurrency skeleton coverage from `README_ResourceDesign.md` | [UT_designConcurrencySkeleton](commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) |
-| Review P1 design skeleton coverage | [UT_reviewDesignTestsSkeleton](commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) |
-| Design Performance skeleton coverage from `README_PerfDesign.md` | [UT_designPerformanceSkeleton](commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md) |
-| Design Robust skeleton coverage from `README_ErrorDesign.md` | [UT_designRobustSkeleton](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
-| Design Compatibility skeleton coverage from `README_CompatDesign.md` | [UT_designCompatibilitySkeleton](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
-| Design Configuration skeleton coverage from `README_DetailDesign.md` | [UT_designConfigurationSkeleton](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
-| Review P2 quality skeleton coverage | [UT_reviewQualityTestsSkeleton](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
 
 ## Quality Checklist
 

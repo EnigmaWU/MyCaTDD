@@ -46,6 +46,7 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 - Review finding: `PASS`, `REVISE`, or `ASK`.
 - Evidence for each finding, grounded in the architecture-changing story, project context, architecture document, and mirror document when present.
 - Checks for module boundaries, dependency direction, AgentSDK/CaTDD separation, runtime adaptation strategy, trace/audit/control coverage, Mermaid-renderable architecture views, and Px-SpecFlow architecture-oriented surface coverage.
+- Checks that architecture remains module-context centered and explicitly documents systems consuming the module and their integration boundaries.
 - If `PASS`: next recommended command is `SPEC_takeDetailDesign`.
 - If `REVISE`: next recommended command is `SPEC_updateArchDesign` to revise the architecture design before detailed design begins.
 - If `ASK`: stop and ask the developer for the missing product, architecture, or review decision.
@@ -55,6 +56,7 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 - Architecture decisions trace to the architecture-changing story or explicitly listed architecture-changing baseline/update stories, and to `projectContext.md`.
 - C4-style architecture views are Mermaid-renderable or explicitly marked not applicable.
 - Module boundaries are clear enough to drive detail design.
+- Module context and consuming-system context are explicit enough to drive integration-safe detail design.
 - CaTDD method semantics remain delegated to `methodPrompts/` and `slashCommands/`.
 - Generic AgentSDK concerns remain independent of CaTDD category/status meaning.
 - Runtime targets, adapters, deployment boundaries, and command execution boundaries are explicit.
@@ -70,5 +72,6 @@ When possible, prefer a SOTA high-reasoning model (for example, GPT-5.5-xHigh) f
 ## Conflict Guard
 
 Do not approve an architecture that cannot explain its system boundary, module ownership, dependency direction, runtime/deployment boundaries, and traceability back to requirements.
+Do not approve an architecture that omits consuming-system context for the designed module.
 
 ONE-MORE-THING: ask developer if something not sure
