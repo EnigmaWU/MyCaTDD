@@ -15,11 +15,11 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` slice `US-USE
 
 ## Active Work Status
 
-- Status: TODO.
-- Active state: `.catdd/spec/todoUS/` ready for `SPEC_openUserStory`.
+- Status: DOING.
+- Active state: `.catdd/spec/doingUS/` opened by `SPEC_openUserStory` on 2026-06-28.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_openUserStory`.
+- Next recommended command: `/SPEC_makePlan`.
 
 ## Story
 
@@ -294,4 +294,4 @@ Resolved Questions:
 
 ## Next Recommended Action
 
-Run `/SPEC_openUserStory` to move this imported story into `.catdd/spec/doingUS/`.
+Run `/SPEC_makePlan` to plan the design and implementation sequence for this story.
