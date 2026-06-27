@@ -19,7 +19,58 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` slice `US-USE
 - Active state: `.catdd/spec/doingUS/` opened by `SPEC_openUserStory` on 2026-06-28.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_clearStoryIntent`.
+- Next recommended command: `/SPEC_makePlan`.
+
+## Mutual Intent Contract
+
+Cleared by `/SPEC_clearStoryIntent` on 2026-06-28. Review result: **CLEARED**.
+
+### Developer Intent
+
+The developer redesigned US-USER-01 from a flat 5-AC list to a categorized 32-AC structure covering all four CaTDD P0 Functional categories. The intent is:
+
+- Every valid CLI invocation pattern from the UserGuide should be testable (Typical, 10 ACs).
+- Every boundary condition that warns but proceeds should be testable (Edge, 10 ACs).
+- Every caller contract violation that exits with error should be testable (Misuse, 9 ACs).
+- Every external dependency failure that exits with error should be testable (Fault, 3 ACs).
+- Edge is now a required category (previously incorrectly marked non-required).
+- All 3 acceptance questions are resolved and the category boundaries are clear.
+
+### CodeAgent Intent
+
+- The CodeAgent will respect the 32-AC structure and CaTDD category boundaries established in the spec.
+- The CodeAgent will use `README_UsageDesign.md` as the formal argument contract and `README_UserGuide.md` as the usage patterns source when designing tests or verifying behavior.
+- The CodeAgent will not invent new ACs or reclassify existing ones without developer approval.
+- The CodeAgent will proceed through the SpecFlow lifecycle: SPEC_makePlan → SPEC_designUnitTests → SPEC_implUnitTests → SPEC_reviewProductCodes → SPEC_commitWorks → SPEC_closeUserStory.
+
+### In Scope
+
+- CLI argument parsing and validation.
+- 32 acceptance criteria across Typical, Edge, Misuse, and Fault.
+- Exit code 0 for success, exit code 1 for error.
+- Diagnostic messages to stderr.
+- File-path validation for all file-based arguments.
+
+### Out of Scope
+
+- Runtime behavior after argument validation.
+- Test skeleton design quality or implementation logic.
+- Slash command execution details.
+- CI/CD integration or non-CLI invocation patterns.
+
+### Success Signal
+
+The story is complete when all 32 ACs have been verified through the CaTDD lifecycle: designed as skeletons, implemented as RED tests, reviewed, and committed.
+
+### Assumptions
+
+- Required arguments are `--goal`, `--target`, and `--behave`.
+- `--goalStory` / `--goalStoryFile` and `--input` / `--inputFile` are mutually exclusive.
+- Default log level is `info`. Default config file path is `{PRJROOT}/CaTDD/utCodeAgentCLI/config.yaml`.
+
+### Open Questions
+
+~ None — all 3 acceptance questions resolved during review ~
 
 ## Story
 
@@ -294,4 +345,4 @@ Resolved Questions:
 
 ## Next Recommended Action
 
-Run `/SPEC_clearStoryIntent` to establish mutual intent before planning.
+Run `/SPEC_makePlan` to plan the design and implementation sequence for this story.
