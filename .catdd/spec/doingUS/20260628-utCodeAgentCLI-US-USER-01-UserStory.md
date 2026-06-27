@@ -19,7 +19,7 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` slice `US-USE
 - Active state: `.catdd/spec/doingUS/` opened by `SPEC_openUserStory` on 2026-06-28.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_makePlan`.
+- Next recommended command: `/SPEC_clearStoryIntent`.
 
 ## Story
 
@@ -294,4 +294,4 @@ Resolved Questions:
 
 ## Next Recommended Action
 
-Run `/SPEC_makePlan` to plan the design and implementation sequence for this story.
+Run `/SPEC_clearStoryIntent` to establish mutual intent before planning.
