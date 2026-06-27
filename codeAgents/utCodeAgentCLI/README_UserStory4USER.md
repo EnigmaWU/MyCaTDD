@@ -21,7 +21,7 @@ Two sub-roles shape distinct USER paths:
 |---|---|---|---|---|
 | Typical | ValidFunc | AC-01 ~ AC-10 | 10 | ✅ User intent — normal usage patterns |
 | Edge | ValidFunc | AC-11 ~ AC-20 | 10 | ✅ Proceed (may warn, no error exit) |
-| Misuse | InvalidFunc | AC-21 ~ AC-28 | 8 | ✅ Error exit — caller's fault |
+| Misuse | InvalidFunc | AC-21 ~ AC-28, AC-32 | 9 | ✅ Error exit — caller's fault |
 | Fault | InvalidFunc | AC-29 ~ AC-31 | 3 | ✅ Error exit — external dependency failure |
 
 ---
@@ -161,7 +161,7 @@ Two sub-roles shape distinct USER paths:
 #### Misuse (InvalidFunc) — Caller contract violations that exit with error
 
 ##### AC-21 [Func/Misuse]: Missing required argument exits with error
-- **Given** the CLI is invoked without one of `--goal`, `--target`, or `--behave`
+- **Given** the CLI is invoked without one of `--goal`, `--target`, or `--behave`, or with `--target ""` (empty string)
 - **When** argument parsing runs
 - **Then** exit code is 1
 - **And** stderr names the missing argument and describes what it is for and why it is required
@@ -209,15 +209,21 @@ Two sub-roles shape distinct USER paths:
 - **Then** exit code is 1
 - **And** stderr lists every valid `--log-level` value
 
+##### AC-32 [Func/Misuse]: --config-file with valid YAML but structurally wrong content
+- **Given** the CLI is invoked with `--config-file` pointing to a valid YAML file that is missing required keys or has structurally invalid content
+- **When** argument validation runs
+- **Then** exit code is 1
+- **And** stderr reports the structural error and lists the required configuration keys
+
 ---
 
 #### Fault (InvalidFunc) — External dependency failures that exit with error
 
-##### AC-29 [Func/Fault]: File-path arguments point to nonexistent files
-- **Given** the CLI is invoked with `--inputFile`, `--goalStoryFile`, `--reference`, `--extra-prompt`, or `--config-file` pointing to a nonexistent path
+##### AC-29 [Func/Fault]: File-path arguments point to nonexistent or unreadable files
+- **Given** the CLI is invoked with `--inputFile`, `--goalStoryFile`, `--reference`, `--extra-prompt`, or `--config-file` pointing to a nonexistent path, or a path that exists but is not a readable file (e.g. broken symlink, permission denied, directory)
 - **When** argument validation runs
 - **Then** exit code is 1
-- **And** stderr names the missing path
+- **And** stderr names the problematic path and describes the issue
 
 ##### AC-30 [Func/Fault]: --config-file not valid YAML
 - **Given** the CLI is invoked with `--config-file` pointing to an existing file that is not valid YAML
