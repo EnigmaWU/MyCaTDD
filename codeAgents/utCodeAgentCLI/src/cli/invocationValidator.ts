@@ -3,6 +3,8 @@ declare const module: { exports: Record<string, unknown> };
 
 const fs = require("node:fs");
 
+const VALID_LOG_LEVELS = ["error", "warn", "info", "debug"];
+
 type InvocationResult = {
 	exitCode: number;
 	stderr: string;
@@ -20,6 +22,12 @@ type ParsedArgs = {
 	references: string[];
 	extraPrompts: string[];
 	configFile?: string;
+	logLevel?: string;
+	diagMethodPrompts: boolean;
+	diagSlashCommands: boolean;
+	diagCats: boolean;
+	diagModelTier: boolean;
+	interactiveSlashCommands: boolean;
 };
 
 const VALID_BEHAVIORS = [
@@ -45,13 +53,19 @@ function fail(stderr: string): InvocationResult {
 }
 
 function parseArgs(argv: string[]): ParsedArgs | InvocationResult {
-	const parsed: ParsedArgs = { references: [], extraPrompts: [] };
+	const parsed: ParsedArgs = { references: [], extraPrompts: [], diagMethodPrompts: false, diagSlashCommands: false, diagCats: false, diagModelTier: false, interactiveSlashCommands: false };
 
 	for (let i = 0; i < argv.length; i += 1) {
 		const flag = argv[i];
 		if (!flag.startsWith("--")) {
 			continue;
 		}
+
+		if (flag == "--diagMethodPrompts") { parsed.diagMethodPrompts = true; continue; }
+		if (flag == "--diagSlashCommands") { parsed.diagSlashCommands = true; continue; }
+		if (flag == "--diagCats") { parsed.diagCats = true; continue; }
+		if (flag == "--diagModelTier") { parsed.diagModelTier = true; continue; }
+		if (flag == "--interactive-slash-commands") { parsed.interactiveSlashCommands = true; continue; }
 
 		const next = argv[i + 1];
 		if (next == null || next.startsWith("--")) {
@@ -88,7 +102,7 @@ function parseArgs(argv: string[]): ParsedArgs | InvocationResult {
 				i += 1;
 				break;
 			case "--reference":
-				parsed.references.push(next);
+				parsed.references.push(...next.split(",").map(function(s) { return s.trim(); }));
 				i += 1;
 				break;
 			case "--extra-prompt":
@@ -97,6 +111,10 @@ function parseArgs(argv: string[]): ParsedArgs | InvocationResult {
 				break;
 			case "--config-file":
 				parsed.configFile = next;
+				i += 1;
+				break;
+			case "--log-level":
+				parsed.logLevel = next;
 				i += 1;
 				break;
 			default:
@@ -131,6 +149,8 @@ function validateInvocation(argv: string[]): InvocationResult {
 		return parsed;
 	}
 
+	if (parsed.goal != null && parsed.goal.trim() == "") { return fail("--goal cannot be empty."); }
+
 	const required: Array<{ flag: string; present: boolean; reason: string }> = [
 		{ flag: "--goal", present: Boolean(parsed.goal), reason: "it describes what the CLI should do" },
 		{ flag: "--target", present: Boolean(parsed.target), reason: "it identifies the test scope" },
@@ -160,6 +180,10 @@ function validateInvocation(argv: string[]): InvocationResult {
 	if (parsed.input == "") warnOut += "Warning: --input is empty, ignoring.\n";
 	for (var ri=0;ri<parsed.references.length;ri++) if (parsed.references[ri]=="") warnOut += "Warning: --reference value "+(ri+1)+" is empty, ignoring.\n";
 	for (var ei=0;ei<parsed.extraPrompts.length;ei++) if (parsed.extraPrompts[ei]=="") warnOut += "Warning: --extra-prompt value "+(ei+1)+" is empty, ignoring.\n";
+
+	if (parsed.logLevel != null && VALID_LOG_LEVELS.indexOf(parsed.logLevel) == -1) { return fail("--log-level not recognized. Supported: error, warn, info, debug"); }
+
+	if (parsed.target != null && (parsed.target + "").indexOf("::") >= 0 && ["designAllSkeleton","designFuncTestsSkeleton"].indexOf(parsed.behave as string) >= 0) { return fail("--target TestCase with skeleton behave mismatch -- invalid combination"); }
 
 	const missingPath = firstMissingPath(parsed);
 	if (missingPath != null) {
