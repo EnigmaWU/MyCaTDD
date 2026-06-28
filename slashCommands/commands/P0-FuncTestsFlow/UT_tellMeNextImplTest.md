@@ -14,8 +14,8 @@ Use this command when the developer already has Typical, Edge, Misuse, Fault, or
 
 ## Method References
 
-- [../../flows/P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 
 ## Output Contract
 

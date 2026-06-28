@@ -375,7 +375,7 @@ test("TC-ARG-009 verifyDesignWithReference_byInputFileTargetBehaveRef_expectDisp
 		"--behave",
 		"designAllSkeleton",
 		"--reference",
-		"docs/api.md,docs/schema.md",
+		"codeAgents/utCodeAgentCLI/tests/fixtures/api.md,codeAgents/utCodeAgentCLI/tests/fixtures/schema.md",
 	]);
 
 	assert.equal(result.exitCode, 0);

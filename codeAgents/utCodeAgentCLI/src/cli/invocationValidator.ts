@@ -156,6 +156,11 @@ function validateInvocation(argv: string[]): InvocationResult {
 		);
 	}
 
+	let warnOut = "";
+	if (parsed.input == "") warnOut += "Warning: --input is empty, ignoring.\n";
+	for (var ri=0;ri<parsed.references.length;ri++) if (parsed.references[ri]=="") warnOut += "Warning: --reference value "+(ri+1)+" is empty, ignoring.\n";
+	for (var ei=0;ei<parsed.extraPrompts.length;ei++) if (parsed.extraPrompts[ei]=="") warnOut += "Warning: --extra-prompt value "+(ei+1)+" is empty, ignoring.\n";
+
 	const missingPath = firstMissingPath(parsed);
 	if (missingPath != null) {
 		return fail(`${missingPath.flag} path not found: ${missingPath.value}`);
@@ -163,7 +168,7 @@ function validateInvocation(argv: string[]): InvocationResult {
 
 	return {
 		exitCode: 0,
-		stderr: "",
+		stderr: warnOut,
 		dispatchedBehavior: parsed.behave,
 	};
 }
