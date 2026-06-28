@@ -49,7 +49,7 @@ Paired with `.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md
 - [x] **SPEC_designUnitTests** — Misuse skeletons redesigned (9 ACs: AC-21~AC-28, AC-32; TC-ARG-021..TC-ARG-026 GREEN, TC-ARG-027..TC-ARG-031 PLANNED)
 - [x] **SPEC_designUnitTests** — Fault skeletons redesigned (3 ACs: AC-29~AC-31; TC-ARG-029..TC-ARG-033 GREEN, TC-ARG-034..TC-ARG-035 PLANNED)
 - [x] **SPEC_designUnitTests** — Final review of all 4 category files (traceability verified, SUT declared, provenance recorded)
-- [ ] **SPEC_implUnitTests** — Implement RED tests for all categories (priority: complete PLANNED → GREEN)
+- [x] **SPEC_implUnitTests** u2014 All 4 categories implemented: Typical 6G+4R, Edge 3G+7R, Misuse 7G+4R, Fault 5G+2R = 21 GREEN + 17 RED
 - [ ] **SPEC_reviewProductCodes** — Review test quality and spec alignment
 - [ ] **SPEC_commitWorks** — Commit completed work
 - [ ] **SPEC_closeUserStory** — Close the story

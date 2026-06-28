@@ -16,9 +16,9 @@ Implement selected CaTDD test cases for the active user story.
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
-- [../../flows/P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 
 ## Output Contract
 

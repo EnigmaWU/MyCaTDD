@@ -192,7 +192,7 @@ test("TC-ARG-001 verifyDesignFuncTests_byUserGoalStoryFileInputFileTarget_expect
 // @[US]: US-USER-01
 // @[AC]: AC-02
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Confirm single-category skeleton design reaches dispatch.
 // @[Expect]: Exit code 0, execution proceeds to single-category design.
 test("TC-ARG-002 verifyDesignEdgeSkeleton_byUserGoalStoryFileInputFileTarget_expectDispatchReady", () => {
@@ -215,7 +215,7 @@ test("TC-ARG-002 verifyDesignEdgeSkeleton_byUserGoalStoryFileInputFileTarget_exp
 // @[US]: US-USER-01
 // @[AC]: AC-03
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Confirm all-skeleton design reaches dispatch.
 // @[Expect]: Exit code 0, execution proceeds to all-skeleton design.
 test("TC-ARG-003 verifyDesignAllSkeleton_byUserGoalStoryFileInputFileTarget_expectDispatchReady", () => {
@@ -238,7 +238,7 @@ test("TC-ARG-003 verifyDesignAllSkeleton_byUserGoalStoryFileInputFileTarget_expe
 // @[US]: US-USER-01
 // @[AC]: AC-04
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Confirm review behavior with only --target reaches dispatch.
 // @[Expect]: Exit code 0, execution proceeds to review.
 test("TC-ARG-004 verifyReviewFuncTests_byTargetOnly_expectDispatchReady", () => {
@@ -261,7 +261,7 @@ test("TC-ARG-004 verifyReviewFuncTests_byTargetOnly_expectDispatchReady", () => 
 // @[US]: US-USER-01
 // @[AC]: AC-05
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Confirm tell-me-next behavior with only --target reaches dispatch.
 // @[Expect]: Exit code 0, execution proceeds to next-TC selection.
 test("TC-ARG-005 verifyTellMeNextImplTest_byTargetOnly_expectDispatchReady", () => {
@@ -284,7 +284,7 @@ test("TC-ARG-005 verifyTellMeNextImplTest_byTargetOnly_expectDispatchReady", () 
 // @[US]: US-USER-01
 // @[AC]: AC-06
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Confirm single-TC implementation reaches dispatch.
 // @[Expect]: Exit code 0, execution proceeds to implement one TC.
 test("TC-ARG-006 verifyImplTestCase_byInputFileTargetTC_expectDispatchReady", () => {
@@ -292,7 +292,7 @@ test("TC-ARG-006 verifyImplTestCase_byInputFileTargetTC_expectDispatchReady", ()
 		"--goal",
 		"implement the selected auth error test case",
 		"--inputFile",
-		"src/auth/AuthService.h",
+		"codeAgents/utCodeAgentCLI/tests/fixtures/AuthService.h",
 		"--target",
 		"tests/auth_api_test.cpp::TC-03",
 		"--behave",
@@ -309,7 +309,7 @@ test("TC-ARG-006 verifyImplTestCase_byInputFileTargetTC_expectDispatchReady", ()
 // @[US]: US-USER-01
 // @[AC]: AC-07
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Confirm full-file implementation reaches dispatch.
 // @[Expect]: Exit code 0, execution proceeds to implement all TCs.
 test("TC-ARG-007 verifyImplTestFile_byInputFileTargetFile_expectDispatchReady", () => {
@@ -317,7 +317,7 @@ test("TC-ARG-007 verifyImplTestFile_byInputFileTargetFile_expectDispatchReady", 
 		"--goal",
 		"implement all ready auth API test cases",
 		"--inputFile",
-		"src/auth/AuthService.h",
+		"codeAgents/utCodeAgentCLI/tests/fixtures/AuthService.h",
 		"--target",
 		"tests/auth_api_test.cpp",
 		"--behave",
@@ -334,7 +334,7 @@ test("TC-ARG-007 verifyImplTestFile_byInputFileTargetFile_expectDispatchReady", 
 // @[US]: US-USER-01
 // @[AC]: AC-08
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Confirm inline story + inline source reaches dispatch.
 // @[Expect]: Exit code 0, execution proceeds with inline values.
 test("TC-ARG-008 verifyDesignInline_byGoalStoryInput_expectDispatchReady", () => {
@@ -361,7 +361,7 @@ test("TC-ARG-008 verifyDesignInline_byGoalStoryInput_expectDispatchReady", () =>
 // @[US]: US-USER-01
 // @[AC]: AC-09
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Confirm reference files are accepted during skeleton generation.
 // @[Expect]: Exit code 0, reference files consulted.
 test("TC-ARG-009 verifyDesignWithReference_byInputFileTargetBehaveRef_expectDispatchReady", () => {
@@ -369,7 +369,7 @@ test("TC-ARG-009 verifyDesignWithReference_byInputFileTargetBehaveRef_expectDisp
 		"--goal",
 		"design all skeletons for the auth interface",
 		"--inputFile",
-		"src/auth/AuthService.h",
+		"codeAgents/utCodeAgentCLI/tests/fixtures/AuthService.h",
 		"--target",
 		"tests/auth_api_test.cpp",
 		"--behave",
@@ -388,7 +388,7 @@ test("TC-ARG-009 verifyDesignWithReference_byInputFileTargetBehaveRef_expectDisp
 // @[US]: US-USER-01
 // @[AC]: AC-10
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Confirm all optional arguments coexist without conflict.
 // @[Expect]: Exit code 0, all optional flags accepted.
 test("TC-ARG-010 verifyDesignWithExtraPromptConfigDiag_byAllOptionalArgs_expectDispatchReady", () => {
@@ -396,15 +396,15 @@ test("TC-ARG-010 verifyDesignWithExtraPromptConfigDiag_byAllOptionalArgs_expectD
 		"--goal",
 		"design and implement auth interface tests",
 		"--inputFile",
-		"src/auth/AuthService.h",
+		"codeAgents/utCodeAgentCLI/tests/fixtures/AuthService.h",
 		"--target",
 		"tests/auth_api_test.cpp",
 		"--behave",
 		"designAndImplTest",
 		"--extra-prompt",
-		"prompts/style-guide.md",
+		"codeAgents/utCodeAgentCLI/tests/fixtures/style-guide.md",
 		"--config-file",
-		"~/.catdd/config.yaml",
+		"codeAgents/utCodeAgentCLI/tests/fixtures/config.yaml",
 		"--diagMethodPrompts",
 		"--diagSlashCommands",
 	]);
@@ -418,13 +418,13 @@ test("TC-ARG-010 verifyDesignWithExtraPromptConfigDiag_byAllOptionalArgs_expectD
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
 // GREEN [@AC-01,US-USER-01] TC-ARG-001
-// PLANNED [@AC-02,US-USER-01] TC-ARG-002
-// PLANNED [@AC-03,US-USER-01] TC-ARG-003
-// PLANNED [@AC-04,US-USER-01] TC-ARG-004
-// PLANNED [@AC-05,US-USER-01] TC-ARG-005
-// PLANNED [@AC-06,US-USER-01] TC-ARG-006
-// PLANNED [@AC-07,US-USER-01] TC-ARG-007
-// PLANNED [@AC-08,US-USER-01] TC-ARG-008
-// PLANNED [@AC-09,US-USER-01] TC-ARG-009
-// PLANNED [@AC-10,US-USER-01] TC-ARG-010
+// RED [@AC-02,US-USER-01] TC-ARG-002
+// RED [@AC-03,US-USER-01] TC-ARG-003
+// RED [@AC-04,US-USER-01] TC-ARG-004
+// RED [@AC-05,US-USER-01] TC-ARG-005
+// RED [@AC-06,US-USER-01] TC-ARG-006
+// RED [@AC-07,US-USER-01] TC-ARG-007
+// RED [@AC-08,US-USER-01] TC-ARG-008
+// RED [@AC-09,US-USER-01] TC-ARG-009
+// RED [@AC-10,US-USER-01] TC-ARG-010
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

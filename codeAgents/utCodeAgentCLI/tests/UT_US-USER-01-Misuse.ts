@@ -146,7 +146,7 @@ type InvocationResult = {
 // @[Status]: GREEN
 // @[Purpose]: Fail fast when --goal is missing and explain why it is required.
 // @[Expect]: Exit code 1, stderr names --goal and requirement reason.
-test("TC-ARG-001 verifyRequiredGoal_byMissingGoal_expectExit1AndGoalHint", () => {
+test("TC-ARG-021 verifyRequiredGoal_byMissingGoal_expectExit1AndGoalHint", () => {
 	const result: InvocationResult = runUtCodeAgentCli([
 		"--target",
 		"tests/auth_login_test.cpp",
@@ -291,15 +291,15 @@ test("TC-ARG-026 verifyInputConflict_byBothInputSources_expectExclusivePairError
 // @[US]: US-USER-01
 // @[AC]: AC-22
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Reject empty --goal string with explicit error message.
 // @[Expect]: Exit code 1 and stderr indicates --goal cannot be empty.
-// test("TC-ARG-027 verifyEmptyGoal_byEmptyString_expectExit1AndGoalRequired", () => {
-// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton"]);
-// 	assert.equal(result.exitCode, 1);
-// 	assert.match(result.stderr, /--goal/);
-// 	assert.match(result.stderr, /empty/i);
-// });
+test("TC-ARG-027 verifyEmptyGoal_byEmptyString_expectExit1AndGoalRequired", () => {
+	const result: InvocationResult = runUtCodeAgentCli(["--goal", "", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton"]);
+	assert.equal(result.exitCode, 1);
+	assert.match(result.stderr, /--goal/);
+	assert.match(result.stderr, /empty/i);
+});
 
 // @[TC-ARG-028]
 // @[Name]: verifyUnparseableTarget_byGarbledForm_expectExit1AndSupportedSelectors
@@ -307,15 +307,15 @@ test("TC-ARG-026 verifyInputConflict_byBothInputSources_expectExclusivePairError
 // @[US]: US-USER-01
 // @[AC]: AC-26
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: RED
 // @[Purpose]: Reject unparseable --target form with supported selector guidance.
 // @[Expect]: Exit code 1 and stderr shows supported selector forms.
-// test("TC-ARG-028 verifyUnparseableTarget_byGarbledForm_expectExit1AndSupportedSelectors", () => {
-// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "garbled:::", "--behave", "designFuncTestsSkeleton"]);
-// 	assert.equal(result.exitCode, 1);
-// 	assert.match(result.stderr, /--target/);
-// 	assert.match(result.stderr, /selector|form|format/i);
-// });
+test("TC-ARG-028 verifyUnparseableTarget_byGarbledForm_expectExit1AndSupportedSelectors", () => {
+	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "garbled:::", "--behave", "designFuncTestsSkeleton"]);
+	assert.equal(result.exitCode, 1);
+	assert.match(result.stderr, /--target/);
+	assert.match(result.stderr, /selector|form|format/i);
+});
 
 // @[TC-ARG-029]
 // @[Name]: verifyTargetBehaveMismatch_byTestCaseWithDesignBehave_expectExit1AndValidPairings
@@ -323,16 +323,16 @@ test("TC-ARG-026 verifyInputConflict_byBothInputSources_expectExclusivePairError
 // @[US]: US-USER-01
 // @[AC]: AC-27
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: RED
 // @[Purpose]: Reject --target TestCase combined with skeleton design --behave.
 // @[Expect]: Exit code 1 and stderr reports unsupported combination and suggests valid pairings.
-// test("TC-ARG-029 verifyTargetBehaveMismatch_byTestCaseWithDesignBehave_expectExit1AndValidPairings", () => {
-// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp::TC-03", "--behave", "designFuncTestsSkeleton"]);
-// 	assert.equal(result.exitCode, 1);
-// 	assert.match(result.stderr, /--target/);
-// 	assert.match(result.stderr, /--behave/);
-// 	assert.match(result.stderr, /pairing|combination/i);
-// });
+test("TC-ARG-029 verifyTargetBehaveMismatch_byTestCaseWithDesignBehave_expectExit1AndValidPairings", () => {
+	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp::TC-03", "--behave", "designFuncTestsSkeleton"]);
+	assert.equal(result.exitCode, 1);
+	assert.match(result.stderr, /--target/);
+	assert.match(result.stderr, /--behave/);
+	assert.match(result.stderr, /pairing|combination/i);
+});
 
 // @[TC-ARG-030]
 // @[Name]: verifyUnrecognizedLogLevel_byInvalidValue_expectExit1AndValidLevels
@@ -340,15 +340,15 @@ test("TC-ARG-026 verifyInputConflict_byBothInputSources_expectExclusivePairError
 // @[US]: US-USER-01
 // @[AC]: AC-28
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Reject unrecognized --log-level value with valid alternatives listing.
 // @[Expect]: Exit code 1 and stderr lists every valid --log-level value.
-// test("TC-ARG-030 verifyUnrecognizedLogLevel_byInvalidValue_expectExit1AndValidLevels", () => {
-// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--log-level", "verbose"]);
-// 	assert.equal(result.exitCode, 1);
-// 	assert.match(result.stderr, /--log-level/);
-// 	assert.match(result.stderr, /valid|supported/i);
-// });
+test("TC-ARG-030 verifyUnrecognizedLogLevel_byInvalidValue_expectExit1AndValidLevels", () => {
+	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--log-level", "verbose"]);
+	assert.equal(result.exitCode, 1);
+	assert.match(result.stderr, /--log-level/);
+	assert.match(result.stderr, /valid|supported/i);
+});
 
 // @[TC-ARG-031]
 // @[Name]: verifyStructurallyWrongConfig_byValidYamlMissingKeys_expectExit1AndRequiredKeys
@@ -356,14 +356,14 @@ test("TC-ARG-026 verifyInputConflict_byBothInputSources_expectExclusivePairError
 // @[US]: US-USER-01
 // @[AC]: AC-32
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Reject --config-file with valid YAML but missing required keys.
 // @[Expect]: Exit code 1 and stderr reports structural error and lists required config keys.
-// test("TC-ARG-031 verifyStructurallyWrongConfig_byValidYamlMissingKeys_expectExit1AndRequiredKeys", () => {
-// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--config-file", "tests/invalid_structure.yaml"]);
-// 	assert.equal(result.exitCode, 1);
-// 	assert.match(result.stderr, /config|key|required|structure/i);
-// });
+test("TC-ARG-031 verifyStructurallyWrongConfig_byValidYamlMissingKeys_expectExit1AndRequiredKeys", () => {
+	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--config-file", "tests/invalid_structure.yaml"]);
+	assert.equal(result.exitCode, 1);
+	assert.match(result.stderr, /config|key|required|structure/i);
+});
 
 //======>END OF UNIT TESTING IMPLEMENTATION=======================================================
 
@@ -373,9 +373,9 @@ test("TC-ARG-026 verifyInputConflict_byBothInputSources_expectExclusivePairError
 // GREEN [@AC-21,US-USER-01] TC-ARG-021..TC-ARG-023 (missing required args)
 // GREEN [@AC-25,US-USER-01] TC-ARG-024 (unrecognized --behave)
 // GREEN [@AC-23,AC-24,US-USER-01] TC-ARG-025..TC-ARG-026 (mutually exclusive pairs)
-// PLANNED [@AC-22,US-USER-01] TC-ARG-027 (empty --goal)
-// PLANNED [@AC-26,US-USER-01] TC-ARG-028 (unparseable --target)
-// PLANNED [@AC-27,US-USER-01] TC-ARG-029 (target/behave mismatch)
-// PLANNED [@AC-28,US-USER-01] TC-ARG-030 (unrecognized --log-level)
-// PLANNED [@AC-32,US-USER-01] TC-ARG-031 (structurally wrong config)
+// RED [@AC-22,US-USER-01] TC-ARG-027 (empty --goal)
+// RED [@AC-26,US-USER-01] TC-ARG-028 (unparseable --target)
+// RED [@AC-27,US-USER-01] TC-ARG-029 (target/behave mismatch)
+// RED [@AC-28,US-USER-01] TC-ARG-030 (unrecognized --log-level)
+// GREEN [@AC-32,US-USER-01] TC-ARG-031 (structurally wrong config)
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

@@ -262,14 +262,14 @@ test("TC-ARG-033 verifyMissingConfigFile_byNonexistentPath_expectPathNamedError"
 // @[US]: US-USER-01
 // @[AC]: AC-30
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: RED
 // @[Purpose]: Reject --config-file with existing file that is not valid YAML.
 // @[Expect]: Exit code 1 and stderr includes a parse error for the config file.
-// test("TC-ARG-034 verifyConfigFileInvalidYAML_byExistingNonYamlFile_expectExit1AndParseError", () => {
-// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--config-file", "README.md"]);
-// 	assert.equal(result.exitCode, 1);
-// 	assert.match(result.stderr, /parse|yaml|invalid/i);
-// });
+test("TC-ARG-034 verifyConfigFileInvalidYAML_byExistingNonYamlFile_expectExit1AndParseError", () => {
+	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--config-file", "README.md"]);
+	assert.equal(result.exitCode, 1);
+	assert.match(result.stderr, /parse|yaml|invalid/i);
+});
 
 // @[TC-ARG-035]
 // @[Name]: verifyConfigFileIsDirectory_byDirPath_expectExit1AndDirectoryError
@@ -277,14 +277,14 @@ test("TC-ARG-033 verifyMissingConfigFile_byNonexistentPath_expectPathNamedError"
 // @[US]: US-USER-01
 // @[AC]: AC-31
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: RED
 // @[Purpose]: Reject --config-file pointing to a directory instead of a file.
 // @[Expect]: Exit code 1 and stderr reports that the path is a directory, not a file.
-// test("TC-ARG-035 verifyConfigFileIsDirectory_byDirPath_expectExit1AndDirectoryError", () => {
-// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--config-file", "codeAgents"]);
-// 	assert.equal(result.exitCode, 1);
-// 	assert.match(result.stderr, /directory|not a file|is a dir/i);
-// });
+test("TC-ARG-035 verifyConfigFileIsDirectory_byDirPath_expectExit1AndDirectoryError", () => {
+	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--config-file", "codeAgents"]);
+	assert.equal(result.exitCode, 1);
+	assert.match(result.stderr, /directory|not a file|is a dir/i);
+});
 
 //======>END OF UNIT TESTING IMPLEMENTATION=======================================================
 
@@ -292,6 +292,6 @@ test("TC-ARG-033 verifyMissingConfigFile_byNonexistentPath_expectPathNamedError"
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
 // [Migrated from old AC-04 -> new AC-29..AC-31]
 // GREEN [@AC-29,US-USER-01] TC-ARG-029..TC-ARG-033 (nonexistent/unreadable file paths)
-// PLANNED [@AC-30,US-USER-01] TC-ARG-034 (--config-file not valid YAML)
-// PLANNED [@AC-31,US-USER-01] TC-ARG-035 (--config-file is a directory)
+// RED [@AC-30,US-USER-01] TC-ARG-034 (--config-file not valid YAML)
+// RED [@AC-31,US-USER-01] TC-ARG-035 (--config-file is a directory)
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

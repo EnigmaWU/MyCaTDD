@@ -178,7 +178,7 @@ type InvocationResult = {
 // @[US]: US-USER-01
 // @[AC]: AC-11
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: RED
 // @[Purpose]: Prove empty-string optional args warn and continue without error.
 // @[Expect]: Exit code 0, stderr emits warning.
 test("TC-ARG-011 verifyEmptyOptionalArgs_byInputReferenceExtraPromptEmpty_expectWarnAndContinue", () => {
@@ -207,7 +207,7 @@ test("TC-ARG-011 verifyEmptyOptionalArgs_byInputReferenceExtraPromptEmpty_expect
 // @[US]: US-USER-01
 // @[AC]: AC-12
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: RED
 // @[Purpose]: Prove --reference with only commas warns and continues.
 // @[Expect]: Exit code 0, stderr emits warning.
 test("TC-ARG-012 verifyReferenceCommaOnly_byEmptyList_expectWarnAndContinue", () => {
@@ -232,7 +232,7 @@ test("TC-ARG-012 verifyReferenceCommaOnly_byEmptyList_expectWarnAndContinue", ()
 // @[US]: US-USER-01
 // @[AC]: AC-13
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: RED
 // @[Purpose]: Prove --extra-prompt with only commas warns and continues.
 // @[Expect]: Exit code 0, stderr emits warning.
 test("TC-ARG-013 verifyExtraPromptCommaOnly_byEmptyList_expectWarnAndContinue", () => {
@@ -257,7 +257,7 @@ test("TC-ARG-013 verifyExtraPromptCommaOnly_byEmptyList_expectWarnAndContinue", 
 // @[US]: US-USER-01
 // @[AC]: AC-14
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: RED
 // @[Purpose]: Prove both --diag flags coexist without conflict.
 // @[Expect]: Exit code 0, both DIAG log messages emitted.
 test("TC-ARG-014 verifyBothDiagFlags_byBothSet_expectBothEmit", () => {
@@ -282,7 +282,7 @@ test("TC-ARG-014 verifyBothDiagFlags_byBothSet_expectBothEmit", () => {
 // @[US]: US-USER-01
 // @[AC]: AC-15
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Prove no --diag flags produce no DIAG output.
 // @[Expect]: Exit code 0, no DIAG messages.
 test("TC-ARG-015 verifyNoDiagFlags_byNeitherSet_expectNoDiag", () => {
@@ -305,7 +305,7 @@ test("TC-ARG-015 verifyNoDiagFlags_byNeitherSet_expectNoDiag", () => {
 // @[US]: US-USER-01
 // @[AC]: AC-16
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Prove --log-level info (default) accepted.
 // @[Expect]: Exit code 0, info verbosity output.
 test("TC-ARG-016 verifyLogLevelExplicitDefault_byInfo_expectInfoOutput", () => {
@@ -330,7 +330,7 @@ test("TC-ARG-016 verifyLogLevelExplicitDefault_byInfo_expectInfoOutput", () => {
 // @[US]: US-USER-01
 // @[AC]: AC-17
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Prove --log-level debug (non-default) accepted.
 // @[Expect]: Exit code 0, debug verbosity output.
 test("TC-ARG-017 verifyLogLevelDebug_byDebug_expectDebugOutput", () => {
@@ -355,7 +355,7 @@ test("TC-ARG-017 verifyLogLevelDebug_byDebug_expectDebugOutput", () => {
 // @[US]: US-USER-01
 // @[AC]: AC-18
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Prove valid --config-file YAML loads without error.
 // @[Expect]: Exit code 0, config loaded.
 test("TC-ARG-018 verifyConfigFileValidYAML_byExistingPath_expectLoaded", () => {
@@ -379,7 +379,7 @@ test("TC-ARG-018 verifyConfigFileValidYAML_byExistingPath_expectLoaded", () => {
 // @[US]: US-USER-01
 // @[AC]: AC-19
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Prove --interactive-slash-commands changes execution mode.
 // @[Expect]: Exit code 0, prompts before each slash command.
 test("TC-ARG-019 verifyInteractiveFlag_bySet_expectPromptBeforeEach", () => {
@@ -402,7 +402,7 @@ test("TC-ARG-019 verifyInteractiveFlag_bySet_expectPromptBeforeEach", () => {
 // @[US]: US-USER-01
 // @[AC]: AC-20
 // @[Priority]: P0
-// @[Status]: PLANNED
+// @[Status]: GREEN
 // @[Purpose]: Prove default behavior without interactive flag.
 // @[Expect]: Exit code 0, no prompts.
 test("TC-ARG-020 verifyInteractiveFlagAbsent_byNotSet_expectNoPrompt", () => {
@@ -422,14 +422,14 @@ test("TC-ARG-020 verifyInteractiveFlagAbsent_byNotSet_expectNoPrompt", () => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
-// PLANNED [@AC-11,US-USER-01] TC-ARG-011
-// PLANNED [@AC-12,US-USER-01] TC-ARG-012
-// PLANNED [@AC-13,US-USER-01] TC-ARG-013
-// PLANNED [@AC-14,US-USER-01] TC-ARG-014
-// PLANNED [@AC-15,US-USER-01] TC-ARG-015
-// PLANNED [@AC-16,US-USER-01] TC-ARG-016
-// PLANNED [@AC-17,US-USER-01] TC-ARG-017
-// PLANNED [@AC-18,US-USER-01] TC-ARG-018
-// PLANNED [@AC-19,US-USER-01] TC-ARG-019
-// PLANNED [@AC-20,US-USER-01] TC-ARG-020
+// RED [@AC-11,US-USER-01] TC-ARG-011
+// RED [@AC-12,US-USER-01] TC-ARG-012
+// RED [@AC-13,US-USER-01] TC-ARG-013
+// RED [@AC-14,US-USER-01] TC-ARG-014
+// RED [@AC-15,US-USER-01] TC-ARG-015
+// RED [@AC-16,US-USER-01] TC-ARG-016
+// RED [@AC-17,US-USER-01] TC-ARG-017
+// RED [@AC-18,US-USER-01] TC-ARG-018
+// RED [@AC-19,US-USER-01] TC-ARG-019
+// RED [@AC-20,US-USER-01] TC-ARG-020
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================
