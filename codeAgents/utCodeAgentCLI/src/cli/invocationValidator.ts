@@ -179,6 +179,11 @@ function validateInvocation(argv: string[]): InvocationResult {
 	let warnOut = "";
 	if (parsed.input == "") warnOut += "Warning: --input is empty, ignoring.\n";
 	for (var ri=0;ri<parsed.references.length;ri++) if (parsed.references[ri]=="") warnOut += "Warning: --reference value "+(ri+1)+" is empty, ignoring.\n";
+	if (parsed.diagMethodPrompts) warnOut += "DIAG: methodPrompts enabled.\n";
+	if (parsed.diagSlashCommands) warnOut += "DIAG: slashCommands enabled.\n";
+	if (parsed.diagCats) warnOut += "DIAG: categories enabled.\n";
+	if (parsed.diagModelTier) warnOut += "DIAG: model tier enabled.\n";
+
 	for (var ei=0;ei<parsed.extraPrompts.length;ei++) if (parsed.extraPrompts[ei]=="") warnOut += "Warning: --extra-prompt value "+(ei+1)+" is empty, ignoring.\n";
 
 	if (parsed.logLevel != null && VALID_LOG_LEVELS.indexOf(parsed.logLevel) == -1) { return fail("--log-level not recognized. Supported: error, warn, info, debug"); }

@@ -257,7 +257,7 @@ test("TC-ARG-013 verifyExtraPromptCommaOnly_byEmptyList_expectWarnAndContinue", 
 // @[US]: US-USER-01
 // @[AC]: AC-14
 // @[Priority]: P0
-// @[Status]: RED
+// @[Status]: GREEN
 // @[Purpose]: Prove both --diag flags coexist without conflict.
 // @[Expect]: Exit code 0, both DIAG log messages emitted.
 test("TC-ARG-014 verifyBothDiagFlags_byBothSet_expectBothEmit", () => {

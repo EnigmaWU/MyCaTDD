@@ -410,7 +410,7 @@ test("TC-ARG-010 verifyDesignWithExtraPromptConfigDiag_byAllOptionalArgs_expectD
 	]);
 
 	assert.equal(result.exitCode, 0);
-	assert.equal(result.stderr, "");
+	assert.ok(result.stderr.length > 0, "diag output expected");
 });
 
 //======>END OF UNIT TESTING IMPLEMENTATION=======================================================
