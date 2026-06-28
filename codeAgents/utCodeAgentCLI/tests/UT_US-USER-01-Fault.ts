@@ -266,7 +266,7 @@ test("TC-ARG-033 verifyMissingConfigFile_byNonexistentPath_expectPathNamedError"
 // @[Purpose]: Reject --config-file with existing file that is not valid YAML.
 // @[Expect]: Exit code 1 and stderr includes a parse error for the config file.
 test("TC-ARG-034 verifyConfigFileInvalidYAML_byExistingNonYamlFile_expectExit1AndParseError", () => {
-	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--config-file", "README.md"]);
+	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--config-file", "codeAgents/utCodeAgentCLI/tests/fixtures/AuthService.h"]);
 	assert.equal(result.exitCode, 1);
 	assert.match(result.stderr, /parse|yaml|invalid/i);
 });
