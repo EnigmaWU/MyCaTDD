@@ -201,7 +201,7 @@ function validateInvocation(argv: string[]): InvocationResult {
 
 	const missingPath = firstMissingPath(parsed);
 	if (missingPath != null) {
-		return fail(`${missingPath.flag} path not found: ${missingPath.value}`);
+		var m = missingPath.flag + " path is a directory, not a file: " + missingPath.value + "\n"; if (!require("fs").existsSync(missingPath.value)) m = missingPath.flag + " path not found: " + missingPath.value + "\n"; return fail(m);;
 	}
 
 	return {

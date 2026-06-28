@@ -277,7 +277,7 @@ test("TC-ARG-034 verifyConfigFileInvalidYAML_byExistingNonYamlFile_expectExit1An
 // @[US]: US-USER-01
 // @[AC]: AC-31
 // @[Priority]: P0
-// @[Status]: RED
+// @[Status]: GREEN
 // @[Purpose]: Reject --config-file pointing to a directory instead of a file.
 // @[Expect]: Exit code 1 and stderr reports that the path is a directory, not a file.
 test("TC-ARG-035 verifyConfigFileIsDirectory_byDirPath_expectExit1AndDirectoryError", () => {
