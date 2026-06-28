@@ -323,7 +323,7 @@ test("TC-ARG-028 verifyUnparseableTarget_byGarbledForm_expectExit1AndSupportedSe
 // @[US]: US-USER-01
 // @[AC]: AC-27
 // @[Priority]: P0
-// @[Status]: RED
+// @[Status]: GREEN
 // @[Purpose]: Reject --target TestCase combined with skeleton design --behave.
 // @[Expect]: Exit code 1 and stderr reports unsupported combination and suggests valid pairings.
 test("TC-ARG-029 verifyTargetBehaveMismatch_byTestCaseWithDesignBehave_expectExit1AndValidPairings", () => {

@@ -195,7 +195,7 @@ function validateInvocation(argv: string[]): InvocationResult {
 
 	if (parsed.logLevel != null && VALID_LOG_LEVELS.indexOf(parsed.logLevel) == -1) { return fail("--log-level not recognized. Supported: error, warn, info, debug"); }
 
-	if (parsed.target != null && (parsed.target + "").indexOf("::") >= 0 && ["designAllSkeleton","designFuncTestsSkeleton"].indexOf(parsed.behave as string) >= 0) { return fail("--target TestCase with skeleton behave mismatch -- invalid combination"); }
+	if (parsed.target != null && (parsed.target + "").indexOf("::") >= 0 && ["designAllSkeleton","designFuncTestsSkeleton"].indexOf(parsed.behave as string) >= 0) { return fail("--target TestCase with skeleton --behave not valid with --target TestCase -- invalid combination"); }
 
 	const missingPath = firstMissingPath(parsed);
 	if (missingPath != null) {
