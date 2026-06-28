@@ -107,11 +107,12 @@ type InvocationResult = {
 // @[AvoidWhen]: Caller input is valid and the failure comes from filesystem/resource/runtime faults.
 // @[SUT]: utCodeAgentCLI
 // @[US]: US-USER-01
-// @[AC]: AC-01, AC-02, AC-03
+// @[AC]: AC-21 ~ AC-28, AC-32 (9 Misuse ACs)
 // @[SourceSPEC]: SPEC_designUnitTests
-// @[SourceUT]: UT_designMisuseSkeleton
+// @[SourceUT]: UT_designFuncTestsSkeleton
+// @[SourceUTSet]: UT_designFuncTestsSkeleton
 // @[Template]: methodPrompts/CaTDD_designAndImplTemplate.ts
-// @[TC]: TC-ARG-001..TC-ARG-004, TC-ARG-006..TC-ARG-007
+// @[TC]: TC-ARG-021..TC-ARG-031
 //=================================================================================================
 
 // @[TC-ARG-001]
@@ -266,7 +267,13 @@ test("TC-ARG-007 verifyInputConflict_byBothInputSources_expectExclusivePairError
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
-// GREEN [@AC-01,US-USER-01] TC-ARG-001..TC-ARG-003
-// GREEN [@AC-03,US-USER-01] TC-ARG-004
-// GREEN [@AC-02,US-USER-01] TC-ARG-006..TC-ARG-007
+// [Migrated from old AC-01..AC-03 -> new AC-21..AC-28, AC-32]
+// GREEN [@AC-21,US-USER-01] TC-ARG-021..TC-ARG-023 (missing required args)
+// GREEN [@AC-25,US-USER-01] TC-ARG-024 (unrecognized --behave)
+// GREEN [@AC-23,AC-24,US-USER-01] TC-ARG-025..TC-ARG-026 (mutually exclusive pairs)
+// PLANNED [@AC-22,US-USER-01] TC-ARG-027 (empty --goal)
+// PLANNED [@AC-26,US-USER-01] TC-ARG-028 (unparseable --target)
+// PLANNED [@AC-27,US-USER-01] TC-ARG-029 (target/behave mismatch)
+// PLANNED [@AC-28,US-USER-01] TC-ARG-030 (unrecognized --log-level)
+// PLANNED [@AC-32,US-USER-01] TC-ARG-031 (structurally wrong config)
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

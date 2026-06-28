@@ -85,7 +85,9 @@ type InvocationResult = {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TEST CASES DESIGN================================================================
 /**
- * AC-04 -> TC-ARG-008..TC-ARG-012
+ * AC-29 -> TC-ARG-029..TC-ARG-033 (nonexistent/unreadable file paths)
+ * AC-30 -> TC-ARG-034 (--config-file not valid YAML)
+ * AC-31 -> TC-ARG-035 (--config-file is a directory)
  */
 //======>END OF TEST CASES DESIGN==================================================================
 //======>END OF UNIT TESTING DESIGN================================================================
@@ -103,11 +105,12 @@ type InvocationResult = {
 // @[AvoidWhen]: Use Misuse for missing required args, unknown behavior names, or conflicting flags.
 // @[SUT]: utCodeAgentCLI
 // @[US]: US-USER-01
-// @[AC]: AC-04
+// @[AC]: AC-29 ~ AC-31 (3 Fault ACs)
 // @[SourceSPEC]: SPEC_designUnitTests
-// @[SourceUT]: UT_designFaultSkeleton
+// @[SourceUT]: UT_designFuncTestsSkeleton
+// @[SourceUTSet]: UT_designFuncTestsSkeleton
 // @[Template]: methodPrompts/CaTDD_designAndImplTemplate.ts
-// @[TC]: TC-ARG-008..TC-ARG-012
+// @[TC]: TC-ARG-029..TC-ARG-035
 //=================================================================================================
 
 // @[TC-ARG-008]
@@ -244,5 +247,8 @@ test("TC-ARG-012 verifyMissingConfigFile_byNonexistentPath_expectPathNamedError"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
-// GREEN [@AC-04,US-USER-01] TC-ARG-008..TC-ARG-012
+// [Migrated from old AC-04 -> new AC-29..AC-31]
+// GREEN [@AC-29,US-USER-01] TC-ARG-029..TC-ARG-033 (nonexistent/unreadable file paths)
+// PLANNED [@AC-30,US-USER-01] TC-ARG-034 (--config-file not valid YAML)
+// PLANNED [@AC-31,US-USER-01] TC-ARG-035 (--config-file is a directory)
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================
