@@ -232,7 +232,7 @@ test("TC-ARG-012 verifyReferenceCommaOnly_byEmptyList_expectWarnAndContinue", ()
 // @[US]: US-USER-01
 // @[AC]: AC-13
 // @[Priority]: P0
-// @[Status]: RED
+// @[Status]: GREEN
 // @[Purpose]: Prove --extra-prompt with only commas warns and continues.
 // @[Expect]: Exit code 0, stderr emits warning.
 test("TC-ARG-013 verifyExtraPromptCommaOnly_byEmptyList_expectWarnAndContinue", () => {

@@ -106,7 +106,7 @@ function parseArgs(argv: string[]): ParsedArgs | InvocationResult {
 				i += 1;
 				break;
 			case "--extra-prompt":
-				parsed.extraPrompts.push(next);
+				parsed.extraPrompts.push(...next.split(",").map(function(s) { return s.trim(); }));
 				i += 1;
 				break;
 			case "--config-file":
