@@ -4,8 +4,8 @@ This document captures module-scoped verification strategy and US/AC/TC traceabi
 
 ## Story and Design Inputs
 
-- Active story: [20260628-utCodeAgentCLI-US-USER-01-UserStory.md](../../.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md)
-- Active TASKs: [20260628-utCodeAgentCLI-US-USER-01-TASKs.md](../../.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md)
+- Active story: [20260628-utCodeAgentCLI-US-USER-01-UserStory.md](../../.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md)
+- Active TASKs: [20260628-utCodeAgentCLI-US-USER-01-TASKs.md](../../.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md)
 - [README_ArchDesign.md](README_ArchDesign.md)
 - [README_DetailDesign.md](README_DetailDesign.md)
 - [SPEC_designUnitTests.md](../../slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md)

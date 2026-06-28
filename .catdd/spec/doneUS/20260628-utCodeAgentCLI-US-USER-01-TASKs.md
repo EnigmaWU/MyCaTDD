@@ -1,7 +1,7 @@
 # TASKs: utCodeAgentCLI USER US-USER-01 Parse and validate CLI arguments
 
 Created by `/SPEC_makePlan` on 2026-06-28.
-Paired with `.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md`.
+Paired with `.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md`.
 
 ## Active Story
 

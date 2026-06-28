@@ -4,8 +4,8 @@ This document captures verification strategy and US/AC/TC traceability for activ
 
 ## Story and Design Inputs
 
-- Active story: [.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md](.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md)
-- Active TASKs: [.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md](.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md)
+- Active story: [.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md](.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md)
+- Active TASKs: [.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md](.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md)
 - Detail design: [codeAgents/utCodeAgentCLI/README_DetailDesign.md](codeAgents/utCodeAgentCLI/README_DetailDesign.md)
 - Target test files (32-AC redesign):
   - [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts) — 10 Typical ACs (AC-01~AC-10)
