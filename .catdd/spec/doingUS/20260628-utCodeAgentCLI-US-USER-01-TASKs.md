@@ -44,19 +44,27 @@ Paired with `.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md
 - [x] **SPEC_importUserStory** — Import US-USER-01 as todoUS artifact
 - [x] **SPEC_openUserStory** — Move to doingUS/
 - [x] **SPEC_clearStoryIntent** — Establish Mutual Intent Contract (CLEARED)
-- [ ] **SPEC_designUnitTests** — Design P0 Functional skeletons (32 ACs across Typical/Edge/Misuse/Fault)
-- [ ] **SPEC_implUnitTests** — Implement RED tests for all categories
+- [x] **SPEC_designUnitTests** — Typical skeletons redesigned (10 ACs, TC-ARG-001..TC-ARG-010)
+- [x] **SPEC_designUnitTests** — Edge skeletons redesigned (from non-required to 10 ACs, TC-ARG-011..TC-ARG-020)
+- [x] **SPEC_designUnitTests** — Misuse skeletons redesigned (9 ACs: AC-21~AC-28, AC-32; TC-ARG-021..TC-ARG-026 GREEN, TC-ARG-027..TC-ARG-031 PLANNED)
+- [x] **SPEC_designUnitTests** — Fault skeletons redesigned (3 ACs: AC-29~AC-31; TC-ARG-029..TC-ARG-033 GREEN, TC-ARG-034..TC-ARG-035 PLANNED)
+- [x] **SPEC_designUnitTests** — Final review of all 4 category files (traceability verified, SUT declared, provenance recorded)
+- [ ] **SPEC_implUnitTests** — Implement RED tests for all categories (priority: complete PLANNED → GREEN)
 - [ ] **SPEC_reviewProductCodes** — Review test quality and spec alignment
 - [ ] **SPEC_commitWorks** — Commit completed work
 - [ ] **SPEC_closeUserStory** — Close the story
 
 ## Selected Next Command
 
-### `/SPEC_designUnitTests`
+### `/SPEC_implUnitTests`
 
-**Rationale:** The Planning Decision Rules (SPEC_makePlan §42-48) skip rules 1-4 (intent cleared, no requirement changes, no design work needed) and land on rule 5: "Implementation-oriented work with sufficient requirement and design readiness: route to `SPEC_designUnitTests`."
+**Rationale:** All 4 P0 Functional category skeletons are now redesigned and reviewed:
+- Typical (10 ACs): TC-ARG-001..TC-ARG-010 — ready for RED implementation
+- Edge (10 ACs): TC-ARG-011..TC-ARG-020 — ready for RED implementation
+- Misuse (9 ACs): TC-ARG-021..TC-ARG-026 (GREEN), TC-ARG-027..TC-ARG-031 (PLANNED, need RED implementation)
+- Fault (3 ACs): TC-ARG-029..TC-ARG-033 (GREEN), TC-ARG-034..TC-ARG-035 (PLANNED, need RED implementation)
 
-The existing test files (`UT_US-USER-01-*.ts`) use old AC references and cover only the original 5-AC structure. New skeletons or skeleton updates are needed to align with the 32-AC structure.
+The PLANNED skeletons (TC-ARG-027~TC-ARG-031 for Misuse, TC-ARG-034~TC-ARG-035 for Fault) need RED test implementation. Existing GREEN tests must remain passing. Source-command provenance is recorded via UT_designFuncTestsSkeleton route.
 
 ## Rejected Alternatives
 

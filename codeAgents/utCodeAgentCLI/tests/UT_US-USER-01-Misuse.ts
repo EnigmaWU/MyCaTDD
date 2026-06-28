@@ -2,7 +2,8 @@
 // CaTDD Design+Implementation Template (TypeScript)
 //
 // PURPOSE:
-//   Verify US-USER-01 Misuse / InvalidFunc behavior for utCodeAgentCLI argument validation.
+//   Verify US-USER-01 Misuse (InvalidFunc) CLI argument validation — 9 ACs (AC-21~AC-28, AC-32)
+//   covering all caller-contract-violation patterns for utCodeAgentCLI.
 //
 // USAGE:
 //   Run this file with node:test to verify wrong caller argument usage is rejected clearly.
@@ -15,6 +16,8 @@
 //   SPEC orchestration: slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md
 //   P0 category design: slashCommands/commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md
 //   P0 full set design: slashCommands/commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md
+//   US-USER-01 spec: ../../codeAgents/utCodeAgentCLI/README_UserStory4USER.md
+//   32-AC redesign: UT_designFuncTestsSkeleton route, 9 Misuse ACs (AC-21~AC-28, AC-32)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 declare function require(moduleName: string): any;
@@ -33,13 +36,14 @@ type InvocationResult = {
 //======>BEGIN OF OVERVIEW OF THIS UNIT TESTING FILE===============================================
 /**
  * @brief
- *   [WHAT] This file verifies invalid caller argument usage.
+ *   [WHAT] This file verifies invalid caller argument usage for US-USER-01 (9 Misuse ACs).
  *   [WHERE] in the utCodeAgentCLI CLI validation boundary.
  *   [WHY] to ensure misuse fails fast with actionable diagnostics.
  *
  * SCOPE:
- *   - [In scope]: missing required args, unknown --behave, and mutually exclusive pairs.
- *   - [Out of scope]: valid invocation success and external missing file dependencies.
+ *   - [In scope]: missing required args, empty string args, mutually exclusive pairs,
+ *     unrecognized/unparseable values, target/behave mismatch, and structurally wrong config.
+ *   - [Out of scope]: valid invocation success, external missing file dependencies.
  *
  * KEY CONCEPTS:
  *   - Misuse: caller violates named CLI preconditions.
@@ -47,6 +51,11 @@ type InvocationResult = {
  *
  * SUT:
  *   - utCodeAgentCLI, executed as a subprocess.
+ *
+ * RELATIONSHIPS:
+ *   - User story: US-USER-01.
+ *   - Production code: codeAgents/utCodeAgentCLI/src/cli/invocationValidator.ts.
+ *   - 32-AC spec redesign via UT_designFuncTestsSkeleton route.
  */
 //======>END OF OVERVIEW OF THIS UNIT TESTING FILE=================================================
 
@@ -61,7 +70,9 @@ type InvocationResult = {
  *
  * P0 FUNCTIONAL POSITION:
  *   InvalidFunc = Misuse + Fault
- *   Misuse proves invalid caller behavior is rejected safely and clearly.
+ *   9 Misuse ACs (AC-21~AC-28, AC-32) prove that invalid caller behavior is rejected
+ *   safely and clearly with exit code 1 and actionable stderr diagnostics.
+ *   Misuse proves wrong caller preconditions produce deterministic error messages.
  */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,18 +89,29 @@ type InvocationResult = {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF ACCEPTANCE CRITERIA DESIGN=======================================================
 /**
- * AC-01: Missing required argument exits with error.
- * AC-02: Mutually exclusive arguments are rejected.
- * AC-03: Unrecognized --behave value lists valid alternatives.
+ * AC-21: Missing required argument (--goal, --target, or --behave) exits with error.
+ * AC-22: Empty --goal string exits with error.
+ * AC-23: Mutually exclusive --goalStory and --goalStoryFile exits with error.
+ * AC-24: Mutually exclusive --input and --inputFile exits with error.
+ * AC-25: Unrecognized --behave value exits with error and lists valid alternatives.
+ * AC-26: Unparseable --target form exits with error and shows supported selectors.
+ * AC-27: --target TestCase combined with skeleton design --behave exits with error.
+ * AC-28: Unrecognized --log-level value exits with error and lists valid values.
+ * AC-32: --config-file with valid YAML but structurally wrong content exits with error.
  */
 //=======>END OF ACCEPTANCE CRITERIA DESIGN========================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TEST CASES DESIGN================================================================
 /**
- * AC-01 -> TC-ARG-001..TC-ARG-003
- * AC-03 -> TC-ARG-004
- * AC-02 -> TC-ARG-006..TC-ARG-007
+ * AC-21 -> TC-ARG-021..TC-ARG-023 (missing required args)
+ * AC-25 -> TC-ARG-024 (unrecognized --behave)
+ * AC-23, AC-24 -> TC-ARG-025..TC-ARG-026 (mutually exclusive pairs)
+ * AC-22 -> TC-ARG-027 (empty --goal)
+ * AC-26 -> TC-ARG-028 (unparseable --target)
+ * AC-27 -> TC-ARG-029 (target/behave mismatch)
+ * AC-28 -> TC-ARG-030 (unrecognized --log-level)
+ * AC-32 -> TC-ARG-031 (structurally wrong config)
  */
 //======>END OF TEST CASES DESIGN==================================================================
 //======>END OF UNIT TESTING DESIGN================================================================
@@ -115,11 +137,11 @@ type InvocationResult = {
 // @[TC]: TC-ARG-021..TC-ARG-031
 //=================================================================================================
 
-// @[TC-ARG-001]
+// @[TC-ARG-021]
 // @[Name]: verifyRequiredGoal_byMissingGoal_expectExit1AndGoalHint
 // @[Category]: Misuse
 // @[US]: US-USER-01
-// @[AC]: AC-01
+// @[AC]: AC-21
 // @[Priority]: P0
 // @[Status]: GREEN
 // @[Purpose]: Fail fast when --goal is missing and explain why it is required.
@@ -137,16 +159,16 @@ test("TC-ARG-001 verifyRequiredGoal_byMissingGoal_expectExit1AndGoalHint", () =>
 	assert.match(result.stderr, /required/i);
 });
 
-// @[TC-ARG-002]
+// @[TC-ARG-022]
 // @[Name]: verifyRequiredTarget_byMissingTarget_expectExit1AndTargetHint
 // @[Category]: Misuse
 // @[US]: US-USER-01
-// @[AC]: AC-01
+// @[AC]: AC-21
 // @[Priority]: P0
 // @[Status]: GREEN
 // @[Purpose]: Fail fast when --target is missing with actionable diagnostic text.
 // @[Expect]: Exit code 1, stderr names --target and requirement reason.
-test("TC-ARG-002 verifyRequiredTarget_byMissingTarget_expectExit1AndTargetHint", () => {
+test("TC-ARG-022 verifyRequiredTarget_byMissingTarget_expectExit1AndTargetHint", () => {
 	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
@@ -159,16 +181,16 @@ test("TC-ARG-002 verifyRequiredTarget_byMissingTarget_expectExit1AndTargetHint",
 	assert.match(result.stderr, /required/i);
 });
 
-// @[TC-ARG-003]
+// @[TC-ARG-023]
 // @[Name]: verifyRequiredBehave_byMissingBehave_expectExit1AndBehaveHint
 // @[Category]: Misuse
 // @[US]: US-USER-01
-// @[AC]: AC-01
+// @[AC]: AC-21
 // @[Priority]: P0
 // @[Status]: GREEN
 // @[Purpose]: Fail fast when --behave is missing with valid behavior guidance.
 // @[Expect]: Exit code 1, stderr names --behave and requirement reason.
-test("TC-ARG-003 verifyRequiredBehave_byMissingBehave_expectExit1AndBehaveHint", () => {
+test("TC-ARG-023 verifyRequiredBehave_byMissingBehave_expectExit1AndBehaveHint", () => {
 	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
@@ -181,16 +203,16 @@ test("TC-ARG-003 verifyRequiredBehave_byMissingBehave_expectExit1AndBehaveHint",
 	assert.match(result.stderr, /required|valid/i);
 });
 
-// @[TC-ARG-004]
+// @[TC-ARG-024]
 // @[Name]: verifyBehaviorList_byUnknownBehave_expectAllValidAlternatives
 // @[Category]: Misuse
 // @[US]: US-USER-01
-// @[AC]: AC-03
+// @[AC]: AC-25
 // @[Priority]: P0
 // @[Status]: GREEN
 // @[Purpose]: Unknown --behave must fail with deterministic alternatives listing.
 // @[Expect]: Exit code 1 and stderr lists all valid --behave values.
-test("TC-ARG-004 verifyBehaviorList_byUnknownBehave_expectAllValidAlternatives", () => {
+test("TC-ARG-024 verifyBehaviorList_byUnknownBehave_expectAllValidAlternatives", () => {
 	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
@@ -205,16 +227,16 @@ test("TC-ARG-004 verifyBehaviorList_byUnknownBehave_expectAllValidAlternatives",
 	assert.match(result.stderr, /valid|supported/i);
 });
 
-// @[TC-ARG-006]
+// @[TC-ARG-025]
 // @[Name]: verifyGoalStoryConflict_byBothStoryInputs_expectExclusivePairError
 // @[Category]: Misuse
 // @[US]: US-USER-01
-// @[AC]: AC-02
+// @[AC]: AC-23
 // @[Priority]: P0
 // @[Status]: GREEN
 // @[Purpose]: Reject combined --goalStory and --goalStoryFile usage.
 // @[Expect]: Exit code 1 and stderr names both conflicting args.
-test("TC-ARG-006 verifyGoalStoryConflict_byBothStoryInputs_expectExclusivePairError", () => {
+test("TC-ARG-025 verifyGoalStoryConflict_byBothStoryInputs_expectExclusivePairError", () => {
 	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
@@ -234,16 +256,16 @@ test("TC-ARG-006 verifyGoalStoryConflict_byBothStoryInputs_expectExclusivePairEr
 	assert.match(result.stderr, /cannot be used together|exclusive|conflict/i);
 });
 
-// @[TC-ARG-007]
+// @[TC-ARG-026]
 // @[Name]: verifyInputConflict_byBothInputSources_expectExclusivePairError
 // @[Category]: Misuse
 // @[US]: US-USER-01
-// @[AC]: AC-02
+// @[AC]: AC-24
 // @[Priority]: P0
 // @[Status]: GREEN
 // @[Purpose]: Reject combined --input and --inputFile usage.
 // @[Expect]: Exit code 1 and stderr names both conflicting args.
-test("TC-ARG-007 verifyInputConflict_byBothInputSources_expectExclusivePairError", () => {
+test("TC-ARG-026 verifyInputConflict_byBothInputSources_expectExclusivePairError", () => {
 	const result: InvocationResult = runUtCodeAgentCli([
 		"--goal",
 		"design unit test skeletons for auth login",
@@ -262,6 +284,86 @@ test("TC-ARG-007 verifyInputConflict_byBothInputSources_expectExclusivePairError
 	assert.match(result.stderr, /--inputFile/);
 	assert.match(result.stderr, /cannot be used together|exclusive|conflict/i);
 });
+
+// @[TC-ARG-027]
+// @[Name]: verifyEmptyGoal_byEmptyString_expectExit1AndGoalRequired
+// @[Category]: Misuse
+// @[US]: US-USER-01
+// @[AC]: AC-22
+// @[Priority]: P0
+// @[Status]: PLANNED
+// @[Purpose]: Reject empty --goal string with explicit error message.
+// @[Expect]: Exit code 1 and stderr indicates --goal cannot be empty.
+// test("TC-ARG-027 verifyEmptyGoal_byEmptyString_expectExit1AndGoalRequired", () => {
+// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton"]);
+// 	assert.equal(result.exitCode, 1);
+// 	assert.match(result.stderr, /--goal/);
+// 	assert.match(result.stderr, /empty/i);
+// });
+
+// @[TC-ARG-028]
+// @[Name]: verifyUnparseableTarget_byGarbledForm_expectExit1AndSupportedSelectors
+// @[Category]: Misuse
+// @[US]: US-USER-01
+// @[AC]: AC-26
+// @[Priority]: P0
+// @[Status]: PLANNED
+// @[Purpose]: Reject unparseable --target form with supported selector guidance.
+// @[Expect]: Exit code 1 and stderr shows supported selector forms.
+// test("TC-ARG-028 verifyUnparseableTarget_byGarbledForm_expectExit1AndSupportedSelectors", () => {
+// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "garbled:::", "--behave", "designFuncTestsSkeleton"]);
+// 	assert.equal(result.exitCode, 1);
+// 	assert.match(result.stderr, /--target/);
+// 	assert.match(result.stderr, /selector|form|format/i);
+// });
+
+// @[TC-ARG-029]
+// @[Name]: verifyTargetBehaveMismatch_byTestCaseWithDesignBehave_expectExit1AndValidPairings
+// @[Category]: Misuse
+// @[US]: US-USER-01
+// @[AC]: AC-27
+// @[Priority]: P0
+// @[Status]: PLANNED
+// @[Purpose]: Reject --target TestCase combined with skeleton design --behave.
+// @[Expect]: Exit code 1 and stderr reports unsupported combination and suggests valid pairings.
+// test("TC-ARG-029 verifyTargetBehaveMismatch_byTestCaseWithDesignBehave_expectExit1AndValidPairings", () => {
+// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp::TC-03", "--behave", "designFuncTestsSkeleton"]);
+// 	assert.equal(result.exitCode, 1);
+// 	assert.match(result.stderr, /--target/);
+// 	assert.match(result.stderr, /--behave/);
+// 	assert.match(result.stderr, /pairing|combination/i);
+// });
+
+// @[TC-ARG-030]
+// @[Name]: verifyUnrecognizedLogLevel_byInvalidValue_expectExit1AndValidLevels
+// @[Category]: Misuse
+// @[US]: US-USER-01
+// @[AC]: AC-28
+// @[Priority]: P0
+// @[Status]: PLANNED
+// @[Purpose]: Reject unrecognized --log-level value with valid alternatives listing.
+// @[Expect]: Exit code 1 and stderr lists every valid --log-level value.
+// test("TC-ARG-030 verifyUnrecognizedLogLevel_byInvalidValue_expectExit1AndValidLevels", () => {
+// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--log-level", "verbose"]);
+// 	assert.equal(result.exitCode, 1);
+// 	assert.match(result.stderr, /--log-level/);
+// 	assert.match(result.stderr, /valid|supported/i);
+// });
+
+// @[TC-ARG-031]
+// @[Name]: verifyStructurallyWrongConfig_byValidYamlMissingKeys_expectExit1AndRequiredKeys
+// @[Category]: Misuse
+// @[US]: US-USER-01
+// @[AC]: AC-32
+// @[Priority]: P0
+// @[Status]: PLANNED
+// @[Purpose]: Reject --config-file with valid YAML but missing required keys.
+// @[Expect]: Exit code 1 and stderr reports structural error and lists required config keys.
+// test("TC-ARG-031 verifyStructurallyWrongConfig_byValidYamlMissingKeys_expectExit1AndRequiredKeys", () => {
+// 	const result: InvocationResult = runUtCodeAgentCli(["--goal", "design tests", "--target", "tests/auth_test.cpp", "--behave", "designFuncTestsSkeleton", "--config-file", "tests/invalid_structure.yaml"]);
+// 	assert.equal(result.exitCode, 1);
+// 	assert.match(result.stderr, /config|key|required|structure/i);
+// });
 
 //======>END OF UNIT TESTING IMPLEMENTATION=======================================================
 

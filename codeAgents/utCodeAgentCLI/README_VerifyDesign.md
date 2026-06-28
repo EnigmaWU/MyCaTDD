@@ -4,17 +4,17 @@ This document captures module-scoped verification strategy and US/AC/TC traceabi
 
 ## Story and Design Inputs
 
-- Closed story: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md](../../.catdd/spec/doneUS/20260612-refactor-UT_US-USER-01-P0-functional-traceability-UserStory.md)
-- Closed TASKs: [20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md](../../.catdd/spec/doneUS/20260612-refactor-UT_US-USER-01-P0-functional-traceability-TASKs.md)
+- Active story: [20260628-utCodeAgentCLI-US-USER-01-UserStory.md](../../.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md)
+- Active TASKs: [20260628-utCodeAgentCLI-US-USER-01-TASKs.md](../../.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md)
 - [README_ArchDesign.md](README_ArchDesign.md)
 - [README_DetailDesign.md](README_DetailDesign.md)
 - [SPEC_designUnitTests.md](../../slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md)
 - [UT_designFuncTestsSkeleton.md](../../slashCommands/commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md)
 - [CaTDD_designAndImplTemplate.ts](../../methodPrompts/CaTDD_designAndImplTemplate.ts)
-- [UT_US-USER-01-Typical.ts](tests/UT_US-USER-01-Typical.ts)
-- [UT_US-USER-01-Edge.ts](tests/UT_US-USER-01-Edge.ts)
-- [UT_US-USER-01-Misuse.ts](tests/UT_US-USER-01-Misuse.ts)
-- [UT_US-USER-01-Fault.ts](tests/UT_US-USER-01-Fault.ts)
+- [UT_US-USER-01-Typical.ts](tests/UT_US-USER-01-Typical.ts) — 10 Typical ACs (AC-01~AC-10)
+- [UT_US-USER-01-Edge.ts](tests/UT_US-USER-01-Edge.ts) — 10 Edge ACs (AC-11~AC-20)
+- [UT_US-USER-01-Misuse.ts](tests/UT_US-USER-01-Misuse.ts) — 9 Misuse ACs (AC-21~AC-28, AC-32)
+- [UT_US-USER-01-Fault.ts](tests/UT_US-USER-01-Fault.ts) — 3 Fault ACs (AC-29~AC-31)
 
 ## Testing Definition
 
@@ -27,21 +27,21 @@ This document captures module-scoped verification strategy and US/AC/TC traceabi
 
 Design P0 Functional coverage first because `US-USER-01` is a CLI invocation contract story and because this story is applying CaTDD `UT_*` methodology to the `utCodeAgentCLI` UnitTesting surface. P1/P2 categories are deferred because this story does not introduce state, capability, concurrency, performance, robust, compatibility, or configuration behavior.
 
-The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` semantics for the full P0 set:
+The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` semantics for the full P0 set (32-AC redesign via `SPEC_designUnitTests`):
 
-- Typical: valid invocation proceeds to behavior dispatch readiness.
-- Edge: explicitly present as a traceable non-required category decision because no valid edge behavior is specified in the authoritative AC set.
-- Misuse: missing required args, unknown `--behave`, and mutually exclusive flag pairs are rejected.
-- Fault: missing file-path dependencies are surfaced with path-level diagnostics.
+- Typical (AC-01~AC-10): valid invocation proceeds to behavior dispatch readiness.
+- Edge (AC-11~AC-20): valid boundary or mode variation — redesigned from non-required to required.
+- Misuse (AC-21~AC-28, AC-32): missing required args, empty string args, mutually exclusive pairs, unrecognized/unparseable values, target/behave mismatch, and structurally wrong config rejected.
+- Fault (AC-29~AC-31): missing file-path dependencies, invalid YAML config, and directory-as-config surfaced with diagnostics.
 
 ## CaTDD Category Coverage
 
 | Priority | Category | Scope | Required Now | Notes |
 | --- | --- | --- | --- | --- |
-| P0 | Functional: Typical | Valid invocation success path | Yes | Covers `TC-ARG-005` in `UT_US-USER-01-Typical.ts`. |
-| P0 | Functional: Edge | Valid boundary or mode variation | No | Decision record present in `UT_US-USER-01-Edge.ts`; Edge is explicitly non-required because no valid edge scenario is specified in `US-USER-01`. |
-| P0 | Functional: Misuse | Invalid caller argument contract checks | Yes | Covers `TC-ARG-001..TC-ARG-004`, `TC-ARG-006..TC-ARG-007` in `UT_US-USER-01-Misuse.ts`. |
-| P0 | Functional: Fault | File-path failure handling | Yes | Covers `TC-ARG-008..TC-ARG-012` in `UT_US-USER-01-Fault.ts`. |
+| P0 | Functional: Typical | Valid invocation success path (AC-01~AC-10) | Yes | Covers `TC-ARG-001..TC-ARG-010` in `UT_US-USER-01-Typical.ts`. |
+| P0 | Functional: Edge | Valid boundary or mode variation (AC-11~AC-20) | Yes | Redesigned from non-required to required with 10 Edge ACs in `UT_US-USER-01-Edge.ts`. |
+| P0 | Functional: Misuse | Invalid caller argument contract checks (AC-21~AC-28, AC-32) | Yes | Covers `TC-ARG-021..TC-ARG-026` (GREEN) and `TC-ARG-027..TC-ARG-031` (PLANNED) in `UT_US-USER-01-Misuse.ts`. |
+| P0 | Functional: Fault | File-path failure handling (AC-29~AC-31) | Yes | Covers `TC-ARG-029..TC-ARG-033` (GREEN) and `TC-ARG-034..TC-ARG-035` (PLANNED) in `UT_US-USER-01-Fault.ts`. |
 | P1 | Design: State/Capability/Concurrency | Runtime state or capability design | No | Not introduced by this story. |
 | P2 | Quality: Performance/Robust/Compatibility/Configuration | Quality envelopes | No | Not introduced by this story. |
 
@@ -49,24 +49,23 @@ The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` sem
 
 | US | AC | TC | Test File | Status |
 | --- | --- | --- | --- | --- |
-| US-USER-01 | AC-05 | TC-ARG-005 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts | GREEN |
-| US-USER-01 | AC-01 | TC-ARG-001 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-01 | TC-ARG-002 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-01 | TC-ARG-003 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-03 | TC-ARG-004 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-02 | TC-ARG-006 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-02 | TC-ARG-007 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-008 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-009 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-010 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-011 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-012 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
+| US-USER-01 | AC-01~AC-10 | TC-ARG-001..TC-ARG-010 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts | PLANNED/GREEN |
+| US-USER-01 | AC-11~AC-20 | TC-ARG-011..TC-ARG-020 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts | PLANNED |
+| US-USER-01 | AC-21 | TC-ARG-021..TC-ARG-023 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-25 | TC-ARG-024 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-23, AC-24 | TC-ARG-025..TC-ARG-026 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-22 | TC-ARG-027 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-26 | TC-ARG-028 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-27 | TC-ARG-029 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-28 | TC-ARG-030 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-32 | TC-ARG-031 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-29 | TC-ARG-029..TC-ARG-033 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
+| US-USER-01 | AC-30 | TC-ARG-034 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | PLANNED |
+| US-USER-01 | AC-31 | TC-ARG-035 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | PLANNED |
 
 ## Edge Category Decision
 
-- [UT_US-USER-01-Edge.ts](tests/UT_US-USER-01-Edge.ts) remains in the P0 Functional set as a category decision record.
-- It does not claim AC/TC coverage and therefore does not weaken the `AC-01..AC-05` cardinality gate.
-- Unknown `--behave`, missing required args, and missing files stay in Misuse or Fault because they are not valid edge behavior.
+- [UT_US-USER-01-Edge.ts](tests/UT_US-USER-01-Edge.ts) was redesigned from non-required to required with 10 Edge ACs (AC-11~AC-20) to match the 32-AC spec. It now provides TC-ARG-011..TC-ARG-020 skeletons for valid boundary and mode-variation behavior.
 
 ## Regression Surface
 
@@ -76,7 +75,7 @@ The existing `US-USER-01` CLI validation tests must remain GREEN after any redes
 node --test codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts
 ```
 
-Expected result: all existing `TC-ARG-001..TC-ARG-012` cases pass. Any future replacement TC set must be explicitly trace-equivalent and still cover AC-01..AC-05.
+Expected result: all existing `TC-ARG-001..TC-ARG-012` cases pass and are remapped to the new 32-AC TC numbering scheme (TC-ARG-001..TC-ARG-010 remain Typical, TC-ARG-011..TC-ARG-020 Edge, TC-ARG-021..TC-ARG-031 Misuse, TC-ARG-029..TC-ARG-035 Fault).
 
 All executable `UT_US-USER-01` cases invoke `utCodeAgentCLI` as a subprocess. They do not call `validateInvocation(...)` directly.
 

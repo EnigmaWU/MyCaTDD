@@ -4,10 +4,14 @@ This document captures verification strategy and US/AC/TC traceability for activ
 
 ## Story and Design Inputs
 
-- Story: US-USER-01 Parse and Validate CLI Arguments
+- Active story: [.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md](.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md)
+- Active TASKs: [.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md](.catdd/spec/doingUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md)
 - Detail design: [codeAgents/utCodeAgentCLI/README_DetailDesign.md](codeAgents/utCodeAgentCLI/README_DetailDesign.md)
-- Completed story artifact: [.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md](.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-USER-01-UserStory.md)
-- Target test files: [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts), [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts), [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts), [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts)
+- Target test files (32-AC redesign):
+  - [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts) — 10 Typical ACs (AC-01~AC-10)
+  - [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts) — 10 Edge ACs (AC-11~AC-20)
+  - [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts) — 9 Misuse ACs (AC-21~AC-28, AC-32)
+  - [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts) — 3 Fault ACs (AC-29~AC-31)
 
 ## Testing Definition
 
@@ -29,10 +33,10 @@ Design P0 Functional coverage first for argument validation because this story i
 
 | Priority | Category | Scope | Required Now | Notes |
 | --- | --- | --- | --- | --- |
-| P0 | Functional: Typical | Valid invocation success path | Yes | Covers `TC-ARG-005` in `UT_US-USER-01-Typical.ts`. |
-| P0 | Functional: Edge | Valid boundary or mode variation | No | Skeleton present in `UT_US-USER-01-Edge.ts`; no valid edge scenario is specified in this story slice. |
-| P0 | Functional: Misuse | Invalid caller argument contract checks | Yes | Covers missing required args, unknown `--behave`, and conflicting story/input flags in `UT_US-USER-01-Misuse.ts`. |
-| P0 | Functional: Fault | File-path failure handling | Yes | Covers nonexistent file-path arguments in `UT_US-USER-01-Fault.ts`. |
+| P0 | Functional: Typical | Valid invocation success path (AC-01~AC-10) | Yes | Covers `TC-ARG-001..TC-ARG-010` in `UT_US-USER-01-Typical.ts`. |
+| P0 | Functional: Edge | Valid boundary or mode variation (AC-11~AC-20) | Yes | Redesigned from non-required to required with 10 Edge ACs in `UT_US-USER-01-Edge.ts`. |
+| P0 | Functional: Misuse | Invalid caller argument checks (AC-21~AC-28, AC-32) | Yes | `TC-ARG-021..TC-ARG-026` GREEN, `TC-ARG-027..TC-ARG-031` PLANNED in `UT_US-USER-01-Misuse.ts`. |
+| P0 | Functional: Fault | File-path failure handling (AC-29~AC-31) | Yes | `TC-ARG-029..TC-ARG-033` GREEN, `TC-ARG-034..TC-ARG-035` PLANNED in `UT_US-USER-01-Fault.ts`. |
 | P1 | Design: State/Capability/Concurrency | Parser/validator internals | No | Defer until runtime state model requires dedicated tests. |
 | P2 | Quality: Performance/Robust/Compatibility/Configuration | CLI quality envelopes | No | Defer until executable implementation baseline exists. |
 
@@ -40,18 +44,19 @@ Design P0 Functional coverage first for argument validation because this story i
 
 | US | AC | TC | Test File | Status |
 | --- | --- | --- | --- | --- |
-| US-USER-01 | AC-01 | TC-ARG-001 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-01 | TC-ARG-002 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-01 | TC-ARG-003 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-03 | TC-ARG-004 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-05 | TC-ARG-005 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts | GREEN |
-| US-USER-01 | AC-02 | TC-ARG-006 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-02 | TC-ARG-007 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-008 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-009 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-010 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-011 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-04 | TC-ARG-012 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
+| US-USER-01 | AC-01~AC-10 | TC-ARG-001..TC-ARG-010 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts | PLANNED/GREEN |
+| US-USER-01 | AC-11~AC-20 | TC-ARG-011..TC-ARG-020 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts | PLANNED |
+| US-USER-01 | AC-21 | TC-ARG-021..TC-ARG-023 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-25 | TC-ARG-024 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-23, AC-24 | TC-ARG-025..TC-ARG-026 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-22 | TC-ARG-027 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-26 | TC-ARG-028 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-27 | TC-ARG-029 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-28 | TC-ARG-030 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-32 | TC-ARG-031 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-29 | TC-ARG-029..TC-ARG-033 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
+| US-USER-01 | AC-30 | TC-ARG-034 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | PLANNED |
+| US-USER-01 | AC-31 | TC-ARG-035 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | PLANNED |
 
 ## Test Case Design Notes
 

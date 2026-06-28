@@ -19,7 +19,7 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` slice `US-USE
 - Active state: `.catdd/spec/doingUS/` opened by `SPEC_openUserStory` on 2026-06-28.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_designUnitTests`.
+- Next recommended command: `/SPEC_implUnitTests`.
 
 ## Mutual Intent Contract
 
@@ -345,4 +345,4 @@ Resolved Questions:
 
 ## Next Recommended Action
 
-Run `/SPEC_designUnitTests` to design P0 Functional skeletons and route to UT commands.
+Run `/SPEC_implUnitTests` to implement RED tests for all 4 P0 Functional category skeletons and advance PLANNED skeletons to implementable state.
