@@ -307,7 +307,7 @@ test("TC-ARG-027 verifyEmptyGoal_byEmptyString_expectExit1AndGoalRequired", () =
 // @[US]: US-USER-01
 // @[AC]: AC-26
 // @[Priority]: P0
-// @[Status]: RED
+// @[Status]: GREEN
 // @[Purpose]: Reject unparseable --target form with supported selector guidance.
 // @[Expect]: Exit code 1 and stderr shows supported selector forms.
 test("TC-ARG-028 verifyUnparseableTarget_byGarbledForm_expectExit1AndSupportedSelectors", () => {

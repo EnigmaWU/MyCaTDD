@@ -149,6 +149,13 @@ function validateInvocation(argv: string[]): InvocationResult {
 		return parsed;
 	}
 
+	if (parsed.target != null && parsed.target.indexOf("::") >= 0) {
+		var tp = parsed.target.split("::");
+		if (tp.length != 2 || tp[0] == "" || tp[1] == "" || tp[1].indexOf(":") >= 0) {
+			return fail("--target " + parsed.target + " is unparseable. Supported forms: <filePath> or <filePath>::<TestCase>.");
+		}
+	}
+
 	if (parsed.goal != null && parsed.goal.trim() == "") { return fail("--goal cannot be empty."); }
 
 	const required: Array<{ flag: string; present: boolean; reason: string }> = [
