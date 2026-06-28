@@ -262,7 +262,7 @@ test("TC-ARG-033 verifyMissingConfigFile_byNonexistentPath_expectPathNamedError"
 // @[US]: US-USER-01
 // @[AC]: AC-30
 // @[Priority]: P0
-// @[Status]: RED
+// @[Status]: GREEN
 // @[Purpose]: Reject --config-file with existing file that is not valid YAML.
 // @[Expect]: Exit code 1 and stderr includes a parse error for the config file.
 test("TC-ARG-034 verifyConfigFileInvalidYAML_byExistingNonYamlFile_expectExit1AndParseError", () => {

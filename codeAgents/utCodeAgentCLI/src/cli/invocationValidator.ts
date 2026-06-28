@@ -135,11 +135,11 @@ function firstMissingPath(parsed: ParsedArgs): { flag: string; value: string } |
 	];
 
 	for (const check of pathChecks) {
-		if (check.value != null && check.value != "" && !fs.existsSync(check.value)) {
-			return { flag: check.flag, value: check.value };
+		if (check.value != null && check.value != "") {
+			if (!fs.existsSync(check.value)) { return { flag: check.flag, value: check.value }; }
+			try { if (!fs.statSync(check.value).isFile()) { return { flag: check.flag, value: check.value }; } } catch(e) {}
 		}
 	}
-
 	return undefined;
 }
 
@@ -182,6 +182,8 @@ function validateInvocation(argv: string[]): InvocationResult {
 			`--behave value '${parsed.behave}' is not recognized. Supported values: ${VALID_BEHAVIORS.join(", ")}.`
 		);
 	}
+
+	if (parsed.configFile != null) { try { var cfg = require("fs").readFileSync(parsed.configFile, "utf8"); if (cfg.indexOf(":") < 0 && cfg.trim().charAt(0) != "#") return fail(parsed.configFile + " is not valid YAML"); } catch(e) {} }
 
 	let warnOut = "";
 	if (parsed.input == "") warnOut += "Warning: --input is empty, ignoring.\n";
