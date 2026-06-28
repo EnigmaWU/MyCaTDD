@@ -178,7 +178,7 @@ type InvocationResult = {
 // @[US]: US-USER-01
 // @[AC]: AC-11
 // @[Priority]: P0
-// @[Status]: RED
+// @[Status]: GREEN
 // @[Purpose]: Prove empty-string optional args warn and continue without error.
 // @[Expect]: Exit code 0, stderr emits warning.
 test("TC-ARG-011 verifyEmptyOptionalArgs_byInputReferenceExtraPromptEmpty_expectWarnAndContinue", () => {
@@ -207,7 +207,7 @@ test("TC-ARG-011 verifyEmptyOptionalArgs_byInputReferenceExtraPromptEmpty_expect
 // @[US]: US-USER-01
 // @[AC]: AC-12
 // @[Priority]: P0
-// @[Status]: RED
+// @[Status]: GREEN
 // @[Purpose]: Prove --reference with only commas warns and continues.
 // @[Expect]: Exit code 0, stderr emits warning.
 test("TC-ARG-012 verifyReferenceCommaOnly_byEmptyList_expectWarnAndContinue", () => {

@@ -135,7 +135,7 @@ function firstMissingPath(parsed: ParsedArgs): { flag: string; value: string } |
 	];
 
 	for (const check of pathChecks) {
-		if (check.value != null && !fs.existsSync(check.value)) {
+		if (check.value != null && check.value != "" && !fs.existsSync(check.value)) {
 			return { flag: check.flag, value: check.value };
 		}
 	}
