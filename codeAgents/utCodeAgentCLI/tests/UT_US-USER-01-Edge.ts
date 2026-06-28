@@ -422,14 +422,14 @@ test("TC-ARG-020 verifyInteractiveFlagAbsent_byNotSet_expectNoPrompt", () => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
-// RED [@AC-11,US-USER-01] TC-ARG-011
-// RED [@AC-12,US-USER-01] TC-ARG-012
-// RED [@AC-13,US-USER-01] TC-ARG-013
-// RED [@AC-14,US-USER-01] TC-ARG-014
-// RED [@AC-15,US-USER-01] TC-ARG-015
-// RED [@AC-16,US-USER-01] TC-ARG-016
-// RED [@AC-17,US-USER-01] TC-ARG-017
-// RED [@AC-18,US-USER-01] TC-ARG-018
-// RED [@AC-19,US-USER-01] TC-ARG-019
-// RED [@AC-20,US-USER-01] TC-ARG-020
+// GREEN [@AC-11,US-USER-01] TC-ARG-011
+// GREEN [@AC-12,US-USER-01] TC-ARG-012
+// GREEN [@AC-13,US-USER-01] TC-ARG-013
+// GREEN [@AC-14,US-USER-01] TC-ARG-014
+// GREEN [@AC-15,US-USER-01] TC-ARG-015
+// GREEN [@AC-16,US-USER-01] TC-ARG-016
+// GREEN [@AC-17,US-USER-01] TC-ARG-017
+// GREEN [@AC-18,US-USER-01] TC-ARG-018
+// GREEN [@AC-19,US-USER-01] TC-ARG-019
+// GREEN [@AC-20,US-USER-01] TC-ARG-020
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

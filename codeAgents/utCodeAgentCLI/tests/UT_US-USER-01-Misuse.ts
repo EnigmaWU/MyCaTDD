@@ -373,9 +373,9 @@ test("TC-ARG-031 verifyStructurallyWrongConfig_byValidYamlMissingKeys_expectExit
 // GREEN [@AC-21,US-USER-01] TC-ARG-021..TC-ARG-023 (missing required args)
 // GREEN [@AC-25,US-USER-01] TC-ARG-024 (unrecognized --behave)
 // GREEN [@AC-23,AC-24,US-USER-01] TC-ARG-025..TC-ARG-026 (mutually exclusive pairs)
-// RED [@AC-22,US-USER-01] TC-ARG-027 (empty --goal)
-// RED [@AC-26,US-USER-01] TC-ARG-028 (unparseable --target)
-// RED [@AC-27,US-USER-01] TC-ARG-029 (target/behave mismatch)
-// RED [@AC-28,US-USER-01] TC-ARG-030 (unrecognized --log-level)
+// GREEN [@AC-22,US-USER-01] TC-ARG-027 (empty --goal)
+// GREEN [@AC-26,US-USER-01] TC-ARG-028 (unparseable --target)
+// GREEN [@AC-27,US-USER-01] TC-ARG-029 (target/behave mismatch)
+// GREEN [@AC-28,US-USER-01] TC-ARG-030 (unrecognized --log-level)
 // GREEN [@AC-32,US-USER-01] TC-ARG-031 (structurally wrong config)
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

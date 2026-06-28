@@ -292,6 +292,6 @@ test("TC-ARG-035 verifyConfigFileIsDirectory_byDirPath_expectExit1AndDirectoryEr
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
 // [Migrated from old AC-04 -> new AC-29..AC-31]
 // GREEN [@AC-29,US-USER-01] TC-ARG-029..TC-ARG-033 (nonexistent/unreadable file paths)
-// RED [@AC-30,US-USER-01] TC-ARG-034 (--config-file not valid YAML)
-// RED [@AC-31,US-USER-01] TC-ARG-035 (--config-file is a directory)
+// GREEN [@AC-30,US-USER-01] TC-ARG-034 (--config-file not valid YAML)
+// GREEN [@AC-31,US-USER-01] TC-ARG-035 (--config-file is a directory)
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

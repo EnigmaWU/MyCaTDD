@@ -418,13 +418,13 @@ test("TC-ARG-010 verifyDesignWithExtraPromptConfigDiag_byAllOptionalArgs_expectD
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
 // GREEN [@AC-01,US-USER-01] TC-ARG-001
-// RED [@AC-02,US-USER-01] TC-ARG-002
-// RED [@AC-03,US-USER-01] TC-ARG-003
-// RED [@AC-04,US-USER-01] TC-ARG-004
-// RED [@AC-05,US-USER-01] TC-ARG-005
-// RED [@AC-06,US-USER-01] TC-ARG-006
-// RED [@AC-07,US-USER-01] TC-ARG-007
-// RED [@AC-08,US-USER-01] TC-ARG-008
-// RED [@AC-09,US-USER-01] TC-ARG-009
-// RED [@AC-10,US-USER-01] TC-ARG-010
+// GREEN [@AC-02,US-USER-01] TC-ARG-002
+// GREEN [@AC-03,US-USER-01] TC-ARG-003
+// GREEN [@AC-04,US-USER-01] TC-ARG-004
+// GREEN [@AC-05,US-USER-01] TC-ARG-005
+// GREEN [@AC-06,US-USER-01] TC-ARG-006
+// GREEN [@AC-07,US-USER-01] TC-ARG-007
+// GREEN [@AC-08,US-USER-01] TC-ARG-008
+// GREEN [@AC-09,US-USER-01] TC-ARG-009
+// GREEN [@AC-10,US-USER-01] TC-ARG-010
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================
