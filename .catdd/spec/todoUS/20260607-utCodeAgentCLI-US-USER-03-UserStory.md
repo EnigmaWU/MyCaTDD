@@ -32,29 +32,110 @@ A reviewer can inspect a test file and verify that review output reports counts,
 
 ## Acceptance Criteria
 
-### AC-01: P0 Functional review reports numeric skeleton status
-- **Given** a test file containing CaTDD skeleton TCs — some PLANNED, some RED, some GREEN, some with missing categories (DESIGNED, PARTIAL, or FULLY_RED state)
-- **When** the CLI runs with `--behave reviewFuncTestsSkeleton` targeting that file
-- **Then** stdout includes: total TC count, count per P0 category (Typical, Edge, Misuse, Fault), count per status (PLANNED, RED, GREEN), list of TC-IDs missing `@[Category]` or `@[Status]` tags
-- **And** no file is modified
+#### P0 Functional Completeness
 
-### AC-02: Review on a file without skeletons reports empty
-- **Given** a test file with no CaTDD skeleton comments (EMPTY state)
-- **When** review is invoked
-- **Then** stdout reports: "0 CaTDD skeleton TCs found"
-- **And** exit code is 0 (not an error — the file is valid, just empty)
+| Category | Class | AC Coverage | Count | Rule |
+|---|---|---|---|---|
+| Typical | ValidFunc | AC-01 ~ AC-04 | 4 | ✅ Normal review |
+| Edge | ValidFunc | AC-05 ~ AC-09 | 5 | ✅ Valid states |
+| Misuse | InvalidFunc | AC-10 ~ AC-13 | 4 | ❌ Behavior-specific |
+| Fault | InvalidFunc | AC-14 ~ AC-17 | 4 | ❌ Read-time failure |
 
-### AC-03: P1 Design review reports State/Capability/Concurrency status
-- **Given** a test file containing P1 design skeleton TCs (State, Capability, Concurrency categories)
-- **When** the CLI runs with `--behave reviewDesignTestsSkeleton`
-- **Then** stdout includes count per P1 category and per status
-- **And** no file is modified
+---
 
-### AC-04: P2 Quality review reports Performance/Robust/Compatibility/Configuration status
-- **Given** a test file containing P2 quality skeleton TCs (Performance, Robust, Compatibility, Configuration categories)
-- **When** the CLI runs with `--behave reviewQualityTestsSkeleton`
-- **Then** stdout includes count per P2 category and per status
-- **And** no file is modified
+### Typical (ValidFunc) — Normal review
+
+##### AC-01 [Func/Typical]: P0 Functional review reports numeric status
+- **Given** file has mixed-status P0 skeletons
+- **When** `--behave reviewFuncTestsSkeleton`
+- **Then** exit 0, stdout includes total TC count, per-category counts, per-status counts, missing-tag list
+- **And** no file modified
+
+##### AC-02 [Func/Typical]: P1 Design review reports State/Capability/Concurrency
+- **Given** file has P1 design skeletons
+- **When** `--behave reviewDesignTestsSkeleton`
+- **Then** exit 0, stdout shows per-category and per-status counts
+
+##### AC-03 [Func/Typical]: P2 Quality review reports Performance/Robust/Compat/Config
+- **Given** file has P2 quality skeletons
+- **When** `--behave reviewQualityTestsSkeleton`
+- **Then** exit 0, stdout shows per-category and per-status counts
+
+##### AC-04 [Func/Typical]: Review all tiers at once
+- **Given** file has P0, P1, P2 skeletons
+- **When** `--behave reviewAllSkeleton`
+- **Then** exit 0, stdout reports all three tiers in labeled sections
+
+### Edge (ValidFunc) — Valid states
+
+##### AC-05 [Func/Edge]: Empty file reports 0 skeletons
+- **Given** file has no CaTDD comments
+- **When** review runs
+- **Then** exit 0, stdout: "0 CaTDD skeleton TCs found"
+
+##### AC-06 [Func/Edge]: All-PLANNED file reports DESIGNED state
+- **Given** every TC is PLANNED
+- **When** review runs
+- **Then** exit 0, stdout shows all PLANNED, 0 RED, 0 GREEN, state DESIGNED
+
+##### AC-07 [Func/Edge]: FULLY_RED file reports all RED
+- **Given** every TC is RED
+- **When** review runs
+- **Then** exit 0, stdout reports FULLY_RED state
+
+##### AC-08 [Func/Edge]: Review P0 on file with only P1/P2 skeletons
+- **Given** file has only P1 and P2, no P0
+- **When** `--behave reviewFuncTestsSkeleton`
+- **Then** exit 0, stdout: "0 P0 TCs found. Contains P1/P2 — use reviewDesignTestsSkeleton or reviewQualityTestsSkeleton"
+
+##### AC-09 [Func/Edge]: TC numbering has gaps but content valid
+- **Given** file has TC-01, TC-03, TC-05 (gaps)
+- **When** review runs
+- **Then** exit 0, stdout lists gaps but counts present TCs
+
+### Misuse (InvalidFunc) — Behavior-specific
+
+##### AC-10 [Func/Misuse]: Corrupted `@[TC-*]` format
+- **Given** file has malformed TC tags (missing bracket)
+- **When** review runs
+- **Then** exit 1, stderr: malformed TC tag at line N
+
+##### AC-11 [Func/Misuse]: Duplicate TC-ID
+- **Given** two skeletons tagged `@[TC-01]`
+- **When** review runs
+- **Then** exit 1, stderr: duplicate TC-ID at lines X and Y
+
+##### AC-12 [Func/Misuse]: Unrecognized `@[Status]`
+- **Given** a TC has `@[Status:DRAFT]`
+- **When** review runs
+- **Then** exit 0, stdout flags: unrecognized status value
+
+##### AC-13 [Func/Misuse]: Target is not a test file
+- **Given** `--target src/AuthService.cpp` (product source)
+- **When** review runs
+- **Then** exit 1, stderr: no CaTDD structure found
+
+### Fault (InvalidFunc) — Read-time failure
+
+##### AC-14 [Func/Fault]: File encoding not UTF-8
+- **Given** file is UTF-16 or mixed encoding
+- **When** review reads
+- **Then** exit 1, stderr: encoding error
+
+##### AC-15 [Func/Fault]: File locked by another process
+- **Given** file has exclusive lock
+- **When** CLI opens for reading
+- **Then** exit 1, stderr: lock conflict
+
+##### AC-16 [Func/Fault]: File exceeds review size limit
+- **Given** file >100MB
+- **When** review runs
+- **Then** exit 1, stderr: file exceeds review limit
+
+##### AC-17 [Func/Fault]: Binary content in file
+- **Given** file contains binary sequences (null bytes)
+- **When** review parses TC tags
+- **Then** exit 1, stderr: binary content detected
 
 ## Scope
 

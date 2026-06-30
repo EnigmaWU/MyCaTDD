@@ -32,6 +32,66 @@ All paths produce a machine-readable trace (US-INVENTOR-02) and validate CaTDD m
 
 ---
 
+## AC State Model (Per Acceptance Criterion)
+
+Each AC in every story sub-document carries a status marker. The state transitions below define how ACs move through the work lifecycle.
+
+### State Transition Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING: AC created in spec redesign
+
+    PENDING --> TODO: Analyzed & accepted
+    PENDING --> ABORT: Invalid / scoped out
+
+    TODO --> DOING: Implementation started
+    TODO --> ABORT: No longer needed
+
+    DOING --> DONE: Verified against implementation
+    DOING --> SUSPEND: Blocked
+    DOING --> TODO: Re-queued
+    DOING --> ABORT: Unviable mid-work
+
+    SUSPEND --> DOING: Resumed
+    SUSPEND --> ABORT: No longer viable
+
+    DONE --> [*]
+    ABORT --> [*]
+```
+
+### Transition Rules
+
+| From | → | To | Trigger |
+|---|---|---|---|
+| PENDING | → | TODO | Analyzed & accepted for work |
+| PENDING | → | ABORT | Invalid / scoped out |
+| TODO | → | DOING | Implementation started |
+| TODO | → | ABORT | No longer needed |
+| DOING | → | DONE | Verified against implementation |
+| DOING | → | SUSPEND | Blocked / needs re-discussion |
+| DOING | → | TODO | Re-queued for later |
+| DOING | → | ABORT | Unviable mid-work |
+| SUSPEND | → | DOING | Unblocked / resumed |
+| SUSPEND | → | ABORT | No longer viable |
+| ABORT | → | PENDING | ❌ Not allowed (terminal) |
+| TODO/ABORT | → | PENDING | ❌ Not allowed |
+
+> **Invariant**: Once an AC leaves `PENDING`, it never returns to `PENDING`.
+
+### Status Values
+
+| Status | Meaning | Who controls |
+|---|---|---|
+| `PENDING` | AC designed but not yet picked up | Queue |
+| `TODO` | AC selected for current work cycle | Developer |
+| `DOING` | AC actively being implemented/tested | Developer |
+| `DONE` | AC verified against implementation | Reviewer / CI |
+| `SUSPEND` | AC blocked or deprioritized | Developer |
+| `ABORT` | AC no longer valid | Developer/Review |
+
+---
+
 ## Test File State Model
 
 ```
@@ -140,7 +200,7 @@ US-DEV-05 → executable reliability/safety contract coverage for ASR-R1..R6
 | `slashCommands/` | Portable command execution (US-INVENTOR-01). Every `--behave` resolves here. |
 | [ASRs/ASR_AgenticReliabilityContracts.md](ASRs/ASR_AgenticReliabilityContracts.md) | Architecture-significant reliability/safety requirements that are implemented as executable US/AC through US-DEV-05. |
 | [ADRs/ADR_AgenticReliabilityPolicy.md](ADRs/ADR_AgenticReliabilityPolicy.md) | Decision defaults for ASR-R1..R6; constrains runtime behavior and acceptance checks in US-DEV-05. |
-| [../../.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md](../../.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md) | Original request. |
+| [.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md](../../.catdd/spec/analyzedNews/20260529-assemble-utCodeAgentCLI-user-stories-Issue.md) | Original request. |
 
 ---
 

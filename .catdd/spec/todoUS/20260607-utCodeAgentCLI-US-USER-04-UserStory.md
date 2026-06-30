@@ -32,24 +32,100 @@ A reviewer can inspect the selection output and confirm that exactly one TC is s
 
 ## Acceptance Criteria
 
-### AC-01: Next TC is the first unimplemented P0 TC
-- **Given** a test file with TC-01 (Typical, PLANNED), TC-02 (Typical, PLANNED), TC-03 (Edge, PLANNED)
-- **When** the CLI runs with `--behave tellMeNextImplTest`
-- **Then** stdout outputs exactly one TC-ID: `TC-01` (first PLANNED, CaTDD priority order: P0 before P1 before P2, within P0: Typical → Edge → Misuse → Fault)
-- **And** stdout includes the TC's category
-- **And** no file is modified
+#### P0 Functional Completeness
 
-### AC-02: When some TCs are already implemented
-- **Given** a test file with TC-01 (RED), TC-02 (PLANNED), TC-03 (PLANNED)
-- **When** `tellMeNextImplTest` is invoked
-- **Then** stdout selects `TC-02` (first non-implemented, following CaTDD priority order)
-- **And** already-RED and GREEN TCs are skipped
+| Category | Class | AC Coverage | Count | Rule |
+|---|---|---|---|---|
+| Typical | ValidFunc | AC-01 ~ AC-04 | 4 | ✅ Normal selection |
+| Edge | ValidFunc | AC-05 ~ AC-08 | 4 | ✅ Valid boundary |
+| Misuse | InvalidFunc | AC-09 ~ AC-12 | 4 | ❌ Behavior-specific |
+| Fault | InvalidFunc | AC-13 ~ AC-15 | 3 | ❌ Read-time failure |
 
-### AC-03: When all TCs are implemented
-- **Given** a test file where every TC has `@[Status:RED]` or `@[Status:GREEN]` (FULLY_RED or ALL_GREEN state)
-- **When** `tellMeNextImplTest` is invoked
-- **Then** stdout reports: "All TCs are already implemented. Nothing to select."
-- **And** exit code is 0
+---
+
+### Typical (ValidFunc) — Normal selection
+
+##### AC-01 [Func/Typical]: First PLANNED in CaTDD priority order
+- **Given** TC-01 (Typical, PLANNED), TC-02 (Typical, PLANNED), TC-03 (Edge, PLANNED)
+- **When** `--behave tellMeNextImplTest`
+- **Then** exit 0, stdout: "TC-01 (Category: Typical)"
+- **And** no file modified
+
+##### AC-02 [Func/Typical]: Skips implemented TCs
+- **Given** TC-01 (RED), TC-02 (PLANNED), TC-03 (PLANNED)
+- **When** selection runs
+- **Then** stdout selects TC-02
+
+##### AC-03 [Func/Typical]: P0 category priority overrides file order
+- **Given** TC-05 (Misuse, PLANNED) before TC-06 (Edge, PLANNED) in file
+- **When** selection runs
+- **Then** stdout selects TC-06 (Edge before Misuse per CaTDD priority)
+
+##### AC-04 [Func/Typical]: P0 selected before P1
+- **Given** P0-Misuse TC (PLANNED) and P1-State TC (PLANNED)
+- **When** selection runs
+- **Then** stdout selects the P0 TC
+
+### Edge (ValidFunc) — Valid boundary
+
+##### AC-05 [Func/Edge]: Only one PLANNED TC
+- **Given** exactly one TC at PLANNED, all others GREEN
+- **When** selection runs
+- **Then** stdout outputs that single TC-ID
+
+##### AC-06 [Func/Edge]: All TCs implemented — nothing to select
+- **Given** every TC is RED or GREEN
+- **When** selection runs
+- **Then** exit 0, stdout: "All TCs are already implemented. Nothing to select."
+
+##### AC-07 [Func/Edge]: Empty file (no CaTDD skeletons)
+- **Given** file has no CaTDD comments
+- **When** selection runs
+- **Then** exit 0, stdout: "0 CaTDD skeleton TCs found. Use a design behavior first."
+
+##### AC-08 [Func/Edge]: All TCs PLANNED but missing `@[Category]`
+- **Given** all TCs PLANNED but no Category tags
+- **When** selection runs
+- **Then** exit 0, stdout: "No TCs with valid @[Category] tags. Falls back to file order."
+
+### Misuse (InvalidFunc) — Behavior-specific
+
+##### AC-09 [Func/Misuse]: No `@[Status]` tags on any TC
+- **Given** file has TC skeletons but all missing `@[Status]`
+- **When** selection runs
+- **Then** exit 1, stderr: no TC has valid @[Status] tag
+
+##### AC-10 [Func/Misuse]: Unrecognized status values on all TCs
+- **Given** all TCs have `@[Status:PENDING]` or `@[Status:TODO]`
+- **When** selection runs
+- **Then** exit 1, stderr: no TCs with PLANNED status found
+
+##### AC-11 [Func/Misuse]: Unrecognized `@[Category]` values
+- **Given** TCs have `@[Category:Unknown]` not in CaTDD map
+- **When** selection runs
+- **Then** exit 0, stdout warns unrecognized categories deprioritized
+
+##### AC-12 [Func/Misuse]: Selected TC missing `@[AC]` traceback
+- **Given** all PLANNED TCs missing `@[AC]` references
+- **When** selection runs
+- **Then** exit 0, selects normally, stderr warns traceability incomplete
+
+### Fault (InvalidFunc) — Read-time failure
+
+##### AC-13 [Func/Fault]: File encoding prevents TC tag parsing
+- **Given** file encoding prevents `@[TC-*]` matching
+- **When** selection runs
+- **Then** exit 1, stderr: encoding/parsing failure
+
+##### AC-14 [Func/Fault]: File locked by another process
+- **Given** file has exclusive lock
+- **When** CLI reads
+- **Then** exit 1, stderr: lock conflict
+
+##### AC-15 [Func/Fault]: Target is a dangling symlink
+- **Given** `--target` is a symlink to nonexistent target
+- **When** CLI resolves and reads
+- **Then** exit 1, stderr: dangling symlink
 
 ## Scope
 
