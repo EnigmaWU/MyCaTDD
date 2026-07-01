@@ -14,7 +14,7 @@
 | **US-DEV-01** [P0] | Actionable error messages for all failure states | [USs/DEV-01](USs/README_UserStory4DEVELOPER-01.md) | 15 |
 | **US-DEV-02** [P1] | Configurable logging and diagnostic output | [USs/DEV-02](USs/README_UserStory4DEVELOPER-02.md) | 6 |
 | **US-DEV-03** [P1] | Interactive per-command confirmation | [USs/DEV-03](USs/README_UserStory4DEVELOPER-03.md) | 6 |
-| **US-DEV-04** [P2] | Runtime adapter interface | [USs/DEV-04](USs/README_UserStory4DEVELOPER-04.md) | 5 |
+| **US-DEV-04** [P0] | Runtime adapter interface (AgentSDK) | [USs/DEV-04](USs/README_UserStory4DEVELOPER-04.md) | 17 |
 | **US-DEV-05** [P1] | Execute ASR reliability and safety policy deterministically | [USs/DEV-05](USs/README_UserStory4DEVELOPER-05.md) | 18 |
 
 ---
