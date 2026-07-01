@@ -78,10 +78,6 @@ fi
 TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
 CATDD_DIR="$TARGET_DIR/.catdd"
 SPEC_DIR="$CATDD_DIR/spec"
-ROOT_UBILANG_SOURCE="$REPO_ROOT/README_UbiLang.md"
-ROOT_UBILANG_TARGET="$TARGET_DIR/README_UbiLang.md"
-ROOT_UBILANG_ZH_SOURCE="$REPO_ROOT/README_UbiLang_ZH.md"
-ROOT_UBILANG_ZH_TARGET="$TARGET_DIR/README_UbiLang_ZH.md"
 CONTINUE_RULES_DIR="$TARGET_DIR/.continue/rules"
 CONTINUE_PROMPTS_DIR="$TARGET_DIR/.continue/prompts"
 
@@ -190,19 +186,6 @@ cp -R "$REPO_ROOT/methodPrompts" "$CATDD_DIR/methodPrompts"
 cp -R "$REPO_ROOT/slashCommands" "$CATDD_DIR/slashCommands"
 update_spec_gitignore
 
-if [[ ! -f "$ROOT_UBILANG_SOURCE" ]]; then
-  echo "[installCaTDD4Continue] Missing source file: $ROOT_UBILANG_SOURCE" >&2
-  exit 1
-fi
-if [[ ! -f "$ROOT_UBILANG_ZH_SOURCE" ]]; then
-  echo "[installCaTDD4Continue] Missing source file: $ROOT_UBILANG_ZH_SOURCE" >&2
-  exit 1
-fi
-log_replace_or_new "$ROOT_UBILANG_TARGET"
-[[ $ROOT_UBILANG_SOURCE -ef $ROOT_UBILANG_TARGET ]] || cp "$ROOT_UBILANG_SOURCE" "$ROOT_UBILANG_TARGET"
-log_replace_or_new "$ROOT_UBILANG_ZH_TARGET"
-[[ $ROOT_UBILANG_ZH_SOURCE -ef $ROOT_UBILANG_ZH_TARGET ]] || cp "$ROOT_UBILANG_ZH_SOURCE" "$ROOT_UBILANG_ZH_TARGET"
-
 log_replace_or_new "$CATDD_DIR/CaTDD_INSTALL.md"
 printf '# CaTDD Install Marker\n\n- Installed version: %s\n\n' "$CATDD_VERSION" > "$CATDD_DIR/CaTDD_INSTALL.md"
 cat >> "$CATDD_DIR/CaTDD_INSTALL.md" <<'MARKER'
@@ -213,7 +196,6 @@ This directory is managed by `scripts/installCaTDD4Continue.sh` from MyCaTDD.
 - `spec/` is the installed SpecCoding artifact workspace.
 - Continue project rule: `.continue/rules/catdd.md`.
 - Continue prompt wrappers: `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`.
-- `README_UbiLang.md` and `README_UbiLang_ZH.md` at project root are the installed CaTDD ubiquitous-language glossaries.
 - Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
 - Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
@@ -234,7 +216,6 @@ This is a Continue project rule installed by MyCaTDD. Use it when working with C
 - Continue prompt wrappers: `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`
 - SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
 - SpecCoding artifact workspace: `.catdd/spec/`
-- Project-root glossaries: `README_UbiLang.md` and `README_UbiLang_ZH.md` (canonical CaTDD vocabulary)
 - Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.
 
 ## Continue Behavior

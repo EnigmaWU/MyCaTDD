@@ -40,7 +40,7 @@ grep -Fq 'Copilot | Continue' <<< "$dry_output" || fail "dryRunner missing suppo
 echo "[installCaTDD-test] Test: Copilot fresh install"
 "$INSTALLER" --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --init --clean-prompts --yes
 [[ -f "$TARGET_DIR/.catdd/methodPrompts/README.md" ]] || fail "Copilot install missing methodPrompts"
-[[ -f "$TARGET_DIR/README_UbiLang.md" ]] || fail "Copilot install missing README_UbiLang.md"
+[[ ! -f "$TARGET_DIR/README_UbiLang.md" ]] || fail "Copilot install should not install README_UbiLang.md"
 [[ -d "$TARGET_DIR/.catdd/spec/pendingNews" ]] || fail "Copilot install missing .catdd/spec/pendingNews"
 [[ -f "$TARGET_DIR/.github/prompts/UT_convertDemoToTypical.prompt.md" ]] || fail "Copilot install missing generated prompt"
 [[ -f "$TARGET_DIR/.github/prompts/SPEC_designUnitTests.prompt.md" ]] || fail "Copilot install missing SPEC_designUnitTests prompt"
@@ -62,7 +62,7 @@ echo "[installCaTDD-test] Test: Continue fresh install"
 TARGET3="$(mktemp -d)"
 "$INSTALLER" --targetDir "$TARGET3" --targetCodeAgent Continue --init --clean-prompts --yes
 [[ -f "$TARGET3/.catdd/methodPrompts/README.md" ]] || fail "Continue install missing methodPrompts"
-[[ -f "$TARGET3/README_UbiLang.md" ]] || fail "Continue install missing README_UbiLang.md"
+[[ ! -f "$TARGET3/README_UbiLang.md" ]] || fail "Continue install should not install README_UbiLang.md"
 [[ -d "$TARGET3/.catdd/spec/pendingNews" ]] || fail "Continue install missing .catdd/spec/pendingNews"
 [[ -f "$TARGET3/.continue/prompts/UT_convertDemoToTypical.prompt" ]] || fail "Continue install missing generated prompt"
 [[ -f "$TARGET3/.continue/prompts/SPEC_designUnitTests.prompt" ]] || fail "Continue install missing SPEC_designUnitTests prompt"
