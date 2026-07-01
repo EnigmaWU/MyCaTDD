@@ -157,15 +157,16 @@ Stage-1: Classifying Design
 2. Run test, confirm RED/failing
 3. Implement minimal production code to pass
 4. Run test, confirm GREEN/passing
-5. Refactor both test and production code
+5. Refactor in order: design comments, test code, production code, regression proof
 6. Repeat for next test case
 
 **Step 9: Refactor & Organize**
 
-- Move mature, stable tests to category-specific files
-- Extract common setup/teardown to fixtures
-- Simplify test code while preserving coverage
-- Update documentation and remove obsolete comments
+- First, refine and clear design comments so they follow the template and make key points glance-readable
+- Second, refactor test code without changing TC purpose, AC meaning, coverage intent, or expected behavior
+- If a key missing behavior, edge case, acceptance point, or test purpose is discovered, ask the developer to add or select a new TC instead of expanding the current one
+- Third, refactor production code for readability and local structure only, with no behavior/API/contract change
+- Last, rerun the focused TC and relevant regression scope; the final state must remain GREEN
 
 ## Coverage Matrix Template
 
