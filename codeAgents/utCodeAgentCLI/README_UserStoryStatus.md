@@ -9,7 +9,7 @@ See `README_UserStory.md` for the state transition diagram and rules.
 
 | Story | Source | PENDING | TODO | DOING | DONE | SUSPEND | ABORT | Total |
 |---|---|---|---|---|---|---|---|---|
-| US-USER-01 | [USs/USER-01](USs/README_UserStory4USER-01.md) | 32 | 0 | 0 | 0 | 0 | 0 | **32** |
+| US-USER-01 | [USs/USER-01](USs/README_UserStory4USER-01.md) | 0 | 0 | 0 | 32 | 0 | 0 | **32** |
 | US-USER-02 | [USs/USER-02](USs/README_UserStory4USER-02.md) | 20 | 0 | 0 | 0 | 0 | 0 | **20** |
 | US-USER-03 | [USs/USER-03](USs/README_UserStory4USER-03.md) | 17 | 0 | 0 | 0 | 0 | 0 | **17** |
 | US-USER-04 | [USs/USER-04](USs/README_UserStory4USER-04.md) | 15 | 0 | 0 | 0 | 0 | 0 | **15** |
@@ -27,6 +27,6 @@ See `README_UserStory.md` for the state transition diagram and rules.
 | US-DEV-03 | [USs/DEV-03](USs/README_UserStory4DEVELOPER-03.md) | 6 | 0 | 0 | 0 | 0 | 0 | **6** |
 | US-DEV-04 | [USs/DEV-04](USs/README_UserStory4DEVELOPER-04.md) | 5 | 0 | 0 | 0 | 0 | 0 | **5** |
 | US-DEV-05 | [USs/DEV-05](USs/README_UserStory4DEVELOPER-05.md) | 18 | 0 | 0 | 0 | 0 | 0 | **18** |
-| **Total** | | **244** | **0** | **0** | **0** | **0** | **0** | **244** |
+| **Total** | | **212** | **0** | **0** | **32** | **0** | **0** | **244** |
 
 > Click a story ID to view its AC detail with per-AC status markers.
