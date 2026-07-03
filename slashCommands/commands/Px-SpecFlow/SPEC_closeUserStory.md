@@ -18,6 +18,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 - `suspended_user_story_files`: optional `.catdd/spec/suspendUS/*-UserStory.md` to confirm the story is not in suspended state before closing.
 - `readme_spec_files`: optional project-root `README*` SPEC files updated by the story.
 - `commit_ref`: completed commit.
+- `merge_summary`: merge/integration evidence when the story used a dedicated branch.
 - `ci_summary`: CI result or accepted verification summary.
 
 ## Method References
@@ -35,6 +36,9 @@ Close an active user story after implementation, review, commit, and CI are comp
  	- Minor lifecycle impact (for example only story file movement or link normalization): remind the developer to run `SPEC_updateProjectContext`.
  	- Major lifecycle impact (for example next-command recommendation changes, pending/todo/doing/done summary changes, or project rules/constraints changed by this story): run `SPEC_updateProjectContext` in the same progress flow before declaring closure complete.
 - Completion summary with traceability to source issue, feature, or imported user-story input, project-root README SPEC docs, tests, code, commit, and CI.
+- Merge checkpoint result:
+ 	- If story completion still depends on branch integration, report `close_blocked_reason = merge_required` and hand off `next_command = /SPEC_mergeWork` (or project merge step) before closing.
+ 	- If merge is complete or not required, proceed with close output.
 - Close-commit checkpoint result:
  	- If no file changed during close: report `close_commit_required = no`.
  	- If close generated file changes: report `close_commit_required = yes` and either:
@@ -44,7 +48,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 
 ## Prompt Template
 
-Ask the assistant to close only verified work, preserve enough history for later review, apply post-close project-context sync policy (minor = remind, major = run `SPEC_updateProjectContext` in-flow), and enforce the post-close commit checkpoint for close-generated file changes.
+Ask the assistant to close only verified work, preserve enough history for later review, confirm whether merge/integration is already satisfied, apply post-close project-context sync policy (minor = remind, major = run `SPEC_updateProjectContext` in-flow), and enforce the post-close commit checkpoint for close-generated file changes.
 
 ## Conflict Guard
 
@@ -56,5 +60,6 @@ Do not leave the same story ID under both `.catdd/spec/doingUS/` and `.catdd/spe
 Do not mark closure complete after major lifecycle impact until `SPEC_updateProjectContext` has been executed or explicitly delegated to the developer.
 Do not mark closure complete when close-generated file changes remain uncommitted.
 Do not treat the pre-close `commit_ref` as sufficient evidence for close-generated changes.
+Do not close a story when branch integration is still required but merge evidence is missing.
 
 ONE-MORE-THING: ask developer if something not sure

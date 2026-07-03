@@ -9,6 +9,7 @@ ABORT_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_abortUserStory.m
 CLEAR_INTENT="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_clearStoryIntent.md"
 TAKE_PLAN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_makePlan.md"
 CLOSE_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md"
+COMMIT_WORKS="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_commitWorks.md"
 UPDATE_ARCH="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_updateArchDesign.md"
 USER_GUIDE="$REPO_ROOT/slashCommands/README_UserGuide.md"
 
@@ -32,9 +33,12 @@ grep -Fq 'follow-up architecture revision' "$TAKE_PLAN" || fail "SPEC_makePlan m
 grep -Fq 'follow-up detail revision' "$TAKE_PLAN" || fail "SPEC_makePlan must allow planning to select follow-up detail revision"
 
 grep -Fq 'Initial next-step recommendation, usually `SPEC_makePlan`.' "$OPEN_STORY" || fail "SPEC_openUserStory must route opened stories to SPEC_makePlan"
+grep -Fq 'ask the developer whether to create or switch to a dedicated branch for this story before continuing' "$OPEN_STORY" || fail "SPEC_openUserStory must ask about dedicated branch creation/switch"
 grep -Fq '.catdd/spec/abortUS/*-UserStory.md' "$ABORT_STORY" || fail "SPEC_abortUserStory must move stories to abortUS"
 grep -Fq 'next recommended command is `SPEC_makePlan`' "$CLEAR_INTENT" || fail "SPEC_clearStoryIntent must hand off to SPEC_makePlan"
 grep -Fq '.catdd/spec/doneUS/*-TASKs.md' "$CLOSE_STORY" || fail "SPEC_closeUserStory must preserve the paired TASKs artifact in doneUS"
+grep -Fq 'close_blocked_reason = merge_required' "$CLOSE_STORY" || fail "SPEC_closeUserStory must block closure when merge is still required"
+grep -Fq 'If branch integration is still required, hand off to `SPEC_mergeWork`' "$COMMIT_WORKS" || fail "SPEC_commitWorks must route to merge step when branch integration is required"
 
 grep -Fq '[SPEC_makePlan.md](SPEC_makePlan.md)' "$COMMAND_README" || fail "Px-SpecFlow command README must list SPEC_makePlan"
 grep -Fq '[SPEC_abortUserStory.md](SPEC_abortUserStory.md)' "$COMMAND_README" || fail "Px-SpecFlow command README must list SPEC_abortUserStory"
@@ -59,6 +63,7 @@ grep -Fq 'ImplementationChoice -- "abort" --> Abort2b["SPEC_abortUserStory"]' "$
 grep -Fq 'QualityDetail -- "YES" --> TailChoice{"after design, what story type?"}' "$FLOW_DOC" || fail "Px-SpecFlow must decide at end of Part 2.a whether to implement or close"
 grep -Fq 'TailChoice -- "design-oriented only" --> CommitDesign["SPEC_commitWorks"]' "$FLOW_DOC" || fail "Px-SpecFlow must allow design-only stories to commit without Part 2.b"
 grep -Fq 'CommitDesign --> CloseDesign["SPEC_closeUserStory"]' "$FLOW_DOC" || fail "Px-SpecFlow must close design-only stories after commit"
+grep -Fq 'optional merge step such as `SPEC_mergeWork` when branch integration is required' "$FLOW_DOC" || fail "Px-SpecFlow must document optional merge step between commit and close when needed"
 grep -Fq 'TailChoice -- "implementation follows" --> DesignReady["handoff to Part 2.b"]' "$FLOW_DOC" || fail "Px-SpecFlow must handoff to Part 2.b when implementation follows"
 grep -Fq 'Arch --> ReviewArch["SPEC_reviewArchDesign"]' "$FLOW_DOC" || fail "Px-SpecFlow must always review architecture after take"
 grep -Fq 'QualityArch -- "NO" --> UpdateArch["SPEC_updateArchDesign"]' "$FLOW_DOC" || fail "Px-SpecFlow must route failed architecture review to SPEC_updateArchDesign"
