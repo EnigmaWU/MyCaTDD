@@ -24,16 +24,17 @@ Prepare and commit completed work after story, tests, product code, and review p
 - Commit scope summary for team-shared artifacts, tests, and product code; include `.catdd/spec/doingUS/` updates when relevant and exclude local gitignored `.catdd/spec/WorkingProcessLog.md`.
 - Structured commit message with what, how, and why.
 - Next-command checkpoint after commit:
-  - If branch integration is still required, hand off to `SPEC_mergeWork` (or the repository's merge step) before closure.
-  - If merge is already complete or not needed, continue to `SPEC_closeUserStory`.
+  - Continue to `SPEC_closeUserStory`.
+  - If work is on a dedicated story branch and integration is still required, `SPEC_closeUserStory` should hand off to `SPEC_mergeWork` (or the repository's merge step) after close.
+  - If no dedicated story branch was used, merge/integration is auto-skipped.
 
 ## Prompt Template
 
-Ask the assistant to verify scope, exclude unrelated changes, create a commit message tied to the active story, and ask whether a merge step is required before `SPEC_closeUserStory`.
+Ask the assistant to verify scope, exclude unrelated changes, create a commit message tied to the active story, and record whether branch integration will be required after `SPEC_closeUserStory`.
 
 ## Conflict Guard
 
 Do not commit unrelated changes. Ask the developer before including ambiguous files.
-Do not route directly to `SPEC_closeUserStory` when the committed story branch still needs merge/integration.
+Do not claim the lifecycle is fully complete when the committed story branch still needs merge/integration after close.
 
 ONE-MORE-THING: ask developer if something not sure
