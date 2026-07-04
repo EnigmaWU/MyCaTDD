@@ -38,7 +38,7 @@ grep -Fq '.catdd/spec/abortUS/*-UserStory.md' "$ABORT_STORY" || fail "SPEC_abort
 grep -Fq 'next recommended command is `SPEC_makePlan`' "$CLEAR_INTENT" || fail "SPEC_clearStoryIntent must hand off to SPEC_makePlan"
 grep -Fq '.catdd/spec/doneUS/*-TASKs.md' "$CLOSE_STORY" || fail "SPEC_closeUserStory must preserve the paired TASKs artifact in doneUS"
 grep -Fq 'If work used a dedicated story branch and branch integration is still required' "$CLOSE_STORY" || fail "SPEC_closeUserStory must hand off to post-close merge when dedicated branch integration is still required"
-grep -Fq 'If merge is already complete or no dedicated story branch was used, report `next_command = none` (merge auto-skipped).' "$CLOSE_STORY" || fail "SPEC_closeUserStory must support auto-skipping merge when no dedicated story branch was used"
+grep -Fq 'If merge is already complete or no dedicated story branch was used, report `next_command = no_command` (merge auto-skipped)' "$CLOSE_STORY" || fail "SPEC_closeUserStory must support auto-skipping merge when no dedicated story branch was used"
 grep -Fq 'Continue to `SPEC_closeUserStory`.' "$COMMIT_WORKS" || fail "SPEC_commitWorks must continue to close before merge checkpoint"
 
 grep -Fq '[SPEC_makePlan.md](SPEC_makePlan.md)' "$COMMAND_README" || fail "Px-SpecFlow command README must list SPEC_makePlan"

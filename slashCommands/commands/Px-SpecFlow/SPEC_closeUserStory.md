@@ -38,7 +38,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 - Completion summary with traceability to source issue, feature, or imported user-story input, project-root README SPEC docs, tests, code, commit, and CI.
 - Post-close merge checkpoint result:
  	- If work used a dedicated story branch and branch integration is still required, report `next_command = SPEC_mergeWork` (or project merge step) after close.
- 	- If merge is already complete or no dedicated story branch was used, report `next_command = none` (merge auto-skipped).
+ 	- If merge is already complete or no dedicated story branch was used, report `next_command = no_command` (merge auto-skipped).
 - Close-commit checkpoint result:
  	- If no file changed during close: report `close_commit_required = no`.
  	- If close generated file changes: report `close_commit_required = yes` and either:
