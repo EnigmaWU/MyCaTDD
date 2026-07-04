@@ -25,7 +25,7 @@ Prepare and commit completed work after story, tests, product code, and review p
 - Structured commit message with what, how, and why.
 - Next-command checkpoint after commit:
   - Continue to `SPEC_closeUserStory`.
-  - If work is on a dedicated story branch and integration is still required, `SPEC_closeUserStory` should hand off to `SPEC_mergeWork` (or the repository's merge step) after close.
+  - If work is on a dedicated story branch and integration is still required, `SPEC_closeUserStory` should hand off to `SPEC_mergeWorks` (or the repository's merge step) after close.
   - If no dedicated story branch was used, merge/integration is auto-skipped.
 
 ## Prompt Template

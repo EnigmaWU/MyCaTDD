@@ -40,6 +40,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_patchOriginalCaTDD.md](SPEC_patchOriginalCaTDD.md) | Patch effective installed-project CaTDD modifications back to the original CaTDD repository. |
 | [SPEC_commitWorks.md](SPEC_commitWorks.md) | Prepare and commit completed work. |
 | [SPEC_closeUserStory.md](SPEC_closeUserStory.md) | Move completed story to done state. |
+| [SPEC_mergeWorks.md](SPEC_mergeWorks.md) | Merge a closed story branch into the target branch when integration is still required. |
 
 ## Contract
 

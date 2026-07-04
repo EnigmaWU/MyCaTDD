@@ -37,7 +37,7 @@ Close an active user story after implementation, review, commit, and CI are comp
  	- Major lifecycle impact (for example next-command recommendation changes, pending/todo/doing/done summary changes, or project rules/constraints changed by this story): run `SPEC_updateProjectContext` in the same progress flow before declaring closure complete.
 - Completion summary with traceability to source issue, feature, or imported user-story input, project-root README SPEC docs, tests, code, commit, and CI.
 - Post-close merge checkpoint result:
- 	- If work used a dedicated story branch and branch integration is still required, report `next_command = SPEC_mergeWork` (or project merge step) after close.
+ 	- If work used a dedicated story branch and branch integration is still required, report `next_command = SPEC_mergeWorks` (or project merge step) after close.
  	- If merge is already complete or no dedicated story branch was used, report `next_command = no_command` (merge auto-skipped).
 - Close-commit checkpoint result:
  	- If no file changed during close: report `close_commit_required = no`.
