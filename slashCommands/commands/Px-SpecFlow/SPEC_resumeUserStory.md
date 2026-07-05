@@ -11,7 +11,7 @@ Resume a suspended user story back into active work.
 ## Inputs
 
 - `suspended_user_story`: selected suspended story under `.catdd/spec/suspendUS/`.
-- `suspended_tasks_file`: optional `.catdd/spec/suspendUS/*-TASKs.md` task artifact paired with the story.
+- `suspended_tasks_file`: optional `.catdd/spec/suspendUS/*-UserStory-Tasks.md` task artifact paired with the story.
 - `resume_ref`: recorded durable resume reference, typically a branch name or worktree path.
 - `projectContext_file`: current project context.
 
@@ -23,10 +23,10 @@ Resume a suspended user story back into active work.
 ## Output Contract
 
 - A `.catdd/spec/doingUS/*-UserStory.md` team-shared active work artifact restored from suspended state.
-- A paired `.catdd/spec/doingUS/*-TASKs.md` task artifact restored when present.
+- A paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact restored when present.
 - Resume note confirming `resume_ref` and any handoff caveats.
 - Local `.catdd/spec/suspendUS/` suspended work state removed after active artifact restoration.
-- Next recommended command: usually `SPEC_whatsNextTask` or the first unchecked task from `*-TASKs.md`.
+- Next recommended command: usually `SPEC_whatsNextTask` or the first unchecked task from `*-UserStory-Tasks.md`.
 
 ## Prompt Template
 

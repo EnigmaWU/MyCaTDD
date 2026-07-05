@@ -11,7 +11,7 @@ Create or update the task artifact paired with the active user story and decide 
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `tasks_file`: paired `.catdd/spec/doingUS/*-TASKs.md` file to create or update for the opened story.
+- `tasks_file`: paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` file to create or update for the opened story.
 - `projectContext_file`: current project context.
 - `mutual_intent_contract`: optional intent-clearing notes produced by `SPEC_clearStoryIntent`.
 - `module_user_story_doc`: optional module or submodule `README_UserStory.md` affected by the active story.
@@ -27,7 +27,7 @@ Create or update the task artifact paired with the active user story and decide 
 
 ## Output Contract
 
-- A team-shared `.catdd/spec/doingUS/*-TASKs.md` task artifact coupled with the opened user story.
+- A team-shared `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact coupled with the opened user story.
 - The task artifact records the active story, current readiness, work orientation, skipped or satisfied prerequisites, candidate next steps, rejected next steps, selected next step, and rationale.
 - The task artifact uses Markdown checkbox tasks: `[ ]` for pending work, `[x]` for satisfied or completed work.
 - After creating or updating the artifact, print the current TASKs checklist in the command response so developers can see `[ ]` and `[x]` status immediately.
@@ -62,7 +62,7 @@ Create or update the task artifact paired with the active user story and decide 
 
 ## Prompt Template
 
-Ask the assistant to examine the opened story, create or update the paired `*-TASKs.md` artifact in `.catdd/spec/doingUS/`, express the work as Markdown checkbox tasks, print the checklist after planning is made, compare the realistic next lifecycle options, distinguish requirement-oriented, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next `SPEC_*` command that best fits the story's current readiness without inventing missing requirements/design or skipping needed checks.
+Ask the assistant to examine the opened story, create or update the paired `*-UserStory-Tasks.md` artifact in `.catdd/spec/doingUS/`, express the work as Markdown checkbox tasks, print the checklist after planning is made, compare the realistic next lifecycle options, distinguish requirement-oriented, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next `SPEC_*` command that best fits the story's current readiness without inventing missing requirements/design or skipping needed checks.
 
 ## Conflict Guard
 

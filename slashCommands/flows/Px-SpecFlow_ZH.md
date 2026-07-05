@@ -58,7 +58,7 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 | 以宪法级别的项目上下文治理工作 | Spec Kit 以项目原则开始，使后续的规范、计划和任务决策不会漂移。 | 将 `.catdd/spec/projectContext.md` 视为类似宪法的防护栏。`SPEC_initProjectContext` 和 `SPEC_updateProjectContext` 应在故事工作继续之前记录稳定的原则、约束、质量关卡和团队惯例。 |
 | 将工作分析为独立可测试的故事切片 | Spec Kit 的规范模板要求优先级的用户故事及独立测试，使 MVP 范围和用户价值显式化。 | `SPEC_analyzeIssue` 和 `SPEC_analyzeFeature` 应生成包含参与者、价值、优先级、独立测试意图、验收场景、边界情况、风险和开放问题的 `.catdd/spec/todoUS/` 故事，而不仅仅是一个松散的摘要。`SPEC_importUserStory` 是已结构化 US/AC 输入的直接队列，将其写入 `.catdd/spec/todoUS/` 而无需分析。分析应将议题/特性的原始输入从 `.catdd/spec/pendingNews/` 移动到 `.catdd/spec/analyzedNews/`，以保持可追溯性而不将已分析的工作留在待处理收件箱中。 |
 | 在设计前明确开发者和 CodeAgent 故事意图 | 一个故事可能看起来完整，而开发者和 CodeAgent 仍然推断出不同的范围、非目标或成功证据。在设计前明确双方意图可防止昂贵的架构和详细设计漂移。 | 当活跃故事仍需要范围对齐时，在 `SPEC_openUserStory` 后使用 `SPEC_clearStoryIntent`。在规划开始前，在活跃故事中记录一份`相互意图契约 (Mutual Intent Contract)`。该契约声明开发者意图、CodeAgent 意图、范围内工作、范围外工作、成功信号、假设和开放问题。如果意图未对齐，在 `SPEC_makePlan` 开始前询问或修改活跃故事。 |
-| 通过轻量级计划步骤分离 `WHAT`/`WHY` 与 `HOW` | Spec Kit 将产品意图保留在 `spec.md` 中，将技术选择推迟到 `plan.md`，减少过早的设计决策。 | 将用户故事意图保留在故事制品中，然后使用 `SPEC_makePlan` 创建一个配对的 `.catdd/spec/doingUS/*-TASKs.md` 制品，以 Markdown 复选框任务形式表达下一步工作，并确定活跃故事是意图澄清型、设计导向型还是实现导向型。对于设计导向型工作，区分初始架构/详细设计 (`SPEC_take*Design`) 和后续设计修订 (`SPEC_update*Design`)。详细技术选择在后续命令需要时仍存放到项目根目录的 `README*` SPEC 文档中。 |
+| 通过轻量级计划步骤分离 `WHAT`/`WHY` 与 `HOW` | Spec Kit 将产品意图保留在 `spec.md` 中，将技术选择推迟到 `plan.md`，减少过早的设计决策。 | 将用户故事意图保留在故事制品中，然后使用 `SPEC_makePlan` 创建一个配对的 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品，以 Markdown 复选框任务形式表达下一步工作，并确定活跃故事是意图澄清型、设计导向型还是实现导向型。对于设计导向型工作，区分初始架构/详细设计 (`SPEC_take*Design`) 和后续设计修订 (`SPEC_update*Design`)。详细技术选择在后续命令需要时仍存放到项目根目录的 `README*` SPEC 文档中。 |
 | 在实现前执行 clarify/analyze/checklist 关卡 | Spec Kit 在编码前暴露歧义、不一致和缺失的覆盖，使返工尽早发生。 | 在架构设计后使用 `SPEC_reviewArchDesign`，在详细设计后使用 `SPEC_reviewDetailDesign`。将未通过的架构审查路由到 `SPEC_updateArchDesign`；将未通过的详细审查路由到 `SPEC_updateDetailDesign`，而不是跳过。 |
 | 使执行切片显式化、有序化并具有并行意识 | Spec Kit 的任务模板将计划转化为显式任务，包含依赖、并行标记和验证检查点。 | 在 `SPEC_implUnitTests` 或 `SPEC_implProductCodes` 之前，在 doings 故事、验证设计和测试文件中将活跃故事分解为显式的 US/AC/TC 切片和验证检查点。保持 P0 优先顺序，但标记可以并行运行的独立工作。 |
 
@@ -79,14 +79,14 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 - `.catdd/spec/analyzedNews/YYYYMMDD-*.md`：已分析并作为源追溯保留的原始议题或特性输入。
 - `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`：等待被开启的已分析用户故事和直接导入的结构化用户故事。
 - `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`：处于设计、测试、实现或审查阶段的活跃用户故事。
-- `.catdd/spec/doingUS/YYYYMMDD-TASKs.md`：团队共享的任务制品，与活跃故事配对，以 Markdown 复选框任务的形式记录下一步所需的 `SPEC_*` 步骤和理由。
+- `.catdd/spec/doingUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：团队共享的任务制品，与活跃故事配对，以 Markdown 复选框任务的形式记录下一步所需的 `SPEC_*` 步骤和理由。
 - `.catdd/spec/suspendUS/YYYYMMDD-UserStory.md`：已挂起的活跃用户故事，保留可恢复的持久工作引用（例如 git 分支或 worktree）。
-- `.catdd/spec/suspendUS/YYYYMMDD-TASKs.md`：当故事通过 `SPEC_makePlan` 制定了计划时，与挂起故事并排保留的挂起任务制品。
+- `.catdd/spec/suspendUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：当故事通过 `SPEC_makePlan` 制定了计划时，与挂起故事并排保留的挂起任务制品。
 - `相互意图契约 (Mutual Intent Contract)`：活跃 doing 故事中的一个部分，在设计开始前记录开发者意图、CodeAgent 意图、范围、非目标、成功信号、假设和开放问题。
 - `.catdd/spec/abortUS/YYYYMMDD-UserStory.md`：已中止的活跃用户故事，保留供后续分析、重新导入或下一轮改进规划。
-- `.catdd/spec/abortUS/YYYYMMDD-TASKs.md`：当故事通过 `SPEC_makePlan` 制定了计划时，与中止故事并排保留的已中止任务制品。
+- `.catdd/spec/abortUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：当故事通过 `SPEC_makePlan` 制定了计划时，与中止故事并排保留的已中止任务制品。
 - `.catdd/spec/doneUS/YYYYMMDD-UserStory.md`：完成审查、提交和 CI 后的用户故事。
-- `.catdd/spec/doneUS/YYYYMMDD-TASKs.md`：与已关闭故事并排保留的已完成任务制品，供后续诊断。
+- `.catdd/spec/doneUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：与已关闭故事并排保留的已完成任务制品，供后续诊断。
 - `README_UserStories.md`：项目级必选故事台账，记录 TODO/DOING/DONE 状态与 AC 追溯状态。
 - `<module-or-submodule>/README_UserStory.md`：该模块范围的规范化正式需求来源。
 - `<module-or-submodule>/README_UserGuide.md`：同一模块范围的配对使用上下文。
@@ -150,13 +150,13 @@ SpecFlow 生命周期状态位于 `.catdd/spec/` 下。共享的 `README*` SPEC 
 | `.catdd/spec/analyzedNews/` | 团队共享 | 分析后提交原始导入的议题或特性，使 `pendingNews/` 仅保留等待输入。 |
 | `.catdd/spec/todoUS/` | 团队共享 | 提交已准备好被领取的已分析用户故事和直接导入的结构化用户故事。 |
 | `.catdd/spec/doingUS/` | 团队共享 | 提交活跃用户故事，使进行中的工作可在不同机器间移动，并对团队成员保持可见。 |
-| `.catdd/spec/doingUS/*-TASKs.md` | 团队共享 | 提交与已开启用户故事配对的活跃任务制品，使下一步 SPEC 步骤保持显式、可检查、可诊断。 |
+| `.catdd/spec/doingUS/*-UserStory-Tasks.md` | 团队共享 | 提交与已开启用户故事配对的活跃任务制品，使下一步 SPEC 步骤保持显式、可检查、可诊断。 |
 | `.catdd/spec/suspendUS/` | 团队共享 | 提交挂起的活跃故事，并保留可恢复的持久引用。 |
-| `.catdd/spec/suspendUS/*-TASKs.md` | 团队共享 | 与挂起故事并排提交挂起任务制品，确保恢复路径可追溯。 |
+| `.catdd/spec/suspendUS/*-UserStory-Tasks.md` | 团队共享 | 与挂起故事并排提交挂起任务制品，确保恢复路径可追溯。 |
 | `.catdd/spec/abortUS/` | 团队共享 | 提交已中止的活跃故事，当当前范围或假设不再适合继续进行时。 |
-| `.catdd/spec/abortUS/*-TASKs.md` | 团队共享 | 与中止故事并排提交已中止的任务制品，供后续分析或下一轮改进规划。 |
+| `.catdd/spec/abortUS/*-UserStory-Tasks.md` | 团队共享 | 与中止故事并排提交已中止的任务制品，供后续分析或下一轮改进规划。 |
 | `.catdd/spec/doneUS/` | 团队共享 | 提交审查、验证和关闭后的已完成故事记录。 |
-| `.catdd/spec/doneUS/*-TASKs.md` | 团队共享 | 与已关闭用户故事并排提交已完成的任务制品，供后续诊断。 |
+| `.catdd/spec/doneUS/*-UserStory-Tasks.md` | 团队共享 | 与已关闭用户故事并排提交已完成的任务制品，供后续诊断。 |
 | `README_UserStories.md` | 团队共享 | 作为项目级用户故事状态与 AC 追溯状态的唯一共享台账提交。 |
 | `README*.md` | 团队共享 | 按需提交项目根 SPEC 文档，如 README、架构设计、用户故事、用户指南、详细设计、错误设计、资源设计、状态设计、性能设计、兼容性设计、诊断设计和验证设计。 |
 | `slashCommands/templates/SpecTodoUserStoryTemplate.md` | 团队共享 | 提交用于 `.catdd/spec/todoUS/*-UserStory.md` 的可重用每故事模板。 |
@@ -207,7 +207,7 @@ flowchart TB
     ClearIntent --> QualityIntent{"intent aligned?"}
     QualityIntent -- "NO" --> ClearIntent
     QualityIntent -- "YES" --> Plan
-    Plan --> Tasks[".catdd/spec/doingUS/*-TASKs.md"]
+    Plan --> Tasks[".catdd/spec/doingUS/*-UserStory-Tasks.md"]
     Plan --> PlanChoice{"work orientation?"}
     PlanChoice -- "intent unclear" --> ClearIntent
     PlanChoice -- "requirement-oriented" --> UpdateStory["SPEC_updateUserStory"]
@@ -284,7 +284,7 @@ flowchart TB
     QualityCode -- "YES" --> Commit["SPEC_commitWorks"]
     Commit --> Close["SPEC_closeUserStory"]
     Close --> Done[".catdd/spec/doneUS/*-UserStory.md"]
-    Close --> DoneTasks[".catdd/spec/doneUS/*-TASKs.md"]
+    Close --> DoneTasks[".catdd/spec/doneUS/*-UserStory-Tasks.md"]
     Abort2b --> AbortUS2b[".catdd/spec/abortUS/*-UserStory.md"]
     AbortUS2b -. "later re-analysis" .-> AnalyzeAbort2b["SPEC_analyzeAbortedUserStory"]
     AbortUS2b -. "new improvement input" .-> ImportIssue2b["SPEC_importIssue"]
@@ -302,7 +302,7 @@ flowchart TB
    - 对于需要对已中止故事进行选择性纠正而非全范围重新分析的中止故事，使用 `SPEC_analyzeAbortedUserStory.md`。
 6. 使用 [SPEC_openUserStory](../commands/Px-SpecFlow/SPEC_openUserStory.md) 将选定的用户故事移入 `.catdd/spec/doingUS/`。
 7. 可选使用 [SPEC_clearStoryIntent](../commands/Px-SpecFlow/SPEC_clearStoryIntent.md)，当开发者意图与 CodeAgent 意图在规划前仍需对齐时。
-8. 使用 [SPEC_makePlan](../commands/Px-SpecFlow/SPEC_makePlan.md) 创建配对的 `.catdd/spec/doingUS/*-TASKs.md` 制品，将工作以 Markdown 复选框任务的形式表达，区分意图澄清型、需求导向型、设计导向型和实现导向型工作，区分初始设计与后续设计修订，并为已开启的故事选择下一步所需的 `SPEC_*` 步骤。
+8. 使用 [SPEC_makePlan](../commands/Px-SpecFlow/SPEC_makePlan.md) 创建配对的 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品，将工作以 Markdown 复选框任务的形式表达，区分意图澄清型、需求导向型、设计导向型和实现导向型工作，区分初始设计与后续设计修订，并为已开启的故事选择下一步所需的 `SPEC_*` 步骤。
 9. 使用 [SPEC_updateUserStory](../commands/Px-SpecFlow/SPEC_updateUserStory.md)，当计划为需求导向型且项目级 `README_UserStories.md` 与配对 `README_UserGuide.md`（以及采用模块文档时的模块需求文档）必须在下游工作前更新时。
 10. 使用 [SPEC_reviewUserStory](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) 在需求更新之后，并验证 `README_UserStories.md` 的 TODO/DOING/DONE 与 AC 追溯状态是否与生命周期制品一致；然后或者关闭纯需求导向型工作（`SPEC_commitWorks` 然后 `SPEC_closeUserStory`，若关闭生成了文件变更则紧接一个 close-commit 检查点），或者转移到设计导向型的下一步。
 11. 使用 [SPEC_whatsNextTask](../commands/Px-SpecFlow/SPEC_whatsNextTask.md)，当你需要从当前状态获得单个下一步推荐时。
