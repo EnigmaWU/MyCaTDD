@@ -255,6 +255,7 @@ flowchart TB
 ### Part 2.b: Implementation-Oriented Active Story Lifecycle
 
 This diagram starts only after `SPEC_makePlan` classifies the story as implementation-oriented or Part 2.a marks `implementation follows`. If requirement readiness is uncertain, route back to Part 2.a for `SPEC_updateUserStory`; if design readiness is uncertain, route back to Part 2.a detail-design updates before test design.
+After `SPEC_closeUserStory`, if the work was done on a dedicated story branch, run the repository merge step (for example `SPEC_mergeWorks`). If no dedicated branch was used, skip merge/integration.
 
 Suspend remains available here as the same global interrupt rule defined in Part 2.a and is not re-drawn from every implementation node.
 
@@ -296,11 +297,11 @@ flowchart TB
    - These analysis commands use a composed pipeline of `.github/skills/` requirements-analysis SKILLs: `write-user-story`, `build-feature-tree`, `elicit-requirements-models`, `extract-business-rules`, `facilitate-example-mapping`, `validate-requirements-criteria`, `prioritize-requirements`.
    - Output follows `SpecTodoUserStoryTemplate.md`.
    - Use `SPEC_analyzeAbortedUserStory.md` for re-analyzing an aborted story that needs selective correction rather than full-scope analysis.
-6. Use [SPEC_openUserStory](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/spec/doingUS/`.
+6. Use [SPEC_openUserStory](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/spec/doingUS/`, and ask whether a dedicated story branch should be created/switched before planning.
 7. Optionally use [SPEC_clearStoryIntent](../commands/Px-SpecFlow/SPEC_clearStoryIntent.md) when developer intent and CodeAgent intent still need to be aligned before planning.
 8. Use [SPEC_makePlan](../commands/Px-SpecFlow/SPEC_makePlan.md) to create the paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact, express the work as Markdown checkbox tasks, distinguish intent-clearing, requirement-oriented, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next required `SPEC_*` step for the opened story.
 9. Use [SPEC_updateUserStory](../commands/Px-SpecFlow/SPEC_updateUserStory.md) when the plan is requirement-oriented and project-level `README_UserStories.md` plus paired `README_UserGuide.md` (and module surfaces when used) must be updated before downstream work.
-10. Use [SPEC_reviewUserStory](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) after requirement updates, and then either close requirement-oriented-only work (`SPEC_commitWorks` then `SPEC_closeUserStory`, followed by an immediate close-commit checkpoint if close generated file changes) or transfer to design-oriented next steps. `SPEC_reviewUserStory` must verify that `README_UserStories.md` TODO/DONE and AC trace status are consistent with active lifecycle artifacts.
+10. Use [SPEC_reviewUserStory](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) after requirement updates, and then either close requirement-oriented-only work (`SPEC_commitWorks`, then `SPEC_closeUserStory`, then optional merge step such as `SPEC_mergeWorks` when branch integration is still required, followed by an immediate close-commit checkpoint if close generated file changes) or transfer to design-oriented next steps. `SPEC_reviewUserStory` must verify that `README_UserStories.md` TODO/DONE and AC trace status are consistent with active lifecycle artifacts.
 11. Use [SPEC_whatsNextTask](../commands/Px-SpecFlow/SPEC_whatsNextTask.md) whenever you need a single next-step recommendation from current state.
 12. Use [SPEC_takeArchDesign](../commands/Px-SpecFlow/SPEC_takeArchDesign.md) to produce initial high-level architecture design and module boundaries in `README_ArchDesign.md` when the plan says initial architecture work is needed.
 13. Use [SPEC_reviewArchDesign](../commands/Px-SpecFlow/SPEC_reviewArchDesign.md) to gate architecture quality before detailed design begins.
@@ -313,7 +314,7 @@ flowchart TB
 20. Use [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md) at any active post-open and pre-close point when work must pause without losing traceability and a durable resume reference, such as a git branch or worktree, already exists or can be created.
 21. Use [SPEC_resumeUserStory](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) to move a suspended story back into active work and continue from the preserved reference.
 22. Use [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md) from Part 2.a or Part 2.b when the active story has a blocking scope, assumption, design, test, or product-quality problem that should be preserved rather than continued in place. After aborting, either use `SPEC_analyzeAbortedUserStory` to analyze the aborted story for a later story round or use `SPEC_importIssue` to create a new improvement/refinement input.
-23. Use [SPEC_commitWorks](../commands/Px-SpecFlow/SPEC_commitWorks.md) and [SPEC_closeUserStory](../commands/Px-SpecFlow/SPEC_closeUserStory.md) to finish the lifecycle, then enforce the close-commit checkpoint when close-generated lifecycle/meta files were changed.
+23. Use [SPEC_commitWorks](../commands/Px-SpecFlow/SPEC_commitWorks.md), then use [SPEC_closeUserStory](../commands/Px-SpecFlow/SPEC_closeUserStory.md), then run merge/integration when required (for example [SPEC_mergeWorks](../commands/Px-SpecFlow/SPEC_mergeWorks.md)); if no dedicated story branch was used, merge is auto-skipped. Enforce the close-commit checkpoint when close-generated lifecycle/meta files were changed.
 24. Use [SPEC_patchOriginalCaTDD](../commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md) when an installed project has effective CaTDD meta-file improvements that should be patched back to the original CaTDD repository on a non-default branch.
 
 ## Conflict Guard
@@ -328,6 +329,7 @@ flowchart TB
 - After `SPEC_makePlan`, use `SPEC_take*Design` only for initial design work and `SPEC_update*Design` only for follow-up design revision against existing design evidence, review feedback, or story-level design gaps.
 - Every design-producing step (`SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_updateDetailDesign`) must be followed by its review gate before downstream lifecycle steps.
 - Use `SPEC_abortUserStory` instead of continuing an active story when the discovered problem changes the story's intent, invalidates its assumptions, or needs a new analysis/improvement round.
+- Do not run `SPEC_closeUserStory` until required branch integration/merge work is complete.
 - Pre-close `SPEC_commitWorks` covers implementation/design artifacts; close-generated lifecycle/meta changes may require an immediate additional `SPEC_commitWorks` checkpoint before closure is complete.
 - `SPEC_patchOriginalCaTDD` is downstream-to-upstream only (installed project to original CaTDD) and must not be used as an upstream-to-installed sync command.
 - If product intent is unclear, keep the user story open and ask the developer instead of inventing requirements.
