@@ -50,6 +50,10 @@ Example ReACT trace for a single-TC pass:
 - Verification command and result when available.
 - TC review result: alignment check against the US/AC/TC skeleton, missing or excessive assertions, setup/cleanup gaps, and drift findings.
 - Next recommended command: `SPEC_implProductCodes` (for GREEN pass), another `SPEC_implUnitTests` pass (for the next TC), `UT_reviewImplTestCase` (when drift needs attention), or `SPEC_designUnitTests` (when skeleton revision is needed).
+- STRICT implementation evidence for each implemented TC:
+ 	- Explicit `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phase markers in test body.
+ 	- Key checks written with `VERIFY_KEYPOINT_xyz` macros in `VERIFY` block.
+ 	- If project utility macros are unavailable, a local compatibility mapping is added and `VERIFY_KEYPOINT_xyz` naming is still preserved in test code.
 
 ## Flow Coupling
 
@@ -74,6 +78,8 @@ The SPEC command owns story-level ordering and handoff to product-code implement
 - Do not implement product code inside this command unless the developer explicitly requests a combined TDD step.
 - When a selected TC depends on missing P1/P2 design evidence, stop and route back to `SPEC_designUnitTests` or the appropriate design command instead of inventing behavior.
 - After implementation, run `UT_reviewImplTestCase` before proceeding to the next TC or `SPEC_implProductCodes`. If review finds implementation-skeleton drift, do not proceed until the drift is resolved: fix the implementation, revise the skeleton, or ask the developer.
+- Enforce strict phase layout for each selected TC: keep a visible 4-phase structure (`SETUP` -> `BEHAVIOR` -> `VERIFY` -> `CLEANUP`) and keep key assertions inside `VERIFY`.
+- Prefer `VERIFY_KEYPOINT_xyz` macros for key assertions; if macros are missing in this repository, add a compatibility mapping and keep `VERIFY_KEYPOINT_xyz` calls in the test body.
 
 ## Prompt Template
 
@@ -85,5 +91,6 @@ Respect test-first order. Do not skip ready P0 Functional TCs in favor of P1/P2 
 Do not redesign skeletons during implementation. If the skeleton is untraceable, missing AC/TC links, or in the wrong category, route back to `SPEC_designUnitTests`.
 Do not proceed to `SPEC_implProductCodes` or the next TC when `UT_reviewImplTestCase` finds implementation-skeleton drift that is not yet resolved.
 Do not skip the review step between TC implementation and product-code handoff: every implemented TC should pass `UT_reviewImplTestCase` before the next lifecycle step.
+Do not claim implementation complete when strict phase markers or `VERIFY_KEYPOINT_xyz` usage is missing for implemented TCs.
 
 ONE-MORE-THING: ask developer if something not sure

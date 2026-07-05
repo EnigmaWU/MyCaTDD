@@ -11,7 +11,7 @@ Suspend an active user story when work must pause, while preserving a durable re
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-TASKs.md` task artifact paired with the story.
+- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact paired with the story.
 - `suspend_reason`: explicit reason for pausing instead of continuing in place.
 - `resume_ref`: durable git resume reference, typically a branch name or worktree path.
 - `working_tree_state`: optional note indicating whether uncommitted changes exist.
@@ -40,7 +40,7 @@ git push -u origin us-123-suspend
 ## Output Contract
 
 - A `.catdd/spec/suspendUS/*-UserStory.md` team-shared suspended story artifact preserving source trace, suspend reason, and resume guidance.
-- A paired `.catdd/spec/suspendUS/*-TASKs.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
+- A paired `.catdd/spec/suspendUS/*-UserStory-Tasks.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
 - Recorded `resume_ref` under the suspended story so the next developer can resume deterministically.
 - Local `.catdd/spec/doingUS/` active work state removed after the suspended artifact is created.
 - Next recommended command: `SPEC_resumeUserStory`.

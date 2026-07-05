@@ -11,7 +11,7 @@ Analyze an aborted user story, audit its preserved evidence, diagnose the abort 
 ## Inputs
 
 - `aborted_user_story`: aborted story under `.catdd/spec/abortUS/`.
-- `aborted_tasks_file`: optional `.catdd/spec/abortUS/*-TASKs.md` task artifact paired with the aborted story.
+- `aborted_tasks_file`: optional `.catdd/spec/abortUS/*-UserStory-Tasks.md` task artifact paired with the aborted story.
 - `projectContext_file`: current project context.
 - `related_docs`: optional README SPEC docs, arch/detail design docs, review findings, test output, implementation notes, or reproduction evidence.
 - `SpecTodoUserStoryTemplate`: output template at `../../templates/SpecTodoUserStoryTemplate.md`.
@@ -36,7 +36,7 @@ Analyze an aborted user story, audit its preserved evidence, diagnose the abort 
 Apply the selective evidence-based pipeline below. The story was already analyzed before — only re-apply SKILLs to the parts that the abort proves needed correction. Use `SpecTodoUserStoryTemplate.md` for the final output, including the **Abort Evidence** section.
 
 ### Step 0 — Audit: Read all available evidence
-Read all sources: the aborted story (`abortUS/*-UserStory.md`), its paired tasks (`abortUS/*-TASKs.md`), project context, and any related documents (design specs, test files, review notes, test output, code fragments). Determine the lifecycle phase at abort (Phase 1 opened only, Phase 2 designed, or Phase 3 implemented) and what evidence exists at each level.
+Read all sources: the aborted story (`abortUS/*-UserStory.md`), its paired tasks (`abortUS/*-UserStory-Tasks.md`), project context, and any related documents (design specs, test files, review notes, test output, code fragments). Determine the lifecycle phase at abort (Phase 1 opened only, Phase 2 designed, or Phase 3 implemented) and what evidence exists at each level.
 
 If no design, test, or code evidence exists, the story was aborted early. If design docs exist, review them for clues about what went wrong. If test files or code exist, review those too.
 

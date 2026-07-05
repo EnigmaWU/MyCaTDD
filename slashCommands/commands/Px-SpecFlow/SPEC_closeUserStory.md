@@ -13,7 +13,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-TASKs.md` task artifact paired with the story.
+- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact paired with the story.
 - `project_user_stories_doc`: project-root `README_UserStories.md` ledger to synchronize TODO/DONE and AC status.
 - `suspended_user_story_files`: optional `.catdd/spec/suspendUS/*-UserStory.md` to confirm the story is not in suspended state before closing.
 - `readme_spec_files`: optional project-root `README*` SPEC files updated by the story.
@@ -28,7 +28,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 ## Output Contract
 
 - A `.catdd/spec/doneUS/*-UserStory.md` team-shared completed story artifact.
-- A paired `.catdd/spec/doneUS/*-TASKs.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
+- A paired `.catdd/spec/doneUS/*-UserStory-Tasks.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
 - Local `.catdd/spec/doingUS/` work state is removed after the completed artifact is created; do not keep a duplicate closed copy in doingUS.
 - Story-specific references that still point to `.catdd/spec/doingUS/` are updated to `.catdd/spec/doneUS/` after closure so trace paths remain valid.
 - Project-level `README_UserStories.md` is synchronized so the story moves from TODO/DOING to DONE and acceptance-criteria status is aligned with closure evidence.

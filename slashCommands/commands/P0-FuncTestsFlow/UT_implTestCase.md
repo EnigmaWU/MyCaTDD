@@ -25,6 +25,10 @@ Use this command after `UT_tellMeNextImplTest` has selected a TC or the develope
 - Minimal production changes only when needed for the requested TDD stage.
 - For REFACTOR stage, an ordered no-behavior-change cleanup report covering design comments, test code, production code, and final GREEN regression proof.
 - Verification command or manual check result when available.
+- STRICT style conformance in implemented TC body:
+ 	- Explicit `//===>>> SETUP <<<===`, `//===>>> BEHAVIOR <<<===`, `//===>>> VERIFY <<<===`, and `//===>>> CLEANUP <<<===` blocks.
+ 	- In `VERIFY` block, use `VERIFY_KEYPOINT_xyz` macros instead of raw `ASSERT_/EXPECT_` for key assertions when those macros are available in the project; if not available, add a local compatibility mapping and still write `VERIFY_KEYPOINT_xyz` in test code.
+ 	- Optional phase `printf` traces are allowed and recommended when they improve diagnosability.
 
 ## Prompt Template
 
@@ -35,14 +39,19 @@ Ask the assistant to:
 3. Implement minimal production code for GREEN only after RED is meaningful.
 4. Refactor only after the selected TC is GREEN and only inside the requested scope.
 5. In REFACTOR stage, apply this order:
-	- First, refine and clear design comments: follow the CaTDD template, preserve US/AC/TC markers, and make key points glance-readable.
-	- Second, refactor test code for readability without changing the TC purpose, AC meaning, coverage intent, or expected behavior.
-	- If a key missing behavior, edge case, acceptance point, or test purpose is discovered, stop expanding the current TC and ask the developer to add or select a new test case.
-	- Third, refactor production code for readability and local structure only, with no behavior, API, contract, or observable state change.
-	- Last, rerun the focused TC and relevant regression scope; the final state must remain GREEN before marking REFACTOR complete.
+ - First, refine and clear design comments: follow the CaTDD template, preserve US/AC/TC markers, and make key points glance-readable.
+ - Second, refactor test code for readability without changing the TC purpose, AC meaning, coverage intent, or expected behavior.
+ - If a key missing behavior, edge case, acceptance point, or test purpose is discovered, stop expanding the current TC and ask the developer to add or select a new test case.
+ - Third, refactor production code for readability and local structure only, with no behavior, API, contract, or observable state change.
+ - Last, rerun the focused TC and relevant regression scope; the final state must remain GREEN before marking REFACTOR complete.
 6. Update TC status without deleting design comments.
+7. Enforce strict implementation layout in the test body:
+ - Keep a visible 4-phase structure: `SETUP` -> `BEHAVIOR` -> `VERIFY` -> `CLEANUP`.
+ - Place key assertions in `VERIFY` and prefer `VERIFY_KEYPOINT_xyz` macros.
+ - If project utilities for `VERIFY_KEYPOINT_xyz` are missing, add a local compatibility macro mapping instead of downgrading to raw assertions in test bodies.
 
 ## Conflict Guard
 
 Do not batch unrelated TCs. CaTDD implementation should move one selected TC at a time unless the developer asks for a batch.
 REFACTOR must not smuggle new behavior into an existing TC; missing points require a new TC or explicit developer approval.
+Do not mark REFACTOR complete if the selected TC body is missing strict 4-phase markers or key `VERIFY_KEYPOINT_xyz` assertions.

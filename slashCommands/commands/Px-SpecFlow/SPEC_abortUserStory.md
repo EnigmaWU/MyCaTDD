@@ -11,7 +11,7 @@ Abort an active user story when continuing it in place would hide a scope, assum
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-TASKs.md` task artifact paired with the story.
+- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact paired with the story.
 - `abort_reason`: the blocking problem that makes the current story unsafe to continue.
 - `followup_intent`: whether the developer wants `SPEC_analyzeAbortedUserStory` on the aborted evidence or a new `SPEC_importIssue` improvement/refinement round.
 
@@ -22,7 +22,7 @@ Abort an active user story when continuing it in place would hide a scope, assum
 ## Output Contract
 
 - A `.catdd/spec/abortUS/*-UserStory.md` team-shared aborted story artifact preserving source trace, current status, abort reason, and unresolved questions.
-- A paired `.catdd/spec/abortUS/*-TASKs.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
+- A paired `.catdd/spec/abortUS/*-UserStory-Tasks.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
 - Local `.catdd/spec/doingUS/` active work state removed or marked aborted after the aborted artifact is created.
 - Next recommended command: `SPEC_analyzeAbortedUserStory` when the next work should reuse the preserved story evidence, or `SPEC_importIssue` when the problem should become a new improvement/refinement input for the next round.
 
