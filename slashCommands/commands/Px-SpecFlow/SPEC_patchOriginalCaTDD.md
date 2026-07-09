@@ -12,16 +12,27 @@ Patch effective CaTDD meta-file improvements from an installed project back to t
 
 - `installed_project_repo`: project repository that already installed CaTDD and contains effective local modifications.
 - `original_catdd_repo`: upstream/original CaTDD source repository that should receive the patch.
+- `target_branch`: required non-default upstream branch used for patch submission; if not already chosen, ask the developer to create or select one before any patch work.
 - `installed_source_layout`: optional source layout selector. Default: `installed_dot_catdd`.
-	- `installed_dot_catdd`: read from `installed_project_repo/.catdd/methodPrompts` and `installed_project_repo/.catdd/slashCommands`.
+  - `installed_dot_catdd`: read from `installed_project_repo/.catdd/methodPrompts` and `installed_project_repo/.catdd/slashCommands`.
 - `original_target_layout`: optional target layout selector. Default: `project_root_sources`.
-	- `project_root_sources`: patch `original_catdd_repo/methodPrompts` and `original_catdd_repo/slashCommands`.
-	- `original_dot_catdd`: patch `original_catdd_repo/.catdd/*` only when developer explicitly requests self-install test sync.
+  - `project_root_sources`: patch `original_catdd_repo/methodPrompts` and `original_catdd_repo/slashCommands`.
+  - `original_dot_catdd`: patch `original_catdd_repo/.catdd/*` only when developer explicitly requests self-install test sync.
 - `patch_scope_allowlist`: optional allowed paths (for example `methodPrompts/`, `slashCommands/`, `scripts/`, docs) to prevent accidental unrelated sync.
-- `target_branch`: non-default upstream branch used for patch submission.
 - `base_branch`: upstream comparison branch, usually `main`.
 - `evidence_of_effectiveness`: optional tests, usage evidence, or review notes proving the downstream changes are useful.
 - `dry_run`: optional flag to produce patch preview only before applying.
+
+## Branch Selection Gate
+
+If `target_branch` is missing or still default (`main`), stop immediately and ask the developer to first create or select a non-default branch. When creating a new branch, the required naming pattern is `patchOriginalCaTDD-YYYYMMDD`.
+
+Do not continue until the developer answers with one of these options:
+
+1. select an existing non-default branch, or
+2. create a new patch branch using the required naming pattern `patchOriginalCaTDD-YYYYMMDD`.
+
+Do not continue to preflight mapping or patch construction until `target_branch` is confirmed.
 
 ## Preflight Mapping Checklist
 
@@ -55,6 +66,7 @@ Ask the assistant to first resolve path mapping (`installed .catdd` -> `original
 
 Do not run this command as original -> installed sync; this command is only for installed project -> original CaTDD patch-back.
 Do not patch directly to the upstream default branch.
+Do not continue without a confirmed non-default `target_branch`.
 Do not include unrelated project business code, secrets, or local-only traces.
 Do not treat generated adapter wrappers as source-of-truth when their portable source files are available.
 Do not apply destructive overwrite when upstream conflicts are unresolved.
