@@ -29,7 +29,7 @@ Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 | --- | --- | --- |
 | Source patch-back | Move effective installed-project CaTDD improvements back to source with allowlists and safety gates. | [HARNESS_patchCaTDDSource](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | Installation verification | Prove an installed CaTDD target project has complete `.catdd` assets, native wrappers, rules, skills, and source-of-truth links before use. | [HARNESS_verifyInstallation](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
-| Installation diagnosis | Second next command for investigating a misworking installed CaTDD target project and recommending repair from verification evidence. | Future `HARNESS_diagnoseInstallation` |
+| Installation diagnosis | Investigate a failed or misworking installed CaTDD target project and recommend safe repair from verification evidence. | [HARNESS_diagnoseInstallation](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) |
 | Run diagnosis | Future commands for collecting run artifacts and diagnosing non-installation harness/test failures. | Future `HARNESS_collectRunArtifacts`, `HARNESS_diagnoseFailure` |
 | Guard and policy | Future commands for checking execution isolation, policy compliance, and destructive-operation guards. | Future `HARNESS_checkPolicy` |
 | Harness repair | Future commands for proposing and validating harness patches with regression gates. | Future `HARNESS_proposePatch`, `HARNESS_validatePatch` |
@@ -48,7 +48,7 @@ flowchart LR
 
 1. Use [../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) when an installed project has effective CaTDD meta-file improvements that should be patched back to the original CaTDD repository on a non-default branch.
 2. Use [../commands/Px-HarnessKits/HARNESS_verifyInstallation.md](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) before trusting a fresh install, after installing into a real target project, or before releasing installer/generator changes.
-3. Use future `HARNESS_diagnoseInstallation` only after verification fails or an installed target project misworks.
+3. Use [../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) only after verification fails or an installed target project misworks.
 
 ## Conflict Guard
 

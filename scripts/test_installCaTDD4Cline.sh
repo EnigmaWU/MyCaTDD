@@ -86,6 +86,7 @@ skills_dir="$TARGET_DIR/.cline/skills"
 [[ -d "$skills_dir/ut-design-typical-skeleton" ]] || fail "missing ut-design-typical-skeleton skill"
 [[ -d "$skills_dir/harness-patch-ca-tdd-source" ]] || fail "missing harness-patch-ca-tdd-source skill"
 [[ -d "$skills_dir/harness-verify-installation" ]] || fail "missing harness-verify-installation skill"
+[[ -d "$skills_dir/harness-diagnose-installation" ]] || fail "missing harness-diagnose-installation skill"
 [[ -f "$skills_dir/spec-import-issue/SKILL.md" ]] || fail "missing SKILL.md in spec-import-issue skill"
 grep -Fq 'name: spec-import-issue' "$skills_dir/spec-import-issue/SKILL.md" || fail "SKILL.md missing command name"
 grep -Fq 'description: Import an issue' "$skills_dir/spec-import-issue/SKILL.md" || fail "SKILL.md missing meaningful description"
@@ -93,6 +94,7 @@ grep -Fq 'slashCommands/commands/Px-SpecFlow/SPEC_importIssue.md' "$skills_dir/s
 grep -Fq '.catdd/slashCommands/commands/' "$skills_dir/spec-import-issue/SKILL.md" || fail "SKILL.md missing .catdd path reference"
 grep -Fq 'slashCommands/commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md' "$skills_dir/harness-patch-ca-tdd-source/SKILL.md" || fail "HARNESS SKILL.md missing source command reference"
 grep -Fq 'slashCommands/commands/Px-HarnessKits/HARNESS_verifyInstallation.md' "$skills_dir/harness-verify-installation/SKILL.md" || fail "HARNESS verify SKILL.md missing source command reference"
+grep -Fq 'slashCommands/commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md' "$skills_dir/harness-diagnose-installation/SKILL.md" || fail "HARNESS diagnose SKILL.md missing source command reference"
 # Count skill directories (one per portable command) - top-level dirs minus 1 for . entry
 skill_count=$(find "$skills_dir" -maxdepth 1 -mindepth 1 -type d | wc -l)
 [[ "$skill_count" -ge 40 ]] || fail "expected at least 40 skill directories, got $skill_count"

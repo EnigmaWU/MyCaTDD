@@ -56,6 +56,12 @@ grep -Fq 'description: "Run CaTDD slash command HARNESS_verifyInstallation"' "$h
 grep -Fq 'slashCommands/commands/Px-HarnessKits/HARNESS_verifyInstallation.md' "$harness_verify_sample" || fail "HARNESS verify sample prompt missing source command reference"
 grep -Fq 'methodPrompts' "$harness_verify_sample" || fail "HARNESS verify sample prompt missing methodPrompts source-of-truth reference"
 
+harness_diagnose_sample="$OUT_DIR/HARNESS_diagnoseInstallation.prompt.md"
+[[ -f "$harness_diagnose_sample" ]] || fail "missing sample prompt: HARNESS_diagnoseInstallation.prompt.md"
+grep -Fq 'description: "Run CaTDD slash command HARNESS_diagnoseInstallation"' "$harness_diagnose_sample" || fail "HARNESS diagnose sample prompt missing Copilot description"
+grep -Fq 'slashCommands/commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md' "$harness_diagnose_sample" || fail "HARNESS diagnose sample prompt missing source command reference"
+grep -Fq 'methodPrompts' "$harness_diagnose_sample" || fail "HARNESS diagnose sample prompt missing methodPrompts source-of-truth reference"
+
 for command_name in SPEC_importIssue SPEC_importFeature SPEC_importUserStory SPEC_analyzeIssue SPEC_analyzeFeature SPEC_abortUserStory SPEC_whatsNextTask SPEC_makePlan; do
   command_prompt="$OUT_DIR/${command_name}.prompt.md"
   [[ -f "$command_prompt" ]] || fail "missing generated prompt: ${command_name}.prompt.md"

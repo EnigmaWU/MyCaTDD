@@ -84,6 +84,11 @@ harness_verify_prompt="$TARGET_DIR/.continue/prompts/HARNESS_verifyInstallation.
 grep -Fq 'name: HARNESS_verifyInstallation' "$harness_verify_prompt" || fail "Continue HARNESS verify prompt missing command name"
 grep -Fq '.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_verifyInstallation.md' "$harness_verify_prompt" || fail "Continue HARNESS verify prompt missing installed source command reference"
 
+harness_diagnose_prompt="$TARGET_DIR/.continue/prompts/HARNESS_diagnoseInstallation.prompt"
+[[ -f "$harness_diagnose_prompt" ]] || fail "missing Continue HARNESS prompt: HARNESS_diagnoseInstallation.prompt"
+grep -Fq 'name: HARNESS_diagnoseInstallation' "$harness_diagnose_prompt" || fail "Continue HARNESS diagnose prompt missing command name"
+grep -Fq '.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md' "$harness_diagnose_prompt" || fail "Continue HARNESS diagnose prompt missing installed source command reference"
+
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"
 grep -Fq 'Continue project rule: `.continue/rules/catdd.md`' "$install_marker" || fail "install marker missing Continue rule location"
@@ -112,5 +117,6 @@ init_target="$TARGET_DIR/new-continue-project"
 [[ -f "$init_target/.continue/prompts/UT_convertDemoToTypical.prompt" ]] || fail "--init target missing Continue prompt wrapper"
 [[ -f "$init_target/.continue/prompts/HARNESS_patchCaTDDSource.prompt" ]] || fail "--init target missing HARNESS Continue prompt wrapper"
 [[ -f "$init_target/.continue/prompts/HARNESS_verifyInstallation.prompt" ]] || fail "--init target missing HARNESS verify Continue prompt wrapper"
+[[ -f "$init_target/.continue/prompts/HARNESS_diagnoseInstallation.prompt" ]] || fail "--init target missing HARNESS diagnose Continue prompt wrapper"
 
 echo "[installCaTDD4Continue-test] PASSED: installed CaTDD Continue assets into temporary target"

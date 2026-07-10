@@ -70,6 +70,11 @@ harness_verify_prompt="$TARGET_DIR/.customCodeAgent/prompts/HARNESS_verifyInstal
 grep -Fq 'name: HARNESS_verifyInstallation' "$harness_verify_prompt" || fail "custom HARNESS verify prompt missing command name"
 grep -Fq '.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_verifyInstallation.md' "$harness_verify_prompt" || fail "custom HARNESS verify prompt missing installed source command reference"
 
+harness_diagnose_prompt="$TARGET_DIR/.customCodeAgent/prompts/HARNESS_diagnoseInstallation.prompt"
+[[ -f "$harness_diagnose_prompt" ]] || fail "missing custom HARNESS prompt: HARNESS_diagnoseInstallation.prompt"
+grep -Fq 'name: HARNESS_diagnoseInstallation' "$harness_diagnose_prompt" || fail "custom HARNESS diagnose prompt missing command name"
+grep -Fq '.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md' "$harness_diagnose_prompt" || fail "custom HARNESS diagnose prompt missing installed source command reference"
+
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"
 grep -Fq 'Custom project rule: `.customCodeAgent/rules/catdd.md`' "$install_marker" || fail "install marker missing custom rule location"
@@ -88,6 +93,7 @@ custom_target="$TARGET_DIR/custom-dir-target"
 [[ -f "$custom_target/.myagent/prompts/UT_convertDemoToTypical.prompt" ]] || fail "--custom-dir target missing custom prompt wrapper"
 [[ -f "$custom_target/.myagent/prompts/HARNESS_patchCaTDDSource.prompt" ]] || fail "--custom-dir target missing custom HARNESS prompt wrapper"
 [[ -f "$custom_target/.myagent/prompts/HARNESS_verifyInstallation.prompt" ]] || fail "--custom-dir target missing custom HARNESS verify prompt wrapper"
+[[ -f "$custom_target/.myagent/prompts/HARNESS_diagnoseInstallation.prompt" ]] || fail "--custom-dir target missing custom HARNESS diagnose prompt wrapper"
 
 if "$INSTALLER" --target "$TARGET_DIR" --custom-dir .bad/name --yes >/dev/null 2>&1; then
   fail "--custom-dir with slash should fail"
