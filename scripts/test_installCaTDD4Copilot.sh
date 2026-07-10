@@ -61,6 +61,11 @@ harness_sample="$TARGET_DIR/.github/prompts/HARNESS_patchCaTDDSource.prompt.md"
 grep -Fq '.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md' "$harness_sample" || fail "HARNESS sample prompt does not point to installed slashCommands"
 grep -Fq '.catdd/methodPrompts/README.md' "$harness_sample" || fail "HARNESS sample prompt does not point to installed methodPrompts"
 
+harness_verify_sample="$TARGET_DIR/.github/prompts/HARNESS_verifyInstallation.prompt.md"
+[[ -f "$harness_verify_sample" ]] || fail "missing installed HARNESS verify prompt"
+grep -Fq '.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_verifyInstallation.md' "$harness_verify_sample" || fail "HARNESS verify prompt does not point to installed slashCommands"
+grep -Fq '.catdd/methodPrompts/README.md' "$harness_verify_sample" || fail "HARNESS verify prompt does not point to installed methodPrompts"
+
 for command_name in SPEC_importIssue SPEC_importFeature SPEC_importUserStory SPEC_analyzeIssue SPEC_analyzeFeature; do
   command_prompt="$TARGET_DIR/.github/prompts/${command_name}.prompt.md"
   [[ -f "$command_prompt" ]] || fail "missing installed prompt: ${command_name}.prompt.md"
@@ -90,6 +95,7 @@ init_target="$TARGET_DIR/new-project"
 [[ -f "$init_target/.github/prompts/UT_convertDemoToTypical.prompt.md" ]] || fail "--init target missing generated Copilot prompt"
 [[ -f "$init_target/.github/prompts/SPEC_openUserStory.prompt.md" ]] || fail "--init target missing generated SPEC Copilot prompt"
 [[ -f "$init_target/.github/prompts/HARNESS_patchCaTDDSource.prompt.md" ]] || fail "--init target missing generated HARNESS Copilot prompt"
+[[ -f "$init_target/.github/prompts/HARNESS_verifyInstallation.prompt.md" ]] || fail "--init target missing generated HARNESS verify Copilot prompt"
 [[ -f "$init_target/.github/prompts/SPEC_importIssue.prompt.md" ]] || fail "--init target missing generated SPEC import issue prompt"
 [[ -f "$init_target/.github/prompts/SPEC_importUserStory.prompt.md" ]] || fail "--init target missing generated SPEC import user story prompt"
 

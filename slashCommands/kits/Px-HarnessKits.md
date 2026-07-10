@@ -15,20 +15,22 @@ P0/P1/P2 flows = category-specific test design and implementation flows
 Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 ```
 
-`HARNESS_*` commands own operational tasks such as patch-back, adapter verification, run artifact collection, failure diagnosis, policy checks, and harness repair gates. They may support SpecFlow, but they do not replace `SPEC_*` lifecycle commands.
+`HARNESS_*` commands own operational tasks such as patch-back, installation verification, installation diagnosis, run artifact collection, policy checks, and harness repair gates. They may support SpecFlow, but they do not replace `SPEC_*` lifecycle commands.
 
 ## Developer Stories
 
 - As a Developer, when an installed project proves a CaTDD method or slash-command improvement, I want to patch that improvement back to the original CaTDD source safely so that the reusable method evolves without copying unrelated project code.
-- As a Developer, when generated adapters, execution harnesses, or diagnostic tools drift from portable command source, I want tool-point commands that inspect and repair the harness without creating a fake product user story.
+- As a Developer, before trusting an installed CaTDD target project, I want a tool-point command that verifies installed assets, generated wrappers, and source-of-truth links so that installation problems are caught before daily use.
+- As a Developer, when an installed CaTDD target project misworks, I want a tool-point command that diagnoses the failed installation surface and recommends repair without creating a fake product user story.
 
 ## Command Families
 
 | Family | Purpose | Current command |
 | --- | --- | --- |
 | Source patch-back | Move effective installed-project CaTDD improvements back to source with allowlists and safety gates. | [HARNESS_patchCaTDDSource](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
-| Adapter verification | Future commands for checking Copilot, Continue, Cline, custom, or CLI wrappers against portable source. | Future `HARNESS_verifyAdapters` |
-| Run diagnosis | Future commands for collecting run artifacts and diagnosing harness/test failures. | Future `HARNESS_collectRunArtifacts`, `HARNESS_diagnoseFailure` |
+| Installation verification | Prove an installed CaTDD target project has complete `.catdd` assets, native wrappers, rules, skills, and source-of-truth links before use. | [HARNESS_verifyInstallation](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
+| Installation diagnosis | Second next command for investigating a misworking installed CaTDD target project and recommending repair from verification evidence. | Future `HARNESS_diagnoseInstallation` |
+| Run diagnosis | Future commands for collecting run artifacts and diagnosing non-installation harness/test failures. | Future `HARNESS_collectRunArtifacts`, `HARNESS_diagnoseFailure` |
 | Guard and policy | Future commands for checking execution isolation, policy compliance, and destructive-operation guards. | Future `HARNESS_checkPolicy` |
 | Harness repair | Future commands for proposing and validating harness patches with regression gates. | Future `HARNESS_proposePatch`, `HARNESS_validatePatch` |
 
@@ -45,6 +47,8 @@ flowchart LR
 ## Command Sequence
 
 1. Use [../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) when an installed project has effective CaTDD meta-file improvements that should be patched back to the original CaTDD repository on a non-default branch.
+2. Use [../commands/Px-HarnessKits/HARNESS_verifyInstallation.md](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) before trusting a fresh install, after installing into a real target project, or before releasing installer/generator changes.
+3. Use future `HARNESS_diagnoseInstallation` only after verification fails or an installed target project misworks.
 
 ## Conflict Guard
 

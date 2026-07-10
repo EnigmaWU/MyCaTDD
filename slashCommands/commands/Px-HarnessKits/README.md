@@ -9,6 +9,7 @@ This directory contains `HARNESS_*` command templates for CaTDD Harness Engineer
 | Command | Purpose |
 | --- | --- |
 | [HARNESS_patchCaTDDSource.md](HARNESS_patchCaTDDSource.md) | Patch effective installed-project CaTDD improvements back to the original CaTDD source repository. |
+| [HARNESS_verifyInstallation.md](HARNESS_verifyInstallation.md) | Verify an installed CaTDD target project has complete `.catdd` assets, native wrappers, rules, skills, and source-of-truth links before use. |
 
 ## Contract
 
