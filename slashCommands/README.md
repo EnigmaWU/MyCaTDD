@@ -1,19 +1,21 @@
 # slashCommands
 
-`slashCommands` contains reusable slash-command prompts and flows that operationalize CaTDD methods.
+`slashCommands` contains reusable slash-command prompts, flows, and kits that operationalize CaTDD methods.
 
 This README is the WHAT / WHY entry point for the command connector layer. For HOW, WHO, WHEN, and WHERE to use `slashCommands/`, read [README_UserGuide.md](README_UserGuide.md) or [README_UserGuide_ZH.md](README_UserGuide_ZH.md).
 
 ## What
 
-`slashCommands` is the flow-oriented connector and commandization layer between `methodPrompts` and existing CodeAgents.
+`slashCommands` is the connector and commandization layer between `methodPrompts` and existing CodeAgents.
 
 It defines portable command intent and flow order for automated or semi-automated CaTDD execution:
 
 - Flow documents that arrange repeatable command phases.
+- Kit documents that group reusable operational tool-point commands.
 - Small command prompt templates that describe one action at a time.
 - A shared command template that keeps portable prompts consistent.
 - SpecCoding flow contracts that move from project context to completed stories.
+- Harness Engineering tool-point commands that maintain CaTDD source, adapters, execution, diagnostics, and patch-back safety.
 - Functional, design, and quality test flows aligned with CaTDD priority classes.
 
 `slashCommands` is code-agent agnostic. The same portable command files can be wrapped for Copilot, Cline, Continue, `utCodeAgentCLI`, or any assistant that can consume prompt text.
@@ -25,7 +27,7 @@ It defines portable command intent and flow order for automated or semi-automate
 It keeps a clean separation:
 
 - `methodPrompts` owns CaTDD method meaning, category semantics, priority order, and design skeleton rules.
-- `slashCommands` owns portable flow intent, command order, and execution handoff between steps.
+- `slashCommands` owns portable flow or kit intent, command order, and execution handoff between steps.
 - Native adapters own only tool-specific exposure, such as Copilot prompt files, Continue prompt files, Cline rules, or CLI integration.
 
 This prevents every tool integration from inventing its own CaTDD workflow while still allowing each tool to expose commands in its native shape.
@@ -49,6 +51,7 @@ In CaTDD terminology, using `methodPrompts` directly in CodeAgent chat is **Vibe
 - It does not replace `methodPrompts`.
 - It does not depend on one editor, one model provider, or one programming language.
 - It does not make native generated wrapper files the source of truth.
+- It keeps `HARNESS_*` operational commands separate from `SPEC_*` story lifecycle state.
 
 When a command conflicts with `methodPrompts`, update `methodPrompts` first, then revise or regenerate the command layer.
 
@@ -59,6 +62,8 @@ Slash command flow priority uses the same Pn numbering as the CaTDD class priori
 - **P0 = FuncTestsFlow**: functional test flow for Typical, Edge, Misuse, and Fault skeletons. It is CaTDD `P0 Functional`.
 - **P1 = DesignTestsFlow**: design-oriented flow for State, Capability, and Concurrency skeletons. It is CaTDD `P1 Design`.
 - **P2 = QualityTestsFlow**: quality-oriented flow for Performance, Robust, Compatibility, and Configuration skeletons. It is CaTDD `P2 Quality`.
+
+`Px` flows and kits, such as `Px-SpecFlow` and `Px-HarnessKits`, are cross-priority orchestration or operational layers. They do not define CaTDD category priority.
 
 Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPrompts`.
 
@@ -72,8 +77,10 @@ Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPr
 
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
 - Flow documents under `flows/`
+- Kit documents under `kits/`
 - Shared command template [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md)
 - Command prompt templates under `commands/`
+- HarnessKits operational commands under `commands/Px-HarnessKits/`
 - Compatibility notes that prevent conflicts with `methodPrompts`
 
 ## Upstream / Downstream

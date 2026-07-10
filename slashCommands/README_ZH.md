@@ -1,19 +1,21 @@
 # slashCommands
 
-本目录存放可复用的斜杠命令提示词与流程，用于将 CaTDD 方法落地为可触发命令。
+本目录存放可复用的斜杠命令提示词、流程与工具包，用于将 CaTDD 方法落地为可触发命令。
 
 本 README 是命令连接层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何使用 `slashCommands/`，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
 
 ## What
 
-`slashCommands` 是 `methodPrompts` 与现有 CodeAgent 之间偏流程的连接与命令化层。
+`slashCommands` 是 `methodPrompts` 与现有 CodeAgent 之间的连接与命令化层。
 
 它为自动化或半自动化 CaTDD 执行定义可移植的命令意图与流程顺序：
 
 - 将可重复命令阶段组织起来的流程文档。
+- 将可复用操作型工具点命令组织起来的工具包文档。
 - 每次只描述一个动作的小型命令提示词模板。
 - 保持可移植提示词一致的共享命令模板。
 - 从项目上下文推进到故事完成的 SpecCoding 流程契约。
+- 维护 CaTDD 源、适配器、执行、诊断和 patch-back 安全性的 Harness Engineering 工具点命令。
 - 与 CaTDD 优先级类对齐的功能、设计和质量测试流程。
 
 `slashCommands` 与具体 code-agent 无关。同一套可移植命令文件可以被包装给 Copilot、Cline、Continue、`utCodeAgentCLI`，或任何能消费提示词文本的助手。
@@ -25,7 +27,7 @@
 它保持清晰分工：
 
 - `methodPrompts` 负责 CaTDD 方法含义、分类语义、优先级顺序和设计骨架规则。
-- `slashCommands` 负责可移植流程意图、命令顺序，以及步骤之间的执行交接。
+- `slashCommands` 负责可移植流程或工具包意图、命令顺序，以及步骤之间的执行交接。
 - 原生适配层只负责工具特定的暴露方式，例如 Copilot prompt files、Continue prompt files、Cline rules 或 CLI 集成。
 
 这样可以避免每个工具集成都发明自己的 CaTDD 工作流，同时仍允许每个工具用自己的原生形态暴露命令。
@@ -49,6 +51,7 @@
 - 不替代 `methodPrompts`。
 - 不依赖某一个编辑器、某一个模型提供方或某一种编程语言。
 - 不把原生生成的包装文件作为真理源。
+- 将 `HARNESS_*` 操作型命令与 `SPEC_*` 故事生命周期状态分开。
 
 当命令与 `methodPrompts` 冲突时，先更新 `methodPrompts`，再修订或重新生成命令层。
 
@@ -59,6 +62,8 @@
 - **P0 = FuncTestsFlow**：功能测试流程，用于 Typical、Edge、Misuse、Fault 骨架。它就是 CaTDD `P0 Functional`。
 - **P1 = DesignTestsFlow**：设计测试流程，用于 State、Capability、Concurrency 骨架。它就是 CaTDD `P1 Design`。
 - **P2 = QualityTestsFlow**：质量测试流程，用于 Performance、Robust、Compatibility、Configuration 骨架。它就是 CaTDD `P2 Quality`。
+
+`Px` 流程与工具包（例如 `Px-SpecFlow` 和 `Px-HarnessKits`）是跨优先级的编排层或操作层。它们不定义 CaTDD 分类优先级。
 
 未来的 Addons/Demo 命令应使用 `P3 Addons`，以保持与 `methodPrompts` 一致。
 
@@ -72,8 +77,10 @@
 
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
 - `flows/` 下的流程文档
+- `kits/` 下的工具包文档
 - 共享命令模板 [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md)
 - `commands/` 下的命令提示词模板
+- `commands/Px-HarnessKits/` 下的 HarnessKits 操作型命令
 - 防止与 `methodPrompts` 冲突的兼容性说明
 
 ## Upstream / Downstream

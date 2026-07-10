@@ -204,7 +204,7 @@ log_replace_or_new "$ANTIGRAVITY_RULES_DIR/catdd.md"
 cat > "$ANTIGRAVITY_RULES_DIR/catdd.md" <<'RULES'
 # CaTDD Antigravity Project Rule
 
-This is an Antigravity project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or UT_* and SPEC_* commands.
+This is an Antigravity project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or UT_*, SPEC_*, and HARNESS_* commands.
 
 ## Installed Sources
 
@@ -218,7 +218,7 @@ This is an Antigravity project rule installed by MyCaTDD. Use it when working wi
 
 - Treat this file as a thin Antigravity adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Use `.catdd/slashCommands/commands/` for UT_* and SPEC_* commands; read the portable command before acting.
+- Use `.catdd/slashCommands/commands/` for UT_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
 - Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
 - Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.

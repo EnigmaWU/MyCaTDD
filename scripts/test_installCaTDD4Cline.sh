@@ -52,7 +52,7 @@ grep -Fq 'README_CompatDesign.md' "$rule" || fail "Cline rule missing compatibil
 grep -Fq 'README_DiagnosisDesign.md' "$rule" || fail "Cline rule missing diagnosis design README SPEC doc"
 grep -Fq 'SPEC_importIssue' "$rule" || fail "Cline rule missing SPEC command guidance"
 grep -Fq 'SPEC_importUserStory' "$rule" || fail "Cline rule missing user-story import guidance"
-grep -Fq 'UT_* and SPEC_* commands' "$rule" || fail "Cline rule missing command family guidance"
+grep -Fq 'UT_*, SPEC_*, and HARNESS_* commands' "$rule" || fail "Cline rule missing command family guidance"
 
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"
@@ -84,18 +84,20 @@ skills_dir="$TARGET_DIR/.cline/skills"
 [[ -d "$skills_dir" ]] || fail "missing .cline/skills directory"
 [[ -d "$skills_dir/spec-import-issue" ]] || fail "missing spec-import-issue skill"
 [[ -d "$skills_dir/ut-design-typical-skeleton" ]] || fail "missing ut-design-typical-skeleton skill"
+[[ -d "$skills_dir/harness-patch-ca-tdd-source" ]] || fail "missing harness-patch-ca-tdd-source skill"
 [[ -f "$skills_dir/spec-import-issue/SKILL.md" ]] || fail "missing SKILL.md in spec-import-issue skill"
 grep -Fq 'name: spec-import-issue' "$skills_dir/spec-import-issue/SKILL.md" || fail "SKILL.md missing command name"
 grep -Fq 'description: Import an issue' "$skills_dir/spec-import-issue/SKILL.md" || fail "SKILL.md missing meaningful description"
 grep -Fq 'slashCommands/commands/Px-SpecFlow/SPEC_importIssue.md' "$skills_dir/spec-import-issue/SKILL.md" || fail "SKILL.md missing source command reference"
 grep -Fq '.catdd/slashCommands/commands/' "$skills_dir/spec-import-issue/SKILL.md" || fail "SKILL.md missing .catdd path reference"
+grep -Fq 'slashCommands/commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md' "$skills_dir/harness-patch-ca-tdd-source/SKILL.md" || fail "HARNESS SKILL.md missing source command reference"
 # Count skill directories (one per portable command) - top-level dirs minus 1 for . entry
 skill_count=$(find "$skills_dir" -maxdepth 1 -mindepth 1 -type d | wc -l)
 [[ "$skill_count" -ge 40 ]] || fail "expected at least 40 skill directories, got $skill_count"
 
 # Verify --clean-prompts works (triggers generator with --clean)
 clean_output="$("$INSTALLER" --target "$TARGET_DIR" --clean-prompts --yes 2>&1)"
-source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"
+source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
 expected_wrappers="Generated ${source_count} Cline Skill wrappers"
 grep -Fq "$expected_wrappers" <<< "$clean_output" || fail "--clean-prompts did not trigger skills generation"
 

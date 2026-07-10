@@ -75,14 +75,17 @@ Testing/
 /agentSkills/dist/
 /.github/prompts/UT_*.prompt.md
 /.github/prompts/SPEC_*.prompt.md
+/.github/prompts/HARNESS_*.prompt.md
 /.continue/rules/catdd.md
 /.continue/prompts/UT_*.prompt
 /.continue/prompts/SPEC_*.prompt
+/.continue/prompts/HARNESS_*.prompt
 /.clinerules/catdd.md
 /.antigravityrules/catdd.md
 /.customCodeAgent/rules/catdd.md
 /.customCodeAgent/prompts/UT_*.prompt
 /.customCodeAgent/prompts/SPEC_*.prompt
+/.customCodeAgent/prompts/HARNESS_*.prompt
 /.cline/skills/
 
 book*

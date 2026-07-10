@@ -20,6 +20,7 @@ fail() {
 git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/rules/catdd.md || fail "generated default custom rule must be ignored in this source repo"
 git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/prompts/UT_example.prompt || fail "generated default custom UT prompt wrappers must be ignored in this source repo"
 git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/prompts/SPEC_example.prompt || fail "generated default custom SPEC prompt wrappers must be ignored in this source repo"
+git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/prompts/HARNESS_example.prompt || fail "generated default custom HARNESS prompt wrappers must be ignored in this source repo"
 
 "$INSTALLER" --target "$TARGET_DIR" --yes
 
@@ -48,8 +49,8 @@ grep -Fq '.customCodeAgent/prompts/' "$rule" || fail "custom rule missing custom
 grep -Fq '.catdd/spec/' "$rule" || fail "custom rule missing spec workspace location"
 grep -Fq 'SPEC_importUserStory' "$rule" || fail "custom rule missing user-story import guidance"
 
-source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"
-prompt_count="$(find "$TARGET_DIR/.customCodeAgent/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' \) | wc -l | tr -d '[:space:]')"
+source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+prompt_count="$(find "$TARGET_DIR/.customCodeAgent/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' -o -name 'HARNESS_*.prompt' \) | wc -l | tr -d '[:space:]')"
 [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count custom prompt wrappers, got $prompt_count"
 
 sample_prompt="$TARGET_DIR/.customCodeAgent/prompts/UT_convertDemoToTypical.prompt"
@@ -59,10 +60,15 @@ grep -Fq 'description: Run CaTDD slash command UT_convertDemoToTypical' "$sample
 grep -Fq '.catdd/slashCommands/commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md' "$sample_prompt" || fail "custom sample prompt missing installed source command reference"
 grep -Fq '.catdd/methodPrompts/README.md' "$sample_prompt" || fail "custom sample prompt missing installed method source reference"
 
+harness_prompt="$TARGET_DIR/.customCodeAgent/prompts/HARNESS_patchCaTDDSource.prompt"
+[[ -f "$harness_prompt" ]] || fail "missing custom HARNESS prompt: HARNESS_patchCaTDDSource.prompt"
+grep -Fq 'name: HARNESS_patchCaTDDSource' "$harness_prompt" || fail "custom HARNESS prompt missing command name"
+grep -Fq '.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md' "$harness_prompt" || fail "custom HARNESS prompt missing installed source command reference"
+
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"
 grep -Fq 'Custom project rule: `.customCodeAgent/rules/catdd.md`' "$install_marker" || fail "install marker missing custom rule location"
-grep -Fq 'Continue-format prompt wrappers: `.customCodeAgent/prompts/UT_*.prompt` and `.customCodeAgent/prompts/SPEC_*.prompt`' "$install_marker" || fail "install marker missing custom prompt wrapper location"
+grep -Fq 'Continue-format prompt wrappers: `.customCodeAgent/prompts/UT_*.prompt`, `.customCodeAgent/prompts/SPEC_*.prompt`, and `.customCodeAgent/prompts/HARNESS_*.prompt`' "$install_marker" || fail "install marker missing custom prompt wrapper location"
 grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$install_marker" || fail "install marker missing version line in YYYYMMDD.HH format"
 
 replacement_output="$("$INSTALLER" --target "$TARGET_DIR" --yes 2>&1)"
@@ -75,6 +81,7 @@ custom_target="$TARGET_DIR/custom-dir-target"
 [[ ! -f "$custom_target/README_UbiLang_ZH.md" ]] || fail "--custom-dir target should not install project-root README_UbiLang_ZH.md"
 [[ -f "$custom_target/.myagent/rules/catdd.md" ]] || fail "--custom-dir target missing custom rule"
 [[ -f "$custom_target/.myagent/prompts/UT_convertDemoToTypical.prompt" ]] || fail "--custom-dir target missing custom prompt wrapper"
+[[ -f "$custom_target/.myagent/prompts/HARNESS_patchCaTDDSource.prompt" ]] || fail "--custom-dir target missing custom HARNESS prompt wrapper"
 
 if "$INSTALLER" --target "$TARGET_DIR" --custom-dir .bad/name --yes >/dev/null 2>&1; then
   fail "--custom-dir with slash should fail"

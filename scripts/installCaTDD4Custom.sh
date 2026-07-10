@@ -19,7 +19,7 @@ and custom rule/prompt wrappers into a target project.
 Options:
   --target DIR      Target project directory.
   --custom-dir NAME Custom subdir name under target (default: .customCodeAgent).
-  --clean-prompts   Remove existing generated UT_*.prompt and SPEC_*.prompt files before regenerating wrappers.
+  --clean-prompts   Remove existing generated UT_*.prompt, SPEC_*.prompt, and HARNESS_*.prompt files before regenerating wrappers.
   --init            Create the target directory if it does not exist.
   --verbose         Print detailed action steps for diagnosis.
   --yes, -y         Skip the Y/n confirmation prompt (non-interactive / scripted use).
@@ -216,7 +216,7 @@ This directory is managed by \
 - \`slashCommands/\` is the installed portable flow-command source.
 - \`spec/\` is the installed SpecCoding artifact workspace.
 - Custom project rule: \`$CUSTOM_DIR/rules/catdd.md\`.
-- Continue-format prompt wrappers: \`$CUSTOM_DIR/prompts/UT_*.prompt\` and \`$CUSTOM_DIR/prompts/SPEC_*.prompt\`.
+- Continue-format prompt wrappers: \`$CUSTOM_DIR/prompts/UT_*.prompt\`, \`$CUSTOM_DIR/prompts/SPEC_*.prompt\`, and \`$CUSTOM_DIR/prompts/HARNESS_*.prompt\`.
 - Commit team-shared SpecCoding artifacts under \`.catdd/spec/\`, such as \`projectContext.md\`, \`pendingNews/\`, \`analyzedNews/\`, \`todoUS/\`, \`doingUS/\`, \`suspendUS/\`, \`abortUS/\`, and \`doneUS/\`.
 - Use project-root \`README*\` files for shared SPEC docs such as \`README.md\`, \`README_ArchDesign.md\`, \`README_UserStories.md\`, \`README_UserGuide.md\`, \`README_DetailDesign.md\`, \`README_ErrorDesign.md\`, \`README_ResourceDesign.md\`, \`README_StateDesign.md\`, \`README_PerfDesign.md\`, \`README_CompatDesign.md\`, \`README_DiagnosisDesign.md\`, and \`README_VerifyDesign.md\` as needed.
 - Keep local SpecCoding work state such as \`.catdd/spec/WorkingProcessLog.md\` gitignored.
@@ -228,13 +228,13 @@ log_replace_or_new "$CUSTOM_RULES_DIR/catdd.md"
 cat > "$CUSTOM_RULES_DIR/catdd.md" <<RULES
 # CaTDD Custom Project Rule
 
-This is a custom project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or UT_* and SPEC_* commands.
+This is a custom project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or UT_*, SPEC_*, and HARNESS_* commands.
 
 ## Installed Sources
 
 - CaTDD method source: \`.catdd/methodPrompts/\`
 - Portable slash command source: \`.catdd/slashCommands/\`
-- Continue-format prompt wrappers: \`$CUSTOM_DIR/prompts/UT_*.prompt\` and \`$CUSTOM_DIR/prompts/SPEC_*.prompt\`
+- Continue-format prompt wrappers: \`$CUSTOM_DIR/prompts/UT_*.prompt\`, \`$CUSTOM_DIR/prompts/SPEC_*.prompt\`, and \`$CUSTOM_DIR/prompts/HARNESS_*.prompt\`
 - SpecCoding flow: \`.catdd/slashCommands/flows/Px-SpecFlow.md\`
 - SpecCoding artifact workspace: \`.catdd/spec/\`
 - Project-root README SPEC docs: \`README.md\`, \`README_ArchDesign.md\`, \`README_UserStories.md\`, \`README_UserGuide.md\`, \`README_DetailDesign.md\`, \`README_ErrorDesign.md\`, \`README_ResourceDesign.md\`, \`README_StateDesign.md\`, \`README_PerfDesign.md\`, \`README_CompatDesign.md\`, \`README_DiagnosisDesign.md\`, and \`README_VerifyDesign.md\` as needed.
@@ -242,9 +242,9 @@ This is a custom project rule installed by MyCaTDD. Use it when working with CaT
 ## Custom Behavior
 
 - Treat this file as a thin custom adapter over \`.catdd/methodPrompts/\` and \`.catdd/slashCommands/\`.
-- Use \`$CUSTOM_DIR/prompts/\` for triggerable UT_* and SPEC_* prompt wrappers in Continue format.
+- Use \`$CUSTOM_DIR/prompts/\` for triggerable UT_*, SPEC_*, and HARNESS_* prompt wrappers in Continue format.
 - Treat \`.catdd/methodPrompts/\` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Use \`.catdd/slashCommands/commands/\` for UT_* and SPEC_* commands; read the portable command before acting.
+- Use \`.catdd/slashCommands/commands/\` for UT_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
 - Keep SpecCoding lifecycle state under \`.catdd/spec/\`.
 - Commit team-shared artifacts such as \`.catdd/spec/projectContext.md\`, \`.catdd/spec/pendingNews/\`, \`.catdd/spec/analyzedNews/\`, \`.catdd/spec/todoUS/\`, \`.catdd/spec/doingUS/\`, \`.catdd/spec/suspendUS/\`, \`.catdd/spec/abortUS/\`, \`.catdd/spec/doneUS/\`, and project-root \`README*\` SPEC docs.
 - Keep local work state such as \`.catdd/spec/WorkingProcessLog.md\` gitignored.

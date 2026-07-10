@@ -15,7 +15,7 @@ Use this guide if you are one of these readers:
 
 ## What
 
-`slashCommands/` turns stable CaTDD method steps into small command files and ordered flows.
+`slashCommands/` turns stable CaTDD method steps into small command files, ordered flows, and operational kits.
 
 The source of method truth remains `methodPrompts/`. The slash-command layer only says how to invoke repeatable steps, what each step should read, what it should produce, what it must preserve, and which step should come next.
 
@@ -43,6 +43,7 @@ slashCommands/
   README_UserGuide_ZH.md
   UT_slashCommandTemplate.md
   flows/
+  kits/
   commands/
 ```
 
@@ -60,9 +61,11 @@ Native adapter outputs live in tool-specific locations:
 ```text
 .github/prompts/UT_*.prompt.md
 .github/prompts/SPEC_*.prompt.md
+.github/prompts/HARNESS_*.prompt.md
 .continue/rules/catdd.md
 .continue/prompts/UT_*.prompt
 .continue/prompts/SPEC_*.prompt
+.continue/prompts/HARNESS_*.prompt
 .clinerules/catdd.md
 ```
 
@@ -77,8 +80,8 @@ It also protects the method boundary: `methodPrompts` owns CaTDD meaning, `slash
 Follow this workflow when using `slashCommands/`.
 
 1. Read [README](README.md) for the WHAT/WHY layer contract.
-2. Choose a flow from the Flow Map below.
-3. Read the flow document to understand the command order and expected handoff.
+2. Choose a flow or kit from the Flow and Kit Map below.
+3. Read the flow or kit document to understand the command order, command families, and expected handoff.
 4. If using a target project, install CaTDD with the adapter script for your CodeAgent.
 5. Trigger the generated native prompt wrapper, or paste the portable command file into your assistant.
 6. Let the command update only the artifact it owns for that step.
@@ -106,7 +109,7 @@ Expected result:
 
 ## Native Adapter Generation
 
-Generate Copilot-native wrappers from portable `SPEC_*` and `UT_*` command files:
+Generate Copilot-native wrappers from portable `SPEC_*`, `UT_*`, and `HARNESS_*` command files:
 
 ```bash
 scripts/makeSlashCmd4Copilot.sh --clean
@@ -157,28 +160,45 @@ Quick rules:
 - Local process trace stays gitignored: `.catdd/spec/WorkingProcessLog.md`.
 - If policy details and this guide ever diverge, follow [Px-SpecFlow](flows/Px-SpecFlow.md) as the source of detailed lifecycle rules.
 
-## Flow Map
+## Flow and Kit Map
 
-| Flow | Purpose | Start here |
+| Flow or kit | Purpose | Start here |
 | --- | --- | --- |
 | Px SpecFlow | Drive SpecCoding from project context and work item to reviewed, committed story | [Px-SpecFlow](flows/Px-SpecFlow.md) |
+| Px HarnessKits | Run Harness Engineering tool-point commands for CaTDD source, adapter, execution, diagnostic, and patch-back maintenance | [Px-HarnessKits](kits/Px-HarnessKits.md) |
 | P0 FuncTestsFlow | Convert or design functional test skeletons, then implement TC-by-TC | [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md) |
 | P1 DesignTestsFlow | Extend stable functional coverage into design-gated State, Capability, and Concurrency skeletons | [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md) |
 | P2 QualityTestsFlow | Extend stable behavior into Performance, Robust, Compatibility, and Configuration | [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md) |
 
 ## Command Map
 
-Key commands only. For full flow-specific command maps, use [Px-SpecFlow](commands/Px-SpecFlow/README.md), [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md), [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md), and [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md).
+Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow](commands/Px-SpecFlow/README.md), [Px-HarnessKits](commands/Px-HarnessKits/README.md), [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md), [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md), and [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md).
 
 | Developer need | Command template |
 | --- | --- |
 | Create or revise a portable SPEC slash command | [SPEC_slashCommandTemplate](SPEC_slashCommandTemplate.md) |
 | Create or revise a portable UT slash command | [UT_slashCommandTemplate](UT_slashCommandTemplate.md) |
 | Drive a full SpecCoding lifecycle | [Px-SpecFlow](commands/Px-SpecFlow/README.md) |
+| Patch installed CaTDD improvements back to the source repo | [HARNESS_patchCaTDDSource](commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | Tell me what SpecCoding task to do next | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | Create checkbox TASKs and choose the next SPEC step for an opened user story | [SPEC_makePlan](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | Import an existing structured User Story or AC slice | [SPEC_importUserStory](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | Convert demo tests into CaTDD Typical skeleton | [UT_convertDemoToTypical](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
+| Design a full P0 Functional skeleton set | [UT_designFuncTestsSkeleton](commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) |
+| Design a Typical skeleton | [UT_designTypicalSkeleton](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |
+| Design an Edge skeleton | [UT_designEdgeSkeleton](commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md) |
+| Design a Misuse skeleton | [UT_designMisuseSkeleton](commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md) |
+| Design a Fault skeleton | [UT_designFaultSkeleton](commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) |
+| Review a P0 Functional skeleton set | [UT_reviewFuncTestsSkeleton](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
+| Design a State skeleton from `README_StateDesign.md` or `README_ArchDesign.md` | [UT_designStateSkeleton](commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) |
+| Design a Capability skeleton from `README_DetailDesign.md` | [UT_designCapabilitySkeleton](commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) |
+| Design a Concurrency skeleton from `README_ResourceDesign.md` | [UT_designConcurrencySkeleton](commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) |
+| Review P1 Design skeletons | [UT_reviewDesignTestsSkeleton](commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) |
+| Design a Performance skeleton from `README_PerfDesign.md` | [UT_designPerformanceSkeleton](commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md) |
+| Design a Robust skeleton from `README_ErrorDesign.md` | [UT_designRobustSkeleton](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
+| Design a Compatibility skeleton from `README_CompatDesign.md` | [UT_designCompatibilitySkeleton](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
+| Design a Configuration skeleton from `README_DetailDesign.md` | [UT_designConfigurationSkeleton](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
+| Review P2 Quality skeletons | [UT_reviewQualityTestsSkeleton](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
 | Select the next test case from existing skeletons | [UT_tellMeNextImplTest](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
 | Implement the selected test case | [UT_implTestCase](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
 | Review the implemented test case | [UT_reviewImplTestCase](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
@@ -189,6 +209,7 @@ Before calling a slash-command change complete, verify:
 
 - Portable command files still point to `methodPrompts` as the method source of truth.
 - Generated native wrappers are thin and regenerable.
+- `HARNESS_*` commands stay operational and do not move SpecFlow lifecycle state unless explicitly invoked by a `SPEC_*` command.
 - Flow order names the next command clearly.
 - Commands preserve US/AC/TC traceability and TC status markers.
 - P0/P1/P2 naming stays aligned with `methodPrompts`.
@@ -198,4 +219,4 @@ Before calling a slash-command change complete, verify:
 
 For method meaning, return to `methodPrompts/README_UserGuide.md` and `methodPrompts/CaTDD_methodPrompt.md`.
 
-For execution, choose a flow from the Flow Map and run the matching native wrapper or portable command file.
+For execution, choose a flow or kit from the Flow and Kit Map and run the matching native wrapper or portable command file.

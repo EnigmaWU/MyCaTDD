@@ -32,8 +32,8 @@ grep -Fq '[installCaTDD4Copilot] patch: .gitignore' <<< "$verbose_output" || fai
 [[ -d "$TARGET_DIR/.catdd/spec/abortUS" ]] || fail "missing .catdd/spec/abortUS"
 [[ -f "$TARGET_DIR/.github/instructions/catdd.instructions.md" ]] || fail "missing Copilot CaTDD instruction file"
 
-source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"
-prompt_count="$(find "$TARGET_DIR/.github/prompts" -type f \( -name 'UT_*.prompt.md' -o -name 'SPEC_*.prompt.md' \) | wc -l | tr -d '[:space:]')"
+source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+prompt_count="$(find "$TARGET_DIR/.github/prompts" -type f \( -name 'UT_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) | wc -l | tr -d '[:space:]')"
 
 [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count installed Copilot prompts, got $prompt_count"
 
@@ -50,10 +50,16 @@ grep -Fq '.catdd/methodPrompts' "$instructions" || fail "instructions missing me
 grep -Fq '.catdd/slashCommands' "$instructions" || fail "instructions missing slashCommands location"
 grep -Fq '.github/prompts/UT_*.prompt.md' "$instructions" || fail "instructions missing UT prompt wrapper location"
 grep -Fq '.github/prompts/SPEC_*.prompt.md' "$instructions" || fail "instructions missing SPEC prompt wrapper location"
+grep -Fq '.github/prompts/HARNESS_*.prompt.md' "$instructions" || fail "instructions missing HARNESS prompt wrapper location"
 
 spec_sample="$TARGET_DIR/.github/prompts/SPEC_openUserStory.prompt.md"
 [[ -f "$spec_sample" ]] || fail "missing installed SPEC sample prompt"
 grep -Fq '.catdd/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md' "$spec_sample" || fail "SPEC sample prompt does not point to installed slashCommands"
+
+harness_sample="$TARGET_DIR/.github/prompts/HARNESS_patchCaTDDSource.prompt.md"
+[[ -f "$harness_sample" ]] || fail "missing installed HARNESS sample prompt"
+grep -Fq '.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md' "$harness_sample" || fail "HARNESS sample prompt does not point to installed slashCommands"
+grep -Fq '.catdd/methodPrompts/README.md' "$harness_sample" || fail "HARNESS sample prompt does not point to installed methodPrompts"
 
 for command_name in SPEC_importIssue SPEC_importFeature SPEC_importUserStory SPEC_analyzeIssue SPEC_analyzeFeature; do
   command_prompt="$TARGET_DIR/.github/prompts/${command_name}.prompt.md"
@@ -83,6 +89,7 @@ init_target="$TARGET_DIR/new-project"
 [[ -d "$init_target/.catdd/spec/suspendUS" ]] || fail "--init target missing .catdd/spec/suspendUS"
 [[ -f "$init_target/.github/prompts/UT_convertDemoToTypical.prompt.md" ]] || fail "--init target missing generated Copilot prompt"
 [[ -f "$init_target/.github/prompts/SPEC_openUserStory.prompt.md" ]] || fail "--init target missing generated SPEC Copilot prompt"
+[[ -f "$init_target/.github/prompts/HARNESS_patchCaTDDSource.prompt.md" ]] || fail "--init target missing generated HARNESS Copilot prompt"
 [[ -f "$init_target/.github/prompts/SPEC_importIssue.prompt.md" ]] || fail "--init target missing generated SPEC import issue prompt"
 [[ -f "$init_target/.github/prompts/SPEC_importUserStory.prompt.md" ]] || fail "--init target missing generated SPEC import user story prompt"
 

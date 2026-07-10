@@ -6,6 +6,8 @@ Flow documents connect existing CodeAgent invocation surfaces to CaTDD method st
 
 Compared with `methodPrompts`, these files are more flow-first and automation-friendly. They explain how a CodeAgent should move through a method, not what the method means.
 
+Operational command kits that group tool-point commands without a strict lifecycle sequence live in [../kits](../kits).
+
 ## Priority Alignment
 
 Flow priority uses the same Pn numbering as `methodPrompts`:

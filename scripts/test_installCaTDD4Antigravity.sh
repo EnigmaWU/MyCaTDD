@@ -44,6 +44,7 @@ grep -Fq 'Antigravity project rule' "$rule" || fail "Antigravity rule missing ad
 grep -Fq '.catdd/methodPrompts/' "$rule" || fail "Antigravity rule missing methodPrompts location"
 grep -Fq '.catdd/slashCommands/' "$rule" || fail "Antigravity rule missing slashCommands location"
 grep -Fq '.catdd/spec/' "$rule" || fail "Antigravity rule missing spec workspace location"
+grep -Fq 'UT_*, SPEC_*, and HARNESS_* commands' "$rule" || fail "Antigravity rule missing command family guidance"
 grep -Fq 'README_ArchDesign.md' "$rule" || fail "Antigravity rule missing project-root README SPEC docs"
 grep -Fq 'SPEC_importUserStory' "$rule" || fail "Antigravity rule missing user-story import guidance"
 

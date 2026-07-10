@@ -20,6 +20,7 @@ fail() {
 git -C "$REPO_ROOT" check-ignore -q .continue/rules/catdd.md || fail "generated Continue rule must be ignored in this source repo"
 git -C "$REPO_ROOT" check-ignore -q .continue/prompts/UT_example.prompt || fail "generated Continue UT prompt wrappers must be ignored in this source repo"
 git -C "$REPO_ROOT" check-ignore -q .continue/prompts/SPEC_example.prompt || fail "generated Continue SPEC prompt wrappers must be ignored in this source repo"
+git -C "$REPO_ROOT" check-ignore -q .continue/prompts/HARNESS_example.prompt || fail "generated Continue HARNESS prompt wrappers must be ignored in this source repo"
 
 "$INSTALLER" --target "$TARGET_DIR" --yes
 
@@ -54,10 +55,10 @@ grep -Fq 'README_CompatDesign.md' "$rule" || fail "Continue rule missing compati
 grep -Fq 'README_DiagnosisDesign.md' "$rule" || fail "Continue rule missing diagnosis design README SPEC doc"
 grep -Fq 'SPEC_importIssue' "$rule" || fail "Continue rule missing SPEC command guidance"
 grep -Fq 'SPEC_importUserStory' "$rule" || fail "Continue rule missing user-story import guidance"
-grep -Fq 'UT_* and SPEC_* commands' "$rule" || fail "Continue rule missing command family guidance"
+grep -Fq 'UT_*, SPEC_*, and HARNESS_* commands' "$rule" || fail "Continue rule missing command family guidance"
 
-source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' \) | wc -l | tr -d '[:space:]')"
-prompt_count="$(find "$TARGET_DIR/.continue/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' \) | wc -l | tr -d '[:space:]')"
+source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+prompt_count="$(find "$TARGET_DIR/.continue/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' -o -name 'HARNESS_*.prompt' \) | wc -l | tr -d '[:space:]')"
 [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count Continue prompt wrappers, got $prompt_count"
 
 sample_prompt="$TARGET_DIR/.continue/prompts/UT_convertDemoToTypical.prompt"
@@ -73,10 +74,15 @@ spec_prompt="$TARGET_DIR/.continue/prompts/SPEC_openUserStory.prompt"
 grep -Fq 'name: SPEC_openUserStory' "$spec_prompt" || fail "Continue SPEC prompt missing command name"
 grep -Fq '.catdd/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md' "$spec_prompt" || fail "Continue SPEC prompt missing installed source command reference"
 
+harness_prompt="$TARGET_DIR/.continue/prompts/HARNESS_patchCaTDDSource.prompt"
+[[ -f "$harness_prompt" ]] || fail "missing Continue HARNESS prompt: HARNESS_patchCaTDDSource.prompt"
+grep -Fq 'name: HARNESS_patchCaTDDSource' "$harness_prompt" || fail "Continue HARNESS prompt missing command name"
+grep -Fq '.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md' "$harness_prompt" || fail "Continue HARNESS prompt missing installed source command reference"
+
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"
 grep -Fq 'Continue project rule: `.continue/rules/catdd.md`' "$install_marker" || fail "install marker missing Continue rule location"
-grep -Fq 'Continue prompt wrappers: `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`' "$install_marker" || fail "install marker missing Continue prompt wrapper location"
+grep -Fq 'Continue prompt wrappers: `.continue/prompts/UT_*.prompt`, `.continue/prompts/SPEC_*.prompt`, and `.continue/prompts/HARNESS_*.prompt`' "$install_marker" || fail "install marker missing Continue prompt wrapper location"
 grep -Fq 'analyzedNews/' "$install_marker" || fail "install marker missing analyzedNews shared artifact guidance"
 grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$install_marker" || fail "install marker missing version line in YYYYMMDD.HH format"
 
@@ -99,5 +105,6 @@ init_target="$TARGET_DIR/new-continue-project"
 [[ -d "$init_target/.catdd/spec/suspendUS" ]] || fail "--init target missing .catdd/spec/suspendUS"
 [[ -f "$init_target/.continue/rules/catdd.md" ]] || fail "--init target missing Continue rule"
 [[ -f "$init_target/.continue/prompts/UT_convertDemoToTypical.prompt" ]] || fail "--init target missing Continue prompt wrapper"
+[[ -f "$init_target/.continue/prompts/HARNESS_patchCaTDDSource.prompt" ]] || fail "--init target missing HARNESS Continue prompt wrapper"
 
 echo "[installCaTDD4Continue-test] PASSED: installed CaTDD Continue assets into temporary target"

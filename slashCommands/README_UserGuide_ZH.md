@@ -15,7 +15,7 @@
 
 ## 内容
 
-`slashCommands/` 将稳定的 CaTDD 方法步骤转化为小型命令文件和有序流程。
+`slashCommands/` 将稳定的 CaTDD 方法步骤转化为小型命令文件、有序流程和操作型工具包。
 
 方法真理源仍然是 `methodPrompts/`。斜杠命令层只说明如何调用可重复步骤、每一步读什么、产出什么、必须保留什么，以及下一步是什么。
 
@@ -43,6 +43,7 @@ slashCommands/
   README_UserGuide_ZH.md
   UT_slashCommandTemplate.md
   flows/
+  kits/
   commands/
 ```
 
@@ -60,9 +61,11 @@ slashCommands/
 ```text
 .github/prompts/UT_*.prompt.md
 .github/prompts/SPEC_*.prompt.md
+.github/prompts/HARNESS_*.prompt.md
 .continue/rules/catdd.md
 .continue/prompts/UT_*.prompt
 .continue/prompts/SPEC_*.prompt
+.continue/prompts/HARNESS_*.prompt
 .clinerules/catdd.md
 ```
 
@@ -77,8 +80,8 @@ slashCommands/
 使用 `slashCommands/` 时，按以下流程执行。
 
 1. 阅读 [README.md](README.md)，理解 WHAT/WHY 层契约。
-2. 从下面的流程地图中选择一个流程。
-3. 阅读流程文档，理解命令顺序和预期交接。
+2. 从下面的流程与工具包地图中选择一个流程或工具包。
+3. 阅读流程或工具包文档，理解命令顺序、命令族和预期交接。
 4. 如果在目标项目使用，先用对应 CodeAgent 的安装脚本安装 CaTDD。
 5. 触发生成的原生 prompt 包装，或把可移植命令文件粘贴给助手。
 6. 让每条命令只更新它在当前步骤负责的产物。
@@ -106,7 +109,7 @@ echo "$TARGET_DIR"
 
 ## 原生适配生成
 
-从可移植 `SPEC_*` 与 `UT_*` 命令文件生成 Copilot 原生包装：
+从可移植 `SPEC_*`、`UT_*` 与 `HARNESS_*` 命令文件生成 Copilot 原生包装：
 
 ```bash
 scripts/makeSlashCmd4Copilot.sh --clean
@@ -157,28 +160,45 @@ bash scripts/test_installCaTDD4Cline.sh
 - 本地过程追踪保持 gitignore：`.catdd/spec/WorkingProcessLog.md`。
 - 若本指南与细节策略出现差异，以 [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) 的详细生命周期规则为准。
 
-## 流程地图
+## 流程与工具包地图
 
-| Flow | Purpose | Start here |
+| Flow or kit | Purpose | Start here |
 | --- | --- | --- |
 | Px SpecFlow | 从项目上下文和 work item 驱动 SpecCoding，直到故事完成审查与提交 | [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) |
+| Px HarnessKits | 运行维护 CaTDD 源、适配器、执行、诊断和 patch-back 的 Harness Engineering 工具点命令 | [kits/Px-HarnessKits.md](kits/Px-HarnessKits.md) |
 | P0 FuncTestsFlow | 转换或设计功能测试骨架，然后逐个 TC 实现 | [flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md) |
 | P1 DesignTestsFlow | 在稳定功能覆盖基础上扩展 State、Capability、Concurrency | [flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md) |
 | P2 QualityTestsFlow | 在稳定行为基础上扩展 Performance、Robust、Compatibility、Configuration | [flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md) |
 
 ## 命令地图
 
-仅保留关键命令。完整的分流程命令地图请查看 [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md)、[flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md)、[flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md)、[flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md)。
+仅保留关键命令。完整的分流程或工具包命令地图请查看 [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md)、[commands/Px-HarnessKits/README.md](commands/Px-HarnessKits/README.md)、[flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md)、[flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md)、[flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md)。
 
 | Developer need | Command template |
 | --- | --- |
 | 创建或修订可移植的 SPEC 斜杠命令 | [SPEC_slashCommandTemplate.md](SPEC_slashCommandTemplate.md) |
 | 创建或修订可移植的 UT 斜杠命令 | [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md) |
 | 驱动完整 SpecCoding 生命周期 | [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md) |
+| 将已安装项目中的 CaTDD 改进 patch 回源仓库 | [commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md](commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | 告诉我当前 SpecCoding 下一步该做什么 | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | 为已打开的 user story 规划下一条 SPEC 步骤 | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | 导入已有结构化 User Story 或 AC 切片 | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
+| 设计完整 P0 Functional 骨架集 | [commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) |
+| 设计 Typical 骨架 | [commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |
+| 设计 Edge 骨架 | [commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md](commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md) |
+| 设计 Misuse 骨架 | [commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md](commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md) |
+| 设计 Fault 骨架 | [commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md](commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) |
+| 审查 P0 Functional 骨架集 | [commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
+| 基于 `README_StateDesign.md` 或 `README_ArchDesign.md` 设计 State 骨架 | [commands/P1-DesignTestsFlow/UT_designStateSkeleton.md](commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) |
+| 基于 `README_DetailDesign.md` 设计 Capability 骨架 | [commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md](commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) |
+| 基于 `README_ResourceDesign.md` 设计 Concurrency 骨架 | [commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md](commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) |
+| 审查 P1 Design 骨架 | [commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md](commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) |
+| 基于 `README_PerfDesign.md` 设计 Performance 骨架 | [commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md](commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md) |
+| 基于 `README_ErrorDesign.md` 设计 Robust 骨架 | [commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
+| 基于 `README_CompatDesign.md` 设计 Compatibility 骨架 | [commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
+| 基于 `README_DetailDesign.md` 设计 Configuration 骨架 | [commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
+| 审查 P2 Quality 骨架 | [commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
 | 从已有骨架中选择下一个测试用例 | [commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
 | 实现已选择的测试用例 | [commands/P0-FuncTestsFlow/UT_implTestCase.md](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
 | 审查已实现的测试用例 | [commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
@@ -189,6 +209,7 @@ bash scripts/test_installCaTDD4Cline.sh
 
 - 可移植命令文件仍指向 `methodPrompts` 作为方法真理源。
 - 生成的原生包装保持轻量且可重新生成。
+- `HARNESS_*` 命令保持操作型定位，除非被 `SPEC_*` 命令显式调用，否则不移动 SpecFlow 生命周期状态。
 - 流程顺序清楚命名下一条命令。
 - 命令保留 US/AC/TC 可追溯性和 TC 状态标记。
 - P0/P1/P2 命名与 `methodPrompts` 保持一致。
@@ -198,4 +219,4 @@ bash scripts/test_installCaTDD4Cline.sh
 
 理解方法含义时，回到 `methodPrompts/README_UserGuide.md` 和 `methodPrompts/CaTDD_methodPrompt.md`。
 
-执行流程时，从流程地图中选择一个流程，然后运行对应原生包装或可移植命令文件。
+执行时，从流程与工具包地图中选择一个流程或工具包，然后运行对应原生包装或可移植命令文件。
