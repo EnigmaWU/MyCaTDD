@@ -32,6 +32,66 @@ EXPERIENCED-USER（精确控制）：
 
 ---
 
+## AC 状态模型（每个验收准则）
+
+每个 Story 子文档中的 AC 都带有状态标记。以下状态转换定义 AC 如何在工作生命周期中移动。
+
+### 状态转换图
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING: 在 spec 重设计中创建 AC
+
+    PENDING --> TODO: 已分析并接受
+    PENDING --> ABORT: 无效 / 被排除范围
+
+    TODO --> DOING: 开始实现
+    TODO --> ABORT: 不再需要
+
+    DOING --> DONE: 针对实现验证通过
+    DOING --> SUSPEND: 被阻塞
+    DOING --> TODO: 重新排队
+    DOING --> ABORT: 中期不可行
+
+    SUSPEND --> DOING: 恢复
+    SUSPEND --> ABORT: 不再可行
+
+    DONE --> [*]
+    ABORT --> [*]
+```
+
+### 转换规则
+
+| 从 | → | 到 | 触发条件 |
+|---|---|---|---|
+| PENDING | → | TODO | 已分析并接受为工作项 |
+| PENDING | → | ABORT | 无效 / 被排除范围 |
+| TODO | → | DOING | 开始实现 |
+| TODO | → | ABORT | 不再需要 |
+| DOING | → | DONE | 针对实现验证通过 |
+| DOING | → | SUSPEND | 被阻塞 / 需要重新讨论 |
+| DOING | → | TODO | 重新排队 |
+| DOING | → | ABORT | 中期不可行 |
+| SUSPEND | → | DOING | 解除阻塞 / 恢复 |
+| SUSPEND | → | ABORT | 不再可行 |
+| ABORT | → | PENDING | ❌ 不允许（终态） |
+| TODO/ABORT | → | PENDING | ❌ 不允许 |
+
+> **不变式**：一旦 AC 离开 `PENDING`，就永远不能回到 `PENDING`。
+
+### 状态值
+
+| 状态 | 含义 | 控制者 |
+|---|---|---|
+| `PENDING` | AC 已设计但尚未被拾取 | 队列 |
+| `TODO` | AC 被选入当前工作周期 | 开发者 |
+| `DOING` | AC 正在实现 / 测试中 | 开发者 |
+| `DONE` | AC 已针对实现验证通过 | 审查者 / CI |
+| `SUSPEND` | AC 被阻塞或降级 | 开发者 |
+| `ABORT` | AC 不再有效 | 开发者 / 审查 |
+
+---
+
 ## 测试文件状态模型
 
 ```

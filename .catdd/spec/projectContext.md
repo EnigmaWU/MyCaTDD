@@ -44,6 +44,19 @@ After self-install with `scripts/installCaTDD4Copilot.sh --target "$PWD" --init 
 - `SPEC_*` commands may orchestrate `UT_*` commands, but must not replace P0/P1/P2 category rules.
 - `SPEC_clearStoryIntent` is the early mutual-intent gate after `SPEC_openUserStory`; it records developer intent and CodeAgent intent before design begins. It does not replace the final `SPEC_reviewUserStory` readiness gate after detail design.
 
+## SUT Unit Convention
+
+The boundary treated as one **Unit** for CaTDD unit tests in this project:
+
+- Default scope: `module-interface` — one cohesive public boundary surfaced by a module or submodule.
+- Rationale: MyCaTDD is organized around self-contained layers (`methodPrompts/`, `slashCommands/`, `codeAgents/utCodeAgentCLI/`, `agentSkills/`); each module interface is large enough to define meaningful behavior and small enough to design tests against without leaking unrelated internals.
+- Example SUT names:
+  - `SUT: methodPrompts` for the CaTDD method layer.
+  - `SUT: slashCommands` for the portable command flow layer.
+  - `SUT: utCodeAgentCLI` for the future CLI module.
+- A single file such as a `*.H` header, a single class, or a single slash command may become the unit when the module interface is too coarse; record the exception in the story-level verification design.
+- Update this convention through `SPEC_updateProjectContext` if the project later decides on a different default granularity.
+
 ## Current Design Decisions
 
 - P0 Functional categories are Typical, Edge, Misuse, and Fault.
@@ -103,6 +116,7 @@ Run this next after context review:
 - The current self-install is intentional for using MyCaTDD as its own target project.
 - `.github/instructions/catdd.instructions.md` should be committed for this source repository, not treated only as local generated target-project state.
 - Empty lifecycle directories do not need placeholder files unless the team wants them visible in Git before they contain artifacts.
+- The proposed `sut_unit_convention` of `module-interface` is the right default for MyCaTDD; confirm or refine per layer.
 
 ## Open Questions
 
