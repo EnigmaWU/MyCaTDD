@@ -8,6 +8,22 @@ Evolve the CaTDD executable harness at test time using unlabeled execution trace
 
 HarnessKits tool-point command. This command improves the CaTDD command, adapter, execution, and diagnostic harness around the method source; it does not move a user story through SpecFlow lifecycle state.
 
+## When to Invoke
+
+Invoke `HARNESS_evolveHarness` when:
+
+- Repeated `HARNESS_verifyInstallation` or `HARNESS_diagnoseInstallation` runs reveal the same harness-layer failure pattern (wrapper drift, stale installer, broken adapter rule, missing skill mapping, etc.).
+- A newly installed CaTDD target project repeatedly fails one or more verification checks and the root cause is in the harness, not in product code or CaTDD method semantics.
+- A `scripts/test_*.sh` harness test fails persistently and the fix belongs to the harness (installer, wrapper, verifier) rather than to a user story.
+- You have collected run artifacts or execution traces that show how a harness command, wrapper, or installer misbehaves in practice.
+
+Do **not** invoke `HARNESS_evolveHarness` when:
+
+- The problem is a missing feature, a product bug, or an unclear user-story requirement -- use `SPEC_*` commands instead.
+- The failure is inside CaTDD method semantics (what a category means, US/AC/TC rules) -- update `methodPrompts/` through a spec story, not a harness patch.
+- You have no execution traces or verification evidence -- run `HARNESS_verifyInstallation` or `HARNESS_diagnoseInstallation` first.
+- You want a one-off quick fix without reviewing the diff -- `dry_run=true` is the default for a reason.
+
 ## CoT Pattern
 
 **ReACT + Observe-Propose-Judge** -- Reasoning + Acting with a candidate population. This command must collect execution traces, maintain parallel branch lineages, propose harness edits from trace evidence, judge them with execution-derived proxy signals, and commit the selected improvement with explicit safety gates.
