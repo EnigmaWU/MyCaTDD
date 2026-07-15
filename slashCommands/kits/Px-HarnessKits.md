@@ -17,7 +17,7 @@ Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 
 `HARNESS_*` commands own operational tasks such as patch-back, installation verification, installation diagnosis, run artifact collection, policy checks, and harness evolution. They may support SpecFlow, but they do not replace `SPEC_*` lifecycle commands.
 
-`HARNESS_evolveHarness` applies the Test-Time Harness Evolution (TTHE) insight: the executable harness around a frozen model is itself the adaptation state, and it can be evolved during evaluation using only unlabeled execution traces. The command implements the three TTHE operators -- **Observe**, **Propose**, **Judge** -- while keeping CaTDD method semantics and model weights untouched.
+`HARNESS_evolveHarness` applies the Test-Time Harness Evolution (TTHE) insight ([Nie et al., arXiv:2607.08124](https://arxiv.org/abs/2607.08124)): the executable harness around a frozen model is itself the adaptation state, and it can be evolved during evaluation using only unlabeled execution traces. The command implements the three TTHE operators -- **Observe**, **Propose**, **Judge** -- while keeping CaTDD method semantics and model weights untouched.
 
 ## Developer Stories
 
