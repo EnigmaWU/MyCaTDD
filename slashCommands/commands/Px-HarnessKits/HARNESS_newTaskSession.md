@@ -17,7 +17,7 @@ HarnessKits tool-point command. This command produces a session handoff summary;
 - `current_session_goal`: the task or user story the developer was working on this session.
 - `code_agent`: the CodeAgent in use. Allowed values: `copilot`, `continue`, `cline`, `custom`, or `auto`.
 - `scope`: optional scope of facts to capture. Allowed values: `full` (default), `spec_only`, `code_only`, or `decisions_only`.
-- `target_file`: optional path to write the handoff note. Default: `.catdd/spec/WorkingProcessLog.md` or developer-supplied path. When omitted, print the handoff note in the response only.
+- `target_file`: optional path to write the handoff note. When provided, write or append the handoff note to this path. When omitted, print the handoff note in the response only and do not write to `.catdd/spec/WorkingProcessLog.md`.
 - `include_file_inventory`: optional flag. When true, list key changed or open files. Default: true.
 - `include_pending_tasks`: optional flag. When true, list unchecked tasks from the active `.catdd/spec/doingUS/*-TASKs.md` artifact. Default: true.
 
@@ -39,7 +39,7 @@ If the current goal or lifecycle state is unclear, ask the developer before coll
 
    - Find the active story and its tasks artifact in `.catdd/spec/doingUS/`.
    - Record completed tasks (`[x]`) and pending tasks (`[ ]`).
-   - Note the last `SPEC_*` command invoked if known.
+   - Note the last `SPEC_*` command invoked: check `.catdd/spec/WorkingProcessLog.md` first, then ask the developer if it cannot be determined from the log or git history.
 
 2. **Collect code and file context**
 
