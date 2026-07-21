@@ -182,6 +182,7 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Patch installed CaTDD improvements back to the source repo | [HARNESS_patchCaTDDSource](commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | Verify a CaTDD installation before trusting target-project commands | [HARNESS_verifyInstallation](commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
 | Diagnose a failed or misworking CaTDD installation | [HARNESS_diagnoseInstallation](commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) |
+| Capture session context before starting a new task session | [HARNESS_newTaskSession](commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | Tell me what SpecCoding task to do next | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | Create checkbox TASKs and choose the next SPEC step for an opened user story | [SPEC_makePlan](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | Import an existing structured User Story or AC slice | [SPEC_importUserStory](commands/Px-SpecFlow/SPEC_importUserStory.md) |
