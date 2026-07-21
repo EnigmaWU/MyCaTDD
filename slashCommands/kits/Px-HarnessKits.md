@@ -22,6 +22,7 @@ Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 - As a Developer, when an installed project proves a CaTDD method or slash-command improvement, I want to patch that improvement back to the original CaTDD source safely so that the reusable method evolves without copying unrelated project code.
 - As a Developer, before trusting an installed CaTDD target project, I want a tool-point command that verifies installed assets, generated wrappers, and source-of-truth links so that installation problems are caught before daily use.
 - As a Developer, when an installed CaTDD target project misworks, I want a tool-point command that diagnoses the failed installation surface and recommends repair without creating a fake product user story.
+- As a Developer, when I finish a task and start a new session, I want a tool-point command that captures important session context — lifecycle state, key files, decisions, environment facts — so the next CodeAgent session can resume without re-investigation.
 
 ## Command Families
 
@@ -30,6 +31,7 @@ Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 | Source patch-back | Move effective installed-project CaTDD improvements back to source with allowlists and safety gates. | [HARNESS_patchCaTDDSource](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | Installation verification | Prove an installed CaTDD target project has complete `.catdd` assets, native wrappers, rules, skills, and source-of-truth links before use. | [HARNESS_verifyInstallation](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
 | Installation diagnosis | Investigate a failed or misworking installed CaTDD target project and recommend safe repair from verification evidence. | [HARNESS_diagnoseInstallation](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) |
+| Session handoff | Capture and preserve important session context — lifecycle state, key files, decisions, environment facts — when finishing a task and starting a new session. | [HARNESS_newTaskSession](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | Run diagnosis | Future commands for collecting run artifacts and diagnosing non-installation harness/test failures. | Future `HARNESS_collectRunArtifacts`, `HARNESS_diagnoseFailure` |
 | Guard and policy | Future commands for checking execution isolation, policy compliance, and destructive-operation guards. | Future `HARNESS_checkPolicy` |
 | Harness repair | Future commands for proposing and validating harness patches with regression gates. | Future `HARNESS_proposePatch`, `HARNESS_validatePatch` |
@@ -49,6 +51,7 @@ flowchart LR
 1. Use [../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) when an installed project has effective CaTDD meta-file improvements that should be patched back to the original CaTDD repository on a non-default branch.
 2. Use [../commands/Px-HarnessKits/HARNESS_verifyInstallation.md](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) before trusting a fresh install, after installing into a real target project, or before releasing installer/generator changes.
 3. Use [../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) only after verification fails or an installed target project misworks.
+4. Use [../commands/Px-HarnessKits/HARNESS_newTaskSession.md](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) at the end of a task session to capture and preserve important context before starting a new session.
 
 ## Conflict Guard
 
