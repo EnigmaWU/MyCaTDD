@@ -2,5 +2,19 @@
         "markdownlint.config": {
         "MD022": false,
         "MD032": false
+    },
+    "chat.tools.terminal.autoApprove": {
+        "/^bash scripts/check_readme_mirror\\.sh$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^bash scripts/test_slashcommands_complete\\.sh && bash scripts/test_documentation_contract\\.sh && bash scripts/check_readme_mirror\\.sh$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^bash scripts/test_slashcommands_complete\\.sh && bash scripts/test_documentation_contract\\.sh && bash scripts/check_readme_mirror\\.sh && git diff --check$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
     }
 }
