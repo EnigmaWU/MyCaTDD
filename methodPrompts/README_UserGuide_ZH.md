@@ -110,24 +110,26 @@ methodPrompts/
 ```bash
 mkdir -p Test
 # C++ target
-cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature_Typical.cxx
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/test_your_feature_funcValidTypical.cxx
 # TypeScript target
-cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/UT_YourFeature_Typical.ts
+cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValidTypical.ts
 ```
 
-类别专属测试文件使用 `UT_<Feature>_<Category>.<ext>`，例如 `UT_YourFeature_Typical.cxx`、`UT_YourFeature_Typical.ts` 或 `UT_YourFeature_Edge.ts`。
+类别专属测试文件使用 `test_{feature}_{category}.<ext>`，例如 `test_your_feature_funcValidTypical.cxx`、`test_your_feature_funcValidTypical.ts` 或 `test_your_feature_funcInvalidMisuse.py`。`{feature}` 应来自模块接口的 usage scenarios，`{category}` 使用 `CaTDD_methodPrompt.md` 中的 CaTDD category filename tokens。
+
+每个 `{feature}` 应创建或保留所有 CaTDD category 文件；若某个 category 没有适用 test points，在该文件中标记 `@[NoTestPoints]: <reason>`，不要静默省略。
 
 然后让 CodeAgent 执行，或手工使用方法提示词：
 
 ```text
 Read methodPrompts/README_UserGuide_ZH.md and methodPrompts/CaTDD_methodPrompt.md.
-Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/UT_YourFeature_Typical.cxx or Test/UT_YourFeature_Typical.ts.
+Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/test_your_feature_funcValidTypical.cxx or Test/test_your_feature_funcValidTypical.ts.
 Preserve US/AC/TC traceability and leave unclear product intent as questions.
 ```
 
 预期结果：
 
-- `Test/UT_YourFeature_Typical.cxx` 或 `Test/UT_YourFeature_Typical.ts` 包含 OVERVIEW 分区。
+- `Test/test_your_feature_funcValidTypical.cxx` 或 `Test/test_your_feature_funcValidTypical.ts` 包含 OVERVIEW 分区。
 - 它包含带有 US/AC/TC 注释的 UNIT TESTING DESIGN 分区。
 - 它包含可进入 Red-Green TDD 的 UNIT TESTING IMPLEMENTATION 分区。
 - 它包含所选 TC 的 TODO/TRACKING 状态标记。

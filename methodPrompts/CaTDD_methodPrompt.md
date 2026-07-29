@@ -858,19 +858,37 @@ Copy this block into your test files to track progress:
 **Multi-File Strategy** (larger projects - used in IOC project)
 
 - All test files in `Test/` directory
-- Use `UT_<Feature>_<Category>.<ext>` for category-specific test files so the filename exposes the CaTDD category before the file is opened
-- Start with `UT_Component_FreelyDrafts.cxx` for exploration
-- Move to category-specific files as tests mature:
-  - `UT_Component_Typical.cxx` - Core workflows
-  - `UT_Component_Edge.cxx` - Edge cases, boundary values, and limits
-  - `UT_Component_Misuse.cxx` - API abuse patterns
-  - `UT_Component_Fault.cxx` - Error handling and recovery
-  - `UT_Component_State.cxx` - State transitions
-  - `UT_Component_Concurrency.cxx` - Thread safety
-  - etc.
+- Use `test_{feature}_{category}.<ext>` for category-specific test files so the filename exposes the module-interface feature slice and CaTDD category before the file is opened.
+- `{feature}` SHOULD be a stable lower_snake_case capability slice derived from the module interface's usage design, scenario descriptions, and coverage matrix; do not use only a source filename when the tested usage scenario has a clearer name.
+- `{category}` MUST use the canonical CaTDD filename token:
+
+| CaTDD class/category | Filename token |
+| --- | --- |
+| P0 Functional / ValidFunc / Typical | `funcValidTypical` |
+| P0 Functional / ValidFunc / Edge | `funcValidEdge` |
+| P0 Functional / InvalidFunc / Misuse | `funcInvalidMisuse` |
+| P0 Functional / InvalidFunc / Fault | `funcInvalidFault` |
+| P1 Design / State | `designState` |
+| P1 Design / Capability | `designCapability` |
+| P1 Design / Concurrency | `designConcurrency` |
+| P2 Quality / Performance | `qualityPerformance` |
+| P2 Quality / Robust | `qualityRobust` |
+| P2 Quality / Compatibility | `qualityCompatibility` |
+| P2 Quality / Configuration | `qualityConfiguration` |
+| P3 Addons / Demo/Example | `addonDemoExample` |
+
+- Start with `test_{feature}_freelyDrafts.<ext>` for exploration, then classify mature test points into category-specific files.
+- Each `{feature}` SHOULD have one file for every canonical CaTDD category token. If a category has no applicable test points, keep that category file as an explicit living decision with `@[NoTestPoints]: <reason>` and no executable TCs.
+- Example category-specific files:
+  - `test_command_execution_funcValidTypical.cxx` - Core valid workflows
+  - `test_command_execution_funcValidEdge.cxx` - Valid edge cases, boundary values, and limits
+  - `test_command_execution_funcInvalidMisuse.cxx` - Invalid caller/API abuse patterns
+  - `test_command_execution_funcInvalidFault.cxx` - External failure handling and recovery
+  - `test_command_execution_designConcurrency.cxx` - Thread safety and concurrent usage
+  - `test_command_execution_qualityPerformance.cxx` - Latency, throughput, or resource budgets
 - Common utilities in `Test/_UT_IOC_Common.h`
 - Data fixtures can use dedicated files (e.g., `Test/DataTypicalAutoAccept.h`)
-- The same category token rule applies across languages, e.g., `UT_Component_Typical.ts` for a TypeScript test target.
+- The same category token rule applies across languages, e.g., `test_command_execution_funcValidTypical.ts` for a TypeScript test target or `test_command_execution_funcValidTypical.py` for a Python test target.
 
 ### For LLM/AI Assistance
 

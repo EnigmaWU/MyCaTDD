@@ -6,7 +6,9 @@
 //   This template embodies Test-Driven Development with rich, structured comments.
 //
 // USAGE:
-//   1. Copy this file to create new UT_<Feature>_<Category>.ts test file
+//   1. Copy this file to create new test_{feature}_{category}.ts test file
+//      Example: Test/test_command_execution_funcValidTypical.ts
+//      Feature comes from module-interface usage scenarios; category uses CaTDD filename tokens.
 //   2. Fill in OVERVIEW: what you're testing and why
 //   3. Draft ideas freely in comments
 //   4. Structure into US/AC/TC format

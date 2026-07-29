@@ -110,24 +110,26 @@ Run these commands from a target project that contains `methodPrompts/`:
 ```bash
 mkdir -p Test
 # C++ target
-cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature_Typical.cxx
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/test_your_feature_funcValidTypical.cxx
 # TypeScript target
-cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/UT_YourFeature_Typical.ts
+cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValidTypical.ts
 ```
 
-Use `UT_<Feature>_<Category>.<ext>` for category-specific files, such as `UT_YourFeature_Typical.cxx`, `UT_YourFeature_Typical.ts`, or `UT_YourFeature_Edge.ts`.
+Use `test_{feature}_{category}.<ext>` for category-specific files, such as `test_your_feature_funcValidTypical.cxx`, `test_your_feature_funcValidTypical.ts`, or `test_your_feature_funcInvalidMisuse.py`. Choose `{feature}` from the module interface's usage scenarios and use the CaTDD category filename tokens from `CaTDD_methodPrompt.md`.
+
+For each `{feature}`, create or preserve all CaTDD category files. If a category has no applicable test points, mark that file with `@[NoTestPoints]: <reason>` instead of silently omitting it.
 
 Then ask your CodeAgent or use the method prompts manually:
 
 ```text
 Read methodPrompts/README_UserGuide.md and methodPrompts/CaTDD_methodPrompt.md.
-Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/UT_YourFeature_Typical.cxx or Test/UT_YourFeature_Typical.ts.
+Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/test_your_feature_funcValidTypical.cxx or Test/test_your_feature_funcValidTypical.ts.
 Preserve US/AC/TC traceability and leave unclear product intent as questions.
 ```
 
 Expected result:
 
-- `Test/UT_YourFeature_Typical.cxx` or `Test/UT_YourFeature_Typical.ts` has an OVERVIEW section.
+- `Test/test_your_feature_funcValidTypical.cxx` or `Test/test_your_feature_funcValidTypical.ts` has an OVERVIEW section.
 - It has a UNIT TESTING DESIGN section with US/AC/TC comments.
 - It has a UNIT TESTING IMPLEMENTATION section ready for Red-Green TDD.
 - It has TODO/TRACKING status markers for the selected TCs.

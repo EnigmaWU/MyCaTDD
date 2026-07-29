@@ -104,12 +104,12 @@ Use this guide as the user-facing entry point for CaTDD. Use the linked layer RE
 
 ```bash
 # C++ target
-cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature_Typical.cxx
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/test_your_feature_funcValidTypical.cxx
 # TypeScript target
-cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/UT_YourFeature_Typical.ts
+cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValidTypical.ts
 ```
 
-Use `UT_<Feature>_<Category>.<ext>` for category-specific test files, such as `UT_YourFeature_Typical.cxx`, `UT_YourFeature_Typical.ts`, or `UT_YourFeature_Edge.ts`.
+Use `test_{feature}_{category}.<ext>` for category-specific test files, such as `test_your_feature_funcValidTypical.cxx`, `test_your_feature_funcValidTypical.ts`, or `test_your_feature_funcInvalidMisuse.py`. Choose `{feature}` from module-interface usage scenarios and choose `{category}` from the CaTDD filename token table in `methodPrompts/CaTDD_methodPrompt.md`.
 
 Run this command from the repository root so `methodPrompts/` resolves correctly.
 If your project does not have a `Test/` directory, create one or adjust the destination path.
@@ -907,12 +907,12 @@ Ready to write your first CaTDD test file? Follow this checklist:
 
 ```bash
 # C++ target
-cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/UT_YourFeature_Typical.cxx
+cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/test_your_feature_funcValidTypical.cxx
 # TypeScript target
-cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/UT_YourFeature_Typical.ts
+cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValidTypical.ts
 ```
 
-Use `UT_<Feature>_<Category>.<ext>` for category-specific test files, such as `UT_YourFeature_Typical.cxx`, `UT_YourFeature_Typical.ts`, or `UT_YourFeature_Edge.ts`.
+Use `test_{feature}_{category}.<ext>` for category-specific test files, such as `test_your_feature_funcValidTypical.cxx`, `test_your_feature_funcValidTypical.ts`, or `test_your_feature_funcInvalidMisuse.py`. Choose `{feature}` from module-interface usage scenarios and choose `{category}` from the CaTDD filename token table in `methodPrompts/CaTDD_methodPrompt.md`.
 
 If your project does not have a `Test/` directory, create one or adjust the destination path.
 
