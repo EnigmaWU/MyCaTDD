@@ -26,7 +26,7 @@ Use the smallest model tier that preserves decision quality for the current comm
 | --- | --- | --- |
 | SOTA reasoning, such as GPT-5.5-xHigh | Architecture work that decides or approves system boundaries, dependency direction, runtime placement, quality trade-offs, and cross-module constraints. | `SPEC_takeArchDesign`, `SPEC_reviewArchDesign` |
 | High Performance | Requirements analysis, intent alignment, planning, requirement updates, local design, review gates, test design, code review, correction routing, and controlled upstream patch-back where quality depends on reasoning across several artifacts. | `SPEC_initProjectContext`, `SPEC_updateProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_analyzeAbortedUserStory`, `SPEC_clearStoryIntent`, `SPEC_makePlan`, `SPEC_updateUserStory`, `SPEC_whatsNextTask`, `SPEC_takeArchDesign`, `SPEC_reviewArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_updateDetailDesign`, `SPEC_reviewUserStory`, `SPEC_designUnitTests`, `SPEC_reviewProductCodes`, `SPEC_patchOriginalCaTDD` |
-| Flash Speed | Deterministic import, move, suspend, resume, abort, commit, close, or small test-driven implementation steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_suspendUserStory`, `SPEC_resumeUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
+| Flash Speed | Deterministic import, move, suspend, resume, abort, commit, close, or small test-driven implementation/refactor steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_suspendUserStory`, `SPEC_resumeUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
 
 Escalate from High Performance or Flash Speed to SOTA when the command exposes architecture-significant uncertainty: competing non-functional requirements, safety/security risk, real-time or embedded constraints, concurrency boundaries, data migration, compatibility matrices, or irreversible module/API ownership decisions.
 
@@ -273,7 +273,10 @@ flowchart TB
     CategoryDesign --> ImplTests["SPEC_implUnitTests"]
     MethodFallback --> ImplTests
     ImplTests --> ImplCode["SPEC_implProductCodes"]
-    ImplCode --> ReviewCode["SPEC_reviewProductCodes"]
+    ImplCode --> RefactTests{"unit-test cleanup needed?"}
+    RefactTests -- "YES" --> RefactUnitTests["SPEC_refactUnitTests"]
+    RefactUnitTests --> ReviewCode["SPEC_reviewProductCodes"]
+    RefactTests -- "NO" --> ReviewCode
     ReviewCode --> QualityCode{"code quality?"}
 
     QualityCode -- "NO, fix in current story" --> DesignRework["return to Part 2.a follow-up detail revision"]
@@ -310,7 +313,7 @@ flowchart TB
 16. Use [SPEC_reviewDetailDesign](../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md) to gate detailed design quality before implementation-oriented steps.
 17. Use [SPEC_updateDetailDesign](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) for follow-up detail revision when detail review finds missing or weak design.
 18. Use [SPEC_designUnitTests](../commands/Px-SpecFlow/SPEC_designUnitTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows, when the plan says the story is test-ready.
-19. Use [SPEC_implUnitTests](../commands/Px-SpecFlow/SPEC_implUnitTests.md), [SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md), and [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review.
+19. Use [SPEC_implUnitTests](../commands/Px-SpecFlow/SPEC_implUnitTests.md), [SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md), optional [SPEC_refactUnitTests](../commands/Px-SpecFlow/SPEC_refactUnitTests.md) for GREEN no-behavior-change unit-test cleanup, and [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review.
 20. Use [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md) at any active post-open and pre-close point when work must pause without losing traceability and a durable resume reference, such as a git branch or worktree, already exists or can be created.
 21. Use [SPEC_resumeUserStory](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) to move a suspended story back into active work and continue from the preserved reference.
 22. Use [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md) from Part 2.a or Part 2.b when the active story has a blocking scope, assumption, design, test, or product-quality problem that should be preserved rather than continued in place. After aborting, either use `SPEC_analyzeAbortedUserStory` to analyze the aborted story for a later story round or use `SPEC_importIssue` to create a new improvement/refinement input.
@@ -328,6 +331,7 @@ flowchart TB
 - Do not suspend a story without preserving a durable resume reference, such as a git branch or worktree, when the active work has changes that must be resumed later.
 - After `SPEC_makePlan`, use `SPEC_take*Design` only for initial design work and `SPEC_update*Design` only for follow-up design revision against existing design evidence, review feedback, or story-level design gaps.
 - Every design-producing step (`SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_updateDetailDesign`) must be followed by its review gate before downstream lifecycle steps.
+- `SPEC_refactUnitTests` must only clean GREEN implemented tests; it must route missing behavior, new coverage, wrong category, or acceptance ambiguity back to the appropriate design or implementation command.
 - Use `SPEC_abortUserStory` instead of continuing an active story when the discovered problem changes the story's intent, invalidates its assumptions, or needs a new analysis/improvement round.
 - Do not run `SPEC_closeUserStory` until required branch integration/merge work is complete.
 - Pre-close `SPEC_commitWorks` covers implementation/design artifacts; close-generated lifecycle/meta changes may require an immediate additional `SPEC_commitWorks` checkpoint before closure is complete.

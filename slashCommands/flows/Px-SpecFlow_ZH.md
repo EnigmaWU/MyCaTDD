@@ -26,7 +26,7 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 | --- | --- | --- |
 | SOTA reasoning，如 GPT-5.5-xHigh | 涉及决定或审批系统边界、依赖方向、运行时放置、质量权衡以及跨模块约束的架构工作。 | `SPEC_takeArchDesign`、`SPEC_reviewArchDesign` |
 | High Performance | 需求分析、意图对齐、规划、需求更新、局部设计、审查关卡、测试设计、代码审查、修正路由，以及依赖跨制品推理的受控上游回补。 | `SPEC_initProjectContext`、`SPEC_updateProjectContext`、`SPEC_analyzeIssue`、`SPEC_analyzeFeature`、`SPEC_analyzeAbortedUserStory`、`SPEC_clearStoryIntent`、`SPEC_makePlan`、`SPEC_updateUserStory`、`SPEC_whatsNextTask`、`SPEC_takeArchDesign`、`SPEC_reviewArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_reviewDetailDesign`、`SPEC_updateDetailDesign`、`SPEC_reviewUserStory`、`SPEC_designUnitTests`、`SPEC_reviewProductCodes`、`SPEC_patchOriginalCaTDD` |
-| Flash Speed | 确定性的导入、移动、挂起、恢复、中止、提交、关闭，或当所需输入制品已明确时的小型测试驱动实现步骤。 | `SPEC_importIssue`、`SPEC_importFeature`、`SPEC_importUserStory`、`SPEC_openUserStory`、`SPEC_suspendUserStory`、`SPEC_resumeUserStory`、`SPEC_abortUserStory`、`SPEC_implUnitTests`、`SPEC_implProductCodes`、`SPEC_commitWorks`、`SPEC_closeUserStory` |
+| Flash Speed | 确定性的导入、移动、挂起、恢复、中止、提交、关闭，或当所需输入制品已明确时的小型测试驱动实现/重构步骤。 | `SPEC_importIssue`、`SPEC_importFeature`、`SPEC_importUserStory`、`SPEC_openUserStory`、`SPEC_suspendUserStory`、`SPEC_resumeUserStory`、`SPEC_abortUserStory`、`SPEC_implUnitTests`、`SPEC_implProductCodes`、`SPEC_refactUnitTests`、`SPEC_commitWorks`、`SPEC_closeUserStory` |
 
 当命令暴露出架构级别的不确定性时，从 High Performance 或 Flash Speed 升级到 SOTA 级别：竞争性的非功能需求、安全/安保风险、实时或嵌入式约束、并发边界、数据迁移、兼容性矩阵或不可逆的模块/API 所有权决策。
 
@@ -276,7 +276,10 @@ flowchart TB
     CategoryDesign --> ImplTests["SPEC_implUnitTests"]
     MethodFallback --> ImplTests
     ImplTests --> ImplCode["SPEC_implProductCodes"]
-    ImplCode --> ReviewCode["SPEC_reviewProductCodes"]
+    ImplCode --> RefactTests{"unit-test cleanup needed?"}
+    RefactTests -- "YES" --> RefactUnitTests["SPEC_refactUnitTests"]
+    RefactUnitTests --> ReviewCode["SPEC_reviewProductCodes"]
+    RefactTests -- "NO" --> ReviewCode
     ReviewCode --> QualityCode{"code quality?"}
 
     QualityCode -- "NO, fix in current story" --> DesignRework["return to Part 2.a follow-up detail revision"]
@@ -313,7 +316,7 @@ flowchart TB
 16. 使用 [SPEC_reviewDetailDesign](../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md) 在实现导向型步骤之前把关详细设计质量。
 17. 使用 [SPEC_updateDetailDesign](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) 进行后续详细设计修订，当详细审查发现缺失或薄弱的设计时。
 18. 使用 [SPEC_designUnitTests](../commands/Px-SpecFlow/SPEC_designUnitTests.md) 进入 CaTDD 测试设计，通常通过 P0/P1/P2 流程，当计划表明故事已为测试准备好时。
-19. 使用 [SPEC_implUnitTests](../commands/Px-SpecFlow/SPEC_implUnitTests.md)、[SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md) 和 [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) 进行测试优先的执行和审查。
+19. 使用 [SPEC_implUnitTests](../commands/Px-SpecFlow/SPEC_implUnitTests.md)、[SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md)、可选的 [SPEC_refactUnitTests](../commands/Px-SpecFlow/SPEC_refactUnitTests.md) 进行 GREEN 状态下不改变行为的 unit-test cleanup，并使用 [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) 进行测试优先的执行和审查。
 20. 使用 [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md)，当活跃工作需要暂停且必须保留可恢复的持久引用（例如 git 分支或 worktree）时。
 21. 使用 [SPEC_resumeUserStory](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) 将挂起故事恢复到活跃工作态并继续执行。
 22. 使用 [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md)，从第二部分 a 或第二部分 b，当活跃故事存在阻塞性的范围、假设、设计、测试或产品质量问题，应被保留而非继续就地修补时。中止后，或者使用 `SPEC_analyzeAbortedUserStory` 分析已中止的故事以供后续故事轮次，或者使用 `SPEC_importIssue` 创建新的改进/细化输入。
@@ -331,6 +334,7 @@ flowchart TB
 - 当活跃工作有必须稍后恢复的变更时，不得在未保留可恢复的持久工作引用（如 git 分支或 worktree）时挂起故事。
 - 在 `SPEC_makePlan` 之后，仅将 `SPEC_take*Design` 用于初始设计工作，将 `SPEC_update*Design` 仅用于针对现有设计证据、审查反馈或故事级设计缺口的后续设计修订。
 - 每个产生设计的步骤（`SPEC_takeArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_updateDetailDesign`）必须在后续生命周期步骤之前跟随其审查关卡。
+- `SPEC_refactUnitTests` 只能清理已经 GREEN 的已实现测试；若发现缺失行为、新覆盖、错误分类或验收歧义，必须路由回相应的设计或实现命令。
 - 当发现的问题改变了故事意图、使假设失效或需要新的分析/改进轮次时，使用 `SPEC_abortUserStory` 而不是继续活跃故事。
 - 关闭前的 `SPEC_commitWorks` 覆盖实现/设计制品；由关闭生成的生命周期/元文件变更可能需要在关闭完成前进行立即的额外 `SPEC_commitWorks` 检查点。
 - `SPEC_patchOriginalCaTDD` 是仅下游到上游的（已安装项目到原始 CaTDD），不得用作上游到已安装的同步命令。

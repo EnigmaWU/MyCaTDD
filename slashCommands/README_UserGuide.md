@@ -205,6 +205,8 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Select the next test case from existing skeletons | [UT_tellMeNextImplTest](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
 | Implement the selected test case | [UT_implTestCase](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
 | Review the implemented test case | [UT_reviewImplTestCase](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
+| Refactor one GREEN test case without behavior change | [UT_refactTestCase](commands/P0-FuncTestsFlow/UT_refactTestCase.md) |
+| Orchestrate story-scoped unit-test refactor | [SPEC_refactUnitTests](commands/Px-SpecFlow/SPEC_refactUnitTests.md) |
 
 ## Quality Checklist
 

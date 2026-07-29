@@ -21,6 +21,7 @@ When `SPEC_designUnitTests` identifies P0 Functional coverage for an active stor
 - As a Developer, when I have demo tests, I want to convert them into CaTDD functional skeletons so that existing examples become living verification design.
 - As a Developer, when I have a defined interface or protocol, I want to use CaTDD to design the Typical skeleton so that core behavior is specified before implementation.
 - As a Developer, when I already have Typical, Edge, Misuse, Fault, or later category skeletons, I want to select and implement the next test case so that TDD proceeds one TC at a time.
+- As a Developer, when an implemented TC is GREEN but hard to read or maintain, I want to refactor that single test case without changing behavior or losing US/AC/TC traceability.
 
 ## Flow Diagram
 
@@ -43,6 +44,8 @@ flowchart LR
     NextTC --> Impl["UT_implTestCase"]
     Impl --> ReviewImpl["UT_reviewImplTestCase"]
     ReviewImpl --> NextTC
+    ReviewImpl -. "cleanup when GREEN" .-> Refact["UT_refactTestCase"]
+    Refact --> ReviewImpl
 ```
 
 ## Command Sequence
@@ -54,6 +57,7 @@ flowchart LR
 5. Use [../commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](../commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) before implementation begins.
 6. Use [../commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md](../commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) to select the next TC.
 7. Use [../commands/P0-FuncTestsFlow/UT_implTestCase.md](../commands/P0-FuncTestsFlow/UT_implTestCase.md) and [../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md](../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) for TC-by-TC execution.
+8. Use [../commands/P0-FuncTestsFlow/UT_refactTestCase.md](../commands/P0-FuncTestsFlow/UT_refactTestCase.md) only after a selected TC is GREEN and reviewed, then run [../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md](../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) again to prove no skeleton drift.
 
 ## Conflict Guard
 
@@ -62,3 +66,4 @@ flowchart LR
 - Category semantics must come from `methodPrompts/CaTDD_methodPrompt4Cat-*.md`.
 - Commands must stay language agnostic. Use C++ names such as `UT_FeatureX-Typical.cxx` only as examples.
 - `UT_designFuncTestsSkeleton` and the category-specific `UT_design*Skeleton` commands own skeleton design, not executable implementation bodies.
+- `UT_refactTestCase` is a no-behavior-change cleanup step for one GREEN TC. Missing behavior, missing coverage, or wrong category routing must go back to design or implementation commands instead of being added during refactor.

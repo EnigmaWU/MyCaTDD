@@ -33,6 +33,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_designUnitTests.md](SPEC_designUnitTests.md) | Design CaTDD unit test skeletons for the active story. |
 | [SPEC_implUnitTests.md](SPEC_implUnitTests.md) | Implement selected test cases. |
 | [SPEC_implProductCodes.md](SPEC_implProductCodes.md) | Implement product code to satisfy tests. |
+| [SPEC_refactUnitTests.md](SPEC_refactUnitTests.md) | Refactor GREEN unit tests without changing behavior. |
 | [SPEC_reviewProductCodes.md](SPEC_reviewProductCodes.md) | Review implementation quality and traceability. |
 | [SPEC_suspendUserStory.md](SPEC_suspendUserStory.md) | Suspend an active story into suspendUS while preserving a durable work reference. |
 | [SPEC_resumeUserStory.md](SPEC_resumeUserStory.md) | Resume a suspended story back into active work. |
