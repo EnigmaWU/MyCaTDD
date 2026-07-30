@@ -1,6 +1,6 @@
 # utCodeAgentCLI 使用设计
 
-本文档记录 `utCodeAgentCLI` 的 CLI 接口设计。它基于 [`slashCommands/templates/README_UsageDesignTemplate.md`](../../slashCommands/templates/README_UsageDesignTemplate.md)。
+本文档记录 `utCodeAgentCLI` 的 CLI 接口设计。它基于 [`README_UsageDesignLiteCliTemplate`](../../slashCommands/templates/README_UsageDesignLiteCliTemplate.md)。
 
 - Story: utCodeAgentCLI 使用设计
 - Source artifact: GitHub issue — "Usage design for utCodeAgentCLI"

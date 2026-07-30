@@ -23,7 +23,11 @@ required_pairs=(
   "README_CompatDesign.md|slashCommands/templates/README_CompatDesignTemplate.md"
   "README_DiagnosisDesign.md|slashCommands/templates/README_DiagnosisDesignTemplate.md"
   "README_VerifyDesign.md|slashCommands/templates/README_VerifyDesignTemplate.md"
-  "README_UsageDesign.md|slashCommands/templates/README_UsageDesignTemplate.md"
+  "README_UsageDesign.md|slashCommands/templates/README_UsageDesignLiteCliTemplate.md"
+)
+
+additional_templates=(
+  "slashCommands/templates/README_UsageDesignMicroServiceTemplate.md"
 )
 
 domain_templates=(
@@ -66,6 +70,16 @@ for pair in "${required_pairs[@]}"; do
       echo "[readme-template-test] template missing Usage Example: $template" >&2
       missing=1
     }
+  fi
+done
+
+for template in "${additional_templates[@]}"; do
+  if [[ ! -f "$REPO_ROOT/$template" ]]; then
+    echo "[readme-template-test] missing additional SpecCoding README template: $template" >&2
+    missing=1
+  elif ! grep -Fq '## Usage Example' "$REPO_ROOT/$template"; then
+    echo "[readme-template-test] additional template missing Usage Example: $template" >&2
+    missing=1
   fi
 done
 

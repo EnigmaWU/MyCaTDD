@@ -13,7 +13,7 @@ Create or update detailed design and acceptance criteria for the active user sto
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `projectContext_file`: current project context.
 - `readme_spec_files`: optional project-root `README*` SPEC files to create or update.
-- `readme_spec_templates`: matching templates under `slashCommands/templates/`, such as `README_DetailDesignTemplate.md`, `README_ErrorDesignTemplate.md`, `README_ResourceDesignTemplate.md`, `README_StateDesignTemplate.md`, `README_PerfDesignTemplate.md`, `README_CompatDesignTemplate.md`, `README_DiagnosisDesignTemplate.md`, `README_VerifyDesignTemplate.md`, and `README_UsageDesignTemplate.md`.
+- `readme_spec_templates`: matching templates under `slashCommands/templates/`, such as `README_DetailDesignTemplate.md`, `README_ErrorDesignTemplate.md`, `README_ResourceDesignTemplate.md`, `README_StateDesignTemplate.md`, `README_PerfDesignTemplate.md`, `README_CompatDesignTemplate.md`, `README_DiagnosisDesignTemplate.md`, `README_VerifyDesignTemplate.md`, `README_UsageDesignLiteCliTemplate.md`, and `README_UsageDesignMicroServiceTemplate.md`.
 - `design_target`: optional project-root README SPEC file, API contract, architecture note, or detail design target.
 
 ## Method References

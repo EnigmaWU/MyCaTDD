@@ -1,6 +1,6 @@
 # utCodeAgentCLI Usage Design
 
-This document captures the CLI interface design for `utCodeAgentCLI`. It is based on [`slashCommands/templates/README_UsageDesignTemplate.md`](../../slashCommands/templates/README_UsageDesignTemplate.md).
+This document captures the CLI interface design for `utCodeAgentCLI`. It is based on [`README_UsageDesignLiteCliTemplate`](../../slashCommands/templates/README_UsageDesignLiteCliTemplate.md).
 
 - Story: Usage design for utCodeAgentCLI
 - Source artifact: GitHub issue — "Usage design for utCodeAgentCLI"
