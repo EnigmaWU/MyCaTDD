@@ -12,9 +12,20 @@ This is the SpecCoding template for project-root `README_ResourceDesign.md`. Cre
 
 ## Resource Inventory
 
-| Resource | Owner | Limit/Budget | Allocation Policy | Release Policy |
-| --- | --- | --- | --- | --- |
-| {{Resource}} | {{Owner}} | {{Limit}} | {{Static/pool/dynamic/borrowed}} | {{Release rule}} |
+| Resource | Owner | Limit/Budget | Allocation Policy | Release Policy | Exhaustion Behavior |
+| --- | --- | --- | --- | --- | --- |
+| {{Resource}} | {{Owner}} | {{Limit}} | {{Static/pool/dynamic/borrowed}} | {{Release rule}} | {{reject/throttle/drop/degrade/fail-fast}} |
+
+## Resource Budget Scenarios
+
+<!-- How: Define finite-resource scenarios as measurable constraints.
+	If a resource has no meaningful limit, mark why instead of inventing a budget. -->
+
+| Scenario | Resource Pressure | Environment | Expected Response | Response Measure | CaTDD Category |
+| --- | --- | --- | --- | --- | --- |
+| {{normal use}} | {{resource use}} | {{environment}} | {{response}} | {{numeric budget or observable bound}} | `funcValidTypical` |
+| {{limit reached}} | {{resource use}} | {{environment}} | {{response}} | {{limit/rejection/degradation measure}} | `funcValidEdge` |
+| {{resource exhaustion}} | {{resource use}} | {{environment}} | {{response}} | {{no leak/no corruption/no deadlock measure}} | `funcInvalidFault` |
 
 ## Contention and Backpressure
 
@@ -24,10 +35,23 @@ This is the SpecCoding template for project-root `README_ResourceDesign.md`. Cre
 
 ## Lifetime and Ownership
 
-- Ownership transfer: {{Producer -> consumer rule}}
-- Lifetime boundary: {{Create, borrow, recycle, destroy}}
-- Cleanup rule: {{Normal cleanup and failure cleanup}}
-- Leak prevention: {{Guard, test, counter, static check}}
+| Resource | Creator | Borrower / Consumer | Transfer Rule | Cleanup Rule | Leak Prevention Evidence |
+| --- | --- | --- | --- | --- | --- |
+| {{resource}} | {{owner}} | {{consumer}} | {{create/borrow/recycle/destroy}} | {{normal and failure cleanup}} | {{guard/test/counter/static check}} |
+
+## Resource Tradeoffs
+
+| Decision | Improves | Costs / Risks | Alternative | Verification Evidence |
+| --- | --- | --- | --- | --- |
+| {{pool/static allocation/drop policy/etc.}} | {{latency/reliability/memory safety}} | {{memory/complexity/throughput/quality}} | {{alternative}} | {{test/measurement/review}} |
+
+## CaTDD Verification Handoff
+
+| Feature Token | Category Token | Suggested Test File | Resource Concern | Notes |
+| --- | --- | --- | --- | --- |
+| `{{feature_token}}` | `funcValidEdge` | `test_{{feature_token}}_funcValidEdge.{{ext}}` | {{valid boundary/resource limit}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
+| `{{feature_token}}` | `funcInvalidFault` | `test_{{feature_token}}_funcInvalidFault.{{ext}}` | {{resource unavailable/exhausted/failing}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
+| `{{feature_token}}` | `qualityRobust` | `test_{{feature_token}}_qualityRobust.{{ext}}` | {{leak prevention/repeated use/backpressure stability}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
 
 ## Embedded and Digital Media Resource Points
 
@@ -60,5 +84,9 @@ Expected result: the temporary file shows resource inventory, contention policy,
 ## Review Checklist
 
 - Every finite resource has an owner, budget, allocation policy, and release policy.
+- Resource budget scenarios define measurable responses at normal, limit, and exhaustion points.
 - Contention and backpressure behavior are explicit.
+- Lifetime ownership and cleanup evidence are explicit.
+- Resource tradeoffs document the cost of the selected policy.
+- CaTDD handoff maps resource behavior to Edge, Fault, or Robust categories.
 - Embedded software finite resources and digital video/audio buffers/compute/bandwidth are covered when relevant.

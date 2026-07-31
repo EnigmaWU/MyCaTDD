@@ -12,7 +12,7 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `projectContext_file`: current project context.
-- `readme_spec_files`: optional project-root `README*` SPEC files to create or update.
+- `readme_spec_files`: optional project-root README SPEC files to create or update, including `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_VerifyDesign.md`, and `README_UsageDesign.md` when the active story changes those design surfaces.
 - `readme_spec_templates`: matching templates under `slashCommands/templates/`, such as `README_DetailDesignTemplate.md`, `README_ErrorDesignTemplate.md`, `README_ResourceDesignTemplate.md`, `README_StateDesignTemplate.md`, `README_PerfDesignTemplate.md`, `README_CompatDesignTemplate.md`, `README_DiagnosisDesignTemplate.md`, `README_VerifyDesignTemplate.md`, `README_UsageDesignLiteCliTemplate.md`, and `README_UsageDesignMicroServiceTemplate.md`.
 - `design_target`: optional project-root README SPEC file, API contract, architecture note, or detail design target.
 
@@ -25,9 +25,9 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 - Skill-first rule: if relevant architecture skills exist in the workspace, use them to shape detailed design output quality.
 - Preferred skills and usage:
-	- `design-architecture-viewpoints` to check detail-level consistency with approved architecture views and ownership boundaries.
-	- `apply-architectural-tactics` to carry architecture quality scenarios into concrete detail constraints and implementation guidance.
-	- `document-architectural-decisions` when detail-level design choices become architecture-significant and require ADR promotion.
+  - `design-architecture-viewpoints` to check detail-level consistency with approved architecture views and ownership boundaries.
+  - `apply-architectural-tactics` to carry architecture quality scenarios into concrete detail constraints and implementation guidance.
+  - `document-architectural-decisions` when detail-level design choices become architecture-significant and require ADR promotion.
 - Builtin fallback rule: if one or more relevant skills are unavailable, apply the learned builtin-skill detail checklist covering: API contract clarity, state transition ownership, resource/error constraints, and AC-to-test conversion readiness.
 - Completion rule: lack of skill availability must not block generation of complete detailed design artifacts. Skills are preferred when present; builtin-skill behavior is mandatory fallback.
 

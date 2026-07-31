@@ -11,9 +11,19 @@ This is the SpecCoding template for project-root `README_PerfDesign.md`. Create 
 
 ## Performance Budgets
 
-| Budget | Target | Worst Case | Measurement Method | Owner |
-| --- | --- | --- | --- | --- |
-| {{Latency/CPU/RAM/bandwidth/power}} | {{Target}} | {{Worst case}} | {{How measured}} | {{Owner}} |
+| Budget | Target | Worst Case | Measurement Method | Owner | Decision If Exceeded |
+| --- | --- | --- | --- | --- | --- |
+| {{Latency/CPU/RAM/bandwidth/power}} | {{Target}} | {{Worst case}} | {{How measured}} | {{Owner}} | {{optimize/degrade/reject/defer}} |
+
+## Quality Attribute Scenarios
+
+<!-- How: Express performance as measurable scenarios, not vague adjectives.
+	Each response measure should be numeric or explicitly qualitative with rationale.
+	(→ SKILL: apply-architectural-tactics) -->
+
+| Scenario | Source | Stimulus | Environment | Response | Response Measure | Priority |
+| --- | --- | --- | --- | --- | --- | --- |
+| {{scenario name}} | {{user/system/load source}} | {{event/load}} | {{normal/peak/degraded}} | {{system response}} | {{latency/throughput/jitter/CPU/RAM/power threshold}} | {{H/M/L}} |
 
 ## Real-Time Path
 
@@ -26,6 +36,12 @@ This is the SpecCoding template for project-root `README_PerfDesign.md`. Create 
 | Condition | Expected Behavior | Degradation Policy | Telemetry |
 | --- | --- | --- | --- |
 | {{Load condition}} | {{Expected behavior}} | {{Drop/throttle/retry/fail-fast}} | {{Counter/log/trace}} |
+
+## Performance Tradeoffs
+
+| Decision | Improves | Costs / Risks | Alternative | Verification Evidence |
+| --- | --- | --- | --- | --- |
+| {{buffering/cache/batching/threading/allocation decision}} | {{latency/throughput/jitter/power}} | {{memory/complexity/freshness/quality}} | {{alternative}} | {{measurement or test}} |
 
 ## Embedded and Digital Media Performance Points
 
@@ -45,9 +61,17 @@ digital video/audio points:
 
 ## Measurement Plan
 
-| Metric | Tool/Probe | Scenario | Pass Criteria |
-| --- | --- | --- | --- |
-| {{Metric}} | {{Profiler/counter/trace/probe}} | {{Scenario}} | {{Threshold}} |
+| Metric | Tool/Probe | Scenario | Pass Criteria | Failure Routing |
+| --- | --- | --- | --- | --- |
+| {{Metric}} | {{Profiler/counter/trace/probe}} | {{Scenario}} | {{Threshold}} | {{optimize/update design/defer/abort story}} |
+
+## CaTDD Verification Handoff
+
+| Feature Token | Category Token | Suggested Test File | Performance Concern | Notes |
+| --- | --- | --- | --- | --- |
+| `{{feature_token}}` | `qualityPerformance` | `test_{{feature_token}}_qualityPerformance.{{ext}}` | {{latency/throughput/jitter/resource budget}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
+| `{{feature_token}}` | `funcValidEdge` | `test_{{feature_token}}_funcValidEdge.{{ext}}` | {{valid boundary load or limit}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
+| `{{feature_token}}` | `qualityRobust` | `test_{{feature_token}}_qualityRobust.{{ext}}` | {{sustained load, stress, or repeated execution}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
 
 ## Usage Example
 
@@ -64,5 +88,9 @@ Expected result: the temporary file shows performance budgets, real-time path, l
 ## Review Checklist
 
 - Every performance goal has a numeric budget or an explicit reason why it is qualitative.
+- Quality attribute scenarios use source, stimulus, environment, response, and response measure.
+- Tradeoffs are documented when improving one performance attribute costs another quality.
 - Measurement method and pass criteria are defined before implementation is considered complete.
+- Measurement failures route to a concrete next action.
+- CaTDD handoff maps performance concerns to category-specific test files or no-test-points decisions.
 - Embedded software timing and digital video/audio QoS constraints are covered when relevant.

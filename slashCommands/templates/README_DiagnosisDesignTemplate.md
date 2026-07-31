@@ -13,9 +13,18 @@ This is the SpecCoding template for project-root `README_DiagnosisDesign.md`. Cr
 
 ## Symptom Model
 
-| Symptom | User/System Observation | Severity | Frequency | Trigger |
+| Symptom | User/System Observation | Severity | Frequency | Trigger | First Triage Question |
+| --- | --- | --- | --- | --- | --- |
+| {{Symptom}} | {{Observable behavior}} | {{Severity}} | {{Always/intermittent/rare}} | {{Trigger condition}} | {{question that separates likely causes}} |
+
+## Symptom to Evidence Map
+
+<!-- How: A diagnosis design is useful only if symptoms route to evidence and next action.
+	Avoid adding logs without stating which question each log answers. -->
+
+| Symptom | Hypothesis | Evidence Needed | Evidence Proves / Disproves | Missing Evidence Risk |
 | --- | --- | --- | --- | --- |
-| {{Symptom}} | {{Observable behavior}} | {{Severity}} | {{Always/intermittent/rare}} | {{Trigger condition}} |
+| {{symptom}} | {{likely cause}} | {{log/counter/trace/snapshot/repro}} | {{what conclusion becomes possible}} | {{what remains unknowable}} |
 
 ## Evidence to Capture
 
@@ -25,17 +34,37 @@ This is the SpecCoding template for project-root `README_DiagnosisDesign.md`. Cr
 
 ## Diagnostic Hooks
 
-- Logging hook: {{log category, level, correlation id, timestamp source}}
-- Counter hook: {{counter name, increment condition, reset policy}}
-- Trace hook: {{tracepoint, span, event id, sampling rule}}
-- Snapshot hook: {{state dump, register dump, buffer dump, crash dump}}
-- Reproduction hook: {{script, captured input, stream segment, seed, config}}
+| Hook | Signal | Capture Trigger | Correlation Key | Cost / Safety Limit |
+| --- | --- | --- | --- | --- |
+| Logging hook | {{log category, level, timestamp source}} | {{when emitted}} | {{correlation id}} | {{redaction/rate limit}} |
+| Counter hook | {{counter name, increment condition, reset policy}} | {{when updated}} | {{scope labels}} | {{cardinality limit}} |
+| Trace hook | {{tracepoint, span, event id, sampling rule}} | {{when sampled}} | {{trace/span id}} | {{sampling/cost limit}} |
+| Snapshot hook | {{state/register/buffer/crash dump}} | {{trigger condition}} | {{artifact id}} | {{privacy/safety/storage limit}} |
+| Reproduction hook | {{script, captured input, stream segment, seed, config}} | {{when captured}} | {{repro id}} | {{retention/safety limit}} |
 
 ## Root-Cause Routing
 
 | Evidence Pattern | Likely Area | Next Command or Action | Owner |
 | --- | --- | --- | --- |
 | {{Pattern}} | {{Design/test/code/config/hardware/media path}} | {{SPEC_updateDetailDesign/SPEC_designUnitTests/SPEC_abortUserStory/SPEC_importIssue}} | {{Owner}} |
+
+## Diagnosis Decision Tree
+
+```mermaid
+flowchart TD
+  symptom["{{Symptom observed}}"] --> evidence{"{{Evidence present?}}"}
+  evidence -->|yes| routeA["{{Likely root-cause route}}"]
+  evidence -->|no| capture["{{Capture missing evidence}}"]
+  capture --> routeB["{{Next diagnostic action}}"]
+```
+
+## CaTDD Verification Handoff
+
+| Feature Token | Category Token | Suggested Test File | Diagnosis Concern | Notes |
+| --- | --- | --- | --- | --- |
+| `{{feature_token}}` | `funcInvalidFault` | `test_{{feature_token}}_funcInvalidFault.{{ext}}` | {{fault emits diagnosable evidence}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
+| `{{feature_token}}` | `qualityRobust` | `test_{{feature_token}}_qualityRobust.{{ext}}` | {{repeated/intermittent issue remains diagnosable}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
+| `{{feature_token}}` | `qualityConfiguration` | `test_{{feature_token}}_qualityConfiguration.{{ext}}` | {{diagnostic hook config, sampling, or redaction behavior}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
 
 ## Embedded and Digital Media Diagnosis Points
 
@@ -68,5 +97,9 @@ Expected result: the temporary file shows symptom, evidence, diagnostic hook, an
 ## Review Checklist
 
 - Each important symptom has explicit evidence to capture.
+- Each diagnostic signal answers a specific triage question or hypothesis.
 - Diagnostic hooks are actionable in development, CI, or field debugging.
+- Diagnostic hooks include correlation, cost, privacy, and safety limits.
+- Root-cause routing has a decision tree or equivalent explicit routing model.
+- CaTDD handoff maps diagnosability behavior to Fault, Robust, or Configuration categories.
 - Embedded software hardware evidence and digital video/audio media evidence are covered when relevant.

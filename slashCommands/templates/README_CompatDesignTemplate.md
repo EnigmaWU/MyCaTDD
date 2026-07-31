@@ -11,9 +11,20 @@ This is the SpecCoding template for project-root `README_CompatDesign.md`. Creat
 
 ## Compatibility Matrix
 
-| Boundary | Supported Set | Unsupported or Deprecated Set | Compatibility Rule | Owner |
+| Boundary | Supported Set | Unsupported or Deprecated Set | Compatibility Rule | Detection Method | Owner |
+| --- | --- | --- | --- | --- | --- |
+| {{Platform/version/protocol/format/toolchain/integration}} | {{Supported values}} | {{Unsupported values}} | {{Accept/reject/migrate/degrade}} | {{probe/metadata/version/handshake}} | {{Owner}} |
+
+## Compatibility Decision Rules
+
+<!-- How: Decide behavior at every boundary before implementation.
+	Compatibility should be observable as accept, reject, migrate, fallback, or degrade. -->
+
+| If Caller / Artifact Is | And Environment Is | Then Behavior Is | User/System Signal | CaTDD Category |
 | --- | --- | --- | --- | --- |
-| {{Platform/version/protocol/format/toolchain/integration}} | {{Supported values}} | {{Unsupported values}} | {{Accept/reject/migrate/degrade}} | {{Owner}} |
+| {{supported version/format/platform}} | {{supported environment}} | {{accept}} | {{success signal}} | `qualityCompatibility` |
+| {{deprecated but supported}} | {{supported environment}} | {{accept with warning / migrate}} | {{warning/result}} | `qualityCompatibility` |
+| {{unsupported}} | {{any environment}} | {{reject / fallback / degrade}} | {{diagnostic/result}} | `funcInvalidMisuse` |
 
 ## Version and Migration Rules
 
@@ -23,10 +34,18 @@ This is the SpecCoding template for project-root `README_CompatDesign.md`. Creat
 
 ## Protocol and Format Boundaries
 
-- Protocol rule: {{Version negotiation, feature detection, or handshake behavior}}
-- Format rule: {{File/container/schema/media format acceptance and rejection}}
-- Toolchain rule: {{Compiler, SDK, runtime, ABI, dependency, or generated-code version}}
-- Integration rule: {{External service, driver, device, or plugin compatibility}}
+| Boundary | Negotiation / Detection | Accepted Behavior | Rejected Behavior | Migration / Fallback |
+| --- | --- | --- | --- | --- |
+| Protocol | {{Version negotiation, feature detection, or handshake behavior}} | {{accepted path}} | {{rejection diagnostic}} | {{fallback}} |
+| Format | {{File/container/schema/media format detection}} | {{accepted path}} | {{rejection diagnostic}} | {{migration/fallback}} |
+| Toolchain | {{Compiler, SDK, runtime, ABI, dependency, generated-code version}} | {{accepted path}} | {{rejection diagnostic}} | {{migration/fallback}} |
+| Integration | {{External service, driver, device, plugin}} | {{accepted path}} | {{rejection diagnostic}} | {{migration/fallback}} |
+
+## Compatibility Risk Register
+
+| Risk | Boundary | Impact | Mitigation | Verification Evidence |
+| --- | --- | --- | --- | --- |
+| {{compatibility risk}} | {{boundary}} | {{breakage/user/system impact}} | {{pin/migrate/detect/fallback/deprecate}} | {{test/manual check/contract evidence}} |
 
 ## Embedded and Digital Media Compatibility Points
 
@@ -50,6 +69,13 @@ digital video/audio points:
 | --- | --- | --- | --- |
 | {{Scenario}} | {{Boundary}} | {{Pass/degrade/reject/migrate}} | {{Test/log/manual evidence}} |
 
+## CaTDD Verification Handoff
+
+| Feature Token | Category Token | Suggested Test File | Compatibility Concern | Notes |
+| --- | --- | --- | --- | --- |
+| `{{feature_token}}` | `qualityCompatibility` | `test_{{feature_token}}_qualityCompatibility.{{ext}}` | {{supported/deprecated/migration/interop behavior}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
+| `{{feature_token}}` | `funcInvalidMisuse` | `test_{{feature_token}}_funcInvalidMisuse.{{ext}}` | {{unsupported caller/artifact rejected}} | {{TC seeds or `@[NoTestPoints]: <reason>`}} |
+
 ## Usage Example
 
 Run from the repository root to instantiate this compatibility-design template into a temporary file:
@@ -66,4 +92,7 @@ Expected result: the temporary file shows compatibility matrix, migration rules,
 
 - Supported and unsupported versions, platforms, protocols, formats, toolchains, and integrations are explicit.
 - Compatibility behavior is observable as accept, reject, migrate, fallback, or degrade.
+- Detection and negotiation rules are explicit at each boundary.
+- Compatibility risks have mitigation and verification evidence.
+- CaTDD handoff maps compatibility and rejection behavior to category-specific test files.
 - Embedded software hardware/toolchain and digital video/audio codec/format compatibility are covered when relevant.
