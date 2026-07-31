@@ -21,19 +21,55 @@
 
 ---
 
+## Story Readiness Snapshot
+
+<!-- How: Decide whether the story can enter SPEC_openUserStory before generating design or tests.
+     A thoughtful story is not just formatted; it proves why now, what outcome matters, which
+     examples are concrete, and which unknowns still block acceptance. -->
+
+| Lens | Answer | Evidence |
+| --- | --- | --- |
+| User value is explicit | {{yes/no}} | {{role + business value source}} |
+| Observable outcome exists | {{yes/no}} | {{output, state change, file, response, or behavior}} |
+| Concrete examples exist | {{yes/no}} | {{Example Mapping rows or source notes}} |
+| Blocking questions remain | {{yes/no}} | {{Initial Acceptance Questions references}} |
+| Story size is acceptable | {{yes/no}} | {{Sub-UserStory Candidates / split rationale}} |
+| Ready decision | {{Ready / Blocked / Too Large / Needs Split}} | {{why this decision is correct}} |
+
+---
+
 ## Priority
 
 <!-- How: Score Business Value, User Value, Cost, Risk 1-9 each. Score = (BV+UV)/(Cost+Risk).
      Score ≥18 elevates to P0. Rationale required. (→ SKILL: prioritize-requirements) -->
 
 | Dimension | Score (1-9) | Rationale |
-|---|---|---|
+| --- | --- | --- |
 | Business Value | {{n}} | {{why this matters to the company}} |
 | User Value | {{n}} | {{how much this improves UX}} |
 | Cost / Effort | {{n}} | {{estimated effort}} |
 | Risk / Complexity | {{n}} | {{technical or domain uncertainty}} |
 
 **Priority Score:** ({{BV}} + {{UV}}) / ({{Cost}} + {{Risk}}) = **{{X}}** | **Priority:** {{P0 / P1 / P2 / P3}}
+
+---
+
+## Example Mapping
+
+<!-- How: Use breadth-first discovery before polishing BDD wording.
+     Yellow = this story. Blue = rules. Green = concrete examples. Pink = open questions.
+     If there are too many rules, split the story. If any pink card blocks the main outcome,
+     mark Ready decision as Blocked. (→ SKILL: facilitate-example-mapping) -->
+
+| Card | ID | Content | Trace / Decision |
+| --- | --- | --- | --- |
+| Yellow Story | US-{{n}} | {{one-line story title}} | {{source note}} |
+| Blue Rule | RULE-{{n}} | {{business rule or acceptance rule}} | {{AC/BR reference}} |
+| Green Example | EX-{{n}} | {{specific values, actor, context, and expected result}} | {{Scenario reference}} |
+| Green Counter-Example | CEX-{{n}} | {{specific invalid, alternate, or failure example}} | {{Edge/Misuse/Fault reference}} |
+| Pink Question | Q-{{n}} | {{unknown that blocks or changes acceptance}} | {{blocking / non-blocking / split}} |
+
+**Example Mapping Decision:** {{Ready / Blocked / Too Many Rules / Needs More Examples}}
 
 ---
 
@@ -51,8 +87,21 @@
 ### Model Gap Analysis
 
 | # | Gap Found | Question |
-|---|---|---|
+| --- | --- | --- |
 | 1 | {{unhandled transition, dead-end state, or missing path}} | {{clarifying question for developer}} |
+
+---
+
+## Input and Output Dictionary
+
+<!-- How: Extract data elements the story consumes, produces, stores, or validates. Use TBD instead
+     of guessing domain limits. Complex structures should decompose into primitives.
+     (→ SKILL: build-data-dictionary + apply-oopsi-model) -->
+
+| Element | Kind | Type / Format | Required | Allowed Values / Limits | Producer | Consumer | Validation / Question |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| {{InputName}} | input | {{string/path/json/object/etc.}} | {{yes/no}} | {{allowed values, range, pattern, or TBD}} | {{user/system/dependency}} | {{feature/module}} | {{rule or question}} |
+| {{OutputName}} | output | {{string/path/json/object/etc.}} | {{yes/no}} | {{allowed values, range, pattern, or TBD}} | {{feature/module}} | {{user/system/dependency}} | {{rule or question}} |
 
 ---
 
@@ -68,31 +117,33 @@
 
 ### Scenario 1: {{Happy Path Title}}
 
+**Example Trace:** EX-{{n}}
 **Rule:** {{business rule or constraint that governs this scenario}}
 **Given** {{precondition}}
 **When** {{action or event}}
 **Then** {{observable outcome}}
 
 | Concrete Examples | Counter-Examples |
-|---|---|
+| --- | --- |
 | {{success case 1}} | {{failure case 1}} |
 
 **Open Questions:** {{or "None"}}
 
 ### Scenario 2: {{Alternate Typical Path Title}}
 
+**Example Trace:** EX-{{n}}
 **Rule:** {{business rule or constraint}}
 **Given** {{precondition}}
 **When** {{action or event}}
 **Then** {{observable outcome}}
 
 | Concrete Examples | Counter-Examples |
-|---|---|
+| --- | --- |
 | {{success case}} | {{failure case}} |
 
 **Open Questions:** {{or "None"}}
 
-### Scenario N: ...
+### Scenario N
 
 ---
 
@@ -104,8 +155,10 @@
      birthdate input), note it — don't silently hardcode. (→ SKILL: extract-business-rules) -->
 
 | ID | Rule | Type | Implied Functional Requirement |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | BR-{{n}} | {{rule definition}} | {{Fact/Constraint/ActionEnabler/Inference/Computation}} | {{what the system must do}} |
+
+**Business Rule Decision:** {{all rules explicit / implied rule needs answer / no business rules found because this is technical or quality-focused}}
 
 ---
 
@@ -124,19 +177,19 @@
 ### Edge (ValidFunc)
 
 | # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | E{{n}} | {{valid boundary, option, limit, or lifecycle variation}} | {{how the system should respond}} | {{Scenario / AS reference}} | {{verifyOperation_byCondition_expectOutcome}} | {{draft / needs clarification}} |
 
 ### Misuse (InvalidFunc)
 
 | # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | M{{n}} | {{caller violates API contract or uses invalid input/state}} | {{how the system should reject or protect}} | {{Scenario / AS reference}} | {{verifyOperation_byMisuse_expectRejection}} | {{draft / needs clarification}} |
 
 ### Fault (InvalidFunc)
 
 | # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | F{{n}} | {{dependency, resource, or runtime failure under valid caller behavior}} | {{cleanup, diagnostic, or deterministic failure behavior}} | {{Scenario / AS reference}} | {{verifyOperation_byFault_expectGracefulFailure}} | {{draft / needs clarification}} |
 
 ---
@@ -149,8 +202,10 @@
      Acceptance Question and keep the candidate row as trace evidence. -->
 
 | Candidate | CaTDD Class / Category | Why It Is Not In Main AC | Recommendation | Status |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | {{sub-story candidate}} | {{P1 Design: State/Capability/Concurrency or P2 Quality: Performance/Robust/Compatibility/Configuration}} | {{reason this is not P0 Typical/Edge/Misuse/Fault}} | {{create sub-UserStory / ask acceptance question / defer}} | {{open / deferred / created}} |
+
+**Split Decision:** {{keep as one story / split before opening / create follow-up story after P0}}
 
 ---
 
@@ -171,7 +226,7 @@
 ## Risks & Assumptions
 
 | # | Risk / Assumption | Severity | Mitigation / Clarification Needed |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1 | {{risk description}} | {{High / Medium / Low}} | {{question or mitigation action}} |
 
 ---
@@ -183,9 +238,9 @@
      create the sub-UserStory before opening this story.
      (→ SPEC_analyzeFeature Conflict Guard) -->
 
-| # | Question | Raised By | Status |
-|---|---|---|---|
-| 1 | {{question}} | {{model gap / ambiguity hunt / business rule}} | {{open / answered}} |
+| # | Question | Raised By | Blocks Ready? | Owner / Next Evidence | Status |
+| --- | --- | --- | --- | --- | --- |
+| 1 | {{question}} | {{model gap / ambiguity hunt / business rule / pink card}} | {{yes/no}} | {{who or what evidence answers it}} | {{open / answered}} |
 
 **Gate:** This story is READY for `SPEC_openUserStory` only when all blocking acceptance questions are answered. Non-blocking P1/P2 follow-up questions may remain only if they are explicitly traced in Sub-UserStory Candidates.
 
@@ -198,7 +253,7 @@
      (→ SKILL: validate-requirements-criteria) -->
 
 | # | Ambiguous Term | Found In Section | Clarifying Question |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1 | `"{{vague term}}"` | {{section name}} | `"{{precise question}}"` |
 
 ---
@@ -206,7 +261,7 @@
 ## Traceability
 
 | From → To | Link |
-|---|---|
+| --- | --- |
 | This story → Raw input | `.catdd/spec/analyzedNews/{{file}}` |
 | Project story index | `README_UserStories.md` |
 | Parent story | `.catdd/spec/todoUS/{{parent-story-file}}` |
@@ -224,7 +279,7 @@
      (→ SPEC_analyzeAbortedUserStory diagnostic) -->
 
 | Field | Value |
-|---|---|
+| --- | --- |
 | **Original Story** | US-{{n}} in `abortUS/{{YYYYMMDD-UserStory.md}}` |
 | **Abort Date** | {{YYYY-MM-DD}} |
 | **Abort Reason** | {{why the story was aborted}} |

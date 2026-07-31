@@ -30,6 +30,34 @@ This is the SpecCoding template for project-root `README_ArchDesign.md`. Create 
 - {{Goal 2}}
 - {{Constraint}}
 
+## Stakeholders and Concerns
+
+<!-- How: Identify who needs this architecture view and which concern each view answers.
+  Cover at least users, developers, maintainers, operators, and support when relevant.
+  (→ SKILL: design-architecture-viewpoints) -->
+
+| Stakeholder | Primary Concern | Viewpoint Needed | Design Response |
+| --- | --- | --- | --- |
+| {{Users / clients}} | {{capability, workflow, reliability}} | {{Context / Functional / Operational}} | {{how the architecture addresses it}} |
+| {{Developers}} | {{module ownership, integration, testability}} | {{Functional / Development}} | {{how the architecture addresses it}} |
+| {{Operators}} | {{deployment, observability, recovery}} | {{Deployment / Operational}} | {{how the architecture addresses it}} |
+
+## Architecturally Significant Requirements
+
+<!-- How: Extract quality and structural drivers before choosing patterns or technologies.
+  Use measurable response measures; do not keep vague goals such as "fast" or "robust".
+  (→ SKILL: apply-architectural-tactics + define-architectural-drivers) -->
+
+| ASR ID | Quality / Driver | Source | Scenario (Source, Stimulus, Environment, Response, Measure) | Priority |
+| --- | --- | --- | --- | --- |
+| ASR-{{n}} | {{Availability / Performance / Security / Modifiability / Testability / Usability / Constraint}} | {{story/design/source}} | {{source; stimulus; environment; response; response measure}} | {{H/M/L value, H/M/L difficulty}} |
+
+## Tactics and Tradeoffs
+
+| ASR | Selected Tactic / Pattern | Why This Tactic | Sensitivity Point | Tradeoff Point | Risk / Non-Risk |
+| --- | --- | --- | --- | --- | --- |
+| ASR-{{n}} | {{tactic or pattern}} | {{why it satisfies the measurable scenario}} | {{decision variable that strongly affects outcome}} | {{quality attributes affected in opposite directions}} | {{risk or non-risk statement}} |
+
 ## Px-SpecFlow Architecture-Oriented Coverage
 
 Declare how this architecture design handles the architecture-oriented SPEC surfaces defined by Px-SpecFlow. Mark each concern as covered here, delegated to an existing document, deferred to a later SPEC doc, or not applicable.
@@ -110,6 +138,20 @@ flowchart TB
 {{Input}} -> {{Component}} -> {{Output}}
 ```
 
+## Inter-View Consistency Checks
+
+<!-- How: Check that architecture views agree before detail design starts.
+  Every external system should map to an interface; every logical component should map to a
+  development module; every runtime process should map to deployment/operation evidence. -->
+
+| Check | Result | Follow-up |
+| --- | --- | --- |
+| Context vs Functional | {{all external systems map to interfaces / gap}} | {{follow-up if any}} |
+| Functional vs Development | {{components map to modules/packages / gap}} | {{follow-up if any}} |
+| Functional vs Concurrency | {{runtime execution maps to process/thread/task model / gap}} | {{follow-up if any}} |
+| Concurrency vs Deployment | {{processes/tasks map to deployment nodes or runtime modes / gap}} | {{follow-up if any}} |
+| Deployment vs Operational | {{deployment has monitoring, diagnosis, install, and recovery hooks / gap}} | {{follow-up if any}} |
+
 ## Embedded and Digital Media Architecture Points
 
 Embedded software points:
@@ -128,9 +170,9 @@ digital video/audio points:
 
 ## Key Decisions
 
-| Decision | Rationale | Alternatives Considered | Status |
-| --- | --- | --- | --- |
-| {{Decision}} | {{Why}} | {{Alternative}} | {{Proposed/Accepted/Superseded}} |
+| Decision | Selected Option | Rationale | Alternatives Considered | Implications | Status |
+| --- | --- | --- | --- | --- | --- |
+| {{Decision}} | {{Option}} | {{Why}} | {{Alternative}} | {{effect on modules, tests, operations, or compatibility}} | {{Proposed/Accepted/Superseded}} |
 
 ## Risks and Constraints
 
@@ -152,7 +194,11 @@ Expected result: the temporary file shows architecture sections for views, bound
 ## Review Checklist
 
 - Architecture decisions are traceable to a user story or project constraint.
+- Stakeholders and concerns map to the selected viewpoints.
+- At least three ASRs use measurable quality-attribute scenario format when architecture quality is in scope.
+- Selected tactics trace to ASRs and expose sensitivity/tradeoff points.
 - Mermaid-renderable C4-style context, container, component, runtime, and deployment views are present or explicitly marked not applicable.
 - Px-SpecFlow architecture-oriented surfaces are covered, delegated, deferred, or marked not applicable.
+- Inter-view consistency checks are explicit before detail design starts.
 - Module boundaries are explicit enough for implementation and review.
 - Dependency direction and risks are visible.
