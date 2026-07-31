@@ -87,10 +87,24 @@ required_sources=(
   "$REPO_ROOT/methodPrompts/README_UserGuide_ZH.md"
   "$REPO_ROOT/methodPrompts/CaTDD_methodPrompt.md"
   "$REPO_ROOT/methodPrompts/CaTDD_designAndImplTemplate.cxx"
+  "$REPO_ROOT/methodPrompts/CaTDD_designAndImplTemplate.ts"
   "$REPO_ROOT/slashCommands"
 )
 
-for source in "${required_sources[@]}"; do
+method_prompt_subtopics=("$REPO_ROOT"/methodPrompts/CaTDD_methodPrompt-*.md)
+method_prompt_categories=("$REPO_ROOT"/methodPrompts/CaTDD_methodPrompt4Cat-*.md)
+
+if [[ ! -e "${method_prompt_subtopics[0]}" ]]; then
+  echo "Required method prompt subtopics not found: $REPO_ROOT/methodPrompts/CaTDD_methodPrompt-*.md" >&2
+  exit 1
+fi
+
+if [[ ! -e "${method_prompt_categories[0]}" ]]; then
+  echo "Required category method prompts not found: $REPO_ROOT/methodPrompts/CaTDD_methodPrompt4Cat-*.md" >&2
+  exit 1
+fi
+
+for source in "${required_sources[@]}" "${method_prompt_subtopics[@]}" "${method_prompt_categories[@]}"; do
   if [[ ! -e "$source" ]]; then
     echo "Required source not found: $source" >&2
     exit 1
@@ -133,7 +147,10 @@ cp "$SOURCE_SKILL_DIR/README.md" "$DIST_SKILL_DIR/README.md"
 cp "$REPO_ROOT/methodPrompts/README_UserGuide.md" "$DIST_SKILL_DIR/references/README_UserGuide.md"
 cp "$REPO_ROOT/methodPrompts/README_UserGuide_ZH.md" "$DIST_SKILL_DIR/references/README_UserGuide_ZH.md"
 cp "$REPO_ROOT/methodPrompts/CaTDD_methodPrompt.md" "$DIST_SKILL_DIR/references/CaTDD_methodPrompt.md"
+cp "${method_prompt_subtopics[@]}" "$DIST_SKILL_DIR/references/"
+cp "${method_prompt_categories[@]}" "$DIST_SKILL_DIR/references/"
 cp "$REPO_ROOT/methodPrompts/CaTDD_designAndImplTemplate.cxx" "$DIST_SKILL_DIR/references/CaTDD_designAndImplTemplate.cxx"
+cp "$REPO_ROOT/methodPrompts/CaTDD_designAndImplTemplate.ts" "$DIST_SKILL_DIR/references/CaTDD_designAndImplTemplate.ts"
 cp -R "$REPO_ROOT/slashCommands" "$DIST_SKILL_DIR/slashCommands"
 
 dist_symlink_count="$(find "$DIST_SKILL_DIR" -type l | wc -l | tr -d '[:space:]')"

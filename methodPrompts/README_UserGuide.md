@@ -59,6 +59,13 @@ methodPrompts/
   README_UserGuide.md
   README_UserGuide_ZH.md
   CaTDD_methodPrompt.md
+  CaTDD_methodPrompt-categorySemantics.md
+  CaTDD_methodPrompt-workflow.md
+  CaTDD_methodPrompt-testStructure.md
+  CaTDD_methodPrompt-fileNaming.md
+  CaTDD_methodPrompt-agentWorkflow.md
+  CaTDD_methodPrompt-troubleshooting.md
+  CaTDD_methodPrompt-examples.md
   CaTDD_methodPrompt4Cat-Typical.md
   CaTDD_methodPrompt4Cat-Edge.md
   CaTDD_methodPrompt4Cat-Misuse.md
@@ -93,15 +100,16 @@ This file exists so users do not need the repo-level guide, slide deck, installe
 Follow this workflow when starting a CaTDD test file.
 
 1. Read `README.md` to choose the relevant method prompt.
-2. Read `CaTDD_methodPrompt.md` for the full method contract.
-3. Copy `CaTDD_designAndImplTemplate.cxx` or adapt its section structure to your language.
-4. Capture Stage-0 free drafts: scenarios, examples, risks, and open questions.
-5. Classify drafts into categories using the priority order below.
-6. Write US/AC/TC comments inside the test file before implementing code.
-7. Generate or write one failing test for the next TC.
-8. Implement only enough production code to pass that TC.
-9. Update TC status markers and keep the comments synchronized with behavior.
-10. Repeat one TC at a time.
+2. Read `CaTDD_methodPrompt.md` as the main method entry.
+3. Read the needed `CaTDD_methodPrompt-*.md` subtopic for detailed guidance.
+4. Copy `CaTDD_designAndImplTemplate.cxx` or adapt its section structure to your language.
+5. Capture Stage-0 free drafts: scenarios, examples, risks, and open questions.
+6. Classify drafts into categories using the priority order below.
+7. Write US/AC/TC comments inside the test file before implementing code.
+8. Generate or write one failing test for the next TC.
+9. Implement only enough production code to pass that TC.
+10. Update TC status markers and keep the comments synchronized with behavior.
+11. Repeat one TC at a time.
 
 ## Usage Example
 
@@ -151,7 +159,14 @@ Use this default priority order unless project risk says otherwise.
 
 | Need | Use |
 | --- | --- |
-| Learn the full method contract | `CaTDD_methodPrompt.md` |
+| Start from the main method entry | `CaTDD_methodPrompt.md` |
+| Classify test points and keep category identity stable | `CaTDD_methodPrompt-categorySemantics.md` |
+| Follow Stage-0, Stage-1, RED/GREEN, and quality gates | `CaTDD_methodPrompt-workflow.md` |
+| Build US/AC/TC comments, coverage matrices, and tracking blocks | `CaTDD_methodPrompt-testStructure.md` |
+| Apply canonical `test_{feature}_{category}.<ext>` naming | `CaTDD_methodPrompt-fileNaming.md` |
+| Guide CodeAgent execution checkpoints | `CaTDD_methodPrompt-agentWorkflow.md` |
+| Recover from design, test, or category blockers | `CaTDD_methodPrompt-troubleshooting.md` |
+| Review concrete category placement examples | `CaTDD_methodPrompt-examples.md` |
 | Design core happy-path behavior | `CaTDD_methodPrompt4Cat-Typical.md` |
 | Design valid edge cases, limits, and boundary values | `CaTDD_methodPrompt4Cat-Edge.md` |
 | Design invalid caller behavior or wrong API usage | `CaTDD_methodPrompt4Cat-Misuse.md` |

@@ -59,6 +59,13 @@ methodPrompts/
   README_UserGuide.md
   README_UserGuide_ZH.md
   CaTDD_methodPrompt.md
+  CaTDD_methodPrompt-categorySemantics.md
+  CaTDD_methodPrompt-workflow.md
+  CaTDD_methodPrompt-testStructure.md
+  CaTDD_methodPrompt-fileNaming.md
+  CaTDD_methodPrompt-agentWorkflow.md
+  CaTDD_methodPrompt-troubleshooting.md
+  CaTDD_methodPrompt-examples.md
   CaTDD_methodPrompt4Cat-Typical.md
   CaTDD_methodPrompt4Cat-Edge.md
   CaTDD_methodPrompt4Cat-Misuse.md
@@ -93,15 +100,16 @@ methodPrompts/
 开始编写 CaTDD 测试文件时，按以下流程执行。
 
 1. 阅读 `README.md`，选择相关方法提示词。
-2. 阅读 `CaTDD_methodPrompt.md`，了解完整方法契约。
-3. 复制 `CaTDD_designAndImplTemplate.cxx`，或把其中的分区结构适配到你的语言。
-4. 捕获 Stage-0 自由草稿：场景、示例、风险与开放问题。
-5. 根据下面的优先级顺序，将草稿归类。
-6. 在实现代码之前，把 US/AC/TC 注释写进测试文件。
-7. 为下一个 TC 生成或编写一个失败测试。
-8. 只实现让该 TC 通过所需的最小生产代码。
-9. 更新 TC 状态标记，并保持注释与行为同步。
-10. 每次只推进一个 TC，持续重复。
+2. 阅读 `CaTDD_methodPrompt.md`，把它作为主入口。
+3. 阅读需要的 `CaTDD_methodPrompt-*.md` 子主题，获取详细方法指导。
+4. 复制 `CaTDD_designAndImplTemplate.cxx`，或把其中的分区结构适配到你的语言。
+5. 捕获 Stage-0 自由草稿：场景、示例、风险与开放问题。
+6. 根据下面的优先级顺序，将草稿归类。
+7. 在实现代码之前，把 US/AC/TC 注释写进测试文件。
+8. 为下一个 TC 生成或编写一个失败测试。
+9. 只实现让该 TC 通过所需的最小生产代码。
+10. 更新 TC 状态标记，并保持注释与行为同步。
+11. 每次只推进一个 TC，持续重复。
 
 ## Usage Example
 
@@ -151,7 +159,14 @@ Preserve US/AC/TC traceability and leave unclear product intent as questions.
 
 | 需求 | 使用 |
 | --- | --- |
-| 学习完整方法契约 | `CaTDD_methodPrompt.md` |
+| 从主方法入口开始 | `CaTDD_methodPrompt.md` |
+| 归类 test points 并保持 category identity 稳定 | `CaTDD_methodPrompt-categorySemantics.md` |
+| 执行 Stage-0、Stage-1、RED/GREEN 与质量门禁 | `CaTDD_methodPrompt-workflow.md` |
+| 构建 US/AC/TC 注释、覆盖矩阵和 tracking blocks | `CaTDD_methodPrompt-testStructure.md` |
+| 使用标准 `test_{feature}_{category}.<ext>` 命名 | `CaTDD_methodPrompt-fileNaming.md` |
+| 指导 CodeAgent 执行 checkpoints | `CaTDD_methodPrompt-agentWorkflow.md` |
+| 从设计、测试或分类阻塞中恢复 | `CaTDD_methodPrompt-troubleshooting.md` |
+| 查看具体 category placement 示例 | `CaTDD_methodPrompt-examples.md` |
 | 设计核心 happy-path 行为 | `CaTDD_methodPrompt4Cat-Typical.md` |
 | 设计合法边缘场景、极限值和边界值 | `CaTDD_methodPrompt4Cat-Edge.md` |
 | 设计非法调用者行为或错误 API 使用 | `CaTDD_methodPrompt4Cat-Misuse.md` |

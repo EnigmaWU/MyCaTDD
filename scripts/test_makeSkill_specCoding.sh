@@ -31,6 +31,32 @@ PACKAGE_DIR="$OUT_ROOT/$SKILL_NAME"
 [[ -f "$PACKAGE_DIR/references/README_UserGuide.md" ]] || fail "missing packaged CaTDD method user guide reference"
 [[ -f "$PACKAGE_DIR/references/README_UserGuide_ZH.md" ]] || fail "missing packaged Chinese CaTDD method user guide reference"
 [[ -f "$PACKAGE_DIR/references/CaTDD_methodPrompt.md" ]] || fail "missing packaged CaTDD method prompt reference"
+for subtopic in \
+  categorySemantics \
+  workflow \
+  testStructure \
+  fileNaming \
+  agentWorkflow \
+  troubleshooting \
+  examples; do
+  [[ -f "$PACKAGE_DIR/references/CaTDD_methodPrompt-${subtopic}.md" ]] || fail "missing packaged CaTDD method prompt subtopic: $subtopic"
+done
+for category_prompt in \
+  Typical \
+  Edge \
+  Misuse \
+  Fault \
+  State \
+  Capability \
+  Concurrency \
+  Performance \
+  Robust \
+  Compatibility \
+  Configuration \
+  DemoExample; do
+  [[ -f "$PACKAGE_DIR/references/CaTDD_methodPrompt4Cat-${category_prompt}.md" ]] || fail "missing packaged CaTDD category method prompt: $category_prompt"
+done
+[[ -f "$PACKAGE_DIR/references/CaTDD_designAndImplTemplate.ts" ]] || fail "missing packaged TypeScript CaTDD implementation template reference"
 [[ -f "$PACKAGE_DIR/slashCommands/README_UserGuide.md" ]] || fail "missing packaged slashCommands user guide"
 [[ -f "$PACKAGE_DIR/slashCommands/flows/Px-SpecFlow.md" ]] || fail "missing packaged Px-SpecFlow flow"
 [[ -f "$PACKAGE_DIR/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md" ]] || fail "missing packaged SPEC_openUserStory command"

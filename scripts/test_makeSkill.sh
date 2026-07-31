@@ -29,7 +29,33 @@ PACKAGE_DIR="$OUT_ROOT/$SKILL_NAME"
 [[ -f "$PACKAGE_DIR/references/README_UserGuide.md" ]] || fail "missing packaged user guide reference"
 [[ -f "$PACKAGE_DIR/references/README_UserGuide_ZH.md" ]] || fail "missing packaged Chinese user guide reference"
 [[ -f "$PACKAGE_DIR/references/CaTDD_methodPrompt.md" ]] || fail "missing packaged method prompt reference"
+for subtopic in \
+  categorySemantics \
+  workflow \
+  testStructure \
+  fileNaming \
+  agentWorkflow \
+  troubleshooting \
+  examples; do
+  [[ -f "$PACKAGE_DIR/references/CaTDD_methodPrompt-${subtopic}.md" ]] || fail "missing packaged method prompt subtopic: $subtopic"
+done
+for category_prompt in \
+  Typical \
+  Edge \
+  Misuse \
+  Fault \
+  State \
+  Capability \
+  Concurrency \
+  Performance \
+  Robust \
+  Compatibility \
+  Configuration \
+  DemoExample; do
+  [[ -f "$PACKAGE_DIR/references/CaTDD_methodPrompt4Cat-${category_prompt}.md" ]] || fail "missing packaged category method prompt: $category_prompt"
+done
 [[ -f "$PACKAGE_DIR/references/CaTDD_designAndImplTemplate.cxx" ]] || fail "missing packaged implementation template reference"
+[[ -f "$PACKAGE_DIR/references/CaTDD_designAndImplTemplate.ts" ]] || fail "missing packaged TypeScript implementation template reference"
 [[ ! -e "$PACKAGE_DIR/references/CaTDD-UserGuide-PPT.md" ]] || fail "packaged skill should use README_UserGuide.md instead of presentation reference"
 [[ ! -e "$PACKAGE_DIR/references/CaTDD-UserGuide-PPT-ZH_CN.md" ]] || fail "packaged skill should use README_UserGuide_ZH.md instead of Chinese presentation reference"
 grep -Fq 'CaTDD Standalone User Guide' "$PACKAGE_DIR/references/README_UserGuide.md" || fail "packaged user guide must come from methodPrompts standalone guide"

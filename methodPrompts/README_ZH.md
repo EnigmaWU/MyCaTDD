@@ -10,7 +10,7 @@
 
 它定义稳定的 CaTDD 方法契约：
 
-- comment-alive 验证设计的主方法规范。
+- comment-alive 验证设计的主方法入口和子主题规范。
 - 面向 P0/P1/P2/P3 测试设计优先级的分类方法提示词。
 - 面向只使用本目录的人类与 CodeAgent 的独立用户指南。
 - 展示方法形态的 C++ 实现模板，但 C++ 不是方法要求。
@@ -53,6 +53,7 @@ CaTDD 方法提示词支持两个设计阶段：
 ## 典型内容
 
 - 主方法规范（`CaTDD_methodPrompt.md`）
+- 方法子主题提示词（`CaTDD_methodPrompt-*.md`）
 - 分类方法提示词（`CaTDD_methodPrompt4Cat-*.md`）
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
 - 实现模板（`CaTDD_designAndImplTemplate.cxx`）
