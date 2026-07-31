@@ -24,6 +24,16 @@ Performance proves that the feature is fast or efficient enough under defined co
 - The concern is long-running stability or repeated cycles; use Robust.
 - The concern is correctness under multiple threads; use Concurrency.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- A named metric with units and target: p50/p95/p99 latency, throughput, CPU, memory, allocation count, startup time, or response size.
+- A defined workload shape: data size, operation mix, concurrency level, warm/cold state, fixture complexity, and measurement duration.
+- A comparison that matters to the design: before/after optimization, bounded regression, algorithmic growth, or budget under supported configuration.
+- Resource-use behavior under representative load without turning the test into a Robust soak or Capability limit check.
+- Measurement guardrails: stable environment, enough samples, allowed tolerance, and metadata that explains failures.
+
 ## Design Skeleton
 
 ```text

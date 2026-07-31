@@ -68,6 +68,9 @@ grep -Fq 'qualitySecurity' "$MASTER_PROMPT" || fail "master method prompt missin
 [[ -f "$METHOD_DIR/CaTDD_methodPrompt4Cat-Interaction.md" ]] || fail "missing P1 interaction category prompt"
 [[ -f "$METHOD_DIR/CaTDD_methodPrompt4Cat-Diagnosis.md" ]] || fail "missing P2 diagnosis category prompt"
 [[ -f "$METHOD_DIR/CaTDD_methodPrompt4Cat-Security.md" ]] || fail "missing P2 security category prompt"
+for category_prompt in "$METHOD_DIR"/CaTDD_methodPrompt4Cat-*.md; do
+  grep -Fq '## TestPointsInMind' "$category_prompt" || fail "category prompt missing TestPointsInMind: ${category_prompt#$METHOD_DIR/}"
+done
 grep -Fq 'test_{feature}_{category}.cxx' "$CXX_TEMPLATE" || fail "C++ template missing canonical test filename guidance"
 grep -Fq 'test_{feature}_{category}.ts' "$TS_TEMPLATE" || fail "TypeScript template missing canonical test filename guidance"
 grep -Fq 'Test/test_your_feature_funcValidTypical.cxx' "$MAIN_GUIDE" || fail "main user guide missing canonical test filename example"

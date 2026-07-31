@@ -34,6 +34,16 @@ Capability proves that the implementation matches the intended capacity contract
 - Distinguish "maximum supported" from "fast enough".
 - Capture whether exceeding capacity is an error, backpressure, queueing, rejection, or degradation.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- The promised minimum, default, configured, documented maximum, and discovered maximum ability from the design source.
+- Below-limit, at-limit, and one-over-limit behavior, especially when accepted work and rejected excess must be distinguishable.
+- Per-scope capacity boundaries: per user, per tenant, per process, per queue, per file, per service, or per configured resource pool.
+- Over-capacity policy: reject, backpressure, queue, evict, degrade, split, paginate, or require explicit configuration.
+- Capacity reset or release behavior after cleanup so the test proves the limit is reusable, not only reached once.
+
 ## Design Skeleton
 
 ```text

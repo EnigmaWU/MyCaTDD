@@ -24,6 +24,16 @@ DemoExample proves that a user-visible workflow can be followed and observed as 
 - The scenario verifies architecture or quality attributes; use P1/P2 categories.
 - The example would invent behavior not present in the user guide or requirements.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- The smallest copy-exec workflow from the UserGuide or README that demonstrates real user value.
+- Setup, command/API call, expected visible output, generated files, cleanup, and re-run behavior.
+- A demo path that exercises already-proven P0/P1/P2 behavior without replacing those required tests.
+- Documentation drift checks: command flags, output snippets, filenames, examples, and expected status stay aligned with the guide.
+- New-user ergonomics: prerequisites are explicit, failure output is understandable, and the example can be followed without hidden local state.
+
 ## Design Skeleton
 
 ```text

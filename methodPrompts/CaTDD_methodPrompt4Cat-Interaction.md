@@ -33,6 +33,16 @@ Interaction proves that collaborators communicate in the intended order with the
 - Verify observable collaboration without overfitting to private implementation details.
 - Prefer stable interaction seams, fakes, spies, or contract fixtures over brittle mocks.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- The source sequence or collaboration rule: validate before transform, transform before dispatch, authorize before execute, or commit after all checks pass.
+- The orchestrator delegates to the intended collaborator and does not absorb responsibilities that belong to adapters, policies, repositories, plugins, or workers.
+- Handoff data is shaped correctly at each boundary: translated payload, normalized command, enriched context, selected policy, or emitted event.
+- Branching interaction rules: collaborator failure aborts, reroutes, retries, compensates, or skips later steps according to design.
+- Lifecycle interactions for callbacks, hooks, plugins, or pipelines: load, initialize, execute, dispose, unsubscribe, or cleanup in the intended order.
+
 ## Design Skeleton
 
 ```text

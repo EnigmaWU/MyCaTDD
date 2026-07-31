@@ -33,6 +33,16 @@ Diagnosis proves that when behavior succeeds, degrades, or fails, the system lea
 - Check that messages are actionable and tied to the failing cause.
 - Avoid asserting noisy prose when structured fields or codes are available.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- Required evidence fields on the authoritative surface: correlation ID, component, operation, status, cause, retry count, remediation, or dependency name.
+- Actionable failure output for a known scenario: missing config, dependency timeout, rejected policy, degraded health, or partial rollback.
+- Cross-surface consistency where needed: log line, trace span, metric, health report, CLI stderr, and returned error all identify the same event.
+- Diagnostic behavior under success, degradation, retry, and failure, without confusing Diagnosis with Robust survival.
+- Negative evidence checks: secrets, tokens, PII, stack traces, or misleading internal details are absent when they must not be exposed.
+
 ## Design Skeleton
 
 ```text

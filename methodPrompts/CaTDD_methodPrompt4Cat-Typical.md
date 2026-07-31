@@ -24,7 +24,7 @@ Typical proves that the feature works correctly under normal, intended use.
 - The scenario is mainly about min/max values, empty values, or mode limits; use Edge.
 - The caller violates the API contract; use Misuse.
 - A dependency, resource, process, network, disk, or environment fails; use Fault.
-- The main risk is lifecycle, capacity, or thread safety; consider State, Capability, or Concurrency.
+- The main risk is lifecycle, capacity, collaborator interaction, or thread safety; consider State, Capability, Interaction, or Concurrency.
 
 ## Design Focus
 
@@ -33,6 +33,16 @@ Typical proves that the feature works correctly under normal, intended use.
 - Keep setup ordinary and valid.
 - Prefer one behavior per test with no more than three key assertions.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- The shortest complete success path from the source usage scenario to the primary observable result.
+- The ordinary default setup: valid inputs, valid state, healthy dependencies, normal configuration, and expected environment.
+- The main side effect promised by the AC, such as persisted data, emitted event, returned value, visible output, or state change.
+- A representative workflow that can become the first executable example for future Edge, Misuse, Fault, P1, and P2 tests.
+- One success result that would fail clearly if the core feature were missing, stubbed, or wired to the wrong component.
+
 ## Design Skeleton
 
 ```text
@@ -40,7 +50,7 @@ Typical proves that the feature works correctly under normal, intended use.
 // @[Category]: Typical
 // @[Intent]: Prove the core happy-path workflow under ordinary valid use.
 // @[UseWhen]: Inputs, state, dependencies, environment, and caller behavior are valid.
-// @[AvoidWhen]: The scenario is mainly Edge, Misuse, Fault, State, Capability, or Concurrency.
+// @[AvoidWhen]: The scenario is mainly Edge, Misuse, Fault, State, Capability, Interaction, or Concurrency.
 // @[US]: [US IDs]
 // @[AC]: [AC IDs]
 // @[TC]: verify[CoreBehavior]_by[ValidCondition]_expect[SuccessResult]

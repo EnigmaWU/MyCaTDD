@@ -33,6 +33,16 @@ Misuse proves that the system rejects wrong use safely and clearly.
 - Prefer deterministic misuse over vague "bad input" cases.
 - Preserve system state so the next valid call can still succeed when appropriate.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- Missing, malformed, conflicting, or contract-breaking caller input that the API explicitly rejects.
+- Wrong call sequence caused by the caller, such as use before init, double close, commit before validate, or operation after dispose.
+- Invalid caller-owned references: stale handle, unknown ID, wrong object type, expired local session, or duplicate registration.
+- Rejection behavior that proves no partial mutation, resource leak, queued work, persisted record, or hidden side effect occurred.
+- Recovery after misuse when the contract promises the component can still accept a subsequent valid call.
+
 ## Design Skeleton
 
 ```text

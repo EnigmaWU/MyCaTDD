@@ -24,6 +24,16 @@ Compatibility proves that the same contract works across supported environments 
 - The scenario is a fault from an unavailable dependency; use Fault.
 - The scenario is performance variation across platforms; use Performance with platform metadata.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- Matrix rows from the compatibility source: operating system, compiler, runtime, dependency version, protocol version, schema version, or API version.
+- Contract behavior that must remain identical across the matrix and behavior that is allowed to vary with documented reason.
+- Backward and forward compatibility: old client with new server, new client with old server, old data with new parser, or deprecated field handling.
+- Boundary formats and integration seams: serialization, path handling, newline conventions, locale, encoding, time zone, or platform-specific permissions.
+- Environment metadata captured in the test result so a failing row can be reproduced and triaged.
+
 ## Design Skeleton
 
 ```text

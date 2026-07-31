@@ -25,6 +25,7 @@ Edge proves that the feature still works correctly at the edges of valid use. In
 - The environment or dependency fails; use Fault.
 - The test is about maximum designed capacity as an architectural promise; use Capability.
 - The test is about performance at high volume; use Performance.
+- The test is about collaborator sequence or handoff design; use Interaction.
 - The test is about concurrent interleavings; use Concurrency.
 
 ## Design Focus
@@ -33,6 +34,16 @@ Edge proves that the feature still works correctly at the edges of valid use. In
 - Make the boundary explicit: min, max, exactly full, one before full, one after full, first call, last call.
 - State whether the expected result is success or a documented non-failure edge result.
 - Keep each test centered on one edge so failures are diagnostic.
+
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- Named valid boundaries: zero, empty, first, last, minimum, maximum, exactly full, one below full, or last allowed item.
+- Valid mode variations that change behavior while keeping the caller correct: sync/async, blocking/non-blocking, timeout/no-timeout, callback/polling.
+- Boundary transitions that should remain safe: from empty to one item, from one item to empty, from capacity-1 to capacity, or from first to next.
+- Documented non-success edge results that are still valid contract behavior, such as timeout, no data, queue full, or already up to date.
+- The point where the scenario stops being Edge and becomes Misuse, Fault, Capability, Performance, State, or Concurrency.
 
 ## Design Skeleton
 
@@ -81,7 +92,7 @@ verifyRead_byLastAvailableItem_expectSuccess
 - Is the exact edge named in the TC name?
 - Is "one below / exactly / one above" considered when relevant?
 - Is the expected behavior documented rather than guessed?
-- Should this scenario move to Capability, Performance, State, or Concurrency instead?
+- Should this scenario move to Capability, Performance, State, Interaction, Concurrency, Diagnosis, Security, or another source-backed category instead?
 
 ## Common Mistakes
 

@@ -33,6 +33,16 @@ State proves that the implementation follows the intended lifecycle and transiti
 - Verify observable state, not only return codes.
 - Include cleanup paths such as close, reset, stop, and recovery from error.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- The smallest allowed transition path that proves each named state can be reached from a valid predecessor.
+- Rejected transitions that protect the state model, such as stop before start, resume after close, or restart from terminal state.
+- Entry and exit side effects: resources allocated, subscriptions attached, timers started, locks released, or outputs flushed.
+- Error, reset, cleanup, and recovery transitions that keep the lifecycle understandable after abnormal conditions.
+- State observability: query result, emitted event, persisted marker, visible output, or behavior difference that proves the state changed.
+
 ## Design Skeleton
 
 ```text

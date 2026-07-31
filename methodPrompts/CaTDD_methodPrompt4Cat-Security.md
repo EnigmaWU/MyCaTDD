@@ -33,6 +33,16 @@ Security proves that the system preserves protection properties under a defined 
 - Verify both allowed and denied paths where the policy requires contrast.
 - Check that failure is safe, deterministic, and does not leak secrets.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- A policy-backed allowed/denied contrast: authorized actor succeeds, unauthorized actor is denied, and the denial is safe.
+- Trust-boundary attempts: cross-tenant access, sandbox escape, path traversal, command injection, replay, tampering, or privilege escalation.
+- Secret and sensitive-data handling: token redaction, credential omission, private data isolation, safe logs, and safe error output.
+- Integrity protection: signed payload validation, checksum mismatch, stale nonce, invalid signature, or unauthorized mutation is rejected.
+- Source trace to SecurityDesign, threat model, policy, or compliance rule; if no source exists, stop and ask instead of inventing fear-based tests.
+
 ## Design Skeleton
 
 ```text

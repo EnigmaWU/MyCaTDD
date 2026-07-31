@@ -24,6 +24,16 @@ Configuration proves that supported settings produce the intended behavior.
 - The scenario is an unsupported caller action; use Misuse.
 - The scenario is cross-platform behavior rather than settings; use Compatibility.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- Default configuration behavior when no explicit setting is provided.
+- Precedence across setting sources: CLI argument, environment variable, config file, profile, feature flag, build option, or deployment override.
+- Supported setting combinations that select different modes, limits, integrations, paths, or policy behavior.
+- Invalid or conflicting configuration that should fail clearly before unsafe behavior starts.
+- Cleanup of global process state, environment variables, temp config files, and feature flags after each test.
+
 ## Design Skeleton
 
 ```text

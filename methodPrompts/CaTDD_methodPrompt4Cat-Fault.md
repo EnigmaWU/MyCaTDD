@@ -33,6 +33,16 @@ Fault proves that the system fails right when the caller behaves correctly but t
 - Avoid nondeterministic tests where the fault might not actually happen.
 - Make external dependency boundaries explicit so the test can be repeated reliably.
 
+## TestPointsInMind
+
+When this category applies, consider test points such as:
+
+- One deterministic injected dependency failure: unavailable service, timeout, process crash, disk full, permission denied, broken pipe, or allocation failure.
+- Partial-work handling: rollback, no partial commit, cleanup, compensation, retry exhaustion, fail-fast, or preserved previous state.
+- Boundary between valid caller behavior and failing world behavior, so the test does not drift into Misuse.
+- Recovery after the fault clears when the product contract promises retry, restart, resume, or re-open behavior.
+- Diagnostic signal required by ErrorDesign or DiagnosisDesign, while keeping the main assertion focused on functional failure handling.
+
 ## Design Skeleton
 
 ```text
