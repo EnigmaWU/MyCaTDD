@@ -44,6 +44,27 @@ Every Class/Category skeleton should preserve this minimum shape so developers a
 
 For example, `P0 Functional / Typical` is the design skeleton for core happy-path functional verification. `P0 Functional / Edge` is a different skeleton for valid boundary values, limits, and mode variations.
 
+## Category Semantics
+
+CaTDD categories are not labels added after tests are written. They are:
+
+- **Thinking lenses** before design: what kind of confidence does this test provide?
+- **Routing rules** during skeleton creation: which category file owns this test point?
+- **Review gates** before implementation: what source artifact justifies this test?
+
+The class names define the verification lens:
+
+| Class | Confidence Lens | Core Question |
+| --- | --- | --- |
+| P0 Functional | Contract | Does the user-visible contract behave correctly? |
+| P1 Design | Model | Does the internal state, capability, or concurrency model hold? |
+| P2 Quality | Envelope | Does the behavior remain acceptable under quality constraints? |
+| P3 Addons | Learning Surface | Does the demo, example, or guide remain executable and useful? |
+
+`P0/P1/P2/P3` gives the default verification order, not absolute business priority. Risk may promote a category earlier in execution order, but it MUST NOT change the category identity.
+
+Example: a real-time audio latency test remains `P2 Quality / Performance` even if it is release-blocking and executed before some P0 edge cases.
+
 ## Core Principles
 
 ### Design Philosophy
@@ -137,6 +158,20 @@ Stage-1: Classifying Design
 - Each US must map to at least 1 AC.
 - Each AC must map to at least 1 TC.
 - Design output must declare the SUT explicitly in the test-file overview section (for example: `SUT: utCodeAgentCLI`).
+- Every non-empty category file must trace to a source-of-truth artifact. If the source is missing, ask the developer or mark the category file with `@[NoTestPoints]: <reason>`; do not invent test points.
+
+### Category Source-of-Truth Gate
+
+Use the category's source artifact to decide whether a test point is valid:
+
+| Class | Category Family | Primary Source of Truth | Missing Source Behavior |
+| --- | --- | --- | --- |
+| P0 Functional | Typical / Edge / Misuse / Fault | User Story, Acceptance Criteria, UsageDesign, API contract | Ask for AC/usage contract or mark `@[NoTestPoints]` |
+| P1 Design | State / Capability / Concurrency | ArchDesign, DetailDesign, StateDesign | Ask where the design model lives before drafting tests |
+| P2 Quality | Performance / Robust / Compatibility / Configuration | PerfDesign, ResourceDesign, CompatDesign, ErrorDesign, DiagnosisDesign, VerifyDesign | Ask for measurable constraints, compatibility rules, or config matrix |
+| P3 Addons | Demo/Example | UserGuide, README examples, demo scripts | Ask for executable example intent or mark `@[NoTestPoints]` |
+
+This rule prevents agents from generating impressive-looking tests that are not grounded in the design.
 
 ### Phase 3: Implementation
 
@@ -240,13 +275,44 @@ P0-Functional = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
   - Misuse: Incorrect API usage patterns
   - Fault: External failures and recovery
 
+Classification rule:
+
+- **Typical**: valid caller, normal environment, common path.
+- **Edge**: valid caller, normal environment, unusual but accepted boundary or mode.
+- **Misuse**: invalid caller behavior, invalid input, invalid state request, or API contract violation.
+- **Fault**: valid caller behavior, but dependency, resource, filesystem, network, hardware, runtime, or environment fails.
+
+The P0 split answers who is wrong:
+
+| Category | Caller | Environment | Meaning |
+| --- | --- | --- | --- |
+| Typical | Correct | Normal | Expected success path |
+| Edge | Correct | Normal | Valid but uncommon success path |
+| Misuse | Wrong | Any | Caller violated the contract |
+| Fault | Correct | Wrong | World/dependency/runtime failed |
+
 **Priority-1: Design-Oriented Testing**
 
 - State → Capability → Concurrency
 
+P1 validates the internal design model, not just external behavior:
+
+- **State** protects lifecycle, transitions, invariants, and invalid transition handling.
+- **Capability** protects designed capability boundaries, limits, and component responsibilities.
+- **Concurrency** protects ownership, ordering, synchronization, race freedom, and deadlock avoidance.
+
 **Priority-2: Quality-Oriented Testing**
 
 - Performance → Robust → Compatibility → Configuration
+
+P2 validates the operating envelope:
+
+- **Performance** proves latency, throughput, timing, power, memory, or resource budgets.
+- **Robust** proves stability under repetition, stress, degraded conditions, or long-running use.
+- **Compatibility** proves version, platform, protocol, schema, toolchain, or integration compatibility.
+- **Configuration** proves defaults, precedence, feature flags, environment variables, and invalid configuration behavior.
+
+Concurrency belongs to P1 when the concern is correctness of the concurrency model. It feeds P2 Robust or Performance when the concern is sustained stress, throughput, latency, or long-running concurrent operation.
 
 **Priority-3: Other-Addons Testing**
 
@@ -523,6 +589,15 @@ Risk Score = Impact × Likelihood × Uncertainty
 - Score 12-17: Move up 2 positions from default
 - Score 9-11: Move up 1 position from default
 - Score ≤ 8: Keep default position
+
+Risk adjustment changes execution order only. It does not rename or reclassify the test.
+
+Examples:
+
+- A release-blocking latency scenario remains `P2 Quality / Performance` even if executed before some P1 tests.
+- A severe race-condition scenario remains `P1 Design / Concurrency` when it proves synchronization correctness.
+- A missing required argument remains `P0 Functional / Misuse` even if it is trivial to implement.
+- A missing dependency file remains `P0 Functional / Fault` when the caller is valid and the filesystem/resource is the failing party.
 
 **Example Risk Assessment**
 
@@ -879,6 +954,8 @@ Copy this block into your test files to track progress:
 
 - Start with `test_{feature}_freelyDrafts.<ext>` for exploration, then classify mature test points into category-specific files.
 - Each `{feature}` SHOULD have one file for every canonical CaTDD category token. If a category has no applicable test points, keep that category file as an explicit living decision with `@[NoTestPoints]: <reason>` and no executable TCs.
+- A category file is a design decision even when it has no executable tests. Empty-by-omission is forbidden; use `@[NoTestPoints]: <reason>` so reviewers and agents know the category was considered.
+- Do not move a test point into a category file because the implementation happens to be nearby. Route by verification lens: contract, model, envelope, or learning surface.
 - Example category-specific files:
   - `test_command_execution_funcValidTypical.cxx` - Core valid workflows
   - `test_command_execution_funcValidEdge.cxx` - Valid edge cases, boundary values, and limits

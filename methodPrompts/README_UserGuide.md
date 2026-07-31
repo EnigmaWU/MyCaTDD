@@ -119,6 +119,8 @@ Use `test_{feature}_{category}.<ext>` for category-specific files, such as `test
 
 For each `{feature}`, create or preserve all CaTDD category files. If a category has no applicable test points, mark that file with `@[NoTestPoints]: <reason>` instead of silently omitting it.
 
+Keep each test point in the category that matches its verification lens. P0 proves the external contract, P1 proves the internal design model, P2 proves the operating envelope, and P3 proves the learning surface. Risk may move a category earlier in execution order, but it does not rename the category. If a category lacks a source-of-truth artifact, ask for the missing design or mark `@[NoTestPoints]: <reason>`.
+
 Then ask your CodeAgent or use the method prompts manually:
 
 ```text

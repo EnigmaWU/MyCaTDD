@@ -119,6 +119,8 @@ cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValid
 
 每个 `{feature}` 应创建或保留所有 CaTDD category 文件；若某个 category 没有适用 test points，在该文件中标记 `@[NoTestPoints]: <reason>`，不要静默省略。
 
+每个 test point 都应放在匹配其 verification lens 的 category 中。P0 证明外部 contract，P1 证明内部 design model，P2 证明 operating envelope，P3 证明 learning surface。风险可以让某个 category 提前执行，但不能重命名该 category。若某个 category 缺少 source-of-truth artifact，应询问缺失的设计，或标记 `@[NoTestPoints]: <reason>`。
+
 然后让 CodeAgent 执行，或手工使用方法提示词：
 
 ```text
