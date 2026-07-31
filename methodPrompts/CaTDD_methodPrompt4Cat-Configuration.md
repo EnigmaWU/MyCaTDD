@@ -7,7 +7,7 @@ Use this prompt when designing P2 Quality tests for settings, feature flags, mod
 Configuration belongs to P2 Quality-oriented testing.
 
 ```text
-P2 Quality = Performance -> Robust -> Compatibility -> Configuration
+P2 Quality = Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security
 ```
 
 Configuration proves that supported settings produce the intended behavior.

@@ -7,7 +7,7 @@ Use this prompt when designing P2 Quality tests for cross-platform, version, pro
 Compatibility belongs to P2 Quality-oriented testing.
 
 ```text
-P2 Quality = Performance -> Robust -> Compatibility -> Configuration
+P2 Quality = Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security
 ```
 
 Compatibility proves that the same contract works across supported environments or versions.

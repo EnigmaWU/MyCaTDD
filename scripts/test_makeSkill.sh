@@ -46,11 +46,14 @@ for category_prompt in \
   Fault \
   State \
   Capability \
+  Interaction \
   Concurrency \
   Performance \
   Robust \
   Compatibility \
   Configuration \
+  Diagnosis \
+  Security \
   DemoExample; do
   [[ -f "$PACKAGE_DIR/references/CaTDD_methodPrompt4Cat-${category_prompt}.md" ]] || fail "missing packaged category method prompt: $category_prompt"
 done

@@ -136,6 +136,8 @@ test_command_execution_funcInvalidMisuse.cxx
 test_command_execution_funcInvalidFault.cxx
 test_command_execution_designConcurrency.cxx
 test_command_execution_qualityPerformance.cxx
+test_command_execution_qualityDiagnosis.cxx
+test_command_execution_qualitySecurity.cxx
 ```
 
 ## Implementation Tracking Template
@@ -155,7 +157,9 @@ P0 Functional:
 
 P1 Design:
   [@AC-3,US-2] TC-1: verifyState_byInvalidTransition_expectRejected - TODO
+  [@AC-3,US-2] TC-2: verifyFlow_byAdapterSequence_expectTranslateBeforeDispatch - TODO
 
 P2 Quality:
   [@AC-4,US-3] TC-1: verifyPerformance_byHighLoad_expectWithinBudget - TODO
+  [@AC-4,US-3] TC-2: verifyFailure_byTimeout_expectActionableDiagnosticEvidence - TODO
 ```

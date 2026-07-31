@@ -54,8 +54,8 @@ For each selected TC:
 | Order | Category Family |
 | --- | --- |
 | P0 | Typical -> Edge -> Misuse -> Fault |
-| P1 | State -> Capability -> Concurrency |
-| P2 | Performance -> Robust -> Compatibility -> Configuration |
+| P1 | State -> Capability -> Interaction -> Concurrency |
+| P2 | Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security |
 | P3 | Demo/Example |
 
 Risk may change this execution order but must not change category identity.
@@ -82,6 +82,9 @@ Examples:
 
 - A release-blocking latency scenario remains P2 Quality / Performance even if executed early.
 - A severe race-condition scenario remains P1 Design / Concurrency when it proves synchronization correctness.
+- A sequence-diagram call order scenario remains P1 Design / Interaction when it proves collaborator handoff design.
+- A structured log or trace evidence scenario remains P2 Quality / Diagnosis when it proves explainability.
+- A secret-leak or authorization scenario remains P2 Quality / Security when it proves a protection property.
 - A missing required argument remains P0 Functional / Misuse.
 - A missing dependency file remains P0 Functional / Fault when the caller is valid.
 
@@ -103,6 +106,7 @@ Before moving from P1 to P2:
 
 - State tests are GREEN when stateful behavior exists.
 - Capability tests are GREEN when designed limits exist.
+- Interaction tests are GREEN when sequence, collaboration, or handoff rules exist.
 - Concurrency tests are GREEN when shared execution exists.
 - Known race and deadlock risks are resolved or documented.
 
@@ -114,6 +118,8 @@ Before release or P3:
 - Robust tests pass required stress or repetition checks.
 - Compatibility tests cover supported boundary sets.
 - Configuration tests cover defaults, precedence, and invalid config.
+- Diagnosis tests cover actionable evidence when observability or failure explainability is required.
+- Security tests cover defined threat, policy, trust-boundary, or protection requirements.
 
 ### Gate P3
 

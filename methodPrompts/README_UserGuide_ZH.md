@@ -72,11 +72,14 @@ methodPrompts/
   CaTDD_methodPrompt4Cat-Fault.md
   CaTDD_methodPrompt4Cat-State.md
   CaTDD_methodPrompt4Cat-Capability.md
+  CaTDD_methodPrompt4Cat-Interaction.md
   CaTDD_methodPrompt4Cat-Concurrency.md
   CaTDD_methodPrompt4Cat-Performance.md
   CaTDD_methodPrompt4Cat-Robust.md
   CaTDD_methodPrompt4Cat-Compatibility.md
   CaTDD_methodPrompt4Cat-Configuration.md
+  CaTDD_methodPrompt4Cat-Diagnosis.md
+  CaTDD_methodPrompt4Cat-Security.md
   CaTDD_methodPrompt4Cat-DemoExample.md
   CaTDD_designAndImplTemplate.cxx
 ```
@@ -151,8 +154,8 @@ Preserve US/AC/TC traceability and leave unclear product intent as questions.
 | 优先级 | 类 | 分类 | 目的 |
 | --- | --- | --- | --- |
 | P0 | P0 Functional | Typical -> Edge -> Misuse -> Fault | 证明合法行为正确工作，非法行为优雅失败。 |
-| P1 | P1 Design | State -> Capability -> Concurrency | 证明生命周期、容量与线程安全等设计行为。 |
-| P2 | P2 Quality | Performance -> Robust -> Compatibility -> Configuration | 证明质量属性与环境变化。 |
+| P1 | P1 Design | State -> Capability -> Interaction -> Concurrency | 证明生命周期、容量、协作者交互与线程安全等设计行为。 |
+| P2 | P2 Quality | Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security | 证明质量属性、环境变化、诊断证据与保护属性。 |
 | P3 | P3 Addons | Demo/Example | 证明面向文档、示例与入门的流程。 |
 
 ## 方法提示词地图
@@ -173,11 +176,14 @@ Preserve US/AC/TC traceability and leave unclear product intent as questions.
 | 设计依赖、资源或环境故障处理 | `CaTDD_methodPrompt4Cat-Fault.md` |
 | 设计生命周期和有限状态机验证 | `CaTDD_methodPrompt4Cat-State.md` |
 | 设计容量和最大能力验证 | `CaTDD_methodPrompt4Cat-Capability.md` |
+| 设计协作者顺序、编排或交接验证 | `CaTDD_methodPrompt4Cat-Interaction.md` |
 | 设计线程安全或竞态条件验证 | `CaTDD_methodPrompt4Cat-Concurrency.md` |
 | 设计延迟、吞吐量或资源使用检查 | `CaTDD_methodPrompt4Cat-Performance.md` |
 | 设计压力、重复、长稳或稳定性检查 | `CaTDD_methodPrompt4Cat-Robust.md` |
 | 设计跨平台、版本或集成检查 | `CaTDD_methodPrompt4Cat-Compatibility.md` |
 | 设计功能开关、配置或环境变化 | `CaTDD_methodPrompt4Cat-Configuration.md` |
+| 设计可观测性、诊断证据或故障可解释性 | `CaTDD_methodPrompt4Cat-Diagnosis.md` |
+| 设计 threat model 或 policy 下的保护属性检查 | `CaTDD_methodPrompt4Cat-Security.md` |
 | 设计面向文档的演示和示例 | `CaTDD_methodPrompt4Cat-DemoExample.md` |
 | 从完整骨架开始编写 C++ 测试文件 | `CaTDD_designAndImplTemplate.cxx` |
 

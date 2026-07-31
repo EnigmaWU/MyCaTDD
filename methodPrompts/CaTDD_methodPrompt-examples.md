@@ -69,6 +69,8 @@ Example scenario mapping:
 | Missing required argument is rejected | `funcInvalidMisuse` |
 | Config file is unreadable while caller provided valid path | `funcInvalidFault` |
 | Config precedence differs by environment | `qualityConfiguration` |
+| Failure emits actionable stderr with a stable cause code | `qualityDiagnosis` |
+| Secret value is not printed in stderr or logs | `qualitySecurity` |
 
 ## Microservice Coverage Dimensions
 
@@ -88,6 +90,8 @@ Example scenario mapping:
 | Unauthorized request is rejected | `funcInvalidMisuse` |
 | Dependency timeout returns deterministic failure | `funcInvalidFault` |
 | Readiness endpoint reflects dependency state | `qualityRobust` or `qualityConfiguration` depending on source |
+| Trace includes request ID and dependency timeout cause | `qualityDiagnosis` |
+| Cross-tenant request is denied without data leakage | `qualitySecurity` |
 
 ## Category Placement Examples
 
@@ -96,6 +100,9 @@ Example scenario mapping:
 | Invalid CLI flag is rejected | `funcInvalidMisuse` | Caller violated the contract |
 | Missing dependency file is reported | `funcInvalidFault` | Caller may be valid; resource/world failed |
 | Closed cannot transition to Running | `designState` | Protects state model |
+| Adapter translates payload before dispatch | `designInteraction` | Protects collaborator sequence and handoff design |
 | Two writers do not corrupt shared cache | `designConcurrency` | Protects ownership/synchronization model |
 | Same operation under sustained load meets budget | `qualityPerformance` | Proves operating envelope |
+| Failure report includes correlation ID and remediation | `qualityDiagnosis` | Proves actionable evidence |
+| Unauthorized actor cannot read protected data | `qualitySecurity` | Proves protection property |
 | README command remains executable | `addonDemoExample` | Proves learning surface |

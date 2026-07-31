@@ -36,7 +36,7 @@ In CaTDD, **design** means a reusable comment skeleton inside the test or source
 Each skeleton is organized by:
 
 - **Class**: the priority family, such as `P0 Functional`, `P1 Design`, `P2 Quality`, or `P3 Addons`.
-- **Category**: the specific verification angle, such as `Typical`, `Edge`, `Misuse`, `Fault`, `State`, `Capability`, `Concurrency`, `Performance`, `Robust`, `Compatibility`, `Configuration`, or `Demo/Example`.
+- **Category**: the specific verification angle, such as `Typical`, `Edge`, `Misuse`, `Fault`, `State`, `Capability`, `Interaction`, `Concurrency`, `Performance`, `Robust`, `Compatibility`, `Configuration`, `Diagnosis`, `Security`, or `Demo/Example`.
 
 Minimum skeleton shape:
 
@@ -70,7 +70,7 @@ The class names define the verification lens:
 | Class | Confidence Lens | Core Question |
 | --- | --- | --- |
 | P0 Functional | Contract | Does the user-visible contract behave correctly? |
-| P1 Design | Model | Does the internal state, capability, or concurrency model hold? |
+| P1 Design | Model | Does the internal state, capability, interaction, or concurrency model hold? |
 | P2 Quality | Envelope | Does the behavior remain acceptable under quality constraints? |
 | P3 Addons | Learning Surface | Does the demo, example, or guide remain executable and useful? |
 
@@ -96,8 +96,8 @@ Use the category's source artifact to decide whether a test point is valid.
 | Class | Category Family | Primary Source of Truth | Missing Source Behavior |
 | --- | --- | --- | --- |
 | P0 Functional | Typical / Edge / Misuse / Fault | User Story, Acceptance Criteria, UsageDesign, API contract | Ask for AC/usage contract or mark `@[NoTestPoints]` |
-| P1 Design | State / Capability / Concurrency | ArchDesign, DetailDesign, StateDesign | Ask where the design model lives before drafting tests |
-| P2 Quality | Performance / Robust / Compatibility / Configuration | PerfDesign, ResourceDesign, CompatDesign, ErrorDesign, DiagnosisDesign, VerifyDesign | Ask for measurable constraints, compatibility rules, or config matrix |
+| P1 Design | State / Capability / Interaction / Concurrency | ArchDesign, DetailDesign, StateDesign, sequence or interaction diagrams | Ask where the design model lives before drafting tests |
+| P2 Quality | Performance / Robust / Compatibility / Configuration / Diagnosis / Security | PerfDesign, ResourceDesign, CompatDesign, ErrorDesign, DiagnosisDesign, SecurityDesign, threat model, VerifyDesign | Ask for measurable constraints, compatibility rules, diagnostic evidence, security policy, or config matrix |
 | P3 Addons | Demo/Example | UserGuide, README examples, demo scripts | Ask for executable example intent or mark `@[NoTestPoints]` |
 
 ## Workflow Summary
@@ -116,8 +116,8 @@ Default execution order:
 | Order | Categories |
 | --- | --- |
 | P0 Functional | Typical -> Edge -> Misuse -> Fault |
-| P1 Design | State -> Capability -> Concurrency |
-| P2 Quality | Performance -> Robust -> Compatibility -> Configuration |
+| P1 Design | State -> Capability -> Interaction -> Concurrency |
+| P2 Quality | Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security |
 | P3 Addons | Demo/Example |
 
 For detailed execution gates, read `CaTDD_methodPrompt-workflow.md`.
@@ -147,11 +147,14 @@ Canonical tokens:
 | P0 Functional / InvalidFunc / Fault | `funcInvalidFault` |
 | P1 Design / State | `designState` |
 | P1 Design / Capability | `designCapability` |
+| P1 Design / Interaction | `designInteraction` |
 | P1 Design / Concurrency | `designConcurrency` |
 | P2 Quality / Performance | `qualityPerformance` |
 | P2 Quality / Robust | `qualityRobust` |
 | P2 Quality / Compatibility | `qualityCompatibility` |
 | P2 Quality / Configuration | `qualityConfiguration` |
+| P2 Quality / Diagnosis | `qualityDiagnosis` |
+| P2 Quality / Security | `qualitySecurity` |
 | P3 Addons / Demo/Example | `addonDemoExample` |
 
 For detailed naming examples, read `CaTDD_methodPrompt-fileNaming.md`.
@@ -168,11 +171,14 @@ Use category-specific prompts when designing a category skeleton.
 | Fault | `CaTDD_methodPrompt4Cat-Fault.md` |
 | State | `CaTDD_methodPrompt4Cat-State.md` |
 | Capability | `CaTDD_methodPrompt4Cat-Capability.md` |
+| Interaction | `CaTDD_methodPrompt4Cat-Interaction.md` |
 | Concurrency | `CaTDD_methodPrompt4Cat-Concurrency.md` |
 | Performance | `CaTDD_methodPrompt4Cat-Performance.md` |
 | Robust | `CaTDD_methodPrompt4Cat-Robust.md` |
 | Compatibility | `CaTDD_methodPrompt4Cat-Compatibility.md` |
 | Configuration | `CaTDD_methodPrompt4Cat-Configuration.md` |
+| Diagnosis | `CaTDD_methodPrompt4Cat-Diagnosis.md` |
+| Security | `CaTDD_methodPrompt4Cat-Security.md` |
 | Demo/Example | `CaTDD_methodPrompt4Cat-DemoExample.md` |
 
 ## Non-Negotiable Agent Rules

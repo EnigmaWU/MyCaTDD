@@ -7,7 +7,7 @@ Use this prompt when designing P1 Design-oriented tests for lifecycle, state mac
 State is the first P1 Design category.
 
 ```text
-P1 Design = State -> Capability -> Concurrency
+P1 Design = State -> Capability -> Interaction -> Concurrency
 ```
 
 State proves that the implementation follows the intended lifecycle and transition rules.

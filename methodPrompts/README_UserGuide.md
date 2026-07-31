@@ -72,11 +72,14 @@ methodPrompts/
   CaTDD_methodPrompt4Cat-Fault.md
   CaTDD_methodPrompt4Cat-State.md
   CaTDD_methodPrompt4Cat-Capability.md
+  CaTDD_methodPrompt4Cat-Interaction.md
   CaTDD_methodPrompt4Cat-Concurrency.md
   CaTDD_methodPrompt4Cat-Performance.md
   CaTDD_methodPrompt4Cat-Robust.md
   CaTDD_methodPrompt4Cat-Compatibility.md
   CaTDD_methodPrompt4Cat-Configuration.md
+  CaTDD_methodPrompt4Cat-Diagnosis.md
+  CaTDD_methodPrompt4Cat-Security.md
   CaTDD_methodPrompt4Cat-DemoExample.md
   CaTDD_designAndImplTemplate.cxx
 ```
@@ -151,8 +154,8 @@ Use this default priority order unless project risk says otherwise.
 | Priority | Class | Categories | Purpose |
 | --- | --- | --- | --- |
 | P0 | P0 Functional | Typical -> Edge -> Misuse -> Fault | Prove valid behavior works and invalid behavior fails well. |
-| P1 | P1 Design | State -> Capability -> Concurrency | Prove lifecycle, capacity, and thread-safety design behavior. |
-| P2 | P2 Quality | Performance -> Robust -> Compatibility -> Configuration | Prove quality attributes and environment variation. |
+| P1 | P1 Design | State -> Capability -> Interaction -> Concurrency | Prove lifecycle, capacity, collaborator interaction, and thread-safety design behavior. |
+| P2 | P2 Quality | Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security | Prove quality attributes, environment variation, diagnostic evidence, and protection properties. |
 | P3 | P3 Addons | Demo/Example | Prove documentation-oriented examples and onboarding flows. |
 
 ## Method Prompt Map
@@ -173,11 +176,14 @@ Use this default priority order unless project risk says otherwise.
 | Design dependency, resource, or environment failure handling | `CaTDD_methodPrompt4Cat-Fault.md` |
 | Design lifecycle and finite-state-machine verification | `CaTDD_methodPrompt4Cat-State.md` |
 | Design capacity and maximum ability verification | `CaTDD_methodPrompt4Cat-Capability.md` |
+| Design collaborator sequence, orchestration, or handoff verification | `CaTDD_methodPrompt4Cat-Interaction.md` |
 | Design thread-safety or race-condition verification | `CaTDD_methodPrompt4Cat-Concurrency.md` |
 | Design latency, throughput, or resource-use checks | `CaTDD_methodPrompt4Cat-Performance.md` |
 | Design stress, repetition, soak, or stability checks | `CaTDD_methodPrompt4Cat-Robust.md` |
 | Design cross-platform, version, or integration checks | `CaTDD_methodPrompt4Cat-Compatibility.md` |
 | Design feature-flag, configuration, or environment variation | `CaTDD_methodPrompt4Cat-Configuration.md` |
+| Design observability, diagnostic evidence, or failure explainability | `CaTDD_methodPrompt4Cat-Diagnosis.md` |
+| Design protection-property checks under a threat model or policy | `CaTDD_methodPrompt4Cat-Security.md` |
 | Design documentation-oriented demos and examples | `CaTDD_methodPrompt4Cat-DemoExample.md` |
 | Start a C++ test file from a complete skeleton | `CaTDD_designAndImplTemplate.cxx` |
 

@@ -24,11 +24,14 @@ test_{feature}_{category}.<ext>
 | P0 Functional / InvalidFunc / Fault | `funcInvalidFault` |
 | P1 Design / State | `designState` |
 | P1 Design / Capability | `designCapability` |
+| P1 Design / Interaction | `designInteraction` |
 | P1 Design / Concurrency | `designConcurrency` |
 | P2 Quality / Performance | `qualityPerformance` |
 | P2 Quality / Robust | `qualityRobust` |
 | P2 Quality / Compatibility | `qualityCompatibility` |
 | P2 Quality / Configuration | `qualityConfiguration` |
+| P2 Quality / Diagnosis | `qualityDiagnosis` |
+| P2 Quality / Security | `qualitySecurity` |
 | P3 Addons / Demo/Example | `addonDemoExample` |
 
 ## Freely Drafts
@@ -59,8 +62,11 @@ test_command_execution_funcValidEdge.cxx
 test_command_execution_funcInvalidMisuse.cxx
 test_command_execution_funcInvalidFault.cxx
 test_command_execution_designState.cxx
+test_command_execution_designInteraction.cxx
 test_command_execution_designConcurrency.cxx
 test_command_execution_qualityPerformance.cxx
+test_command_execution_qualityDiagnosis.cxx
+test_command_execution_qualitySecurity.cxx
 test_command_execution_qualityConfiguration.ts
 ```
 

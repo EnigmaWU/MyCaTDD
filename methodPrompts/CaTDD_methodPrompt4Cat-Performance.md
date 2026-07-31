@@ -7,7 +7,7 @@ Use this prompt when designing P2 Quality tests for speed, latency, throughput, 
 Performance belongs to P2 Quality-oriented testing.
 
 ```text
-P2 Quality = Performance -> Robust -> Compatibility -> Configuration
+P2 Quality = Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security
 ```
 
 Performance proves that the feature is fast or efficient enough under defined conditions.

@@ -7,7 +7,7 @@ Use this prompt when designing P1 Design-oriented tests for designed capacity, l
 Capability is the second P1 Design category.
 
 ```text
-P1 Design = State -> Capability -> Concurrency
+P1 Design = State -> Capability -> Interaction -> Concurrency
 ```
 
 Capability proves that the implementation matches the intended capacity contract.
@@ -24,6 +24,7 @@ Capability proves that the implementation matches the intended capacity contract
 - The scenario is a simple edge value around one input parameter; use Edge.
 - The concern is speed, latency, or throughput; use Performance.
 - The concern is repeated stability after many cycles; use Robust.
+- The concern is collaborator sequence or handoff design; use Interaction.
 - The concern is simultaneous access and race conditions; use Concurrency.
 
 ## Design Focus

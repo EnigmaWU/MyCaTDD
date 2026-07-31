@@ -17,7 +17,7 @@ Category identity stays in place. Risk may move a category earlier in execution 
 | Class | Confidence Lens | Core Question |
 | --- | --- | --- |
 | P0 Functional | Contract | Does the user-visible contract behave correctly? |
-| P1 Design | Model | Does the internal state, capability, or concurrency model hold? |
+| P1 Design | Model | Does the internal state, capability, interaction, or concurrency model hold? |
 | P2 Quality | Envelope | Does the behavior remain acceptable under quality constraints? |
 | P3 Addons | Learning Surface | Does the demo, example, or guide remain executable and useful? |
 
@@ -28,8 +28,8 @@ Use the category's source artifact to decide whether a test point is valid.
 | Class | Category Family | Primary Source of Truth | Missing Source Behavior |
 | --- | --- | --- | --- |
 | P0 Functional | Typical / Edge / Misuse / Fault | User Story, Acceptance Criteria, UsageDesign, API contract | Ask for AC/usage contract or mark `@[NoTestPoints]` |
-| P1 Design | State / Capability / Concurrency | ArchDesign, DetailDesign, StateDesign | Ask where the design model lives before drafting tests |
-| P2 Quality | Performance / Robust / Compatibility / Configuration | PerfDesign, ResourceDesign, CompatDesign, ErrorDesign, DiagnosisDesign, VerifyDesign | Ask for measurable constraints, compatibility rules, or config matrix |
+| P1 Design | State / Capability / Interaction / Concurrency | ArchDesign, DetailDesign, StateDesign, sequence or interaction diagrams | Ask where the design model lives before drafting tests |
+| P2 Quality | Performance / Robust / Compatibility / Configuration / Diagnosis / Security | PerfDesign, ResourceDesign, CompatDesign, ErrorDesign, DiagnosisDesign, SecurityDesign, threat model, VerifyDesign | Ask for measurable constraints, compatibility rules, diagnostic evidence, security policy, or config matrix |
 | P3 Addons | Demo/Example | UserGuide, README examples, demo scripts | Ask for executable example intent or mark `@[NoTestPoints]` |
 
 Do not invent test points to fill a category file. A category file with `@[NoTestPoints]: <reason>` is a valid living design decision.
@@ -58,9 +58,10 @@ P1 Design proves the internal design model.
 
 - State protects lifecycle, transitions, invariants, and invalid transition handling.
 - Capability protects designed capability boundaries, limits, and component responsibilities.
-- Concurrency protects ownership, ordering, synchronization, race freedom, and deadlock avoidance.
+- Interaction protects collaborator sequence, handoff contracts, orchestration, and internal protocol order.
+- Concurrency protects ownership, ordering under simultaneous access, synchronization, race freedom, and deadlock avoidance.
 
-Concurrency belongs to P1 when the concern is correctness of the concurrency model. It feeds P2 Robust or Performance when the concern is sustained stress, throughput, latency, or long-running concurrent operation.
+Interaction is often sourced from sequence diagrams, but sequence is the artifact form and Interaction is the design concern. Concurrency belongs to P1 when the concern is correctness of the concurrency model. It feeds P2 Robust or Performance when the concern is sustained stress, throughput, latency, or long-running concurrent operation.
 
 ## P2 Quality Split
 
@@ -70,6 +71,10 @@ P2 Quality proves the operating envelope.
 - Robust proves stability under repetition, stress, degraded conditions, or long-running use.
 - Compatibility proves version, platform, protocol, schema, toolchain, or integration compatibility.
 - Configuration proves defaults, precedence, feature flags, environment variables, and invalid configuration behavior.
+- Diagnosis proves observability, debuggability, actionable evidence, and failure explainability.
+- Security proves protection properties under a defined threat model, policy, trust boundary, or hostile condition.
+
+Diagnosis is P2 because it asks whether the operating evidence remains useful under real conditions. Security is P2 by default because it asks whether protection properties hold under threat conditions. Security architecture shape can feed P1 Interaction or Capability, but protection behavior belongs to P2 Security.
 
 ## P3 Addons Split
 
@@ -90,11 +95,14 @@ Use `test_{feature}_{category}.<ext>` for category-specific files. `{feature}` i
 | P0 Functional / InvalidFunc / Fault | `funcInvalidFault` |
 | P1 Design / State | `designState` |
 | P1 Design / Capability | `designCapability` |
+| P1 Design / Interaction | `designInteraction` |
 | P1 Design / Concurrency | `designConcurrency` |
 | P2 Quality / Performance | `qualityPerformance` |
 | P2 Quality / Robust | `qualityRobust` |
 | P2 Quality / Compatibility | `qualityCompatibility` |
 | P2 Quality / Configuration | `qualityConfiguration` |
+| P2 Quality / Diagnosis | `qualityDiagnosis` |
+| P2 Quality / Security | `qualitySecurity` |
 | P3 Addons / Demo/Example | `addonDemoExample` |
 
 ## Routing Checklist

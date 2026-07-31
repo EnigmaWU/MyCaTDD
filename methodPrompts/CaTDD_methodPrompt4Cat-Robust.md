@@ -7,7 +7,7 @@ Use this prompt when designing P2 Quality tests for stability under stress, repe
 Robust belongs to P2 Quality-oriented testing.
 
 ```text
-P2 Quality = Performance -> Robust -> Compatibility -> Configuration
+P2 Quality = Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security
 ```
 
 Robust proves that the system remains stable after repeated or sustained use.

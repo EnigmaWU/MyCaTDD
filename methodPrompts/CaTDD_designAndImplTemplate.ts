@@ -85,14 +85,14 @@
  *
  * PRIORITY FRAMEWORK:
  *   P0 FUNCTIONAL:      Must complete before P1 (ValidFunc + InvalidFunc)
- *   P1 DESIGN-ORIENTED: Test after P0 (State, Capability, Concurrency)
- *   P2 QUALITY-ORIENTED: Test for quality attributes (Performance, Robust, etc.)
+ *   P1 DESIGN-ORIENTED: Test after P0 (State, Capability, Interaction, Concurrency)
+ *   P2 QUALITY-ORIENTED: Test for quality attributes (Performance, Robust, Diagnosis, Security, etc.)
  *   P3 ADDONS:          Optional (Demo, Examples)
  *
  * DEFAULT TEST ORDER:
  *   P0: Typical → Edge → Misuse → Fault
- *   P1: State → Capability → Concurrency
- *   P2: Performance → Robust → Compatibility → Configuration
+ *   P1: State → Capability → Interaction → Concurrency
+ *   P2: Performance → Robust → Compatibility → Configuration → Diagnosis → Security
  *   P3: Demo/Example
  *
  * CONTEXT-SPECIFIC ADJUSTMENTS:
@@ -100,7 +100,9 @@
  *   - Stateful/FSM: Promote State to early P1 (after Typical+Edge)
  *   - High Reliability: Promote Fault & Robust
  *   - Performance SLOs: Promote Performance to P2 level
- *   - Highly Concurrent: Promote Concurrency to first in P2
+ *   - Interaction-heavy: Promote Interaction when sequence or handoff design is architectural core
+ *   - Highly Concurrent: Promote Concurrency within P1 when synchronization correctness is architectural core
+ *   - Security-critical: Promote Security when protection properties are release blocking
  *
  * RISK-DRIVEN ADJUSTMENT:
  *   Score = Impact (1-3) × Likelihood (1-3) × Uncertainty (1-3)
@@ -142,6 +144,10 @@
  *      - Purpose: Test architectural limits.
  *      - Examples: Max connections, queue limits.
  *
+ *   INTERACTION: Collaborator sequence and handoff contracts. (FOR ORCHESTRATION DESIGN)
+ *      - Purpose: Validate internal collaboration and sequence rules.
+ *      - Examples: Validate->Transform->Persist, plugin lifecycle, adapter handoff.
+ *
  *   CONCURRENCY: Thread safety and synchronization. (FOR COMPLEX SYSTEMS)
  *      - Purpose: Validate concurrent access and find race conditions.
  *      - Examples: Race conditions, deadlocks, parallel access.
@@ -166,6 +172,14 @@
  *      - Purpose: Test various configuration scenarios.
  *      - Examples: Debug/release modes, feature flags.
  *
+ *   DIAGNOSIS: Observability and failure explainability. (FOR OPERABILITY)
+ *      - Purpose: Validate logs, traces, metrics, health, stderr, and diagnostic evidence.
+ *      - Examples: Correlation IDs, actionable errors, degraded health reasons.
+ *
+ *   SECURITY: Protection properties under threat or policy. (FOR TRUST BOUNDARIES)
+ *      - Purpose: Validate authorization, secret handling, injection resistance, and containment.
+ *      - Examples: Cross-tenant denial, token redaction, sandboxed file access.
+ *
  *===================================================================================================
  * PRIORITY-3: OTHER-ADDONS TESTING (Documentation & Tutorials)
  *===================================================================================================
@@ -176,8 +190,8 @@
  *
  * SELECTION STRATEGY:
  *   P0 (Functional): MUST be completed before moving to P1.
- *   P1 (Design): Test after P0 if the component has significant design complexity (state, concurrency).
- *   P2 (Quality): Test when quality attributes (performance, robustness) are critical.
+ *   P1 (Design): Test after P0 if the component has significant design complexity (state, interaction, concurrency).
+ *   P2 (Quality): Test when quality attributes (performance, robustness, diagnosis, security) are critical.
  *   P3 (Addons): Optional, for documentation and examples.
  *************************************************************************************************/
 
