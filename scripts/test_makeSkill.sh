@@ -31,6 +31,7 @@ PACKAGE_DIR="$OUT_ROOT/$SKILL_NAME"
 [[ -f "$PACKAGE_DIR/references/CaTDD_methodPrompt.md" ]] || fail "missing packaged method prompt reference"
 for subtopic in \
   categorySemantics \
+  testPointDiscovery \
   workflow \
   testStructure \
   fileNaming \

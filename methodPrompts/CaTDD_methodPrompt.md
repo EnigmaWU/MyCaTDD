@@ -20,6 +20,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 | Need | Read |
 | --- | --- |
 | Category semantics, category identity, source-of-truth gate | `CaTDD_methodPrompt-categorySemantics.md` |
+| Test point discovery with Example Mapping and Agile Testing Quadrants | `CaTDD_methodPrompt-testPointDiscovery.md` |
 | Stage model, RED/GREEN cycle, risk-based ordering, quality gates | `CaTDD_methodPrompt-workflow.md` |
 | Comment skeleton, coverage matrix, US/AC/TC, test structure | `CaTDD_methodPrompt-testStructure.md` |
 | Canonical `test_{feature}_{category}.<ext>` file naming | `CaTDD_methodPrompt-fileNaming.md` |

@@ -60,6 +60,7 @@ methodPrompts/
   README_UserGuide_ZH.md
   CaTDD_methodPrompt.md
   CaTDD_methodPrompt-categorySemantics.md
+  CaTDD_methodPrompt-testPointDiscovery.md
   CaTDD_methodPrompt-workflow.md
   CaTDD_methodPrompt-testStructure.md
   CaTDD_methodPrompt-fileNaming.md
@@ -107,12 +108,13 @@ Follow this workflow when starting a CaTDD test file.
 3. Read the needed `CaTDD_methodPrompt-*.md` subtopic for detailed guidance.
 4. Copy `CaTDD_designAndImplTemplate.cxx` or adapt its section structure to your language.
 5. Capture Stage-0 free drafts: scenarios, examples, risks, and open questions.
-6. Classify drafts into categories using the priority order below.
-7. Write US/AC/TC comments inside the test file before implementing code.
-8. Generate or write one failing test for the next TC.
-9. Implement only enough production code to pass that TC.
-10. Update TC status markers and keep the comments synchronized with behavior.
-11. Repeat one TC at a time.
+6. Use `CaTDD_methodPrompt-testPointDiscovery.md` to map rules, examples, questions, and quadrant blind spots before locking TCs.
+7. Classify drafts into categories using the priority order below.
+8. Write US/AC/TC comments inside the test file before implementing code.
+9. Generate or write one failing test for the next TC.
+10. Implement only enough production code to pass that TC.
+11. Update TC status markers and keep the comments synchronized with behavior.
+12. Repeat one TC at a time.
 
 ## Usage Example
 
@@ -164,6 +166,7 @@ Use this default priority order unless project risk says otherwise.
 | --- | --- |
 | Start from the main method entry | `CaTDD_methodPrompt.md` |
 | Classify test points and keep category identity stable | `CaTDD_methodPrompt-categorySemantics.md` |
+| Discover source-backed test points with Example Mapping and quadrant balance checks | `CaTDD_methodPrompt-testPointDiscovery.md` |
 | Follow Stage-0, Stage-1, RED/GREEN, and quality gates | `CaTDD_methodPrompt-workflow.md` |
 | Build US/AC/TC comments, coverage matrices, and tracking blocks | `CaTDD_methodPrompt-testStructure.md` |
 | Apply canonical `test_{feature}_{category}.<ext>` naming | `CaTDD_methodPrompt-fileNaming.md` |
