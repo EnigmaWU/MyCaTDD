@@ -24,13 +24,14 @@ Implement product code for the active story after selected unit tests exist.
 - Product code changes scoped to the active story and intended for commit when review passes.
 - Traceability from implementation to tests and acceptance criteria.
 - Known verification result or reason verification was not run.
+- Next recommended command: `SPEC_reviewProductCodes`; when product-code review passes, run `SPEC_reviewImplUnitTests` again before refactor, commit, or closure.
 
 ## Prompt Template
 
-Ask the assistant to write minimal product code needed for selected tests and preserve existing behavior.
+Ask the assistant to write minimal product code needed for selected tests, preserve existing behavior, then route to `SPEC_reviewProductCodes` and the post-product-code `SPEC_reviewImplUnitTests` gate.
 
 ## Conflict Guard
 
-Do not broaden scope beyond the active story. Route design gaps to `SPEC_updateDetailDesign`.
+Do not broaden scope beyond the active story. Route design gaps to `SPEC_updateDetailDesign`. Do not route directly to commit after product code changes; product-code review and post-product-code unit-test implementation review must both pass first.
 
 ONE-MORE-THING: ask developer if something not sure

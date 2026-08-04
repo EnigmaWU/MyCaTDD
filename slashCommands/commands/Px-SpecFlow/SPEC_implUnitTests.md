@@ -17,7 +17,7 @@ Example ReACT trace for a single-TC pass:
 3. `Observe`: Implementation compiles; test runner shows expected RED.
 4. `Act`: Apply `UT_reviewImplTestCase` mechanics — implementation aligns with TC-001 skeleton.
 5. `Observe`: Review passes; no drift found.
-6. `Decide`: Recommend `SPEC_implProductCodes` for GREEN pass, or another `SPEC_implUnitTests` pass for the next TC.
+6. `Decide`: Recommend `SPEC_reviewImplUnitTests` before product-code work, or another `SPEC_implUnitTests` pass for the next TC.
 
 ## Inputs
 
@@ -49,7 +49,7 @@ Example ReACT trace for a single-TC pass:
 - Evidence that TC selection respected P0-first priority, or an explicit developer override for a P1/P2 TC.
 - Verification command and result when available.
 - TC review result: alignment check against the US/AC/TC skeleton, missing or excessive assertions, setup/cleanup gaps, and drift findings.
-- Next recommended command: `SPEC_implProductCodes` (for GREEN pass), another `SPEC_implUnitTests` pass (for the next TC), `UT_reviewImplTestCase` (when drift needs attention), or `SPEC_designUnitTests` (when skeleton revision is needed).
+- Next recommended command: `SPEC_reviewImplUnitTests` (story-level test implementation review), another `SPEC_implUnitTests` pass (for the next TC), `UT_reviewImplTestCase` (when drift needs attention), or `SPEC_designUnitTests` (when skeleton revision is needed).
 - STRICT implementation evidence for each implemented TC:
  	- Explicit `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phase markers in test body.
  	- Key checks written with `VERIFY_KEYPOINT_xyz` macros in `VERIFY` block.
@@ -65,7 +65,7 @@ Example ReACT trace for a single-TC pass:
 4. Move to P2 `Performance`, `Robust`, `Compatibility`, or `Configuration` TCs only when P0 exists and relevant P1 coverage is complete, blocked with evidence, or explicitly not applicable.
 5. Use `UT_implTestCase` mechanics for each selected TC: locate the TC, preserve comments, implement exactly the requested test body, update status, and report verification.
 6. Use `UT_reviewImplTestCase` mechanics after each implementation: compare implementation against the TC skeleton, check assertions verify the promised expectation, check setup/behavior/verify/cleanup clarity, and report alignment or drift.
-7. Decide: if review passes, recommend `SPEC_implProductCodes` (for GREEN pass) or another `SPEC_implUnitTests` pass (for the next TC). If review finds drift, route to the recommended action (fix implementation, revise skeleton, or select next TC).
+7. Decide: if TC-level review passes, recommend `SPEC_reviewImplUnitTests` before `SPEC_implProductCodes`, or another `SPEC_implUnitTests` pass for the next TC. If review finds drift, route to the recommended action (fix implementation, revise skeleton, or select next TC).
 
 The SPEC command owns story-level ordering and handoff to product-code implementation. The `UT_*` command contract owns TC-level mechanics.
 
@@ -77,19 +77,19 @@ The SPEC command owns story-level ordering and handoff to product-code implement
 - Prefer RED first when behavior is missing. A meaningful failing test is a valid result and should route next to `SPEC_implProductCodes`.
 - Do not implement product code inside this command unless the developer explicitly requests a combined TDD step.
 - When a selected TC depends on missing P1/P2 design evidence, stop and route back to `SPEC_designUnitTests` or the appropriate design command instead of inventing behavior.
-- After implementation, run `UT_reviewImplTestCase` before proceeding to the next TC or `SPEC_implProductCodes`. If review finds implementation-skeleton drift, do not proceed until the drift is resolved: fix the implementation, revise the skeleton, or ask the developer.
+- After implementation, run `UT_reviewImplTestCase` before proceeding to the next TC or `SPEC_reviewImplUnitTests`. If review finds implementation-skeleton drift, do not proceed until the drift is resolved: fix the implementation, revise the skeleton, or ask the developer.
 - Enforce strict phase layout for each selected TC: keep a visible 4-phase structure (`SETUP` -> `BEHAVIOR` -> `VERIFY` -> `CLEANUP`) and keep key assertions inside `VERIFY`.
 - Prefer `VERIFY_KEYPOINT_xyz` macros for key assertions; if macros are missing in this repository, add a compatibility mapping and keep `VERIFY_KEYPOINT_xyz` calls in the test body.
 
 ## Prompt Template
 
-Ask the assistant to run an observable ReACT loop: reason about TC priority and skeleton review status, act by selecting (via `UT_tellMeNextImplTest`), implementing (via `UT_implTestCase`), and reviewing (via `UT_reviewImplTestCase`) one TC at a time, observe implementation quality and review alignment, then decide the next step. Preserve CaTDD skeleton metadata, respect P0-first ordering, and keep unrelated test skeletons untouched.
+Ask the assistant to run an observable ReACT loop: reason about TC priority and skeleton review status, act by selecting (via `UT_tellMeNextImplTest`), implementing (via `UT_implTestCase`), and reviewing (via `UT_reviewImplTestCase`) one TC at a time, observe implementation quality and review alignment, then decide the next step. Preserve CaTDD skeleton metadata, respect P0-first ordering, keep unrelated test skeletons untouched, and recommend `SPEC_reviewImplUnitTests` before product-code implementation.
 
 ## Conflict Guard
 
 Respect test-first order. Do not skip ready P0 Functional TCs in favor of P1/P2 work unless the developer explicitly selected that TC or the P0 TCs are complete, blocked, or not applicable. If tests cannot run or fail unexpectedly, report that before implementing product code.
 Do not redesign skeletons during implementation. If the skeleton is untraceable, missing AC/TC links, or in the wrong category, route back to `SPEC_designUnitTests`.
-Do not proceed to `SPEC_implProductCodes` or the next TC when `UT_reviewImplTestCase` finds implementation-skeleton drift that is not yet resolved.
+Do not proceed to `SPEC_reviewImplUnitTests`, `SPEC_implProductCodes`, or the next TC when `UT_reviewImplTestCase` finds implementation-skeleton drift that is not yet resolved.
 Do not skip the review step between TC implementation and product-code handoff: every implemented TC should pass `UT_reviewImplTestCase` before the next lifecycle step.
 Do not claim implementation complete when strict phase markers or `VERIFY_KEYPOINT_xyz` usage is missing for implemented TCs.
 

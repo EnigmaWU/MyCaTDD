@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Review product code, tests, and traceability before commit or abort routing.
+Review product code, tests, and traceability before post-product-code unit-test implementation review, commit, or abort routing.
 
 ## CoT Pattern
 
@@ -24,14 +24,14 @@ Review product code, tests, and traceability before commit or abort routing.
 
 - Review result for committed-scope product/test changes: pass, update design, add tests, abort story, or ask developer.
 - Findings prioritized by correctness, traceability to project-root README SPEC docs, and quality risk.
-- Next recommended command: `SPEC_commitWorks`, `SPEC_updateDetailDesign`, `SPEC_designUnitTests`, `SPEC_abortUserStory`, or `SPEC_importIssue`.
+- Next recommended command: `SPEC_reviewImplUnitTests` when product-code review passes, `SPEC_updateDetailDesign`, `SPEC_designUnitTests`, `SPEC_abortUserStory`, or `SPEC_importIssue`.
 
 ## Prompt Template
 
-Ask the assistant to review behavior, tests, traceability, minimality, and project-context consistency.
+Ask the assistant to review behavior, tests, traceability, minimality, and project-context consistency. When product-code review passes, route to `SPEC_reviewImplUnitTests` before commit.
 
 ## Conflict Guard
 
-Do not commit when quality is not met or when verification evidence is missing without explanation.
+Do not commit when quality is not met or when verification evidence is missing without explanation. Do not route directly to `SPEC_commitWorks`; run `SPEC_reviewImplUnitTests` after product-code review when product code changed.
 
 ONE-MORE-THING: ask developer if something not sure

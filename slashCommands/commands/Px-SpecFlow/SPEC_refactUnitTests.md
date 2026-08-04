@@ -19,7 +19,7 @@ Example ReACT trace for a single-TC refactor pass:
 3. `Observe`: Focused TC remains GREEN and US/AC/TC comments are unchanged.
 4. `Act`: Apply `UT_reviewImplTestCase` mechanics to confirm no skeleton drift.
 5. `Observe`: Review passes; no behavior or coverage change found.
-6. `Decide`: Recommend another `SPEC_refactUnitTests` pass for the next independent TC or `SPEC_reviewProductCodes` when cleanup is complete.
+6. `Decide`: Recommend another `SPEC_refactUnitTests` pass for the next independent TC or `SPEC_reviewImplUnitTests` when cleanup is complete.
 
 ## Inputs
 
@@ -28,7 +28,7 @@ Example ReACT trace for a single-TC refactor pass:
 - `selected_tc`: optional TC identifier and name; if omitted, choose the safest GREEN refactor candidate.
 - `refactor_scope`: optional explicit list of TC slices, files, or cleanup goals.
 - `verification_output`: latest focused or regression test output proving current behavior is GREEN.
-- `review_status`: latest `UT_reviewImplTestCase` or `SPEC_reviewProductCodes` result when available.
+- `review_status`: latest `UT_reviewImplTestCase`, `SPEC_reviewImplUnitTests`, or `SPEC_reviewProductCodes` result when available.
 - `source_files`: optional production files related to the selected TC; product edits remain no-behavior-change only.
 
 ## Method References
@@ -37,6 +37,7 @@ Example ReACT trace for a single-TC refactor pass:
 - [P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
 - [UT_refactTestCase.md](../../commands/P0-FuncTestsFlow/UT_refactTestCase.md)
 - [UT_reviewImplTestCase.md](../../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md)
+- [SPEC_reviewImplUnitTests.md](SPEC_reviewImplUnitTests.md)
 - [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
 
 ## Output Contract
@@ -46,8 +47,8 @@ Example ReACT trace for a single-TC refactor pass:
 - Preserved CaTDD metadata, including US/AC/TC, `@[Category]`, `@[Priority]`, `@[SourceSPEC]`, `@[SourceUT]`, `@[Template]`, and `@[SUT]` markers.
 - Evidence that each refactored TC still has strict `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phase markers and `VERIFY_KEYPOINT_xyz` key checks when available.
 - `UT_reviewImplTestCase` review result for each refactored TC or an explicit reason review could not run.
-- Refactor boundary decision: continue refactoring, route to `SPEC_designUnitTests`, route to `SPEC_implUnitTests`, route to `SPEC_implProductCodes`, or hand off to `SPEC_reviewProductCodes`.
-- Next recommended command: another `SPEC_refactUnitTests` pass, `SPEC_reviewProductCodes`, `SPEC_designUnitTests`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, or ask the developer.
+- Refactor boundary decision: continue refactoring, route to `SPEC_designUnitTests`, route to `SPEC_implUnitTests`, route to `SPEC_implProductCodes`, hand off to `SPEC_reviewImplUnitTests`, or hand off to `SPEC_reviewProductCodes`.
+- Next recommended command: another `SPEC_refactUnitTests` pass, `SPEC_reviewImplUnitTests`, `SPEC_reviewProductCodes`, `SPEC_designUnitTests`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, or ask the developer.
 
 ## Flow Coupling
 
@@ -60,7 +61,7 @@ Example ReACT trace for a single-TC refactor pass:
 5. Run focused verification after each TC or safe batch.
 6. Run `UT_reviewImplTestCase` after each refactored TC to detect skeleton drift.
 7. Stop and route back to design or implementation if refactor reveals missing behavior, new coverage, wrong category, or acceptance ambiguity.
-8. Recommend `SPEC_reviewProductCodes` only when refactored TCs remain GREEN and review passes.
+8. Recommend `SPEC_reviewImplUnitTests` when refactored TCs remain GREEN and TC-level review passes; then route to `SPEC_reviewProductCodes` when story-level unit-test implementation review passes.
 
 ## Implementation Rules
 
@@ -73,12 +74,12 @@ Example ReACT trace for a single-TC refactor pass:
 
 ## Prompt Template
 
-Ask the assistant to run an observable ReACT loop: inspect active-story implemented TCs and verification evidence, select the smallest GREEN refactor candidate, apply `UT_refactTestCase` mechanics, verify no behavior change, review with `UT_reviewImplTestCase`, and decide whether to continue refactoring or hand off to `SPEC_reviewProductCodes`. Preserve CaTDD skeleton metadata and stop on any behavior, category, or acceptance ambiguity.
+Ask the assistant to run an observable ReACT loop: inspect active-story implemented TCs and verification evidence, select the smallest GREEN refactor candidate, apply `UT_refactTestCase` mechanics, verify no behavior change, review with `UT_reviewImplTestCase`, and decide whether to continue refactoring or hand off to `SPEC_reviewImplUnitTests`. Preserve CaTDD skeleton metadata and stop on any behavior, category, or acceptance ambiguity.
 
 ## Conflict Guard
 
 Do not use refactor as a shortcut for adding coverage, fixing RED tests, or implementing product behavior. If a TC is not GREEN before refactor, route to `SPEC_implUnitTests` or `SPEC_implProductCodes`.
-Do not proceed to `SPEC_reviewProductCodes` when any refactored TC lacks post-refactor verification or has unresolved `UT_reviewImplTestCase` drift.
+Do not proceed to `SPEC_reviewImplUnitTests` or `SPEC_reviewProductCodes` when any refactored TC lacks post-refactor verification or has unresolved `UT_reviewImplTestCase` drift.
 Do not batch refactors when shared setup, fixture state, or production behavior makes the blast radius unclear.
 
 ONE-MORE-THING: ask developer if something not sure
