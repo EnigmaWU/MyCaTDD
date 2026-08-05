@@ -28,6 +28,7 @@ Example ReACT trace for a story-level unit-test implementation review:
 - `review_status`: latest `UT_reviewImplTestCase` result for each implemented TC when available.
 - `verification_output`: focused test, compile, lint, or manual verification output for the implemented tests.
 - `product_review_status`: latest `SPEC_reviewProductCodes` result when this command runs after product-code implementation.
+- `test_readme_files`: optional companion test README files, normally `<test_filename_without_extension>_readme.md` beside each target test file.
 - `source_files`: optional production files related to the TCs; this command reviews tests and does not implement product behavior.
 
 ## Method References
@@ -39,6 +40,23 @@ Example ReACT trace for a story-level unit-test implementation review:
 - [UT_reviewImplTestCase](../../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md)
 - [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 
+## Skill Integration Policy
+
+- Skill-first rule: if the latest available `test-case-with-readme` skill exists in the workspace or installed agent skill registry, apply it during this review for each target test file.
+- Preferred skill and usage:
+   - `test-case-with-readme` to verify or create/update the companion `<test_filename_without_extension>_readme.md` file beside each implemented test file.
+   - The companion README must include Purpose, Status, Covered, and Manual sections grounded in the implemented test body, US/AC/TC comments, verification output, and product-code review status when present.
+- Builtin fallback rule: if `test-case-with-readme` is unavailable, do not block the whole review. Report the missing skill and run the builtin README gates below instead.
+- Completion rule: this command must remain executable without skill loading. Use the latest skill when present; otherwise make the fallback evidence explicit.
+
+### Builtin README Gates (when `test-case-with-readme` is unavailable)
+
+- Companion-name gate: each target test file should have or be assigned an expected same-directory `<test_filename_without_extension>_readme.md` path.
+- Section gate: the companion README should include Purpose, Status, Covered, and Manual sections.
+- Grounding gate: Purpose and Covered must trace to the real test body and US/AC/TC comments; do not invent coverage.
+- Status gate: Status must match current TC markers and verification output, including expected RED before product-code implementation or GREEN after product-code review.
+- Manual gate: Manual steps must be executable or explicitly marked as not needed; generic filler is a review issue.
+
 ## Output Contract
 
 - Story-scoped implementation review result for unit tests: pass, fix implementation, revise skeleton, continue implementing tests, implement product code, refactor tests, review product code, or ask the developer.
@@ -47,6 +65,7 @@ Example ReACT trace for a story-level unit-test implementation review:
 - Evidence that P0-first priority was preserved, or an explicit developer override/blocker for skipped P0 TCs.
 - Verification result summary, including whether RED is expected because product behavior is not implemented yet, or whether GREEN is traceable after product-code review.
 - Product-code review correlation when this command runs after `SPEC_reviewProductCodes`.
+- Test README evidence: `test-case-with-readme` applied, unavailable with builtin fallback, missing companion README, updated companion README, or ask the developer.
 - Drift findings that distinguish implementation drift from skeleton/design drift.
 - Next recommended command: `SPEC_implUnitTests`, `UT_implTestCase`, `UT_reviewImplTestCase`, `SPEC_designUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_reviewProductCodes`, `SPEC_commitWorks`, or ask the developer.
 
@@ -58,9 +77,10 @@ Example ReACT trace for a story-level unit-test implementation review:
 2. Check that every implemented TC preserves US/AC/TC comments and required CaTDD metadata.
 3. Check that each implemented TC has strict `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phase markers and key checks written with `VERIFY_KEYPOINT_xyz` macros when available.
 4. Apply `UT_reviewImplTestCase` mechanics to each implemented TC that lacks current review evidence.
-5. Review story-level ordering: P0 Functional before P1 Design, P1 before P2 Quality, unless blocked or explicitly overridden.
-6. Review status markers against verification output: meaningful RED is acceptable before product-code implementation; after product-code review, GREEN must be traceable to expected product behavior; unexplained GREEN, ISSUES, or BLOCKED states require evidence.
-7. Decide the next lifecycle step:
+5. Apply the latest `test-case-with-readme` skill when available, or the builtin README gates when the skill is unavailable, to review companion test README evidence for each target test file.
+6. Review story-level ordering: P0 Functional before P1 Design, P1 before P2 Quality, unless blocked or explicitly overridden.
+7. Review status markers against verification output: meaningful RED is acceptable before product-code implementation; after product-code review, GREEN must be traceable to expected product behavior; unexplained GREEN, ISSUES, or BLOCKED states require evidence.
+8. Decide the next lifecycle step:
    - If implemented tests are aligned and product behavior is missing, route to `SPEC_implProductCodes`.
    - If implemented tests are aligned and product code has not been reviewed, route to `SPEC_reviewProductCodes`.
    - If implemented tests are aligned and GREEN but need cleanup, route to `SPEC_refactUnitTests`.
@@ -73,6 +93,7 @@ Example ReACT trace for a story-level unit-test implementation review:
 - Review only active-story test implementation scope.
 - Do not implement product code or refactor tests inside this command.
 - Do not redesign skeletons silently. Report skeleton-vs-implementation conflicts and route deliberately.
+- Do not modify test code while applying `test-case-with-readme`; companion README documentation is allowed only when grounded in available evidence.
 - Do not treat a RED test as a failure when RED is the expected test-first result and assertions align with the skeleton.
 - When run after `SPEC_reviewProductCodes`, confirm product-code review findings did not require test or skeleton changes before commit.
 - Do not accept a TC as reviewed when strict phase markers or key verification macros are missing.
@@ -80,13 +101,14 @@ Example ReACT trace for a story-level unit-test implementation review:
 
 ## Prompt Template
 
-Ask the assistant to run an observable ReACT loop: inspect active-story implemented TC slices, verify P0-first ordering and CaTDD metadata, apply `UT_reviewImplTestCase` mechanics per TC, compare implementation against US/AC/TC comments, check strict phase layout and `VERIFY_KEYPOINT_xyz` usage, interpret verification output and any `SPEC_reviewProductCodes` result, then recommend the next lifecycle command.
+Ask the assistant to run an observable ReACT loop: inspect active-story implemented TC slices, verify P0-first ordering and CaTDD metadata, apply `UT_reviewImplTestCase` mechanics per TC, apply the latest `test-case-with-readme` skill when available or the builtin README gates when unavailable, compare implementation against US/AC/TC comments, check strict phase layout and `VERIFY_KEYPOINT_xyz` usage, interpret verification output and any `SPEC_reviewProductCodes` result, then recommend the next lifecycle command.
 
 ## Conflict Guard
 
 If implementation and skeleton disagree, do not choose automatically which one is truth. Report the conflict and ask whether method design or implementation should change.
 Do not skip story-level review evidence before `SPEC_implProductCodes`, `SPEC_refactUnitTests`, or `SPEC_reviewProductCodes` when implemented unit tests changed.
 Do not skip the post-product-code `SPEC_reviewImplUnitTests` pass before `SPEC_commitWorks` when product code changed or product-code review findings touched test behavior.
+Do not claim the `test-case-with-readme` skill was applied when it is unavailable; report the fallback gates used instead.
 Do not claim review complete when implemented TCs are missing verification evidence, unless the missing evidence is explicitly reported as a blocker.
 
 ONE-MORE-THING: ask developer if something not sure
