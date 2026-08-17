@@ -2,7 +2,7 @@
 
 Initialized by `/SPEC_initProjectContext` on 2026-05-29.
 
-This file is the team-shared SpecCoding context for this repository. Keep stable project facts, constraints, conventions, and open questions here so future `SPEC_*` commands can continue from explicit state instead of chat memory.
+This file is the team-shared, always-loaded working memory for SpecCoding in this repository. Keep project-wide guardrails and broadly reused facts here; retrieve module detail, lifecycle state, and history from the canonical routes below.
 
 ## Project Facts
 
@@ -31,7 +31,7 @@ After self-install with `scripts/installCaTDD4Copilot.sh --target "$PWD" --init 
 - `.catdd/slashCommands/` contains installed portable flow-command source.
 - `.catdd/spec/` contains SpecCoding lifecycle artifacts.
 - `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` are generated Copilot adapters and are gitignored in this source repo.
-- `.github/instructions/catdd.instructions.md` points Copilot agents at the installed `.catdd/` assets.
+- `.github/instructions/catdd.instructions.md` is a tracked team-shared instruction that points Copilot agents at the installed `.catdd/` assets.
 
 ## Stable Conventions
 
@@ -39,7 +39,7 @@ After self-install with `scripts/installCaTDD4Copilot.sh --target "$PWD" --init 
 - Keep English and Chinese README mirrors aligned by heading structure.
 - Do not redefine CaTDD method semantics in `slashCommands/`, `codeAgents/`, or native prompt wrappers; refer back to `methodPrompts/`.
 - Treat native wrappers as thin, regenerable adapters over `.catdd/slashCommands/` or `slashCommands/`.
-- Commit shared SpecCoding artifacts such as `.catdd/spec/projectContext.md`, pending imported work, analyzed raw input archives, todo user stories, active doing user stories, done user stories, and stable project-root `README*` SPEC docs.
+- Commit `.catdd/spec/projectContext.md`, shared lifecycle artifacts under `.catdd/spec/`, and stable project-root `README*` SPEC docs.
 - Keep local SpecCoding work-state trace gitignored: `.catdd/spec/WorkingProcessLog.md`.
 - `SPEC_*` commands may orchestrate `UT_*` commands, but must not replace P0/P1/P2 category rules.
 - `SPEC_clearStoryIntent` is the early mutual-intent gate after `SPEC_openUserStory`; it records developer intent and CodeAgent intent before design begins. It does not replace the final `SPEC_reviewUserStory` readiness gate after detail design.
@@ -57,17 +57,17 @@ The boundary treated as one **Unit** for CaTDD unit tests in this project:
 - A single file such as a `*.H` header, a single class, or a single slash command may become the unit when the module interface is too coarse; record the exception in the story-level verification design.
 - Update this convention through `SPEC_updateProjectContext` if the project later decides on a different default granularity.
 
-## Current Design Decisions
+## Canonical Knowledge Routes
 
-- P0 Functional categories are Typical, Edge, Misuse, and Fault.
-- P1 Design categories are State, Capability, and Concurrency.
-- P2 Quality categories are Performance, Robust, Compatibility, and Configuration.
-- `designAllSkeleton` means all P0/P1/P2 categories.
-- `designFuncTestsSkeleton` means the P0 Functional set only: Typical, Edge, Misuse, and Fault.
-- In `utCodeAgentCLI`, `--target` is test-space scope only: one TestCase in one TestFile, one TestFile, or some TestFiles.
-- In `utCodeAgentCLI`, `--input` or `--inputFile` carries source/context such as interface, protocol, schema, draft, or production source.
-- In `utCodeAgentCLI`, `--behave` names a compatible UT slash-command behavior or a stable CLI alias.
-- Stable CLI aliases include `reviewFuncTestsSkeleton` and `tellMeNextImplTest`, resolving to `UT_reviewFuncTestsSkeleton` and `UT_tellMeNextImplTest` respectively.
+| Knowledge | Canonical source | Retrieval rule |
+| --- | --- | --- |
+| CaTDD semantics, category meanings, skeleton rules, and status discipline | [methodPrompts](../../methodPrompts/README.md) and `methodPrompts/` | Read before interpreting or changing the method; project context must not redefine it. |
+| SpecFlow lifecycle, command ownership, and artifact policy | [Px-SpecFlow](../../slashCommands/flows/Px-SpecFlow.md) and `slashCommands/commands/` | Read for `SPEC_*` orchestration and `UT_*` handoff rules. |
+| `utCodeAgentCLI` requirements and open product questions | [README_UserStory](../../codeAgents/utCodeAgentCLI/README_UserStory.md) | Read when planning or reviewing CLI behavior. |
+| `utCodeAgentCLI` public argument and behavior contract | [README_UsageDesign](../../codeAgents/utCodeAgentCLI/README_UsageDesign.md) | Read before changing CLI inputs, aliases, diagnostics, or invocation behavior. |
+| `utCodeAgentCLI` architecture, runtime decisions, and rationale | [README_ArchDesign](../../codeAgents/utCodeAgentCLI/README_ArchDesign.md) and [ADRs](../../codeAgents/utCodeAgentCLI/ADRs/) | Read for module boundaries, runtime placement, quality trade-offs, and supersession history. |
+| `utCodeAgentCLI` implementation contracts | [README_DetailDesign](../../codeAgents/utCodeAgentCLI/README_DetailDesign.md) | Read before changing parser, planner, executor, adapter, trace, or diagnostic internals. |
+| Verification strategy and traceability | [README_VerifyDesign.md](../../README_VerifyDesign.md) and module `README_VerifyDesign.md` files | Read the project or module scope relevant to the active story. |
 
 ## Validation Commands
 
@@ -85,41 +85,16 @@ Use focused checks such as `git diff --check -- <files>` for edited Markdown or 
 
 ## SpecFlow Lifecycle State
 
-- `SPEC_*` Copilot prompt wrappers have been installed into `.github/prompts/`.
-- Do not maintain duplicated file lists for `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `doneUS/`, or `abortUS/` in this file. They drift too easily.
-- Before updating lifecycle state, run a live directory inventory and use that output as the source of truth:
+- Lifecycle state is operational memory. Do not store directory snapshots, filenames, counts, or next-task recommendations in this file.
+- Before reading or updating lifecycle state, inspect all live directories and use that output as the source of truth:
 
 ```bash
-ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/doneUS .catdd/spec/abortUS
+ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/suspendUS .catdd/spec/doneUS .catdd/spec/abortUS
 ```
 
-- If a lifecycle directory is absent, record that absence instead of inventing an empty state. Current check on 2026-06-11 found `.catdd/spec/abortUS/` absent.
-- Current lifecycle summary from the latest filesystem check: `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, and `doneUS/` exist; `doingUS/` is empty; `20260612-refactor-UT_US-USER-01-P0-functional-traceability-{UserStory,TASKs}.md` are now in `doneUS/`.
-- Use `/SPEC_whatsNextTask` or the live `ls -lrt` inventory to choose the next lifecycle file, rather than reading a stale filename list from this project context.
-- Shared module UserStory doc created: `codeAgents/utCodeAgentCLI/README_UserStory.md` and `codeAgents/utCodeAgentCLI/README_UserStory_ZH.md`.
-- Shared module ArchDesign doc created: `codeAgents/utCodeAgentCLI/README_ArchDesign.md` and `codeAgents/utCodeAgentCLI/README_ArchDesign_ZH.md`; latest draft includes the runtime-language tradeoff review across TypeScript/Node.js, Python, and Go, Mermaid-renderable C4-style architecture views, Px-SpecFlow architecture-oriented surface coverage, and an ADR link for the runtime choice.
-- Current `utCodeAgentCLI` ArchDesign has `/SPEC_reviewArchDesign` PASS recorded on 2026-06-03; the runtime-language ADR is now DECIDED: TypeScript/Node.js for V1 (PoC) and Go pre-selected for V2 (production distribution), Python evaluated and not selected. ADR status updated to Decided in `codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md`.
-- Shared module DetailDesign doc created: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` and `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md`; latest draft includes TypeScript-facing parser, planner, executor, adapter, trace, diagnostics, state, error, and verification contracts; `/SPEC_reviewDetailDesign` PASS recorded on 2026-06-04.
-- Current `utCodeAgentCLI` story/design readiness has `/SPEC_reviewUserStory` PASS recorded on 2026-06-04 and the story itself is archived in `doneUS/`.
-- `US-USER-01` lifecycle was completed on 2026-06-08: `/SPEC_reviewProductCodes` PASS, `/SPEC_commitWorks` commit `3a98908`, CaTDD category correction commit `90268f7`, and closure through `/SPEC_closeUserStory`.
-- `SPEC_designUnitTests` to `UT_designFuncTestsSkeleton` alignment lifecycle was completed on 2026-06-11: category-specific `UT_US-USER-01-*.ts` UnitTesting split, `/SPEC_reviewProductCodes` PASS, `/SPEC_commitWorks` commit `8714e7f`, and closure through `/SPEC_closeUserStory`.
-- `UT_US-USER-01` mandatory P0 traceability and subprocess-SUT lifecycle was completed on 2026-06-12: `/SPEC_designUnitTests`, `/SPEC_implUnitTests`, `/SPEC_reviewProductCodes` PASS, `/SPEC_commitWorks` commit `25389e6`, and closure through `/SPEC_closeUserStory`.
-
-## Next Recommended Command
-
-Run this next after context review:
-
-- `/SPEC_analyzeIssue` for pending imported work, starting with `.catdd/spec/pendingNews/20260611-add-emoji-to-designAndImplTemplate-key-states-Issue.md` if that is the next priority.
-
-## Assumptions To Confirm
-
-- The current self-install is intentional for using MyCaTDD as its own target project.
-- `.github/instructions/catdd.instructions.md` should be committed for this source repository, not treated only as local generated target-project state.
-- Empty lifecycle directories do not need placeholder files unless the team wants them visible in Git before they contain artifacts.
-- The proposed `sut_unit_convention` of `module-interface` is the right default for MyCaTDD; confirm or refine per layer.
+- If a directory is absent, report the absence instead of inventing state. Use `/SPEC_whatsNextTask` to derive the next action from current artifacts.
+- Completed and aborted work remains available from `doneUS/`, `abortUS/`, ADRs, review artifacts, and Git history when rationale or diagnosis is needed.
 
 ## Open Questions
 
-- Which user role should be treated as primary when prioritizing `utCodeAgentCLI` User Stories: developer, CodeAgent, maintainer, or tooling author?
-- Should the self-installed `.github/instructions/catdd.instructions.md` become part of the repository's committed project instructions?
-- Should the validation command list be expanded into a formal project-root `README_VerifyDesign.md` later?
+- None at project scope. Module-specific questions live in their canonical requirement and design documents.

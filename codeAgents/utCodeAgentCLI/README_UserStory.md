@@ -206,6 +206,7 @@ US-DEV-05 → executable reliability/safety contract coverage for ASR-R1..R6
 
 ## Open Questions
 
+- Which user role should be treated as primary when prioritizing `utCodeAgentCLI` User Stories: developer, CodeAgent, maintainer, or tooling author?
 - Trace file output directory and naming convention?
 - `--log-level trace` for raw prompt/response logging?
 - First adapter runtime target: TypeScript CLI, Copilot-native, or OpenCode?

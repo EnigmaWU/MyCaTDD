@@ -208,6 +208,7 @@ US-DEV-05 → ASR-R1..R6 的可执行可靠性/安全契约覆盖
 
 ## 开放问题
 
+- 在确定 `utCodeAgentCLI` 用户故事优先级时，应将哪个用户角色视为主要角色：开发者、CodeAgent、维护者还是工具作者？
 - Trace 文件输出目录和命名规范？
 - `--log-level trace` 原始 prompt/response 日志？
 - 首个 adapter runtime 目标：TypeScript CLI、Copilot-native 还是 OpenCode？
