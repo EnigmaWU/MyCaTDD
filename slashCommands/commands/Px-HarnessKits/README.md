@@ -13,6 +13,7 @@ This directory contains `HARNESS_*` command templates for CaTDD Harness Engineer
 | [HARNESS_diagnoseInstallation.md](HARNESS_diagnoseInstallation.md) | Diagnose a failed or misworking CaTDD installation and recommend safe repair actions. |
 | [HARNESS_newTaskSession.md](HARNESS_newTaskSession.md) | Capture and preserve important session context when finishing the current task and starting a new session, so the next CodeAgent session can resume without re-investigation. |
 | [HARNESS_evolveHarness.md](HARNESS_evolveHarness.md) | Evolve the CaTDD executable harness at test time from execution traces using a propose-and-judge population loop. |
+| [HARNESS_learnFromSuccess.md](HARNESS_learnFromSuccess.md) | Reflect on a meaningful successful task, route reusable lessons to canonical owners, and propose evidence-backed improvements without automatic mutation. |
 
 ## Contract
 

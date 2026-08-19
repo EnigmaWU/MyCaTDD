@@ -33,22 +33,26 @@ Close an active user story after implementation, review, commit, and CI are comp
 - Story-specific references that still point to `.catdd/spec/doingUS/` are updated to `.catdd/spec/doneUS/` after closure so trace paths remain valid.
 - Project-level `README_UserStories.md` is synchronized so the story moves from TODO/DOING to DONE and acceptance-criteria status is aligned with closure evidence.
 - Project-context sync policy is applied after closure:
- 	- Minor lifecycle impact (for example only story file movement or link normalization): remind the developer to run `SPEC_updateProjectContext`.
- 	- Major lifecycle impact (for example next-command recommendation changes, pending/todo/doing/done summary changes, or project rules/constraints changed by this story): run `SPEC_updateProjectContext` in the same progress flow before declaring closure complete.
+  - Minor lifecycle impact (for example only story file movement or link normalization): remind the developer to run `SPEC_updateProjectContext`.
+  - Major lifecycle impact (for example next-command recommendation changes, pending/todo/doing/done summary changes, or project rules/constraints changed by this story): run `SPEC_updateProjectContext` in the same progress flow before declaring closure complete.
 - Completion summary with traceability to source issue, feature, or imported user-story input, project-root README SPEC docs, tests, code, commit, and CI.
 - Post-close merge checkpoint result:
- 	- If work used a dedicated story branch and branch integration is still required, report `next_command = SPEC_mergeWorks` (or project merge step) after close.
- 	- If merge is already complete or no dedicated story branch was used, report `next_command = no_command` (merge auto-skipped).
+  - If work used a dedicated story branch and branch integration is still required, report `next_command = SPEC_mergeWorks` (or project merge step) after close.
+  - If merge is already complete or no dedicated story branch was used, report `next_command = no_command` (merge auto-skipped).
 - Close-commit checkpoint result:
- 	- If no file changed during close: report `close_commit_required = no`.
- 	- If close generated file changes: report `close_commit_required = yes` and either:
-  		- include `close_commit_ref` for the commit that captured close-generated changes, or
-  		- include explicit handoff `next_command = /SPEC_commitWorks` and do not mark closure complete yet.
+  - If no file changed during close: report `close_commit_required = no`.
+  - If close generated file changes: report `close_commit_required = yes` and either:
+    - include `close_commit_ref` for the commit that captured close-generated changes, or
+    - include explicit handoff `next_command = /SPEC_commitWorks` and do not mark closure complete yet.
 - Remaining follow-up work, if any.
+- Non-blocking post-success learning hook:
+  - Report `success_learning_checkpoint = recommended`.
+  - Report `next_command = /HARNESS_learnFromSuccess` when no lifecycle, commit, or merge command has precedence.
+  - When another command has precedence, preserve it as `next_command` and report `learning_command = /HARNESS_learnFromSuccess` separately.
 
 ## Prompt Template
 
-Ask the assistant to close only verified work, preserve enough history for later review, determine whether post-close branch integration is required or auto-skipped, apply post-close project-context sync policy (minor = remind, major = run `SPEC_updateProjectContext` in-flow), and enforce the post-close commit checkpoint for close-generated file changes.
+Ask the assistant to close only verified work, preserve enough history for later review, determine whether post-close branch integration is required or auto-skipped, apply post-close project-context sync policy (minor = remind, major = run `SPEC_updateProjectContext` in-flow), enforce the post-close commit checkpoint for close-generated file changes, and report the non-blocking `HARNESS_learnFromSuccess` checkpoint without replacing a required lifecycle command.
 
 ## Conflict Guard
 

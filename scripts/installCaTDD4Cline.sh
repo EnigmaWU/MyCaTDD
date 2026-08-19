@@ -231,6 +231,7 @@ This is a Cline project rule installed by MyCaTDD. Use it when working with CaTD
 - Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
 - Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
 - Prefer explicit SpecFlow intake commands: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_analyzeIssue`, and `SPEC_analyzeFeature`.
+- After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_learnFromSuccess`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply a learning proposal.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
 
 ONE-MORE-THING: ask developer if something not sure

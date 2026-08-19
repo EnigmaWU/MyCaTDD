@@ -47,6 +47,8 @@ grep -Fq '.catdd/spec/' "$rule" || fail "Antigravity rule missing spec workspace
 grep -Fq 'UT_*, SPEC_*, and HARNESS_* commands' "$rule" || fail "Antigravity rule missing command family guidance"
 grep -Fq 'README_ArchDesign.md' "$rule" || fail "Antigravity rule missing project-root README SPEC docs"
 grep -Fq 'SPEC_importUserStory' "$rule" || fail "Antigravity rule missing user-story import guidance"
+grep -Fq 'success_learning_checkpoint = recommended' "$rule" || fail "Antigravity rule missing success-learning checkpoint"
+grep -Fq '/HARNESS_learnFromSuccess' "$rule" || fail "Antigravity rule missing success-learning command hook"
 
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"

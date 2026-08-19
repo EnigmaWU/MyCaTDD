@@ -19,3 +19,5 @@ Commands may orchestrate work, request inputs, and define output shape. They mus
 - `SPEC_*` commands are SpecCoding lifecycle commands.
 - `UT_*` commands are unit-test design and implementation commands.
 - `HARNESS_*` commands are operational Harness Engineering tool-point commands.
+
+After every meaningful verified success, CodeAgent integrations should report `success_learning_checkpoint = recommended` and surface `/HARNESS_learnFromSuccess` as a non-blocking learning hook. The hook must not replace a required lifecycle, commit, merge, or safety command, and it must not mutate source automatically.

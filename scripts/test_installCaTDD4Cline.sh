@@ -53,6 +53,8 @@ grep -Fq 'README_DiagnosisDesign.md' "$rule" || fail "Cline rule missing diagnos
 grep -Fq 'SPEC_importIssue' "$rule" || fail "Cline rule missing SPEC command guidance"
 grep -Fq 'SPEC_importUserStory' "$rule" || fail "Cline rule missing user-story import guidance"
 grep -Fq 'UT_*, SPEC_*, and HARNESS_* commands' "$rule" || fail "Cline rule missing command family guidance"
+grep -Fq 'success_learning_checkpoint = recommended' "$rule" || fail "Cline rule missing success-learning checkpoint"
+grep -Fq '/HARNESS_learnFromSuccess' "$rule" || fail "Cline rule missing success-learning command hook"
 
 install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
 [[ -f "$install_marker" ]] || fail "missing install marker"

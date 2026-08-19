@@ -51,6 +51,8 @@ grep -Fq '.catdd/slashCommands' "$instructions" || fail "instructions missing sl
 grep -Fq '.github/prompts/UT_*.prompt.md' "$instructions" || fail "instructions missing UT prompt wrapper location"
 grep -Fq '.github/prompts/SPEC_*.prompt.md' "$instructions" || fail "instructions missing SPEC prompt wrapper location"
 grep -Fq '.github/prompts/HARNESS_*.prompt.md' "$instructions" || fail "instructions missing HARNESS prompt wrapper location"
+grep -Fq 'success_learning_checkpoint = recommended' "$instructions" || fail "instructions missing success-learning checkpoint"
+grep -Fq '/HARNESS_learnFromSuccess' "$instructions" || fail "instructions missing success-learning command hook"
 
 spec_sample="$TARGET_DIR/.github/prompts/SPEC_openUserStory.prompt.md"
 [[ -f "$spec_sample" ]] || fail "missing installed SPEC sample prompt"

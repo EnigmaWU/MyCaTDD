@@ -166,6 +166,19 @@ assert_design_source \
 assert_contains "slashCommands/commands/README.md" "P1-DesignTestsFlow"
 assert_contains "slashCommands/commands/README.md" "P2-QualityTestsFlow"
 
+success_learning_command="slashCommands/commands/Px-HarnessKits/HARNESS_learnFromSuccess.md"
+assert_file "$success_learning_command"
+assert_contains "$success_learning_command" "# HARNESS_learnFromSuccess"
+assert_contains "$success_learning_command" "success_learning_checkpoint"
+assert_contains "$success_learning_command" "no reusable learning"
+assert_contains "$success_learning_command" "dry_run"
+assert_contains "$success_learning_command" "## Usage Example"
+assert_contains "slashCommands/commands/Px-HarnessKits/README.md" "HARNESS_learnFromSuccess.md"
+assert_contains "slashCommands/kits/Px-HarnessKits.md" "HARNESS_learnFromSuccess"
+assert_contains "slashCommands/README_UserGuide.md" "HARNESS_learnFromSuccess.md"
+assert_contains "slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md" "success_learning_checkpoint = recommended"
+assert_contains "slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md" "next_command = /HARNESS_learnFromSuccess"
+
 if grep -Fq "Future Command Candidates" "$REPO_ROOT/slashCommands/flows/P1-DesignTestsFlow.md"; then
   fail "P1 flow still describes completed commands as future candidates"
 fi
