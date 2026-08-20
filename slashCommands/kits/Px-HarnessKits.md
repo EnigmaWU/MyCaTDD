@@ -17,9 +17,7 @@ Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 
 `HARNESS_*` commands own operational tasks such as patch-back, installation verification, installation diagnosis, run artifact collection, policy checks, and harness evolution. They may support SpecFlow, but they do not replace `SPEC_*` lifecycle commands.
 
-`HARNESS_evolveHarness` applies the Test-Time Harness Evolution (TTHE) insight ([Nie et al., arXiv:2607.08124](https://arxiv.org/abs/2607.08124)): the executable harness around a frozen model is itself the adaptation state, and it can be evolved during evaluation using only unlabeled execution traces. The command implements the three TTHE operators -- **Observe**, **Propose**, **Judge** -- while keeping CaTDD method semantics and model weights untouched.
-
-`HARNESS_learnFromSuccess` provides the lighter post-success learning loop. It reflects after meaningful success, routes reusable lessons to their canonical owner, and defaults to a dry-run proposal; it does not treat one successful session as permission to mutate the harness.
+`HARNESS_evolveHarness` is the single CaTDD learning and evolution entry point. With `evolution_mode=auto`, it chooses `refine` for one bounded evidence-backed lesson and `restructure` for repeated or systemic traces requiring structural alternatives. The `restructure` mode applies the Test-Time Harness Evolution (TTHE) insight ([Nie et al., arXiv:2607.08124](https://arxiv.org/abs/2607.08124)) through the **Observe**, **Propose**, and **Judge** population loop while keeping model weights untouched.
 
 ## Developer Stories
 
@@ -39,8 +37,7 @@ Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 | Session handoff | Capture and preserve important session context — lifecycle state, key files, decisions, environment facts — when finishing a task and starting a new session. | [HARNESS_newTaskSession](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | Run diagnosis | Future commands for collecting run artifacts and diagnosing non-installation harness/test failures. | Future `HARNESS_collectRunArtifacts`, `HARNESS_diagnoseFailure` |
 | Guard and policy | Future commands for checking execution isolation, policy compliance, and destructive-operation guards. | Future `HARNESS_checkPolicy` |
-| Harness evolution | Evolve the executable harness at test time from execution traces using a propose-and-judge population loop. | [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
-| Success learning | Reflect after meaningful success, classify reusable lessons, and propose evidence-backed updates to the correct canonical owner. | [HARNESS_learnFromSuccess](../commands/Px-HarnessKits/HARNESS_learnFromSuccess.md) |
+| Learning and evolution | Route verified lessons to canonical owners; use `refine` for bounded improvements and `restructure` for trace-driven structural evolution. | [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
 | Harness repair | Future commands for proposing and validating harness patches with regression gates. | Future `HARNESS_proposePatch`, `HARNESS_validatePatch` |
 
 ## Seed Flow
@@ -52,15 +49,11 @@ flowchart LR
     Diff --> Review["Developer review"]
     Review --> Commit["Commit to CaTDD source repo"]
 
-    Traces["Execution traces / run artifacts"] --> Propose["HARNESS_evolveHarness"]
-    Propose --> Judge["Proxy-signal judge"]
-    Judge --> Winner["Selected harness candidate"]
-    Winner --> Preview["dry_run preview"]
-    Winner --> EvolveCommit["Commit to non-default branch"]
-
-    Success["Meaningful verified success"] --> Learn["HARNESS_learnFromSuccess"]
-    Learn --> Route["Classify canonical owner"]
-    Route --> Proposal["dry_run proposal or no reusable learning"]
+    Evidence["Verified success or failure evidence"] --> Evolve["HARNESS_evolveHarness mode=auto"]
+    Evolve --> Mode{"evolution_mode?"}
+    Mode -->|refine| Proposal["One owner-scoped dry-run proposal"]
+    Mode -->|restructure| Judge["TTHE candidate population and judge"]
+    Judge --> Winner["Selected structural candidate"]
 ```
 
 ## Command Sequence
@@ -69,8 +62,7 @@ flowchart LR
 2. Use [../commands/Px-HarnessKits/HARNESS_verifyInstallation.md](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) before trusting a fresh install, after installing into a real target project, or before releasing installer/generator changes.
 3. Use [../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) only after verification fails or an installed target project misworks.
 4. Use [../commands/Px-HarnessKits/HARNESS_newTaskSession.md](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) at the end of a task session to capture and preserve important context before starting a new session.
-5. Use [../commands/Px-HarnessKits/HARNESS_evolveHarness.md](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) when repeated execution traces reveal a harness bug, wrapper drift, installer fragility, or verification failure pattern that can be fixed without changing CaTDD method semantics or product requirements. Default to `dry_run=true` first.
-6. Use [../commands/Px-HarnessKits/HARNESS_learnFromSuccess.md](../commands/Px-HarnessKits/HARNESS_learnFromSuccess.md) after a meaningful verified success. CodeAgents should report the non-blocking `success_learning_checkpoint` reminder, while the command defaults to `dry_run=true` and may validly return `no reusable learning`.
+5. Use [../commands/Px-HarnessKits/HARNESS_evolveHarness.md](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) after meaningful verified success or repeated harness evidence. Default to `evolution_mode=auto` and `dry_run=true`: bounded lessons select `refine`; repeated/systemic evidence may select `restructure`; no durable lesson may return `no reusable learning`.
 
 ## Conflict Guard
 

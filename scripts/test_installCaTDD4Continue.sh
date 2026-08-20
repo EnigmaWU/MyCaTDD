@@ -57,7 +57,7 @@ grep -Fq 'SPEC_importIssue' "$rule" || fail "Continue rule missing SPEC command 
 grep -Fq 'SPEC_importUserStory' "$rule" || fail "Continue rule missing user-story import guidance"
 grep -Fq 'UT_*, SPEC_*, and HARNESS_* commands' "$rule" || fail "Continue rule missing command family guidance"
 grep -Fq 'success_learning_checkpoint = recommended' "$rule" || fail "Continue rule missing success-learning checkpoint"
-grep -Fq '/HARNESS_learnFromSuccess' "$rule" || fail "Continue rule missing success-learning command hook"
+grep -Fq '/HARNESS_evolveHarness' "$rule" || fail "Continue rule missing unified evolution command hook"
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
 prompt_count="$(find "$TARGET_DIR/.continue/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' -o -name 'HARNESS_*.prompt' \) | wc -l | tr -d '[:space:]')"

@@ -2,16 +2,17 @@
 
 ## Purpose
 
-Evolve the CaTDD executable harness at test time using unlabeled execution traces, following the Test-Time Harness Evolution (TTHE) principle: the harness around the LLM is the state of adaptation, and improvements are proposed, judged, and persisted without changing model weights, requiring gold labels, or training a separate adaptation model.
+Learn from verified CaTDD successes and failures, then evolve the correct canonical artifact at the smallest justified depth. One command supports lightweight evidence-backed refinement and heavier trace-driven restructuring without changing model weights or silently mutating source.
 
 ## Command Type
 
-HarnessKits tool-point command. This command improves the CaTDD command, adapter, execution, and diagnostic harness around the method source; it does not move a user story through SpecFlow lifecycle state.
+HarnessKits learning and evolution tool-point command. It routes reusable lessons to their narrowest canonical owner and may improve the CaTDD command, adapter, execution, diagnostic, specification, method, project-memory, or skill surface through the owning workflow. It does not move SpecFlow lifecycle state.
 
 ## When to Invoke
 
 Invoke `HARNESS_evolveHarness` when:
 
+- A meaningful coding task, VibeCoding session, user-story closure, or CodeAgent chat has objective success evidence and may contain a reusable lesson.
 - Repeated `HARNESS_verifyInstallation` or `HARNESS_diagnoseInstallation` runs reveal the same harness-layer failure pattern (wrapper drift, stale installer, broken adapter rule, missing skill mapping, etc.).
 - A newly installed CaTDD target project repeatedly fails one or more verification checks and the root cause is in the harness, not in product code or CaTDD method semantics.
 - A `scripts/test_*.sh` harness test fails persistently and the fix belongs to the harness (installer, wrapper, verifier) rather than to a user story.
@@ -19,25 +20,31 @@ Invoke `HARNESS_evolveHarness` when:
 
 Do **not** invoke `HARNESS_evolveHarness` when:
 
-- The problem is a missing feature, a product bug, or an unclear user-story requirement -- use `SPEC_*` commands instead.
-- The failure is inside CaTDD method semantics (what a category means, US/AC/TC rules) -- update `methodPrompts/` through a spec story, not a harness patch.
-- You have no execution traces or verification evidence -- run `HARNESS_verifyInstallation` or `HARNESS_diagnoseInstallation` first.
+- Verification is incomplete or the only evidence is a `SUCCESS` label with no observable result.
+- The problem is a missing feature, product bug, unclear requirement, or method-semantic change with an already-known owner -- delegate to the corresponding `SPEC_*` workflow instead of editing it directly here.
 - You want a one-off quick fix without reviewing the diff -- `dry_run=true` is the default for a reason.
 
 ## CoT Pattern
 
-**ReACT + Observe-Propose-Judge** -- Reasoning + Acting with a candidate population. This command must collect execution traces, maintain parallel branch lineages, propose harness edits from trace evidence, judge them with execution-derived proxy signals, and commit the selected improvement with explicit safety gates.
+**ReACT + Observe-Classify-Propose-Judge** -- inspect evidence, extract reusable lessons, route each lesson to its canonical owner, select the smallest justified evolution mode, and judge proposals with explicit validation. `restructure` adds the TTHE parallel-candidate population loop; `refine` does not.
 
 ## Inputs
 
-- `target_project_repo`: project repository whose harness execution traces will be analyzed.
+- `target_project_repo`: project repository whose successful session, failure evidence, or harness traces will be analyzed.
+- `evolution_mode`: optional depth selector. Default: `auto`.
+  - `auto`: choose `refine` for one bounded lesson with a clear owner and focused validation; choose `restructure` only for repeated/systemic evidence or competing structural alternatives.
+  - `refine`: propose one minimal owner-scoped update without branch-population search.
+  - `restructure`: run the TTHE Observe-Propose-Judge population loop for a harness-level structural change.
+- `learning_source`: optional completed session summary, closed story, commit, review, issue resolution, verification report, or execution trace.
+- `learning_evidence`: objective outcome evidence and, when available, contribution and reuse evidence.
 - `trace_source`: optional trace source selector. Default: `auto`.
   - `auto`: discover traces from `.catdd/spec/WorkingProcessLog.md`, verification reports, and recent test-script runs.
   - `run_artifacts_dir`: read from a directory produced by `HARNESS_collectRunArtifacts`.
   - `verification_report`: read from a previous `HARNESS_verifyInstallation` output.
   - `manual`: developer-supplied trace snippets or failure observations.
-- `candidate_scope`: optional harness layer selector. Default: `all`.
-  - `all`: consider command files, adapter wrappers, installer scripts, and verification scripts.
+- `candidate_scope`: optional canonical-owner filter. Default: `all`.
+  - `all`: classify across project context, product specification, method, slash commands, harness, and reusable skills.
+  - `project-context`, `product-spec`, `method`, `skill`: delegate accepted lessons to the corresponding canonical owner and governed workflow.
   - `slashCommands`: portable command files under `.catdd/slashCommands/commands/`.
   - `wrappers`: native adapter wrappers such as `.github/prompts/*.prompt.md`.
   - `installers`: installation scripts under `.catdd/scripts/` or project-root `scripts/installCaTDD*.sh`.
@@ -57,9 +64,50 @@ Do **not** invoke `HARNESS_evolveHarness` when:
   - `diff_reduce`: failure or warning inventory shrinks compared to baseline.
   - `manual`: developer provides the acceptance signal.
 - `dry_run`: optional flag to produce candidate proposals without applying the winner. Default: `true`.
+- `apply_approved`: optional explicit developer approval to apply a selected `refine` proposal. Default: `false`.
 - `base_branch`: optional branch used as the safe starting point. Default: `main`.
 - `target_branch`: optional non-default branch where the committed improvement is written. Required when `dry_run=false`.
 - `budget`: optional guardrail set. Default: `{ max_wall_minutes: 60, max_candidates: 50, exclude_malformed: true }`.
+
+## Mode Selection Gate
+
+Use `refine` when all of these are true:
+
+- One bounded lesson is supported by observable evidence.
+- Its canonical owner is clear.
+- The proposed change is minimal and a focused check can falsify it.
+- Parallel alternatives would add cost without improving the decision.
+
+Use `restructure` when any of these are true:
+
+- Repeated traces reveal a systemic harness problem.
+- The current command or adapter structure cannot express the required behavior cleanly.
+- Multiple plausible structural candidates must be executed and compared.
+- The change crosses harness modules or materially changes orchestration.
+
+When `auto` lacks enough evidence to choose safely, return `ASK`; do not default upward to `restructure`. A valid run may return `no reusable learning`.
+
+## Ownership Router
+
+| Candidate lesson | Canonical owner | Evolution action |
+| --- | --- | --- |
+| Stable project-wide fact, constraint, or routing rule | `.catdd/spec/projectContext.md` | Delegate through `SPEC_updateProjectContext`; do not append session history. |
+| Product behavior, acceptance criterion, edge case, or design decision | User story or project/module `README*` SPEC document | Delegate through the narrowest SpecFlow command. |
+| CaTDD category meaning, US/AC/TC semantics, or method rule | `methodPrompts/` | Require a reviewed method-level story. |
+| Portable CodeAgent workflow or slash-command contract | `slashCommands/commands/` or `slashCommands/flows/` | Refine directly when bounded; restructure only with systemic evidence. |
+| Installer, wrapper, verification, or execution behavior | Harness command or `scripts/` | Refine or restructure according to the Mode Selection Gate. |
+| Reusable cross-project procedure with clear triggers | Agent skill | Delegate to the governed skill workflow. |
+| One-session tactic, preference, or incidental detail | None | Discard as transient. |
+
+If a lesson fits multiple owners, choose the narrowest source of truth. Never duplicate the same lesson across owners.
+
+## Evidence Gate
+
+- **Outcome evidence** proves the task or correction succeeded.
+- **Contribution evidence** connects the candidate lesson to that result.
+- **Reuse evidence** shows recurrence, transfer, or a defensible general rule.
+
+One verified occurrence may justify a dry-run `refine` proposal, but not automatic persistence. `restructure` requires repeated/systemic traces or concrete competing structural alternatives.
 
 ## Preflight Mapping Checklist
 
@@ -67,25 +115,23 @@ Before evolution starts, print and confirm:
 
 1. `target project`: exact absolute path being analyzed.
 2. `trace source`: what execution traces or artifacts are available.
-3. `candidate scope`: which harness layers may be changed.
-4. `branches_G`, `rounds_R`, `batch_size_B`, `branch_roles`: search topology.
-5. `proxy signals`: how the judge will decide which candidate wins.
+3. `canonical owner`: where accepted learning would be remembered.
+4. `evolution mode`: `refine` or `restructure`, with evidence-based rationale.
+5. For `restructure`, `branches_G`, `rounds_R`, `batch_size_B`, `branch_roles`, and proxy signals.
 6. `budget`: wall-clock, candidate count, and malformed-candidate limits.
-7. `mutation policy`: `dry_run` preview unless `dry_run=false` and `target_branch` is provided.
+7. `mutation policy`: dry-run unless the mode-specific approval requirements are satisfied.
 
 If trace source or target path is unclear, stop and ask the developer.
 
 ## Evolution Workflow
 
-1. **Observe**: execute the current harness on the current batch of trace events and collect detailed execution traces -- command invocations, wrapper failures, verification findings, installer errors, stdout/stderr, intermediate artifacts, runtime states, recovery attempts, and probe results.
-2. **Initialize branches**: create `branches_G` parallel branch lineages from the current harness, each assigned a role from `branch_roles`. Each branch owns its parent and edits only its own lineage.
-3. **Propose (R rounds)**: for each round, every branch's proposer edits its own parent harness into a child harness while free to read the other branches' code and traces for context. An invalid or unloadable child falls back to its parent.
-4. **Observe children**: execute each newly generated child harness on the same batch and collect fresh traces and proxy signals.
-5. **Judge**: inspect the final-round branches' code, traces, and proxy signals. The judge may run additional probes or re-execute candidates. It commits one harness as the winner using only label-free evidence.
-6. **Score (measurement only)**: report the committed harness against the batch using cached outputs. Do not use this score to alter the committed harness.
-7. **Persist or preview**:
-   - If `dry_run=true`: report the winner, its diff, proxy evidence, coverage/selection notes, but do not modify files.
-   - If `dry_run=false`: write the winner to `target_branch`, run a final verification, and report the committed improvement.
+1. **Observe**: summarize the goal, meaningful actions, pivots, outcome, and available evidence.
+2. **Extract and classify**: identify candidate lessons, discard transient details, and select one canonical owner per lesson.
+3. **Select mode**: apply the Mode Selection Gate and report why `refine` or `restructure` is justified.
+4. **Refine path**: propose one minimal owner-scoped patch, its risk, and a focused validation check. Apply only when `dry_run=false` and `apply_approved=true`; otherwise return the proposal.
+5. **Restructure path**: initialize `branches_G` role-diverse lineages, run `rounds_R` Observe-Propose-Judge cycles on the same trace batch, expose raw traces and proxy signals, and select one winner. Apply only when `dry_run=false` and `target_branch` is a non-default branch.
+6. **Persist or delegate**: write only through the canonical owner. For project context, product specification, method, or skill changes, hand off to the governed owning workflow.
+7. **Stop**: return `no reusable learning` when no candidate passes the evidence and reuse gates.
 
 ## Proxy-Signal Rules
 
@@ -111,27 +157,56 @@ If trace source or target path is unclear, stop and ask the developer.
 
 ## Output Contract
 
-- Trace summary: what was observed, grouped by harness layer and failure mode.
-- Branch population table: each branch's role, changed files per round, parent-child lineage, validity status, and fallback events.
-- Proxy-signal matrix: each final candidate's scores across the selected proxy signals, plus raw-trace highlights.
-- Winner selection: selected candidate, proxy evidence, confidence level, and selection-regret notes.
+- Evidence synopsis with goal, outcome, and observed contribution.
+- Candidate table with lesson, evidence, reuse rationale, canonical owner, mode, and decision (`PROPOSE`, `DISCARD`, or `ASK`).
+- Duplicate and conflict check against the canonical owner.
+- Mode selection and rationale.
+- For `refine`: one minimal dry-run patch, risk note, and focused validation command.
+- For `restructure`: branch population table, proxy-signal matrix, winner, coverage gaps, and selection-regret notes.
 - Coverage gaps: observed failures that no candidate addressed.
 - If `dry_run=true`: a commit-ready diff or patch artifact for the winner.
 - If `dry_run=false`: branch name, final verification result, and exact committed files.
 - Risk notes: conflicts, generated-wrapper drift, portability gaps, batch specialization, and side effects on non-harness files.
 - Recommended next action:
-  - `dry_run=true`: review the winner, then rerun with `dry_run=false` and a `target_branch`.
+  - `refine` with `dry_run=true`: review the proposal, then rerun with `dry_run=false` and `apply_approved=true`.
+  - `restructure` with `dry_run=true`: review the winner, then rerun with `dry_run=false` and a `target_branch`.
   - `dry_run=false`: run `HARNESS_verifyInstallation` in the target project and consider `HARNESS_patchCaTDDSource` if the fix should move upstream.
   - Coverage gap: broaden `candidate_scope`, add method knowledge, or file a spec-level story instead of a harness patch.
 
 ## Prompt Template
 
-Ask the assistant to collect execution traces from the selected source, initialize `branches_G` parallel lineages with distinct roles, run `rounds_R` Observe-Propose-Judge cycles, expose raw traces and proxy signals (not a single scalar) to the proposer and judge, commit one label-free winner, and either preview the diff or write it to a non-default branch. Respect budgets, exclude malformed candidates, report coverage gaps and selection regret, and never modify model weights, require gold labels, or drift into product user-story work.
+Ask the assistant to inspect verified success or failure evidence, extract reusable lessons, route each to its canonical owner, and select `refine` or `restructure` using the Mode Selection Gate. For `refine`, propose one minimal validated update. For `restructure`, run the bounded TTHE parallel-candidate loop. Default to dry-run, permit `no reusable learning`, and never mutate the wrong owner.
+
+## CodeAgent Integration Hook
+
+After every meaningful verified success, report:
+
+```text
+success_learning_checkpoint = recommended
+next_command = /HARNESS_evolveHarness
+suggested_evolution_mode = auto
+```
+
+If a lifecycle, commit, merge, or safety command has precedence, preserve it as `next_command` and report `learning_command = /HARNESS_evolveHarness` separately.
+
+## Usage Example
+
+For a successful session with one bounded lesson:
+
+```text
+/HARNESS_evolveHarness
+learning_source: current successful chat session
+learning_evidence: focused command contract passed
+evolution_mode: auto
+dry_run: true
+```
+
+Expected result: `auto` selects `refine`, routes the lesson to one canonical owner, and returns one reviewable patch or `no reusable learning`. It does not start branch-population search unless evidence justifies `restructure`.
 
 ## Conflict Guard
 
 Do not modify product code, user stories, acceptance criteria, or SpecFlow lifecycle state.
-Do not evolve CaTDD method semantics; only the harness around them may change.
+Do not directly evolve product or method semantics; delegate accepted lessons to their governed owner.
 Do not commit directly to the default branch; use a non-default `target_branch` when `dry_run=false`.
 Do not treat generated adapter wrappers as source-of-truth when portable command files are available.
 Do not propose destructive changes that overwrite newer source content.
@@ -139,5 +214,7 @@ Do not run unbounded evolution; respect `branches_G`, `rounds_R`, and the `budge
 Do not fabricate trace events; only propose candidates grounded in observed execution traces.
 Do not collapse proxy signals into a single maximized scalar; expose raw traces and signal conflicts.
 Do not train a separate adaptation model or update model weights.
+Do not run `restructure` when a bounded `refine` proposal and focused check are sufficient.
+Do not treat `no reusable learning` as failure.
 
 ONE-MORE-THING: ask developer if something not sure

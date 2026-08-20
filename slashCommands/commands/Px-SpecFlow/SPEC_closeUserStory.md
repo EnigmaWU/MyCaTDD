@@ -47,12 +47,12 @@ Close an active user story after implementation, review, commit, and CI are comp
 - Remaining follow-up work, if any.
 - Non-blocking post-success learning hook:
   - Report `success_learning_checkpoint = recommended`.
-  - Report `next_command = /HARNESS_learnFromSuccess` when no lifecycle, commit, or merge command has precedence.
-  - When another command has precedence, preserve it as `next_command` and report `learning_command = /HARNESS_learnFromSuccess` separately.
+  - Report `next_command = /HARNESS_evolveHarness` with `suggested_evolution_mode = auto` when no lifecycle, commit, or merge command has precedence.
+  - When another command has precedence, preserve it as `next_command` and report `learning_command = /HARNESS_evolveHarness` separately.
 
 ## Prompt Template
 
-Ask the assistant to close only verified work, preserve enough history for later review, determine whether post-close branch integration is required or auto-skipped, apply post-close project-context sync policy (minor = remind, major = run `SPEC_updateProjectContext` in-flow), enforce the post-close commit checkpoint for close-generated file changes, and report the non-blocking `HARNESS_learnFromSuccess` checkpoint without replacing a required lifecycle command.
+Ask the assistant to close only verified work, preserve enough history for later review, determine whether post-close branch integration is required or auto-skipped, apply post-close project-context sync policy (minor = remind, major = run `SPEC_updateProjectContext` in-flow), enforce the post-close commit checkpoint for close-generated file changes, and report the non-blocking `HARNESS_evolveHarness` checkpoint without replacing a required lifecycle command.
 
 ## Conflict Guard
 

@@ -49,7 +49,7 @@ grep -Fq '.customCodeAgent/prompts/' "$rule" || fail "custom rule missing custom
 grep -Fq '.catdd/spec/' "$rule" || fail "custom rule missing spec workspace location"
 grep -Fq 'SPEC_importUserStory' "$rule" || fail "custom rule missing user-story import guidance"
 grep -Fq 'success_learning_checkpoint = recommended' "$rule" || fail "custom rule missing success-learning checkpoint"
-grep -Fq '/HARNESS_learnFromSuccess' "$rule" || fail "custom rule missing success-learning command hook"
+grep -Fq '/HARNESS_evolveHarness' "$rule" || fail "custom rule missing unified evolution command hook"
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
 prompt_count="$(find "$TARGET_DIR/.customCodeAgent/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' -o -name 'HARNESS_*.prompt' \) | wc -l | tr -d '[:space:]')"
