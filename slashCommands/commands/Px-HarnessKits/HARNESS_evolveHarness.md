@@ -26,7 +26,7 @@ Do **not** invoke `HARNESS_evolveHarness` when:
 
 ## CoT Pattern
 
-**ReACT + Observe-Classify-Propose-Judge** -- inspect evidence, extract reusable lessons, route each lesson to its canonical owner, select the smallest justified evolution mode, and judge proposals with explicit validation. `restructure` adds the TTHE parallel-candidate population loop; `refine` does not.
+**ReAct + evidence-grounded self-correction** -- reason about observed evidence, act through the canonical owner, evaluate the result against explicit criteria, and correct or stop within a bounded loop. `restructure` adds the TTHE Observe-Propose-Judge population search; `refine` uses one proposal and does not.
 
 ## Inputs
 
@@ -64,9 +64,10 @@ Do **not** invoke `HARNESS_evolveHarness` when:
   - `diff_reduce`: failure or warning inventory shrinks compared to baseline.
   - `manual`: developer provides the acceptance signal.
 - `dry_run`: optional flag to produce candidate proposals without applying the winner. Default: `true`.
-- `apply_approved`: optional explicit developer approval to apply a selected `refine` proposal. Default: `false`.
+- `apply_approved`: optional explicit developer approval to apply a selected proposal or winner. Default: `false`.
 - `base_branch`: optional branch used as the safe starting point. Default: `main`.
-- `target_branch`: optional non-default branch where the committed improvement is written. Required when `dry_run=false`.
+- `target_branch`: optional non-default branch where an approved improvement is written. Required for both modes when `dry_run=false`.
+- `max_correction_attempts`: optional maximum number of evidence-grounded correction attempts for the selected proposal. Default: `3`.
 - `budget`: optional guardrail set. Default: `{ max_wall_minutes: 60, max_candidates: 50, exclude_malformed: true }`.
 
 ## Mode Selection Gate
@@ -86,6 +87,10 @@ Use `restructure` when any of these are true:
 - The change crosses harness modules or materially changes orchestration.
 
 When `auto` lacks enough evidence to choose safely, return `ASK`; do not default upward to `restructure`. A valid run may return `no reusable learning`.
+
+## Multiple-Lesson Rule
+
+`refine` processes exactly one bounded lesson and one canonical owner per run. When `auto` finds multiple independent lessons, return an ordered candidate table and `ASK` the developer to select one; do not bundle unrelated refinements. Select `restructure` only when the lessons are evidence of one systemic problem or require a cross-module structural decision under the Mode Selection Gate.
 
 ## Ownership Router
 
@@ -109,29 +114,58 @@ If a lesson fits multiple owners, choose the narrowest source of truth. Never du
 
 One verified occurrence may justify a dry-run `refine` proposal, but not automatic persistence. `restructure` requires repeated/systemic traces or concrete competing structural alternatives.
 
+## Evidence-Grounded Correction Loop
+
+Run the selected `refine` proposal or `restructure` winner through this bounded inner loop:
+
+```text
+Reason/Propose
+  -> Act through the canonical owner
+  -> Observe external evidence
+  -> Evaluate against explicit acceptance criteria
+  -> Correct or stop
+```
+
+- Define the falsifying acceptance criteria and focused validation command before mutation.
+- Treat test, build, lint, verifier, execution, or developer-supplied acceptance results as external evidence. Intrinsic confidence or self-critique alone is not proof.
+- On failed evaluation, record the failed criterion and evidence before making the smallest grounded correction.
+- Stop on success, `max_correction_attempts`, a repeated failure with no materially new correction, conflicting evidence, an ownership boundary, or exhausted budget.
+- A no-progress stop must return the last validated state, remaining failure evidence, and `ASK` or a coverage gap; it must not continue retrying or claim success.
+
+## Mode-Specific Mutation Gates
+
+| Mode | Dry-run evidence | Mutation requirements |
+| --- | --- | --- |
+| `refine` | One bounded lesson, clear owner, and focused falsifying check. Full run traces are optional. | `dry_run=false`, `apply_approved=true`, and a non-default `target_branch`. |
+| `restructure` | Repeated/systemic traces or executable competing structural candidates, plus declared proxy signals. | A judged winner, `dry_run=false`, `apply_approved=true`, and a non-default `target_branch`. |
+
+Missing any mutation requirement returns the reviewable proposal or winner without writing source. Approval never substitutes for validation, and a passing validation never substitutes for approval.
+
 ## Preflight Mapping Checklist
 
 Before evolution starts, print and confirm:
 
 1. `target project`: exact absolute path being analyzed.
-2. `trace source`: what execution traces or artifacts are available.
+2. `evidence source`: for `refine`, the outcome evidence and focused falsifying check; for `restructure`, the execution traces or artifacts.
 3. `canonical owner`: where accepted learning would be remembered.
 4. `evolution mode`: `refine` or `restructure`, with evidence-based rationale.
 5. For `restructure`, `branches_G`, `rounds_R`, `batch_size_B`, `branch_roles`, and proxy signals.
 6. `budget`: wall-clock, candidate count, and malformed-candidate limits.
 7. `mutation policy`: dry-run unless the mode-specific approval requirements are satisfied.
 
-If trace source or target path is unclear, stop and ask the developer.
+If the target path is unclear, stop and ask the developer. Require a clear trace source only for `restructure`; a `refine` run may proceed from objective outcome evidence and a focused check.
 
 ## Evolution Workflow
 
 1. **Observe**: summarize the goal, meaningful actions, pivots, outcome, and available evidence.
 2. **Extract and classify**: identify candidate lessons, discard transient details, and select one canonical owner per lesson.
 3. **Select mode**: apply the Mode Selection Gate and report why `refine` or `restructure` is justified.
-4. **Refine path**: propose one minimal owner-scoped patch, its risk, and a focused validation check. Apply only when `dry_run=false` and `apply_approved=true`; otherwise return the proposal.
-5. **Restructure path**: initialize `branches_G` role-diverse lineages, run `rounds_R` Observe-Propose-Judge cycles on the same trace batch, expose raw traces and proxy signals, and select one winner. Apply only when `dry_run=false` and `target_branch` is a non-default branch.
-6. **Persist or delegate**: write only through the canonical owner. For project context, product specification, method, or skill changes, hand off to the governed owning workflow.
-7. **Stop**: return `no reusable learning` when no candidate passes the evidence and reuse gates.
+4. **Refine path**: select exactly one lesson and propose one minimal owner-scoped patch, its risk, and a focused validation check.
+5. **Restructure path**: initialize `branches_G` role-diverse lineages, run `rounds_R` Observe-Propose-Judge cycles on the same trace batch, expose raw traces and proxy signals, and select one winner.
+6. **Mutate or return**: enforce the Mode-Specific Mutation Gates. Without every required gate, return the dry-run artifact unchanged.
+7. **Evaluate and correct**: apply the Evidence-Grounded Correction Loop to the selected proposal or winner, bounded by `max_correction_attempts` and the no-progress rule.
+8. **Persist or delegate**: write only through the canonical owner. For project context, product specification, method, or skill changes, hand off to the governed owning workflow.
+9. **Stop**: return `no reusable learning` when no candidate passes the evidence and reuse gates.
 
 ## Proxy-Signal Rules
 
@@ -163,13 +197,14 @@ If trace source or target path is unclear, stop and ask the developer.
 - Mode selection and rationale.
 - For `refine`: one minimal dry-run patch, risk note, and focused validation command.
 - For `restructure`: branch population table, proxy-signal matrix, winner, coverage gaps, and selection-regret notes.
+- Correction trace: attempt number, acceptance criteria, action, external evidence, evaluation result, and stop reason. Do not require a branch-population trace for `refine`.
 - Coverage gaps: observed failures that no candidate addressed.
 - If `dry_run=true`: a commit-ready diff or patch artifact for the winner.
 - If `dry_run=false`: branch name, final verification result, and exact committed files.
 - Risk notes: conflicts, generated-wrapper drift, portability gaps, batch specialization, and side effects on non-harness files.
 - Recommended next action:
-  - `refine` with `dry_run=true`: review the proposal, then rerun with `dry_run=false` and `apply_approved=true`.
-  - `restructure` with `dry_run=true`: review the winner, then rerun with `dry_run=false` and a `target_branch`.
+  - `refine` with `dry_run=true`: review the proposal, then rerun with `dry_run=false`, `apply_approved=true`, and a non-default `target_branch`.
+  - `restructure` with `dry_run=true`: review the winner, then rerun with `dry_run=false`, `apply_approved=true`, and a non-default `target_branch`.
   - `dry_run=false`: run `HARNESS_verifyInstallation` in the target project and consider `HARNESS_patchCaTDDSource` if the fix should move upstream.
   - Coverage gap: broaden `candidate_scope`, add method knowledge, or file a spec-level story instead of a harness patch.
 
@@ -189,6 +224,8 @@ suggested_evolution_mode = auto
 
 If a lifecycle, commit, merge, or safety command has precedence, preserve it as `next_command` and report `learning_command = /HARNESS_evolveHarness` separately.
 
+Apply same-evidence suppression: while executing `HARNESS_evolveHarness`, do not emit another learning checkpoint for this command's completion or for the same `learning_source` plus `learning_evidence`. Report `success_learning_checkpoint = suppressed_same_evidence`. A later checkpoint requires materially new verified evidence.
+
 ## Usage Example
 
 For a successful session with one bounded lesson:
@@ -207,7 +244,7 @@ Expected result: `auto` selects `refine`, routes the lesson to one canonical own
 
 Do not modify product code, user stories, acceptance criteria, or SpecFlow lifecycle state.
 Do not directly evolve product or method semantics; delegate accepted lessons to their governed owner.
-Do not commit directly to the default branch; use a non-default `target_branch` when `dry_run=false`.
+Do not mutate or commit without `apply_approved=true` and a non-default `target_branch`, regardless of mode.
 Do not treat generated adapter wrappers as source-of-truth when portable command files are available.
 Do not propose destructive changes that overwrite newer source content.
 Do not run unbounded evolution; respect `branches_G`, `rounds_R`, and the `budget` guardrails.

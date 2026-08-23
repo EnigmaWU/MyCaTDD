@@ -17,7 +17,7 @@ Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 
 `HARNESS_*` commands own operational tasks such as patch-back, installation verification, installation diagnosis, run artifact collection, policy checks, and harness evolution. They may support SpecFlow, but they do not replace `SPEC_*` lifecycle commands.
 
-`HARNESS_evolveHarness` is the single CaTDD learning and evolution entry point. With `evolution_mode=auto`, it chooses `refine` for one bounded evidence-backed lesson and `restructure` for repeated or systemic traces requiring structural alternatives. The `restructure` mode applies the Test-Time Harness Evolution (TTHE) insight ([Nie et al., arXiv:2607.08124](https://arxiv.org/abs/2607.08124)) through the **Observe**, **Propose**, and **Judge** population loop while keeping model weights untouched.
+`HARNESS_evolveHarness` is the single CaTDD learning and evolution entry point. With `evolution_mode=auto`, it chooses `refine` for one bounded evidence-backed lesson and `restructure` for repeated or systemic traces requiring structural alternatives. Both modes use bounded evidence-grounded correction: **Reason/Propose**, **Act**, **Observe external evidence**, **Evaluate**, then **Correct or stop**. The `restructure` mode additionally applies the Test-Time Harness Evolution (TTHE) insight ([Nie et al., arXiv:2607.08124](https://arxiv.org/abs/2607.08124)) through the **Observe**, **Propose**, and **Judge** population loop while keeping model weights untouched.
 
 ## Developer Stories
 
@@ -54,6 +54,9 @@ flowchart LR
     Mode -->|refine| Proposal["One owner-scoped dry-run proposal"]
     Mode -->|restructure| Judge["TTHE candidate population and judge"]
     Judge --> Winner["Selected structural candidate"]
+    Proposal --> Validate["Evaluate external evidence"]
+    Winner --> Validate
+    Validate --> Stop["Correct or stop within bound"]
 ```
 
 ## Command Sequence
@@ -62,7 +65,7 @@ flowchart LR
 2. Use [../commands/Px-HarnessKits/HARNESS_verifyInstallation.md](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) before trusting a fresh install, after installing into a real target project, or before releasing installer/generator changes.
 3. Use [../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) only after verification fails or an installed target project misworks.
 4. Use [../commands/Px-HarnessKits/HARNESS_newTaskSession.md](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) at the end of a task session to capture and preserve important context before starting a new session.
-5. Use [../commands/Px-HarnessKits/HARNESS_evolveHarness.md](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) after meaningful verified success or repeated harness evidence. Default to `evolution_mode=auto` and `dry_run=true`: bounded lessons select `refine`; repeated/systemic evidence may select `restructure`; no durable lesson may return `no reusable learning`.
+5. Use [../commands/Px-HarnessKits/HARNESS_evolveHarness.md](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) after meaningful verified success or repeated harness evidence. Default to `evolution_mode=auto` and `dry_run=true`: bounded lessons select `refine`; repeated/systemic evidence may select `restructure`; no durable lesson may return `no reusable learning`. Any approved mutation must pass explicit acceptance criteria using external evidence and stop on success, retry bound, or no progress.
 
 ## Conflict Guard
 

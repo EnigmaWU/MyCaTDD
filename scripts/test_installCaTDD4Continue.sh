@@ -58,6 +58,7 @@ grep -Fq 'SPEC_importUserStory' "$rule" || fail "Continue rule missing user-stor
 grep -Fq 'UT_*, SPEC_*, and HARNESS_* commands' "$rule" || fail "Continue rule missing command family guidance"
 grep -Fq 'success_learning_checkpoint = recommended' "$rule" || fail "Continue rule missing success-learning checkpoint"
 grep -Fq '/HARNESS_evolveHarness' "$rule" || fail "Continue rule missing unified evolution command hook"
+grep -Fq 'same evidence' "$rule" || fail "Continue rule missing same-evidence evolution hook suppression"
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
 prompt_count="$(find "$TARGET_DIR/.continue/prompts" -type f \( -name 'UT_*.prompt' -o -name 'SPEC_*.prompt' -o -name 'HARNESS_*.prompt' \) | wc -l | tr -d '[:space:]')"
