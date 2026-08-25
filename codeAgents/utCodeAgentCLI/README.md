@@ -16,7 +16,14 @@ It is the repository's CaTDD-native agent concept:
 - The agent collects traces, reflects on outcomes, and feeds reusable patterns back into the method and command layers.
 - The agent preserves CaTDD comment skeletons, US/AC/TC traceability, category classification, and RED/GREEN status discipline.
 
-At the current repository stage, this directory documents the intended CLI layer contract. It does not yet contain a runnable CLI implementation.
+Implementation is now incremental rather than documentation-only:
+
+- `src/cli/main.ts` is a runnable Node.js entry point for the `US-USER-01` invocation-validation slice.
+- `src/cli/invocationValidator.ts` validates required arguments, exclusive pairs, supported behaviors, target shape, log levels, config shape, and referenced file paths.
+- The four CaTDD P0 functional test files under `tests/` verify all 32 `US-USER-01` acceptance criteria.
+- Planning, method-prompt and slash-command resolution, runtime adapters, command execution, trace persistence, and reflection remain design targets rather than implemented runtime capabilities.
+
+The module therefore has a runnable validation slice, but it does not yet ship a distributable `utCodeAgentCLI` binary or an end-to-end agent execution loop.
 
 ## Why
 
@@ -27,13 +34,13 @@ It keeps a clean execution boundary:
 - `methodPrompts` owns method semantics.
 - `slashCommands` owns portable command steps and flows.
 - `agentSkills` packages CaTDD for common CodeAgents such as GitHub Copilot; it is not an upstream dependency of this CLI layer.
-- `utCodeAgentCLI` will own goal-driven planning, execution, trace collection, and reflection when the CLI implementation is added.
+- `utCodeAgentCLI` owns CLI validation today and will progressively own goal-driven planning, execution, trace collection, and reflection.
 
 This avoids making generic CodeAgent adapters carry CaTDD-specific orchestration logic while still preserving a future path for first-class CaTDD automation.
 
 ## CaTDD-native contract
 
-A future CLI implementation should be based on the upstream layers:
+The CLI implementation must be based on the upstream layers:
 
 - `methodPrompts` provides the language-agnostic CaTDD method contract.
 - `slashCommands` provides code-agent-agnostic reusable prompt commands.
@@ -46,10 +53,10 @@ It may target many programming languages, but it must preserve CaTDD's comment-a
 - Standalone user-story docs (`README_UserStory.md`, `README_UserStory_ZH.md`)
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
 - Architecture and detail design docs (`README_ArchDesign.md`, `README_DetailDesign.md`, and ZH mirrors)
-- Future CLI task entry prompts
-- Future goal templates and execution checklists
-- Future trace collection and reflection-loop design notes
-- Future implementation files when the CLI becomes executable
+- TypeScript implementation slices under `src/`
+- CaTDD unit tests and fixtures under `tests/`
+- Planned CLI task entry prompts, goal templates, and execution checklists
+- Planned trace collection and reflection-loop assets
 
 ## Upstream / Downstream
 
@@ -72,12 +79,14 @@ Keep the documentation split clear:
 | --- | --- |
 | `README.md` / `README_ZH.md` | WHAT this layer is and WHY it exists. |
 | `README_UserStory.md` / `README_UserStory_ZH.md` | WHO needs this layer, WHAT user value it should provide, and BDD acceptance criteria before detail design. |
+| `README_UserStoryStatus.md` | Current acceptance-criteria lifecycle status across all CLI stories. |
 | `README_UbiLang.md` | Shared domain vocabulary (roles, states, category/tier terms, behavior naming) used across story/design/implementation docs. |
 | `README_ArchDesign.md` / `README_ArchDesign_ZH.md` | High-level module architecture, runtime adapter boundaries, AgentSDK separation, trace/audit/control design, and key trade-offs. |
 | `README_DetailDesign.md` / `README_DetailDesign_ZH.md` | TypeScript-facing contracts, data schemas, state transitions, error handling, implementation plan, and verification strategy. |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW to design or use this layer today, WHO uses it, WHEN to work in it, WHERE future assets live, and a copy-exec `Usage Example`. |
+| `src/` / `tests/` | Incremental product implementation and executable CaTDD verification. |
 
-Operational CLI commands should be documented in the standalone user guides once a runnable CLI exists.
+Operational CLI commands belong in the standalone user guides as each runnable slice becomes available.
 
 ## Maintenance rule
 

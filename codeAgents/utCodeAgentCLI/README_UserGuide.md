@@ -34,7 +34,7 @@ utCodeAgentCLI \
   --behave designFuncTestsSkeleton
 ```
 
-This repository currently documents the future CLI contract; it does not yet ship a runnable `utCodeAgentCLI` binary. Treat examples here as invocation plans until the CLI implementation exists.
+This repository does not yet ship a distributable `utCodeAgentCLI` binary or an end-to-end execution loop. The current Node.js entry point validates invocations only; treat design and execution examples as invocation plans until their corresponding behavior slices are implemented.
 
 ## Argument Cheat Sheet
 
@@ -72,9 +72,9 @@ Use this guide if you are one of these readers:
 
 ## What
 
-`codeAgents/utCodeAgentCLI/` is currently the startup and design home for the future CLI execution layer.
+`codeAgents/utCodeAgentCLI/` is the startup, design, and incremental implementation home for the CLI execution layer.
 
-It does not yet contain a runnable CLI implementation. Today, use this guide to form clear invocation plans and to document stable execution patterns that should eventually become first-class CLI behavior.
+It currently contains a runnable `US-USER-01` invocation-validation slice, but not planner, delegated-command execution, trace, or reflection runtime capabilities. Today, use this guide to run supported validation scenarios, form clear invocation plans, and document stable execution patterns that should become first-class CLI behavior.
 
 This UserGuide includes the startup contract needed for day-to-day planning: command shape, argument meaning, target forms, behavior selection, and common recipes. Treat [README_UsageDesign.md](README_UsageDesign.md) as the formal reference for parser grammar, selector details, and exhaustive error handling.
 

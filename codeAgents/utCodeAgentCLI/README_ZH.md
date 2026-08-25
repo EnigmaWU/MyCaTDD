@@ -16,7 +16,14 @@
 - 智能体收集轨迹、反思结果，并将可复用模式反馈回方法层和命令层。
 - 智能体保持 CaTDD 注释骨架、US/AC/TC 可追踪关系、分类归属和 RED/GREEN 状态纪律。
 
-在当前仓库阶段，本目录记录预期的 CLI 层契约。它尚未包含可运行的 CLI 实现。
+当前实现已从“仅文档”进入增量交付阶段：
+
+- `src/cli/main.ts` 是可通过 Node.js 运行的 `US-USER-01` 调用验证入口。
+- `src/cli/invocationValidator.ts` 验证必需参数、互斥参数对、受支持行为、target 形状、日志级别、配置结构和引用文件路径。
+- `tests/` 下四个 CaTDD P0 功能测试文件验证 `US-USER-01` 的全部 32 条 acceptance criteria。
+- 规划、method prompt 与 slash command 解析、runtime adapter、命令执行、trace 持久化和反思仍是设计目标，尚未成为运行时能力。
+
+因此，本模块已有可运行的验证切片，但尚未交付可分发的 `utCodeAgentCLI` binary，也尚未形成端到端 agent execution loop。
 
 ## Why
 
@@ -27,13 +34,13 @@
 - `methodPrompts` 负责方法语义。
 - `slashCommands` 负责可移植命令步骤和流程。
 - `agentSkills` 负责把 CaTDD 打包给 GitHub Copilot 等通用 CodeAgent 使用；它不是本 CLI 层的上游依赖。
-- `utCodeAgentCLI` 在 CLI 实现加入后，负责目标驱动规划、执行、轨迹收集和反思。
+- `utCodeAgentCLI` 当前负责 CLI 验证，并将逐步负责目标驱动规划、执行、轨迹收集和反思。
 
 这样可以避免让通用 CodeAgent 适配器承载 CaTDD 专用编排逻辑，同时保留未来一等 CaTDD 自动化路径。
 
 ## CaTDD-native contract
 
-未来的 CLI 实现应建立在上游层之上：
+CLI 实现必须建立在上游层之上：
 
 - `methodPrompts` 提供与语言无关的 CaTDD 方法契约。
 - `slashCommands` 提供与 code-agent 无关的可复用提示词命令。
@@ -46,10 +53,10 @@
 - 独立 User Story 文档（`README_UserStory.md`、`README_UserStory_ZH.md`）
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
 - 架构与详细设计文档（`README_ArchDesign.md`、`README_DetailDesign.md` 及 ZH mirrors）
-- 未来的 CLI 任务入口提示词
-- 未来的目标模板与执行检查清单
-- 未来的轨迹收集与反思回路设计记录
-- CLI 变为可执行时的未来实现文件
+- `src/` 下的 TypeScript 增量实现
+- `tests/` 下的 CaTDD 单元测试与 fixtures
+- 规划中的 CLI 任务入口提示词、目标模板与执行检查清单
+- 规划中的 trace 收集与反思回路资产
 
 ## Upstream / Downstream
 
@@ -72,11 +79,14 @@
 | --- | --- |
 | `README.md` / `README_ZH.md` | WHAT：这一层是什么；WHY：这一层为什么存在。 |
 | `README_UserStory.md` / `README_UserStory_ZH.md` | WHO：谁需要这一层；WHAT：它应提供什么用户价值；以及 detail design 前的 BDD acceptance criteria。 |
+| `README_UserStoryStatus.md` | 全部 CLI stories 的当前 acceptance-criteria 生命周期状态。 |
+| `README_UbiLang.md` | story、design 与 implementation docs 共用的 domain vocabulary（roles、states、category/tier terms、behavior naming）。 |
 | `README_ArchDesign.md` / `README_ArchDesign_ZH.md` | 高层模块架构、runtime adapter 边界、AgentSDK 分离、trace/audit/control 设计，以及关键 trade-offs。 |
 | `README_DetailDesign.md` / `README_DetailDesign_ZH.md` | 面向 TypeScript 的 contracts、data schemas、state transitions、error handling、implementation plan 与 verification strategy。 |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW：现在如何设计或使用这一层；WHO：谁使用；WHEN：何时在这一层工作；WHERE：未来资产位于哪里；以及可复制执行的 `Usage Example`。 |
+| `src/` / `tests/` | 增量 product implementation 与可执行 CaTDD verification。 |
 
-当可运行 CLI 存在后，具体 CLI 命令应记录在独立用户指南中。
+每个可运行切片交付时，其具体 CLI 命令都应记录在独立用户指南中。
 
 ## Maintenance rule
 

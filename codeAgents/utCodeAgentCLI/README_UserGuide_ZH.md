@@ -34,7 +34,7 @@ utCodeAgentCLI \
   --behave designFuncTestsSkeleton
 ```
 
-本仓库当前记录的是未来 CLI contract；还没有提供可运行的 `utCodeAgentCLI` binary。在 CLI 实现存在之前，把这里的示例视为 invocation plans。
+本仓库尚未提供可分发的 `utCodeAgentCLI` binary 或端到端 execution loop。当前 Node.js 入口只验证 invocation；在对应 behavior slice 实现前，把这里的 design 与 execution 示例视为 invocation plans。
 
 ## Argument Cheat Sheet
 
@@ -72,9 +72,9 @@ utCodeAgentCLI \
 
 ## 内容
 
-`codeAgents/utCodeAgentCLI/` 当前是未来 CLI 执行层的启动与设计归属地。
+`codeAgents/utCodeAgentCLI/` 当前是 CLI 执行层的启动、设计与增量实现归属地。
 
-它尚未包含可运行的 CLI 实现。今天使用本指南时，应形成清晰 invocation plans，并记录未来应成为一等 CLI 行为的稳定执行模式。
+它当前包含可运行的 `US-USER-01` invocation-validation slice，但尚未包含 planner、delegated-command execution、trace 或 reflection runtime capability。今天使用本指南时，可运行已支持的 validation scenarios、形成清晰 invocation plans，并记录应成为一等 CLI behavior 的稳定执行模式。
 
 本 UserGuide 已包含日常 planning 所需的启动契约：command shape、argument meaning、target forms、behavior selection 和 common recipes。把 [README_UsageDesign_ZH.md](README_UsageDesign_ZH.md) 作为 parser grammar、selector details 和完整错误处理的正式 reference。
 
