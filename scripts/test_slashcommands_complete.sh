@@ -192,6 +192,20 @@ assert_contains "slashCommands/README_UserGuide.md" "HARNESS_evolveHarness.md"
 assert_contains "slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md" "success_learning_checkpoint = recommended"
 assert_contains "slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md" "next_command = /HARNESS_evolveHarness"
 
+impl_product_codes_command="slashCommands/commands/Px-SpecFlow/SPEC_implProductCodes.md"
+assert_file "$impl_product_codes_command"
+assert_contains "$impl_product_codes_command" "Bounded Correction/TDD"
+assert_contains "$impl_product_codes_command" "valid RED evidence"
+assert_contains "$impl_product_codes_command" "max_correction_attempts"
+assert_contains "$impl_product_codes_command" "focused validation"
+assert_contains "$impl_product_codes_command" "Correct or stop"
+assert_contains "$impl_product_codes_command" "no-progress"
+assert_contains "$impl_product_codes_command" "SPEC_updateDetailDesign"
+assert_contains "$impl_product_codes_command" "SPEC_implUnitTests"
+assert_contains "$impl_product_codes_command" "SPEC_designUnitTests"
+assert_contains "$impl_product_codes_command" "SPEC_updateUserStory"
+assert_contains "$impl_product_codes_command" "SPEC_reviewProductCodes"
+
 if grep -Fq "Future Command Candidates" "$REPO_ROOT/slashCommands/flows/P1-DesignTestsFlow.md"; then
   fail "P1 flow still describes completed commands as future candidates"
 fi
