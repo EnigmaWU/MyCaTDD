@@ -76,6 +76,13 @@ State why this command exists.
 
 State the execution procedure using the chosen CoT pattern.
 
+Px-SpecFlow commands should also declare how they behave in `manualMode` versus `autonomousMode`:
+
+- `manualMode` is the default. When mode is not already fixed by the invoking prompt or lifecycle artifact, ask the developer whether to keep `manualMode` or switch to explicit `autonomousMode` before the next material lifecycle advance.
+- In `manualMode`, stop for clarification when product intent, acceptance criteria, scope, or lifecycle safety is unclear.
+- In `autonomousMode`, keep moving through the command's predefined procedure from explicit artifacts, record assumptions and open questions, and stop only when blocking ambiguity or approval-gated work appears.
+- `autonomousMode` is the final evolving goal of Px-SpecFlow, but commands must preserve the safer `manualMode` default until the developer opts in.
+
 ### ReACT Execution (when CoT Pattern = ReACT)
 
 Repeat until the output artifact is complete and the output contract is satisfied:
@@ -127,6 +134,7 @@ List command parameters using portable placeholders:
 - `{{readme_spec_files}}`: one or more project-root `README*.md` SPEC docs
 - `{{related_docs}}`: optional architecture, design, test, or reproduction notes
 - `{{developer_goal}}`: optional developer intent or context that is not captured in artifacts
+- `{{execution_mode}}`: optional `manualMode | autonomousMode` (default: `manualMode`; `autonomousMode` must be explicit)
 
 ## Output Contract
 
@@ -134,6 +142,7 @@ Define the expected response shape:
 
 - Artifact created, updated, reviewed, or moved
 - Lifecycle state change applied
+- Execution mode applied, why it was selected, and whether the developer explicitly opted into `autonomousMode`
 - Assumptions made and questions surfaced
 - Conflicts or quality failures found and reported
 - Next recommended command

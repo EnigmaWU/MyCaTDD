@@ -6,10 +6,10 @@ Analyze a pending issue, bug report, defect, support problem, or research input;
 
 ## CoT Pattern
 
-**ReACT + ToT preflight, then mode-gated execution** — Stage 0.1 uses **ReACT** to inspect the raw issue, observe evidence gaps, and decide what must be clarified. Stage 0.2 uses **ToT** to branch across plausible interpretations, repair slices, and follow-up routes before choosing the best analysis path. After those stages, execution chooses either default `BRAINSTORM` mode or explicit `AUTONOMOUS` mode.
+**ReACT + ToT preflight, then mode-gated execution** — Stage 0.1 uses **ReACT** to inspect the raw issue, observe evidence gaps, and decide what must be clarified. Stage 0.2 uses **ToT** to branch across plausible interpretations, repair slices, and follow-up routes before choosing the best analysis path. After those stages, execution chooses either default `manualMode` or explicit `autonomousMode`.
 
-- `BRAINSTORM` mode is the default: chat with the developer step by step, ask focused clarification questions, refine the issue understanding, and generate `todoUS` only when the story is good enough or explicitly marked blocked/not-ready.
-- `AUTONOMOUS` mode is opt-in only: generate `todoUS` by the predefined prompts below, record assumptions and open questions explicitly, and mark the story NOT ready when blocking intent or acceptance questions remain.
+- `manualMode` is the default: chat with the developer step by step, ask focused clarification questions, refine the issue understanding, and generate `todoUS` only when the story is good enough or explicitly marked blocked/not-ready.
+- `autonomousMode` is opt-in only: generate `todoUS` by the predefined prompts below, record assumptions and open questions explicitly, and mark the story NOT ready when blocking intent or acceptance questions remain.
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
@@ -19,7 +19,7 @@ Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 - `issue_origin`: optional `external_issue | defect_report | support_problem | research_input`.
 - `projectContext_file`: current project context.
 - `related_docs`: optional architecture, README, API, logs, test docs, or reproduction notes.
-- `analysis_mode`: optional `BRAINSTORM | AUTONOMOUS` (default: `BRAINSTORM`; `AUTONOMOUS` must be explicit).
+- `analysis_mode`: optional `manualMode | autonomousMode` (default: `manualMode`; `autonomousMode` must be explicit).
 - `analysis_depth`: optional `standard | detailed | exhaustive` (default: `detailed`).
 - `insight_focus`: optional focus areas such as `requirements | architecture | design | tests | risks | user-impact | process`.
 - `SpecTodoUserStoryTemplate`: output template at `../../templates/SpecTodoUserStoryTemplate.md`.
@@ -66,8 +66,8 @@ Inspect the pending issue and related evidence. Reason about what is known, act 
 
 Mode behavior:
 
-- In default `BRAINSTORM` mode, ask the developer the highest-value clarification question or small question set before generating `todoUS` when the answer could materially change role, value, scope, expected behavior, or acceptance criteria. Continue step by step until the story is good enough to draft, explicitly blocked, or the developer switches to `AUTONOMOUS` mode.
-- In explicit `AUTONOMOUS` mode, do not pause for every clarification. Continue through the predefined prompts, but record unanswered items as assumptions, ambiguity warnings, or Initial Acceptance Questions. Blocking questions make the generated story NOT ready for `SPEC_openUserStory`.
+- In default `manualMode`, ask the developer the highest-value clarification question or small question set before generating `todoUS` when the answer could materially change role, value, scope, expected behavior, or acceptance criteria. Continue step by step until the story is good enough to draft, explicitly blocked, or the developer switches to `autonomousMode`.
+- In explicit `autonomousMode`, do not pause for every clarification. Continue through the predefined prompts, but record unanswered items as assumptions, ambiguity warnings, or Initial Acceptance Questions. Blocking questions make the generated story NOT ready for `SPEC_openUserStory`.
 
 Good-enough gate for drafting `todoUS`:
 
@@ -78,7 +78,7 @@ Good-enough gate for drafting `todoUS`:
 - acceptance criteria can be tested or blocking questions are recorded
 - evidence confidence is recorded for major claims
 
-Example ReACT trace for `BRAINSTORM` intake:
+Example ReACT trace for `manualMode` intake:
 
 1. `Reason`: The issue says the guide is confusing for developers, but the affected reader role and expected usage path are not explicit.
 2. `Act`: Inspect the pending issue, `README_UserGuide.md`, and project context only enough to identify missing intent.
@@ -87,7 +87,7 @@ Example ReACT trace for `BRAINSTORM` intake:
 5. `Observe`: Developer selects API integration.
 6. `Decide`: The story is good enough to draft as a guide repair story focused on API integration, with onboarding and scenario expansion recorded as follow-up candidates.
 
-Example ReACT trace for explicit `AUTONOMOUS` intake:
+Example ReACT trace for explicit `autonomousMode` intake:
 
 1. `Reason`: The developer requested autonomous analysis, so missing intent must be recorded rather than resolved through chat.
 2. `Act`: Inspect the pending issue and directly related docs.
@@ -103,12 +103,12 @@ Generate 2-4 candidate interpretations before committing to one story shape. Inc
 - candidate split/follow-up issues
 - forbidden-input route: aborted UserStory input must stop here and reroute to `SPEC_analyzeAbortedUserStory`
 
-Evaluate each candidate against evidence strength, story size, user value, testability, risk, and fit with the issue origin. In `BRAINSTORM` mode, present the candidate comparison to the developer and ask for selection or correction when more than one candidate is plausible. In `AUTONOMOUS` mode, select the best candidate by the evidence/risk criteria and record discarded candidates as alternatives.
+Evaluate each candidate against evidence strength, story size, user value, testability, risk, and fit with the issue origin. In `manualMode`, present the candidate comparison to the developer and ask for selection or correction when more than one candidate is plausible. In `autonomousMode`, select the best candidate by the evidence/risk criteria and record discarded candidates as alternatives.
 
 Mode selection rule:
 
-- If the developer explicitly requests `AUTONOMOUS`, run autonomous generation using this command's predefined prompt pipeline.
-- Otherwise default to `BRAINSTORM`, because issue analysis often contains hidden product intent and should converge through developer conversation before committing a todo story.
+- If the developer explicitly requests `autonomousMode`, run autonomous generation using this command's predefined prompt pipeline.
+- Otherwise default to `manualMode`, because issue analysis often contains hidden product intent and should converge through developer conversation before committing a todo story.
 
 Example ToT candidate comparison:
 
@@ -194,9 +194,9 @@ After moving the raw issue, normalize analyzed metadata and trace in the archive
 
 If the issue lacks reproducible intent or expected behavior, create questions and keep the story draft incomplete instead of inventing requirements.
 
-- Do not run `AUTONOMOUS` mode unless the developer explicitly requested it.
-- In `BRAINSTORM` mode, do not generate `todoUS` before the good-enough gate passes unless the output is explicitly marked incomplete/not-ready.
-- In `AUTONOMOUS` mode, do not hide missing intent behind assumptions. Record every material unknown as an Initial Acceptance Question, Ambiguity Warning, or Risk/Assumption entry.
+- Do not run `autonomousMode` unless the developer explicitly requested it.
+- In `manualMode`, do not generate `todoUS` before the good-enough gate passes unless the output is explicitly marked incomplete/not-ready.
+- In `autonomousMode`, do not hide missing intent behind assumptions. Record every material unknown as an Initial Acceptance Question, Ambiguity Warning, or Risk/Assumption entry.
 - If the input is an aborted UserStory, paired abort task artifact, or preserved abort evidence, stop and route to `SPEC_analyzeAbortedUserStory`; do not synthesize a new issue story here.
 - If issue analysis would require reading `.catdd/spec/abortUS/` evidence, stop and ask the developer to run `SPEC_analyzeAbortedUserStory`.
 - If expected behavior cannot be determined from the issue: keep the story draft incomplete — do not guess.

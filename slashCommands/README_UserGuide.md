@@ -88,6 +88,13 @@ Follow this workflow when using `slashCommands/`.
 7. Preserve US/AC/TC comments, category labels, priority gates, and TC status markers.
 8. Continue with the next command named by the current command or flow document.
 
+### Execution modes
+
+- Px-SpecFlow defaults to `manualMode`.
+- If the mode is not already explicit in the command invocation or active artifacts, ask the developer whether to keep `manualMode` or switch to `autonomousMode` before the next material flow advance.
+- Use `manualMode` for step-by-step collaboration and clarification.
+- Use `autonomousMode` only when the developer explicitly opts in; it is the final evolving goal of Px-SpecFlow, not the default.
+
 ## Usage Example
 
 Run these commands from the MyCaTDD repository root to install slash-command assets into a temporary Copilot-style target project:

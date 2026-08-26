@@ -6,6 +6,8 @@ This directory contains `SPEC_*` command templates for the CaTDD SpecCoding life
 
 Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, project-root `README*` SPEC docs, tests, and product code. Keep local-only traces such as `.catdd/spec/WorkingProcessLog.md` gitignored.
 
+Px-SpecFlow runs in `manualMode` by default. Before the next material lifecycle advance, ask the developer whether to keep `manualMode` or explicitly switch this flow run to `autonomousMode`. `autonomousMode` is opt-in and remains the final evolving goal of the flow.
+
 ## Command Map
 
 | Command | Purpose |

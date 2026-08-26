@@ -49,6 +49,14 @@ For deterministic lifecycle movement, flash-speed models are usually enough:
 /SPEC_closeUserStory
 ```
 
+## Execution Mode Guidance
+
+- `manualMode` is the default for Px-SpecFlow.
+- Unless the current command invocation or active artifacts already declare a mode, ask the developer whether the flow should remain in `manualMode` or explicitly switch to `autonomousMode` before the next material lifecycle advance.
+- In `manualMode`, the assistant moves step by step, asks focused questions when intent or acceptance is unclear, and waits for developer confirmation before risky, ambiguous, or destructive lifecycle choices.
+- `autonomousMode` is opt-in only. In that mode, the assistant should keep moving through the next safe Px-SpecFlow steps from explicit artifacts, record assumptions and open questions, and stop when blocking ambiguity or approval-gated work appears.
+- `autonomousMode` is the final evolving goal of Px-SpecFlow, but the safe default remains `manualMode` until the developer explicitly requests otherwise.
+
 ## Refinements from GitHub Spec Kit
 
 Use this list first when explaining or adopting `Px SpecFlow` refinements from GitHub's Spec Kit.

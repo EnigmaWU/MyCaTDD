@@ -17,6 +17,7 @@ Recommend the next SpecCoding task when a developer is new to the flow or resumi
 - `suspended_user_story_files`: optional `.catdd/spec/suspendUS/*-UserStory.md`.
 - `done_user_story_files`: optional `.catdd/spec/doneUS/*-UserStory.md`.
 - `working_log`: optional `.catdd/spec/WorkingProcessLog.md`.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`; `autonomousMode` must be explicit).
 
 ## Method References
 
@@ -28,14 +29,16 @@ Recommend the next SpecCoding task when a developer is new to the flow or resumi
 - Exactly one recommended next command based on current SpecCoding artifacts.
 - A short rationale describing current lifecycle stage and why this command is next.
 - Required input artifacts to prepare before running the recommended command.
+- A mode decision: keep `manualMode`, or use developer-approved `autonomousMode` for the next flow advance.
 - If no reliable recommendation is possible, explicit blockers and questions for the developer.
 
 ## Prompt Template
 
-Ask the assistant to inspect current `.catdd/spec/` lifecycle artifacts and pick exactly one next `SPEC_*` command that best advances the active work without skipping required gates.
+Ask the assistant to inspect current `.catdd/spec/` lifecycle artifacts, pick exactly one next `SPEC_*` command that best advances the active work without skipping required gates, and default to `manualMode` unless the developer explicitly requests `autonomousMode`. If the mode is not already explicit, ask whether the developer wants the next flow advance to remain in `manualMode` or switch to `autonomousMode`.
 
 ## Conflict Guard
 
 Do not invent missing story or design state. If required artifacts are missing or inconsistent, stop and ask the developer before selecting a destructive or closing step.
+Do not assume `autonomousMode`; it must be explicitly requested by the developer.
 
 ONE-MORE-THING: ask developer if something not sure
