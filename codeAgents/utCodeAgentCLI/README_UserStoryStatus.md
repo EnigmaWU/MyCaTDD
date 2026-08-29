@@ -3,6 +3,8 @@
 Each AC carries a `PENDING` | `TODO` | `DOING` | `DONE` | `SUSPEND` | `ABORT` status marker.
 See `README_UserStory.md` for the state transition diagram and rules.
 
+This file is the authoritative AC lifecycle dashboard for `utCodeAgentCLI`; per-story documents carry matching status markers and stable AC IDs.
+
 ---
 
 ## Status Totals
@@ -19,7 +21,7 @@ See `README_UserStory.md` for the state transition diagram and rules.
 | US-USER-08 | [USs/USER-08](USs/README_UserStory4USER-08.md) | 8 | 0 | 0 | 0 | 0 | 0 | **8** |
 | US-USER-09 | [USs/USER-09](USs/README_UserStory4USER-09.md) | 15 | 0 | 0 | 0 | 0 | 0 | **15** |
 | US-USER-10 | [USs/USER-10](USs/README_UserStory4USER-10.md) | 14 | 0 | 0 | 0 | 0 | 0 | **14** |
-| US-INVENTOR-01 | [USs/INV-01](USs/README_UserStory4INVENTOR-01.md) | 16 | 0 | 0 | 0 | 0 | 0 | **16** |
+| US-INVENTOR-01 | [USs/INV-01](USs/README_UserStory4INVENTOR-01.md) | 0 | 16 | 0 | 0 | 0 | 0 | **16** |
 | US-INVENTOR-02 | [USs/INV-02](USs/README_UserStory4INVENTOR-02.md) | 17 | 0 | 0 | 0 | 0 | 0 | **17** |
 | US-INVENTOR-03 | [USs/INV-03](USs/README_UserStory4INVENTOR-03.md) | 6 | 0 | 0 | 0 | 0 | 0 | **6** |
 | US-DEV-01 | [USs/DEV-01](USs/README_UserStory4DEVELOPER-01.md) | 15 | 0 | 0 | 0 | 0 | 0 | **15** |
@@ -27,6 +29,6 @@ See `README_UserStory.md` for the state transition diagram and rules.
 | US-DEV-03 | [USs/DEV-03](USs/README_UserStory4DEVELOPER-03.md) | 6 | 0 | 0 | 0 | 0 | 0 | **6** |
 | US-DEV-04 | [USs/DEV-04](USs/README_UserStory4DEVELOPER-04.md) | 17 | 0 | 0 | 0 | 0 | 0 | **17** |
 | US-DEV-05 | [USs/DEV-05](USs/README_UserStory4DEVELOPER-05.md) | 18 | 0 | 0 | 0 | 0 | 0 | **18** |
-| **Total** | | **224** | **0** | **0** | **32** | **0** | **0** | **256** |
+| **Total** | | **208** | **16** | **0** | **32** | **0** | **0** | **256** |
 
 > Click a story ID to view its AC detail with per-AC status markers.

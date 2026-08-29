@@ -26,7 +26,7 @@ Use the smallest model tier that preserves decision quality for the current comm
 | --- | --- | --- |
 | SOTA reasoning, such as GPT-5.5-xHigh | Architecture work that decides or approves system boundaries, dependency direction, runtime placement, quality trade-offs, and cross-module constraints. | `SPEC_takeArchDesign`, `SPEC_reviewArchDesign` |
 | High Performance | Requirements analysis, intent alignment, planning, requirement updates, local design, review gates, test design, code review, correction routing, and controlled upstream patch-back where quality depends on reasoning across several artifacts. | `SPEC_initProjectContext`, `SPEC_updateProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_analyzeAbortedUserStory`, `SPEC_clearStoryIntent`, `SPEC_makePlan`, `SPEC_updateUserStory`, `SPEC_whatsNextTask`, `SPEC_takeArchDesign`, `SPEC_reviewArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_updateDetailDesign`, `SPEC_reviewUserStory`, `SPEC_designUnitTests`, `SPEC_reviewImplUnitTests`, `SPEC_reviewProductCodes`, `SPEC_patchOriginalCaTDD` |
-| Flash Speed | Deterministic import, move, suspend, resume, abort, commit, close, or small test-driven implementation/refactor steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_suspendUserStory`, `SPEC_resumeUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
+| Flash Speed | Deterministic import, move, suspend, resume, partial-close, abort, commit, close, or small test-driven implementation/refactor steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_suspendUserStory`, `SPEC_resumeUserStory`, `SPEC_partialCloseUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
 
 Escalate from High Performance or Flash Speed to SOTA when the command exposes architecture-significant uncertainty: competing non-functional requirements, safety/security risk, real-time or embedded constraints, concurrency boundaries, data migration, compatibility matrices, or irreversible module/API ownership decisions.
 
@@ -45,6 +45,7 @@ For deterministic lifecycle movement, flash-speed models are usually enough:
 /SPEC_importIssue
 /SPEC_importUserStory
 /SPEC_openUserStory
+/SPEC_partialCloseUserStory
 /SPEC_abortUserStory
 /SPEC_closeUserStory
 ```

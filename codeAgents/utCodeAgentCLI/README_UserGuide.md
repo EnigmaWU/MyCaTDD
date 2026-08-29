@@ -273,6 +273,14 @@ Use this when the CLI should repeat single-TC implementation across every ready 
 --behave implTestFile
 ```
 
+## Delegation Evidence
+
+End-to-end delegation is a planned runtime capability; the current implementation validates invocations only. When delegation is implemented, each CLI invocation must read its required `methodPrompts/` and `slashCommands/` assets from the effective roots instead of using persistent semantic content from an earlier invocation.
+
+US-INVENTOR-01 proves that boundary through structured run-plan or fake-runtime capture. The captured evidence includes resolved asset paths, current source content handed to the run, and ordered `prompt-read` and `command-invocation` events. Generated test artifacts belong to US-USER-02 and are not required to prove resolver delegation.
+
+US-INVENTOR-03 separately owns `--diagMethodPrompts`, `--diagSlashCommands`, and their flag-controlled stderr rendering. Missing, empty, unreadable, configured-root-escaping, or wrong-kind assets must stop the invocation without a hardcoded semantic fallback. Method/CLI version negotiation is outside this behavior and remains future compatibility work. AC lifecycle status for this module is tracked in [README_UserStoryStatus.md](README_UserStoryStatus.md).
+
 ## Usage Example
 
 Run these commands from the repository root to create a temporary invocation plan without changing the source tree:

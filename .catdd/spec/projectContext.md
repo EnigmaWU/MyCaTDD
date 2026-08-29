@@ -20,7 +20,7 @@ This file is the team-shared, always-loaded working memory for SpecCoding in thi
 | --- | --- | --- |
 | Method source | `methodPrompts/` | Owns CaTDD semantics, category meanings, US/AC/TC skeleton rules, status discipline, and implementation templates. |
 | Command flow | `slashCommands/` | Owns portable `UT_*` and `SPEC_*` command contracts, flow order, input/output handoff, and tool-neutral execution rules. |
-| Native CLI design | `codeAgents/utCodeAgentCLI/` | Owns the future CaTDD-native CLI execution layer and its goal/input/target/behavior contract. It is currently documentation and design, not a runnable CLI. |
+| Native CLI execution | `codeAgents/utCodeAgentCLI/` | Owns the CaTDD-native CLI execution layer and its goal/input/target/behavior contract. It has a runnable US-USER-01 invocation-validation slice; end-to-end planning and execution remain unimplemented. See the module `README.md` for the current boundary. |
 | Skill packaging | `agentSkills/` | Owns reusable CodeAgent skill packages that reference the canonical method and command assets. |
 
 ## Installed Project Surface
@@ -53,7 +53,7 @@ The boundary treated as one **Unit** for CaTDD unit tests in this project:
 - Example SUT names:
   - `SUT: methodPrompts` for the CaTDD method layer.
   - `SUT: slashCommands` for the portable command flow layer.
-  - `SUT: utCodeAgentCLI` for the future CLI module.
+  - `SUT: utCodeAgentCLI` for the CLI module.
 - A single file such as a `*.H` header, a single class, or a single slash command may become the unit when the module interface is too coarse; record the exception in the story-level verification design.
 - Update this convention through `SPEC_updateProjectContext` if the project later decides on a different default granularity.
 
