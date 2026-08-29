@@ -16,8 +16,8 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4INVENTOR.md` slice `US
 
 ## Active Work Status
 
-- Status: OPEN.
-- Active state: `.catdd/spec/doingUS/` PROD-REV-01 detail design is updated; review is required before test-first correction.
+- Status: DONE.
+- Active state: `.catdd/spec/doneUS/` completed story archive.
 - Opened by `/SPEC_openUserStory` on 2026-08-26.
 - Planned by `/SPEC_makePlan` on 2026-08-26.
 - Intent cleared by `/SPEC_clearStoryIntent` on 2026-08-26.
@@ -46,10 +46,13 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4INVENTOR.md` slice `US
 - Minimum TC-DELEGATE-001 product slice implemented by `/SPEC_implProductCodes` on 2026-08-28: GREEN on correction attempt 1.
 - Product slice reviewed by `/SPEC_reviewProductCodes` on 2026-08-28: UPDATE DESIGN with PROD-REV-01.
 - PROD-REV-01 detail design updated by `/SPEC_updateDetailDesign` on 2026-08-29: canonical-root ownership and test-first correction defined.
+- Closed by `/SPEC_closeUserStory` on 2026-08-29.
+- Commit reference: `fe43e6e` (`refactor: add project diagnosis harness and close accepted story lane`).
 - Branch: `feat/utcodeagentcli-us-inventor-01`.
+- Branch integration: deferred; next lifecycle step after close is `/SPEC_mergeWorks` if the story branch still requires merge/integration.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_reviewDetailDesign` for PROD-REV-01.
+- Next recommended command: `/SPEC_mergeWorks` for branch integration, or `/HARNESS_evolveHarness` with `evolution_mode=auto` when no merge step is required.
 
 ## Story
 
