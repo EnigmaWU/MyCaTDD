@@ -103,6 +103,10 @@ Example ReACT trace for a story-level unit-test implementation review:
 
 Ask the assistant to run an observable ReACT loop: inspect active-story implemented TC slices, verify P0-first ordering and CaTDD metadata, apply `UT_reviewImplTestCase` mechanics per TC, apply the latest `test-case-with-readme` skill when available or the builtin README gates when unavailable, compare implementation against US/AC/TC comments, check strict phase layout and `VERIFY_KEYPOINT_xyz` usage, interpret verification output and any `SPEC_reviewProductCodes` result, then recommend the next lifecycle command.
 
+## Loop Guard
+
+Rework routes from this review to `SPEC_implUnitTests`, `UT_implTestCase`, `UT_reviewImplTestCase`, or `SPEC_designUnitTests` must record structured findings. Each `impl -> review` rework cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim unit-test review progress without changed evidence between passes.
+
 ## Conflict Guard
 
 If implementation and skeleton disagree, do not choose automatically which one is truth. Report the conflict and ask whether method design or implementation should change.

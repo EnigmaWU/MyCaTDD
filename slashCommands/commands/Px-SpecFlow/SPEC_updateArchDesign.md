@@ -15,6 +15,7 @@ Revise high-level architecture design after architecture review feedback, story-
 - `projectContext_file`: current project context.
 - `review_feedback`: findings from architecture review or upstream story-quality feedback.
 - `reference_docs`: optional related architecture notes, ADRs, usage/error/resource/state/perf/compat/diagnosis docs affected by the architecture revision.
+- `max_rework_attempts`: optional maximum number of architecture rework attempts in the `SPEC_updateArchDesign -> SPEC_reviewArchDesign` cycle. Default: `3`.
 
 ## Method References
 
@@ -33,6 +34,10 @@ Revise high-level architecture design after architecture review feedback, story-
 ## Prompt Template
 
 Ask the assistant to make the minimum architecture change needed to address review feedback while preserving traceability to the active story and project context.
+
+## Loop Guard
+
+This update runs inside the `SPEC_updateArchDesign -> SPEC_reviewArchDesign` rework cycle, bounded by `max_rework_attempts` (default `3`). Stop on resolved findings, exhausted attempts, or repeated no-progress evidence; on stop, preserve the latest evidence and route to `SPEC_abortUserStory` or `ASK`, never a third silent retry.
 
 ## Conflict Guard
 

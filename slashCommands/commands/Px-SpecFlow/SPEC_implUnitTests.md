@@ -29,6 +29,7 @@ Example ReACT trace for a single-TC pass:
 - `review_status`: latest `UT_reviewFuncTestsSkeleton`, `UT_reviewDesignTestsSkeleton`, or `UT_reviewQualityTestsSkeleton` result when available.
 - `source_files`: optional production files related to the selected TC; product changes still belong to later TDD stage or `SPEC_implProductCodes` unless explicitly requested.
 - `test_result`: optional test output, failure summary, or review result from the previous implementation pass.
+- `max_rework_attempts`: optional maximum number of test-implementation rework attempts in the `SPEC_implUnitTests -> UT_reviewImplTestCase` cycle. Default: `3`.
 
 ## Method References
 
@@ -84,6 +85,10 @@ The SPEC command owns story-level ordering and handoff to product-code implement
 ## Prompt Template
 
 Ask the assistant to run an observable ReACT loop: reason about TC priority and skeleton review status, act by selecting (via `UT_tellMeNextImplTest`), implementing (via `UT_implTestCase`), and reviewing (via `UT_reviewImplTestCase`) one TC at a time, observe implementation quality and review alignment, then decide the next step. Preserve CaTDD skeleton metadata, respect P0-first ordering, keep unrelated test skeletons untouched, and recommend `SPEC_reviewImplUnitTests` before product-code implementation.
+
+## Loop Guard
+
+Test-implementation rework is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: stop on passed `UT_reviewImplTestCase`, exhausted attempts, or repeated no-progress evidence; on stop, preserve the latest evidence and route to `SPEC_designUnitTests`, `SPEC_abortUserStory`, or `ASK`, never a third silent retry.
 
 ## Conflict Guard
 

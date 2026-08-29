@@ -63,6 +63,10 @@ Review detailed design immediately after `SPEC_takeDetailDesign` and before `SPE
 
 Ask the assistant to review the detailed design against the active story and approved architecture, report PASS/REVISE/ASK findings first, and prevent `SPEC_reviewUserStory` or `SPEC_designUnitTests` unless detailed design is clear enough for CaTDD skeleton design.
 
+## Loop Guard
+
+On `REVISE`, route to `SPEC_updateDetailDesign` and record structured findings. The `SPEC_updateDetailDesign -> SPEC_reviewDetailDesign` rework cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim detail-design review progress without changed evidence between passes.
+
 ## Conflict Guard
 
 Do not approve a detailed design that lacks testable acceptance criteria, clear API/state ownership, or consistency with the approved architecture.

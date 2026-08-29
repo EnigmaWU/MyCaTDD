@@ -19,6 +19,8 @@ Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 
 `HARNESS_evolveHarness` is the single CaTDD learning and evolution entry point. With `evolution_mode=auto`, it chooses `refine` for one bounded evidence-backed lesson and `restructure` for repeated or systemic traces requiring structural alternatives. Both modes use bounded evidence-grounded correction: **Reason/Propose**, **Act**, **Observe external evidence**, **Evaluate**, then **Correct or stop**. The `restructure` mode additionally applies the Test-Time Harness Evolution (TTHE) insight ([Nie et al., arXiv:2607.08124](https://arxiv.org/abs/2607.08124)) through the **Observe**, **Propose**, and **Judge** population loop while keeping model weights untouched.
 
+Harness loops follow the same bounded loop policy as `Px-SpecFlow`'s [Loop Guard](../flows/Px-SpecFlow.md#loop-guard-deadloop-prevention): stop on success, budget exhaustion, or repeated no-progress evidence, and route to the canonical owner instead of re-running unboundedly. `HARNESS_diagnoseProject` surfaces non-converging rework loops as `deadloop-risk` so a story is never left bouncing between the same commands.
+
 ## Developer Stories
 
 - As a Developer, when an installed project proves a CaTDD method or slash-command improvement, I want to patch that improvement back to the original CaTDD source safely so that the reusable method evolves without copying unrelated project code.
@@ -34,6 +36,7 @@ Px HarnessKits = operational tool-point commands for CaTDD harness maintenance
 | Source patch-back | Move effective installed-project CaTDD improvements back to source with allowlists and safety gates. | [HARNESS_patchCaTDDSource](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | Installation verification | Prove an installed CaTDD target project has complete `.catdd` assets, native wrappers, rules, skills, and source-of-truth links before use. | [HARNESS_verifyInstallation](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
 | Installation diagnosis | Investigate a failed or misworking installed CaTDD target project and recommend safe repair from verification evidence. | [HARNESS_diagnoseInstallation](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) |
+| Project diagnosis | Diagnose project correctness, consistency, and SpecCoding/CaTDD drift without mutating source by default. | [HARNESS_diagnoseProject](../commands/Px-HarnessKits/HARNESS_diagnoseProject.md) |
 | Session handoff | Capture and preserve important session context — lifecycle state, key files, decisions, environment facts — when finishing a task and starting a new session. | [HARNESS_newTaskSession](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | Run diagnosis | Future commands for collecting run artifacts and diagnosing non-installation harness/test failures. | Future `HARNESS_collectRunArtifacts`, `HARNESS_diagnoseFailure` |
 | Guard and policy | Future commands for checking execution isolation, policy compliance, and destructive-operation guards. | Future `HARNESS_checkPolicy` |

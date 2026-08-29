@@ -271,6 +271,14 @@ behavior names 使用的 category shorthand：P0 Functional 表示 Typical、Edg
 --behave implTestFile
 ```
 
+## Delegation Evidence
+
+端到端 delegation 是规划中的 runtime capability；当前实现仅验证 invocation。实现 delegation 后，每次 CLI invocation 都必须从 effective roots 读取所需的 `methodPrompts/` 与 `slashCommands/` assets，不能使用来自更早 invocation 的持久化 semantic content。
+
+US-INVENTOR-01 通过 structured run-plan 或 fake-runtime capture 证明该边界。Captured evidence 包含 resolved asset paths、交给本次 run 的 current source content，以及有序的 `prompt-read` 与 `command-invocation` events。Generated test artifacts 属于 US-USER-02，不是证明 resolver delegation 的必要条件。
+
+US-INVENTOR-03 单独负责 `--diagMethodPrompts`、`--diagSlashCommands` 及其由 flags 控制的 stderr rendering。当 asset 缺失、为空、不可读、逃逸 configured root 或 file kind 错误时，invocation 必须停止，且不得使用 hardcoded semantic fallback。Method/CLI version negotiation 不属于本 behavior，保留为未来 compatibility work。本模块的 AC lifecycle status 由 [README_UserStoryStatus.md](README_UserStoryStatus.md) 追踪。
+
 ## Usage Example
 
 在仓库根目录运行以下命令，在不修改源码树的情况下创建一个临时 invocation plan：

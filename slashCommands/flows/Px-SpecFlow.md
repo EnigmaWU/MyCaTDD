@@ -26,7 +26,7 @@ Use the smallest model tier that preserves decision quality for the current comm
 | --- | --- | --- |
 | SOTA reasoning, such as GPT-5.5-xHigh | Architecture work that decides or approves system boundaries, dependency direction, runtime placement, quality trade-offs, and cross-module constraints. | `SPEC_takeArchDesign`, `SPEC_reviewArchDesign` |
 | High Performance | Requirements analysis, intent alignment, planning, requirement updates, local design, review gates, test design, code review, correction routing, and controlled upstream patch-back where quality depends on reasoning across several artifacts. | `SPEC_initProjectContext`, `SPEC_updateProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_analyzeAbortedUserStory`, `SPEC_clearStoryIntent`, `SPEC_makePlan`, `SPEC_updateUserStory`, `SPEC_whatsNextTask`, `SPEC_takeArchDesign`, `SPEC_reviewArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_updateDetailDesign`, `SPEC_reviewUserStory`, `SPEC_designUnitTests`, `SPEC_reviewImplUnitTests`, `SPEC_reviewProductCodes`, `SPEC_patchOriginalCaTDD` |
-| Flash Speed | Deterministic import, move, suspend, resume, abort, commit, close, or small test-driven implementation/refactor steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_suspendUserStory`, `SPEC_resumeUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
+| Flash Speed | Deterministic import, move, suspend, resume, partial-close, abort, commit, close, or small test-driven implementation/refactor steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_suspendUserStory`, `SPEC_resumeUserStory`, `SPEC_partialCloseUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
 
 Escalate from High Performance or Flash Speed to SOTA when the command exposes architecture-significant uncertainty: competing non-functional requirements, safety/security risk, real-time or embedded constraints, concurrency boundaries, data migration, compatibility matrices, or irreversible module/API ownership decisions.
 
@@ -45,6 +45,7 @@ For deterministic lifecycle movement, flash-speed models are usually enough:
 /SPEC_importIssue
 /SPEC_importUserStory
 /SPEC_openUserStory
+/SPEC_partialCloseUserStory
 /SPEC_abortUserStory
 /SPEC_closeUserStory
 ```
@@ -326,6 +327,42 @@ flowchart TB
 23. Use [SPEC_commitWorks](../commands/Px-SpecFlow/SPEC_commitWorks.md), then use [SPEC_closeUserStory](../commands/Px-SpecFlow/SPEC_closeUserStory.md), then run merge/integration when required (for example [SPEC_mergeWorks](../commands/Px-SpecFlow/SPEC_mergeWorks.md)); if no dedicated story branch was used, merge is auto-skipped. Enforce the close-commit checkpoint when close-generated lifecycle/meta files were changed.
 24. Use [SPEC_patchOriginalCaTDD](../commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md) when an installed project has effective CaTDD meta-file improvements that should be patched back to the original CaTDD repository on a non-default branch.
 
+## Loop Guard (DeadLoop Prevention)
+
+A DeadLoop is repeating the same lifecycle step, or oscillating between two `SPEC_*` commands, with no observable progress toward the story goal. Every rework loop in Px-SpecFlow must be bounded and converge-or-abort: never loop "until it works." Loop until `PASS`/`GREEN`, a bounded rework count, or a no-progress/ownership/abort signal, then route or abort instead of silently re-running.
+
+### Governing Defaults
+
+Loop bounds are set by the agentic reliability policy and contracts in `codeAgents/utCodeAgentCLI/`:
+
+- `maxStepRetry = 2`: maximum retries of the same failed lifecycle step.
+- `maxRunCorrectionLoop = 3`: maximum correction-loop iterations for one run.
+- `max_correction_attempts` default `3`: per-command local-bound input (for example `SPEC_implProductCodes`).
+- ASR-R1: retry and correction loops shall be bounded and deterministic at budget exhaustion.
+
+### Universal Stop Conditions
+
+Every rework loop (`review -> update -> review`, `impl -> review -> impl`, and their test/design variants) stops on the first of:
+
+1. `PASS`/`GREEN` — the gate's exit condition is met.
+2. Bounded retry/correction budget exhausted (`maxStepRetry`, `maxRunCorrectionLoop`, or `max_correction_attempts`).
+3. Repeated no-progress evidence — the same failure persists with nothing changed toward the goal.
+4. Scope expansion beyond the reviewed design or active story.
+5. Conflicting evidence or unclear owner — `ASK` the developer.
+6. Abort — the problem changes story intent or invalidates assumptions; use `SPEC_abortUserStory`.
+7. Ownership boundary reached — route to the canonical `SPEC_*`/`UT_*`/`HARNESS_*` owner.
+
+A no-progress stop must preserve the latest observed evidence, report remaining failures, and route or ask; it must not claim success.
+
+### Route Instead of Reloop
+
+- Failed architecture review -> `SPEC_updateArchDesign`, then re-gate via `SPEC_reviewArchDesign`, bounded.
+- Failed detail review -> `SPEC_updateDetailDesign`, then re-gate via `SPEC_reviewDetailDesign`, bounded.
+- Failed requirement review -> `SPEC_updateUserStory`, then re-gate via `SPEC_reviewUserStory`, bounded.
+- Test-implementation defect -> `SPEC_implUnitTests`; test-design/coverage defect -> `SPEC_designUnitTests`; product-code defect -> bounded local correction in `SPEC_implProductCodes` or design routing per its Conflict Guard.
+
+Failure classification follows ASR-R3: retry only transient failures; route permanent failures deterministically. If no-progress persists after the bound, break the loop with `SPEC_abortUserStory` into `.catdd/spec/abortUS/` for later re-analysis instead of continuing to patch in place.
+
 ## Conflict Guard
 
 - `Px SpecFlow` defines lifecycle orchestration only; CaTDD method semantics remain in `methodPrompts`.
@@ -345,3 +382,7 @@ flowchart TB
 - Pre-close `SPEC_commitWorks` covers implementation/design artifacts; close-generated lifecycle/meta changes may require an immediate additional `SPEC_commitWorks` checkpoint before closure is complete.
 - `SPEC_patchOriginalCaTDD` is downstream-to-upstream only (installed project to original CaTDD) and must not be used as an upstream-to-installed sync command.
 - If product intent is unclear, keep the user story open and ask the developer instead of inventing requirements.
+- Every review -> update -> review rework cycle is bounded: the update command carries a rework bound (`max_rework_attempts`, default `3`) and must stop on no-progress or exhausted attempts and route or abort.
+- Do not allow a review gate to loop back to the same update command indefinitely; a repeated failing pass with no-progress must route to `SPEC_abortUserStory` or `ASK`, not a third silent retry.
+- Do not retry permanent failures; retry only transient failures per ASR-R3, and keep every retry inside the governing loop bounds.
+- On no-progress evidence or exhausted loop bounds, preserve the latest evidence and route or abort; do not claim success.

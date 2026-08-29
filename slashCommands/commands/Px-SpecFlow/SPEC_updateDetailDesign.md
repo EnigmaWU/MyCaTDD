@@ -14,6 +14,7 @@ Revise detailed design and acceptance criteria after story review, implementatio
 - `detail_design`: project-root README detail design file or active story design section to update.
 - `readme_spec_files`: optional project-root `README*` SPEC files to create or update using matching `slashCommands/templates/README_*Template.md` files when first created, including `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when feedback changes error, resource, state, performance, compatibility, or diagnosis design.
 - `review_feedback`: findings from story, code, test, or CI review.
+- `max_rework_attempts`: optional maximum number of detail-design rework attempts in the `SPEC_updateDetailDesign -> SPEC_reviewDetailDesign` cycle. Default: `3`.
 
 ## Method References
 
@@ -31,6 +32,10 @@ Revise detailed design and acceptance criteria after story review, implementatio
 ## Prompt Template
 
 Ask the assistant to make the minimum design change needed to address feedback while preserving traceability.
+
+## Loop Guard
+
+This update runs inside the `SPEC_updateDetailDesign -> SPEC_reviewDetailDesign` rework cycle, bounded by `max_rework_attempts` (default `3`). Stop on resolved findings, exhausted attempts, or repeated no-progress evidence; on stop, preserve the latest evidence and route to `SPEC_abortUserStory` or `ASK`, never a third silent retry.
 
 ## Conflict Guard
 
