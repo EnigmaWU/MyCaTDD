@@ -16,6 +16,7 @@ Update requirement-oriented story artifacts for an active story by revising proj
 - `module_user_guide_doc`: paired module or submodule `README_UserGuide.md` to align with the updated user story.
 - `update_scope`: optional scope hint such as specific `US-*` or `AC-*` IDs.
 - `projectContext_file`: optional project context.
+- `max_rework_attempts`: optional maximum number of requirement rework attempts in the `SPEC_updateUserStory -> SPEC_reviewUserStory` cycle. Default: `3`.
 
 ## Method References
 
@@ -34,6 +35,10 @@ Update requirement-oriented story artifacts for an active story by revising proj
 ## Prompt Template
 
 Ask the assistant to apply minimum requirement-level updates to project `README_UserStories.md` and paired `README_UserGuide.md` (plus module `README_UserStory.md` when applicable), preserve US/AC traceability and TODO/DONE consistency, and avoid architecture/detail-design expansion.
+
+## Loop Guard
+
+This update runs inside the `SPEC_updateUserStory -> SPEC_reviewUserStory` rework cycle, bounded by `max_rework_attempts` (default `3`). Stop on resolved findings, exhausted attempts, or repeated no-progress evidence; on stop, preserve the latest evidence and route to `SPEC_abortUserStory` or `ASK`, never a third silent retry.
 
 ## Conflict Guard
 

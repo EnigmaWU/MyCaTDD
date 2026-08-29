@@ -34,6 +34,10 @@ Review the active user story, project-level requirement ledger (`README_UserStor
 
 Ask the assistant to run a clarify/analyze/checklist-style review gate over requirement clarity, completeness, traceability, testability, measurable outcomes, project `README_UserStories.md` ledger consistency, usage-guide consistency, and consistency with project context.
 
+## Loop Guard
+
+On revise findings, route to `SPEC_updateUserStory` and record structured findings. The `SPEC_updateUserStory -> SPEC_reviewUserStory` rework cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim requirement-review progress without changed evidence between passes.
+
 ## Conflict Guard
 
 Do not approve a story when acceptance criteria cannot be tested through CaTDD skeletons.

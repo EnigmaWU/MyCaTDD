@@ -75,10 +75,12 @@ If the target path or evidence base is unclear, stop and ask the developer.
    - whether open/doing/done/abort lanes are coherent
    - whether review, update, design, and implementation gates were followed
    - whether project-level rules and canonical source-of-truth boundaries are respected
+   - whether the same story or command is bouncing across lifecycle artifacts, task checkboxes, or review passes with no state progress (deadloop-risk, per the `Px-SpecFlow` Loop Guard)
 5. Classify findings into these buckets:
    - `correctness-risk`
    - `consistency-risk`
    - `speccoding-drift`
+   - `deadloop-risk`
    - `healthy`
 6. Rank findings by severity and traceability.
 7. Recommend the smallest next command or action for each risk.
@@ -90,6 +92,7 @@ If the target path or evidence base is unclear, stop and ask the developer.
 | correctness-risk | project behavior or state does not match the intended contract | run the relevant product/test or verification command |
 | consistency-risk | docs, commands, or filesystem state disagree with each other | fix the drift and re-check the contract |
 | speccoding-drift | lifecycle or CaTDD rules are being skipped, duplicated, or misapplied | route to the narrowest `SPEC_*` or `HARNESS_*` command |
+| deadloop-risk | the same story or command bounces across lifecycle artifacts, task checkboxes, or review passes with no state progress (see `Px-SpecFlow` Loop Guard) | route to `SPEC_abortUserStory`, `SPEC_whatsNextTask`, or `ASK`; do not continue the same rework loop |
 | healthy | no strong evidence of project drift | continue with the current task |
 
 ## Method References
@@ -106,6 +109,7 @@ If the target path or evidence base is unclear, stop and ask the developer.
   - `project_correctness`
   - `project_consistency`
   - `speccoding_drift`
+  - `deadloop_risk`
 - Each finding should include:
   - `severity`
   - `evidence_ref`

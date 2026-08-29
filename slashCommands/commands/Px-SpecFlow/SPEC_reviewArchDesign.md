@@ -69,6 +69,10 @@ Ask the assistant to review the high-level architecture against the architecture
 
 When possible, prefer a SOTA high-reasoning model (for example, GPT-5.5-xHigh) for this review so trade-off risks and boundary mistakes are not missed.
 
+## Loop Guard
+
+On `REVISE`, route to `SPEC_updateArchDesign` and record structured findings. The `SPEC_updateArchDesign -> SPEC_reviewArchDesign` rework cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim architecture review progress without changed evidence between passes.
+
 ## Conflict Guard
 
 Do not approve an architecture that cannot explain its system boundary, module ownership, dependency direction, runtime/deployment boundaries, and traceability back to requirements.

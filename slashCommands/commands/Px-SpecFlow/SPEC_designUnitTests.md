@@ -35,6 +35,7 @@ Example ReACT trace for P0-first unit-test design:
 - `existing_skeletons`: optional existing P0/P1/P2 skeleton files and their current TC status markers.
 - `review_status`: optional prior `UT_reviewFuncTestsSkeleton`, `UT_reviewDesignTestsSkeleton`, or `UT_reviewQualityTestsSkeleton` result.
 - `language`: optional target language or file extension for selecting a matching CaTDD design+implementation template.
+- `max_rework_attempts`: optional maximum number of skeleton-design rework attempts in the `SPEC_designUnitTests -> SPEC_reviewImplUnitTests` (or skeleton-review) cycle. Default: `3`.
 
 ## Method References
 
@@ -133,6 +134,10 @@ When creating or redesigning test files, infer the target language from `languag
 ## Prompt Template
 
 Ask the assistant to use an observable ReACT loop: reason about category routing, act by reading the matching flow and `UT_*` command contracts, observe traceability/design-source gaps, and decide the next step. For P0, ask the assistant to design the CaTDD Functional skeleton set `Typical`, `Edge`, `Misuse`, and `Fault` through `UT_designFuncTestsSkeleton` by default, preserve story-to-test traceability and source-command provenance, select the correct language-specific CaTDD template when available, and leave a parallel-ready implementation checklist for the next execution step.
+
+## Loop Guard
+
+Skeleton-design rework routed through `SPEC_designUnitTests` is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: stop on passed skeleton review, exhausted attempts, or repeated no-progress evidence; on stop, preserve the latest evidence and route to `SPEC_updateDetailDesign`, `SPEC_abortUserStory`, or `ASK`, never a third silent retry.
 
 ## Conflict Guard
 

@@ -30,6 +30,10 @@ Review product code, tests, and traceability before post-product-code unit-test 
 
 Ask the assistant to review behavior, tests, traceability, minimality, and project-context consistency. When product-code review passes, route to `SPEC_reviewImplUnitTests` before commit.
 
+## Loop Guard
+
+Rework routes from this review to `SPEC_updateDetailDesign` or `SPEC_designUnitTests` must record structured findings. Each `impl -> review -> rework` cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim product-code review progress without changed evidence between passes.
+
 ## Conflict Guard
 
 Do not commit when quality is not met or when verification evidence is missing without explanation. Do not route directly to `SPEC_commitWorks`; run `SPEC_reviewImplUnitTests` after product-code review when product code changed.
