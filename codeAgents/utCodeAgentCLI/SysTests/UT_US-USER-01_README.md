@@ -27,8 +27,8 @@ All tests GREEN (passing in local node test run across all four categories).
 invalid YAML, directory-as-config) is a distinct test case.
 
 ### SUT Boundary Under Test
-- `codeAgents/utCodeAgentCLI/src/cli/main.ts` executed as a subprocess
-- Delegated product code: `codeAgents/utCodeAgentCLI/src/cli/invocationValidator.ts`
+- `codeAgents/utCodeAgentCLI/SrcTS/cli/main.ts` executed as a subprocess
+- Delegated product code: `codeAgents/utCodeAgentCLI/SrcTS/cli/invocationValidator.ts`
 
 ### What's Verified Per Category
 
@@ -48,16 +48,16 @@ invalid YAML, directory-as-config) is a distinct test case.
 ```bash
 # Run all 33 test cases across all four categories:
 node --test \
-  codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts \
-  codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts \
-  codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts \
-  codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts
+  codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts \
+  codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts \
+  codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts \
+  codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts
 ```
 
 Expected result: **all tests pass** (exit code 0, no failures).
 
 If failures occur, inspect:
-- subprocess invocation through `codeAgents/utCodeAgentCLI/src/cli/main.ts`
+- subprocess invocation through `codeAgents/utCodeAgentCLI/SrcTS/cli/main.ts`
 - argument parsing and required-flag checks
 - exclusive-pair checks (`--goalStory`/`--goalStoryFile`, `--input`/`--inputFile`)
 - `--behave` allowlist handling

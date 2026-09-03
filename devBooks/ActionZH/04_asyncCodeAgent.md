@@ -405,7 +405,7 @@ CLI 拥有 `PLANNED → RED` 的转换（编写测试代码）。`RED → GREEN`
 ```bash
 utCodeAgentCLI \
   --goal "Design and implement P0 functional tests for EventQueue" \
-  --target codeAgents/utCodeAgentCLI/tests/UT_EventQueue.ts \
+  --target codeAgents/utCodeAgentCLI/SysTests/UT_EventQueue.ts \
   --input spec/EventQueue.h \
   --behave designFuncTestsSkeleton \
   --model-tier high-performance

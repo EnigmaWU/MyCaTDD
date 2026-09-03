@@ -12,10 +12,36 @@ This document defines the high-level architecture for `utCodeAgentCLI`: a CaTDD-
 - DEVELOPER requirements: [README_UserStory4DEVELOPER.md](README_UserStory4DEVELOPER.md)
 - CLI contract: [README_UsageDesign.md](README_UsageDesign.md)
 - Startup guide: [README_UserGuide.md](README_UserGuide.md)
+- Subproject context: [../../.catdd/spec/projectContext-utCodeAgentCLI.md](../../.catdd/spec/projectContext-utCodeAgentCLI.md)
+- Architecture-only policy: [ADRs/ADR_ArchitectureOnlyDesignPolicy.md](ADRs/ADR_ArchitectureOnlyDesignPolicy.md)
 - Method source of truth: [../../methodPrompts/](../../methodPrompts/)
 - Portable command source of truth: [../../slashCommands/](../../slashCommands/)
 
-`utCodeAgentCLI` is not yet a runnable binary. This architecture describes the intended production-ready shape before detail design, unit-test design, or runtime implementation begins.
+`utCodeAgentCLI` is not yet a distributable binary. This architecture is the sole module design authority before unit-test design or runtime implementation begins.
+
+## Architecture-Only Documentation Policy
+
+- Keep module ownership, dependency direction, state/control models, architecture-significant interfaces, and quality tradeoffs in this ArchDesign and its ZH mirror.
+- Record durable alternatives and decisions in `ADRs/`.
+- Keep public behavior in UserStory/UserGuide/UsageDesign, verification mappings in VerifyDesign/tests, and executable detail in `src/`.
+- Do not create or route work through `README_DetailDesign*` for this module.
+- Repository lifecycle validation under `scripts/` may inspect module artifacts, but it is not CLI product code and does not create a second design authority.
+
+This policy overrides older current guidance that expected a separate DetailDesign phase. Historical records remain evidence only.
+
+## Lifecycle Consistency Guard Boundary
+
+The repository may provide `scripts/check_utcodeagentcli_lifecycle_consistency.sh` as a read-only guard over `utCodeAgentCLI` lifecycle evidence. This is a repository validation adapter, not CLI product code.
+
+- Input: optional `--repo-root PATH`, defaulting to the current repository.
+- Output: one deterministic success line on stdout or one first-failure diagnostic on stderr.
+- Exit codes: `0` coherent, `1` lifecycle inconsistency, `2` checker invocation misuse.
+- Ownership: `scripts/` owns the checker; this ArchDesign owns only its boundary and constraints.
+- Safety: the checker never writes, moves, stages, or commits inspected files.
+- Verification: fixture-driven tests own parsing examples, lane combinations, and diagnostic assertions.
+- Scope: partial-closure state, unfinished-scope ownership, current lifecycle links/commands, archive authority, and unresolved full-closure gates.
+
+Exact parsing mechanics remain in tests and implementation rather than a second design document.
 
 ## Architecture Decision: Runtime Language
 
@@ -272,7 +298,7 @@ export interface AgentRunPlan {
 }
 ```
 
-Exact TypeScript types, error classes, and module names belong to later detail design.
+Exact TypeScript types, error classes, and module names belong to source and tests unless they constrain architecture and therefore require an ArchDesign or ADR update.
 
 ### Auth/Audit/Auto/Hooks/Control Ports
 
@@ -431,12 +457,12 @@ Primary trace artifacts for this revision:
 | Add escalation threshold policy | Addressed | Added interactive and non-interactive escalation behavior. |
 | Add shell safety and sensitive-file policy | Addressed | Added allowlist execution and sensitive-path protection policy. |
 | Freeze story as design-oriented-only unless scope expands | Addressed | This revision remains architecture-contract-only; no implementation scope was added. |
-| Final numeric thresholds tuning by runtime evidence | Deferred | Keep current defaults for architecture gate; calibrate in detail design and test evidence. |
+| Final numeric thresholds tuning by runtime evidence | Deferred | Keep current defaults for architecture gate; calibrate through test evidence and an ADR update when the policy changes. |
 
 ### Remaining Risks
 
 - Retry and loop defaults may require adjustment after empirical CI/runtime evidence.
-- Adapter capability differences may require per-adapter policy compatibility notes in detail design.
+- Adapter capability differences may require per-adapter policy compatibility notes in this ArchDesign or a dedicated ADR.
 - Sensitive-path policy may need repository-specific expansion beyond the initial baseline.
 
 ## Dependencies
@@ -447,7 +473,7 @@ Primary trace artifacts for this revision:
 | `utCodeAgentCLI -> slashCommands` | Read-only/execute dependency | Run portable CaTDD behaviors. | Command contract drift requires resolver diagnostics. |
 | `utCodeAgentCLI -> AgentSDK` | Application calls generic runtime. | Keep runtime adapters out of CaTDD logic. | Boundary can blur if CaTDD terms leak into SDK. |
 | `AgentSDK -> RuntimeAdapter` | Interface dependency. | Support raw TS, Copilot/MCP, OpenCode, and future runtimes. | Adapter mismatch or incomplete capabilities. |
-| `TraceWriter -> filesystem` | Write dependency. | Persist machine-readable run records. | Trace paths and redaction policy need detail design. |
+| `TraceWriter -> filesystem` | Write dependency. | Persist machine-readable run records. | Trace paths and redaction policy belong in this ArchDesign, ADRs, and verification evidence. |
 
 ## Key Decisions
 
@@ -540,7 +566,7 @@ Expected result: `diff` prints no output and exits with code 0.
 
 ## Open Questions
 
-- Should `AgentSDK` live inside `codeAgents/utCodeAgentCLI/src/agentsdk/` first, or become a separate package once the API stabilizes?
+- Should `AgentSDK` live inside `codeAgents/utCodeAgentCLI/SrcTS/agentsdk/` first, or become a separate package once the API stabilizes?
 - Should trace output default to `codeAgents/utCodeAgentCLI/traces/`, `.catdd/traces/`, or a user-configured path?
 - Which Copilot integration depth is required first: prompt-wrapper execution, MCP tools, VS Code extension integration, or GitHub Models usage?
 - Which OpenCode surface is required first: command adapter, provider abstraction, workflow compatibility, or shared agent runtime?
@@ -548,6 +574,6 @@ Expected result: `diff` prints no output and exits with code 0.
 
 ## Next Step
 
-For a story that changes this architecture, run `/SPEC_reviewArchDesign` before `/SPEC_takeDetailDesign`.
+For a story that changes this architecture, run `/SPEC_reviewArchDesign` before CaTDD test design or implementation.
 
 For a story that only consumes this architecture, continue with that story's own planned next SPEC step instead of treating it as an architecture trace owner.

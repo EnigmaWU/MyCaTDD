@@ -405,7 +405,7 @@ Every `--behave` value has a precise contract with the file state:
 ```bash
 utCodeAgentCLI \
   --goal "Design and implement P0 functional tests for EventQueue" \
-  --target codeAgents/utCodeAgentCLI/tests/UT_EventQueue.ts \
+  --target codeAgents/utCodeAgentCLI/SysTests/UT_EventQueue.ts \
   --input spec/EventQueue.h \
   --behave designFuncTestsSkeleton \
   --model-tier high-performance

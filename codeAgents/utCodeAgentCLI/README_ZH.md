@@ -18,8 +18,8 @@
 
 当前实现已从“仅文档”进入增量交付阶段：
 
-- `src/cli/main.ts` 是可通过 Node.js 运行的 `US-USER-01` 调用验证入口。
-- `src/cli/invocationValidator.ts` 验证必需参数、互斥参数对、受支持行为、target 形状、日志级别、配置结构和引用文件路径。
+- `SrcTS/cli/main.ts` 是可通过 Node.js 运行的 `US-USER-01` 调用验证入口。
+- `SrcTS/cli/invocationValidator.ts` 验证必需参数、互斥参数对、受支持行为、target 形状、日志级别、配置结构和引用文件路径。
 - `tests/` 下四个 CaTDD P0 功能测试文件验证 `US-USER-01` 的全部 32 条 acceptance criteria。
 - 规划、method prompt 与 slash command 解析、runtime adapter、命令执行、trace 持久化和反思仍是设计目标，尚未成为运行时能力。
 
@@ -52,7 +52,7 @@ CLI 实现必须建立在上游层之上：
 
 - 独立 User Story 文档（`README_UserStory.md`、`README_UserStory_ZH.md`）
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
-- 架构与详细设计文档（`README_ArchDesign.md`、`README_DetailDesign.md` 及 ZH mirrors）
+- 架构设计文档（`README_ArchDesign.md` 及其 ZH mirror）与长期 ADRs
 - `src/` 下的 TypeScript 增量实现
 - `tests/` 下的 CaTDD 单元测试与 fixtures
 - 规划中的 CLI 任务入口提示词、目标模板与执行检查清单
@@ -78,11 +78,10 @@ CLI 实现必须建立在上游层之上：
 | 文件 | 负责内容 |
 | --- | --- |
 | `README.md` / `README_ZH.md` | WHAT：这一层是什么；WHY：这一层为什么存在。 |
-| `README_UserStory.md` / `README_UserStory_ZH.md` | WHO：谁需要这一层；WHAT：它应提供什么用户价值；以及 detail design 前的 BDD acceptance criteria。 |
+| `README_UserStory.md` / `README_UserStory_ZH.md` | WHO：谁需要这一层；WHAT：它应提供什么用户价值；以及 design 与 test work 前的 BDD acceptance criteria。 |
 | `README_UserStoryStatus.md` | 全部 CLI stories 的当前 acceptance-criteria 生命周期状态。 |
 | `README_UbiLang.md` | story、design 与 implementation docs 共用的 domain vocabulary（roles、states、category/tier terms、behavior naming）。 |
-| `README_ArchDesign.md` / `README_ArchDesign_ZH.md` | 高层模块架构、runtime adapter 边界、AgentSDK 分离、trace/audit/control 设计，以及关键 trade-offs。 |
-| `README_DetailDesign.md` / `README_DetailDesign_ZH.md` | 面向 TypeScript 的 contracts、data schemas、state transitions、error handling、implementation plan 与 verification strategy。 |
+| `README_ArchDesign.md` / `README_ArchDesign_ZH.md` 与 `ADRs/` | 唯一模块设计 authority：boundaries、runtime adapters、AgentSDK 分离、trace/audit/control policy、architecture-significant implementation constraints、trade-offs 与长期 decisions。 |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW：现在如何设计或使用这一层；WHO：谁使用；WHEN：何时在这一层工作；WHERE：未来资产位于哪里；以及可复制执行的 `Usage Example`。 |
 | `src/` / `tests/` | 增量 product implementation 与可执行 CaTDD verification。 |
 

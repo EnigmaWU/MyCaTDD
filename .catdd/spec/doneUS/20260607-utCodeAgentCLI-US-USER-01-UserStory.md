@@ -15,10 +15,11 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` slice `US-USE
 ## Active Work Status
 
 - Status: CLOSED.
-- Active state: `.catdd/spec/doneUS/` completed artifact.
+- Archive state: `.catdd/spec/doneUS/` legacy five-AC lifecycle slice.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_analyzeIssue`.
+- Authority note: this record is superseded for current requirement status by the 2026-06-28 32-AC story, canonical detailed requirement, and module dashboard.
+- Next recommended command: no action for this legacy archive.
 
 ## Story
 
@@ -96,7 +97,7 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_analyzeIssue` on one pending issue to continue the next story cycle.
+No action is required for this superseded legacy archive. Use the 2026-06-28 USER-01 record and module dashboard for current completion status.
 
 ## Closure Summary
 

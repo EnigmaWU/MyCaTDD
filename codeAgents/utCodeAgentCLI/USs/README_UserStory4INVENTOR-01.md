@@ -9,6 +9,7 @@
 - Fail explicitly when a required asset is missing, empty, unreadable, outside its configured root, or the wrong file kind. Never substitute hardcoded CaTDD semantics.
 - Method/CLI version negotiation and version-drift detection are deferred to a future compatibility story.
 - [README_UserStoryStatus.md](../README_UserStoryStatus.md) is the authoritative AC lifecycle dashboard for this module.
+- Partial-closure status: AC-01 is accepted DONE evidence from the archived 2026-06-07 lifecycle slice; AC-02 through AC-16 remain TODO here, are not implied complete by that archive, and are owned by [US-INVENTOR-01-FOLLOWUP-01](../../../.catdd/spec/todoUS/20260830-utCodeAgentCLI-US-INVENTOR-01-remaining-delegation-UserStory.md).
 
 ## P0 Functional Completeness
 
@@ -23,17 +24,17 @@
 
 | Category | PENDING | TODO | DOING | DONE | SUSPEND | ABORT | Total |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Typical | 0 | 4 | 0 | 0 | 0 | 0 | 4 |
+| Typical | 0 | 3 | 0 | 1 | 0 | 0 | 4 |
 | Edge | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | Misuse | 0 | 2 | 0 | 0 | 0 | 0 | 2 |
 | Fault | 0 | 8 | 0 | 0 | 0 | 0 | 8 |
-| **Total** | **0** | **16** | **0** | **0** | **0** | **0** | **16** |
+| **Total** | **0** | **15** | **0** | **1** | **0** | **0** | **16** |
 
 ---
 
 ## Typical (ValidFunc) — Delegation succeeds normally
 
-### 【TODO】AC-01 [Func/Typical]: Category resolved from methodPrompts at runtime
+### 【DONE】AC-01 [Func/Typical]: Category resolved from methodPrompts at runtime
 - **Given** CLI needs Edge category meaning
 - **When** `--behave designEdgeSkeleton` is prepared for a fake runtime
 - **Then** captured run input contains the path and current source content of `CaTDD_methodPrompt4Cat-Edge.md`

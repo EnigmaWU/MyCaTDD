@@ -43,6 +43,7 @@ After self-install with `scripts/installCaTDD4Copilot.sh --target "$PWD" --init 
 - Keep local SpecCoding work-state trace gitignored: `.catdd/spec/WorkingProcessLog.md`.
 - `SPEC_*` commands may orchestrate `UT_*` commands, but must not replace P0/P1/P2 category rules.
 - `SPEC_clearStoryIntent` is the early mutual-intent gate after `SPEC_openUserStory`; it records developer intent and CodeAgent intent before design begins. It does not replace the final `SPEC_reviewUserStory` readiness gate after detail design.
+- `utCodeAgentCLI` uses the subproject context at [projectContext-utCodeAgentCLI.md](projectContext-utCodeAgentCLI.md). Its reviewed architecture-only policy overrides generic DetailDesign routing for that subproject.
 
 ## SUT Unit Convention
 
@@ -65,8 +66,8 @@ The boundary treated as one **Unit** for CaTDD unit tests in this project:
 | SpecFlow lifecycle, command ownership, and artifact policy | [Px-SpecFlow](../../slashCommands/flows/Px-SpecFlow.md) and `slashCommands/commands/` | Read for `SPEC_*` orchestration and `UT_*` handoff rules. |
 | `utCodeAgentCLI` requirements and open product questions | [README_UserStory](../../codeAgents/utCodeAgentCLI/README_UserStory.md) | Read when planning or reviewing CLI behavior. |
 | `utCodeAgentCLI` public argument and behavior contract | [README_UsageDesign](../../codeAgents/utCodeAgentCLI/README_UsageDesign.md) | Read before changing CLI inputs, aliases, diagnostics, or invocation behavior. |
-| `utCodeAgentCLI` architecture, runtime decisions, and rationale | [README_ArchDesign](../../codeAgents/utCodeAgentCLI/README_ArchDesign.md) and [ADRs](../../codeAgents/utCodeAgentCLI/ADRs/) | Read for module boundaries, runtime placement, quality trade-offs, and supersession history. |
-| `utCodeAgentCLI` implementation contracts | [README_DetailDesign](../../codeAgents/utCodeAgentCLI/README_DetailDesign.md) | Read before changing parser, planner, executor, adapter, trace, or diagnostic internals. |
+| `utCodeAgentCLI` subproject constraints and routing | [projectContext-utCodeAgentCLI.md](projectContext-utCodeAgentCLI.md) | Read before planning or changing the subproject. |
+| `utCodeAgentCLI` architecture, implementation constraints, runtime decisions, and rationale | [README_ArchDesign](../../codeAgents/utCodeAgentCLI/README_ArchDesign.md) and [ADRs](../../codeAgents/utCodeAgentCLI/ADRs/) | This is the sole module design route; executable detail remains in source/tests. |
 | Verification strategy and traceability | [README_VerifyDesign.md](../../README_VerifyDesign.md) and module `README_VerifyDesign.md` files | Read the project or module scope relevant to the active story. |
 
 ## Validation Commands

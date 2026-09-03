@@ -226,7 +226,7 @@ mindmap
 | This story -> Raw input | `.catdd/spec/analyzedNews/20260830-reconcile-utCodeAgentCLI-closure-and-session-contract-Issue.md` |
 | Project/module story ledger | `codeAgents/utCodeAgentCLI/README_UserStoryStatus.md` |
 | Related closed story | `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md` |
-| Sibling repair story | `.catdd/spec/todoUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md` |
+| Sibling repair story | `.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md` |
 | This story ID | US-UTCLI-REPAIR-01 |
 
 ## Next Recommended Command

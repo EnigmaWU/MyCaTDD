@@ -4,7 +4,7 @@ declare const process: { cwd(): string; execPath: string };
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
-const cliEntryPoint = path.resolve(process.cwd(), "codeAgents/utCodeAgentCLI/src/cli/main.ts");
+const cliEntryPoint = path.resolve(process.cwd(), "codeAgents/utCodeAgentCLI/SrcTS/cli/main.ts");
 
 function runUtCodeAgentCli(argv: string[]) {
 	const result = spawnSync(process.execPath, [cliEntryPoint, ...argv], {

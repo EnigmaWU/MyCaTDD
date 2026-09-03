@@ -117,8 +117,7 @@ codeAgents/utCodeAgentCLI/
   README_UbiLang.md
   README_ArchDesign.md
   README_ArchDesign_ZH.md
-  README_DetailDesign.md
-  README_DetailDesign_ZH.md
+  ADRs/
   README_UserGuide.md
   README_UserGuide_ZH.md
   README_UsageDesign.md
@@ -134,8 +133,8 @@ codeAgents/utCodeAgentCLI/
   checklists/
   traces/
   reflections/
-  src/
-  tests/
+  SrcTS/
+  SysTests/
 ```
 
 Do not add generated runtime output to this directory as source. Keep repeatable design assets, templates, and implementation files here; keep local run logs or temporary execution output outside committed source unless they become deliberate examples.
@@ -168,7 +167,7 @@ Use this path when a user starts with a CaTDD need and wants a `utCodeAgentCLI` 
 2. Open [README_UsageDesign.md](README_UsageDesign.md) only when strict parser syntax, selector details, or exhaustive error rules matter.
 3. Open [README_UbiLang.md](README_UbiLang.md) when term meaning is ambiguous (roles, status/state words, category/tier names, behavior labels).
 4. Open [README_ArchDesign.md](README_ArchDesign.md) when module boundaries, adapter boundaries, or AgentSDK separation matter.
-5. Open [README_DetailDesign.md](README_DetailDesign.md) when TypeScript contracts, data schemas, state transitions, trace schema, or implementation plan matter.
+5. Open [README_ArchDesign.md](README_ArchDesign.md) and the relevant ADR when implementation constraints, state transitions, trace policy, or module design matter; executable detail remains in `SrcTS/` and `SysTests/`.
 6. Open `slashCommands/README_UserGuide.md` only when you need to inspect the portable command contract behind a `UT_*` behavior.
 7. Open `methodPrompts/README_UserGuide.md` only when you need method meaning; do not redefine category semantics here.
 8. Open [README.md](README.md) only when you need layer-level WHAT/WHY background.
@@ -280,6 +279,8 @@ End-to-end delegation is a planned runtime capability; the current implementatio
 US-INVENTOR-01 proves that boundary through structured run-plan or fake-runtime capture. The captured evidence includes resolved asset paths, current source content handed to the run, and ordered `prompt-read` and `command-invocation` events. Generated test artifacts belong to US-USER-02 and are not required to prove resolver delegation.
 
 US-INVENTOR-03 separately owns `--diagMethodPrompts`, `--diagSlashCommands`, and their flag-controlled stderr rendering. Missing, empty, unreadable, configured-root-escaping, or wrong-kind assets must stop the invocation without a hardcoded semantic fallback. Method/CLI version negotiation is outside this behavior and remains future compatibility work. AC lifecycle status for this module is tracked in [README_UserStoryStatus.md](README_UserStoryStatus.md).
+
+The dashboard may represent a partial closure when only a reviewed slice is accepted. For US-INVENTOR-01, AC-01 is DONE; AC-02 through AC-16 remain TODO under the dedicated `US-INVENTOR-01-FOLLOWUP-01` lifecycle story and must not be inferred complete from the archived lifecycle story.
 
 ## Usage Example
 

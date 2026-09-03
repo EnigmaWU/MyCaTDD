@@ -22,15 +22,18 @@ Updated by `/SPEC_reviewImplUnitTests` on 2026-08-28; corrected TC-DELEGATE-001 
 Updated by `/SPEC_implProductCodes` on 2026-08-28; TC-DELEGATE-001 GREEN on correction attempt 1.
 Updated by `/SPEC_reviewProductCodes` on 2026-08-28; result UPDATE DESIGN with PROD-REV-01.
 Updated by `/SPEC_updateDetailDesign` on 2026-08-29; PROD-REV-01 ownership and test-first correction defined.
+Reconciled by `/SPEC_updateUserStory` on 2026-08-30 as historical partial-closure evidence; unchecked steps below remain preserved and are not current commands.
 Paired with [20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md](20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md).
 
-## Active Story
+## Partial Closure Archive
 
 - **ID:** US-INVENTOR-01
 - **Title:** Delegate all CaTDD semantics to methodPrompts
 - **Priority:** P0
-- **Lifecycle phase:** Open -> Requirement/Detail PASS -> P0 Skeleton Review PASS -> PROD-REV-01 Detail Review
+- **Lifecycle phase:** Partially closed; AC-01 accepted, AC-02 through AC-16 unfinished
 - **Branch:** `feat/utcodeagentcli-us-inventor-01`
+- **Current reconciliation owner:** [US-SPECFLOW-REPAIR-01](../doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md)
+- **Unfinished-scope owner:** [US-INVENTOR-01-FOLLOWUP-01](../todoUS/20260830-utCodeAgentCLI-US-INVENTOR-01-remaining-delegation-UserStory.md)
 
 ## Requirement Source Trace
 
@@ -39,7 +42,7 @@ Paired with [20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md](20260607-utCod
 - Paired usage context: [README_UserGuide.md](../../../codeAgents/utCodeAgentCLI/README_UserGuide.md)
 - Module AC dashboard: [README_UserStoryStatus.md](../../../codeAgents/utCodeAgentCLI/README_UserStoryStatus.md)
 - Architecture evidence: [README_ArchDesign.md](../../../codeAgents/utCodeAgentCLI/README_ArchDesign.md)
-- Detail-design evidence: [README_DetailDesign.md](../../../codeAgents/utCodeAgentCLI/README_DetailDesign.md)
+- Former detail-design evidence: `codeAgents/utCodeAgentCLI/README_DetailDesign.md` was removed by `ADR_ArchitectureOnlyDesignPolicy.md`; current design authority is ArchDesign.
 - Verification evidence: [README_VerifyDesign.md](../../../codeAgents/utCodeAgentCLI/README_VerifyDesign.md)
 - Project context: [projectContext.md](../projectContext.md)
 
@@ -47,23 +50,23 @@ Paired with [20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md](20260607-utCod
 
 | Prerequisite | Status | Evidence or gap |
 | --- | --- | --- |
-| Story lifecycle | Satisfied | The selected story is open under `doingUS/` and has no duplicate lifecycle copy. |
+| Story lifecycle | Partially closed | This artifact is archived under `doneUS/`; only AC-01 is accepted done scope. |
 | Requirement identity | Satisfied | `US-INVENTOR-01 [P0]` has 16 stable ACs across Typical, Edge, Misuse, and Fault. |
-| Module AC status | Synchronized | The detailed source and authoritative module dashboard show all 16 ACs as TODO. |
+| Module AC status | Reconciled | The detailed source and dashboard show AC-01 DONE and AC-02 through AC-16 TODO. |
 | Mutual Intent Contract | Cleared | Fresh-read, diagnostic-proof, version-drift, and ledger decisions are recorded in the active story. |
 | Story ledger | Satisfied by developer decision | `codeAgents/utCodeAgentCLI/README_UserStoryStatus.md` is authoritative for this module; a root ledger is out of scope. |
 | Canonical requirement wording | Reviewed PASS | Stable ACs use the canonical 4/2/2/8 Typical/Edge/Misuse/Fault distribution. |
 | Project context | Corrected | It records the runnable US-USER-01 validation slice and the remaining unimplemented end-to-end boundary. |
 | Architecture | Satisfied | Existing architecture defines the resolver/delegation boundaries; the cleared intent changes no module ownership or dependency direction. |
-| Detail design | Updated / review pending | PROD-REV-01 assigns canonical-root ownership to `InvocationAssetSession` and defines a test-first correction in both mirrors. |
+| Detail design | Historical update preserved | PROD-REV-01 design evidence remains historical; canonical-session repair is owned by US-UTCLI-REPAIR-01. |
 | Story-specific verification design | Updated | INV-01 category coverage, traceability, flow coupling, and parallel-ready slices are recorded. |
 | Test status | In GREEN review | TC-DELEGATE-001 is GREEN; the other 15 TCs remain PLANNED with corrected 4/2/2/8 category ownership. |
 | Executable US-INVENTOR-01 tests | One GREEN | TC-DELEGATE-001 passes after minimum product implementation; 38 existing CLI tests also pass. |
-| Product-code review | UPDATE DESIGN | PROD-REV-01 reproduces wrong public-path classification for a symlinked workspace root. |
+| Product-code review | Partial acceptance | AC-01 public-path evidence was accepted; the broader session contract is not implied complete. |
 
 ## Work Orientation
 
-**Detail-design review gate.** Canonical-root ownership and the test-first correction are explicit; they must be reviewed before tests or product code change.
+**Historical partial-closure record.** The unchecked sequence below shows work that was not completed in this lifecycle artifact. It is retained as evidence and must not be followed as the current plan.
 
 ## Cleared Intent Decisions
 
@@ -76,11 +79,13 @@ Paired with [20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md](20260607-utCod
 
 | Candidate | Decision | Rationale |
 | --- | --- | --- |
-| `SPEC_reviewDetailDesign` | Selected | Gate the PROD-REV-01 ownership, async interface, projection invariant, and test-first route. |
+| `SPEC_reviewDetailDesign` | Superseded | This was the historical selection before partial closure. |
 | `SPEC_reviewImplUnitTests` | Blocked | Product review has not passed. |
 | P1/P2 design commands | Deferred | No additional source-backed AC requires promotion. |
 
-## Task Checklist
+## Historical Task Checklist
+
+Checked items record completed historical steps. Unchecked items remain intentionally unchecked and are not current next actions.
 
 - [x] **SPEC_importUserStory** - Import the structured US-INVENTOR-01 slice into `todoUS/`.
 - [x] **SPEC_openUserStory** - Move the story into `doingUS/` on its dedicated branch.
@@ -121,13 +126,13 @@ Paired with [20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md](20260607-utCod
 - [ ] **SPEC_commitWorks** - Commit the verified story work.
 - [ ] **SPEC_closeUserStory** - Move the completed story and task artifact into `doneUS/`.
 
-## Selected Next Command
+## Historical Selected Command
 
-### `/SPEC_reviewDetailDesign`
+### `/SPEC_reviewDetailDesign` (superseded)
 
-Review the PROD-REV-01 ownership decision, asynchronous session-opening contract, canonical-to-canonical projection invariant, and TC-DELEGATE-001 test-first route.
+This command was selected before the story was partially closed. Current lifecycle work is US-SPECFLOW-REPAIR-01, whose next command is `/SPEC_reviewUserStory`.
 
-## Rejected Next Steps
+## Historical Rejected Next Steps
 
 | Candidate | Reason rejected now |
 | --- | --- |
@@ -144,6 +149,8 @@ Review the PROD-REV-01 ownership decision, asynchronous session-opening contract
 | `SPEC_commitWorks` | Both downstream reviews remain pending. |
 
 ## Blockers
+
+- Current status: this archive has no active blocker or executable next command; unresolved product/session scope is owned by US-UTCLI-REPAIR-01.
 
 - No intent blocker remains.
 - No requirement-review blocker remains; all five findings are closed.
