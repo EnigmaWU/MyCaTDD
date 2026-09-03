@@ -49,6 +49,14 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 /SPEC_closeUserStory
 ```
 
+## 执行模式指南
+
+- `manualMode` 是 Px-SpecFlow 的默认模式。
+- 除非当前命令调用或活跃产物已经声明模式，否则在下一次实质性的生命周期推进之前，先询问开发者本次流程应继续保持 `manualMode`，还是显式切换到 `autonomousMode`。
+- 在 `manualMode` 中，assistant 逐步推进；当意图、范围或验收不清晰时提出聚焦问题；在高风险、含糊或破坏性的生命周期选择前等待开发者确认。
+- `autonomousMode` 仅在显式选择时启用。在该模式下，assistant 应基于明确产物继续推进下一步安全的 Px-SpecFlow 步骤，记录假设与开放问题，并在遇到阻塞性歧义或需要审批的工作时停止。
+- `autonomousMode` 是 Px-SpecFlow 最终演进的目标，但在开发者未明确请求前，安全默认值仍然是 `manualMode`。
+
 ## GitHub Spec Kit 的改进
 
 在解释或采用来自 GitHub Spec Kit 的 `Px SpecFlow` 改进时，首选此列表。

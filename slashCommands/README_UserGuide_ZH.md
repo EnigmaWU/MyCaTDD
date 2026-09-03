@@ -88,6 +88,13 @@ slashCommands/
 7. 保留 US/AC/TC 注释、分类标签、优先级关卡和 TC 状态标记。
 8. 按当前命令或流程文档指定的下一条命令继续。
 
+### 执行模式
+
+- Px-SpecFlow 默认使用 `manualMode`。
+- 如果命令调用或活跃产物尚未显式声明模式，则在下一次实质性流程推进前先询问开发者，是继续保持 `manualMode` 还是切换到 `autonomousMode`。
+- `manualMode` 用于逐步协作与澄清。
+- `autonomousMode` 仅在开发者显式选择时使用；它是 Px-SpecFlow 的最终演进目标，而不是默认值。
+
 ## Usage Example
 
 在 MyCaTDD 仓库根目录运行以下命令，将 slash-command 资产安装到一个临时 Copilot 风格目标项目：

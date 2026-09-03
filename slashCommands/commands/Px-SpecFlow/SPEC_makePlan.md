@@ -19,6 +19,7 @@ Create or update the task artifact paired with the active user story and decide 
 - `project_user_stories_doc`: project-root `README_UserStories.md` ledger for TODO/DONE and AC trace status.
 - `readme_spec_files`: optional project-root `README*` SPEC docs that already influence the next step.
 - `related_docs`: optional issue, feature, review, architecture, detail-design, or test notes relevant to next-step planning.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`; `autonomousMode` must be explicit).
 
 ## Method References
 
@@ -32,6 +33,7 @@ Create or update the task artifact paired with the active user story and decide 
 - The task artifact uses Markdown checkbox tasks: `[ ]` for pending work, `[x]` for satisfied or completed work.
 - After creating or updating the artifact, print the current TASKs checklist in the command response so developers can see `[ ]` and `[x]` status immediately.
 - The selected next command should be chosen by lifecycle position and work orientation, depending on what the opened story actually needs next.
+- A mode decision note showing whether the story remains in default `manualMode` or moves under explicit `autonomousMode`.
 - Explicit notes about whether requirement updates, architecture design, detail design, review, or direct unit-test design can be skipped because existing artifacts are already sufficient.
 - Explicit trace to the requirement source for the active story: issue/feature pending input, imported user-story input, or module/submodule `README_UserStory.md` plus paired `README_UserGuide.md`.
 - Explicit check of project-level `README_UserStories.md` consistency: TODO/DONE state and AC trace/status must match lifecycle artifacts. SUSPENDED stories should be routed to `SPEC_resumeUserStory` before planning continues.
@@ -62,7 +64,7 @@ Create or update the task artifact paired with the active user story and decide 
 
 ## Prompt Template
 
-Ask the assistant to examine the opened story, create or update the paired `*-UserStory-Tasks.md` artifact in `.catdd/spec/doingUS/`, express the work as Markdown checkbox tasks, print the checklist after planning is made, compare the realistic next lifecycle options, distinguish requirement-oriented, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next `SPEC_*` command that best fits the story's current readiness without inventing missing requirements/design or skipping needed checks.
+Ask the assistant to examine the opened story, create or update the paired `*-UserStory-Tasks.md` artifact in `.catdd/spec/doingUS/`, express the work as Markdown checkbox tasks, print the checklist after planning is made, compare the realistic next lifecycle options, distinguish requirement-oriented, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next `SPEC_*` command that best fits the story's current readiness without inventing missing requirements/design or skipping needed checks. Default to `manualMode`; if the mode is not already explicit, ask the developer whether this flow should continue in `manualMode` or switch to `autonomousMode`, and record that mode decision in the task artifact.
 
 ## Conflict Guard
 
@@ -70,5 +72,6 @@ Do not jump directly into implementation from planning. If the next safe step is
 Do not plan a story whose `README_UserStories.md` ledger state is SUSPENDED; route to `SPEC_resumeUserStory` first to resume before continuing planning.
 Do not skip `SPEC_updateUserStory` when the active story changes requirement surfaces, especially project-root `README_UserStories.md` or `README_UserGuide.md`.
 Do not route to design-oriented commands before requirement-oriented updates are reviewed when requirement intent is still changing.
+Do not assume `autonomousMode`; keep `manualMode` unless the developer explicitly opts in.
 
 ONE-MORE-THING: ask developer if something not sure

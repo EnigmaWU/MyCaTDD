@@ -6,13 +6,17 @@ Analyze a pending feature request, enhancement, or imported structured user-stor
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This command must inspect the raw feature or user-story input, reason about user value, actor, and outcome, draft a lifecycle-ready user story, and verify it against quality criteria before accepting the output. When inputs are ambiguous or incomplete, the reasoning loop surfaces questions instead of inventing requirements.
+**ReACT, then mode-gated execution** — This command must inspect the raw feature or user-story input, reason about user value, actor, and outcome, draft a lifecycle-ready user story, and verify it against quality criteria before accepting the output. After inspection, execution chooses either default `manualMode` or explicit `autonomousMode`.
+
+- `manualMode` is the default: chat with the developer step by step, ask focused clarification questions, and draft `todoUS` only when the story is good enough or explicitly marked blocked/not-ready.
+- `autonomousMode` is opt-in only: continue through the predefined prompt pipeline, record assumptions and open questions explicitly, and mark the story NOT ready when blocking intent or acceptance questions remain.
 
 ## Inputs
 
 - `pending_feature`: feature or imported user-story file under `.catdd/spec/pendingNews/`.
 - `projectContext_file`: current project context.
 - `related_docs`: optional architecture, README, API, design, product, or test docs.
+- `analysis_mode`: optional `manualMode | autonomousMode` (default: `manualMode`; `autonomousMode` must be explicit).
 - `SpecTodoUserStoryTemplate`: output template at `../../templates/SpecTodoUserStoryTemplate.md`.
 
 ## Method References
@@ -28,10 +32,14 @@ Analyze a pending feature request, enhancement, or imported structured user-stor
 - A value-focused, independently testable user story slice with user value, priority, acceptance scenarios, edge cases, scope, non-goals, risks, assumptions, and initial acceptance questions.
 - Source trace from the user story back to the archived raw input artifact.
 - The story follows `SpecTodoUserStoryTemplate.md` structure, with each section tracing to its source analysis technique.
+- A **Mode Decision** record documenting `analysis_mode`, why that mode was selected, what was clarified interactively, or which predefined prompts were used autonomously.
 
 ## Prompt Template
 
 Apply the pipeline below. Each step summarizes the key technique; `(→ SKILL: name)` marks the source for more detail. Use `SpecTodoUserStoryTemplate.md` for the final output.
+
+- In default `manualMode`, ask the developer focused clarification questions whenever role, value, scope, outcome, or acceptance wording could materially change the story.
+- In explicit `autonomousMode`, continue without pausing for every clarification, but record every material unknown as an assumption, ambiguity warning, or Initial Acceptance Question.
 
 ### Step 1 — Is this story too big?
 Inspect the pending feature. If it spans >3 functional areas or would need >7 acceptance scenarios, it may need splitting. Group into L1 areas → L2 groups → L3 features. Propose a split before continuing. `(→ SKILL: build-feature-tree)`
@@ -64,6 +72,7 @@ Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. Move the
 
 If the feature or imported user-story source lacks user value, actor, or outcome, create questions and keep the story draft incomplete instead of inventing requirements.
 
+- Do not run `autonomousMode` unless the developer explicitly requested it.
 - If Step 1 detects oversize: propose splitting, don't write one oversized story.
 - If Step 4 finds unhandled model gaps: list them as questions, don't invent paths.
 - If Step 5 finds implied but unspecified business rules: flag them, don't guess values.
