@@ -14,10 +14,10 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4INVENTOR.md` slice `US
 - Import granularity: `US-by-US`
 - Imported slice: `US-INVENTOR-01 [P0]`
 
-## Active Work Status
+## Partial Closure Status
 
-- Status: DONE.
-- Active state: `.catdd/spec/doneUS/` completed story archive.
+- Status: PARTIALLY CLOSED.
+- Archive state: `.catdd/spec/doneUS/` contains the accepted AC-01 slice and its historical evidence; it does not imply completion of AC-02 through AC-16.
 - Opened by `/SPEC_openUserStory` on 2026-08-26.
 - Planned by `/SPEC_makePlan` on 2026-08-26.
 - Intent cleared by `/SPEC_clearStoryIntent` on 2026-08-26.
@@ -52,7 +52,11 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4INVENTOR.md` slice `US
 - Branch integration: deferred; next lifecycle step after close is `/SPEC_mergeWorks` if the story branch still requires merge/integration.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_mergeWorks` for branch integration, or `/HARNESS_evolveHarness` with `evolution_mode=auto` when no merge step is required.
+- Accepted scope: AC-01 / TC-DELEGATE-001 public delegation-path evidence.
+- Unfinished scope: AC-02 through AC-16 remain TODO in `codeAgents/utCodeAgentCLI/USs/README_UserStory4INVENTOR-01.md` with TC-DELEGATE-002 through TC-DELEGATE-016 PLANNED and are owned by `.catdd/spec/todoUS/20260830-utCodeAgentCLI-US-INVENTOR-01-remaining-delegation-UserStory.md`.
+- Reconciliation owner: `.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md`.
+- Product-contract follow-up: `.catdd/spec/todoUS/20260830-utCodeAgentCLI-canonical-asset-session-repair-UserStory.md`.
+- Current next recommended command: `/SPEC_reviewUserStory` for US-SPECFLOW-REPAIR-01.
 
 ## Story
 
@@ -340,8 +344,8 @@ Out of scope:
 
 - **Update date:** 2026-08-28
 - **Applied by:** `/SPEC_updateDetailDesign`
-- **English design:** [../../../codeAgents/utCodeAgentCLI/README_DetailDesign.md](../../../codeAgents/utCodeAgentCLI/README_DetailDesign.md)
-- **Chinese mirror:** [../../../codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md](../../../codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md)
+- **Former English design:** `codeAgents/utCodeAgentCLI/README_DetailDesign.md` (removed by the architecture-only ADR).
+- **Former Chinese mirror:** `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md` (removed by the architecture-only ADR).
 - **Architecture impact:** None; existing resolver, executor, adapter, and trace boundaries remain intact.
 
 ### Addressed Feedback
@@ -406,8 +410,8 @@ Out of scope:
 
 - **Correction date:** 2026-08-28
 - **Applied by:** `/SPEC_updateDetailDesign`
-- **English design:** [../../../codeAgents/utCodeAgentCLI/README_DetailDesign.md](../../../codeAgents/utCodeAgentCLI/README_DetailDesign.md)
-- **Chinese mirror:** [../../../codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md](../../../codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md)
+- **Former English design:** `codeAgents/utCodeAgentCLI/README_DetailDesign.md` (removed by the architecture-only ADR).
+- **Former Chinese mirror:** `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md` (removed by the architecture-only ADR).
 - **Architecture impact:** None; the adapter remains generic and the detail-level step lifecycle refines the architecture's conceptual prepared-run sketch.
 
 ### Applied Corrections
@@ -458,8 +462,8 @@ Out of scope:
 - **Correction date:** 2026-08-28
 - **Applied by:** `/SPEC_updateDetailDesign`
 - **Resolved finding:** DD-REV-05
-- **English design:** [../../../codeAgents/utCodeAgentCLI/README_DetailDesign.md](../../../codeAgents/utCodeAgentCLI/README_DetailDesign.md)
-- **Chinese mirror:** [../../../codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md](../../../codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md)
+- **Former English design:** `codeAgents/utCodeAgentCLI/README_DetailDesign.md` (removed by the architecture-only ADR).
+- **Former Chinese mirror:** `codeAgents/utCodeAgentCLI/README_DetailDesign_ZH.md` (removed by the architecture-only ADR).
 
 ### Applied Correction
 
@@ -692,4 +696,4 @@ Out of scope:
 
 ## Next Recommended Action
 
-Run `/SPEC_reviewDetailDesign` to review the PROD-REV-01 ownership and test-first correction design.
+Historical `/SPEC_reviewDetailDesign` guidance is superseded by the partial-closure reconciliation. Run `/SPEC_reviewUserStory` for US-SPECFLOW-REPAIR-01; canonical-session product repair remains a separate todo story.

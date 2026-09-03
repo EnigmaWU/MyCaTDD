@@ -54,7 +54,7 @@ type InvocationResult = {
  *
  * RELATIONSHIPS:
  *   - User story: US-USER-01.
- *   - Production code: codeAgents/utCodeAgentCLI/src/cli/invocationValidator.ts.
+ *   - Production code: codeAgents/utCodeAgentCLI/SrcTS/cli/invocationValidator.ts.
  *   - 32-AC spec redesign via UT_designFuncTestsSkeleton route.
  */
 //======>END OF OVERVIEW OF THIS UNIT TESTING FILE=================================================

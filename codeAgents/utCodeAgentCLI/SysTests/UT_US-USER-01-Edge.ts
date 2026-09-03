@@ -55,7 +55,7 @@ type InvocationResult = {
  *
  * RELATIONSHIPS:
  *   - User story: US-USER-01.
- *   - Production code: codeAgents/utCodeAgentCLI/src/cli/invocationValidator.ts.
+ *   - Production code: codeAgents/utCodeAgentCLI/SrcTS/cli/invocationValidator.ts.
  *   - 32-AC spec redesign via UT_designFuncTestsSkeleton route.
  */
 //======>END OF OVERVIEW OF THIS UNIT TESTING FILE=================================================
@@ -367,7 +367,7 @@ test("TC-ARG-018 verifyConfigFileValidYAML_byExistingPath_expectLoaded", () => {
 		"--behave",
 		"designFuncTestsSkeleton",
 		"--config-file",
-		"codeAgents/utCodeAgentCLI/tests/UT_US-USER-01_README.md",
+		"codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01_README.md",
 	]);
 
 	assert.equal(result.exitCode, 0);

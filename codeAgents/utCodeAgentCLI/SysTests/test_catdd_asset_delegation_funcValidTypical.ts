@@ -182,12 +182,12 @@ test(
 		try {
 			//===>>> BEHAVIOR <<<===
 			try {
-				const { resolveBehavior } = require("../src/catdd/behaviorRegistry.ts");
-				const { openAssetSession } = require("../src/catdd/invocationAssetSession.ts");
-				const { resolveMethodPrompts } = require("../src/catdd/methodPromptResolver.ts");
-				const { planCatddRun } = require("../src/catdd/planner.ts");
-				const { resolveSlashCommands } = require("../src/catdd/slashCommandResolver.ts");
-				const { buildAgentRunPlan } = require("../src/catdd/agentRunPlanBuilder.ts");
+				const { resolveBehavior } = require("../SrcTS/catdd/behaviorRegistry.ts");
+				const { openAssetSession } = require("../SrcTS/catdd/invocationAssetSession.ts");
+				const { resolveMethodPrompts } = require("../SrcTS/catdd/methodPromptResolver.ts");
+				const { planCatddRun } = require("../SrcTS/catdd/planner.ts");
+				const { resolveSlashCommands } = require("../SrcTS/catdd/slashCommandResolver.ts");
+				const { buildAgentRunPlan } = require("../SrcTS/catdd/agentRunPlanBuilder.ts");
 				assetSession = await Promise.resolve(
 					openAssetSession({
 						workspaceRoot,
@@ -281,9 +281,9 @@ test(
 				return { events: [] };
 			},
 		};
-		const openAssetSession = require("../src/catdd/invocationAssetSession.ts").openAssetSession;
-		const { resolveMethodPrompts } = require("../src/catdd/methodPromptResolver.ts");
-		const { planCatddRun } = require("../src/catdd/planner.ts");
+		const openAssetSession = require("../SrcTS/catdd/invocationAssetSession.ts").openAssetSession;
+		const { resolveMethodPrompts } = require("../SrcTS/catdd/methodPromptResolver.ts");
+		const { planCatddRun } = require("../SrcTS/catdd/planner.ts");
 		fakeAssetFileSystem.addSymlink(workspaceRoot, realWorkspaceRoot);
 		fakeAssetFileSystem.addDirectory(realWorkspaceRoot);
 		fakeAssetFileSystem.addDirectory(methodPromptsRoot);

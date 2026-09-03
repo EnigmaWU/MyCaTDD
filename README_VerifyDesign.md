@@ -6,12 +6,12 @@ This document captures verification strategy and US/AC/TC traceability for activ
 
 - Active story: [.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md](.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md)
 - Active TASKs: [.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md](.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md)
-- Detail design: [codeAgents/utCodeAgentCLI/README_DetailDesign.md](codeAgents/utCodeAgentCLI/README_DetailDesign.md)
+- Module design authority: [codeAgents/utCodeAgentCLI/README_ArchDesign.md](codeAgents/utCodeAgentCLI/README_ArchDesign.md)
 - Target test files (32-AC redesign):
-  - [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts) — 10 Typical ACs (AC-01~AC-10)
-  - [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts) — 10 Edge ACs (AC-11~AC-20)
-  - [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts) — 9 Misuse ACs (AC-21~AC-28, AC-32)
-  - [codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts](codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts) — 3 Fault ACs (AC-29~AC-31)
+  - [codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts](codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts) — 10 Typical ACs (AC-01~AC-10)
+  - [codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts](codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts) — 10 Edge ACs (AC-11~AC-20)
+  - [codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts](codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts) — 9 Misuse ACs (AC-21~AC-28, AC-32)
+  - [codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts](codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts) — 3 Fault ACs (AC-29~AC-31)
 
 ## Testing Definition
 
@@ -44,19 +44,19 @@ Design P0 Functional coverage first for argument validation because this story i
 
 | US | AC | TC | Test File | Status |
 | --- | --- | --- | --- | --- |
-| US-USER-01 | AC-01~AC-10 | TC-ARG-001..TC-ARG-010 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts | PLANNED/GREEN |
-| US-USER-01 | AC-11~AC-20 | TC-ARG-011..TC-ARG-020 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts | PLANNED |
-| US-USER-01 | AC-21 | TC-ARG-021..TC-ARG-023 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-25 | TC-ARG-024 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-23, AC-24 | TC-ARG-025..TC-ARG-026 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-22 | TC-ARG-027 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-26 | TC-ARG-028 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-27 | TC-ARG-029 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-28 | TC-ARG-030 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-32 | TC-ARG-031 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-29 | TC-ARG-029..TC-ARG-033 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-30 | TC-ARG-034 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | PLANNED |
-| US-USER-01 | AC-31 | TC-ARG-035 | codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts | PLANNED |
+| US-USER-01 | AC-01~AC-10 | TC-ARG-001..TC-ARG-010 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts | PLANNED/GREEN |
+| US-USER-01 | AC-11~AC-20 | TC-ARG-011..TC-ARG-020 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts | PLANNED |
+| US-USER-01 | AC-21 | TC-ARG-021..TC-ARG-023 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-25 | TC-ARG-024 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-23, AC-24 | TC-ARG-025..TC-ARG-026 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | GREEN |
+| US-USER-01 | AC-22 | TC-ARG-027 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-26 | TC-ARG-028 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-27 | TC-ARG-029 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-28 | TC-ARG-030 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-32 | TC-ARG-031 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
+| US-USER-01 | AC-29 | TC-ARG-029..TC-ARG-033 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts | GREEN |
+| US-USER-01 | AC-30 | TC-ARG-034 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts | PLANNED |
+| US-USER-01 | AC-31 | TC-ARG-035 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts | PLANNED |
 
 ## Test Case Design Notes
 
@@ -96,7 +96,7 @@ digital video/audio points:
 Run from repository root to inspect the designed skeleton file:
 
 ```bash
-sed -n '1,220p' codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts
+sed -n '1,220p' codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts
 ```
 
 Expected result: category-specific CaTDD UnitTesting files with `@[US]`, `@[AC]`, `@[TC]`, `@[Category]`, and `@[Status]: GREEN` tags where executable TCs exist.

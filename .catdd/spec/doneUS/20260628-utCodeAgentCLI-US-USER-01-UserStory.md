@@ -15,11 +15,13 @@ Imported from `codeAgents/utCodeAgentCLI/README_UserStory4USER.md` slice `US-USE
 
 ## Active Work Status
 
-- Status: DOING.
-- Active state: `.catdd/spec/doingUS/` opened by `SPEC_openUserStory` on 2026-06-28.
+- Status: CLOSED.
+- Archive state: `.catdd/spec/doneUS/` authoritative 32-AC requirement-completion record for US-USER-01.
 - Priority: P0 - critical.
 - Confidence: high.
-- Next recommended command: `/SPEC_implUnitTests`.
+- Completion evidence: commit `c55a0ef` updated the canonical detailed story and module dashboard to all 32 ACs DONE; the 38 executable CLI regression cases pass.
+- Paired TASKs caveat: the paired 2026-06-28 TASK artifact is an incomplete historical planning snapshot, not current command guidance.
+- Next recommended command: no action for this completed story.
 
 ## Mutual Intent Contract
 
@@ -345,4 +347,4 @@ Resolved Questions:
 
 ## Next Recommended Action
 
-Run `/SPEC_implUnitTests` to implement RED tests for all 4 P0 Functional category skeletons and advance PLANNED skeletons to implementable state.
+No action is required for this completed story. Use the canonical detailed requirement and `README_UserStoryStatus.md` for current 32-AC status; preserve the paired TASK artifact only as incomplete historical planning evidence.

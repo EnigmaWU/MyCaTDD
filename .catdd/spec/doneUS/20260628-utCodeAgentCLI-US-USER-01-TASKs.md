@@ -2,13 +2,14 @@
 
 Created by `/SPEC_makePlan` on 2026-06-28.
 Paired with `.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md`.
+Reconciled by `/SPEC_updateUserStory` on 2026-08-30 as an incomplete historical planning snapshot. It is not current command guidance and does not replace completion evidence in commit `c55a0ef`, the canonical detailed story, or the module dashboard.
 
-## Active Story
+## Historical Story Snapshot
 
 - **ID:** US-USER-01
 - **Title:** Parse and validate CLI arguments
 - **Priority:** P0
-- **Lifecycle Phase:** Open → Intent Cleared → Planning
+- **Lifecycle Phase:** Historical planning snapshot; superseded by verified 32-AC completion evidence
 
 ## Requirement Source Trace
 
@@ -54,9 +55,9 @@ Paired with `.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md`
 - [ ] **SPEC_commitWorks** — Commit completed work
 - [ ] **SPEC_closeUserStory** — Close the story
 
-## Selected Next Command
+## Historical Selected Command
 
-### `/SPEC_implUnitTests`
+### `/SPEC_implUnitTests` (superseded)
 
 **Rationale:** All 4 P0 Functional category skeletons are now redesigned and reviewed:
 - Typical (10 ACs): TC-ARG-001..TC-ARG-010 — ready for RED implementation
@@ -64,7 +65,7 @@ Paired with `.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md`
 - Misuse (9 ACs): TC-ARG-021..TC-ARG-026 (GREEN), TC-ARG-027..TC-ARG-031 (PLANNED, need RED implementation)
 - Fault (3 ACs): TC-ARG-029..TC-ARG-033 (GREEN), TC-ARG-034..TC-ARG-035 (PLANNED, need RED implementation)
 
-The PLANNED skeletons (TC-ARG-027~TC-ARG-031 for Misuse, TC-ARG-034~TC-ARG-035 for Fault) need RED test implementation. Existing GREEN tests must remain passing. Source-command provenance is recorded via UT_designFuncTestsSkeleton route.
+This selection reflects the artifact's 2026-06-28 planning state. It is not a current command; later canonical evidence records all 32 ACs DONE and 38 executable regression cases passing.
 
 ## Rejected Alternatives
 

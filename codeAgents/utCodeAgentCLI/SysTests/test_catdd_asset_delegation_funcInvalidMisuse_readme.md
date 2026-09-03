@@ -15,14 +15,14 @@ PLANNED / design-only. Two CaTDD TC skeletons exist; no executable test bodies a
 - Story: US-INVENTOR-01.
 - Acceptance criteria: AC-11 through AC-12.
 - Test cases: TC-DELEGATE-011 through TC-DELEGATE-012.
-- Source: `README_UserStory4INVENTOR-01.md` and `README_DetailDesign.md`.
+- Source: `README_UserStory4INVENTOR-01.md`, `README_ArchDesign.md`, and relevant ADRs.
 
 ## Manual
 
 Run from the repository root:
 
 ```bash
-FILE=codeAgents/utCodeAgentCLI/tests/test_catdd_asset_delegation_funcInvalidMisuse.ts
+FILE=codeAgents/utCodeAgentCLI/SysTests/test_catdd_asset_delegation_funcInvalidMisuse.ts
 test "$(rg -c '@\[Status:PLANNED\]' "$FILE")" -eq 2
 if rg -n '(^|[^/])\b(test|it|describe)\s*\(' "$FILE"; then exit 1; fi
 ```

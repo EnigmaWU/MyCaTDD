@@ -4,13 +4,16 @@ This document captures module-scoped verification strategy and US/AC/TC traceabi
 
 ## Story and Design Inputs
 
-- Active story: [20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md](../../.catdd/spec/doingUS/20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md)
-- Active TASKs: [20260607-utCodeAgentCLI-US-INVENTOR-01-TASKs.md](../../.catdd/spec/doingUS/20260607-utCodeAgentCLI-US-INVENTOR-01-TASKs.md)
+- Active lifecycle-reconciliation story: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md](../../.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md)
+- Active lifecycle-reconciliation TASKs: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md](../../.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md)
+- Partially closed delegation story: [20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md](../../.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md)
+- Partially closed delegation TASKs: [20260607-utCodeAgentCLI-US-INVENTOR-01-TASKs.md](../../.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-INVENTOR-01-TASKs.md)
 - Reviewed requirement: [USs/README_UserStory4INVENTOR-01.md](USs/README_UserStory4INVENTOR-01.md)
 - Completed regression story: [20260628-utCodeAgentCLI-US-USER-01-UserStory.md](../../.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-UserStory.md)
 - Completed regression TASKs: [20260628-utCodeAgentCLI-US-USER-01-TASKs.md](../../.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md)
 - [README_ArchDesign.md](README_ArchDesign.md)
-- [README_DetailDesign.md](README_DetailDesign.md)
+- [README_ArchDesign.md](README_ArchDesign.md)
+- [ADRs/ADR_ArchitectureOnlyDesignPolicy.md](ADRs/ADR_ArchitectureOnlyDesignPolicy.md)
 - [SPEC_designUnitTests.md](../../slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md)
 - [UT_designFuncTestsSkeleton.md](../../slashCommands/commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md)
 - [CaTDD_designAndImplTemplate.ts](../../methodPrompts/CaTDD_designAndImplTemplate.ts)
@@ -23,11 +26,22 @@ This document captures module-scoped verification strategy and US/AC/TC traceabi
 - [UT_US-USER-01-Misuse.ts](tests/UT_US-USER-01-Misuse.ts) — 9 Misuse ACs (AC-21~AC-28, AC-32)
 - [UT_US-USER-01-Fault.ts](tests/UT_US-USER-01-Fault.ts) — 3 Fault ACs (AC-29~AC-31)
 
+## Current Lifecycle Status
+
+- Current lifecycle story: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md](../../.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md)
+- Current lifecycle tasks: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md](../../.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md)
+- Current lifecycle command: `/SPEC_reviewArchDesign`
+- Executable delegation bodies: 2
+- US-INVENTOR-01 is partially closed: AC-01 / TC-DELEGATE-001 is accepted DONE/GREEN evidence; AC-02 through AC-16 and TC-DELEGATE-002 through TC-DELEGATE-016 remain TODO/PLANNED under [US-INVENTOR-01-FOLLOWUP-01](../../.catdd/spec/todoUS/20260830-utCodeAgentCLI-US-INVENTOR-01-remaining-delegation-UserStory.md).
+- The separate `TC-DELEGATE-001-SYMLINK` executable body is current regression evidence but has no independent CaTDD TC identity; its reconciliation belongs to `US-UTCLI-REPAIR-01`.
+- Historical review sections below preserve the decisions that led to the partial closure. They are not current next-command guidance.
+- Current lifecycle work is US-SPECFLOW-REPAIR-01; the architecture-only policy supersedes its DetailDesign route and selects `SPEC_reviewArchDesign`.
+
 ## Testing Definition
 
 - SUT: `utCodeAgentCLI` module interface.
 - Active unit slice: asset resolution, invocation-local sessions, generic run-plan translation, delegation evidence, prepared-step runtime handoff, and safe trace projection.
-- Regression unit slice: CLI argument validation through `src/cli/main.ts` and `src/cli/invocationValidator.ts`.
+- Regression unit slice: CLI argument validation through `SrcTS/cli/main.ts` and `SrcTS/cli/invocationValidator.ts`.
 - UnitTesting verifies command-contract behavior and test-file trace structure at repository file scope.
 - ModuleTesting verifies `utCodeAgentCLI` preserves CaTDD method delegation and CLI validation behavior.
 - UserTesting remains outside this story unless the CLI execution surface is changed.
@@ -99,13 +113,13 @@ The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` sem
 - Companion documentation: all four `_readme.md` files match category ownership and counts.
 - Requirement review: PASS after canonical category assignments and verification summaries were synchronized.
 - TC selection: `TC-DELEGATE-001` selected by `UT_tellMeNextImplTest`.
-- RED implementation: PASS; one test runs and fails at the implementation keypoint for missing `src/catdd/behaviorRegistry.ts`.
+- RED implementation: PASS; one test runs and fails at the implementation keypoint for missing `SrcTS/catdd/behaviorRegistry.ts`.
 - TC-level structural review: PASS for two key assertions, four phases, cleanup, and metadata preservation.
 - Story-level implementation re-review: PASS; IMPL-REV-01 and IMPL-REV-02 are closed.
 - Product implementation: GREEN on correction attempt 1 for TC-DELEGATE-001 only.
-- Product-code review: UPDATE DESIGN with PROD-REV-01.
-- PROD-REV-01 detail design: updated on 2026-08-29; review pending.
-- Next lifecycle gate: `SPEC_reviewDetailDesign`.
+- Product-code review at that historical checkpoint: UPDATE DESIGN with PROD-REV-01.
+- PROD-REV-01 detail design was updated on 2026-08-29; later public-path evidence was accepted for AC-01 partial closure.
+- Broader canonical-session contract reconciliation is tracked separately by US-UTCLI-REPAIR-01.
 
 ## Selected Implementation Test
 
@@ -113,11 +127,11 @@ The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` sem
 - Trace: US-INVENTOR-01 / AC-01 / P0 Functional / ValidFunc / Typical.
 - Selection reason: all INV-01 TCs are PLANNED, Typical is the highest ready category, and no source-backed risk override changes the default order.
 - Dependency value: this slice establishes current prompt resolution and fake-runtime capture used by later provenance, ordering, and freshness tests.
-- Initial result: meaningful RED because `src/catdd/behaviorRegistry.ts` did not exist.
+- Initial result: meaningful RED because `SrcTS/catdd/behaviorRegistry.ts` did not exist.
 - Current status: GREEN; the other 15 INV-01 TCs remain PLANNED.
 - Correction evidence: behavior, planning, command resolution, prompt resolution, and run-plan translation are invoked once; the expected public path is no longer supplied to the run plan.
 - Module-scope evidence: the test and two support files are diagnostic-clean.
-- Product-code result: GREEN; product review is pending.
+- Product-code result: GREEN and accepted as the AC-01 partial-closure slice; broader session-contract review is not implied complete.
 
 ## Story-Level Implemented-Test Review
 
@@ -134,7 +148,7 @@ The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` sem
 - Applied by `SPEC_implUnitTests` on 2026-08-28.
 - IMPL-REV-01: corrected; the approved resolver chain derives all command and prompt assets before fake-runtime preparation.
 - IMPL-REV-02: corrected; type-only module markers remove all three redeclaration diagnostics without changing CommonJS execution.
-- Focused result: one test executes and remains RED for missing `src/catdd/behaviorRegistry.ts`.
+- Focused result: one test executes and remains RED for missing `SrcTS/catdd/behaviorRegistry.ts`.
 - TC-level correction review: PASS; one-TC scope, phases, keypoints, cleanup, metadata, and 1 RED / 15 PLANNED status are preserved.
 - Story-level status: re-review PASS; product-code implementation may begin for TC-DELEGATE-001 only.
 
@@ -144,7 +158,7 @@ The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` sem
 - US/AC/TC alignment: PASS; `designEdgeSkeleton` drives resolver-derived Edge prompt capture for US-INVENTOR-01 AC-01.
 - Assertions and phases: PASS; two keypoints are inside VERIFY and all four phases plus cleanup are explicit.
 - P0/status discipline: PASS; TC-DELEGATE-001 is the only RED and the other 15 TCs remain PLANNED.
-- RED evidence: PASS; one test fails at the first missing product module, `src/catdd/behaviorRegistry.ts`.
+- RED evidence: PASS; one test fails at the first missing product module, `SrcTS/catdd/behaviorRegistry.ts`.
 - Diagnostics: PASS; the test and support files have zero reported errors.
 - Companion README: PASS using `test-case-with-readme`; naming, required sections, status, grounding, and manual command are current.
 - Product review correlation: not applicable because no product code exists yet.
@@ -154,9 +168,9 @@ The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` sem
 ## Product Implementation Result
 
 - Target: US-INVENTOR-01 / AC-01 / TC-DELEGATE-001.
-- Permitted scope: `src/catdd/behaviorRegistry.ts`, `planner.ts`, `invocationAssetSession.ts`, `slashCommandResolver.ts`, `methodPromptResolver.ts`, and `agentRunPlanBuilder.ts`.
-- Initial RED: one test failed for missing `src/catdd/behaviorRegistry.ts`.
-- Focused validation: `node --test codeAgents/utCodeAgentCLI/tests/test_catdd_asset_delegation_funcValidTypical.ts`.
+- Permitted scope: `SrcTS/catdd/behaviorRegistry.ts`, `planner.ts`, `invocationAssetSession.ts`, `slashCommandResolver.ts`, `methodPromptResolver.ts`, and `agentRunPlanBuilder.ts`.
+- Initial RED: one test failed for missing `SrcTS/catdd/behaviorRegistry.ts`.
+- Focused validation: `node --test codeAgents/utCodeAgentCLI/SysTests/test_catdd_asset_delegation_funcValidTypical.ts`.
 - Correction attempts: 1 of 3; no follow-up correction was required.
 - Evaluation: GREEN; one focused test passes and 38 existing CLI regressions pass.
 - Delegation boundary: product code contains routing paths only; current method/command content is read from injected asset roots and translated into generic runtime inputs.
@@ -164,7 +178,7 @@ The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` sem
 - Stop reason: targeted GREEN reached without scope expansion.
 - Next command: `SPEC_reviewProductCodes`; after PASS, rerun `SPEC_reviewImplUnitTests`.
 
-## Product-Code Review Result
+## Historical Product-Code Review Result
 
 - Result: UPDATE DESIGN on 2026-08-28.
 - Passing evidence: TC-DELEGATE-001 and all 38 existing CLI regressions pass; product/test diagnostics and semantic-isolation checks pass.
@@ -187,8 +201,8 @@ The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` sem
 - Test-first correction: preserve TC-DELEGATE-001 and change its fake topology so `/workspace-link` canonicalizes to `/real/workspace`; the current product must become RED by emitting a root-labeled path before product correction.
 - Product correction after RED review: make `openAssetSession` return `Promise<InvocationAssetSession>`, retain canonical roots once per session, and use those roots for containment and projection.
 - Scope: no new user-story AC or TC; typed error and eager root-validation behavior remains with the existing PLANNED Fault/Misuse TCs.
-- Remaining risk: the current product and current GREEN fixture still reproduce PROD-REV-01 until the reviewed test-first correction sequence runs.
-- Next command: `SPEC_reviewDetailDesign`.
+- Later evidence corrected the workspace-relative public-path output, but the reviewed asynchronous session-opening and immutable-root contract remains tracked by US-UTCLI-REPAIR-01.
+- This section is historical and does not select the current lifecycle command.
 
 ## Parallel-Ready Implementation Handoff
 
@@ -206,7 +220,7 @@ The four test files can be implemented in parallel after shared fake-port interf
 The existing `US-USER-01` CLI validation tests must remain GREEN after any redesign:
 
 ```bash
-node --test codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Typical.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Edge.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Misuse.ts codeAgents/utCodeAgentCLI/tests/UT_US-USER-01-Fault.ts
+node --test codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts
 ```
 
 Expected result: all 38 executable USER-01 regression cases pass.
@@ -218,24 +232,24 @@ All executable `UT_US-USER-01` cases invoke `utCodeAgentCLI` as a subprocess. Th
 - Shared fake filesystem/runtime contracts must be frozen before parallel test implementation.
 - The V1 stable-filesystem assumption excludes concurrent adversarial topology mutation.
 - P1 Interaction and P2 Security remain deferred until source-backed ACs explicitly request promotion.
-- Product code must not begin until implemented tests are confirmed RED for the intended missing behavior.
+- Further canonical-session product work belongs to US-UTCLI-REPAIR-01 and must follow that story's test-first gates.
 
 ## Usage Example
 
-Run from the repository root to verify the INV-01 package has one GREEN test and 15 remaining PLANNED TCs:
+Run from the repository root to verify the INV-01 package has one metadata-bearing GREEN TC, 15 remaining PLANNED TCs, and two current executable test bodies:
 
 ```bash
 FILES=(
-  codeAgents/utCodeAgentCLI/tests/test_catdd_asset_delegation_funcValidTypical.ts
-  codeAgents/utCodeAgentCLI/tests/test_catdd_asset_delegation_funcValidEdge.ts
-  codeAgents/utCodeAgentCLI/tests/test_catdd_asset_delegation_funcInvalidMisuse.ts
-  codeAgents/utCodeAgentCLI/tests/test_catdd_asset_delegation_funcInvalidFault.ts
+  codeAgents/utCodeAgentCLI/SysTests/test_catdd_asset_delegation_funcValidTypical.ts
+  codeAgents/utCodeAgentCLI/SysTests/test_catdd_asset_delegation_funcValidEdge.ts
+  codeAgents/utCodeAgentCLI/SysTests/test_catdd_asset_delegation_funcInvalidMisuse.ts
+  codeAgents/utCodeAgentCLI/SysTests/test_catdd_asset_delegation_funcInvalidFault.ts
 )
 
 test "$(rg -o '@\[TC\]: TC-DELEGATE-[0-9]{3}' "${FILES[@]}" | sed 's/.*TC-DELEGATE/TC-DELEGATE/' | sort -u | wc -l | tr -d ' ')" -eq 16
 test "$(rg -c '@\[Status:PLANNED\]' "${FILES[@]}" | awk -F: '{sum += $2} END {print sum}')" -eq 15
 test "$(rg -c '@\[Status:GREEN\]' "${FILES[@]}" | awk -F: '{sum += $2} END {print sum}')" -eq 1
-test "$(rg -c '^test\(' "${FILES[@]}" | awk -F: '{sum += $2} END {print sum}')" -eq 1
+test "$(rg -c '^test\(' "${FILES[@]}" | awk -F: '{sum += $2} END {print sum}')" -eq 2
 ```
 
 Expected result: no output and exit code 0.
@@ -254,4 +268,4 @@ Expected result: no output and exit code 0.
 
 ## Next Step
 
-Run `/SPEC_reviewDetailDesign` to gate the PROD-REV-01 ownership and test-first correction design.
+Run `/SPEC_reviewArchDesign` to review the architecture-only policy and lifecycle-checker boundary before validator test design.

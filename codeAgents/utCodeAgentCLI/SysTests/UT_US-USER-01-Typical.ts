@@ -54,7 +54,7 @@ type InvocationResult = {
  *
  * RELATIONSHIPS:
  *   - User story: US-USER-01.
- *   - Production code: codeAgents/utCodeAgentCLI/src/cli/invocationValidator.ts.
+ *   - Production code: codeAgents/utCodeAgentCLI/SrcTS/cli/invocationValidator.ts.
  *   - Verification design: codeAgents/utCodeAgentCLI/README_VerifyDesign.md.
  *   - 32-AC spec redesign via UT_designFuncTestsSkeleton route.
  */
@@ -292,7 +292,7 @@ test("TC-ARG-006 verifyImplTestCase_byInputFileTargetTC_expectDispatchReady", ()
 		"--goal",
 		"implement the selected auth error test case",
 		"--inputFile",
-		"codeAgents/utCodeAgentCLI/tests/fixtures/AuthService.h",
+		"codeAgents/utCodeAgentCLI/SysTests/fixtures/AuthService.h",
 		"--target",
 		"tests/auth_api_test.cpp::TC-03",
 		"--behave",
@@ -317,7 +317,7 @@ test("TC-ARG-007 verifyImplTestFile_byInputFileTargetFile_expectDispatchReady", 
 		"--goal",
 		"implement all ready auth API test cases",
 		"--inputFile",
-		"codeAgents/utCodeAgentCLI/tests/fixtures/AuthService.h",
+		"codeAgents/utCodeAgentCLI/SysTests/fixtures/AuthService.h",
 		"--target",
 		"tests/auth_api_test.cpp",
 		"--behave",
@@ -369,13 +369,13 @@ test("TC-ARG-009 verifyDesignWithReference_byInputFileTargetBehaveRef_expectDisp
 		"--goal",
 		"design all skeletons for the auth interface",
 		"--inputFile",
-		"codeAgents/utCodeAgentCLI/tests/fixtures/AuthService.h",
+		"codeAgents/utCodeAgentCLI/SysTests/fixtures/AuthService.h",
 		"--target",
 		"tests/auth_api_test.cpp",
 		"--behave",
 		"designAllSkeleton",
 		"--reference",
-		"codeAgents/utCodeAgentCLI/tests/fixtures/api.md,codeAgents/utCodeAgentCLI/tests/fixtures/schema.md",
+		"codeAgents/utCodeAgentCLI/SysTests/fixtures/api.md,codeAgents/utCodeAgentCLI/SysTests/fixtures/schema.md",
 	]);
 
 	assert.equal(result.exitCode, 0);
@@ -396,15 +396,15 @@ test("TC-ARG-010 verifyDesignWithExtraPromptConfigDiag_byAllOptionalArgs_expectD
 		"--goal",
 		"design and implement auth interface tests",
 		"--inputFile",
-		"codeAgents/utCodeAgentCLI/tests/fixtures/AuthService.h",
+		"codeAgents/utCodeAgentCLI/SysTests/fixtures/AuthService.h",
 		"--target",
 		"tests/auth_api_test.cpp",
 		"--behave",
 		"designAndImplTest",
 		"--extra-prompt",
-		"codeAgents/utCodeAgentCLI/tests/fixtures/style-guide.md",
+		"codeAgents/utCodeAgentCLI/SysTests/fixtures/style-guide.md",
 		"--config-file",
-		"codeAgents/utCodeAgentCLI/tests/fixtures/config.yaml",
+		"codeAgents/utCodeAgentCLI/SysTests/fixtures/config.yaml",
 		"--diagMethodPrompts",
 		"--diagSlashCommands",
 	]);

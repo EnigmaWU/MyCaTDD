@@ -12,10 +12,36 @@
 - DEVELOPER requirements: [README_UserStory4DEVELOPER_ZH.md](README_UserStory4DEVELOPER_ZH.md)
 - CLI contract: [README_UsageDesign_ZH.md](README_UsageDesign_ZH.md)
 - Startup guide: [README_UserGuide_ZH.md](README_UserGuide_ZH.md)
+- Subproject context: [../../.catdd/spec/projectContext-utCodeAgentCLI.md](../../.catdd/spec/projectContext-utCodeAgentCLI.md)
+- Architecture-only policy: [ADRs/ADR_ArchitectureOnlyDesignPolicy.md](ADRs/ADR_ArchitectureOnlyDesignPolicy.md)
 - Method source of truth: [../../methodPrompts/](../../methodPrompts/)
 - Portable command source of truth: [../../slashCommands/](../../slashCommands/)
 
-`utCodeAgentCLI` 目前还不是可运行 binary。本文描述的是进入 detail design、unit-test design 或运行时实现之前的 production-ready 架构形态。
+`utCodeAgentCLI` 目前还不是可分发 binary。本文是进入 unit-test design 或 runtime implementation 前唯一的模块设计 authority。
+
+## Architecture-Only Documentation Policy
+
+- 模块 ownership、dependency direction、state/control models、architecture-significant interfaces 与 quality tradeoffs 统一保存在本 ArchDesign 及其 ZH mirror 中。
+- 长期 alternatives 与 decisions 记录在 `ADRs/`。
+- Public behavior 属于 UserStory/UserGuide/UsageDesign，verification mappings 属于 VerifyDesign/tests，可执行细节属于 `src/`。
+- 本模块不得创建 `README_DetailDesign*`，也不得把工作路由到这些文件。
+- `scripts/` 下的 repository lifecycle validation 可以检查模块 artifacts，但它不是 CLI product code，也不创建第二个 design authority。
+
+本 policy 覆盖旧的独立 DetailDesign 当前指导；历史记录只作为 evidence 保留。
+
+## Lifecycle Consistency Guard Boundary
+
+仓库可以提供 `scripts/check_utcodeagentcli_lifecycle_consistency.sh`，用于只读检查 `utCodeAgentCLI` lifecycle evidence。它是 repository validation adapter，不是 CLI product code。
+
+- Input：可选 `--repo-root PATH`，默认当前 repository。
+- Output：成功时 stdout 输出一条确定性结果；失败时 stderr 输出第一条 failure diagnostic。
+- Exit codes：`0` coherent、`1` lifecycle inconsistency、`2` checker invocation misuse。
+- Ownership：`scripts/` 拥有 checker；本 ArchDesign 只拥有其 boundary 与 constraints。
+- Safety：checker 不会写入、移动、stage 或 commit 被检查文件。
+- Verification：fixture-driven tests 拥有 parsing examples、lane combinations 与 diagnostic assertions。
+- Scope：partial-closure state、unfinished-scope ownership、current lifecycle links/commands、archive authority，以及 unresolved full-closure gates。
+
+精确 parsing mechanics 保留在 tests 与 implementation 中，不再创建第二份 design document。
 
 ## 架构决策：运行时语言
 
@@ -272,7 +298,7 @@ export interface AgentRunPlan {
 }
 ```
 
-精确 TypeScript types、error classes 与 module names 属于后续 detail design。
+精确 TypeScript types、error classes 与 module names 属于 source 和 tests；若它们约束 architecture，则通过 ArchDesign 或 ADR 更新。
 
 ### Auth/Audit/Auto/Hooks/Control Ports
 
@@ -431,12 +457,12 @@ Ownership 被刻意拆分：`catdd/` 在 planning 前验证 expected file state�
 | Add escalation threshold policy | Addressed | 已补充交互与非交互两种升级行为。 |
 | Add shell safety and sensitive-file policy | Addressed | 已补充 allowlist 执行与敏感路径保护策略。 |
 | Freeze story as design-oriented-only unless scope expands | Addressed | 本次仅做架构契约更新，未扩展实现范围。 |
-| Final numeric thresholds tuning by runtime evidence | Deferred | 当前默认值先用于架构门禁；后续在 detail design 与测试证据中校准。 |
+| Final numeric thresholds tuning by runtime evidence | Deferred | 当前默认值先用于架构门禁；后续通过测试证据与 ADR update 校准。 |
 
 ### Remaining Risks
 
 - Retry 与 loop 默认值可能仍需依据 CI/运行证据调整。
-- 不同 adapter 能力差异可能要求在 detail design 中补充按 adapter 的策略兼容说明。
+- 不同 adapter 能力差异可能要求在本 ArchDesign 或专门 ADR 中补充按 adapter 的策略兼容说明。
 - 敏感路径策略可能需要扩展到仓库特定的更多高风险路径。
 
 ## Dependencies
@@ -447,7 +473,7 @@ Ownership 被刻意拆分：`catdd/` 在 planning 前验证 expected file state�
 | `utCodeAgentCLI -> slashCommands` | Read-only/execute dependency | 运行 portable CaTDD behaviors。 | Command contract drift 需要 resolver diagnostics。 |
 | `utCodeAgentCLI -> AgentSDK` | Application 调用 generic runtime。 | 将 runtime adapters 排除在 CaTDD logic 之外。 | 如果 CaTDD terms 泄漏到 SDK，boundary 会模糊。 |
 | `AgentSDK -> RuntimeAdapter` | Interface dependency。 | 支持 raw TS、Copilot/MCP、OpenCode 与 future runtimes。 | Adapter mismatch 或 capability 不完整。 |
-| `TraceWriter -> filesystem` | Write dependency。 | 持久化 machine-readable run records。 | Trace paths 与 redaction policy 需要 detail design。 |
+| `TraceWriter -> filesystem` | Write dependency。 | 持久化 machine-readable run records。 | Trace paths 与 redaction policy 属于本 ArchDesign、ADRs 与 verification evidence。 |
 
 ## Key Decisions
 
@@ -539,7 +565,7 @@ Expected result：`diff` 不输出内容，并以 code 0 退出。
 
 ## Open Questions
 
-- `AgentSDK` 应先位于 `codeAgents/utCodeAgentCLI/src/agentsdk/`，还是 API 稳定后变成独立 package？
+- `AgentSDK` 应先位于 `codeAgents/utCodeAgentCLI/SrcTS/agentsdk/`，还是 API 稳定后变成独立 package？
 - Trace output 默认应写入 `codeAgents/utCodeAgentCLI/traces/`、`.catdd/traces/`，还是 user-configured path？
 - Copilot integration depth 首先需要哪一种：prompt-wrapper execution、MCP tools、VS Code extension integration，还是 GitHub Models usage？
 - OpenCode surface 首先需要哪一种：command adapter、provider abstraction、workflow compatibility，还是 shared agent runtime？
@@ -547,6 +573,6 @@ Expected result：`diff` 不输出内容，并以 code 0 退出。
 
 ## Next Step
 
-如果某个 story 会修改本架构，请先运行 `/SPEC_reviewArchDesign`，再进入 `/SPEC_takeDetailDesign`。
+如果某个 story 会修改本架构，请先运行 `/SPEC_reviewArchDesign`，再进入 CaTDD test design 或 implementation。
 
 如果某个 story 只是消费本架构，请继续执行该 story 自己计划中的下一条 SPEC 步骤，而不要把它当作 architecture trace owner。

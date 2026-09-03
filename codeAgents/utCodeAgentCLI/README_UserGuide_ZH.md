@@ -116,8 +116,7 @@ codeAgents/utCodeAgentCLI/
   README_UserStory_ZH.md
   README_ArchDesign.md
   README_ArchDesign_ZH.md
-  README_DetailDesign.md
-  README_DetailDesign_ZH.md
+  ADRs/
   README_UserGuide.md
   README_UserGuide_ZH.md
   README_UsageDesign.md
@@ -133,8 +132,8 @@ codeAgents/utCodeAgentCLI/
   checklists/
   traces/
   reflections/
-  src/
-  tests/
+  SrcTS/
+  SysTests/
 ```
 
 不要把生成的运行输出作为源码加入本目录。这里应保留可重复设计资产、模板和实现文件；本地运行日志或临时执行输出不应提交，除非它们成为明确的示例。
@@ -166,7 +165,7 @@ CLI 层应成为 CaTDD 从方法文本或提示词命令走向 native execution 
 1. 先留在本 UserGuide 中选择实践路径和可能的 `--behave`。
 2. 只有在 strict parser syntax、selector details 或完整错误规则很重要时，才打开 [README_UsageDesign_ZH.md](README_UsageDesign_ZH.md)。
 3. 当 module boundaries、adapter boundaries 或 AgentSDK separation 很重要时，打开 [README_ArchDesign_ZH.md](README_ArchDesign_ZH.md)。
-4. 当 TypeScript contracts、data schemas、state transitions、trace schema 或 implementation plan 很重要时，打开 [README_DetailDesign_ZH.md](README_DetailDesign_ZH.md)。
+4. 当 implementation constraints、state transitions、trace policy 或 module design 很重要时，打开 [README_ArchDesign_ZH.md](README_ArchDesign_ZH.md) 与相关 ADR；可执行细节保留在 `SrcTS/` 与 `SysTests/`。
 5. 只有在需要检查某个 `UT_*` behavior 背后的 portable command contract 时，才打开 `slashCommands/README_UserGuide_ZH.md`。
 6. 只有在需要 method meaning 时，才打开 `methodPrompts/README_UserGuide_ZH.md`；不要在这里重新定义 category semantics。
 7. 只有在需要层级 WHAT/WHY 背景时，才打开 [README.md](README.md)。
@@ -278,6 +277,8 @@ behavior names 使用的 category shorthand：P0 Functional 表示 Typical、Edg
 US-INVENTOR-01 通过 structured run-plan 或 fake-runtime capture 证明该边界。Captured evidence 包含 resolved asset paths、交给本次 run 的 current source content，以及有序的 `prompt-read` 与 `command-invocation` events。Generated test artifacts 属于 US-USER-02，不是证明 resolver delegation 的必要条件。
 
 US-INVENTOR-03 单独负责 `--diagMethodPrompts`、`--diagSlashCommands` 及其由 flags 控制的 stderr rendering。当 asset 缺失、为空、不可读、逃逸 configured root 或 file kind 错误时，invocation 必须停止，且不得使用 hardcoded semantic fallback。Method/CLI version negotiation 不属于本 behavior，保留为未来 compatibility work。本模块的 AC lifecycle status 由 [README_UserStoryStatus.md](README_UserStoryStatus.md) 追踪。
+
+当只有通过 review 的部分 scope 被接受时，dashboard 可以表示 partial closure。对于 US-INVENTOR-01，AC-01 为 DONE；AC-02 到 AC-16 仍由专门的 `US-INVENTOR-01-FOLLOWUP-01` lifecycle story 以 TODO 状态持有，不能因为 lifecycle story 已归档就推断它们已经完成。
 
 ## Usage Example
 

@@ -71,7 +71,7 @@ Terms here should stay consistent with:
 - [README_UserStory.md](README_UserStory.md)
 - [README_UsageDesign.md](README_UsageDesign.md)
 - [README_ArchDesign.md](README_ArchDesign.md)
-- [README_DetailDesign.md](README_DetailDesign.md)
+- [ADRs/](ADRs/)
 - [README_UserGuide.md](README_UserGuide.md)
 
 ## Why

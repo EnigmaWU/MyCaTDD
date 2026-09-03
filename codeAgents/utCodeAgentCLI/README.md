@@ -18,8 +18,8 @@ It is the repository's CaTDD-native agent concept:
 
 Implementation is now incremental rather than documentation-only:
 
-- `src/cli/main.ts` is a runnable Node.js entry point for the `US-USER-01` invocation-validation slice.
-- `src/cli/invocationValidator.ts` validates required arguments, exclusive pairs, supported behaviors, target shape, log levels, config shape, and referenced file paths.
+- `SrcTS/cli/main.ts` is a runnable Node.js entry point for the `US-USER-01` invocation-validation slice.
+- `SrcTS/cli/invocationValidator.ts` validates required arguments, exclusive pairs, supported behaviors, target shape, log levels, config shape, and referenced file paths.
 - The four CaTDD P0 functional test files under `tests/` verify all 32 `US-USER-01` acceptance criteria.
 - Planning, method-prompt and slash-command resolution, runtime adapters, command execution, trace persistence, and reflection remain design targets rather than implemented runtime capabilities.
 
@@ -52,7 +52,7 @@ It may target many programming languages, but it must preserve CaTDD's comment-a
 
 - Standalone user-story docs (`README_UserStory.md`, `README_UserStory_ZH.md`)
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
-- Architecture and detail design docs (`README_ArchDesign.md`, `README_DetailDesign.md`, and ZH mirrors)
+- Architecture design docs (`README_ArchDesign.md` and its ZH mirror) plus durable ADRs
 - TypeScript implementation slices under `src/`
 - CaTDD unit tests and fixtures under `tests/`
 - Planned CLI task entry prompts, goal templates, and execution checklists
@@ -78,11 +78,10 @@ Keep the documentation split clear:
 | File | Owns |
 | --- | --- |
 | `README.md` / `README_ZH.md` | WHAT this layer is and WHY it exists. |
-| `README_UserStory.md` / `README_UserStory_ZH.md` | WHO needs this layer, WHAT user value it should provide, and BDD acceptance criteria before detail design. |
+| `README_UserStory.md` / `README_UserStory_ZH.md` | WHO needs this layer, WHAT user value it should provide, and BDD acceptance criteria before design and test work. |
 | `README_UserStoryStatus.md` | Current acceptance-criteria lifecycle status across all CLI stories. |
 | `README_UbiLang.md` | Shared domain vocabulary (roles, states, category/tier terms, behavior naming) used across story/design/implementation docs. |
-| `README_ArchDesign.md` / `README_ArchDesign_ZH.md` | High-level module architecture, runtime adapter boundaries, AgentSDK separation, trace/audit/control design, and key trade-offs. |
-| `README_DetailDesign.md` / `README_DetailDesign_ZH.md` | TypeScript-facing contracts, data schemas, state transitions, error handling, implementation plan, and verification strategy. |
+| `README_ArchDesign.md` / `README_ArchDesign_ZH.md` and `ADRs/` | Sole module design authority: boundaries, runtime adapters, AgentSDK separation, trace/audit/control policy, architecture-significant implementation constraints, trade-offs, and durable decisions. |
 | `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW to design or use this layer today, WHO uses it, WHEN to work in it, WHERE future assets live, and a copy-exec `Usage Example`. |
 | `src/` / `tests/` | Incremental product implementation and executable CaTDD verification. |
 

@@ -7,7 +7,7 @@ analysis_mode: BRAINSTORM
 analysis_depth: detailed
 generated_todo_story:
   - `.catdd/spec/todoUS/20260830-utCodeAgentCLI-canonical-asset-session-repair-UserStory.md`
-  - `.catdd/spec/todoUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md`
+  - `.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md`
 project_story_ledger: `codeAgents/utCodeAgentCLI/README_UserStoryStatus.md`
 related_closed_story: `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md`
 
@@ -59,7 +59,7 @@ Read-only `/HARNESS_diagnoseProject` evidence for `codeAgents/utCodeAgentCLI` fo
 ## Generated Artifacts
 
 - `.catdd/spec/todoUS/20260830-utCodeAgentCLI-canonical-asset-session-repair-UserStory.md`
-- `.catdd/spec/todoUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md`
+- `.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md`
 
 ## Evidence References
 

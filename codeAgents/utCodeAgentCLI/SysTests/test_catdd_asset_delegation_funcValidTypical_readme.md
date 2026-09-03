@@ -16,14 +16,14 @@ PARTIAL / GREEN / DETAIL-DESIGN REVIEW PENDING. TC-DELEGATE-001 drives behavior,
 - Acceptance criteria: AC-01 through AC-04.
 - Test cases: TC-DELEGATE-001 through TC-DELEGATE-004.
 - Implemented scope: TC-DELEGATE-001 exercises behavior resolution, planning, session-backed command/prompt resolution, run-plan translation, and fake-runtime preparation.
-- Source: `README_UserStory4INVENTOR-01.md` and `README_DetailDesign.md`.
+- Source: `README_UserStory4INVENTOR-01.md`, `README_ArchDesign.md`, and relevant ADRs.
 
 ## Manual
 
 Run from the repository root:
 
 ```bash
-node --test codeAgents/utCodeAgentCLI/tests/test_catdd_asset_delegation_funcValidTypical.ts
+node --test codeAgents/utCodeAgentCLI/SysTests/test_catdd_asset_delegation_funcValidTypical.ts
 ```
 
 Expected result: TC-DELEGATE-001 passes; one test runs with zero failures.
@@ -38,7 +38,7 @@ Expected result: TC-DELEGATE-001 passes; one test runs with zero failures.
 - Product implementation: GREEN on correction attempt 1 with no test changes used to manufacture the result.
 - Product review: UPDATE DESIGN because public path projection mixes a canonical asset path with a non-canonical workspace root.
 - Detail-design correction: `InvocationAssetSession` owns asynchronous canonicalization and immutable canonical roots; review pending.
-- Next command: `/SPEC_reviewDetailDesign`.
+- Next command: follow the current active story; module design changes require `/SPEC_reviewArchDesign`.
 
 ## Product Implementation
 
