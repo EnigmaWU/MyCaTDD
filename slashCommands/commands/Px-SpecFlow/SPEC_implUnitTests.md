@@ -10,14 +10,32 @@ Implement selected CaTDD test cases for the active user story in test-first orde
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
-Example ReACT trace for a single-TC pass:
+### ReACT Execution
 
-1. `Reason`: The handoff lists P0 Functional TCs; Typical TC-001 is TODO with no dependencies.
-2. `Act`: Apply `UT_implTestCase` mechanics to implement TC-001 in RED stage.
-3. `Observe`: Implementation compiles; test runner shows expected RED.
-4. `Act`: Apply `UT_reviewImplTestCase` mechanics — implementation aligns with TC-001 skeleton.
-5. `Observe`: Review passes; no drift found.
-6. `Decide`: Recommend `SPEC_reviewImplUnitTests` before product-code work, or another `SPEC_implUnitTests` pass for the next TC.
+Repeat once per TC; the loop is priority locked to P0 Functional before any P1/P2 slice.
+
+1. **Thought** — From the handoff slices and skeleton review status, pick the next TC via `UT_tellMeNextImplTest`. Respect declared dependencies and category priority.
+2. **Action** — Implement that one TC via `UT_implTestCase` mechanics, then review it via `UT_reviewImplTestCase`.
+3. **Observation** — Confirm the test compiles and produces *meaningful* RED — failing for missing product behavior, not for a test defect, stale fixture, or environment error. A defective RED, or review drift against the skeleton, returns to **Action**.
+4. **Stop** — After each reviewed TC, decide: another pass for the next TC, or hand off to `SPEC_reviewImplUnitTests` before product-code work begins.
+
+### Worked Example
+
+Implementing the first TC from the design handoff:
+
+```text
+/SPEC_implUnitTests
+doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+tc_slices: TC-001 (Typical, P0, TODO)
+```
+
+Expected result:
+
+- **Thought**: the handoff lists P0 Functional TCs; Typical TC-001 is `TODO` with no dependencies → selected.
+- **Action**: `UT_implTestCase` mechanics applied; TC-001 written with strict `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phases.
+- **Observation**: first run fails on a missing fixture path, not on missing product behavior → that is a test defect, not meaningful RED → back to **Action** → fixture path corrected.
+- **Observation**: rerun now fails on the missing `gatewayPort` module → meaningful RED. `UT_reviewImplTestCase` finds no drift from the skeleton.
+- **Stop**: reported — `next_command = SPEC_reviewImplUnitTests` before product-code work, or another pass for TC-002.
 
 ## Inputs
 
@@ -81,10 +99,6 @@ The SPEC command owns story-level ordering and handoff to product-code implement
 - After implementation, run `UT_reviewImplTestCase` before proceeding to the next TC or `SPEC_reviewImplUnitTests`. If review finds implementation-skeleton drift, do not proceed until the drift is resolved: fix the implementation, revise the skeleton, or ask the developer.
 - Enforce strict phase layout for each selected TC: keep a visible 4-phase structure (`SETUP` -> `BEHAVIOR` -> `VERIFY` -> `CLEANUP`) and keep key assertions inside `VERIFY`.
 - Prefer `VERIFY_KEYPOINT_xyz` macros for key assertions; if macros are missing in this repository, add a compatibility mapping and keep `VERIFY_KEYPOINT_xyz` calls in the test body.
-
-## Prompt Template
-
-Ask the assistant to run an observable ReACT loop: reason about TC priority and skeleton review status, act by selecting (via `UT_tellMeNextImplTest`), implementing (via `UT_implTestCase`), and reviewing (via `UT_reviewImplTestCase`) one TC at a time, observe implementation quality and review alignment, then decide the next step. Preserve CaTDD skeleton metadata, respect P0-first ordering, keep unrelated test skeletons untouched, and recommend `SPEC_reviewImplUnitTests` before product-code implementation.
 
 ## Loop Guard
 

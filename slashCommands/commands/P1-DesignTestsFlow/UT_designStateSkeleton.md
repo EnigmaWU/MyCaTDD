@@ -6,6 +6,37 @@ Design a CaTDD State skeleton from a confirmed state design source and stable fu
 
 Use this command after P0 functional skeletons exist and the component has meaningful lifecycle, transition, ownership, or persistence behavior.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. P1 categories may not be invented from imagination — they must trace to a confirmed design source. The loop opens with a two-tier design-source gate, and closes by checking that each state transition is observable through functional behavior.
+
+### ReACT Execution
+
+Repeat until every state AC traces to both a design source and an observable behavior.
+
+1. **Thought** — Design-source gate first, in order: check project-root `README_StateDesign.md`; if absent, check whether `README_ArchDesign.md` contains a `State Design` chapter. If neither source exists, output a WARNING and ask the developer where the state design lives or stop before drafting the State skeleton. Then read the confirmed source and the functional skeletons for observable behavior links.
+2. **Action** — Draft only the State skeleton with the full `@[...]` metadata set, covering transitions, lifecycle boundaries, ownership, persistence, and recovery. Preserve unrelated categories.
+3. **Observation** — Check each AC names a transition the design source defines, and links to a functional scenario that makes it observable. A transition the source never defines is invented → back to **Thought**. Look for missing states, invalid transitions, ambiguous ownership, and lifecycle gaps.
+4. **Stop** — Exit when every AC is doubly traced. Recommend `UT_designCapabilitySkeleton`, `UT_designConcurrencySkeleton`, or `UT_reviewDesignTestsSkeleton`.
+
+### Worked Example
+
+Adding state coverage for the gateway adapter:
+
+```text
+/UT_designStateSkeleton
+feature_name: payment gateway connection lifecycle
+target_test_file: services/payment/SysTests/UT_Gateway.ts
+```
+
+Expected result:
+
+- **Thought**: `README_StateDesign.md` is absent → fall through to tier two → `README_ArchDesign.md` does contain a `State Design` chapter → gate passes on the second source. It defines `idle → connecting → ready → degraded → idle`.
+- **Action**: US-07 drafted with AC-18 (`connecting → ready` on successful handshake), AC-19 (`ready → degraded` on repeated timeout), AC-20 (`degraded → ready` on successful health probe).
+- **Observation**: a fourth AC asserted a direct `degraded → connecting` transition — the source defines no such edge → invented → back to **Thought** → dropped and raised as a design gap.
+- **Observation**: each remaining transition is observable through an existing Typical or Fault scenario → doubly traced.
+- **Stop**: three traced ACs, one design gap reported. Recommended `UT_reviewDesignTestsSkeleton`.
+
 ## Inputs
 
 - `interface_or_protocol_file`: API, protocol, header, schema, or behavior contract.
@@ -32,19 +63,6 @@ Use this command after P0 functional skeletons exist and the component has meani
 - A State design skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
 - US/AC/TC entries that focus on state transitions, lifecycle boundaries, ownership, persistence, or recovery.
 - Explicit links back to the functional scenarios that make the state behavior observable.
-
-## Prompt Template
-
-Ask the assistant to:
-
-1. Check whether project-root `README_StateDesign.md` exists before drafting any skeleton content.
-2. If `README_StateDesign.md` is missing, check whether project-root `README_ArchDesign.md` contains a `State Design` chapter.
-3. If neither source exists, output a WARNING and ask the developer where the state design lives or stop before drafting the State skeleton.
-4. Read the confirmed state design source, then read the functional skeletons for observable behavior links.
-5. Use the State method prompt as the category source of truth.
-6. Draft only the State skeleton and preserve unrelated categories.
-7. Identify missing states, invalid transitions, ambiguous ownership, or lifecycle gaps.
-8. Recommend whether to continue to `UT_designCapabilitySkeleton`, `UT_designConcurrencySkeleton`, or `UT_reviewDesignTestsSkeleton`.
 
 ## Conflict Guard
 

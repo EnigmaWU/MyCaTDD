@@ -10,7 +10,36 @@ HarnessKits tool-point command. This command validates an installed CaTDD harnes
 
 ## CoT Pattern
 
-**Checklist + ReACT** -- Validate fixed installation invariants first, then inspect failed checks to explain risk and next action. This command must keep verification read-only unless the developer explicitly asks for repair.
+**Linear** -- Direct execution. The Verification Checklist is a fixed set of installation invariants, so a complete run is deterministic: check each invariant, record the result, emit a PASS/WARN/FAIL verdict. There is no reasoning loop here by design — explaining *why* a check failed and ranking root causes belongs to `HARNESS_diagnoseInstallation`, which is the ReACT counterpart to this command.
+
+### Linear Execution
+
+Run these steps once, in order. Verification is read-only unless the developer explicitly asks for repair.
+
+1. Complete the Preflight Mapping Checklist. Stop and ask if the target path or adapter surface is unclear.
+2. Walk the Verification Checklist top to bottom: Core CaTDD Assets, Command Inventory, Adapter Surfaces, Wrapper Fidelity. Record every result, including passes.
+3. Apply `strict_mode` when set: missing optional docs, stale wrappers, and unexpected wrapper files become failures rather than warnings.
+4. Emit one verdict — `PASS`, `WARN`, or `FAIL` — with the exact failing paths.
+5. On `WARN` or `FAIL`, report `next_command = HARNESS_diagnoseInstallation`. Do not diagnose or repair here.
+
+### Worked Example
+
+Verifying a freshly installed project:
+
+```text
+/HARNESS_verifyInstallation
+target_project_repo: ~/work/acme-pay
+code_agent: copilot
+strict_mode: false
+```
+
+Expected result:
+
+1. Preflight prints target `~/work/acme-pay`, installed root `~/work/acme-pay/.catdd`, adapter `.github/prompts/`, mutation policy read-only.
+2. Core assets present. Command inventory: 40 portable commands found. Adapter surfaces: `.github/prompts/` present. Wrapper fidelity: 39 wrappers — `SPEC_makePlan.prompt.md` missing.
+3. `strict_mode` off, so the missing optional ZH doc stays a warning; the missing wrapper is still a failure.
+4. Verdict `FAIL`, failing path `.github/prompts/SPEC_makePlan.prompt.md`.
+5. Reported `next_command = HARNESS_diagnoseInstallation`. No root cause is ranked here — that is the diagnose command's job.
 
 ## Inputs
 
@@ -83,10 +112,6 @@ If the target path or adapter surface is unclear, stop and ask the developer.
   - `PASS`: use the installed CaTDD commands.
   - `WARN`: review optional or strict-mode findings before daily use.
   - `FAIL`: run or create `HARNESS_diagnoseInstallation` to identify root cause and repair options.
-
-## Prompt Template
-
-Ask the assistant to verify the installed CaTDD target project in read-only mode, compare portable command inventory against generated adapter surfaces, confirm `HARNESS_*` commands are installed and exposed correctly, and report a clear PASS/WARN/FAIL verdict with exact failing paths.
 
 ## Conflict Guard
 

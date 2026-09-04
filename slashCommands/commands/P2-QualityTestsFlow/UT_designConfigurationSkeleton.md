@@ -6,6 +6,37 @@ Design a CaTDD Configuration skeleton from project-root `README_DetailDesign.md`
 
 Use this command after P0 functional coverage exists and behavior depends on configuration state or supported configuration combinations.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. The gate here is precedence: configuration bugs come from unstated defaults and unresolved conflicts between sources. Every AC must state which configuration wins and why, or it is not testable.
+
+### ReACT Execution
+
+Repeat until every AC states a defined outcome for its configuration combination.
+
+1. **Thought** — Design-source gate first: check project-root `README_DetailDesign.md` exists. If it is missing, output a **WARNING** and stop before drafting anything. Then read it as the configuration design source and read existing skeletons for behavior links.
+2. **Action** — Draft only the Configuration skeleton with the full `@[...]` metadata set, covering default, explicit, unsupported, conflicting, and environment-specific behavior. Preserve unrelated categories.
+3. **Observation** — Check each AC names the resolved outcome: which default applies, which source wins on conflict, and which combinations are refused. An AC that asserts a precedence the design source never defines returns to **Thought** — report the gap instead of choosing a winner.
+4. **Stop** — Exit when every AC has a defined outcome. Recommend another P2 category or `UT_reviewQualityTestsSkeleton`.
+
+### Worked Example
+
+Adding configuration coverage:
+
+```text
+/UT_designConfigurationSkeleton
+feature_name: gateway selection configuration
+target_test_file: services/payment/SysTests/UT_Gateway.ts
+```
+
+Expected result:
+
+- **Thought**: `README_DetailDesign.md` exists → gate passes. It defines a default gateway, an env-var override, and refuses an empty gateway list.
+- **Action**: US-11 drafted with AC-28 (default applies when unset), AC-29 (env var overrides the file value), AC-30 (empty list is refused at startup).
+- **Observation**: a fourth AC asserted that a CLI flag beats the env var — the design source never defines that precedence → back to **Thought** → the precedence gap is reported rather than decided here.
+- **Observation**: AC-28..AC-30 each name a resolved outcome → gate passes.
+- **Stop**: three ACs with defined outcomes, one precedence gap reported. Recommended `UT_reviewQualityTestsSkeleton`.
+
 ## Inputs
 
 - `interface_or_protocol_file`: API, protocol, header, schema, or behavior contract.
@@ -32,18 +63,6 @@ Use this command after P0 functional coverage exists and behavior depends on con
 - A Configuration quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
 - US/AC/TC entries for default, explicit, unsupported, conflicting, or environment-specific configuration behavior.
 - Traceability to functional or design scenarios that vary by configuration.
-
-## Prompt Template
-
-Ask the assistant to:
-
-1. Check whether project-root `README_DetailDesign.md` exists before drafting any skeleton content.
-2. If `README_DetailDesign.md` is missing, output a WARNING and stop before drafting the Configuration skeleton.
-3. Read `README_DetailDesign.md` as the configuration design source, then read existing skeletons for behavior links.
-4. Use the Configuration method prompt as the category source of truth.
-5. Draft only the Configuration skeleton and preserve unrelated categories.
-6. Identify missing defaults, invalid combinations, environment assumptions, or configuration precedence gaps.
-7. Recommend whether to continue to another P2 category or `UT_reviewQualityTestsSkeleton`.
 
 ## Conflict Guard
 

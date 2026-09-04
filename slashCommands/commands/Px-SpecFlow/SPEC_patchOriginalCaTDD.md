@@ -8,6 +8,36 @@ Patch effective CaTDD meta-file improvements from an installed project back to t
 
 **ReACT** -- Reasoning + Acting. This command must inspect downstream modifications, evaluate whether they are portable and method-consistent, build an allowlisted patch, and report upstream-ready outcomes with explicit safety gates.
 
+### ReACT Execution
+
+Repeat per candidate change. Safety gates are checked before any file is touched.
+
+1. **Thought** — Pass the Branch Selection Gate and the Preflight Mapping Checklist first. Then, for each downstream modification, decide whether it is portable upstream or project-specific.
+2. **Action** — Add only portable, allowlisted paths to the patch, targeting the confirmed non-default `target_branch`. Honor `dry_run` when set.
+3. **Observation** — Check the direction is installed → original, that no business code, secret, or local-only trace entered the patch, and that generated adapter wrappers were not taken where portable sources exist. Any violation returns to **Thought** and the path is excluded.
+4. **Stop** — Exit when the inventory is final. Report included and excluded paths with rationale, conflict risks, and `next_command = SPEC_commitWorks` in the original repository.
+
+### Worked Example
+
+Patching improvements back upstream:
+
+```text
+/SPEC_patchOriginalCaTDD
+installed_project_repo: ~/work/acme-pay
+original_catdd_repo: ~/VSCode/MyCaTDD
+target_branch: patchOriginalCaTDD-20260904
+patch_scope_allowlist: slashCommands/, methodPrompts/
+dry_run: true
+```
+
+Expected result:
+
+- **Thought**: `target_branch` is non-default and matches the required `patchOriginalCaTDD-YYYYMMDD` pattern → gate passes. Preflight prints source `~/work/acme-pay/.catdd/slashCommands` → target `~/VSCode/MyCaTDD/slashCommands`, direction installed → original → confirmed.
+- **Action**: three candidates — an improved `UT_implTestCase.md`, a new project-specific `SPEC_deployToAcme.md`, and a regenerated Copilot wrapper.
+- **Observation**: `UT_implTestCase.md` is portable → included. `SPEC_deployToAcme.md` is acme-specific → excluded. The Copilot wrapper is generated and its portable source is already in the patch → excluded.
+- **Observation**: no secrets or business code present; allowlist held.
+- **Stop**: `dry_run` → preview only, 1 file included, 2 excluded with rationale. Reported `next_command = SPEC_commitWorks` after developer review.
+
 ## Inputs
 
 - `installed_project_repo`: project repository that already installed CaTDD and contains effective local modifications.
@@ -57,10 +87,6 @@ If path mapping is unclear, stop and ask the developer.
 - Patch artifact or equivalent commit-ready diff for `target_branch`.
 - Risk notes for conflicts, generated wrappers, and portability gaps.
 - Recommended next command: `SPEC_commitWorks` in the original CaTDD repository after review.
-
-## Prompt Template
-
-Ask the assistant to first resolve path mapping (`installed .catdd` -> `original PROJECT_ROOT` by default), inspect installed-project CaTDD modifications, keep only portable and effective upstream-worthy changes, generate an allowlisted patch toward the original CaTDD repository on a non-default branch, and report what was included or excluded.
 
 ## Conflict Guard
 

@@ -8,6 +8,32 @@ Refresh `.catdd/spec/projectContext.md` when project facts, constraints, convent
 
 **ReACT** — Reasoning + Acting. This command must inspect the change source, existing context, and canonical project artifacts; classify each candidate memory; apply the minimum source-backed update; compact when needed; and verify that assumptions remain separate from stable facts without losing provenance.
 
+### ReACT Execution
+
+Run this loop until the context file satisfies the Output Contract and the Context Budget.
+
+1. **Thought** — Read `change_source` and `projectContext_file`. Classify each candidate fact as `CORE`, `REFERENCE`, `OPERATIONAL`, `EPISODIC`, or `TRANSIENT` per the Memory Classification Rule. Use filesystem-backed lifecycle inventory before touching `SpecFlow Lifecycle State`.
+2. **Action** — Apply the minimum update: edit existing facts in place, link rather than copy `REFERENCE` material, and delete superseded wording per the Supersession Rule.
+3. **Observation** — Run `wc -l .catdd/spec/projectContext.md` against the Context Budget, and check that provenance survived and assumptions are still separated from confirmed rules. If over budget, compact per the Compaction Procedure and return to **Action**. If a fact lost its source, return to **Thought**.
+4. **Stop** — Exit when the file is within budget with no semantic loss. Report classifications applied, removals, and line count.
+
+### Worked Example
+
+After an architecture decision is recorded in an ADR, run:
+
+```text
+/SPEC_updateProjectContext
+projectContext_file: .catdd/spec/projectContext.md
+change_source: codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md
+```
+
+Expected result — one ReACT pass:
+
+- **Thought**: the chosen runtime is `CORE`; the rejected alternatives and their rationale are `REFERENCE` (they belong in the ADR, not the context file).
+- **Action**: the existing runtime line is updated in place as `CORE`, the ADR is linked as `REFERENCE`, and the superseded runtime wording is deleted.
+- **Observation**: `wc -l .catdd/spec/projectContext.md` is within the Context Budget and every kept fact still names its source → loop exits.
+- Reported: 1 `CORE` update, 1 `REFERENCE` link, 1 superseded line removed.
+
 ## Inputs
 
 - `projectContext_file`: existing project context.
@@ -107,22 +133,6 @@ Before completing the update, verify all of the following:
 - Assumptions and open questions are still clearly distinguished from confirmed facts.
 - The resulting context meets `context_budget`, or the over-budget exception and developer question are reported.
 - A second run with no new evidence would produce no change.
-
-## Prompt Template
-
-Ask the assistant to classify candidate memory as `CORE`, `REFERENCE`, `OPERATIONAL`, `EPISODIC`, or `TRANSIENT`; update existing facts in place; preserve provenance; compact to the context budget without semantic loss; separate assumptions from confirmed project rules; and use filesystem-backed lifecycle inventory before changing `SpecFlow Lifecycle State`.
-
-## Usage Example
-
-After an architecture decision is recorded in an ADR, run:
-
-```text
-/SPEC_updateProjectContext
-projectContext_file: .catdd/spec/projectContext.md
-change_source: codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md
-```
-
-Expected result: the active project-wide runtime constraint is updated once as `CORE` or linked as `REFERENCE`; alternatives and historical rationale remain in the ADR; superseded wording is removed; and the result reports `wc -l .catdd/spec/projectContext.md` against the context budget.
 
 ## Conflict Guard
 

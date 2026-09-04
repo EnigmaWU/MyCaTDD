@@ -8,6 +8,38 @@ Analyze an aborted user story, audit its preserved evidence, diagnose the abort 
 
 **ReACT** — Reasoning + Acting. This command must inspect the aborted story, its paired tasks, the abort reason, and any design/test/product evidence produced before the abort. It reasons about what was valid (preserve), what was invalid (reject), which parts of the story need correction, and which analysis SKILLs to selectively re-apply. When replacement intent is unclear, it surfaces questions instead of inventing requirements.
 
+### ReACT Execution
+
+Drive the Analysis Pipeline below with this loop. The point of the loop is selectivity — re-analyze only what the abort proves was wrong.
+
+1. **Thought** — From the abort evidence, name which parts of the original story are suspect and which are untouched by the abort cause.
+2. **Action** — Run the next pipeline step against the suspect parts only.
+3. **Observation** — Check the result:
+   - A rejection with no supporting evidence → return to **Thought**; do not reject valid work just because the story was aborted.
+   - Step 4's gates fail → stop and route out instead of forcing a corrected story.
+   - Replacement intent still unclear → record a question rather than inventing a requirement.
+4. **Stop** — Exit after Step 7. The aborted story in `.catdd/spec/abortUS/` must be byte-identical to how it started.
+
+### Worked Example
+
+The payment-retry story was aborted on a bad idempotency assumption:
+
+```text
+/SPEC_analyzeAbortedUserStory
+aborted_user_story: .catdd/spec/abortUS/20260904-payment-retry-UserStory.md
+aborted_tasks_file: .catdd/spec/abortUS/20260904-payment-retry-UserStory-Tasks.md
+```
+
+Expected result:
+
+- **Thought**: the abort names an `assumption-gap` about gateway idempotency. Role, business value, and AC-01..AC-03 were never implicated → not suspect.
+- **Action (Step 0-1)**: audit shows Phase 3 abort — tests and code exist. Classified **Assumption invalid**.
+- **Action (Step 2)**: preserved — role `merchant admin`, capability `bounded retry`, AC-01..AC-03, BR-1..BR-2.
+- **Action (Step 3)**: rejected — "gateway is idempotent", disproved by `TC-RETRY-009`.
+- **Observation**: a first draft also rejected AC-02, but nothing in the abort evidence touches AC-02 → over-correction → back to **Thought** → AC-02 restored to the preserved list.
+- **Action (Step 5)**: only `extract-business-rules` and `validate-requirements-criteria` re-applied, scoped to the idempotency rule. The feature tree and prioritization are **not** redone.
+- **Stop**: corrected story written to `.catdd/spec/todoUS/` with an **Abort Evidence** section; `abortUS/` copy untouched.
+
 ## Inputs
 
 - `aborted_user_story`: aborted story under `.catdd/spec/abortUS/`.
@@ -31,9 +63,9 @@ Analyze an aborted user story, audit its preserved evidence, diagnose the abort 
 - The story follows `SpecTodoUserStoryTemplate.md` structure and includes the optional **Abort Evidence** section documenting the abort diagnosis.
 - Explicit documentation of what was kept (valid) and what was rejected (invalid) from the original story.
 
-## Prompt Template
+## Analysis Pipeline
 
-Apply the selective evidence-based pipeline below. The story was already analyzed before — only re-apply SKILLs to the parts that the abort proves needed correction. Use `SpecTodoUserStoryTemplate.md` for the final output, including the **Abort Evidence** section.
+Apply the selective evidence-based pipeline below, driven by the ReACT Execution loop. The story was already analyzed before — only re-apply SKILLs to the parts that the abort proves needed correction. Use `SpecTodoUserStoryTemplate.md` for the final output, including the **Abort Evidence** section.
 
 ### Step 0 — Audit: Read all available evidence
 Read all sources: the aborted story (`abortUS/*-UserStory.md`), its paired tasks (`abortUS/*-UserStory-Tasks.md`), project context, and any related documents (design specs, test files, review notes, test output, code fragments). Determine the lifecycle phase at abort (Phase 1 opened only, Phase 2 designed, or Phase 3 implemented) and what evidence exists at each level.

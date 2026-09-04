@@ -8,6 +8,38 @@ Analyze a pending feature request, enhancement, or imported structured user-stor
 
 **ReACT** — Reasoning + Acting. This command must inspect the raw feature or user-story input, reason about user value, actor, and outcome, draft a lifecycle-ready user story, and verify it against quality criteria before accepting the output. When inputs are ambiguous or incomplete, the reasoning loop surfaces questions instead of inventing requirements.
 
+### ReACT Execution
+
+The Analysis Pipeline below is not a straight run — wrap it in this loop.
+
+1. **Thought** — Identify which pipeline step is next and whether its inputs actually exist in the source. Never substitute a missing input with an invented one.
+2. **Action** — Run that single pipeline step.
+3. **Observation** — Inspect what the step produced:
+   - Step 1 says oversized → propose a split and restart at Step 1 with the first slice.
+   - Steps 4, 5, or 7 produced open questions → record them and continue; do not fill the gap.
+   - Step 2 lacks role, capability, or business value → stop and ask the developer.
+4. **Stop** — Exit after Step 9. If any Initial Acceptance Question is still open, mark the story NOT ready; it may not proceed to `SPEC_openUserStory`.
+
+### Worked Example
+
+A feature request is analyzed into a story:
+
+```text
+/SPEC_analyzeFeature
+pending_feature: .catdd/spec/pendingNews/20260904-per-merchant-retry-cap-Feature.md
+projectContext_file: .catdd/spec/projectContext.md
+```
+
+Expected result:
+
+- **Thought/Action/Observation (Step 1)**: the request touches retry policy, merchant config, and the admin UI — 3 functional areas → borderline. Feature tree gives L1 `retry policy` / L2 `per-merchant override`. Admin UI is split out as a follow-up → restart Step 1 on the first slice → now single-area, passes.
+- **Step 2**: role `merchant admin`, capability `cap retry attempts`, value `avoid duplicate charges on non-idempotent endpoints` → all three present, no stop.
+- **Step 3**: 1 happy + 1 alternate (cap = 0) + 2 error (cap above system max, cap not numeric) = 4 scenarios.
+- **Step 5**: implied rule — "cap must not exceed the system-wide max" — but the max is never stated. Flagged as a question. **Not** guessed.
+- **Step 7**: source says retries should stop "quickly" → flagged: "Is 'quickly' a time bound or an attempt bound?" No threshold substituted.
+- **Step 8**: BV 7, UV 8, Cost 3, Risk 2 → score 3.0.
+- **Step 9**: written to `.catdd/spec/todoUS/`, raw feature archived to `analyzedNews/`. Two questions remain open → story marked **NOT ready**; it cannot proceed to `SPEC_openUserStory` until they are answered.
+
 ## Inputs
 
 - `pending_feature`: feature or imported user-story file under `.catdd/spec/pendingNews/`.
@@ -29,9 +61,9 @@ Analyze a pending feature request, enhancement, or imported structured user-stor
 - Source trace from the user story back to the archived raw input artifact.
 - The story follows `SpecTodoUserStoryTemplate.md` structure, with each section tracing to its source analysis technique.
 
-## Prompt Template
+## Analysis Pipeline
 
-Apply the pipeline below. Each step summarizes the key technique; `(→ SKILL: name)` marks the source for more detail. Use `SpecTodoUserStoryTemplate.md` for the final output.
+Apply the pipeline below, driven by the ReACT Execution loop. Each step summarizes the key technique; `(→ SKILL: name)` marks the source for more detail. Use `SpecTodoUserStoryTemplate.md` for the final output.
 
 ### Step 1 — Is this story too big?
 Inspect the pending feature. If it spans >3 functional areas or would need >7 acceptance scenarios, it may need splitting. Group into L1 areas → L2 groups → L3 features. Propose a split before continuing. `(→ SKILL: build-feature-tree)`

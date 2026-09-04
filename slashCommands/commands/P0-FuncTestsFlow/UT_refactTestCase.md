@@ -6,6 +6,39 @@ Refactor one already implemented CaTDD test case after it is GREEN, while preser
 
 Use this command after `UT_reviewImplTestCase` passes and the selected TC needs readability, structure, naming, setup, cleanup, or assertion clarity improvements without changing coverage intent.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. Refactor is only safe if each change is proven not to have changed behavior. This command must clean one TC, then check GREEN and coverage equivalence — that check is the loop's back-edge, and a discovered design gap is a hard stop rather than an invitation to expand the TC.
+
+### ReACT Execution
+
+Repeat for the one selected TC only.
+
+1. **Thought** — Confirm the selected TC is already implemented and GREEN via `verification_result`. Locate it and its linked US/AC. Decide the smallest cleanup that serves `refactor_goal`.
+2. **Action** — Refactor only that TC body and the local helpers it directly requires.
+3. **Observation** — Rerun the focused TC and relevant regression scope. Check the TC is still GREEN, the US/AC/TC comments, category/priority/source/status markers are intact, the `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` layout survives, and `VERIFY_KEYPOINT_xyz` assertions are preserved. Any loss returns to **Action** and is reverted. If missing behavior, missing assertions, wrong category, or new coverage is discovered, **stop** and report a design gap — do not absorb it.
+4. **Stop** — Exit when the TC is GREEN before and after with no coverage change. Report before/after evidence and recommend `UT_reviewImplTestCase`.
+
+### Worked Example
+
+Cleaning up a GREEN TC:
+
+```text
+/UT_refactTestCase
+selected_tc: TC-002 verifyAuthorize_byValidCard_expectApproved
+test_file: services/payment/SysTests/UT_Gateway.ts
+verification_result: GREEN (12 passing)
+refactor_goal: remove duplicated setup
+```
+
+Expected result:
+
+- **Thought**: TC-002 is GREEN. Its card fixture setup is duplicated from TC-001 → extract a local helper. Scope is TC-002's body only.
+- **Action**: helper extracted, assertion names clarified.
+- **Observation**: rerun is GREEN, but the extracted helper also absorbed a `VERIFY_KEYPOINT_authorizeApproved` check that TC-002 owned → key assertion lost from `VERIFY` → back to **Action** → reverted, helper limited to setup only.
+- **Observation**: rerun GREEN, all markers and the 4-phase layout intact, coverage unchanged.
+- **Stop**: before GREEN / after GREEN recorded. TC-001 was left untouched. Recommended `UT_reviewImplTestCase`.
+
 ## Inputs
 
 - `selected_tc`: TC identifier and name.
@@ -28,19 +61,6 @@ Use this command after `UT_reviewImplTestCase` passes and the selected TC needs 
 - No behavior, API, contract, acceptance-criteria, or observable state change.
 - Before/after verification evidence, or a clear reason verification could not be run.
 - Recommendation: keep, run `UT_reviewImplTestCase`, select next TC, route back to `SPEC_designUnitTests`, or ask the developer.
-
-## Prompt Template
-
-Ask the assistant to:
-
-1. Confirm the selected TC is already implemented and GREEN.
-2. Locate the selected TC and its linked US/AC.
-3. Refactor only the selected TC body and directly required local helpers.
-4. Preserve comment-alive traceability, status markers, and strict 4-phase implementation layout.
-5. Improve clarity without changing the TC purpose, expected behavior, coverage intent, or acceptance meaning.
-6. Stop and report a design gap if missing behavior, missing assertions, wrong category, or new coverage is discovered.
-7. Rerun the focused TC and relevant regression scope when available.
-8. Recommend `UT_reviewImplTestCase` after the refactor.
 
 ## Conflict Guard
 

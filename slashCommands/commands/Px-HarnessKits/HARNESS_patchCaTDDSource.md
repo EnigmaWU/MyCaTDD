@@ -12,6 +12,33 @@ HarnessKits tool-point command. This command maintains CaTDD source, installed c
 
 **ReACT** -- Reasoning + Acting. This command must inspect downstream modifications, evaluate whether they are portable and method-consistent, build an allowlisted patch, and report upstream-ready outcomes with explicit safety gates.
 
+### ReACT Execution
+
+Repeat per candidate change. Safety gates run before any file is touched.
+
+1. **Thought** — Complete the Preflight Mapping Checklist first. Then, for each downstream modification, decide whether it is portable to the CaTDD source or specific to the installed project.
+2. **Action** — Add only portable, allowlisted paths to the patch, targeting the confirmed non-default branch.
+3. **Observation** — Verify the direction is installed → source, that no project business code, secret, or local-only trace entered the patch, and that generated wrappers were not taken where their portable sources exist. Any violation returns to **Thought** and the path is excluded.
+4. **Stop** — Exit when the inventory is final. Report included and excluded paths with rationale, plus conflict risks.
+
+### Worked Example
+
+Pushing a local command improvement back to the CaTDD source:
+
+```text
+/HARNESS_patchCaTDDSource
+installed_project_repo: ~/work/acme-pay
+catdd_source_repo: ~/VSCode/MyCaTDD
+patch_scope_allowlist: slashCommands/
+```
+
+Expected result:
+
+- **Thought**: preflight prints source `~/work/acme-pay/.catdd/slashCommands` → target `~/VSCode/MyCaTDD/slashCommands`, direction installed → source → confirmed. Three local modifications found.
+- **Action**: an improved `UT_reviewImplTestCase.md` is portable → included.
+- **Observation**: a second change hardcodes `acme-pay` paths → not portable → back to **Thought** → excluded. A third is a regenerated Copilot wrapper whose portable source is already included → excluded.
+- **Stop**: 1 included, 2 excluded with rationale; no secrets or business code present.
+
 ## Inputs
 
 - `installed_project_repo`: project repository that already installed CaTDD and contains effective local modifications.
@@ -51,10 +78,6 @@ If path mapping is unclear, stop and ask the developer.
 - Patch artifact or equivalent commit-ready diff for `target_branch`.
 - Risk notes for conflicts, generated wrappers, portability gaps, and local-only traces.
 - Recommended next action: review and commit the diff in `catdd_source_repo`, or return to the active SPEC command if this tool was invoked inside a story workflow.
-
-## Prompt Template
-
-Ask the assistant to first resolve path mapping (`installed .catdd` -> `CaTDD source PROJECT_ROOT` by default), inspect installed-project CaTDD modifications, keep only portable and effective upstream-worthy changes, generate an allowlisted patch toward the CaTDD source repository on a non-default branch, and report what was included or excluded.
 
 ## Conflict Guard
 

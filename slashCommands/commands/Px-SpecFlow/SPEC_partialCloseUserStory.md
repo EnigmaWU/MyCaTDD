@@ -10,6 +10,47 @@ This command is the explicit bridge between `SPEC_closeUserStory` and `SPEC_abor
 
 **Linear** — Direct execution. Given an active user story, an accepted-scope summary, and a rejected-scope summary with explicit reasons, this command moves accepted work to the close lane and moves rejected work to the abort lane while preserving evidence, trace links, and the story's original rationale.
 
+### Linear Execution
+
+Run these steps once, in order. There is no retry loop; a failed split validation stops and asks the developer.
+
+1. Validate there is exactly one active target story in `.catdd/spec/doingUS/` for the selected story ID.
+2. Capture `accepted_scope` and `rejected_scope` in explicit structured form. If `accepted_scope` is empty or not materially valid, stop and fall back to `SPEC_abortUserStory`.
+3. Confirm the accepted slice is verified and reviewable. Never close a rejected slice as accepted.
+4. Move the accepted slice into the close lane and record its close evidence.
+5. Move the rejected slice into the abort lane with its `rejection_reason` and `evidence_refs` preserved.
+6. Synchronize `README_UserStories.md` so accepted ACs show DONE and rejected ACs show the abort state.
+7. Verify no duplicate same-ID story remains across the doing, done, and abort lanes.
+8. Record `followup_intent` for the rejected side and report the next command per lane.
+
+### Worked Example
+
+Three of four ACs shipped; the fourth turned out to rest on a bad assumption:
+
+```text
+/SPEC_partialCloseUserStory
+doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+accepted_scope:
+  accepted_summary: AC-01..AC-03 bounded retry with exponential backoff
+  accepted_evidence: 38/38 GREEN; commit a1b2c3d
+rejected_scope:
+  rejected_summary: AC-04 automatic retry of partially-settled charges
+  rejection_reason: assumption-gap
+  evidence_refs: SysTests/UT_Retry-Fault.ts (TC-RETRY-009 FAILS)
+  followup_intent: SPEC_importIssue
+```
+
+Expected result:
+
+1. Exactly one active story matches → check passes.
+2. Both scopes structured; `accepted_scope` is materially valid → no fallback to abort.
+3. AC-01..AC-03 carry passing evidence → accepted slice is closeable.
+4. Accepted slice written to `.catdd/spec/doneUS/` with commit `a1b2c3d`.
+5. Rejected slice written to `.catdd/spec/abortUS/` keeping the failing test reference verbatim.
+6. Ledger: AC-01..AC-03 DONE, AC-04 marked aborted — not silently dropped.
+7. Story ID present in `doneUS` and `abortUS` as a declared split, absent from `doingUS` → normalized.
+8. Reported: accepted lane complete; rejected lane `next_command = SPEC_importIssue`.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
@@ -53,21 +94,6 @@ This command is the explicit bridge between `SPEC_closeUserStory` and `SPEC_abor
   - `SPEC_closeUserStory` for the accepted slice after review/verification is complete.
   - `SPEC_analyzeAbortedUserStory` for the rejected slice when the team should reuse the preserved evidence.
   - `SPEC_importIssue` when the rejected slice should become a fresh improvement input.
-
-## Execution Checklist
-
-1. Validate there is exactly one active target story in `.catdd/spec/doingUS/` for the selected story ID.
-2. Capture `accepted_scope` and `rejected_scope` in explicit structured form.
-3. Confirm the accepted slice is valid and reviewable; do not close a rejected slice as accepted.
-4. Move the accepted story slice into the close lane and record close evidence.
-5. Move the rejected story slice into the abort lane and preserve evidence.
-6. Verify no duplicate same-ID story remains across doing, done, and abort lanes.
-7. Record `followup_intent` for the rejected side.
-8. Recommend the next command for each remaining lane.
-
-## Prompt Template
-
-Ask the assistant to split the active story into accepted and rejected scope, preserve the rejected evidence in `.catdd/spec/abortUS/`, close only the valid accepted work, and keep the story trace intact without silently discarding the rejected portion.
 
 ## Conflict Guard
 

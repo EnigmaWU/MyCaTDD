@@ -31,7 +31,35 @@ Do not invoke `HARNESS_diagnoseProject` when:
 
 ## CoT Pattern
 
-**Observe -> Classify -> Rank -> Recommend** — inspect evidence, classify it into correctness, consistency, and SpecCoding drift, rank likely risks, and recommend the smallest next action.
+**ReACT** — Reasoning + Acting. Inspect evidence, classify it into correctness, consistency, and SpecCoding drift, rank likely risks, and recommend the smallest next action. When the evidence does not separate a real risk from a false positive, the loop gathers one more read-only signal instead of guessing.
+
+### ReACT Execution
+
+Repeat until every finding is classified with traceable evidence.
+
+1. **Thought** — From the current evidence, name the candidate risks and which Risk Catalog bucket each would land in.
+2. **Action** — Run the next read-only inspection from the Diagnosis Workflow. This command never repairs; it only observes and recommends.
+3. **Observation** — Classify each finding into `correctness-risk`, `consistency-risk`, `speccoding-drift`, `deadloop-risk`, or `healthy`. A finding that cannot cite a file, lane, or verification signal is unproven → return to **Thought** for one more signal, or drop it.
+4. **Stop** — Exit when findings are ranked by severity and traceability. Recommend the smallest next command per risk.
+
+### Worked Example
+
+A health check on a repository mid-flow:
+
+```text
+/HARNESS_diagnoseProject
+target_project_root: ~/work/acme-pay
+```
+
+Expected result:
+
+- **Thought**: candidates — README mirrors may have drifted (consistency), and `doingUS/` has a story that also appears in `doneUS/` (consistency or a stale copy).
+- **Action**: read-only inspection of lane contents and mirror headings.
+- **Observation**: EN/ZH heading counts match → `healthy`, candidate dropped. The duplicate story ID is real and cited by path → `consistency-risk`.
+- **Thought**: the tasks file shows `SPEC_updateUserStory → SPEC_reviewUserStory` three times with identical findings → possible `deadloop-risk`.
+- **Action**: compare the story file across the three passes for changed evidence.
+- **Observation**: the story is byte-identical between passes 2 and 3 → no progress → `deadloop-risk` confirmed and traceable.
+- **Stop**: two findings ranked — `deadloop-risk` first → route to `SPEC_abortUserStory` or `ASK`, never a fourth retry; `consistency-risk` second → remove the stale `doingUS` copy. No repair performed by this command.
 
 ## Inputs
 
@@ -123,10 +151,6 @@ If the target path or evidence base is unclear, stop and ask the developer.
   - `no_action_required` when the project is healthy
 - Non-blocking learning checkpoint:
   - if evidence supports a reusable improvement, report `learning_command = /HARNESS_evolveHarness` and keep it non-blocking
-
-## Prompt Template
-
-Ask the assistant to inspect the repository and classify project health across correctness, consistency, and SpecCoding discipline, ranking risks and recommending the smallest next command without modifying source unless a repair step is explicitly approved.
 
 ## Conflict Guard
 

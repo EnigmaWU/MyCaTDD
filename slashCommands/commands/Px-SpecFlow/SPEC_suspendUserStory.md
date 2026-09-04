@@ -8,6 +8,48 @@ Suspend an active user story when work must pause, while preserving a durable re
 
 **Linear** -- Direct execution. Given a selected active story and a suspend reason, this command moves the active story and its paired task artifact from `.catdd/spec/doingUS/` to `.catdd/spec/suspendUS/` and records a durable git resume reference.
 
+### Linear Execution
+
+Run these steps once, in order. There is no retry loop; any failed check stops and asks the developer.
+
+1. Require an explicit `suspend_reason`. Stop if absent.
+2. Require a durable `resume_ref` — branch or worktree per the Resume Reference Guidance. Stop if only a dirty working tree or a stash-only reference is available for work that must be resumed.
+3. Checkpoint the work: commit on the resume branch, and push when team handoff is expected.
+4. Move the story and its paired tasks artifact from `doingUS` to `suspendUS`, preserving source trace.
+5. Record `suspend_reason` and `resume_ref` in the suspended artifact.
+6. Verify the story ID no longer appears under `doingUS`.
+7. Report the suspended paths and `next_command = SPEC_resumeUserStory`.
+
+### Worked Example
+
+Work must pause for an urgent production fix:
+
+```text
+/SPEC_suspendUserStory
+doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+suspend_reason: Paused for P0 incident INC-4471; resuming after the incident closes.
+resume_ref: us-123-suspend
+working_tree_state: uncommitted changes in services/payment/retry.ts
+```
+
+Expected result:
+
+1. `suspend_reason` present → check passes.
+2. `resume_ref` is a branch name, not a stash → check passes.
+3. Uncommitted changes detected, so the work is checkpointed first:
+
+```bash
+git switch -c us-123-suspend
+git add -A
+git commit -m "wip: suspend US-123 at current checkpoint"
+git push -u origin us-123-suspend
+```
+
+4. Story and tasks moved to `.catdd/spec/suspendUS/`.
+5. Reason and `us-123-suspend` recorded in the suspended artifact.
+6. ID absent from `doingUS` → verified.
+7. Reported: `next_command = SPEC_resumeUserStory`.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
@@ -44,10 +86,6 @@ git push -u origin us-123-suspend
 - Recorded `resume_ref` under the suspended story so the next developer can resume deterministically.
 - Local `.catdd/spec/doingUS/` active work state removed after the suspended artifact is created.
 - Next recommended command: `SPEC_resumeUserStory`.
-
-## Prompt Template
-
-Ask the assistant to suspend the selected active story into `.catdd/spec/suspendUS/`, preserve full traceability, record a durable git resume reference, and avoid mutating product intent.
 
 ## Conflict Guard
 

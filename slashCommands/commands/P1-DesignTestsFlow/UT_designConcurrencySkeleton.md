@@ -6,6 +6,37 @@ Design a CaTDD Concurrency skeleton from project-root `README_ResourceDesign.md`
 
 Use this command after P0 functional skeletons exist and the component can be called concurrently, scheduled asynchronously, interrupted, canceled, or accessed from multiple owners.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. P1 categories may not be invented from imagination — they must trace to a confirmed design source. The loop opens with a hard design-source gate, and closes by checking that each concurrency risk is actually observable rather than theoretical.
+
+### ReACT Execution
+
+Repeat until every concurrency AC traces to both a design source and an observable behavior.
+
+1. **Thought** — Design-source gate first: check project-root `README_ResourceDesign.md` exists. If it is missing, output a **WARNING**, ask the developer where the concurrency/resource design lives, and stop before drafting anything. Then read it as the resource and contention design source and read the functional skeletons for observable behavior links.
+2. **Action** — Draft only the Concurrency skeleton with the full `@[...]` metadata set, covering ordering, interleaving, reentrancy, cancellation, shared ownership, and synchronization. Preserve unrelated categories.
+3. **Observation** — Check each AC traces to a stated resource/ownership rule and is observable through a functional scenario. An AC describing a race the design source never permits is invented → back to **Thought**. Look for missing ordering rules, race risks, lock ownership gaps, and async lifecycle conflicts.
+4. **Stop** — Exit when every AC is doubly traced. Recommend `UT_designStateSkeleton`, `UT_designCapabilitySkeleton`, or `UT_reviewDesignTestsSkeleton`.
+
+### Worked Example
+
+Adding concurrency coverage for the gateway adapter:
+
+```text
+/UT_designConcurrencySkeleton
+feature_name: payment gateway routing
+target_test_file: services/payment/SysTests/UT_Gateway.ts
+```
+
+Expected result:
+
+- **Thought**: `README_ResourceDesign.md` exists → gate passes. It states the connection pool is shared and that an in-flight authorize may be canceled.
+- **Action**: US-06 drafted with AC-15 (concurrent authorizes do not share a connection), AC-16 (canceling an in-flight authorize releases its connection), AC-17 (reentrant capture is rejected).
+- **Observation**: a fourth AC asserted ordering guarantees between two independent authorizes — the design source explicitly makes ordering unspecified → asserting it would invent a contract → back to **Thought** → dropped and raised as a design question.
+- **Observation**: AC-16's release is observable via the pool counter used in the Fault scenarios → doubly traced.
+- **Stop**: three traced ACs, one design question. Recommended `UT_reviewDesignTestsSkeleton`.
+
 ## Inputs
 
 - `interface_or_protocol_file`: API, protocol, header, schema, or behavior contract.
@@ -32,18 +63,6 @@ Use this command after P0 functional skeletons exist and the component can be ca
 - A Concurrency design skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
 - US/AC/TC entries for ordering, interleaving, reentrancy, cancellation, shared ownership, or synchronization behavior.
 - Traceability to functional and design scenarios that make concurrency risk observable.
-
-## Prompt Template
-
-Ask the assistant to:
-
-1. Check whether project-root `README_ResourceDesign.md` exists before drafting any skeleton content.
-2. If `README_ResourceDesign.md` is missing, output a WARNING and ask the developer where the concurrency/resource design lives or stop before drafting the Concurrency skeleton.
-3. Read `README_ResourceDesign.md` as the resource and contention design source, then read the functional skeletons for observable behavior links.
-4. Use the Concurrency method prompt as the category source of truth.
-5. Draft only the Concurrency skeleton and preserve unrelated categories.
-6. Identify missing ordering rules, race risks, lock ownership gaps, or async lifecycle conflicts.
-7. Recommend whether to continue to `UT_designStateSkeleton`, `UT_designCapabilitySkeleton`, or `UT_reviewDesignTestsSkeleton`.
 
 ## Conflict Guard
 

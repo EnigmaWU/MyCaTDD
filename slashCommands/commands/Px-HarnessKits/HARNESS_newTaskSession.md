@@ -10,7 +10,34 @@ HarnessKits tool-point command. This command produces a session handoff summary;
 
 ## CoT Pattern
 
-**Checklist + ReACT** -- Collect session facts first, then reason over what is worth preserving for the next session. Surface only the details the next session needs to continue without re-discovering them. Prefer structure over prose so the handoff note can be pasted directly into the next session as context.
+**ReACT** -- Reasoning + Acting. Collect session facts first, then reason over what is worth preserving for the next session. Surface only the details the next session needs to continue without re-discovering them. Prefer structure over prose so the handoff note can be pasted directly into the next session as context.
+
+### ReACT Execution
+
+Repeat until the note would let a fresh session resume with no re-investigation.
+
+1. **Thought** — After the Preflight Mapping Checklist, decide which facts the *next* session cannot re-derive cheaply. Facts recoverable in one command (for example `git status`) are not worth preserving.
+2. **Action** — Run the Session Handoff Workflow for the selected `scope` and fill the Handoff Note Template.
+3. **Observation** — Read the note as if starting cold: does any Next Action depend on a decision, path, or environment fact the note never states? If yes, return to **Thought** and add it. Prose that restates a file listing is noise → cut it.
+4. **Stop** — Exit when the note is self-sufficient. Print it, write it to `target_file` only when one was given, and close with the next action.
+
+### Worked Example
+
+Wrapping up a session mid-story:
+
+```text
+/HARNESS_newTaskSession
+current_session_goal: implement retry TCs for US-07
+scope: full
+```
+
+Expected result:
+
+- **Thought**: worth preserving — the active story ID, the unchecked tasks, and the decision to skip the settlement path. Not worth preserving — the full changed-file diff, which `git status` re-derives instantly.
+- **Action**: Handoff Note Template filled with Active Story, Completed Tasks, Pending Tasks, Key Files, Decisions and Constraints, Environment Facts, Next Action.
+- **Observation**: Next Action reads "implement TC-003" — but the note never records that TC-003 is blocked on the sandbox gateway credential → the next session would rediscover it the hard way → back to **Thought** → added under Environment Facts.
+- **Observation (pass 2)**: every Next Action is fully supported by the note → self-sufficient.
+- **Stop**: note printed. No `target_file` was given, so nothing is written to `.catdd/spec/WorkingProcessLog.md`.
 
 ## Inputs
 
@@ -118,10 +145,6 @@ The composed handoff note should follow this structure:
 - A `Next Action` section naming the next recommended command and its inputs.
 - When `target_file` is specified: confirmation that the note was written or appended.
 - Reminder to the developer to paste the note at the start of the next session.
-
-## Prompt Template
-
-Ask the assistant to collect the current session facts — active SpecFlow lifecycle state, key touched files, design decisions, and environment notes — compose a structured handoff note using the Handoff Note Template, print the note in the response, optionally write it to the target file, and close with a clear next-action recommendation so the next session can resume without re-investigation.
 
 ## Conflict Guard
 

@@ -8,6 +8,49 @@ Prepare and commit completed work after story, tests, product code, and review p
 
 **Linear** — Direct execution. Given verified changed files and the active story, this command determines commit scope and creates the commit message deterministically. If scope ambiguity is found, the observation stops and asks the developer before committing.
 
+### Linear Execution
+
+Run these steps once, in order. There is no retry loop; any failed step stops and asks the developer.
+
+1. Determine scope: use `staged_files` if non-empty, otherwise `doingUS_related_files`. Exclude `.catdd/spec/WorkingProcessLog.md`.
+2. Stop and ask if any in-scope file is unrelated to `doing_user_story`.
+3. Read `recent_commit_messages` (latest 5) and extract tone, tense, capitalization, and scope format.
+4. Draft the message with `WHAT` / `HOW` / `WHY` sections in that style.
+5. Present the draft. Commit only after approval, or immediately if `auto_commit` is set.
+6. Report whether a branch merge is still required, then hand off to `SPEC_closeUserStory`.
+
+### Worked Example
+
+After `SPEC_reviewProductCodes` passed on a story branch:
+
+```text
+/SPEC_commitWorks
+doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+verification_summary: 38/38 unit tests GREEN; lint clean
+branch_context: on branch feat/payment-retry, not yet merged
+```
+
+Expected result:
+
+- Scope taken from staged files: `services/payment/retry.ts`, `services/payment/SysTests/UT_Retry-Typical.ts`. `WorkingProcessLog.md` excluded.
+- Recent 5 commits use imperative subject lines with no scope prefix, so the draft matches that.
+- Draft presented, not committed:
+
+```text
+Add bounded retry for failed payment authorizations
+
+WHAT
+- Retry authorization up to 3 times with exponential backoff
+
+HOW
+- retry.ts wraps the gateway call; UT_Retry-Typical.ts covers TC-RETRY-001..003
+
+WHY
+- Fixed backoff caused thundering-herd retries against the gateway under outage
+```
+
+- Reported: merge into `main` still required after `SPEC_closeUserStory`.
+
 ## Inputs
 
 - `staged_files`: staged files to commit, preferred when present.
@@ -29,35 +72,28 @@ Prepare and commit completed work after story, tests, product code, and review p
   - `WHAT`: concise summary of what was completed for the active story.
   - `HOW`: key technical changes (files, tests, implementation approach).
   - `WHY`: rationale for design/implementation choices, not a restatement of `HOW`.
-- Keep the commit message concise but informative, and aligned with the latest 5 commit messages in tone, tense, capitalization, and scope format.
+
+  Use this structure unless the repository's recent style requires a different but equivalent layout:
+
+  ```text
+  <subject line in recent repo style>
+
+  WHAT
+  - ...
+
+  HOW
+  - ...
+
+  WHY
+  - ...
+  ```
+
+- Keep the commit message concise but informative, and aligned with the latest 5 commit messages in tone, tense, capitalization, and scope format. If the recent commit history is ambiguous or inconsistent, stop and ask the developer before committing.
 - Do not commit automatically unless the user has approved the draft or `auto_commit` is explicitly enabled.
 - Next-command checkpoint after commit:
   - Continue to `SPEC_closeUserStory`.
   - If work is on a dedicated story branch and integration is still required, `SPEC_closeUserStory` should hand off to `SPEC_mergeWorks` (or the repository's merge step) after close.
   - If no dedicated story branch was used, merge/integration is auto-skipped.
-
-## Prompt Template
-
-Ask the assistant to verify scope by checking staged files first, then current `doingUS`-related files, exclude unrelated changes, review the latest 5 commit log messages, and always draft the commit message before any commit. The commit message must follow the recent style while staying tied to the active story. Record whether branch integration will be required after `SPEC_closeUserStory`.
-
-When drafting the commit message, use this structure unless the repository's recent style requires a different but equivalent layout:
-
-```text
-<subject line in recent repo style>
-
-WHAT
-- ...
-
-HOW
-- ...
-
-WHY
-- ...
-```
-
-`WHAT` should capture scope/result, `HOW` should capture technical execution, and `WHY` should capture decision rationale and trade-offs.
-
-When drafting the commit message, match the recent message style in tone, tense, capitalization, and scope format. If the recent commit history is ambiguous or inconsistent, stop and ask the developer before committing. Only proceed to commit after the draft is approved, unless `auto_commit` is explicitly enabled.
 
 ## Conflict Guard
 

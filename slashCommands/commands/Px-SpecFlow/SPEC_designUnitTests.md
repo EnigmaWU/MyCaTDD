@@ -10,14 +10,32 @@ Design CaTDD unit test skeletons for the active user story after story and detai
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
-Example ReACT trace for P0-first unit-test design:
+### ReACT Execution
 
-1. `Reason`: The active story has functional CLI behavior. P0 Functional applies and must be represented as `ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`.
-2. `Act`: Inspect `P0-FuncTestsFlow.md`, `UT_designFuncTestsSkeleton.md`, and the four category prompts for `Typical`, `Edge`, `Misuse`, and `Fault`.
-3. `Observe`: ACs map to normal success, valid boundary, invalid caller usage, and external/file/config fault surfaces. Existing skeletons are missing or stale.
-4. `Act`: Create or update the four P0 design skeletons with US/AC/TC comments, SUT, category labels, `@[SourceSPEC]`, `@[SourceUT]`, and template provenance.
-5. `Observe`: Each US has at least one AC, each AC has at least one TC, and no P1/P2 design source is required yet.
-6. `Decide`: Recommend `UT_reviewFuncTestsSkeleton`, then hand off ready P0 TC slices to `SPEC_implUnitTests`.
+Repeat per category until the P0 Functional set is complete; the loop is priority locked.
+
+1. **Thought** — Read the active story and reviewed design. Decide the category routing: which ACs are normal success, valid boundary, invalid caller usage, and external/environment fault.
+2. **Action** — Draft or update the CaTDD US/AC/TC skeletons for that routing, including SUT, category labels, `@[SourceSPEC]`, `@[SourceUT]`, and template provenance per the Language Template Selection.
+3. **Observation** — Check the coverage invariants: every US has at least one AC, every AC has at least one TC, and every skeleton names its design source. A missing link returns to **Action**. A P1/P2 skeleton drafted without the design-source evidence required by the P1/P2 Promotion Gate returns to **Thought** and is dropped.
+4. **Stop** — Exit when the P0 Functional set `Typical + Edge + Misuse + Fault` is decided. Report `next_command = UT_reviewFuncTestsSkeleton`, then hand ready P0 slices to `SPEC_implUnitTests`.
+
+### Worked Example
+
+Designing skeletons after detail-design review passed:
+
+```text
+/SPEC_designUnitTests
+doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+detail_design: README_DetailDesign.md
+```
+
+Expected result:
+
+- **Thought**: the story has functional CLI behavior, so P0 Functional applies and must be represented as `ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`.
+- **Action**: inspected `P0-FuncTestsFlow.md`, `UT_designFuncTestsSkeleton.md`, and the four category prompts; created the four P0 skeletons with full US/AC/TC provenance.
+- **Observation**: AC-04 (gateway timeout) had a Fault TC but no matching `@[SourceSPEC]` link → invariant broken → back to **Action** → link added to `README_ErrorDesign.md`.
+- **Observation**: a `Performance` skeleton was also drafted, but `README_PerfDesign.md` contains no measurable target → P1/P2 Promotion Gate fails → back to **Thought** → skeleton dropped and recorded as deferred.
+- **Stop**: four P0 skeletons complete; reported `next_command = UT_reviewFuncTestsSkeleton`.
 
 ## Inputs
 
@@ -130,10 +148,6 @@ The design output must leave `SPEC_implUnitTests` with a deterministic set of `t
 ## Language Template Selection
 
 When creating or redesigning test files, infer the target language from `language`, `target_test_files`, or explicit story metadata. If a matching language-specific CaTDD design+implementation template exists in `methodPrompts/`, use it as the structural template source and record that provenance in the output. Do not apply a template from another language when a matching target-language template exists.
-
-## Prompt Template
-
-Ask the assistant to use an observable ReACT loop: reason about category routing, act by reading the matching flow and `UT_*` command contracts, observe traceability/design-source gaps, and decide the next step. For P0, ask the assistant to design the CaTDD Functional skeleton set `Typical`, `Edge`, `Misuse`, and `Fault` through `UT_designFuncTestsSkeleton` by default, preserve story-to-test traceability and source-command provenance, select the correct language-specific CaTDD template when available, and leave a parallel-ready implementation checklist for the next execution step.
 
 ## Loop Guard
 

@@ -8,6 +8,37 @@ Resume a suspended user story back into active work.
 
 **Linear** -- Direct execution. Given a selected suspended story, this command moves the story and its paired task artifact from `.catdd/spec/suspendUS/` to `.catdd/spec/doingUS/` and validates the stored resume reference.
 
+### Linear Execution
+
+Run these steps once, in order. There is no retry loop; any failed check stops and asks the developer.
+
+1. Confirm no story with the same ID already exists under `.catdd/spec/doingUS/`.
+2. Validate the stored `resume_ref` still exists — the branch or worktree must be resolvable. Stop if it is gone.
+3. Move the story and its paired tasks artifact from `suspendUS` to `doingUS`, preserving prior task state and suspended history.
+4. Write the resume note confirming `resume_ref` and any handoff caveats.
+5. Verify the ID no longer appears under `suspendUS`.
+6. Report the restored paths and the next step: `SPEC_whatsNextTask`, or the first unchecked task in the restored `*-UserStory-Tasks.md`.
+
+### Worked Example
+
+The incident that paused the story is closed, so work resumes:
+
+```text
+/SPEC_resumeUserStory
+suspended_user_story: .catdd/spec/suspendUS/20260904-payment-retry-UserStory.md
+resume_ref: us-123-suspend
+projectContext_file: .catdd/spec/projectContext.md
+```
+
+Expected result:
+
+1. No matching ID under `doingUS` → check passes.
+2. `git rev-parse --verify us-123-suspend` resolves → resume ref valid.
+3. Story and tasks moved to `.catdd/spec/doingUS/`; the `[x]`/`[ ]` task state from before the suspend is preserved unchanged.
+4. Resume note records `us-123-suspend` and the caveat that the branch is behind `main` by 12 commits.
+5. ID absent from `suspendUS` → verified.
+6. Reported: first unchecked task is `[ ] implement idempotency key`, so `next_command = SPEC_whatsNextTask`.
+
 ## Inputs
 
 - `suspended_user_story`: selected suspended story under `.catdd/spec/suspendUS/`.
@@ -27,10 +58,6 @@ Resume a suspended user story back into active work.
 - Resume note confirming `resume_ref` and any handoff caveats.
 - Local `.catdd/spec/suspendUS/` suspended work state removed after active artifact restoration.
 - Next recommended command: usually `SPEC_whatsNextTask` or the first unchecked task from `*-UserStory-Tasks.md`.
-
-## Prompt Template
-
-Ask the assistant to resume a selected suspended story into `.catdd/spec/doingUS/`, preserve traceability and prior task state, verify or restate the durable resume reference, and continue from the correct lifecycle step.
 
 ## Conflict Guard
 

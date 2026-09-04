@@ -8,6 +8,34 @@ Review detailed design immediately after `SPEC_takeDetailDesign` and before `SPE
 
 **ReACT** — Reasoning + Acting. This command must inspect the active user story, `README_ArchDesign.md`, `README_DetailDesign.md`, matching ZH mirrors when present, and any related README SPEC docs; reason about detailed design completeness, API signatures, state models, resource/error/compatibility impacts, and acceptance-criteria testability; then produce a PASS, REVISE, or ASK finding with actionable evidence.
 
+### ReACT Execution
+
+Repeat until the finding is stable and every finding is actionable.
+
+1. **Thought** — Read the story, architecture design, detail design, and related README SPEC docs. Walk the Review Checklist and name the items that fail.
+2. **Action** — Run the Builtin Skill Gates (or the preferred skills when available) and write one verdict — `PASS`, `REVISE`, or `ASK` — with one evidence line per failed item.
+3. **Observation** — Check that each finding cites a document section and a pass condition, and that the Testability gate was applied to every AC, not a sample. A vague finding or a skipped AC returns to **Thought**.
+4. **Stop** — Exit on a stable verdict. `PASS` → `SPEC_reviewUserStory`; `REVISE` → `SPEC_updateDetailDesign`; `ASK` → stop and ask the developer.
+
+### Worked Example
+
+Gating the detail design before test skeletons are written:
+
+```text
+/SPEC_reviewDetailDesign
+doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+readme_detail_design: README_DetailDesign.md
+readme_spec_files: README_StateDesign.md, README_ErrorDesign.md
+```
+
+Expected result — two passes:
+
+- **Thought**: AC-01..AC-04 walked one by one. AC-04 says the adapter should "recover on its own" with no observable signal → Testability gate FAIL. The `degraded` state has no exit transition → API/state gate REVISE.
+- **Action**: verdict `REVISE`, two evidence lines citing `README_DetailDesign.md` AC-04 and `README_StateDesign.md` the state table.
+- **Observation**: the first pass only spot-checked AC-01 and AC-04 → gate not applied to every AC → back to **Thought**.
+- **Observation (pass 2)**: all four ACs checked; AC-02 and AC-03 convert cleanly to Typical/Fault skeletons → verdict stable.
+- Reported: `REVISE` → `next_command = SPEC_updateDetailDesign`. `SPEC_designUnitTests` stays blocked.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
@@ -58,10 +86,6 @@ Review detailed design immediately after `SPEC_takeDetailDesign` and before `SPE
 - Acceptance criteria can be converted into CaTDD US/AC/TC skeletons.
 - The detailed design does not contradict approved architecture boundaries.
 - EN/ZH detail-design mirrors have matching heading structure when both are present.
-
-## Prompt Template
-
-Ask the assistant to review the detailed design against the active story and approved architecture, report PASS/REVISE/ASK findings first, and prevent `SPEC_reviewUserStory` or `SPEC_designUnitTests` unless detailed design is clear enough for CaTDD skeleton design.
 
 ## Loop Guard
 

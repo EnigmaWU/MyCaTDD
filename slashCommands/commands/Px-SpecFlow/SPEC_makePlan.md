@@ -8,6 +8,33 @@ Create or update the task artifact paired with the active user story and decide 
 
 **ToT** — Tree of Thoughts. This command must inspect the opened story, current project context, optional mutual-intent notes, and any existing design evidence, branch across the plausible next lifecycle paths, compare them against the story's current readiness, and choose the smallest correct next step without skipping required quality gates.
 
+### ToT Execution
+
+1. **Generate** — From the story's current readiness, list every next command that is *not yet excluded* by the Planning Decision Rules. Produce at least two branches; one branch per candidate command.
+2. **Evaluate** — For each branch, state the evidence that would make it correct and whether that evidence exists today. A branch whose prerequisite artifact is missing is rejected, not deferred.
+3. **Select** — Take the surviving branch that is earliest in the Planning Decision Rules order. If two branches survive at the same rank, stop and ask the developer.
+4. **Execute** — Write the branches, the rejections with reasons, and the selection into the paired `*-UserStory-Tasks.md` as `[ ]`/`[x]` checkbox tasks.
+5. **Verify** — Print the checklist. Confirm the selected command's own prerequisites are all `[x]`. If any is `[ ]`, the selection is wrong; return to **Select**.
+
+### Worked Example
+
+A story was just opened that changes both `README_UserStories.md` wording and the retry algorithm:
+
+```text
+/SPEC_makePlan
+doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+tasks_file: .catdd/spec/doingUS/20260904-payment-retry-UserStory-Tasks.md
+projectContext_file: .catdd/spec/projectContext.md
+```
+
+Expected result — one ToT pass:
+
+- **Generate**: three branches — `SPEC_updateUserStory`, `SPEC_takeDetailDesign`, `SPEC_designUnitTests`.
+- **Evaluate**: `SPEC_designUnitTests` rejected (no detail design exists). `SPEC_takeDetailDesign` rejected (AC wording is still changing, so design would be built on a moving target). `SPEC_updateUserStory` survives (requirement surface `README_UserStories.md` is being changed).
+- **Select**: `SPEC_updateUserStory` — rank 2, earliest surviving.
+- **Execute**: tasks file records all three branches, the two rejections with reasons, and the selection.
+- **Verify**: prerequisites of `SPEC_updateUserStory` are `[x]` (story opened, intent clear) → selection stands.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
@@ -59,10 +86,6 @@ Create or update the task artifact paired with the active user story and decide 
 - If developer and CodeAgent intent are not aligned, route to `SPEC_clearStoryIntent` before design or implementation-oriented work.
 - If the story changes both requirements and design, route to `SPEC_updateUserStory` first, then review the story, then transfer to design-oriented next steps.
 - If required requirement/design evidence is missing, mark the affected checklist item `[ ]`, reject downstream commands in the rationale, and ask the developer instead of guessing.
-
-## Prompt Template
-
-Ask the assistant to examine the opened story, create or update the paired `*-UserStory-Tasks.md` artifact in `.catdd/spec/doingUS/`, express the work as Markdown checkbox tasks, print the checklist after planning is made, compare the realistic next lifecycle options, distinguish requirement-oriented, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next `SPEC_*` command that best fits the story's current readiness without inventing missing requirements/design or skipping needed checks.
 
 ## Conflict Guard
 

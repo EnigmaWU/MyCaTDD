@@ -12,6 +12,37 @@ Default convention: for each module or submodule, treat its `README_UserStory.md
 
 **Linear** -- Direct execution. This command performs a deterministic import and normalization step. Given a user-story source and selected slice, it preserves the existing requirement intent and writes a todo user-story artifact without creating new requirements or re-analyzing acceptance criteria.
 
+### Linear Execution
+
+Run these steps once, in order. There is no retry loop; a missing slice or ambiguous granularity stops and asks the developer.
+
+1. Locate `slice_id` in `user_story_source`. Stop and ask if it cannot be found.
+2. Resolve `granularity` per the Import Granularity rules. Stop and ask when the choice changes the artifact boundary.
+3. Copy the slice verbatim, preserving `US-*`/`AC-*` IDs, priority, dependency hints, and status markers exactly as written.
+4. Record the source trace, including the paired `README_UserGuide.md` when the source is a module `README_UserStory.md`.
+5. Write one `.catdd/spec/todoUS/*-UserStory.md` per selected slice. Never merge unrelated requirements into one artifact.
+6. Report the output paths and `next_command = SPEC_openUserStory`.
+
+### Worked Example
+
+One story is pulled out of a large existing requirements doc:
+
+```text
+/SPEC_importUserStory
+user_story_source: services/payment/README_UserStory.md
+slice_id: US-07
+granularity: US-by-US
+```
+
+Expected result:
+
+1. `US-07` found in the source under "Retry policy" → check passes.
+2. `US-by-US` requested and the source treats US-07's four ACs as one deliverable → no ambiguity, no stop.
+3. AC-01..AC-04 copied verbatim with their IDs, `priority: P1`, and the dependency note on US-03 preserved. Wording is **not** improved or rephrased.
+4. Source trace records `services/payment/README_UserStory.md#US-07` plus the paired `services/payment/README_UserGuide.md`.
+5. Written to `.catdd/spec/todoUS/20260904-payment-retry-UserStory.md`.
+6. Reported: path + `next_command = SPEC_openUserStory`. No new AC is invented — the vague AC-04 wording is carried across as-is for `SPEC_reviewUserStory` to catch later.
+
 ## Inputs
 
 - `user_story_source`: existing user story, requirement document, AC checklist, backlog export, copied story text, or chat summary.
@@ -48,10 +79,6 @@ When invoked during an active chat conversation -- for example, when a developer
 - Pass them as inputs to the subagent.
 - Let the subagent write the todo artifact or artifacts and report the output file name on completion.
 - Continue the current conversation without waiting for the subagent to finish unless the imported artifact is immediately needed.
-
-## Prompt Template
-
-Ask the assistant to preserve existing US/AC intent, normalize metadata, keep parent/child requirement traceability, and avoid design or implementation analysis beyond lightweight classification.
 
 ## Conflict Guard
 

@@ -6,6 +6,39 @@ Design the complete P0 Functional CaTDD skeleton set: Typical, Edge, Misuse, and
 
 Use this command when a developer wants the full functional skeleton set from one interface, protocol, existing draft, or behavior contract before implementation begins.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. This command must read the behavior source, draft one category skeleton at a time, and check each draft against the traceability cardinality gate before moving on. The loop exists because a category often reveals ACs the previous category missed.
+
+### ReACT Execution
+
+Repeat per category in order — Typical, then Edge, Misuse, Fault.
+
+1. **Thought** — Read `interface_or_protocol_file` as the behavior source and the matching category method prompt as the category source of truth. Decide which behaviors belong to this category and not another.
+2. **Action** — Draft or update that one category skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TC]`. Preserve existing skeletons; never rewrite an unrelated category.
+3. **Observation** — Apply the cardinality gate: every `@[US]` has ≥1 `@[AC]`, every `@[AC]` has ≥1 `@[TC]`. A dangling US or AC returns to **Action**. A behavior that belongs to a different category returns to **Thought** and is moved, not duplicated.
+4. **Stop** — Exit when all four categories pass the gate and the SUT is declared. Report missing information as questions, and recommend `UT_reviewFuncTestsSkeleton` before implementation.
+
+### Worked Example
+
+Designing the full P0 set from a gateway interface:
+
+```text
+/UT_designFuncTestsSkeleton
+interface_or_protocol_file: services/payment/gatewayPort.h
+feature_name: payment gateway retry
+target_test_file: services/payment/SysTests/UT_Gateway.ts
+```
+
+Expected result:
+
+- **Thought/Action (Typical)**: normal authorize/capture paths → US-01 with AC-01, AC-02, each carrying one TC. `SUT: gatewayPort` declared in the file overview.
+- **Observation**: gate passes.
+- **Thought/Action (Edge)**: zero-amount and max-amount authorizations drafted.
+- **Observation**: AC-04 was written with no TC → dangling AC → back to **Action** → TC-EDGE-004 added.
+- **Thought (Misuse)**: "gateway returns malformed JSON" was drafted here, but that is an *external* failure, not invalid caller usage → back to **Thought** → moved to Fault, not duplicated in both.
+- **Stop**: four categories, all passing the cardinality gate, no executable test code written. Reported `next_command = UT_reviewFuncTestsSkeleton`.
+
 ## Inputs
 
 - `interface_or_protocol_file`: API, protocol, header, schema, or behavior contract.
@@ -29,18 +62,6 @@ Use this command when a developer wants the full functional skeleton set from on
 - Traceability cardinality gate: each `@[US]` has >=1 linked `@[AC]`, and each `@[AC]` has >=1 linked `@[TC]`.
 - Explicit SUT declaration in the test-file overview (for example: `SUT: utCodeAgentCLI`).
 - No executable implementation test code.
-
-## Prompt Template
-
-Ask the assistant to:
-
-1. Read the interface or protocol as the behavior source.
-2. Use the P0 category method prompts as the category source of truth.
-3. Draft or update the Typical skeleton first.
-4. Draft or update the Edge, Misuse, and Fault skeletons in that order.
-5. Preserve existing skeletons and avoid rewriting unrelated categories.
-6. List missing information as questions or assumptions.
-7. Recommend whether to continue to `UT_reviewFuncTestsSkeleton` before implementation.
 
 ## Conflict Guard
 

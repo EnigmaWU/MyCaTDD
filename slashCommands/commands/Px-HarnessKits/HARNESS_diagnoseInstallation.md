@@ -10,7 +10,35 @@ HarnessKits tool-point command. This command investigates an installed CaTDD har
 
 ## CoT Pattern
 
-**ReACT + Fault Tree** -- Inspect symptoms and verification evidence, classify the failing installation surface, rank likely root causes, and propose a safe repair plan. This command should reuse `HARNESS_verifyInstallation` evidence when available.
+**ReACT** -- Reasoning + Acting, with a fault-tree descent in the reasoning step. Inspect symptoms and verification evidence, classify the failing installation surface, rank likely root causes, and propose a safe repair plan. This command should reuse `HARNESS_verifyInstallation` evidence when available.
+
+### ReACT Execution
+
+Repeat until every failed surface has a ranked cause and a repair action.
+
+1. **Thought** — Descend the fault tree: failing check → installation surface → candidate causes from the Root Cause Catalog. Assign a confidence to each candidate.
+2. **Action** — Run the next read-only check from the Diagnosis Workflow that would discriminate between the top candidates. Never mutate the installation to test a hypothesis.
+3. **Observation** — If the evidence does not separate the top two candidates, return to **Thought** with a narrower check. If a new surface fails, add it to the tree.
+4. **Stop** — Exit when each failed surface has `expected`, `observed`, `evidence`, `likely cause`, `confidence`, and `repair action`. Order the repair plan least-destructive first, and close with `HARNESS_verifyInstallation`.
+
+### Worked Example
+
+A developer reports that `/SPEC_makePlan` is missing from the command palette:
+
+```text
+/HARNESS_diagnoseInstallation
+target_project_root: ~/work/acme-pay
+symptoms: SPEC_makePlan not offered in Copilot chat
+```
+
+Expected result:
+
+- **Thought**: two surfaces could explain this — missing wrapper, or editor indexing lag. Both start at medium confidence.
+- **Action**: read-only check — count wrappers under `.github/prompts/` vs portable commands under `.catdd/slashCommands/commands/`.
+- **Observation**: 39 wrappers vs 40 commands → discriminating, but which command is missing is still unknown → back to **Thought** with a narrower check.
+- **Action**: diff the two inventories by name.
+- **Observation**: `SPEC_makePlan.prompt.md` absent → wrapper-count surface confirmed, editor-cache candidate dropped to low confidence.
+- **Stop**: cause — stale wrappers, `--clean-prompts` skipped (high confidence). Repair plan, least destructive first: (1) regenerate wrappers, (2) if still failing, rerun installer with `--clean-prompts`, (3) reload the editor. Close with `HARNESS_verifyInstallation`.
 
 ## Inputs
 
@@ -83,10 +111,6 @@ If the target path, symptom, or adapter surface is unclear, stop and ask the dev
   - If root cause is clear and repair is safe: apply the proposed repair only with developer approval, then verify.
   - If source-level CaTDD changes are needed: use `HARNESS_patchCaTDDSource` after proving the downstream fix.
   - If failure is not installation-related: hand off to the relevant SPEC, UT, or non-installation harness diagnosis workflow.
-
-## Prompt Template
-
-Ask the assistant to diagnose a misworking CaTDD target installation by first collecting or running verification evidence, grouping failed checks by installation surface, ranking likely root causes, and returning a safe repair and re-verification plan without modifying files unless explicitly approved.
 
 ## Conflict Guard
 

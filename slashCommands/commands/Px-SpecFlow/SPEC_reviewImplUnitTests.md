@@ -12,12 +12,34 @@ Use this command when one or more TC bodies have been implemented and the develo
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
-Example ReACT trace for a story-level unit-test implementation review:
+### ReACT Execution
 
-1. `Reason`: TC-001 and TC-002 were implemented by `SPEC_implUnitTests`; both are P0 Functional and claim RED because product code is still missing.
-2. `Act`: Apply `UT_reviewImplTestCase` mechanics to each implemented TC body.
-3. `Observe`: TC-001 matches its AC and has strict phases; TC-002 has a raw assertion outside `VERIFY`.
-4. `Decide`: Route TC-002 back to `SPEC_implUnitTests` or `UT_implTestCase` before product-code work starts.
+Repeat until every implemented TC has current review evidence and the verdict is stable.
+
+1. **Thought** — List the implemented TCs that lack current `UT_reviewImplTestCase` evidence, and note their claimed status markers.
+2. **Action** — Run the Flow Coupling steps below over that set: apply `UT_reviewImplTestCase` mechanics per TC, apply `test-case-with-readme` or the Builtin README Gates per test file, and check story-level P0-first ordering.
+3. **Observation** — Compare each claimed status marker against `verification_output`. Unexplained `GREEN`, `ISSUES`, or `BLOCKED` returns to **Thought**. Separate implementation drift (fix the test body) from skeleton drift (fix the design) — never report them as one finding.
+4. **Stop** — Exit when every implemented TC is reviewed and each finding names its TC, its cause, and its route. Report the next lifecycle command.
+
+### Worked Example
+
+Two TCs were just implemented and product code does not exist yet:
+
+```text
+/SPEC_reviewImplUnitTests
+doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+target_test_files: services/payment/SysTests/UT_Gateway-Typical.ts
+implementation_status: TC-001 RED, TC-002 RED
+verification_output: 0 passing, 2 failing (module not found)
+```
+
+Expected result:
+
+- **Thought**: TC-001 and TC-002 are both P0 Functional, both claim `RED`, neither has review evidence yet.
+- **Action**: `UT_reviewImplTestCase` mechanics applied to both bodies; companion README gates run on the test file.
+- **Observation**: TC-001 matches its AC with strict `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phases. TC-002 has a raw assertion outside `VERIFY`. `RED` is meaningful for both — it fails on the missing product module, which is expected before implementation, so the status is explained.
+- **Observation**: TC-002's defect is in the test body, not the skeleton → classified as implementation drift, routed to `UT_implTestCase`, **not** back to `SPEC_designUnitTests`.
+- **Stop**: reported — fix TC-002 first via `UT_implTestCase`; product-code work does not start until it is aligned.
 
 ## Inputs
 
@@ -98,10 +120,6 @@ Example ReACT trace for a story-level unit-test implementation review:
 - When run after `SPEC_reviewProductCodes`, confirm product-code review findings did not require test or skeleton changes before commit.
 - Do not accept a TC as reviewed when strict phase markers or key verification macros are missing.
 - Do not proceed to product-code work while implementation-skeleton drift is unresolved.
-
-## Prompt Template
-
-Ask the assistant to run an observable ReACT loop: inspect active-story implemented TC slices, verify P0-first ordering and CaTDD metadata, apply `UT_reviewImplTestCase` mechanics per TC, apply the latest `test-case-with-readme` skill when available or the builtin README gates when unavailable, compare implementation against US/AC/TC comments, check strict phase layout and `VERIFY_KEYPOINT_xyz` usage, interpret verification output and any `SPEC_reviewProductCodes` result, then recommend the next lifecycle command.
 
 ## Loop Guard
 

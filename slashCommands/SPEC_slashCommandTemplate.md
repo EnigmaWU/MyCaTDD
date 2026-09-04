@@ -28,7 +28,44 @@ Choose one based on the command's decision complexity:
 - **ToT** — Tree of Thoughts: Use when the command must generate multiple candidate artifacts or approaches, evaluate each against quality criteria, and select the best. Suitable for commands that compare design alternatives, story quality options, or competing next-step paths.
 - **Linear** — Direct execution: Use when the command's action is deterministic given complete and valid inputs and no branching is expected. Suitable for simple artifact movement, context initialization, or atomic commit and CI steps.
 
-State the chosen pattern here and explain why it fits this command's decision structure.
+State the chosen pattern here and explain why it fits this command's decision structure, then write the matching `### <Pattern> Execution` subsection below. A pattern may not be declared without its executable loop.
+
+### ReACT Execution (when CoT Pattern = ReACT)
+
+Repeat until the output artifact is complete and the output contract is satisfied:
+
+1. **Thought**: Inspect the listed input artifacts and method references. Identify current lifecycle state, gaps, conflicts, or missing information.
+2. **Action**: Perform the specific operation this command owns — create, update, review, or move the named artifact.
+3. **Observation**: Verify the output artifact meets the output contract. Name the condition that sends execution back to **Thought** or **Action**.
+4. **Stop**: Exit on a stable result. If the observation reveals a quality issue or missing information, surface it as a question or assumption and stop instead of inventing requirements.
+5. Report the artifact produced, assumptions made, conflicts found, and the next recommended command.
+
+### ToT Execution (when CoT Pattern = ToT)
+
+1. **Generate**: Produce two or more candidate approaches, artifact outlines, or next-step options from the input artifacts.
+2. **Evaluate**: Assess each candidate against the quality criteria in the output contract and the lifecycle rules in `Px-SpecFlow`. Reject candidates whose prerequisite evidence does not exist today.
+3. **Select**: Choose the best candidate. If no candidate is clearly best, present the top options and ask the developer to choose.
+4. **Execute**: Apply the selected candidate to produce the output artifact.
+5. **Verify**: Confirm the output artifact meets the output contract. Name the condition that sends execution back to **Select**. Report the decision rationale, assumptions, and next recommended command.
+
+### Linear Execution (when CoT Pattern = Linear)
+
+Run these steps once, in order. State explicitly that there is no retry loop.
+
+1. Read the listed inputs and method references.
+2. Preserve existing lifecycle artifact traceability, status markers, and naming conventions.
+3. Perform only this command's requested step.
+4. Report the artifact produced, assumptions made, and next recommended command.
+5. Avoid product-specific, editor-specific, model-specific, or language-specific behavior unless explicitly supplied as input.
+
+### Worked Example
+
+Walk the loop above through one concrete, realistic invocation. Required in every command.
+
+1. Show the invocation as a `text` block: the command name and its actual input values.
+2. Walk each named step of the chosen pattern, showing what that step concludes on this input.
+3. Show at least one step failing its own check where the pattern allows it, so the loop condition is visible rather than decorative.
+4. End with the next recommended command.
 
 ## WHO
 
@@ -74,33 +111,7 @@ State why this command exists.
 
 ## HOW
 
-State the execution procedure using the chosen CoT pattern.
-
-### ReACT Execution (when CoT Pattern = ReACT)
-
-Repeat until the output artifact is complete and the output contract is satisfied:
-
-1. **Thought**: Inspect the listed input artifacts and method references. Identify current lifecycle state, gaps, conflicts, or missing information.
-2. **Action**: Perform the specific operation this command owns — create, update, review, or move the named artifact.
-3. **Observation**: Verify the output artifact meets the output contract. Check for missing traceability, unresolved questions, or quality failures.
-4. If the observation reveals a quality issue or missing information, surface it as a question or assumption and stop instead of inventing requirements.
-5. Report the artifact produced, assumptions made, conflicts found, and the next recommended command.
-
-### ToT Execution (when CoT Pattern = ToT)
-
-1. **Generate**: Produce two or more candidate approaches, artifact outlines, or next-step options from the input artifacts.
-2. **Evaluate**: Assess each candidate against the quality criteria in the output contract and the lifecycle rules in `Px-SpecFlow`.
-3. **Select**: Choose the best candidate. If no candidate is clearly best, present the top options and ask the developer to choose.
-4. **Execute**: Apply the selected candidate to produce the output artifact.
-5. **Verify**: Confirm the output artifact meets the output contract. Report the decision rationale, assumptions, and next recommended command.
-
-### Linear Execution (when CoT Pattern = Linear)
-
-1. Read the listed inputs and method references.
-2. Preserve existing lifecycle artifact traceability, status markers, and naming conventions.
-3. Perform only this command's requested step.
-4. Report the artifact produced, assumptions made, and next recommended command.
-5. Avoid product-specific, editor-specific, model-specific, or language-specific behavior unless explicitly supplied as input.
+The execution procedure lives in the `### <Pattern> Execution` subsection under `## CoT Pattern`, so the declared pattern and its loop cannot drift apart. Do not restate that procedure here or in a separate prompt-template section.
 
 ## Subagent Recommendation
 

@@ -13,6 +13,74 @@ Analyze a pending issue, bug report, defect, support problem, or research input;
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
+### ReACT Execution (Stage 0.1 — intake and clarification gate)
+
+Inspect the pending issue and related evidence, then repeat until the good-enough gate passes or the story is explicitly blocked.
+
+1. **Thought** — Identify what is known and what is missing across role, observed behavior, expected behavior, repair capability, scope, and testability.
+2. **Action** — Read the minimum necessary artifacts: `pending_issue`, `projectContext_file`, and only the `related_docs` that close a named gap.
+3. **Observation** — Check the good-enough gate below. If a gap could materially change role, value, scope, expected behavior, or acceptance criteria, return to **Thought** with one focused question.
+4. **Stop** — Exit when the gate passes, or when a blocking question makes the story NOT ready.
+
+Mode behavior inside the loop:
+
+- In default `BRAINSTORM` mode, step 3 asks the developer the highest-value clarification question before generating `todoUS`, and the loop continues until the story is good enough, explicitly blocked, or the developer switches to `AUTONOMOUS`.
+- In explicit `AUTONOMOUS` mode, step 3 does not pause. Unanswered items are recorded as assumptions, ambiguity warnings, or Initial Acceptance Questions, and blocking questions mark the story NOT ready for `SPEC_openUserStory`.
+
+Good-enough gate for drafting `todoUS`:
+
+- role or affected user is known or explicitly marked unknown
+- observed behavior and expected behavior are distinguished
+- primary repair capability is identified
+- scope/non-goals are bounded enough to avoid an oversized story
+- acceptance criteria can be tested or blocking questions are recorded
+- evidence confidence is recorded for major claims
+
+### ToT Execution (Stage 0.2 — candidate analysis and mode selection)
+
+1. **Generate** — Produce 2-4 candidate interpretations before committing to one story shape: candidate repair story slices, candidate root-cause hypotheses, candidate split/follow-up issues, and the forbidden-input route (aborted UserStory input must stop and reroute to `SPEC_analyzeAbortedUserStory`).
+2. **Evaluate** — Score each candidate on evidence strength, story size, user value, testability, risk, and fit with the issue origin.
+3. **Select** — In `BRAINSTORM` mode, present the comparison and ask the developer to choose whenever more than one candidate is plausible. In `AUTONOMOUS` mode, select by evidence/risk and record discarded candidates as alternatives.
+4. **Execute** — Run the Analysis Pipeline below against the selected candidate.
+5. **Verify** — If the pipeline shows the selected shape is oversized or unsupported by evidence, return to **Select**.
+
+Mode selection rule:
+
+- If the developer explicitly requests `AUTONOMOUS`, run autonomous generation using this command's Analysis Pipeline.
+- Otherwise default to `BRAINSTORM`, because issue analysis often contains hidden product intent and should converge through developer conversation before committing a todo story.
+
+### Worked Example
+
+An imported issue says the user guide is confusing:
+
+```text
+/SPEC_analyzeIssue
+pending_issue: .catdd/spec/pendingNews/20260904-user-guide-confusing-Issue.md
+analysis_mode: BRAINSTORM
+```
+
+**Stage 0.1 (ReACT)** — two passes:
+
+- **Thought**: the issue names "developers" but not which journey; expected outcome is unstated.
+- **Action**: read the pending issue, `README_UserGuide.md`, and project context — nothing more.
+- **Observation**: the guide mixes onboarding, API usage, and scenario explanation. Role is too broad to bound scope → gate fails → back to **Thought**.
+- **Thought/Action**: ask "Which developer journey should this story optimize first: first-time build/run, API integration, or service usage scenarios?" — developer answers *API integration*.
+- **Observation**: role, expected behavior, and scope are now bounded → gate passes → **Stop**.
+
+**Stage 0.2 (ToT)** — four candidates:
+
+| Candidate | Interpretation | Evidence Strength | Risk | Decision |
+|---|---|---|---|---|
+| A | Repair the user guide for new application developers integrating IOC APIs. | High: issue names developer usage and README_UserGuide target. | Medium: scope can grow into full documentation rewrite. | Preferred if developer confirms API integration is the primary journey. |
+| B | Split into multiple documentation stories: build/run, API integration, and usage scenarios. | Medium: guide likely has multiple reader paths. | Low per story, higher coordination cost. | Follow-up candidate if Candidate A is still too broad. |
+| C | Treat as an architecture/design issue. | Low: issue is documentation-facing, not a design failure. | High: would route work to the wrong lifecycle lane. | Reject unless new evidence shows design docs are incorrect. |
+| D | Analyze an aborted UserStory as the source. | Forbidden in this command. | High: violates command boundary. | Stop and route to `SPEC_analyzeAbortedUserStory`. |
+
+- **Select**: Candidate A, confirmed by the developer in Stage 0.1.
+- **Execute**: Analysis Pipeline Steps 0-11 run against Candidate A.
+- **Verify**: Step 3 finds the story still spans 3 functional areas → return to **Select** → Candidate B adopted as a split, with A kept as the first slice.
+- Result: `.catdd/spec/todoUS/20260904-user-guide-api-integration-UserStory.md`, raw issue archived to `analyzedNews/` with `status: analyzed`.
+
 ## Inputs
 
 - `pending_issue`: issue file under `.catdd/spec/pendingNews/`.
@@ -56,68 +124,9 @@ Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
   - insight list grouped by requirement, design, test, risk, and process learning
   - recommended story split or follow-up issue candidates
 
-## Prompt Template
+## Analysis Pipeline
 
-Apply the pipeline below. Each step summarizes the key technique; `(→ SKILL: name)` marks the source for more detail. Use `SpecTodoUserStoryTemplate.md` for the final output. The story is framed as a **repair** — the happy path is the corrected behavior, and error paths include regression scenarios (what must NOT break).
-
-### Stage 0.1 — ReACT intake and clarification gate
-
-Inspect the pending issue and related evidence. Reason about what is known, act by reading the minimum necessary artifacts, observe missing or conflicting facts, and produce a short clarification backlog.
-
-Mode behavior:
-
-- In default `BRAINSTORM` mode, ask the developer the highest-value clarification question or small question set before generating `todoUS` when the answer could materially change role, value, scope, expected behavior, or acceptance criteria. Continue step by step until the story is good enough to draft, explicitly blocked, or the developer switches to `AUTONOMOUS` mode.
-- In explicit `AUTONOMOUS` mode, do not pause for every clarification. Continue through the predefined prompts, but record unanswered items as assumptions, ambiguity warnings, or Initial Acceptance Questions. Blocking questions make the generated story NOT ready for `SPEC_openUserStory`.
-
-Good-enough gate for drafting `todoUS`:
-
-- role or affected user is known or explicitly marked unknown
-- observed behavior and expected behavior are distinguished
-- primary repair capability is identified
-- scope/non-goals are bounded enough to avoid an oversized story
-- acceptance criteria can be tested or blocking questions are recorded
-- evidence confidence is recorded for major claims
-
-Example ReACT trace for `BRAINSTORM` intake:
-
-1. `Reason`: The issue says the guide is confusing for developers, but the affected reader role and expected usage path are not explicit.
-2. `Act`: Inspect the pending issue, `README_UserGuide.md`, and project context only enough to identify missing intent.
-3. `Observe`: Evidence shows the guide mixes onboarding, API usage, and scenario explanation; expected outcome is unclear.
-4. `Ask`: "Which developer journey should this story optimize first: first-time build/run, API integration, or service usage scenarios?"
-5. `Observe`: Developer selects API integration.
-6. `Decide`: The story is good enough to draft as a guide repair story focused on API integration, with onboarding and scenario expansion recorded as follow-up candidates.
-
-Example ReACT trace for explicit `AUTONOMOUS` intake:
-
-1. `Reason`: The developer requested autonomous analysis, so missing intent must be recorded rather than resolved through chat.
-2. `Act`: Inspect the pending issue and directly related docs.
-3. `Observe`: Expected behavior is partially supported by source text, but target reader experience is ambiguous.
-4. `Decide`: Continue to story generation with reader role as an assumption, add an Initial Acceptance Question for confirmation, and mark the story NOT ready if the question blocks acceptance.
-
-### Stage 0.2 — ToT candidate analysis and mode selection
-
-Generate 2-4 candidate interpretations before committing to one story shape. Include, when applicable:
-
-- candidate repair story slices
-- candidate root-cause hypotheses
-- candidate split/follow-up issues
-- forbidden-input route: aborted UserStory input must stop here and reroute to `SPEC_analyzeAbortedUserStory`
-
-Evaluate each candidate against evidence strength, story size, user value, testability, risk, and fit with the issue origin. In `BRAINSTORM` mode, present the candidate comparison to the developer and ask for selection or correction when more than one candidate is plausible. In `AUTONOMOUS` mode, select the best candidate by the evidence/risk criteria and record discarded candidates as alternatives.
-
-Mode selection rule:
-
-- If the developer explicitly requests `AUTONOMOUS`, run autonomous generation using this command's predefined prompt pipeline.
-- Otherwise default to `BRAINSTORM`, because issue analysis often contains hidden product intent and should converge through developer conversation before committing a todo story.
-
-Example ToT candidate comparison:
-
-| Candidate | Interpretation | Evidence Strength | Risk | Decision |
-|---|---|---|---|---|
-| A | Repair the user guide for new application developers integrating IOC APIs. | High: issue names developer usage and README_UserGuide target. | Medium: scope can grow into full documentation rewrite. | Preferred if developer confirms API integration is the primary journey. |
-| B | Split into multiple documentation stories: build/run, API integration, and usage scenarios. | Medium: guide likely has multiple reader paths. | Low per story, higher coordination cost. | Follow-up candidate if Candidate A is still too broad. |
-| C | Treat as an architecture/design issue. | Low: issue is documentation-facing, not a design failure. | High: would route work to the wrong lifecycle lane. | Reject unless new evidence shows design docs are incorrect. |
-| D | Analyze an aborted UserStory as the source. | Forbidden in this command. | High: violates command boundary. | Stop and route to `SPEC_analyzeAbortedUserStory`. |
+Apply the pipeline below, driven by the ToT Execution step 4. Each step summarizes the key technique; `(→ SKILL: name)` marks the source for more detail. Use `SpecTodoUserStoryTemplate.md` for the final output. The story is framed as a **repair** — the happy path is the corrected behavior, and error paths include regression scenarios (what must NOT break).
 
 ### Step 0 — Classify origin and reject forbidden inputs
 

@@ -26,7 +26,38 @@ Do **not** invoke `HARNESS_evolveHarness` when:
 
 ## CoT Pattern
 
-**ReAct + evidence-grounded self-correction** -- reason about observed evidence, act through the canonical owner, evaluate the result against explicit criteria, and correct or stop within a bounded loop. `restructure` adds the TTHE Observe-Propose-Judge population search; `refine` uses one proposal and does not.
+**ReACT** -- Reasoning + Acting with evidence-grounded self-correction. Reason about observed evidence, act through the canonical owner, evaluate the result against explicit criteria, and correct or stop within a bounded loop. `restructure` adds the TTHE Observe-Propose-Judge population search on top of the same loop; `refine` uses one proposal and does not.
+
+### ReACT Execution
+
+The loop body is the Evidence-Grounded Correction Loop below; this is its contract.
+
+1. **Thought** — Apply the Evidence Gate to each candidate lesson: outcome, contribution, and reuse evidence. Then apply the Mode Selection Gate to choose `refine` or `restructure`, and the Ownership Router to name the canonical owner. Define the falsifying acceptance criteria and the focused validation command *before* any mutation.
+2. **Action** — Mutate only through the canonical owner, within the Mode-Specific Mutation Gates. Default to dry-run.
+3. **Observation** — Evaluate against the acceptance criteria using external evidence only: test, build, lint, verifier, execution, or developer-supplied results. Intrinsic confidence or self-critique is not proof. On failure, record the failed criterion and evidence, then return to **Action** with the smallest grounded correction.
+4. **Stop** — Exit on success, `max_correction_attempts`, a repeated failure with no materially new correction, conflicting evidence, an ownership boundary, or exhausted budget. A no-progress stop returns the last validated state plus remaining failure evidence and `ASK` — it must never claim success.
+
+`no reusable learning` is a valid, successful outcome.
+
+### Worked Example
+
+For a successful session with one bounded lesson:
+
+```text
+/HARNESS_evolveHarness
+learning_source: current successful chat session
+learning_evidence: focused command contract passed
+evolution_mode: auto
+dry_run: true
+```
+
+Expected result:
+
+- **Thought**: Evidence Gate — outcome evidence present (the contract passed), contribution evidence present (the lesson caused the pass), reuse evidence is a single occurrence. One occurrence justifies a dry-run `refine` proposal but not persistence, and it does not meet the `restructure` bar. Mode Selection Gate → `refine`. Ownership Router → one canonical owner file. Acceptance criterion defined up front.
+- **Action**: one minimal proposed update against that owner, dry-run.
+- **Observation**: focused validation passes against the stated criterion, using external command output rather than self-assessment.
+- **Stop**: returns one reviewable patch. Branch-population search is **not** started, because the evidence never justified `restructure`.
+- Under same-evidence suppression, this run reports `success_learning_checkpoint = suppressed_same_evidence` rather than recommending itself again.
 
 ## Inputs
 
@@ -208,10 +239,6 @@ If the target path is unclear, stop and ask the developer. Require a clear trace
   - `dry_run=false`: run `HARNESS_verifyInstallation` in the target project and consider `HARNESS_patchCaTDDSource` if the fix should move upstream.
   - Coverage gap: broaden `candidate_scope`, add method knowledge, or file a spec-level story instead of a harness patch.
 
-## Prompt Template
-
-Ask the assistant to inspect verified success or failure evidence, extract reusable lessons, route each to its canonical owner, and select `refine` or `restructure` using the Mode Selection Gate. For `refine`, propose one minimal validated update. For `restructure`, run the bounded TTHE parallel-candidate loop. Default to dry-run, permit `no reusable learning`, and never mutate the wrong owner.
-
 ## CodeAgent Integration Hook
 
 After every meaningful verified success, report:
@@ -225,20 +252,6 @@ suggested_evolution_mode = auto
 If a lifecycle, commit, merge, or safety command has precedence, preserve it as `next_command` and report `learning_command = /HARNESS_evolveHarness` separately.
 
 Apply same-evidence suppression: while executing `HARNESS_evolveHarness`, do not emit another learning checkpoint for this command's completion or for the same `learning_source` plus `learning_evidence`. Report `success_learning_checkpoint = suppressed_same_evidence`. A later checkpoint requires materially new verified evidence.
-
-## Usage Example
-
-For a successful session with one bounded lesson:
-
-```text
-/HARNESS_evolveHarness
-learning_source: current successful chat session
-learning_evidence: focused command contract passed
-evolution_mode: auto
-dry_run: true
-```
-
-Expected result: `auto` selects `refine`, routes the lesson to one canonical owner, and returns one reviewable patch or `no reusable learning`. It does not start branch-population search unless evidence justifies `restructure`.
 
 ## Conflict Guard
 

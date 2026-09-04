@@ -8,6 +8,36 @@ Create or update detailed design and acceptance criteria for the active user sto
 
 **ReACT** — Reasoning + Acting. This command must inspect the active user story and project context, reason about the design surfaces needed (detail design, error, resource, state, performance, compatibility, diagnosis), draft or update the relevant project-root README SPEC docs, and verify that acceptance criteria are testable and traceable before finalizing. Embedded software and digital media domain concerns should trigger additional reasoning cycles for error, resource, state, performance, compatibility, and diagnosis design surfaces.
 
+### ReACT Execution
+
+Repeat until every acceptance criterion is convertible to a CaTDD skeleton.
+
+1. **Thought** — Decide which design surfaces this story actually changes. Do not open a README SPEC doc the story does not touch.
+2. **Action** — Draft or update only those docs, seeding first-time files from the matching `slashCommands/templates/README_*Template.md`. Include the story's lightweight implementation plan: technical context, structure decisions, constraints, verification strategy. Apply the Skill Integration Policy, falling back to the Builtin Skill Checklist.
+3. **Observation** — Test each acceptance criterion against the Verification builtin: can it become a US/AC/TC skeleton as written? An untestable AC, an undocumented state transition, or an architecture quality scenario that was dropped instead of carried into detail constraints returns to **Action**.
+4. **Stop** — Exit when all ACs are convertible and assumptions/constraints/open questions are explicit. Report `next_command = SPEC_reviewDetailDesign`. Coding does not start here.
+
+For embedded or digital video/audio work, step 2 must also design localized state lifecycles and thread concurrency primitives.
+
+### Worked Example
+
+Detailing the gateway adapter story after architecture review passed:
+
+```text
+/SPEC_takeDetailDesign
+doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+readme_spec_files: README_DetailDesign.md, README_ErrorDesign.md, README_StateDesign.md
+```
+
+Expected result — two passes:
+
+- **Thought**: the story changes the adapter API, its failure modes, and its connection state machine → three docs. It does not touch performance or compatibility → those docs stay closed.
+- **Action**: `README_DetailDesign.md` gets the port signature; `README_ErrorDesign.md` gets timeout/refusal/partial-settlement cases; `README_StateDesign.md` gets `idle → connecting → ready → degraded` including invalid-transition handling.
+- **Observation**: AC-03 reads "gateway failures are handled gracefully" — not convertible to a TC → back to **Action**.
+- **Action (pass 2)**: AC-03 rewritten as "on gateway timeout, the adapter returns `GatewayTimeout` without retrying, and emits one diagnostic event".
+- **Observation**: all ACs now map to Typical/Edge/Fault skeletons; the architecture's p95 latency scenario is carried across as a detail constraint → **Stop**.
+- Reported: `next_command = SPEC_reviewDetailDesign`.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
@@ -47,10 +77,6 @@ Create or update detailed design and acceptance criteria for the active user sto
 - Detailed design notes tied to the active user story in team-shared `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
 - Acceptance criteria that can be converted into CaTDD US/AC/TC skeletons.
 - Explicit assumptions, constraints, and unresolved questions.
-
-## Prompt Template
-
-Ask the assistant to design localized implementation details, class layouts, state machine transitions, and concrete API signatures before writing tests or product code, updating only the project-root Detailed-oriented README SPEC docs needed for the active story, keeping detailed design decisions traceable to story intent, and capturing the active story's lightweight implementation plan in the resulting design docs. For embedded or digital video/audio work, ensure localized state lifecycles and thread concurrency primitives are designed where relevant.
 
 ## Conflict Guard
 

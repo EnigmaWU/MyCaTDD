@@ -10,6 +10,34 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 
 **ReACT** — Reasoning + Acting. This command must inspect the architecture-changing active user story, `projectContext.md`, `README_ArchDesign.md`, and the matching ZH mirror when present; reason about architecture completeness, traceability, module boundaries, runtime adapters, and design risks; then produce a PASS, REVISE, or ASK finding with actionable evidence. When the architecture document already reflects earlier architecture work, review whether the current story is correctly represented as an architecture-changing update instead of requiring every opened story to appear as an architecture trace owner.
 
+### ReACT Execution
+
+Repeat until the finding is stable and every finding is actionable.
+
+1. **Thought** — Read the story, project context, `README_ArchDesign.md`, and the ZH mirror when present. Walk the Review Checklist and name the items that fail.
+2. **Action** — Run the Builtin Skill Gates (or the preferred skills when available) and write one verdict — `PASS`, `REVISE`, or `ASK` — with one evidence line per failed item.
+3. **Observation** — Check every finding cites a document section and states what would make it pass. A finding that only says "unclear" returns to **Thought**. A finding demanding that an unrelated consuming story appear as an architecture trace owner is invalid and must be dropped.
+4. **Stop** — Exit on a stable verdict. `PASS` → `SPEC_takeDetailDesign`; `REVISE` → `SPEC_updateArchDesign`; `ASK` → stop and ask the developer.
+
+### Worked Example
+
+Gating the architecture for the multi-gateway story:
+
+```text
+/SPEC_reviewArchDesign
+doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+readme_arch_design: README_ArchDesign.md
+readme_arch_design_zh: README_ArchDesign_ZH.md
+```
+
+Expected result — two passes:
+
+- **Thought**: checklist walk finds only two measurable quality scenarios, and the EN/ZH mirrors differ by one heading.
+- **Action**: Quality gate → REVISE (fewer than three scenarios). Mirror check → REVISE. Verdict `REVISE` with two evidence lines.
+- **Observation**: a third draft finding said "the component view feels overloaded" — no section cited, no pass condition → not actionable → back to **Thought** → restated as "Component view: `GatewayRouter` owns both routing and retry; split or document why one component owns both".
+- **Observation (pass 2)**: all three findings cite a section and a pass condition → verdict stable.
+- Reported: `REVISE` → `next_command = SPEC_updateArchDesign`. Detail design is blocked until this passes.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/` that creates or changes architecture decisions, architecture boundaries, deployment/runtime strategy, or architecture-oriented SPEC surfaces.
@@ -62,12 +90,6 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 - Runtime targets, adapters, deployment boundaries, and command execution boundaries are explicit.
 - Auth, audit, auto, hooks, control, diagnostics, trace, and failure paths are covered or intentionally deferred.
 - EN/ZH architecture mirrors have matching heading structure when both are present.
-
-## Prompt Template
-
-Ask the assistant to review the high-level architecture against the architecture-changing story, project context, and architecture documents, report PASS/REVISE/ASK findings first, and prevent `SPEC_takeDetailDesign` unless the architecture can support the detailed design work. Do not require unrelated opened stories that merely consume existing architecture to appear as architecture trace owners.
-
-When possible, prefer a SOTA high-reasoning model (for example, GPT-5.5-xHigh) for this review so trade-off risks and boundary mistakes are not missed.
 
 ## Loop Guard
 

@@ -17,6 +17,49 @@ Compared with `methodPrompts`, a slash command should be more flow-first and aut
 - `Source of truth`: method prompt files under `methodPrompts/`
 - `Adapter target`: Copilot prompt, Cline command/rule, Continue command, `utCodeAgentCLI` command, or another existing CodeAgent surface
 
+## CoT Pattern
+
+State which Chain-of-Thought reasoning pattern this command uses and why, then write the matching `### <Pattern> Execution` subsection. A pattern may not be declared without its executable loop.
+
+- **ReACT** — Reasoning + Acting: use when the command must inspect current skeleton or test state, act, check the result against a CaTDD gate, and iterate. Suitable for skeleton design, implementation, refactor, and review commands.
+- **ToT** — Tree of Thoughts: use when the command must compare several candidates and commit to one. Suitable for selection commands.
+- **Linear** — Direct execution: use when the step is deterministic given complete inputs and no branching is expected.
+
+### ReACT Execution (when CoT Pattern = ReACT)
+
+Repeat until the output artifact satisfies the Output Contract:
+
+1. **Thought**: Inspect the listed inputs and method references. Identify the CaTDD class/category in play and what is missing or stale.
+2. **Action**: Perform this command's single step, preserving existing comment skeletons, US/AC/TC traceability, category labels, and status markers.
+3. **Observation**: Check the result against this command's CaTDD gate — traceability cardinality, phase layout, category fit, or status honesty. Name the condition that sends execution back to **Thought** or **Action**.
+4. **Stop**: Exit on a stable result. Report assumptions, conflicts, missing information, and the next recommended command.
+
+### ToT Execution (when CoT Pattern = ToT)
+
+1. **Generate**: List the candidate TCs, categories, or next steps the current state allows.
+2. **Evaluate**: Score each against CaTDD category priority, status, dependencies, and risk. Reject candidates whose preconditions are unmet.
+3. **Select**: Choose exactly one. If two candidates tie, present both and ask the developer.
+4. **Execute**: Report the selection and its rationale.
+5. **Verify**: Confirm no higher-priority candidate was skipped. Name the condition that returns to **Select**.
+
+### Linear Execution (when CoT Pattern = Linear)
+
+Run these steps once, in order. State explicitly that there is no retry loop.
+
+1. Read the listed inputs and method references.
+2. Preserve existing CaTDD comment skeletons, US/AC/TC traceability, category labels, and status markers.
+3. Perform only the command's requested step.
+4. Report assumptions, conflicts, missing information, and next recommended command.
+
+### Worked Example
+
+Walk the loop above through one concrete, realistic invocation. Required in every command.
+
+1. Show the invocation as a `text` block with actual input values.
+2. Walk each named step, showing what it concludes on this input.
+3. Show at least one step failing its own CaTDD gate where the pattern allows it, so the loop condition is visible rather than decorative.
+4. End with the next recommended command.
+
 ## WHO
 
 State who invokes this command and who should act on it.
@@ -61,13 +104,7 @@ State why this command exists.
 
 ## HOW
 
-State the execution procedure.
-
-1. Read the listed inputs and method references.
-2. Preserve existing CaTDD comment skeletons, US/AC/TC traceability, category labels, and status markers.
-3. Perform only the command's requested step.
-4. Report assumptions, conflicts, missing information, and next recommended command.
-5. Avoid product-specific, editor-specific, model-specific, or language-specific behavior unless it is explicitly supplied as input.
+The execution procedure lives in the `### <Pattern> Execution` subsection under `## CoT Pattern`, so the declared pattern and its loop cannot drift apart. Do not restate that procedure here or in a separate prompt-template section.
 
 ## Input Contract
 

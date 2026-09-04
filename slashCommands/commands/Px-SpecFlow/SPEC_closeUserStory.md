@@ -10,6 +10,42 @@ Close an active user story after implementation, review, commit, and CI are comp
 
 **Linear** — Direct execution. Given verified commit and CI evidence, this command moves the story artifact to done state deterministically and normalizes story-specific trace links to the done location. If any lifecycle gate (review, commit, CI) remains unresolved, the observation stops and asks the developer instead of closing.
 
+### Linear Execution
+
+Run these steps once, in order. The branches below are deterministic gates, not a retry loop; any unresolved gate stops and asks the developer.
+
+1. Verify the close gates: review passed, `commit_ref` present, `ci_summary` acceptable, and the story is not listed under `.catdd/spec/suspendUS/`. Stop on any failure.
+2. Move the story and its paired tasks artifact from `.catdd/spec/doingUS/` to `.catdd/spec/doneUS/`. Remove the doingUS copy so the ID exists in exactly one lane.
+3. Rewrite story-specific references that still point at `.catdd/spec/doingUS/` to `.catdd/spec/doneUS/`.
+4. Synchronize `README_UserStories.md`: story TODO/DOING → DONE, and AC status aligned with closure evidence.
+5. Classify project-context impact: **minor** (file movement or link normalization only) → remind the developer to run `SPEC_updateProjectContext`; **major** (next-command recommendation, lifecycle summary, or project rules changed) → run `SPEC_updateProjectContext` in-flow before declaring closure complete.
+6. Evaluate the close-commit checkpoint: if steps 2–5 changed no file, report `close_commit_required = no`; otherwise report `close_commit_required = yes` with either a `close_commit_ref` or `next_command = /SPEC_commitWorks`, and do not mark closure complete.
+7. Evaluate the merge checkpoint: dedicated story branch still unintegrated → `next_command = SPEC_mergeWorks`; otherwise `next_command = no_command`.
+8. Report the completion summary plus the non-blocking `learning_command = /HARNESS_evolveHarness` checkpoint, without displacing a required lifecycle command.
+
+### Worked Example
+
+A story branch has been committed, merged, and CI is green:
+
+```text
+/SPEC_closeUserStory
+doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+commit_ref: a1b2c3d
+merge_summary: merged feat/payment-retry into main
+ci_summary: CI green (38/38)
+```
+
+Expected result:
+
+1. Gates pass; story is not suspended.
+2. Story and tasks moved to `.catdd/spec/doneUS/`; doingUS copies removed.
+3. Two links inside the story rewritten from `doingUS/` to `doneUS/`.
+4. `README_UserStories.md`: `US-07` moved to DONE, AC-01..AC-04 marked satisfied.
+5. Impact classified **minor** — only file movement and link normalization → developer reminded to run `SPEC_updateProjectContext`.
+6. Steps 2–4 changed files → `close_commit_required = yes`, `next_command = /SPEC_commitWorks`; closure is **not** yet complete.
+7. Merge already done → merge checkpoint auto-skipped.
+8. Reported alongside: `learning_command = /HARNESS_evolveHarness`.
+
 ## Inputs
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
@@ -49,10 +85,6 @@ Close an active user story after implementation, review, commit, and CI are comp
   - Report `success_learning_checkpoint = recommended`.
   - Report `next_command = /HARNESS_evolveHarness` with `suggested_evolution_mode = auto` when no lifecycle, commit, or merge command has precedence.
   - When another command has precedence, preserve it as `next_command` and report `learning_command = /HARNESS_evolveHarness` separately.
-
-## Prompt Template
-
-Ask the assistant to close only verified work, preserve enough history for later review, determine whether post-close branch integration is required or auto-skipped, apply post-close project-context sync policy (minor = remind, major = run `SPEC_updateProjectContext` in-flow), enforce the post-close commit checkpoint for close-generated file changes, and report the non-blocking `HARNESS_evolveHarness` checkpoint without replacing a required lifecycle command.
 
 ## Conflict Guard
 

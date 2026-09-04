@@ -6,7 +6,39 @@ Implement the minimum product code for the active story after selected unit test
 
 ## CoT Pattern
 
-**Bounded Correction/TDD** — Confirm valid RED evidence, implement the minimum product-code change within the reviewed design, run focused external validation, evaluate the result, then correct or stop. Local correction is bounded by `max_correction_attempts`; design, test, requirement, environment, and ownership defects route to their canonical command instead of being patched inside product code.
+**ReACT** — Reasoning + Acting, bounded. Confirm valid RED evidence, implement the minimum product-code change within the reviewed design, run focused external validation, evaluate the result, then correct or stop. Local correction is bounded by `max_correction_attempts`; design, test, requirement, environment, and ownership defects route to their canonical command instead of being patched inside product code.
+
+### ReACT Execution
+
+The loop body is the Bounded Implementation Loop below. Each pass:
+
+1. **Thought** — Apply the Valid RED Gate. If RED is not valid, do not touch product code; route the defect to its owner. Then record the targeted AC/TC IDs, permitted production files, and the focused validation command.
+2. **Action** — Change only the product behavior required by the selected tests and reviewed design. Never modify tests to manufacture GREEN.
+3. **Observation** — Run the focused validation plus the narrowest relevant build, lint, type, sanitizer, or regression check. Evaluate to `GREEN`, `CORRECT`, `ROUTE`, or `ASK`.
+4. **Stop** — `GREEN` exits. `CORRECT` returns to **Action** with the smallest evidence-grounded fix. Stop also on `max_correction_attempts`, repeated no-progress evidence, scope expansion, conflicting evidence, an ownership boundary, or unavailable validation — and a no-progress stop must report remaining failures, never claim success.
+
+### Worked Example
+
+Implementing against a reviewed RED test:
+
+```text
+/SPEC_implProductCodes
+doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+failing_tests: UT_Gateway-Typical.ts TC-001 (RED: module not found)
+focused_validation: node --test services/payment/SysTests/UT_Gateway-Typical.ts
+max_correction_attempts: 3
+```
+
+Expected result:
+
+- **Thought**: RED gate — the test loads, fails on the missing `gatewayPort` module, and traces to AC-01/TC-001 and the reviewed detail design → valid RED. Scope recorded: `gatewayPort.ts` only.
+- **Action**: minimal port implementation written.
+- **Observation**: focused validation → TC-001 GREEN, TC-002 now fails → evaluate `CORRECT` (attempt 1), the failure is local and understood.
+- **Action**: minimal correction to the port's error branch.
+- **Observation**: focused validation → both GREEN, no regression → evaluate `GREEN`.
+- **Stop**: 1 correction attempt used of 3. Reported `next_command = SPEC_reviewProductCodes`, followed by the post-product-code `SPEC_reviewImplUnitTests` gate.
+
+A `ROUTE` variant: if TC-002 had failed because the design never defined the error branch, the evaluation would be `ROUTE` → stop, do not invent behavior, hand to `SPEC_updateDetailDesign`.
 
 ## Inputs
 
@@ -55,10 +87,6 @@ A no-progress stop must preserve the latest observed evidence, report remaining 
 - Initial RED evidence, validation commands and results, correction-attempt count, evaluation state, and stop reason.
 - Remaining failures and exact owner route when the result is `ROUTE` or `ASK`.
 - Next recommended command: `SPEC_reviewProductCodes`; when product-code review passes, run `SPEC_reviewImplUnitTests` again before refactor, commit, or closure.
-
-## Prompt Template
-
-Ask the assistant to confirm valid RED evidence, state the AC/TC and file boundary, write the minimum product code required by the reviewed design, run focused external validation, and correct locally only while evidence supports a bounded in-scope change. On GREEN, route to `SPEC_reviewProductCodes` and the post-product-code `SPEC_reviewImplUnitTests` gate; otherwise report the stop evidence and route to the canonical owner.
 
 ## Conflict Guard
 

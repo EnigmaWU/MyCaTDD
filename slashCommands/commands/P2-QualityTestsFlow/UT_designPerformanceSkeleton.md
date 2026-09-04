@@ -6,6 +6,37 @@ Design a CaTDD Performance skeleton from project-root `README_PerfDesign.md` and
 
 Use this command after P0 functional coverage exists and performance behavior is part of product risk or acceptance.
 
+## CoT Pattern
+
+**ReACT** — Reasoning + Acting. A performance AC is worthless unless it is measurable, so the loop's gate is numeric: every AC must carry a metric, a measurement boundary, and a pass/fail threshold taken from the design source — never a threshold the assistant picked.
+
+### ReACT Execution
+
+Repeat until every AC is measurable and sourced.
+
+1. **Thought** — Design-source gate first: check project-root `README_PerfDesign.md` exists. If it is missing, output a **WARNING** and stop before drafting anything. Then read it as the performance design source and read existing skeletons for behavior links.
+2. **Action** — Draft only the Performance skeleton with the full `@[...]` metadata set. Preserve unrelated categories.
+3. **Observation** — Check each AC states a metric, a measurement boundary, a load assumption, and a pass/fail threshold. A qualitative AC, or a threshold not present in the design source, returns to **Thought** — record it as a question rather than inventing a number.
+4. **Stop** — Exit when every AC is measurable and sourced. Recommend another P2 category or `UT_reviewQualityTestsSkeleton`.
+
+### Worked Example
+
+Adding performance coverage:
+
+```text
+/UT_designPerformanceSkeleton
+feature_name: payment authorization latency
+target_test_file: services/payment/SysTests/UT_Gateway.ts
+```
+
+Expected result:
+
+- **Thought**: `README_PerfDesign.md` exists → gate passes. It states p95 authorize latency < 500ms at 50 rps, measured at the port boundary.
+- **Action**: US-08 drafted with AC-21 (p95 < 500ms at 50 rps, measured at the port).
+- **Observation**: a second AC read "authorization should be fast under load" — no metric, no threshold → not measurable → back to **Thought** → the design source says nothing about sustained load, so it becomes an open question rather than an invented number.
+- **Observation**: AC-21 carries metric, boundary, load, and threshold, all sourced → gate passes.
+- **Stop**: one measurable AC, one open question. Recommended `UT_reviewQualityTestsSkeleton`.
+
 ## Inputs
 
 - `interface_or_protocol_file`: API, protocol, header, schema, or behavior contract.
@@ -32,18 +63,6 @@ Use this command after P0 functional coverage exists and performance behavior is
 - A Performance quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
 - US/AC/TC entries that make performance expectations measurable and bounded.
 - Traceability to functional or design scenarios that must remain correct under performance constraints.
-
-## Prompt Template
-
-Ask the assistant to:
-
-1. Check whether project-root `README_PerfDesign.md` exists before drafting any skeleton content.
-2. If `README_PerfDesign.md` is missing, output a WARNING and stop before drafting the Performance skeleton.
-3. Read `README_PerfDesign.md` as the performance design source, then read existing skeletons for behavior links.
-4. Use the Performance method prompt as the category source of truth.
-5. Draft only the Performance skeleton and preserve unrelated categories.
-6. Identify missing metrics, measurement boundaries, load assumptions, or pass/fail thresholds.
-7. Recommend whether to continue to another P2 category or `UT_reviewQualityTestsSkeleton`.
 
 ## Conflict Guard
 

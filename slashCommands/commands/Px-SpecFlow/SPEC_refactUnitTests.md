@@ -12,14 +12,32 @@ Use this command after selected unit tests and product code are GREEN, and befor
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
-Example ReACT trace for a single-TC refactor pass:
+### ReACT Execution
 
-1. `Reason`: TC-003 is GREEN, reviewed, and has duplicated setup that does not affect behavior.
-2. `Act`: Apply `UT_refactTestCase` mechanics to clean setup and assertion naming.
-3. `Observe`: Focused TC remains GREEN and US/AC/TC comments are unchanged.
-4. `Act`: Apply `UT_reviewImplTestCase` mechanics to confirm no skeleton drift.
-5. `Observe`: Review passes; no behavior or coverage change found.
-6. `Decide`: Recommend another `SPEC_refactUnitTests` pass for the next independent TC or `SPEC_reviewImplUnitTests` when cleanup is complete.
+Repeat once per TC or per small independent batch. Behavior and coverage intent must not change.
+
+1. **Thought** — From implemented TC status and verification evidence, choose one TC or a small independent batch that is GREEN, reviewed, and safe to clean.
+2. **Action** — Apply `UT_refactTestCase` mechanics to that batch only.
+3. **Observation** — Re-run the focused validation and apply `UT_reviewImplTestCase`. The TC must stay GREEN and its US/AC/TC comments must be unchanged. Any behavior change, coverage change, or skeleton drift returns to **Action** and is reverted.
+4. **Stop** — Exit when no safe batch remains. Report another pass, a route back to design/implementation, or `SPEC_reviewImplUnitTests` when cleanup is complete.
+
+### Worked Example
+
+Cleaning up duplicated setup after the suite went GREEN:
+
+```text
+/SPEC_refactUnitTests
+doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+tc_slices: TC-003 (GREEN, reviewed)
+```
+
+Expected result:
+
+- **Thought**: TC-003 is GREEN, reviewed, and has setup duplicated from TC-002 — cosmetic, no behavior involved → safe batch.
+- **Action**: `UT_refactTestCase` mechanics applied to shared setup and assertion naming.
+- **Observation**: TC-003 stays GREEN, but the extracted helper also swallowed an assertion that TC-003 owned → coverage changed → back to **Action** → assertion restored inside `VERIFY`.
+- **Observation**: rerun GREEN, US/AC/TC comments byte-identical, `UT_reviewImplTestCase` finds no drift.
+- **Stop**: no further safe batch → reported `next_command = SPEC_reviewImplUnitTests`.
 
 ## Inputs
 
@@ -71,10 +89,6 @@ Example ReACT trace for a single-TC refactor pass:
 - Do not implement missing product behavior during refactor. Route required behavior changes to `SPEC_implProductCodes` or `SPEC_implUnitTests` as appropriate.
 - Keep unrelated test files and unrelated TC status markers untouched.
 - Preserve strict phase layout and key verification naming in every refactored TC.
-
-## Prompt Template
-
-Ask the assistant to run an observable ReACT loop: inspect active-story implemented TCs and verification evidence, select the smallest GREEN refactor candidate, apply `UT_refactTestCase` mechanics, verify no behavior change, review with `UT_reviewImplTestCase`, and decide whether to continue refactoring or hand off to `SPEC_reviewImplUnitTests`. Preserve CaTDD skeleton metadata and stop on any behavior, category, or acceptance ambiguity.
 
 ## Conflict Guard
 
