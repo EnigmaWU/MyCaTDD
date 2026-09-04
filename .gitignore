@@ -72,6 +72,8 @@ Testing/
 /.catdd/methodPrompts/
 /.catdd/slashCommands/
 /.catdd/CaTDD_INSTALL.md
+/.catdd/CaTDD_INSTALL.manifest
+/.catdd/.install-baseline/
 /agentSkills/dist/
 /.github/prompts/UT_*.prompt.md
 /.github/prompts/SPEC_*.prompt.md

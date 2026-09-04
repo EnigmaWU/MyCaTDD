@@ -94,7 +94,7 @@ slashCommands/
 
 ```bash
 TARGET_DIR="$(mktemp -d)"
-scripts/installCaTDD4Copilot.sh --target "$TARGET_DIR" --clean-prompts
+scripts/installCaTDD.sh --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts
 test -f "$TARGET_DIR/.catdd/slashCommands/README_UserGuide.md"
 test -f "$TARGET_DIR/.github/prompts/UT_convertDemoToTypical.prompt.md"
 echo "$TARGET_DIR"
@@ -124,7 +124,7 @@ bash scripts/test_makeSlashCmd4Copilot.sh
 安装或刷新 CaTDD 到另一个已启用 Copilot 的项目：
 
 ```bash
-scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot --clean-prompts
 ```
 
 生成 Continue 原生包装：
@@ -133,20 +133,19 @@ scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
 scripts/makeSlashCmd4Continue.sh --clean
 ```
 
-安装或刷新 CaTDD 到 Continue 或 Cline 项目：
+安装或刷新 CaTDD 到 Continue、Cline 或 Antigravity 项目：
 
 ```bash
-scripts/installCaTDD4Continue.sh --target /path/to/project
-scripts/installCaTDD4Cline.sh --target /path/to/project
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
 ```
 
 验证安装器和生成器行为：
 
 ```bash
-bash scripts/test_installCaTDD4Copilot.sh
+bash scripts/test_installCaTDD.sh
 bash scripts/test_makeSlashCmd4Continue.sh
-bash scripts/test_installCaTDD4Continue.sh
-bash scripts/test_installCaTDD4Cline.sh
 ```
 
 ## SpecCoding 产物策略

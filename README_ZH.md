@@ -112,28 +112,26 @@ CaTDD 术语 **VibeCoding** 和 **SpecCoding** 的定义见 [slashCommands/READM
 可以用下面的命令把 CaTDD 安装或刷新到已有的 Copilot 项目：
 
 ```bash
-scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot --clean-prompts
 ```
 
 如果目标目录还不存在，增加 `--init`：
 
 ```bash
-scripts/installCaTDD4Copilot.sh --target /path/to/new-project --init --clean-prompts
+scripts/installCaTDD.sh --targetDir /path/to/new-project --targetCodeAgent Copilot --init --clean-prompts
 ```
 
-可以用下面的命令把 CaTDD 安装或刷新到 Continue 项目：
+可以通过选择智能体把 CaTDD 安装或刷新到 Continue、Cline 或 Antigravity 项目：
 
 ```bash
-scripts/installCaTDD4Continue.sh --target /path/to/project
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
 ```
 
-如果需要在重新生成前删除旧的 `UT_*.prompt` 和 `SPEC_*.prompt` Continue 包装，可增加 `--clean-prompts`。
+如果需要在重新生成前删除旧的 prompt 包装，可增加 `--clean-prompts`。
 
-可以用下面的命令把 CaTDD 安装或刷新到 Cline 项目：
-
-```bash
-scripts/installCaTDD4Cline.sh --target /path/to/project
-```
+刷新是补丁感知的：安装后目标中被演进的文件（例如由 `HARNESS_evolveHarness` 修改）会被保留，绝不静默覆盖。互不重叠的上游与目标修改会进行三方合并，重叠修改保留目标并报告冲突，`--force-overwrite` 可将所有受管文件恢复为规范源。
 
 安装器会在目标项目中创建或刷新这些资产：
 
@@ -144,6 +142,9 @@ scripts/installCaTDD4Cline.sh --target /path/to/project
 - `.continue/rules/catdd.md`：指向 `.catdd/` 的 Continue 项目规则。
 - `.continue/prompts/UT_*.prompt` 和 `.continue/prompts/SPEC_*.prompt`：从 `slashCommands` 生成的 Continue 原生 prompt 薄适配。
 - `.clinerules/catdd.md`：指向 `.catdd/` 的 Cline 项目规则。
+- `.cline/skills/`：从 `slashCommands` 生成的 Cline 命令技能适配。
+- `.antigravityrules/catdd.md`：指向 `.catdd/` 的 Antigravity 项目规则。
+- `.catdd/CaTDD_INSTALL.manifest` 与 `.catdd/.install-baseline/`：用于检测并合并目标演进文件的补丁感知刷新状态。
 
 在本源仓库中，生成的 `.github/prompts/UT_*.prompt.md`、`.github/prompts/SPEC_*.prompt.md`、`.continue/rules/catdd.md`、`.continue/prompts/UT_*.prompt`、`.continue/prompts/SPEC_*.prompt`、`.clinerules/catdd.md` 文件只是临时适配输出，并被刻意忽略。应提交 `methodPrompts`、`slashCommands`、脚本与文档；需要时再为目标项目重新生成原生适配。
 

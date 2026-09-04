@@ -3,16 +3,36 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 INSTALLER="$REPO_ROOT/scripts/installCaTDD.sh"
-TARGET_DIR="$(mktemp -d)"
+WORK="$(mktemp -d)"
 
 cleanup() {
-  rm -rf "$TARGET_DIR"
+  rm -rf "$WORK"
 }
 trap cleanup EXIT
 
 fail() {
   echo "[installCaTDD-test] $*" >&2
   exit 1
+}
+
+assert_file() {
+  [[ -f "$1" ]] || fail "missing file: $1"
+}
+
+assert_dir() {
+  [[ -d "$1" ]] || fail "missing dir: $1"
+}
+
+assert_absent() {
+  [[ ! -e "$1" ]] || fail "unexpected file: $1"
+}
+
+assert_contains() {
+  grep -Fq "$2" "$1" || fail "$1 missing expected content: $2"
+}
+
+assert_not_contains() {
+  ! grep -Fq "$2" "$1" || fail "$1 should not contain: $2"
 }
 
 [[ -x "$INSTALLER" ]] || fail "missing executable installer: scripts/installCaTDD.sh"
@@ -25,54 +45,144 @@ err_out="$("$INSTALLER" 2>&1)" || true
 grep -Fq 'Missing required --targetDir' <<< "$err_out" || fail "missing --targetDir not detected"
 
 echo "[installCaTDD-test] Test: missing --targetCodeAgent exits error"
-err_out="$("$INSTALLER" --targetDir "$TARGET_DIR" 2>&1)" || true
+err_out="$("$INSTALLER" --targetDir "$WORK" 2>&1)" || true
 grep -Fq 'Missing required --targetCodeAgent' <<< "$err_out" || fail "missing --targetCodeAgent not detected"
 
 echo "[installCaTDD-test] Test: unknown agent exits error"
-err_out="$("$INSTALLER" --targetDir "$TARGET_DIR" --targetCodeAgent Foo 2>&1)" || true
+err_out="$("$INSTALLER" --targetDir "$WORK" --targetCodeAgent Foo 2>&1)" || true
 grep -Fq 'Unknown --targetCodeAgent' <<< "$err_out" || fail "unknown agent not detected"
 
 echo "[installCaTDD-test] Test: dryRunner"
-dry_output="$("$INSTALLER" --targetDir /tmp/dry --targetCodeAgent dryRunner 2>&1)"
+dry_output="$("$INSTALLER" --targetDir "$WORK/dry" --targetCodeAgent dryRunner 2>&1)"
 grep -Fq 'dryRunner' <<< "$dry_output" || fail "dryRunner missing dryRunner label"
-grep -Fq 'Copilot | Continue' <<< "$dry_output" || fail "dryRunner missing supported agents"
+grep -Fq 'Copilot | Continue | Cline | Antigravity' <<< "$dry_output" || fail "dryRunner missing supported agents"
 
-echo "[installCaTDD-test] Test: Copilot fresh install"
-"$INSTALLER" --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --init --clean-prompts --yes
-[[ -f "$TARGET_DIR/.catdd/methodPrompts/README.md" ]] || fail "Copilot install missing methodPrompts"
-[[ ! -f "$TARGET_DIR/README_UbiLang.md" ]] || fail "Copilot install should not install README_UbiLang.md"
-[[ -d "$TARGET_DIR/.catdd/spec/pendingNews" ]] || fail "Copilot install missing .catdd/spec/pendingNews"
-[[ -f "$TARGET_DIR/.github/prompts/UT_convertDemoToTypical.prompt.md" ]] || fail "Copilot install missing generated prompt"
-[[ -f "$TARGET_DIR/.github/prompts/SPEC_designUnitTests.prompt.md" ]] || fail "Copilot install missing SPEC_designUnitTests prompt"
-[[ -f "$TARGET_DIR/.github/prompts/HARNESS_patchCaTDDSource.prompt.md" ]] || fail "Copilot install missing HARNESS_patchCaTDDSource prompt"
-[[ -f "$TARGET_DIR/.github/prompts/HARNESS_verifyInstallation.prompt.md" ]] || fail "Copilot install missing HARNESS_verifyInstallation prompt"
-[[ -f "$TARGET_DIR/.github/prompts/HARNESS_diagnoseInstallation.prompt.md" ]] || fail "Copilot install missing HARNESS_diagnoseInstallation prompt"
-[[ -f "$TARGET_DIR/.github/instructions/catdd.instructions.md" ]] || fail "Copilot install missing instructions"
-install_marker="$TARGET_DIR/.catdd/CaTDD_INSTALL.md"
-grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$install_marker" || fail "install marker missing version line"
+echo "[installCaTDD-test] Test: per-agent fresh installs"
+install_fresh() {
+  local agent="$1"
+  local dir="$WORK/fresh-$agent"
+  local marker
+  echo "[installCaTDD-test]   agent: $agent"
+  "$INSTALLER" --targetDir "$dir" --targetCodeAgent "$agent" --init --clean-prompts --yes >/dev/null 2>&1
+  assert_file "$dir/.catdd/methodPrompts/README.md"
+  assert_file "$dir/.catdd/slashCommands/UT_slashCommandTemplate.md"
+  assert_dir "$dir/.catdd/spec/pendingNews"
+  assert_absent "$dir/README_UbiLang.md"
+  assert_file "$dir/.catdd/CaTDD_INSTALL.manifest"
+  assert_dir "$dir/.catdd/.install-baseline/methodPrompts"
+  assert_dir "$dir/.catdd/.install-baseline/slashCommands"
+  marker="$dir/.catdd/CaTDD_INSTALL.md"
+  grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$marker" || fail "install marker missing version line"
+
+  case "$agent" in
+    Copilot)
+      assert_file "$dir/.github/instructions/catdd.instructions.md"
+      assert_contains "$dir/.github/instructions/catdd.instructions.md" '/HARNESS_evolveHarness'
+      assert_file "$dir/.github/prompts/UT_convertDemoToTypical.prompt.md"
+      assert_file "$dir/.github/prompts/SPEC_openUserStory.prompt.md"
+      assert_file "$dir/.github/prompts/HARNESS_patchCaTDDSource.prompt.md"
+      assert_file "$dir/.github/prompts/HARNESS_verifyInstallation.prompt.md"
+      assert_file "$dir/.github/prompts/HARNESS_diagnoseInstallation.prompt.md"
+      assert_contains "$dir/.github/prompts/UT_convertDemoToTypical.prompt.md" 'thin Copilot adapter'
+      source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+      prompt_count="$(find "$dir/.github/prompts" -type f \( -name 'UT_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) | wc -l | tr -d '[:space:]')"
+      [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count installed Copilot prompts, got $prompt_count"
+      ;;
+    Continue)
+      assert_file "$dir/.continue/rules/catdd.md"
+      assert_contains "$dir/.continue/rules/catdd.md" '.continue/prompts/UT_*.prompt'
+      assert_contains "$dir/.continue/rules/catdd.md" '/HARNESS_evolveHarness'
+      assert_file "$dir/.continue/prompts/UT_convertDemoToTypical.prompt"
+      assert_file "$dir/.continue/prompts/SPEC_openUserStory.prompt"
+      ;;
+    Cline)
+      assert_file "$dir/.clinerules/catdd.md"
+      assert_contains "$dir/.clinerules/catdd.md" '/HARNESS_evolveHarness'
+      assert_dir "$dir/.cline/skills"
+      ;;
+    Antigravity)
+      assert_file "$dir/.antigravityrules/catdd.md"
+      assert_contains "$dir/.antigravityrules/catdd.md" '/HARNESS_evolveHarness'
+      ;;
+  esac
+
+  replacement_output="$("$INSTALLER" --targetDir "$dir" --targetCodeAgent "$agent" --clean-prompts --yes 2>&1)"
+  grep -Fq '] version:' <<< "$replacement_output" || fail "installer missing version action output on reinstall"
+  grep -Fq '(same version, replacement)' <<< "$replacement_output" || fail "reinstall should report same-version replacement"
+  rm -rf "$dir"
+}
+
+for agent in Copilot Continue Cline Antigravity; do
+  install_fresh "$agent"
+done
 
 echo "[installCaTDD-test] Test: GitHub/Copilot alias works"
-TARGET2="$(mktemp -d)"
-"$INSTALLER" --targetDir "$TARGET2" --targetCodeAgent "GitHub/Copilot" --init --yes
-[[ -f "$TARGET2/.catdd/methodPrompts/README.md" ]] || fail "GitHub/Copilot alias install missing methodPrompts"
-rm -rf "$TARGET2"
+TARGET2="$WORK/alias"
+"$INSTALLER" --targetDir "$TARGET2" --targetCodeAgent "GitHub/Copilot" --init --yes >/dev/null 2>&1
+assert_file "$TARGET2/.catdd/methodPrompts/README.md"
 
-echo "[installCaTDD-test] Test: --verbose passthrough"
-verbose_output="$("$INSTALLER" --targetDir /tmp/_catdd_verbose_never --targetCodeAgent dryRunner --verbose 2>&1 || true)"
-grep -Fq 'installCaTDD' <<< "$verbose_output" || true  # dryRunner doesn't forward --verbose to sub-installer, but should still work
+echo "[installCaTDD-test] Test: evolved file survives refresh, --force-overwrite restores canonical"
+S1="$WORK/sync-keep"
+"$INSTALLER" --targetDir "$S1" --targetCodeAgent Copilot --init --clean-prompts --yes >/dev/null 2>&1
+EV1="$S1/.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_evolveHarness.md"
+printf '\n<!-- EVOLVED-LINE-TEST -->\n' >> "$EV1"
+keep_output="$("$INSTALLER" --targetDir "$S1" --targetCodeAgent Copilot --clean-prompts --yes 2>&1)"
+grep -Fq 'kept-local' <<< "$keep_output" || fail "evolved file not reported as kept-local"
+grep -Fq 'same version, replacement' <<< "$keep_output" || fail "same-version refresh did not report replacement"
+assert_contains "$EV1" 'EVOLVED-LINE-TEST'
+"$INSTALLER" --targetDir "$S1" --targetCodeAgent Copilot --clean-prompts --yes --force-overwrite >/dev/null 2>&1
+assert_not_contains "$EV1" 'EVOLVED-LINE-TEST'
 
-echo "[installCaTDD-test] Test: Continue fresh install"
-TARGET3="$(mktemp -d)"
-"$INSTALLER" --targetDir "$TARGET3" --targetCodeAgent Continue --init --clean-prompts --yes
-[[ -f "$TARGET3/.catdd/methodPrompts/README.md" ]] || fail "Continue install missing methodPrompts"
-[[ ! -f "$TARGET3/README_UbiLang.md" ]] || fail "Continue install should not install README_UbiLang.md"
-[[ -d "$TARGET3/.catdd/spec/pendingNews" ]] || fail "Continue install missing .catdd/spec/pendingNews"
-[[ -f "$TARGET3/.continue/prompts/UT_convertDemoToTypical.prompt" ]] || fail "Continue install missing generated prompt"
-[[ -f "$TARGET3/.continue/prompts/SPEC_designUnitTests.prompt" ]] || fail "Continue install missing SPEC_designUnitTests prompt"
-[[ -f "$TARGET3/.continue/prompts/HARNESS_patchCaTDDSource.prompt" ]] || fail "Continue install missing HARNESS_patchCaTDDSource prompt"
-[[ -f "$TARGET3/.continue/prompts/HARNESS_verifyInstallation.prompt" ]] || fail "Continue install missing HARNESS_verifyInstallation prompt"
-[[ -f "$TARGET3/.continue/prompts/HARNESS_diagnoseInstallation.prompt" ]] || fail "Continue install missing HARNESS_diagnoseInstallation prompt"
-[[ -f "$TARGET3/.continue/rules/catdd.md" ]] || fail "Continue install missing Continue rule"
-rm -rf "$TARGET3"
+echo "[installCaTDD-test] Test: three-way merge, conflict keep, and upstream propagation"
+FIX="$WORK/fixture"
+mkdir -p "$FIX"
+cp -R "$REPO_ROOT/methodPrompts" "$FIX/methodPrompts"
+cp -R "$REPO_ROOT/slashCommands" "$FIX/slashCommands"
+S2="$WORK/sync-merge"
+CATDD_SOURCE_ROOT="$FIX" "$INSTALLER" --targetDir "$S2" --targetCodeAgent Copilot --init --yes >/dev/null 2>&1
 
-echo "[installCaTDD-test] PASSED: all tests passed"
+HB="$S2/.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_evolveHarness.md"
+SC="$S2/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_commitWorks.md"
+OU="$S2/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md"
+
+# Local evolution in the target.
+perl -0pi -e 's/(^# HARNESS_evolveHarness$)/$1\n> LOCAL-EVOLVED-TEST/m' "$HB"
+perl -0pi -e 's/^# SPEC_commitWorks$/# SPEC_commitWorks LOCAL-CONFLICT-TEST/m' "$SC"
+
+# Upstream changes in the fixture source.
+printf '\n<!-- UPSTREAM-LINE-A -->\n' >> "$FIX/slashCommands/commands/Px-HarnessKits/HARNESS_evolveHarness.md"
+perl -0pi -e 's/^# SPEC_commitWorks$/# SPEC_commitWorks UPSTREAM-CONFLICT-TEST/m' "$FIX/slashCommands/commands/Px-SpecFlow/SPEC_commitWorks.md"
+printf '\n<!-- UPSTREAM-LINE-B -->\n' >> "$FIX/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md"
+
+merge_output="$(CATDD_SOURCE_ROOT="$FIX" "$INSTALLER" --targetDir "$S2" --targetCodeAgent Copilot --yes 2>&1)"
+grep -Fq 'sync: merged (kept target-evolved lines)' <<< "$merge_output" || fail "disjoint edits were not merged"
+grep -Fq 'sync: conflict (kept target; upstream not applied)' <<< "$merge_output" || fail "overlapping edits were not reported as conflict"
+grep -Fq 'sync slashCommands: new=0' <<< "$merge_output" || fail "merge run reported unexpected new files"
+assert_contains "$HB" 'LOCAL-EVOLVED-TEST'
+assert_contains "$HB" 'UPSTREAM-LINE-A'
+head -1 "$SC" | grep -Fq '# SPEC_commitWorks LOCAL-CONFLICT-TEST' || fail "conflict file was overwritten instead of kept"
+assert_contains "$OU" 'UPSTREAM-LINE-B'
+assert_not_contains "$S2/.catdd/.install-baseline/slashCommands/commands/Px-HarnessKits/HARNESS_evolveHarness.md" 'LOCAL-EVOLVED-TEST'
+
+echo "[installCaTDD-test] Test: local-only command file is kept"
+S3="$WORK/sync-local-only"
+"$INSTALLER" --targetDir "$S3" --targetCodeAgent Copilot --init --yes >/dev/null 2>&1
+LOCAL_CMD="$S3/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_myLocalCommand.md"
+printf '# SPEC_myLocalCommand\n' > "$LOCAL_CMD"
+local_only_output="$("$INSTALLER" --targetDir "$S3" --targetCodeAgent Copilot --yes 2>&1)"
+grep -Fq 'local-only (kept)' <<< "$local_only_output" || fail "target-only file not reported as local-only"
+assert_file "$LOCAL_CMD"
+
+echo "[installCaTDD-test] Test: legacy target without baseline is conservatively kept"
+S4="$WORK/legacy"
+"$INSTALLER" --targetDir "$S4" --targetCodeAgent Copilot --init --yes >/dev/null 2>&1
+rm -rf "$S4/.catdd/CaTDD_INSTALL.manifest" "$S4/.catdd/.install-baseline"
+EV4="$S4/.catdd/slashCommands/commands/Px-HarnessKits/HARNESS_evolveHarness.md"
+printf '\n<!-- LEGACY-EVOLVED-TEST -->\n' >> "$EV4"
+legacy_output="$("$INSTALLER" --targetDir "$S4" --targetCodeAgent Copilot --yes 2>&1)"
+grep -Fq 'no baseline, assume evolved' <<< "$legacy_output" || fail "legacy divergent file not reported"
+assert_contains "$EV4" 'LEGACY-EVOLVED-TEST'
+"$INSTALLER" --targetDir "$S4" --targetCodeAgent Copilot --yes --force-overwrite >/dev/null 2>&1
+assert_not_contains "$EV4" 'LEGACY-EVOLVED-TEST'
+
+echo "[installCaTDD-test] PASSED: unified installer, per-agent assets, and patch-aware sync verified"

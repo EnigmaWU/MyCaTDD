@@ -26,7 +26,7 @@ for heading in '## Who' '## What' '## When' '## Where' '## Why' '## How' '## Usa
   grep -Fq "$heading" "$GUIDE" || fail "slashCommands user guide missing $heading section"
 done
 
-grep -Fq 'scripts/installCaTDD4Copilot.sh --target "$TARGET_DIR" --clean-prompts' "$GUIDE" || fail "slashCommands user guide missing copy-exec Copilot install example"
+grep -Fq 'scripts/installCaTDD.sh --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts' "$GUIDE" || fail "slashCommands user guide missing copy-exec Copilot install example"
 grep -Fq '.catdd/slashCommands/README_UserGuide.md' "$GUIDE" || fail "slashCommands user guide missing installed slashCommands path check"
 grep -Fq 'scripts/makeSlashCmd4Continue.sh --clean' "$GUIDE" || fail "slashCommands user guide missing Continue generation command"
 grep -Fq 'flows/P0-FuncTestsFlow.md' "$GUIDE" || fail "slashCommands user guide missing flow map"
@@ -37,7 +37,7 @@ grep -Fq '.catdd/spec/abortUS/' "$GUIDE" || fail "slashCommands user guide missi
 
 grep -Fq '## 使用者' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing 使用者 section"
 grep -Fq '## Usage Example' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing copy-exec Usage Example section"
-grep -Fq 'scripts/installCaTDD4Copilot.sh --target "$TARGET_DIR" --clean-prompts' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing copy-exec Copilot install example"
+grep -Fq 'scripts/installCaTDD.sh --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing copy-exec Copilot install example"
 grep -Fq '.catdd/slashCommands/README_UserGuide.md' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing installed slashCommands path check"
 grep -Fq 'scripts/makeSlashCmd4Continue.sh --clean' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing Continue generation command"
 grep -Fq 'flows/P0-FuncTestsFlow.md' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing flow map"

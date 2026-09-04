@@ -94,7 +94,7 @@ Run these commands from the MyCaTDD repository root to install slash-command ass
 
 ```bash
 TARGET_DIR="$(mktemp -d)"
-scripts/installCaTDD4Copilot.sh --target "$TARGET_DIR" --clean-prompts
+scripts/installCaTDD.sh --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts
 test -f "$TARGET_DIR/.catdd/slashCommands/README_UserGuide.md"
 test -f "$TARGET_DIR/.github/prompts/UT_convertDemoToTypical.prompt.md"
 echo "$TARGET_DIR"
@@ -124,7 +124,7 @@ bash scripts/test_makeSlashCmd4Copilot.sh
 Install or refresh CaTDD into another Copilot-enabled project:
 
 ```bash
-scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot --clean-prompts
 ```
 
 Generate Continue-native wrappers:
@@ -133,20 +133,19 @@ Generate Continue-native wrappers:
 scripts/makeSlashCmd4Continue.sh --clean
 ```
 
-Install or refresh CaTDD into Continue or Cline projects:
+Install or refresh CaTDD into Continue, Cline, or Antigravity projects:
 
 ```bash
-scripts/installCaTDD4Continue.sh --target /path/to/project
-scripts/installCaTDD4Cline.sh --target /path/to/project
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
 ```
 
 Validate installer and generator behavior:
 
 ```bash
-bash scripts/test_installCaTDD4Copilot.sh
+bash scripts/test_installCaTDD.sh
 bash scripts/test_makeSlashCmd4Continue.sh
-bash scripts/test_installCaTDD4Continue.sh
-bash scripts/test_installCaTDD4Cline.sh
 ```
 
 ## SpecCoding Artifact Policy

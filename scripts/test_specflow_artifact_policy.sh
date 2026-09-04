@@ -3,7 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 FLOW_DOC="$REPO_ROOT/slashCommands/flows/Px-SpecFlow.md"
-INSTALLER="$REPO_ROOT/scripts/installCaTDD4Copilot.sh"
+INSTALLER="$REPO_ROOT/scripts/installCaTDD.sh"
 TARGET_DIR="$(mktemp -d)"
 
 cleanup() {
@@ -71,8 +71,8 @@ fi
 git -C "$REPO_ROOT" check-ignore -q .catdd/spec/WorkingProcessLog.md || fail "source .gitignore must ignore local .catdd/spec/WorkingProcessLog.md"
 
 printf '/dist/\n' > "$TARGET_DIR/.gitignore"
-"$INSTALLER" --target "$TARGET_DIR" --clean-prompts --yes >/dev/null
-"$INSTALLER" --target "$TARGET_DIR" --clean-prompts --yes >/dev/null
+"$INSTALLER" --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts --yes >/dev/null
+"$INSTALLER" --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts --yes >/dev/null
 
 [[ -d "$TARGET_DIR/.catdd/spec" ]] || fail "installer must create .catdd/spec workspace"
 [[ -d "$TARGET_DIR/.catdd/spec/pendingNews" ]] || fail "installer must create .catdd/spec/pendingNews"

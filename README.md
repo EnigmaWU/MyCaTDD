@@ -116,34 +116,26 @@ For the CaTDD terms **VibeCoding** and **SpecCoding**, see [slashCommands/README
 Install or refresh CaTDD into an existing Copilot-enabled project with:
 
 ```bash
-scripts/installCaTDD4Copilot.sh --target /path/to/project --clean-prompts
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot --clean-prompts
 ```
 
 For a new target directory, add `--init`:
 
 ```bash
-scripts/installCaTDD4Copilot.sh --target /path/to/new-project --init --clean-prompts
+scripts/installCaTDD.sh --targetDir /path/to/new-project --targetCodeAgent Copilot --init --clean-prompts
 ```
 
-Install or refresh CaTDD into a Continue project with:
+Install or refresh CaTDD into Continue, Cline, or Antigravity projects by selecting the agent:
 
 ```bash
-scripts/installCaTDD4Continue.sh --target /path/to/project
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
 ```
 
-Add `--clean-prompts` when you want to remove old generated `UT_*.prompt` and `SPEC_*.prompt` Continue wrappers before regenerating them.
+Add `--clean-prompts` when you want to remove old generated prompt wrappers before regenerating them.
 
-Install or refresh CaTDD into a Cline project with:
-
-```bash
-scripts/installCaTDD4Cline.sh --target /path/to/project
-```
-
-Install or refresh CaTDD into an Antigravity project with:
-
-```bash
-scripts/installCaTDD4Antigravity.sh --target /path/to/project
-```
+Refresh is patch-aware: files evolved in the target after install (for example by `HARNESS_evolveHarness`) are kept and never silently overwritten. Disjoint upstream and target edits are three-way merged, overlapping edits keep the target and are reported, and `--force-overwrite` restores canonical source for all managed files.
 
 The installer creates or refreshes these target-project assets:
 
@@ -154,7 +146,9 @@ The installer creates or refreshes these target-project assets:
 - `.continue/rules/catdd.md`: Continue project rule that points agents back to `.catdd/`.
 - `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`: Continue-native thin prompt adapters generated from `slashCommands`.
 - `.clinerules/catdd.md`: Cline project rule that points agents back to `.catdd/`.
+- `.cline/skills/`: Cline slash-command skill adapters generated from `slashCommands`.
 - `.antigravityrules/catdd.md`: Antigravity project rule that points agents back to `.catdd/`.
+- `.catdd/CaTDD_INSTALL.manifest` and `.catdd/.install-baseline/`: patch-aware refresh state used to detect and merge target-evolved files.
 
 In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, `.continue/rules/catdd.md`, `.continue/prompts/UT_*.prompt`, `.continue/prompts/SPEC_*.prompt`, `.clinerules/catdd.md`, and `.antigravityrules/catdd.md` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
 

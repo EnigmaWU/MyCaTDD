@@ -25,7 +25,7 @@ This file is the team-shared, always-loaded working memory for SpecCoding in thi
 
 ## Installed Project Surface
 
-After self-install with `scripts/installCaTDD4Copilot.sh --target "$PWD" --init --clean-prompts`:
+After self-install with `scripts/installCaTDD.sh --targetDir "$PWD" --targetCodeAgent Copilot --init --clean-prompts`:
 
 - `.catdd/methodPrompts/` contains installed CaTDD method source for target-project usage.
 - `.catdd/slashCommands/` contains installed portable flow-command source.
@@ -79,7 +79,7 @@ bash scripts/check_readme_mirror.sh
 bash scripts/test_documentation_contract.sh
 bash scripts/test_slashcommands_complete.sh
 bash scripts/test_makeSlashCmd4Copilot.sh
-bash scripts/test_installCaTDD4Copilot.sh
+bash scripts/test_installCaTDD.sh
 ```
 
 Use focused checks such as `git diff --check -- <files>` for edited Markdown or shell files before committing.
