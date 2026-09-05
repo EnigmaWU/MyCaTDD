@@ -4,38 +4,39 @@
 
 Review the P1 design skeleton set before quality coverage or implementation continues.
 
-Use this command when State, Capability, or Concurrency skeletons exist and the developer wants to know whether design coverage is coherent enough to proceed.
+Use this command to review the declared State, Capability, Interaction, and Concurrency scope, including source-backed concerns for which no skeleton or TC exists yet.
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This review's distinguishing gate is design-source backing: a P1 skeleton that looks plausible but traces to no confirmed design source must not be approved. The loop keeps checking findings until each is specific and each skeleton's source is verified. It is read-only.
+**ReACT** — Reasoning + Acting. This is a bounded, source-first independent review, not only an audit of existing skeleton links. A plausible skeleton without a confirmed design source cannot be approved. The command is read-only; return findings and proposed corrections without changing design or implementation files.
 
 ### ReACT Execution
 
-Repeat until every skeleton's design source is verified and every finding is actionable.
+Use one discovery sweep and one independent challenge, with at most two repair/recheck rounds for the review report. Stop earlier on missing intent, conflicting sources, or no progress; do not loop until PASS. Apply the canonical P1 Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md).
 
-1. **Thought** — Read the P1 skeletons. For each, check it declares a clear Class/Category with a full US/AC/TC trace, **and** that it links to a confirmed design source. Judge whether each scenario sits in State, Capability, or Concurrency correctly.
-2. **Action** — Write the coverage summary across the three categories, listing conflicts, duplicated scenarios, missing AC/TC links, unbacked skeletons, and unclear assumptions.
-3. **Observation** — Check each finding names a category, an id, and a fix; vague findings return to **Thought**. A skeleton with no confirmed design source cannot be approved regardless of how reasonable it reads. Confirm no implementation code was modified.
-4. **Stop** — Exit when findings are actionable. Recommend more P1 design, moving to P2 QualityTestsFlow, `UT_tellMeNextImplTest`, or blocking for clarification.
+1. **Thought** — Read source artifacts first, before the designer's ledger or skeletons. Declare SUT, in-scope categories, domain profile(s), test level, and execution environment. Independently derive the source-backed state/guard, capability/responsibility, handoff, and interleaving obligations. Record a source-derived checklist and any missing source or applicability question.
+2. **Action** — Read the discovery_ledger and skeletons, then reconcile the independent checklist in both directions. Check source-backed setup/oracles, category placement, verification procedures, and US/AC/TC links. A missing obligation may have no existing US/AC/TC ID: identify it by source/rule or TP ID, category, and a concrete correction or question. A TODO TC can be DESIGNED; it is not a discovery gap merely because it is unimplemented.
+3. **Observation** — Audit actual disposition counts, exclusions, routing, and review provenance. In-scope handoffs retain GAP/QUESTION until resolved; do not count referrals as coverage. Check manual/model-facing evidence as well as automated assertions. Report missing ledger/review evidence as a gap. Correct vague or inconsistent findings only within the remaining review budget; confirm no files were modified.
+4. **Stop** — Report BLOCKED for unresolved in-scope source/oracle/ownership/scope questions; otherwise GAPS for missing design or review evidence; otherwise PASS for this scope only. `ready_for_implementation: yes` requires both cardinality and discovery gates to pass. Recommend clarification/design repair on non-PASS, or `UT_tellMeNextImplTest` or further P2 design on PASS; do not claim release readiness.
 
 ### Worked Example
 
-Gating the P1 set:
+Illustrative embedded-device review: the supplied lifecycle rule `R-STATE` defines stopping and handle release; `R-CAP` defines a configured handle-pool limit; `R-INT` requires callback detachment before closing the device. Existing skeletons cover the first two, but omit the handoff order. Concurrency is requested in scope, yet its design source is missing.
 
 ```text
 /UT_reviewDesignTestsSkeleton
-test_file_or_files: services/payment/SysTests/UT_Gateway.ts
-feature_name: payment gateway
+test_file_or_files: Test/test_device_session_freelyDrafts.cxx
+feature_name: device session
+scope: P1 State, Capability, Interaction, Concurrency
+design_sources: supplied R-STATE, R-CAP, R-INT; concurrency model missing
 ```
 
 Expected result:
 
-- **Thought**: State traces to the `State Design` chapter → backed. Capability traces to `README_DetailDesign.md` → backed. Concurrency cites no source at all.
-- **Action**: coverage summary written with two findings — the unbacked Concurrency skeleton, and a Capability AC duplicated from the Misuse skeleton.
-- **Observation**: a third finding read "State could be richer" → no id, no fix → back to **Thought** → restated as "State has no AC for recovery after process restart".
-- **Observation**: the Concurrency skeleton reads plausibly, but plausibility is not a design source → not approved.
-- **Stop**: three actionable findings; no implementation code touched. Blocked for clarification until the concurrency design source is confirmed.
+- **Thought**: source-first checklist captures `R-INT` before examining existing TC counts; missing concurrency intent remains a question.
+- **Action**: report the unlinked `R-INT` obligation as GAP without inventing an existing TC ID. Ask where the concurrency model lives instead of assuming interrupt or locking behavior.
+- **Observation**: valid links for State/Capability do not close either finding. Record the reviewer/process, sources, checklist, and ledger reconciliation; do not infer counts from this abbreviated example.
+- **Stop**: `discovery_status: BLOCKED`, `ready_for_implementation: no`; retain the known GAP alongside the question. No source or test files are changed.
 
 ## Inputs
 
@@ -43,26 +44,34 @@ Expected result:
 - `feature_name`: feature under review.
 - `scope`: expected design scope.
 - `design_sources`: confirmed P1 design sources used by the skeletons under review.
+- `discovery_ledger`: feature-level inventory, dimension/sampling evidence, and candidate dispositions; if absent, report the missing review input.
+- `domain_profile` / `execution_environment`: applicable embedded/service/agent context and host, simulator, target/HIL, or other verification boundary.
 - `functional_skeletons`: related P0 Typical, Edge, Misuse, or Fault skeletons.
 
 ## Preconditions
 
-- P1 MUST have DESIGN: every State, Capability, or Concurrency skeleton under review must trace to a confirmed design source.
+- P1 MUST have DESIGN: every State, Capability, Interaction, or Concurrency skeleton under review must trace to a confirmed design source.
+- Apply the P1 Discovery Gate to the declared scope, not only existing files; source-backed obligations with no skeleton remain reviewable.
 - WARNING: If a P1 skeleton has no confirmed design source, ask the developer where the design lives or stop before approving the P1 review.
 
 ## Method References
 
-- [../../flows/P1-DesignTestsFlow.md](../../flows/P1-DesignTestsFlow.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-State.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-State.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Capability.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Capability.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Concurrency.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Concurrency.md)
+- [P1-DesignTestsFlow](../../flows/P1-DesignTestsFlow.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [CaTDD_methodPrompt-testPointDiscovery](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
+- [CaTDD_methodPrompt4Cat-State](../../../methodPrompts/CaTDD_methodPrompt4Cat-State.md)
+- [CaTDD_methodPrompt4Cat-Capability](../../../methodPrompts/CaTDD_methodPrompt4Cat-Capability.md)
+- [CaTDD_methodPrompt4Cat-Interaction](../../../methodPrompts/CaTDD_methodPrompt4Cat-Interaction.md)
+- [CaTDD_methodPrompt4Cat-Concurrency](../../../methodPrompts/CaTDD_methodPrompt4Cat-Concurrency.md)
 
 ## Output Contract
 
-- Coverage summary for State, Capability, and Concurrency.
-- Conflicts, duplicated scenarios, missing AC/TC links, and unclear assumptions.
-- A recommended next action: design more P1 skeleton, move to P2 QualityTestsFlow, select the next TC, or block for clarification.
+- SUT, declared scope across State/Capability/Interaction/Concurrency, source references, domain/test-level/environment, and verification methods.
+- `discovery_ledger`: location or explicit missing-evidence finding; disposition counts reconciled to actual rows, with exclusions, routing, and sampling limits separate from coverage.
+- `review_evidence`: independent source-derived checklist, reviewer/process (or labeled self-review), sources examined, reconciliation, and residual risk.
+- Findings keyed by source/rule or TP ID, with US/AC/TC IDs only when they exist; identify gaps, unknowns, category conflicts, weak oracles, or unsupported assumptions and the required correction/decision.
+- `cardinality_gate`: PASS | FAIL; `discovery_status`: PASS | GAPS | BLOCKED; `ready_for_implementation`: yes | no. Any non-PASS gate means no; PASS applies only to the reviewed scope, not execution or release readiness.
+- Bounded-review stop reason and next action: clarify/repair on non-PASS, or choose a TC or continue P2 design on PASS.
 
 ## Conflict Guard
 

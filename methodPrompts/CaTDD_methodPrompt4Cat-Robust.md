@@ -26,6 +26,8 @@ Robust proves that the system remains stable after repeated or sustained use.
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - Repeated operation cycles that should preserve the same invariant after many runs, not just once.
@@ -33,6 +35,10 @@ When this category applies, consider test points such as:
 - Stability under mixed valid use: alternating modes, repeated open/close, start/stop loops, enqueue/dequeue churn, or recover-and-continue flows.
 - Leak and residue checks: memory, handles, temp files, subscriptions, timers, threads, queues, or global state return to baseline.
 - Failure triage evidence that makes a late-cycle failure diagnosable without requiring huge unstructured logs.
+- Domain-specific questions:
+  - *Embedded Linux*: Across the source-defined duration/count of device, storage, or reset cycles, which resource and persisted-state invariants must hold? Plan safe target/HIL fixtures for physical faults; sanitizer findings are supporting evidence, not proof of no leaks anywhere.
+  - *Microservices*: Under repeated dependency flapping, reconnects, or pool churn, which source-defined stability and cleanup bounds must hold?
+  - *LLM Agents*: Across repeated runs, cancellations, or tool failures, which budgets and cleanup invariants remain stable? A single stop-counter check is State/Capability or P0 behavior unless repetition is the concern.
 
 ## Design Skeleton
 

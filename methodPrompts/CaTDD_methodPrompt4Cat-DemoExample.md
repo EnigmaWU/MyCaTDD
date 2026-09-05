@@ -26,6 +26,8 @@ DemoExample proves that a user-visible workflow can be followed and observed as 
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - The smallest copy-exec workflow from the UserGuide or README that demonstrates real user value.
@@ -33,6 +35,10 @@ When this category applies, consider test points such as:
 - A demo path that exercises already-proven P0/P1/P2 behavior without replacing those required tests.
 - Documentation drift checks: command flags, output snippets, filenames, examples, and expected status stay aligned with the guide.
 - New-user ergonomics: prerequisites are explicit, failure output is understandable, and the example can be followed without hidden local state.
+- Domain-specific questions:
+  - *Embedded Linux*: Does the guide identify whether a loopback/device example needs a host fixture, simulator, or target board, with explicit manual observations and cleanup?
+  - *Microservices*: Can the documented setup/request/cleanup workflow produce the specified response and status, including any intentional nonzero error example?
+  - *LLM Agents*: Does the walkthrough distinguish fake/recorded dependencies from live calls, state permissions and cost prerequisites, and expose the promised result without substituting a mock for the declared SUT?
 
 ## Design Skeleton
 

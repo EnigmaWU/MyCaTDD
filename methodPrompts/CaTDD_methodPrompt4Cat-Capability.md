@@ -36,6 +36,8 @@ Capability proves that the implementation matches the intended capacity contract
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - The promised minimum, default, configured, documented maximum, and discovered maximum ability from the design source.
@@ -43,6 +45,10 @@ When this category applies, consider test points such as:
 - Per-scope capacity boundaries: per user, per tenant, per process, per queue, per file, per service, or per configured resource pool.
 - Over-capacity policy: reject, backpressure, queue, evict, degrade, split, paginate, or require explicit configuration.
 - Capacity reset or release behavior after cleanup so the test proves the limit is reusable, not only reached once.
+- Domain-specific questions:
+  - *Embedded Linux*: Which supported operations, ring-buffer slots, device channels, or handle limits belong to this component? What is the designed excess and release behavior?
+  - *Microservices*: Which pool or tenant limits and responsibility boundaries are defined? Distinguish designed admission limits from measured throughput.
+  - *LLM Agents*: Which tools, delegation depth, per-run call limits, or context capacities are supported? What happens when the actual source-defined limit is reached or exceeded?
 
 ## Design Skeleton
 

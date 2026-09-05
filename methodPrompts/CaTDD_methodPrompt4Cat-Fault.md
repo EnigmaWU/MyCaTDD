@@ -35,7 +35,7 @@ Fault proves that the system fails right when the caller behaves correctly but t
 
 ## TestPointsInMind
 
-First apply the source inventory and Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Account for candidates in the shared discovery ledger; the ideas below are not a completeness quota.
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
 
 When this category applies, consider test points such as:
 
@@ -46,6 +46,10 @@ When this category applies, consider test points such as:
 - Boundary between valid caller behavior and failing world behavior, so the test does not drift into Misuse.
 - Recovery after the fault clears when the product contract promises retry, restart, resume, or re-open behavior.
 - Diagnostic signal required by ErrorDesign or DiagnosisDesign, while keeping the main assertion focused on functional failure handling.
+- Domain-specific questions:
+  - *Embedded Linux*: Under valid caller use, which device, bus, or storage failures can be injected safely, including during partial work? What exact error and preserved/changed state does the contract require?
+  - *Microservices*: What does a valid request observe when a dependency fails or acknowledgment is lost after a side effect? Use specified retry/idempotency semantics, not assumed rollback.
+  - *LLM Agents*: How does a valid run handle provider unavailability, malformed upstream output, or a broken stream? An over-limit request rejected by a provider is not automatically Fault; identify who violated the contract and whether the SUT constructed the invalid request.
 
 ## Design Skeleton
 

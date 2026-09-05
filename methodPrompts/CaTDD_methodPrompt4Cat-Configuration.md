@@ -26,6 +26,8 @@ Configuration proves that supported settings produce the intended behavior.
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - Default configuration behavior when no explicit setting is provided.
@@ -33,6 +35,10 @@ When this category applies, consider test points such as:
 - Supported setting combinations that select different modes, limits, integrations, paths, or policy behavior.
 - Invalid or conflicting configuration that should fail clearly before unsafe behavior starts.
 - Cleanup of global process state, environment variables, temp config files, and feature flags after each test.
+- Domain-specific questions:
+  - *Embedded Linux*: Which user-space, build, boot, or device settings are part of this SUT? Use actual precedence and supported combinations; DeviceTree or Kconfig is not required for every daemon/library.
+  - *Microservices*: Which supplied flag, environment, file, or deployment sources win, and when are changes applied? Do not assume a hierarchy or hot-reload support.
+  - *LLM Agents*: Which provider settings, prompt/tool policies, or endpoint options are supported, with what defaults and invalid-setting behavior? Not every model exposes the same parameters.
 
 ## Design Skeleton
 

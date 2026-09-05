@@ -26,6 +26,8 @@ Performance proves that the feature is fast or efficient enough under defined co
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - A named metric with units and target: p50/p95/p99 latency, throughput, CPU, memory, allocation count, startup time, or response size.
@@ -33,6 +35,10 @@ When this category applies, consider test points such as:
 - A comparison that matters to the design: before/after optimization, bounded regression, algorithmic growth, or budget under supported configuration.
 - Resource-use behavior under representative load without turning the test into a Robust soak or Capability limit check.
 - Measurement guardrails: stable environment, enough samples, allowed tolerance, and metadata that explains failures.
+- Domain-specific questions:
+  - *Embedded Linux*: Which deadline, jitter, allocation, or resource budget is specified for which build, scheduler, workload, and target? Do not substitute host or sanitizer timing for target evidence, or a percentile for a hard deadline.
+  - *Microservices*: Which latency/throughput/resource target and comparison relation applies to the documented request mix and deployment? Obtain the threshold from the performance source.
+  - *LLM Agents*: Which first-token, end-to-end, token-throughput, or cost budget is specified for the selected model, input size, and tool workload? Record variance and measurement conditions rather than inventing a target.
 
 ## Design Skeleton
 

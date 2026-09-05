@@ -10,6 +10,19 @@ This subtopic explains how developers and CodeAgents discover and account for te
 
 The goal is fewer omissions through systematic discovery, not more TCs for their own sake. This method does not guarantee exhaustive coverage or the absence of deployment bugs.
 
+Discovery spans two design stages before implementation:
+
+- **Stage-0: Freely Drafting**: source-first, breadth-first exploration of operations, rules, outcomes, and questions using Example Mapping and applicable discovery sweeps, without premature category lock-in.
+- **Stage-1: Classifying Design**: routing source-backed candidates into CaTDD category skeletons (`P0 Functional`, `P1 Design`, `P2 Quality`, `P3 Addons`), maintaining a living ledger, and challenging the design through the Discovery Gate.
+
+CaTDD's usage emphasis is:
+
+1. **Embedded Linux (primary)**: user-space/kernel boundaries, POSIX/device contracts, constrained resources, timing, persistence, and recovery.
+2. **Microservices (secondary)**: service contracts, distributed state, dependency failures, deployment differences, and operating evidence.
+3. **LLM Agents (tertiary)**: model/tool contracts, execution control, permissions, budgets, and externally verifiable outcomes.
+
+Choose the profile(s) relevant to the declared SUT. These priorities do not change category identity or require every project to implement every technology below.
+
 Use this rule:
 
 ```text
@@ -22,13 +35,54 @@ If an expected result cannot trace back to a source artifact, record a QUESTION 
 
 Build the inventory **from sources before reading existing skeletons as coverage evidence**. Existing tests are useful later for reconciliation; they are not the inventory of what the product should do.
 
-1. Declare the SUT boundary, feature scope, test level, and explicit developer-approved scope limits.
-2. List source artifacts with stable references (path plus section, rule ID, or revision when available). Read relevant User Stories, ACs, UsageDesign, interface/schema contracts, documented workflows, and functional error contracts. A header's signatures alone may not specify outcomes.
-3. Enumerate every in-scope operation, supported usage variant, rule, precondition, output, and promised side effect. Assign local rule IDs when the source lacks them; do not change its meaning. One example per API is not sufficient if it has several distinct behaviors. Expand shared rules such as "both operations", "either", "each", or "same range" into explicit operation/rule obligations. Preserve the source's quantifiers: a shared rejection rule already defines each operation's result; do not turn that explicit rule into an unnecessary ambiguity question.
+1. Declare the SUT boundary, feature scope, in-scope classes, test level, execution environment, and explicit developer-approved scope limits. Distinguish host simulation from on-target/HIL evidence and identify the applicable domain profile(s).
+2. List source artifacts with stable references (path plus section, rule ID, or revision when available). Read relevant User Stories, ACs, UsageDesign, interface/schema contracts, design models, quality budgets/policies/matrices, and guide workflows. A header's signatures alone may not specify outcomes; a generic tactic or skill is not a product requirement.
+3. Enumerate every in-scope operation, supported usage variant, rule, model invariant, quality predicate, guide outcome, and promised side effect. Assign local rule IDs when the source lacks them; do not change its meaning. One example per API is not sufficient if it has several distinct behaviors. Expand shared rules such as "both operations", "either", "each", or "same range" into explicit operation/rule obligations. Preserve the source's quantifiers: a shared rejection rule already defines each operation's result; do not turn that explicit rule into an unnecessary ambiguity question.
 4. Name relevant input, caller, state, dependency, and deployment dimensions and their supported values. Every discovered source conflict, missing contract, or uncertain applicability must create a QUESTION ledger row with the decision needed and its owner (or a request to identify the owner). Silence is not a not-applicable decision.
 5. Consult available incident reports, support cases, real usage examples, dependency documentation, and deployment differences as **discovery evidence**. Record whether these sources were reviewed, unavailable, or not applicable. Do not require incidents to exist in a new project. Implementation and mocks may reveal overlooked seams but are not the authority for expected behavior.
 
 Keep the inventory in the feature's FreelyDrafts or test-file overview/design comments. Link it from category files rather than maintaining a competing external specification. For large scopes, slice explicitly with the developer instead of silently sampling away whole operations.
+
+## Stage-0 Elicitation Toolkit
+
+Use Example Mapping as the scenario-derivation backbone. The following are optional supporting heuristics, not a mandatory sequence before it. OOPSI and business-rule extraction apply to functional workflows; do not force business rules onto a driver synchronization model or a timing budget. Use the corresponding P1/P2 sources and sweeps directly for those concerns. Ambiguity checks apply to every source type.
+
+### 1. OOPSI Model (Outcome -> Outputs -> Process -> Scenarios -> Inputs)
+
+Starting test design from inputs ("What parameters can I pass?") obscures the business purpose and misses unstated side effects. Reverse the inquiry:
+
+1. **Outcome**: What is the overarching business goal or contract intent?
+2. **Outputs**: What tangible artifacts, return values, emitted events, or state changes prove the outcome was achieved? (This defines the verifiable test oracle).
+3. **Process**: What high-level workflow steps produce those outputs?
+4. **Scenarios**: What are the alternate paths, edge cases, error branches, and boundary conditions within that process?
+5. **Inputs**: What exact parameters, payloads, or preconditions trigger each scenario?
+
+Every scenario needs a source-backed observable oracle. Manual or hybrid verification is valid when its procedure, expected observation, and evidence capture are specified, including on-target or hardware-in-the-loop (HIL) checks. Record the verification method and execution environment separately from the expected behavior. Missing automation alone is not a QUESTION; missing intent, applicability, or an oracle is. An undesigned verification procedure is a GAP; unavailable execution equipment is an execution limitation, not automatically a design blocker.
+
+### 2. Business Rules Taxonomy
+
+For functional sources containing business/domain rules, use the taxonomy to ask additional discovery questions:
+
+| Rule Type | Definition | Discovery questions |
+| --- | --- | --- |
+| **Fact** | A source-defined truth about the domain. | Which observable behaviors depend on it, and under which stated conditions? |
+| **Constraint** | A restriction on an allowed action or value. | Which compliant and violating scenarios have distinct promised outcomes? |
+| **Action Enabler** | A condition that triggers a workflow. | What happens when the condition holds and when it does not? |
+| **Inference** | A conclusion derived from stated rules. | Which input partitions lead to each distinct conclusion? |
+| **Computation** | A source-defined formula or calculation. | What ordinary results, rounding rules, valid precision, and boundaries must be checked? |
+
+Rule type does not determine CaTDD category. An ordinary sensor-value computation can be Typical, its valid boundary can be Edge, and a State test requires an actual internal design model. Route each candidate by its verification lens after discovery. If a rule or boundary is unstated, record a QUESTION rather than inferring product policy.
+
+### 3. Ambiguity and Exception Path Hunting
+
+Before accepting drafted requirements into design:
+
+- **Hunt Ambiguity**: Flag subjective words ("fast", "reliable", "seamless", "graceful", "properly", "safe"). Ask for an observable predicate or, for a numeric budget, a threshold with units. Do not invent either.
+- **Probe Exception Paths**: Systematically ask "What if..." for every happy path:
+  - *What if* the caller is unauthenticated or unauthorized?
+  - *What if* the network, filesystem, or hardware is disconnected mid-transaction?
+  - *What if* the input is null, empty, negative, or max-sized?
+  - *What if* the operation is cancelled or repeated immediately?
 
 ## Example Mapping First
 
@@ -49,6 +103,8 @@ Workflow:
 4. Capture questions instead of guessing.
 5. Route each example to the CaTDD category that matches its verification lens.
 6. Convert only source-backed examples into US/AC/TC.
+
+For every applicable P0/P1/P2/P3 sweep below, record source/rule references, dimensions and outcomes, TP IDs, or an explicit exclusion rationale. Keep verification methods, execution environments, feasible combinations, and sampling limits visible. A category heading or a checklist tick alone is not discovery evidence. A narrower declared scope does not require unrelated classes or domain profiles, but unresolved applicability within that scope is a QUESTION.
 
 ## P0 Discovery Sweep
 
@@ -76,6 +132,71 @@ For combinations, enumerate all feasible combinations when the decision table is
 
 A representative TC plus a source-backed equivalence rationale can cover a partition; do not label every other untested value in that partition a GAP. For example, testing an ordinary count of 2 does not automatically require another Typical TC at 4 when the rule makes no distinction. Keep distinct outcomes, boundary obligations, and risk-significant combinations explicit rather than inflating TC counts.
 
+## P1 Design Discovery Sweep
+
+P1 Design proves the internal model against confirmed design sources. Architectural viewpoints help discover concerns; they are neither product requirements nor a one-to-one category taxonomy. Check relevant context, functional, information, concurrency, deployment, and operational views for consistent responsibilities and boundaries without inventing new CaTDD categories.
+
+| Category / Viewpoint | Discovery Dimensions | Probing Questions | Observable Oracle Expectation |
+| --- | --- | --- | --- |
+| **State** (*Information / Functional*) | States, transitions, guards, entry/exit effects, invariants. | Which transitions and rejected operations does the model define? Is repeated close rejected or idempotent? Which cleanup, failure, and recovery paths are specified? | Source-defined states and effects, observed through queries, events, persisted markers, or stable model-facing test seams; do not assume a particular recovery state. |
+| **Capability** (*Functional*) | Responsibilities, supported modes, capacity and support boundaries. | What capability is supported, conditional, or unsupported? For each defined limit, what happens below, at, and beyond it at the valid domain precision? Which scope owns the capacity? | Supported/unsupported behavior, accepted work, excess handling, and capacity release exactly as designed; not an assumed error or backpressure policy. |
+| **Interaction** (*Functional / Context*) | Delegation, sequence, payloads, ownership handoffs, alternate paths. | Which collaborator acts in which order and with what data? What does the design require before/after a partial handoff or missing acknowledgment? | Required order, data integrity, delegation, and the specified failure policy; rollback, retry, or compensation only when the source promises it. |
+| **Concurrency** (*Concurrency / Deployment*) | Actors, shared resources, synchronization, interleavings. | Which thread/process/interrupt boundaries exist? Which schedules challenge ownership, lock order, cancellation, or shutdown invariants? What controlled seam reproduces each schedule? | Design invariants under named bounded schedules and evidence of completion/cleanup; a passing schedule or race detector is not proof of all possible interleavings. |
+
+## P2 Quality Discovery Sweep
+
+P2 Quality proves the operating envelope. Use tactics questions to elicit concerns and a **6-Part Quality Attribute Scenario** to describe each source-backed candidate:
+
+$$\text{QAS} = \langle \text{Source}, \text{Stimulus}, \text{Artifact}, \text{Environment}, \text{Response}, \text{Response Measure} \rangle$$
+
+Here, Source means the stimulus origin; keep the authoritative design/source-artifact reference separately. Response measures may be numeric thresholds or exact predicates: a supported compatibility-matrix result, a configuration winner, required diagnostic fields, or an allowed/denied policy outcome. Numeric budgets need source-defined units, thresholds, workloads, and measurement conditions; symbolic predicates need equally explicit expected evidence. Unknown expectations become QUESTION, but a valid non-numeric oracle does not. The verification method may be automated, manual, or hybrid.
+
+| Category / Tactic | Quality Dimensions | Probing Questions | Observable Oracle Expectation |
+| --- | --- | --- | --- |
+| **Performance** (*Resource Control*) | Deadlines, jitter, latency, throughput, resource budgets. | Which worst-case or percentile measure is required, with which workload, build, target, tolerance, and sampling? What instrumentation overhead matters? | Compare each metric using its source-defined relation and unit: an upper latency bound is not a minimum throughput target. Do not substitute a percentile for a hard deadline. |
+| **Robust** (*Fault Prevention & Soak*) | Sustained operation, resource churn, repeated recovery. | Which invariants must hold for the specified duration or repetition count, including defined failure/recovery cycles? | The specified stability, resource-residue, and recovery predicates throughout that workload; no assumed self-healing or fixed soak duration. |
+| **Compatibility** (*Interoperability*) | Supported platforms, ABIs, versions, formats, protocols. | Which matrix rows are supported? Which outcomes must agree and which differences or negotiations are expressly allowed? | Source-defined compatibility relations, preserved data, and allowed differences per matrix row; byte-identical output is not universally required. |
+| **Configuration** (*Defer Binding*) | Setting sources, defaults, precedence, combinations, reload. | Which build/boot/runtime sources exist and which wins? What is the specified behavior for missing, conflicting, or changed settings? | Exact resolved value/mode and the specified invalid-setting or reload outcome; do not invent a precedence order or require reload support. |
+| **Diagnosis** (*Detect & Observe*) | Evidence surfaces, required fields, correlation, redaction. | Which success/failure events require what evidence for which operator or tool? Which sensitive fields must be absent? | Required codes, fields, causal/correlation links, and forbidden data on the specified surfaces; not an assumed logging framework or prose string. |
+| **Security** (*Resist & React*) | Assets, trust boundaries, actors, permissions, integrity. | Which allowed/denied contrasts and threat conditions follow from the policy? What reaction or audit evidence is required? | Policy-defined denial, containment, integrity, and permitted effects; do not impose rate limiting, sanitization, or lockout unless specified. |
+
+## P3 Addons Discovery Sweep
+
+P3 Addons proves the learning surface. Sourced from developer onboarding, user guides, and copy-exec documentation.
+
+| Category | Discovery Dimensions | Probing Questions | Observable Oracle Expectation |
+| --- | --- | --- | --- |
+| **DemoExample** | Guide paths, setup, visible outcomes, cleanup, repeatability. | Which documented workflows can a newcomer follow? Are prerequisites and manual steps explicit? Are simulated dependencies distinguished from a live target/provider? | The documented outputs, statuses, artifacts or non-effects, and cleanup. An intentional error example may return nonzero; not every demo creates files or uses stdout. |
+
+A demo may use documented fake dependencies, but must not claim that simulated hardware/provider behavior validates the real target. It must exercise the declared SUT and cannot replace P0/P1/P2 obligations.
+
+## Domain Archetype Discovery (Embedded, Microservice, LLM Agent)
+
+This is a usage-priority guide, not a historical lineage or a source of product requirements. Embedded Linux comes first, followed by Microservices and LLM Agents. Apply only relevant profiles, combining them for mixed systems when justified. Every candidate still needs a source, an oracle, and an explicit disposition; unsupported hypotheses remain questions, not mandatory features or automatic exclusions.
+
+### 1. Embedded Linux Domain
+
+- **Boundary first**: Is the SUT a library, user-space daemon, kernel module, or device interface? Which evidence can a host fixture provide, and which requires a simulator, target board, or HIL procedure? Shared RAM atomics do not imply that atomic operations are supported on MMIO; use the platform's device-access and DMA ownership contract.
+- **Functional (P0)**: Which frame lengths, units, precision, and operations are valid? What does the contract promise for short I/O, interrupted/nonblocking operations, device disconnection, or storage failure? Account for interruption before, during, and after persistent effects without inventing retry or power-loss recovery behavior.
+- **Design (P1)**: Which lifecycle/cleanup transitions, queue/resource limits, daemon-driver handoffs, and thread/interrupt ownership rules are specified? Probe each source-defined guard, handoff, and interleaving rather than assuming a universal boot state machine.
+- **Quality (P2)**: Which deadline/jitter, allocation, memory, power, or endurance budgets exist on the named target? What soak/recovery workload, supported board/ABI/kernel/libc matrix, and build/boot/runtime settings apply? Which reset/fault evidence and protection policies are required? Sanitizers can support a specified check, but do not prove target timing, DMA correctness, or complete memory safety.
+- **Addons (P3)**: Can the documented loopback or device walkthrough be repeated with explicit board/host prerequisites, observable results, and cleanup? Label simulation and manual observations; do not imply a host-only demo validated hardware.
+
+### 2. Microservices Domain
+
+- **Functional (P0)**: Which request/workflow outcomes, protocol status codes, payloads, and side effects are promised? What happens on a partial response or lost acknowledgment under the documented delivery/retry contract?
+- **Design (P1)**: Which service lifecycles, pool limits, collaboration sequences, transaction boundaries, and concurrent ownership rules exist? Do not require sagas, circuit breakers, or distributed locks merely because the SUT is a service.
+- **Quality (P2)**: Use source-defined workload/budget pairs, sustained-failure invariants, supported API/schema matrices, actual configuration precedence, required correlation evidence, and threat policies. Do not impose a latency target, logging framework, or precedence hierarchy.
+- **Addons (P3)**: Does the documented local setup/request/cleanup flow show its promised output and clearly identify any simulated services?
+
+### 3. LLM Agent Domain
+
+- **Boundary first**: Is the SUT the orchestrator, a provider adapter, or the tool executor? Malformed caller arguments and a malformed upstream model response need different routing. A remote rejection alone does not establish a dependency Fault.
+- **Functional (P0)**: Which observable task results, permitted tool effects, streaming/cancellation outcomes, and input partitions are defined? Derive context boundaries from the actual provider contract, including history/tool/schema overhead and reserved output where applicable; a percentage chosen by the method is not a boundary.
+- **Design (P1)**: Which run/checkpoint states, tool/delegation limits, permission-before-execution handoffs, and parallel session-memory ownership rules must hold? Use the designed stop/recovery behavior rather than assuming a universal planning loop.
+- **Quality (P2)**: Which latency/cost budgets, repeated-run invariants, supported model/tool-schema versions, settings, trace/redaction fields, and sandbox policies exist? Separate deterministic tool/state checks from source-defined model-output evaluation, recording fixtures, variability, and acceptance criteria. An agent's own success claim is not evidence.
+- **Addons (P3)**: Does the guide distinguish recorded/fake provider responses from live calls, explain permissions/cost prerequisites, and expose the promised result and cleanup?
+
 ## Test-Point Ledger
 
 Keep one `discovery_ledger` in living comments, alongside the inventory and coverage matrix. Use stable local TP IDs distinct from US/AC/TC IDs. Each row represents a specific condition and observable obligation, not just a category name.
@@ -85,7 +206,9 @@ Keep one `discovery_ledger` in living comments, alongside the inventory and cove
 | TP ID and rule/source | Stable TP ID; source reference and rule ID, or evidence reference plus missing-source question. |
 | Scenario | Concrete inputs, state, relevant environment/dependencies, and action. |
 | Oracle | Expected observable result and important promised side effects/non-effects; write unknown if unresolved. |
+| Verification method | Automated, manual, or hybrid procedure; execution environment and evidence capture. |
 | Category and test level | Owning verification lens and intended verification boundary; provisional when unresolved. |
+| Scope and routing | In-scope or out-of-scope relative to this review; destination artifact/work item and owner when handing off. Unresolved scope must be a QUESTION. |
 | Disposition and evidence | One disposition below, with actual links, rationale, question, or destination. |
 
 | Disposition | Meaning and required evidence |
@@ -93,8 +216,19 @@ Keep one `discovery_ledger` in living comments, alongside the inventory and cove
 | DESIGNED | Linked category file plus US/AC/TC IDs actually specify this scenario and oracle. TODO TCs count as designed, not implemented or GREEN. |
 | QUESTION | Missing/conflicting source, expected behavior, or scope decision. Record the question and decision owner, or ask who owns it. Do not invent a TC expectation. |
 | EXCLUDED | Source-backed not-applicable condition or explicit developer-approved scope exclusion, with rationale and approval reference. Difficulty or low execution priority is not an exclusion. |
-| REFERRED | Another category or test level owns the concern. Record the reason, concrete destination artifact/work item, and responsible owner or pending handoff question. Referral is not verified coverage. |
+| REFERRED | An accepted out-of-scope handoff with its scope boundary, reason, concrete destination artifact/work item, and responsible owner. A pending ownership decision is QUESTION. Referral is not designed or verified coverage in this scope. |
 | GAP | A known in-scope source-backed point has no adequate TC. Name what must be designed; a weak oracle or a dangling TC link is also a gap. |
+
+Routing is independent of disposition. An in-scope point awaiting a TC at another test level stays GAP (or QUESTION if its source/oracle/ownership is unresolved), with the destination recorded separately. Once that design is linked and adequate, it is DESIGNED. Use REFERRED only for an accepted handoff outside the declared scope; never duplicate a TP ID merely to record its destination.
+
+Handoff acceptance never changes scope. Only an explicit developer-approved scope change can move an existing obligation out of scope; accepting an integration-test work item is not that approval. For a known source-backed obligation:
+
+| Situation in the current review | Disposition | Evidence to retain |
+| --- | --- | --- |
+| In scope; destination/owner accepted; no adequate TC | GAP | Source obligation plus the accepted destination; design is still missing. |
+| In scope; adequate destination TC linked | DESIGNED | Actual source-backed setup/oracle and US/AC/TC links, even if execution is still TODO. |
+| Explicitly out of scope; destination/owner accepted | REFERRED | Declared scope boundary (and approval if scope changed), destination, and owner; not coverage. |
+| Applicability, scope, source, oracle, or ownership unresolved | QUESTION | The specific decision and responsible owner; unresolved in-scope questions block readiness. |
 
 Every source rule and every applicable sweep dimension must link to ledger rows; each row must have a disposition. Multiple TCs may be needed per rule. A TC may support several rows only when its setup and assertions genuinely distinguish those obligations.
 
@@ -104,17 +238,18 @@ Every source rule and every applicable sweep dimension must link to ledger rows;
 
 Run this gate in addition to the US -> AC -> TC cardinality gate:
 
-1. **Source -> design**: every in-scope operation/rule is inventoried; every relevant dimension and distinct outcome has ledger evidence. Look for omitted behaviors even when existing TCs all have valid links.
-2. **Design -> source**: each DESIGNED row resolves to a real TC with source-backed setup and oracle. Detect wrong categories, duplicates, missing assertions, and invented expectations.
+1. **Source -> design**: every in-scope operation, model rule, quality predicate, and guide outcome is inventoried; every applicable P0/P1/P2/P3 sweep dimension has ledger evidence. Look for omitted behaviors even when existing TCs all have valid links.
+2. **Design -> source**: each DESIGNED row resolves to a real TC with source-backed setup, oracle, and verification procedure. Detect wrong categories, duplicates, missing observations/assertions, and invented expectations. Manual evidence and exact symbolic predicates are valid when specified.
 3. **Independent challenge**: derive expected behavior from the sources before consulting the designer's ledger/skeletons, preferably with a second reviewer. A solo developer/agent must perform a separate source-first pass and label it self-review, with shared-blind-spot risk explicit. Record reviewer/process, sources examined, and a source-derived operation/outcome checklist reconciled against the ledger; a bare "reviewed" flag is insufficient. Ask, "Which realistic scenario could violate this contract while every proposed test still passes?" Record source-backed findings; turn unsupported hypotheses into questions.
-4. **Disposition audit**: review unknowns, exclusions, unexamined evidence, sampling omissions, and referrals. An unimplemented designed TC is not a missing point. An in-scope P0 obligation referred to a higher test level remains a GAP until its design is linked, or the developer explicitly narrows the scope. Unresolved handoff ownership remains a QUESTION. A confirmed P1/P2 referral does not expand P0 but remains visible follow-up, not release readiness.
+4. **Disposition audit**: review unknowns, exclusions, unexamined evidence, sampling omissions, and routing. An unimplemented designed TC is not a missing point. An in-scope obligation in any class remains GAP until adequate design is linked, even if another category or test level will execute it. Unknown source/oracle/scope or unresolved handoff ownership remains QUESTION. An accepted out-of-scope handoff is REFERRED and visible follow-up, not covered behavior or release readiness.
 5. **Stop and report**: perform one discovery sweep and one independent challenge; allow at most two repair/recheck rounds. Stop earlier on missing intent or no progress. Never loop until a desired PASS appears; report remaining gaps and ask for the needed decision.
 
 Report separately:
 
 ```text
-Scope/SUT and source references: ...
+Scope/SUT, in-scope classes, domain profile(s), and source references: ...
 Inventory and discovery_ledger location: ...
+Verification methods / execution environments / evidence capture: ...
 Dimensions considered / sampling limits: ...
 Review provenance and source-derived checklist: ...
 Disposition counts: DESIGNED / QUESTION / EXCLUDED / REFERRED / GAP
@@ -124,15 +259,15 @@ ready_for_implementation: yes | no
 Review evidence, open questions, referrals, residual risk, next action: ...
 ```
 
-Use BLOCKED when an in-scope source, oracle, or scope decision is unresolved; otherwise GAPS when known obligations or required review evidence are missing; otherwise PASS **for the declared scope and reviewed sources only**. `ready_for_implementation: yes` requires both gates to pass and the independent review to be complete. All unresolved in-scope P0 questions block readiness, not just high-risk ones. A developer-approved smaller slice can be reviewed separately, but must not be reported as the whole feature being complete. Passing this design gate is not proof of test execution or release readiness.
+Use BLOCKED when an in-scope source, oracle, ownership, or scope decision is unresolved; otherwise GAPS when known obligations or required review evidence are missing; otherwise PASS **for the declared scope and reviewed sources only**. `ready_for_implementation: yes` requires both gates to pass and the independent review to be complete. All unresolved in-scope questions block readiness across P0/P1/P2/P3, not just high-risk ones. A developer-approved smaller slice can be reviewed separately, but must not be reported as the whole feature being complete. Passing this design gate is not proof of test execution, target-equipment availability, or release readiness.
 
 ### Report Consistency Audit
 
 Before returning the report:
 
 - Re-read the cited rule for every QUESTION. If it already specifies the result, replace the question with DESIGNED or GAP evidence; if sources actually conflict, cite both. Unclear applicability within the requested scope remains a blocking scope question until resolved, not an assumed exclusion.
-- Count dispositions from the full ledger, one per TP ID. Totals must match actual rows; when presenting only a sample, label it partial and link the full ledger or omit totals. Every claimed referral needs its own REFERRED row and destination, not just a narrative footnote.
-- Apply status precedence explicitly: any unresolved in-scope source/oracle/scope question -> BLOCKED; otherwise any known design/review gap -> GAPS; otherwise PASS. BLOCKED takes precedence even when known gaps also exist. Report both kinds of findings; non-PASS always means `ready_for_implementation: no`.
+- Count dispositions from the full ledger, one per TP ID. Totals must match actual rows; when presenting only a sample, label it partial and link the full ledger or omit totals. Every handoff needs routing evidence on its existing row. Only accepted out-of-scope handoffs use REFERRED; in-scope GAP/QUESTION rows retain their disposition and destination together.
+- Apply status precedence explicitly: any unresolved in-scope source/oracle/ownership/scope question -> BLOCKED; otherwise any known design/review gap -> GAPS; otherwise PASS. BLOCKED takes precedence even when known gaps also exist. Report both kinds of findings; non-PASS always means `ready_for_implementation: no`.
 - Compare the independent operation/outcome checklist to ledger coverage once more. A grouped range is not evidence for missing endpoints; show concrete boundary examples. Correct inconsistent output within the same bounded review budget, or report the inconsistency without approving readiness.
 
 ## Escaped-Bug Feedback
@@ -246,11 +381,11 @@ Rules:
 
 Before converting discovered examples into US/AC/TC, verify:
 
-- The Behavior Inventory, P0 Discovery Sweep where applicable, and Test-Point Ledger are available in living comments.
+- The Behavior Inventory, applicable P0/P1/P2/P3 discovery sweeps, and Test-Point Ledger are available in living comments.
 - Every example has a source-backed rule.
 - Every rule's distinct outcomes and relevant conditions have concrete examples or explicit dispositions, not merely one example by quota.
 - Every unresolved question is visible and not silently converted into a test.
 - Every example is routed by verification lens, not by implementation proximity.
-- P2 examples have measurable thresholds, matrices, policies, or evidence surfaces.
+- P2 examples have source-defined thresholds or exact matrix/policy/evidence predicates; verification methods and environments are explicit.
 - Q1/Q2/Q3/Q4 have been considered as a balance check where the feature risk justifies it.
 - The Discovery Gate is reported separately from cardinality; unknowns and residual risks are not claimed as coverage.

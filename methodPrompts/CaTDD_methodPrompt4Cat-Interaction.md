@@ -35,6 +35,8 @@ Interaction proves that collaborators communicate in the intended order with the
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - The source sequence or collaboration rule: validate before transform, transform before dispatch, authorize before execute, or commit after all checks pass.
@@ -42,6 +44,10 @@ When this category applies, consider test points such as:
 - Handoff data is shaped correctly at each boundary: translated payload, normalized command, enriched context, selected policy, or emitted event.
 - Branching interaction rules: collaborator failure aborts, reroutes, retries, compensates, or skips later steps according to design.
 - Lifecycle interactions for callbacks, hooks, plugins, or pipelines: load, initialize, execute, dispose, unsubscribe, or cleanup in the intended order.
+- Domain-specific questions:
+  - *Embedded Linux*: Which driver/daemon/callback handoffs exist, with what data ownership and attach/detach/close order? Which steps stop or continue after partial failure according to design?
+  - *Microservices*: Which collaborators validate, persist, publish, or acknowledge in what order? Verify compensation only if the interaction contract defines it.
+  - *LLM Agents*: How do the coordinator, specialists, tools, and evaluators exchange task results and permission decisions? What must occur before an external side effect?
 
 ## Design Skeleton
 

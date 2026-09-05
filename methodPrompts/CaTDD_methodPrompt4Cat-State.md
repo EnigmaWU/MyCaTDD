@@ -35,6 +35,8 @@ State proves that the implementation follows the intended lifecycle and transiti
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - The smallest allowed transition path that proves each named state can be reached from a valid predecessor.
@@ -42,6 +44,10 @@ When this category applies, consider test points such as:
 - Entry and exit side effects: resources allocated, subscriptions attached, timers started, locks released, or outputs flushed.
 - Error, reset, cleanup, and recovery transitions that keep the lifecycle understandable after abnormal conditions.
 - State observability: query result, emitted event, persisted marker, visible output, or behavior difference that proves the state changed.
+- Domain-specific questions:
+  - *Embedded Linux*: Which initialization, open/close, reset, or power-state transitions and entry/exit effects are in the actual model? What observation proves each resource was released?
+  - *Microservices*: Which readiness, draining, transaction, or restart states are specified, and what guards protect their transitions?
+  - *LLM Agents*: Which run, checkpoint, cancellation, and completion states exist? What state does the source require after tool failure, rather than an assumed return to Planning?
 
 ## Design Skeleton
 

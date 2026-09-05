@@ -35,6 +35,8 @@ Security proves that the system preserves protection properties under a defined 
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - A policy-backed allowed/denied contrast: authorized actor succeeds, unauthorized actor is denied, and the denial is safe.
@@ -42,6 +44,10 @@ When this category applies, consider test points such as:
 - Secret and sensitive-data handling: token redaction, credential omission, private data isolation, safe logs, and safe error output.
 - Integrity protection: signed payload validation, checksum mismatch, stale nonce, invalid signature, or unauthorized mutation is rejected.
 - Source trace to SecurityDesign, threat model, policy, or compliance rule; if no source exists, stop and ask instead of inventing fear-based tests.
+- Domain-specific questions:
+  - *Embedded Linux*: Which device-access, privilege, firmware-integrity, or memory-protection policy exists? Use controlled fixtures; a sanitizer run supports a particular check but does not certify overall memory safety or secure boot.
+  - *Microservices*: Which identity, tenant-isolation, trust-boundary, and data-integrity rules require allowed/denied contrasts? Verify the policy without imposing a particular authentication or transport technology.
+  - *LLM Agents*: Which untrusted prompt/tool-result inputs must not grant permissions or bypass approval? Verify the defined sandbox, side-effect, and credential-protection boundaries with observable evidence.
 
 ## Design Skeleton
 

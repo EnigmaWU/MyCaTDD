@@ -35,7 +35,7 @@ Typical proves that the feature works correctly under normal, intended use.
 
 ## TestPointsInMind
 
-First apply the source inventory and Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Account for candidates in the shared discovery ledger; the ideas below are not a completeness quota.
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
 
 When this category applies, consider test points such as:
 
@@ -45,6 +45,10 @@ When this category applies, consider test points such as:
 - The main side effect promised by the AC, such as persisted data, emitted event, returned value, visible output, or state change.
 - A representative workflow that can become the first executable example for future Edge, Misuse, Fault, P1, and P2 tests.
 - One success result that would fail clearly if the core feature were missing, stubbed, or wired to the wrong component.
+- Domain-specific questions:
+  - *Embedded Linux*: What ordinary device/library workflow proves the promised decoded value, units, resource handling, or persisted result?
+  - *Microservices*: What normal request/workflow proves the protocol-specific status, payload, and promised side effects, not merely successful transport?
+  - *LLM Agents*: What observable task result and permitted tool effects prove an ordinary supported goal, without assuming it always needs one tool call?
 
 ## Design Skeleton
 

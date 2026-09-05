@@ -20,7 +20,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 | Need | Read |
 | --- | --- |
 | Category semantics, category identity, source-of-truth gate | `CaTDD_methodPrompt-categorySemantics.md` |
-| Source-first behavior inventory, test-point ledger, Discovery Gate, and escaped-bug feedback | `CaTDD_methodPrompt-testPointDiscovery.md` |
+| Source-first behavior inventory, multi-class sweeps (P0–P3), domain archetypes, test-point ledger, Discovery Gate, and escaped-bug feedback | `CaTDD_methodPrompt-testPointDiscovery.md` |
 | Stage model, RED/GREEN cycle, risk-based ordering, quality gates | `CaTDD_methodPrompt-workflow.md` |
 | Comment skeleton, coverage matrix, US/AC/TC, test structure | `CaTDD_methodPrompt-testStructure.md` |
 | Canonical `test_{feature}_{category}.<ext>` file naming | `CaTDD_methodPrompt-fileNaming.md` |
@@ -94,8 +94,11 @@ For full category guidance, read `CaTDD_methodPrompt-categorySemantics.md`.
 
 US/AC/TC cardinality proves linkage, not completeness: an entirely missing behavior cannot fail a link check.
 
-- Before drafting skeletons, inventory source-backed behaviors and apply the discovery sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md).
-- Keep a `discovery_ledger` in living design comments: each candidate has a source/rule, scenario, observable oracle, category/test level, and disposition (DESIGNED, QUESTION, EXCLUDED, REFERRED, or GAP).
+- In **Stage-0: Freely Drafting**, inventory source-backed obligations and use Example Mapping to discover examples and questions breadth-first. OOPSI and business-rule extraction are optional aids for functional workflows, not prerequisites for every class.
+- CaTDD serves primarily Embedded Linux, secondarily Microservices, and thirdly LLM Agents. Select applicable domain profiles for the declared SUT; these are usage priorities, not a historical lineage, mandatory technology stack, or category order.
+- Before approving skeletons in **Stage-1: Classifying Design**, reconcile the applicable P0 Functional, P1 Design, P2 Quality, and P3 Addons sweeps in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Classify by verification lens, not rule type or domain.
+- Keep a `discovery_ledger` in living design comments: each candidate has a source/rule, scenario, observable oracle, verification method/environment, category/test level, scope/routing metadata, and one disposition (DESIGNED, QUESTION, EXCLUDED, REFERRED, or GAP). A handoff does not close an unresolved in-scope obligation.
+- Oracles may be numeric budgets or exact predicates; manual/hybrid evidence is valid when the procedure and expected observation are specified. Never infer product limits, precedence, or recovery behavior from a domain example.
 - Apply the **Discovery Gate** independently from source to skeleton as well as from skeleton to source. Category presence, TC counts, and passing tests do not prove all relevant points were discovered.
 - Unresolved in-scope questions or uncovered obligations prevent implementation readiness. Missing-source `@[NoTestPoints]` is blocked evidence, not a coverage exemption.
 - Report readiness for the declared scope, exclusions, referrals, and residual risk. Learn from escaped bugs without promising zero omissions or inventing product behavior.

@@ -107,14 +107,22 @@ Follow this workflow when starting a CaTDD test file.
 2. Read `CaTDD_methodPrompt.md` as the main method entry.
 3. Read the needed `CaTDD_methodPrompt-*.md` subtopic for detailed guidance.
 4. Copy `CaTDD_designAndImplTemplate.cxx` or adapt its section structure to your language.
-5. Inventory in-scope source behaviors before treating existing tests as coverage. Capture Stage-0 scenarios, examples, risks, and open questions.
-6. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) to sweep operations/outcomes, partitions, boundaries, combinations, public sequences, dependency failures, and production differences. Record candidates and source references in a `discovery_ledger` in living comments.
-7. Classify drafts into categories using the priority order below.
+5. Declare SUT, in-scope classes, domain profile(s), test level, and execution environment. Inventory source obligations before treating existing tests as coverage. Capture Stage-0 examples and questions through Example Mapping.
+6. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) for the applicable P0/P1/P2/P3 sweeps. OOPSI and business-rule extraction are optional aids for functional workflows; design models and quality constraints use their own sources. Record candidates and source references in a `discovery_ledger` in living comments.
+7. Classify drafts by verification lens, not rule type, domain, or priority. Use the priority order below for execution, adjusted by risk.
 8. Write US/AC/TC comments inside the test file before implementing code.
 9. Independently review source -> ledger -> US/AC/TC and back. Require both cardinality and the Discovery Gate to pass with `ready_for_implementation: yes` for the declared scope; then write one failing test for the next TC.
 10. Implement only enough production code to pass that TC.
 11. Update TC status markers and keep the comments synchronized with behavior.
 12. Repeat one TC at a time.
+
+### Domain and verification scope
+
+CaTDD primarily serves **Embedded Linux**, secondarily **Microservices**, and thirdly **LLM Agents**. This is usage emphasis, not a historical lineage or a mandatory technology stack. Select relevant profiles; do not assume every embedded component contains kernel code or every agent supports multiple providers.
+
+- For embedded work, distinguish user-space/kernel/device boundaries and host, simulator, target-board, or HIL evidence. A host fixture or sanitizer run does not establish hardware behavior or target timing.
+- Record `verification_method` (automated, manual, or hybrid), execution environment, expected observation, and evidence capture. Exact policies/fields and documented manual observations are valid oracles; only numeric budgets require numeric thresholds.
+- Keep routing separate from disposition. An unresolved in-scope handoff stays GAP/QUESTION with a destination and owner; REFERRED is for accepted out-of-scope handoffs, not covered behavior. Scope changes require explicit approval.
 
 ## Usage Example
 
@@ -138,10 +146,16 @@ Then ask your CodeAgent or use the method prompts manually:
 
 ```text
 Read methodPrompts/README_UserGuide.md and methodPrompts/CaTDD_methodPrompt.md.
+Before drafting, apply methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md.
+Declare the SUT, class scope, applicable domain profiles, and test environment.
+Build the source inventory and use Example Mapping plus the applicable sweeps.
+Use OOPSI/business-rule aids only for suitable functional sources; never infer
+limits, recovery policies, or technologies from domain examples.
 Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/test_your_feature_funcValidTypical.cxx or Test/test_your_feature_funcValidTypical.ts.
 Preserve US/AC/TC traceability and leave unclear product intent as questions.
-Before drafting, apply methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md.
 Keep a source-first behavior inventory and discovery_ledger in living comments.
+Record verification_method, execution environment, observable oracle, and
+evidence capture for each candidate; keep handoff routing separate from status.
 Review sources independently of existing tests; report discovery_status,
 ready_for_implementation, exclusions, referrals, and residual risks separately.
 ```
@@ -155,7 +169,7 @@ Expected result:
 - It links source rules and discovery dimensions to ledger rows with DESIGNED, QUESTION, EXCLUDED, REFERRED, or GAP evidence. Accounted-for points are not automatically covered.
 - Unresolved in-scope source/oracle questions and uncovered obligations prevent readiness. Missing-source `@[NoTestPoints]` is BLOCKED, not proof of inapplicability.
 
-For a self-contained exercise that exposes missing scenarios despite valid US/AC/TC links, use the [exporter review example](CaTDD_methodPrompt-testPointDiscovery.md#usage-example). The method reduces omissions; it does not guarantee that no deployment bugs remain. Feed escaped bugs back into discovery questions, not just additional TC counts.
+For a self-contained exercise that exposes missing scenarios despite valid US/AC/TC links, use the [exporter review example](CaTDD_methodPrompt-testPointDiscovery.md#usage-example). The method aims to reduce omissions; it does not guarantee that no deployment bugs remain. Feed escaped bugs back into discovery questions, not just additional TC counts.
 
 ## Priority Framework
 
@@ -174,7 +188,7 @@ Use this default priority order unless project risk says otherwise.
 | --- | --- |
 | Start from the main method entry | `CaTDD_methodPrompt.md` |
 | Classify test points and keep category identity stable | `CaTDD_methodPrompt-categorySemantics.md` |
-| Discover source-backed test points with Example Mapping and quadrant balance checks | `CaTDD_methodPrompt-testPointDiscovery.md` |
+| Discover source-backed test points with multi-class sweeps, domain archetypes, and quadrant checks | `CaTDD_methodPrompt-testPointDiscovery.md` |
 | Follow Stage-0, Stage-1, RED/GREEN, and quality gates | `CaTDD_methodPrompt-workflow.md` |
 | Build US/AC/TC comments, coverage matrices, and tracking blocks | `CaTDD_methodPrompt-testStructure.md` |
 | Apply canonical `test_{feature}_{category}.<ext>` naming | `CaTDD_methodPrompt-fileNaming.md` |
@@ -233,11 +247,11 @@ Use explicit status markers so humans and CodeAgents can continue work safely.
 
 Before calling a CaTDD design complete, verify:
 
-- Every in-scope source behavior and applicable discovery dimension has ledger evidence, not just a populated category file.
+- Every in-scope source behavior, model rule, quality predicate, guide outcome, and applicable discovery dimension has ledger evidence, not just a populated category file.
 - An independent source-first Discovery Gate passes; questions, scope exclusions, sampling limits, and higher-level/P1/P2 referrals remain explicit.
 - Each TC links back to at least one AC and US.
 - Category names match the method prompt map.
-- P0 Functional coverage is addressed before optional P1/P2 expansion.
+- Applicable P0/P1/P2/P3 sweeps are reconciled for the declared scope; execution priority does not exempt in-scope design or quality obligations.
 - Each implemented test follows SETUP -> BEHAVIOR -> VERIFY -> CLEANUP.
 - Each test focuses on one behavior and uses a small number of key assertions.
 - Comments and code agree after implementation.

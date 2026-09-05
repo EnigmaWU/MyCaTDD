@@ -35,7 +35,7 @@ Misuse proves that the system rejects wrong use safely and clearly.
 
 ## TestPointsInMind
 
-First apply the source inventory and Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Account for candidates in the shared discovery ledger; the ideas below are not a completeness quota.
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
 
 When this category applies, consider test points such as:
 
@@ -46,6 +46,10 @@ When this category applies, consider test points such as:
 - Invalid caller-owned references: stale handle, unknown ID, wrong object type, expired local session, or duplicate registration.
 - Rejection behavior that proves no partial mutation, resource leak, queued work, persisted record, or hidden side effect occurred.
 - Recovery after misuse when the contract promises the component can still accept a subsequent valid call.
+- Domain-specific questions:
+  - *Embedded Linux*: Which invalid operation codes, offsets, handles, or buffer arguments must the API reject? Do not invent safe rejection for undefined behavior outside its contract.
+  - *Microservices*: Which missing fields, malformed payloads, or conflicting caller options violate a stated request contract? Keep protection-policy proofs in Security.
+  - *LLM Agents*: At a tool executor's caller boundary, which unknown tools or invalid argument types must be rejected? If the SUT instead consumes a malformed upstream model response, reconsider Fault rather than labeling it caller misuse.
 
 ## Design Skeleton
 

@@ -8,15 +8,15 @@ CaTDD uses two design stages before implementation.
 
 | Stage | Purpose | Output |
 | --- | --- | --- |
-| Stage-0: Freely Drafting | Inventory behavior from sources and discover scenarios, risks, and questions breadth-first. | FreelyDrafts, source/rule inventory, discovery dimensions, candidate ledger |
-| Stage-1: Classifying Design | Classify mature drafts and reconcile every candidate before approving US/AC/TC. | Category skeletons, discovery ledger, independent review evidence, TODO tracking |
+| Stage-0: Freely Drafting | Inventory source-backed obligations; use Example Mapping and applicable domain/class sweeps to discover examples and questions breadth-first. Use OOPSI/business-rule aids only for suitable functional sources. | FreelyDrafts, source/rule inventory, discovery dimensions, candidate ledger |
+| Stage-1: Classifying Design | Classify mature drafts into P0, P1, P2, P3 category skeletons, reconcile every candidate in the living ledger, and pass the Discovery Gate before approving US/AC/TC. | Category skeletons, discovery ledger, independent review evidence, TODO tracking |
 
 ## Phase 1: Design and Planning
 
 1. Define the component or feature under test.
-2. Declare the SUT explicitly in the test-file overview.
+2. Declare the SUT, in-scope classes, domain profile(s), test level, and execution environment explicitly in the test-file overview. Embedded Linux is the primary usage context, followed by Microservices and LLM Agents; do not force unrelated profiles into a slice.
 3. Inventory all in-scope source rules before treating existing tests as coverage evidence.
-4. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) to sweep partitions, boundaries, combinations, workflows, failures, and production differences; capture examples and questions in living comments.
+4. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) for Example Mapping and applicable P0/P1/P2/P3 sweeps. Capture source-defined examples, verification methods, and questions in living comments; domain hints never supply thresholds or product policy.
 5. Classify drafts using `CaTDD_methodPrompt-categorySemantics.md`.
 6. Select category-specific prompt files when deeper category guidance is needed.
 

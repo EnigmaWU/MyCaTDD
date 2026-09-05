@@ -37,7 +37,7 @@ Edge proves that the feature still works correctly at the edges of valid use. In
 
 ## TestPointsInMind
 
-First apply the source inventory and Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Account for candidates in the shared discovery ledger; the ideas below are not a completeness quota.
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
 
 When this category applies, consider test points such as:
 
@@ -48,6 +48,10 @@ When this category applies, consider test points such as:
 - Boundary transitions that should remain safe: from empty to one item, from one item to empty, from capacity-1 to capacity, or from first to next.
 - Documented non-success edge results that are still valid contract behavior, such as timeout, no data, queue full, or already up to date.
 - The point where the scenario stops being Edge and becomes Misuse, Fault, Capability, Performance, State, or Concurrency.
+- Domain-specific questions:
+  - *Embedded Linux*: Which minimum/maximum frame lengths, buffer occupancy, precision, or nonblocking results are valid? Test zero/empty only if the contract allows them.
+  - *Microservices*: Which empty results, pagination boundaries, encodings, or uncommon modes have distinct valid outcomes under the actual API contract?
+  - *LLM Agents*: Which inputs are immediately below or at the source-defined context budget, including required overhead and output reserve? Which setting limits are supported? Invalid over-limit requests belong elsewhere, not automatically in Edge.
 
 ## Design Skeleton
 

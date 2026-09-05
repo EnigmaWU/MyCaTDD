@@ -36,6 +36,8 @@ Concurrency proves that correct behavior survives simultaneous access and interl
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - Multiple actors start from a controlled barrier and operate on one named shared resource or synchronization boundary.
@@ -43,6 +45,10 @@ When this category applies, consider test points such as:
 - Concurrent lifecycle pressure: shutdown while work is in flight, cancel during wait, register while dispatching, or close while readers exist.
 - Contention around ownership transfer, lock ordering, idempotency, atomic compare/update, queue pop, cache write, or callback dispatch.
 - Tool-backed evidence when available: deterministic scheduler, sanitizer, race detector, timeout guard, or bounded repeated run.
+- Domain-specific questions:
+  - *Embedded Linux*: Which thread/interrupt actors share ordinary RAM, and which coordinate with MMIO or DMA? Use the platform's synchronization and device-access rules; do not assume RAM atomics are supported on MMIO. Which bounded schedule challenges lock order or buffer ownership?
+  - *Microservices*: Which worker, message-consumer, or transaction interleavings challenge the designed ownership/deduplication invariant? Do not assume a distributed-lock strategy.
+  - *LLM Agents*: Which parallel tool/session updates or cancellation races can violate the designed state/side-effect boundary, and what controlled schedule exposes them?
 
 ## Design Skeleton
 

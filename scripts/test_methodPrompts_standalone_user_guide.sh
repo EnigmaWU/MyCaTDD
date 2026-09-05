@@ -89,7 +89,7 @@ grep -Fq '独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`�
 grep -Fq '[methodPrompts/README_UserGuide.md](methodPrompts/README_UserGuide.md)' "$MAIN_GUIDE" || fail "main user guide missing methodPrompts sub-user-guide link"
 grep -Fq '[methodPrompts/README_UserGuide_ZH.md](methodPrompts/README_UserGuide_ZH.md)' "$MAIN_GUIDE" || fail "main user guide missing ZH methodPrompts sub-user-guide link"
 
-# SUT: methodPrompts (P0 command integration included).
+# SUT: methodPrompts (P0/P1/P2 command integration included).
 # @[Class]: P0 Functional / ValidFunc
 # @[Category]: Typical
 # @[US]: US-DISCOVERY-01 — source-first discovery exposes missing behavior,
@@ -103,9 +103,43 @@ assert_discovery_contract() {
   grep -Fq "$text" "$path" || fail "${path#$REPO_ROOT/} missing discovery contract: $text"
 }
 
+assert_discovery_section() {
+  local path="$1"
+  local heading="$2"
+  local text="$3"
+  awk -v heading="$heading" '
+    $0 == heading { selected = 1; next }
+    selected && /^## / { exit }
+    selected { print }
+  ' "$path" | grep -F "$text" > /dev/null \
+    || fail "${path#$REPO_ROOT/} missing contract in $heading: $text"
+}
+
+assert_discovery_absent() {
+  local path="$1"
+  local text="$2"
+  if grep -Fq "$text" "$path"; then
+    fail "${path#$REPO_ROOT/} retains conflicting discovery contract: $text"
+  fi
+}
+
+assert_discovery_order() {
+  local path="$1"
+  local first="$2"
+  local second="$3"
+  awk -v first="$first" -v second="$second" '
+    index($0, first) && !first_line { first_line = NR }
+    index($0, second) && !second_line { second_line = NR }
+    END { exit !(first_line && second_line && first_line < second_line) }
+  ' "$path" || fail "${path#$REPO_ROOT/} must place '$first' before '$second'"
+}
+
 # [@AC-DISCOVERY-01,US-DISCOVERY-01] TC-DISCOVERY-01: inventory before skeletons.
 DISCOVERY="$METHOD_DIR/CaTDD_methodPrompt-testPointDiscovery.md"
-for heading in '## Behavior Inventory' '## P0 Discovery Sweep' '## Test-Point Ledger'; do
+for heading in '## Behavior Inventory' '## Stage-0 Elicitation Toolkit' \
+  '## P0 Discovery Sweep' '## P1 Design Discovery Sweep' '## P2 Quality Discovery Sweep' \
+  '## P3 Addons Discovery Sweep' '## Domain Archetype Discovery (Embedded, Microservice, LLM Agent)' \
+  '## Test-Point Ledger'; do
   assert_discovery_contract "$DISCOVERY" "$heading"
 done
 for disposition in DESIGNED QUESTION EXCLUDED REFERRED GAP; do
@@ -127,7 +161,8 @@ for method_entry in "$MASTER_PROMPT" \
   assert_discovery_contract "$method_entry" 'CaTDD_methodPrompt-testPointDiscovery.md'
   assert_discovery_contract "$method_entry" 'Discovery Gate'
 done
-for category in Typical Edge Misuse Fault; do
+for category in Typical Edge Misuse Fault State Capability Interaction Concurrency \
+  Performance Robust Compatibility Configuration Diagnosis Security DemoExample; do
   assert_discovery_contract "$METHOD_DIR/CaTDD_methodPrompt4Cat-$category.md" 'CaTDD_methodPrompt-testPointDiscovery.md'
 done
 
@@ -142,10 +177,108 @@ assert_discovery_contract "$P0_COMMANDS/UT_reviewFuncTestsSkeleton.md" 'no exist
 assert_discovery_contract "$P0_COMMANDS/UT_tellMeNextImplTest.md" 'review_evidence'
 assert_discovery_contract "$P0_COMMANDS/UT_tellMeNextImplTest.md" 'ready_for_implementation'
 
+P1_REVIEW="$REPO_ROOT/slashCommands/commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md"
+assert_discovery_contract "$P1_REVIEW" 'CaTDD_methodPrompt-testPointDiscovery.md'
+assert_discovery_contract "$P1_REVIEW" 'P1 Discovery Gate'
+
+P2_REVIEW="$REPO_ROOT/slashCommands/commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md"
+assert_discovery_contract "$P2_REVIEW" 'CaTDD_methodPrompt-testPointDiscovery.md'
+assert_discovery_contract "$P2_REVIEW" 'P2 Discovery Gate'
+
 # [@AC-DISCOVERY-05,US-DISCOVERY-01] TC-DISCOVERY-05: standalone EN/ZH adoption.
 for guide in "$GUIDE" "$GUIDE_ZH"; do
   assert_discovery_contract "$guide" 'discovery_ledger'
   assert_discovery_contract "$guide" 'ready_for_implementation'
 done
+
+# @[US]: US-DISCOVERY-02 — as a method user, I want comprehensive sweeps
+# to preserve source-defined meaning rather than invent requirements.
+# Source: accepted correctness/consistency review; staged-file-only scope.
+# Purpose/Covered: AC-DISCOVERY-06..11 cover oracle validity, lens-based
+# routing, optional domain prompts, bounded reviews, direct design routes,
+# and the distinction between handoff acceptance and scope exclusion.
+# Status: TC-DISCOVERY-06..11 each exposed the intended missing contract
+# before its correction and then passed. Rerun to verify the current files.
+# Manual: bash scripts/test_methodPrompts_standalone_user_guide.sh
+# These are text-contract regressions, not a semantic discovery benchmark.
+
+# [@AC-DISCOVERY-06,US-DISCOVERY-02] TC-DISCOVERY-06:
+# GIVEN source-defined symbolic or manually observed outcomes, WHEN the
+# discovery contract is read, THEN it does not demand invented numeric targets
+# or automation as a prerequisite for a valid oracle.
+assert_discovery_section "$DISCOVERY" '## P2 Quality Discovery Sweep' 'numeric thresholds or exact predicates'
+assert_discovery_section "$DISCOVERY" '## Stage-0 Elicitation Toolkit' 'Manual or hybrid verification is valid'
+assert_discovery_absent "$DISCOVERY" 'A quality scenario lacking a quantitative Response Measure cannot be tested'
+
+# [@AC-DISCOVERY-07,US-DISCOVERY-02] TC-DISCOVERY-07:
+# GIVEN a source-backed obligation, WHEN rule tags or handoff destinations
+# change, THEN category identity and in-scope readiness cannot be bypassed.
+assert_discovery_section "$DISCOVERY" '## Stage-0 Elicitation Toolkit' 'Rule type does not determine CaTDD category'
+assert_discovery_section "$DISCOVERY" '## Test-Point Ledger' 'Routing is independent of disposition'
+assert_discovery_section "$DISCOVERY" '## Discovery Gate' 'An in-scope obligation in any class remains GAP'
+
+# [@AC-DISCOVERY-08,US-DISCOVERY-02] TC-DISCOVERY-08:
+# GIVEN the embedded-first usage priority, WHEN a domain prompt is selected,
+# THEN it remains optional source-backed guidance, not an invented threshold,
+# a historical claim, or an assumption about MMIO atomics.
+assert_discovery_contract "$MASTER_PROMPT" 'primarily Embedded Linux, secondarily Microservices, and thirdly LLM Agents'
+assert_discovery_section "$DISCOVERY" '## Domain Archetype Discovery (Embedded, Microservice, LLM Agent)' 'not a historical lineage'
+for category in Typical Edge Misuse Fault State Capability Interaction Concurrency \
+  Performance Robust Compatibility Configuration Diagnosis Security DemoExample; do
+  category_prompt="$METHOD_DIR/CaTDD_methodPrompt4Cat-$category.md"
+  assert_discovery_section "$category_prompt" '## TestPointsInMind' 'optional prompts, not requirements'
+  assert_discovery_section "$category_prompt" '## TestPointsInMind' 'discovery_ledger'
+done
+assert_discovery_absent "$METHOD_DIR/CaTDD_methodPrompt4Cat-Edge.md" '($95\%$ token capacity)'
+assert_discovery_absent "$METHOD_DIR/CaTDD_methodPrompt4Cat-Performance.md" '50\text{ms}'
+assert_discovery_absent "$METHOD_DIR/CaTDD_methodPrompt4Cat-Concurrency.md" 'atomic compare-and-swap on shared device memory'
+
+# [@AC-DISCOVERY-09,US-DISCOVERY-02] TC-DISCOVERY-09:
+# GIVEN a P1/P2 review request, WHEN its execution and output contracts are
+# followed, THEN source-first evidence, a bounded stop, and explicit readiness
+# are required even for omissions without an existing TC.
+for review in "$P1_REVIEW" "$P2_REVIEW"; do
+  assert_discovery_order "$review" 'Read source artifacts first' 'Read the discovery_ledger and skeletons'
+  assert_discovery_section "$review" '## CoT Pattern' 'at most two repair/recheck rounds'
+  assert_discovery_absent "$review" 'Repeat until every'
+  assert_discovery_contract "$review" 'no existing US/AC/TC ID'
+  for field in discovery_ledger review_evidence cardinality_gate discovery_status ready_for_implementation; do
+    assert_discovery_section "$review" '## Output Contract' "$field"
+  done
+done
+assert_discovery_section "$P1_REVIEW" '## Preconditions' 'every State, Capability, Interaction, or Concurrency skeleton'
+assert_discovery_section "$P2_REVIEW" '## Preconditions' 'numeric budgets or exact predicates'
+
+# [@AC-DISCOVERY-10,US-DISCOVERY-02] TC-DISCOVERY-10:
+# GIVEN categories without dedicated design commands, WHEN following the flow
+# or standalone guide, THEN an explicit source-gated direct method route exists
+# and verification methods/readiness remain visible.
+P1_FLOW="$REPO_ROOT/slashCommands/flows/P1-DesignTestsFlow.md"
+P2_FLOW="$REPO_ROOT/slashCommands/flows/P2-QualityTestsFlow.md"
+assert_discovery_section "$P1_FLOW" '## Command Sequence' 'CaTDD_methodPrompt4Cat-Interaction.md'
+assert_discovery_section "$P1_FLOW" '## Flow Diagram' 'Interaction --> Review'
+for category in Diagnosis Security; do
+  assert_discovery_section "$P2_FLOW" '## Command Sequence' "CaTDD_methodPrompt4Cat-$category.md"
+  assert_discovery_section "$P2_FLOW" '## Flow Diagram' "$category --> Review"
+done
+for flow in "$P1_FLOW" "$P2_FLOW"; do
+  assert_discovery_section "$flow" '## Discovery Handoff' 'discovery_ledger'
+  assert_discovery_section "$flow" '## Command Sequence' 'ready_for_implementation: yes'
+done
+for guide in "$GUIDE" "$GUIDE_ZH"; do
+  assert_discovery_section "$guide" '## Usage Example' 'verification_method'
+  assert_discovery_absent "$guide" 'Apply Stage-0 elicitation (OOPSI, Business Rules, Ambiguity hunting) and identify domain archetype risks'
+done
+
+# [@AC-DISCOVERY-11,US-DISCOVERY-02] TC-DISCOVERY-11:
+# GIVEN an accepted owner/destination but no adequate TC, WHEN the obligation
+# stays in scope, THEN its disposition is GAP, not REFERRED. An illustrative
+# agent check still conflated acceptance with a scope change; lock in explicit
+# contrasting cases rather than treating that check's overall PASS as proof.
+# A narrow replay matched GAP/no readiness after the clarification; this does
+# not establish general agent compliance or measured omission reduction.
+assert_discovery_section "$DISCOVERY" '## Test-Point Ledger' 'In scope; destination/owner accepted; no adequate TC | GAP'
+assert_discovery_section "$DISCOVERY" '## Test-Point Ledger' 'Explicitly out of scope; destination/owner accepted | REFERRED'
+assert_discovery_section "$DISCOVERY" '## Test-Point Ledger' 'Handoff acceptance never changes scope'
 
 echo "[methodPrompts-standalone-guide-test] PASSED: methodPrompts has standalone user guide"

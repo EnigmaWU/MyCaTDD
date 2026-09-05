@@ -32,14 +32,17 @@ Build dimensions from source rules, not from tests already written. Link each ap
 Keep one feature-level inventory and `discovery_ledger` in FreelyDrafts or the OVERVIEW / UNIT TESTING DESIGN comments; category files link to it. These comments supplement, not replace, US/AC/TC or TODO status. The discovery subtopic owns the disposition/readiness semantics.
 
 ```text
-// DISCOVERY SCOPE: [SUT, feature, test level, approved limits]
-// SOURCES / RULES: [artifact#section or rule ID -> distinct behavior/outcome]
-// DIMENSIONS: [dimension/partition/combination -> TP IDs or reason not applicable]
+// DISCOVERY SCOPE: [SUT, feature, in-scope classes, test level, approved limits]
+// DOMAIN / EXECUTION ENVIRONMENT: [profile(s), user-space/kernel boundary, host/simulator/target/HIL as relevant]
+// SOURCES / RULES: [artifact#section or rule ID -> behavior, model invariant, quality predicate, or guide outcome]
+// DIMENSIONS: [applicable P0/P1/P2/P3 sweep dimension/partition/combination -> TP IDs or reason not applicable]
 // SAMPLING: [feasible dimensions/constraints, selection method, omissions/rationale, risk-significant additions; or not applicable]
 // REVIEW: [reviewer/process or labeled self-review, sources, independently derived operation/outcome checklist, residual risk]
 // TP ID | Source/rule | Setup/action | Observable oracle | Category/level | Disposition/evidence
 // TP-01 | [source/R1] | [condition]  | [expected result]  | Typical/unit   | DESIGNED: [file, US/AC/TC IDs]
 // TP-02 | [source/R2] | [condition]  | unknown            | provisional    | QUESTION: [question, decision owner]
+// VERIFICATION METHOD by TP ID: [automated/manual/hybrid procedure, environment, evidence capture]
+// SCOPE / ROUTING by TP ID: [in/out of scope, destination and owner if applicable; independent of disposition]
 // Discovery Gate: [PASS/GAPS/BLOCKED, review evidence, residual risk]
 // ready_for_implementation: [yes/no for this scope; not release readiness]
 ```
@@ -55,13 +58,15 @@ Value B     | Value X     | US-3: Error handling
 
 ### Common Dimensions
 
-| Component Type | Useful Dimensions |
+| Component Type / Domain | Useful Dimensions |
 | --- | --- |
 | Event system | Service role x client role x mode |
 | State machine | State x operation x edge condition |
 | Concurrent queue | Concurrency x resource level x operation |
 | CLI | command mode x input source x validation outcome |
-| Microservice | endpoint x auth state x dependency state |
+| Embedded Linux | SUT layer x operation x resource/device condition x host/target environment; separate user-space, kernel, shared RAM, and MMIO/DMA boundaries |
+| Microservice | Endpoint/workflow x caller role x dependency outcome across supported deployments |
+| LLM Agent | Goal/task x tool permission x provider/session condition; identify whether the SUT is the orchestrator, adapter, or tool |
 
 ## Test Naming Convention
 

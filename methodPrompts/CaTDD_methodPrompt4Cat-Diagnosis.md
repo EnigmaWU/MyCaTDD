@@ -35,6 +35,8 @@ Diagnosis proves that when behavior succeeds, degrades, or fails, the system lea
 
 ## TestPointsInMind
 
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+
 When this category applies, consider test points such as:
 
 - Required evidence fields on the authoritative surface: correlation ID, component, operation, status, cause, retry count, remediation, or dependency name.
@@ -42,6 +44,10 @@ When this category applies, consider test points such as:
 - Cross-surface consistency where needed: log line, trace span, metric, health report, CLI stderr, and returned error all identify the same event.
 - Diagnostic behavior under success, degradation, retry, and failure, without confusing Diagnosis with Robust survival.
 - Negative evidence checks: secrets, tokens, PII, stack traces, or misleading internal details are absent when they must not be exposed.
+- Domain-specific questions:
+  - *Embedded Linux*: Which daemon stderr/log, kernel/serial, reset-cause, or device-indicator evidence is required, and how is it captured on the target? Keep user-space and kernel surfaces distinct.
+  - *Microservices*: Which correlation fields, causal errors, and health evidence must survive actual request/message boundaries? Use the specified surface, not an assumed telemetry framework.
+  - *LLM Agents*: Which run/tool outcomes, usage fields, and permission decisions must be reconstructable, and what sensitive input/output must be omitted or redacted? An agent's self-reported success is not diagnostic proof.
 
 ## Design Skeleton
 
