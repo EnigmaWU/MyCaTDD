@@ -29,10 +29,10 @@ Symptoms:
 
 Resolution:
 
-1. Rebuild the US -> AC -> TC chain.
-2. Reclassify the test point using `CaTDD_methodPrompt-categorySemantics.md`.
-3. Ask whether the missing behavior belongs in the current story or a sub-story.
-4. Mark `@[NoTestPoints]: <reason>` only when the category was deliberately considered.
+1. Rebuild the behavior inventory from sources, not only the existing US -> AC -> TC chain. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md).
+2. Sweep missing conditions and outcomes, reconcile the discovery ledger, and repair linkage gaps separately.
+3. Reclassify by verification lens and ask whether missing behavior belongs in the current story or a sub-story.
+4. Mark `@[NoTestPoints]: <reason>` only after explicit consideration. Missing source remains QUESTION/BLOCKED, not a passed discovery gate.
 
 ## Issue 3: Production Behavior Is Unclear
 
@@ -95,6 +95,21 @@ Resolution:
 2. Strengthen setup or observable verification.
 3. Confirm the test would fail if the behavior were removed.
 4. If behavior already exists, mark the TC as existing coverage and run regression instead of forcing fake RED.
+
+## Issue 7: Deployment Finds a Missing Test Point
+
+Symptoms:
+
+- Every written US/AC/TC is linked, but a production scenario has no corresponding test design.
+- Mocks hide a relevant dependency outcome or deployment difference.
+- The same kind of escaped bug recurs across related operations.
+
+Resolution:
+
+1. Follow **Escaped-Bug Feedback** in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md).
+2. Distinguish a missing requirement or discovery point from a weak oracle, unimplemented test, or test not run in the relevant environment.
+3. Confirm expected behavior, add the source-backed regression skeleton, then follow RED/GREEN for the fix.
+4. Record the reusable discovery question that was missed and review neighboring scenarios; do not merely add one incident-specific TC and declare completeness.
 
 ## Decision Tree
 

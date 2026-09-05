@@ -35,9 +35,13 @@ Fault proves that the system fails right when the caller behaves correctly but t
 
 ## TestPointsInMind
 
+First apply the source inventory and Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Account for candidates in the shared discovery ledger; the ideas below are not a completeness quota.
+
 When this category applies, consider test points such as:
 
 - One deterministic injected dependency failure: unavailable service, timeout, process crash, disk full, permission denied, broken pipe, or allocation failure.
+- Failures at each meaningful dependency boundary and phase: before work, during partial work, or after a side effect but before acknowledgment. A startup failure does not prove partial-work handling.
+- Malformed, partial, delayed, or duplicate dependency responses when applicable. Confirm the expected behavior from the functional contract; a fault hypothesis alone cannot justify retry, rollback, or idempotency rules.
 - Partial-work handling: rollback, no partial commit, cleanup, compensation, retry exhaustion, fail-fast, or preserved previous state.
 - Boundary between valid caller behavior and failing world behavior, so the test does not drift into Misuse.
 - Recovery after the fault clears when the product contract promises retry, restart, resume, or re-open behavior.
@@ -86,11 +90,13 @@ verifyServiceRestart_byProcessCrash_expectRecoveredState
 
 ## Checklist
 
+- Does the dependency/phase sweep expose any missing ledger row, weak oracle, or mock that always succeeds at the relevant boundary?
 - Is the caller using the API correctly?
 - What dependency, resource, or environment fault is injected?
 - Is the injection deterministic enough for automation?
 - What should happen to partial work after the fault?
 - Should the component retry, rollback, cleanup, or fail fast?
+- If unit-level injection cannot prove the obligation, is there a concrete higher-level verification handoff rather than a silent omission?
 
 ## Common Mistakes
 

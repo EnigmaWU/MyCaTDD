@@ -107,11 +107,11 @@ Follow this workflow when starting a CaTDD test file.
 2. Read `CaTDD_methodPrompt.md` as the main method entry.
 3. Read the needed `CaTDD_methodPrompt-*.md` subtopic for detailed guidance.
 4. Copy `CaTDD_designAndImplTemplate.cxx` or adapt its section structure to your language.
-5. Capture Stage-0 free drafts: scenarios, examples, risks, and open questions.
-6. Use `CaTDD_methodPrompt-testPointDiscovery.md` to map rules, examples, questions, and quadrant blind spots before locking TCs.
+5. Inventory in-scope source behaviors before treating existing tests as coverage. Capture Stage-0 scenarios, examples, risks, and open questions.
+6. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) to sweep operations/outcomes, partitions, boundaries, combinations, public sequences, dependency failures, and production differences. Record candidates and source references in a `discovery_ledger` in living comments.
 7. Classify drafts into categories using the priority order below.
 8. Write US/AC/TC comments inside the test file before implementing code.
-9. Generate or write one failing test for the next TC.
+9. Independently review source -> ledger -> US/AC/TC and back. Require both cardinality and the Discovery Gate to pass with `ready_for_implementation: yes` for the declared scope; then write one failing test for the next TC.
 10. Implement only enough production code to pass that TC.
 11. Update TC status markers and keep the comments synchronized with behavior.
 12. Repeat one TC at a time.
@@ -140,6 +140,10 @@ Then ask your CodeAgent or use the method prompts manually:
 Read methodPrompts/README_UserGuide.md and methodPrompts/CaTDD_methodPrompt.md.
 Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/test_your_feature_funcValidTypical.cxx or Test/test_your_feature_funcValidTypical.ts.
 Preserve US/AC/TC traceability and leave unclear product intent as questions.
+Before drafting, apply methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md.
+Keep a source-first behavior inventory and discovery_ledger in living comments.
+Review sources independently of existing tests; report discovery_status,
+ready_for_implementation, exclusions, referrals, and residual risks separately.
 ```
 
 Expected result:
@@ -148,6 +152,10 @@ Expected result:
 - It has a UNIT TESTING DESIGN section with US/AC/TC comments.
 - It has a UNIT TESTING IMPLEMENTATION section ready for Red-Green TDD.
 - It has TODO/TRACKING status markers for the selected TCs.
+- It links source rules and discovery dimensions to ledger rows with DESIGNED, QUESTION, EXCLUDED, REFERRED, or GAP evidence. Accounted-for points are not automatically covered.
+- Unresolved in-scope source/oracle questions and uncovered obligations prevent readiness. Missing-source `@[NoTestPoints]` is BLOCKED, not proof of inapplicability.
+
+For a self-contained exercise that exposes missing scenarios despite valid US/AC/TC links, use the [exporter review example](CaTDD_methodPrompt-testPointDiscovery.md#usage-example). The method reduces omissions; it does not guarantee that no deployment bugs remain. Feed escaped bugs back into discovery questions, not just additional TC counts.
 
 ## Priority Framework
 
@@ -225,6 +233,8 @@ Use explicit status markers so humans and CodeAgents can continue work safely.
 
 Before calling a CaTDD design complete, verify:
 
+- Every in-scope source behavior and applicable discovery dimension has ledger evidence, not just a populated category file.
+- An independent source-first Discovery Gate passes; questions, scope exclusions, sampling limits, and higher-level/P1/P2 referrals remain explicit.
 - Each TC links back to at least one AC and US.
 - Category names match the method prompt map.
 - P0 Functional coverage is addressed before optional P1/P2 expansion.

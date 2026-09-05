@@ -8,15 +8,15 @@ CaTDD uses two design stages before implementation.
 
 | Stage | Purpose | Output |
 | --- | --- | --- |
-| Stage-0: Freely Drafting | Capture raw scenarios, examples, risks, and questions without forcing structure too early. | FreelyDrafts, open questions, rough coverage dimensions |
-| Stage-1: Classifying Design | Classify mature drafts into CaTDD classes/categories and convert them into US/AC/TC. | Category skeletons, US/AC/TC comments, TODO tracking |
+| Stage-0: Freely Drafting | Inventory behavior from sources and discover scenarios, risks, and questions breadth-first. | FreelyDrafts, source/rule inventory, discovery dimensions, candidate ledger |
+| Stage-1: Classifying Design | Classify mature drafts and reconcile every candidate before approving US/AC/TC. | Category skeletons, discovery ledger, independent review evidence, TODO tracking |
 
 ## Phase 1: Design and Planning
 
 1. Define the component or feature under test.
 2. Declare the SUT explicitly in the test-file overview.
-3. Identify coverage dimensions such as role, mode, state, resource, or environment.
-4. Capture freely drafted scenarios and questions.
+3. Inventory all in-scope source rules before treating existing tests as coverage evidence.
+4. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) to sweep partitions, boundaries, combinations, workflows, failures, and production differences; capture examples and questions in living comments.
 5. Classify drafts using `CaTDD_methodPrompt-categorySemantics.md`.
 6. Select category-specific prompt files when deeper category guidance is needed.
 
@@ -28,6 +28,7 @@ CaTDD uses two design stages before implementation.
 4. Keep TC names in `verifyBehavior_byCondition_expectResult` form.
 5. Keep each test to no more than three key assertions; split if needed.
 6. Put planned TCs in the TODO/tracking section.
+7. Reconcile the discovery ledger, then run the source-first independent challenge and **Discovery Gate** from [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Missing in-scope oracles, sources, or obligations prevent readiness even when every written AC has a TC.
 
 ## Mandatory Traceability
 
@@ -36,6 +37,7 @@ CaTDD uses two design stages before implementation.
 - Each AC must map to at least one TC.
 - Each non-empty category file must trace to a source-of-truth artifact.
 - Missing source evidence should stop design or become `@[NoTestPoints]: <reason>`.
+- A missing-source `@[NoTestPoints]` is BLOCKED, not evidence that coverage is unnecessary. Report discovery dispositions and residual risk separately from linkage counts.
 
 ## Phase 3: TDD Red-Green Cycle
 
@@ -94,6 +96,7 @@ Examples:
 
 Before leaving P0:
 
+- The Discovery Gate passes for the declared P0 scope; all in-scope questions and design gaps are resolved, with exclusions/referrals visible.
 - Typical tests are GREEN.
 - Edge tests are GREEN or explicitly scoped out.
 - Misuse tests are GREEN or documented.

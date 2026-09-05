@@ -107,11 +107,11 @@ methodPrompts/
 2. 阅读 `CaTDD_methodPrompt.md`，把它作为主入口。
 3. 阅读需要的 `CaTDD_methodPrompt-*.md` 子主题，获取详细方法指导。
 4. 复制 `CaTDD_designAndImplTemplate.cxx`，或把其中的分区结构适配到你的语言。
-5. 捕获 Stage-0 自由草稿：场景、示例、风险与开放问题。
-6. 使用 `CaTDD_methodPrompt-testPointDiscovery.md` 映射 rules、examples、questions 与 quadrant blind spots，再锁定 TCs。
+5. 先从来源列出范围内的行为，再把已有测试当作覆盖证据。捕获 Stage-0 场景、示例、风险与开放问题。
+6. 使用 [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) 扫描操作与结果、输入分区、边界、组合、公开调用序列、依赖故障及部署差异；在活注释中的 `discovery_ledger` 记录候选点与来源。
 7. 根据下面的优先级顺序，将草稿归类。
 8. 在实现代码之前，把 US/AC/TC 注释写进测试文件。
-9. 为下一个 TC 生成或编写一个失败测试。
+9. 独立审查 source -> ledger -> US/AC/TC 及反向链接。只有 cardinality 和 Discovery Gate 都通过、声明范围内 `ready_for_implementation: yes` 时，才为下一个 TC 编写失败测试。
 10. 只实现让该 TC 通过所需的最小生产代码。
 11. 更新 TC 状态标记，并保持注释与行为同步。
 12. 每次只推进一个 TC，持续重复。
@@ -140,6 +140,10 @@ cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValid
 Read methodPrompts/README_UserGuide_ZH.md and methodPrompts/CaTDD_methodPrompt.md.
 Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/test_your_feature_funcValidTypical.cxx or Test/test_your_feature_funcValidTypical.ts.
 Preserve US/AC/TC traceability and leave unclear product intent as questions.
+Before drafting, apply methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md.
+Keep a source-first behavior inventory and discovery_ledger in living comments.
+Review sources independently of existing tests; report discovery_status,
+ready_for_implementation, exclusions, referrals, and residual risks separately.
 ```
 
 预期结果：
@@ -148,6 +152,10 @@ Preserve US/AC/TC traceability and leave unclear product intent as questions.
 - 它包含带有 US/AC/TC 注释的 UNIT TESTING DESIGN 分区。
 - 它包含可进入 Red-Green TDD 的 UNIT TESTING IMPLEMENTATION 分区。
 - 它包含所选 TC 的 TODO/TRACKING 状态标记。
+- 来源规则与发现维度均链接到有证据的 ledger 条目：DESIGNED、QUESTION、EXCLUDED、REFERRED 或 GAP。有交代不等于已覆盖。
+- 范围内未解决的来源/预期结果问题以及未设计的义务会阻止就绪。因缺少来源而填写的 `@[NoTestPoints]` 是 BLOCKED，不是不适用的证明。
+
+若要练习发现「US/AC/TC 链接完整但场景遗漏」，使用独立的 [exporter 审查示例](CaTDD_methodPrompt-testPointDiscovery.md#usage-example)。本方法减少遗漏，但不保证部署后零缺陷；应把逃逸缺陷反馈为发现问题，而不只是增加 TC 数量。
 
 ## 优先级框架
 
@@ -225,6 +233,8 @@ Preserve US/AC/TC traceability and leave unclear product intent as questions.
 
 在声明 CaTDD 设计完成之前，检查：
 
+- 范围内每个来源行为与适用发现维度都有 ledger 证据，而不只是分类文件存在。
+- 独立的 source-first Discovery Gate 已通过；开放问题、范围排除、抽样限制、其他测试层级及 P1/P2 转交均保持可见。
 - 每个 TC 至少回链到一个 AC 和一个 US。
 - 分类名称与方法提示词地图一致。
 - 在扩展可选 P1/P2 之前，先处理 P0 Functional 覆盖。

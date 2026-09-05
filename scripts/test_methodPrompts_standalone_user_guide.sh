@@ -89,4 +89,63 @@ grep -Fq '独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`�
 grep -Fq '[methodPrompts/README_UserGuide.md](methodPrompts/README_UserGuide.md)' "$MAIN_GUIDE" || fail "main user guide missing methodPrompts sub-user-guide link"
 grep -Fq '[methodPrompts/README_UserGuide_ZH.md](methodPrompts/README_UserGuide_ZH.md)' "$MAIN_GUIDE" || fail "main user guide missing ZH methodPrompts sub-user-guide link"
 
+# SUT: methodPrompts (P0 command integration included).
+# @[Class]: P0 Functional / ValidFunc
+# @[Category]: Typical
+# @[US]: US-DISCOVERY-01 — source-first discovery exposes missing behavior,
+# not merely dangling US/AC/TC links. Source: developer-requested method contract.
+# @[AC]: AC-DISCOVERY-01..05 — GIVEN the standalone method and P0 commands,
+# WHEN their contracts are checked, THEN discovery, readiness, and routing
+# remain explicit. These checks verify text contracts, not semantic completeness.
+assert_discovery_contract() {
+  local path="$1"
+  local text="$2"
+  grep -Fq "$text" "$path" || fail "${path#$REPO_ROOT/} missing discovery contract: $text"
+}
+
+# [@AC-DISCOVERY-01,US-DISCOVERY-01] TC-DISCOVERY-01: inventory before skeletons.
+DISCOVERY="$METHOD_DIR/CaTDD_methodPrompt-testPointDiscovery.md"
+for heading in '## Behavior Inventory' '## P0 Discovery Sweep' '## Test-Point Ledger'; do
+  assert_discovery_contract "$DISCOVERY" "$heading"
+done
+for disposition in DESIGNED QUESTION EXCLUDED REFERRED GAP; do
+  assert_discovery_contract "$DISCOVERY" "$disposition"
+done
+
+# [@AC-DISCOVERY-02,US-DISCOVERY-01] TC-DISCOVERY-02: honest readiness and feedback.
+for contract in '## Discovery Gate' '## Escaped-Bug Feedback' '## Usage Example' \
+  'discovery_status' 'ready_for_implementation' 'accounted for does not mean covered' \
+  'does not guarantee' 'pairwise' 'TP-05' '### Report Consistency Audit'; do
+  assert_discovery_contract "$DISCOVERY" "$contract"
+done
+
+# [@AC-DISCOVERY-03,US-DISCOVERY-01] TC-DISCOVERY-03: all method entry routes.
+for method_entry in "$MASTER_PROMPT" \
+  "$METHOD_DIR/CaTDD_methodPrompt-workflow.md" \
+  "$METHOD_DIR/CaTDD_methodPrompt-testStructure.md" \
+  "$METHOD_DIR/CaTDD_methodPrompt-agentWorkflow.md"; do
+  assert_discovery_contract "$method_entry" 'CaTDD_methodPrompt-testPointDiscovery.md'
+  assert_discovery_contract "$method_entry" 'Discovery Gate'
+done
+for category in Typical Edge Misuse Fault; do
+  assert_discovery_contract "$METHOD_DIR/CaTDD_methodPrompt4Cat-$category.md" 'CaTDD_methodPrompt-testPointDiscovery.md'
+done
+
+# [@AC-DISCOVERY-04,US-DISCOVERY-01] TC-DISCOVERY-04: command handoff and blind spots.
+P0_COMMANDS="$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow"
+for command in UT_designFuncTestsSkeleton UT_reviewFuncTestsSkeleton; do
+  assert_discovery_contract "$P0_COMMANDS/$command.md" 'CaTDD_methodPrompt-testPointDiscovery.md'
+  assert_discovery_contract "$P0_COMMANDS/$command.md" 'discovery_ledger'
+  assert_discovery_contract "$P0_COMMANDS/$command.md" 'ready_for_implementation'
+done
+assert_discovery_contract "$P0_COMMANDS/UT_reviewFuncTestsSkeleton.md" 'no existing US/AC/TC ID'
+assert_discovery_contract "$P0_COMMANDS/UT_tellMeNextImplTest.md" 'review_evidence'
+assert_discovery_contract "$P0_COMMANDS/UT_tellMeNextImplTest.md" 'ready_for_implementation'
+
+# [@AC-DISCOVERY-05,US-DISCOVERY-01] TC-DISCOVERY-05: standalone EN/ZH adoption.
+for guide in "$GUIDE" "$GUIDE_ZH"; do
+  assert_discovery_contract "$guide" 'discovery_ledger'
+  assert_discovery_contract "$guide" 'ready_for_implementation'
+done
+
 echo "[methodPrompts-standalone-guide-test] PASSED: methodPrompts has standalone user guide"

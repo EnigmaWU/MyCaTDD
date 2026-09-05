@@ -35,9 +35,12 @@ Typical proves that the feature works correctly under normal, intended use.
 
 ## TestPointsInMind
 
+First apply the source inventory and Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Account for candidates in the shared discovery ledger; the ideas below are not a completeness quota.
+
 When this category applies, consider test points such as:
 
 - The shortest complete success path from the source usage scenario to the primary observable result.
+- Each distinct ordinary supported operation, role, or workflow outcome. One representative success path must not hide another promised capability.
 - The ordinary default setup: valid inputs, valid state, healthy dependencies, normal configuration, and expected environment.
 - The main side effect promised by the AC, such as persisted data, emitted event, returned value, visible output, or state change.
 - A representative workflow that can become the first executable example for future Edge, Misuse, Fault, P1, and P2 tests.
@@ -85,6 +88,7 @@ verifyFileSave_byWritablePath_expectPersistedContent
 
 ## Checklist
 
+- Does every ordinary supported workflow in the source inventory have actual ledger/TC evidence or an explicit unresolved gap?
 - Does the test represent a real normal workflow?
 - Are all preconditions valid and ordinary?
 - Is the expected result specific enough to fail when the feature is wrong?

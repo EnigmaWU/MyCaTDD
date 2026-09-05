@@ -20,7 +20,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 | Need | Read |
 | --- | --- |
 | Category semantics, category identity, source-of-truth gate | `CaTDD_methodPrompt-categorySemantics.md` |
-| Test point discovery with Example Mapping and Agile Testing Quadrants | `CaTDD_methodPrompt-testPointDiscovery.md` |
+| Source-first behavior inventory, test-point ledger, Discovery Gate, and escaped-bug feedback | `CaTDD_methodPrompt-testPointDiscovery.md` |
 | Stage model, RED/GREEN cycle, risk-based ordering, quality gates | `CaTDD_methodPrompt-workflow.md` |
 | Comment skeleton, coverage matrix, US/AC/TC, test structure | `CaTDD_methodPrompt-testStructure.md` |
 | Canonical `test_{feature}_{category}.<ext>` file naming | `CaTDD_methodPrompt-fileNaming.md` |
@@ -90,6 +90,16 @@ For full category guidance, read `CaTDD_methodPrompt-categorySemantics.md`.
 - Every non-empty category file must trace to a source-of-truth artifact.
 - If the source is missing, ask the developer or mark the category file with `@[NoTestPoints]: <reason>`; do not invent test points.
 
+## Test-Point Discovery Contract
+
+US/AC/TC cardinality proves linkage, not completeness: an entirely missing behavior cannot fail a link check.
+
+- Before drafting skeletons, inventory source-backed behaviors and apply the discovery sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md).
+- Keep a `discovery_ledger` in living design comments: each candidate has a source/rule, scenario, observable oracle, category/test level, and disposition (DESIGNED, QUESTION, EXCLUDED, REFERRED, or GAP).
+- Apply the **Discovery Gate** independently from source to skeleton as well as from skeleton to source. Category presence, TC counts, and passing tests do not prove all relevant points were discovered.
+- Unresolved in-scope questions or uncovered obligations prevent implementation readiness. Missing-source `@[NoTestPoints]` is blocked evidence, not a coverage exemption.
+- Report readiness for the declared scope, exclusions, referrals, and residual risk. Learn from escaped bugs without promising zero omissions or inventing product behavior.
+
 ## Category Source-of-Truth Gate
 
 Use the category's source artifact to decide whether a test point is valid.
@@ -103,9 +113,9 @@ Use the category's source artifact to decide whether a test point is valid.
 
 ## Workflow Summary
 
-1. Capture Stage-0 free drafts: scenarios, examples, risks, and open questions.
-2. Classify drafts into CaTDD categories using the verification lens and source-of-truth gate.
-3. Write US/AC/TC comments before implementing code.
+1. Inventory behavior from source artifacts and capture Stage-0 drafts using the discovery sweep.
+2. Classify source-backed drafts by verification lens; retain unknowns and referrals in the test-point ledger.
+3. Write US/AC/TC comments, reconcile the ledger, and pass both the cardinality and Discovery Gate before implementation.
 4. Pick one TC and write the test first.
 5. Run the test and confirm RED for the intended reason.
 6. Implement the minimum production code to make the TC GREEN.
@@ -188,6 +198,7 @@ Use category-specific prompts when designing a category skeleton.
 - Do not write production code before a failing test exists for the selected TC.
 - Do not guess missing product intent, acceptance criteria, source-of-truth design, or quality thresholds.
 - Do not silently omit a category file.
+- Do not declare design complete from category presence or US/AC/TC counts alone; pass the Discovery Gate for the declared scope.
 - Do not reclassify a test because risk changed execution order.
 - Do not expand a TC during refactor beyond its original AC meaning.
 

@@ -35,9 +35,13 @@ Misuse proves that the system rejects wrong use safely and clearly.
 
 ## TestPointsInMind
 
+First apply the source inventory and Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Account for candidates in the shared discovery ledger; the ideas below are not a completeness quota.
+
 When this category applies, consider test points such as:
 
 - Missing, malformed, conflicting, or contract-breaking caller input that the API explicitly rejects.
+- Every named caller constraint: both invalid sides of a valid range, cross-field contradictions, mutually exclusive options, and invalid combinations of individually valid inputs when the source defines them.
+- Error precedence for simultaneous violations only when specified; otherwise record the unresolved policy instead of inventing an order.
 - Wrong call sequence caused by the caller, such as use before init, double close, commit before validate, or operation after dispose.
 - Invalid caller-owned references: stale handle, unknown ID, wrong object type, expired local session, or duplicate registration.
 - Rejection behavior that proves no partial mutation, resource leak, queued work, persisted record, or hidden side effect occurred.
@@ -86,6 +90,7 @@ verifyExec_byInvalidHandle_expectInvalidParam
 
 ## Checklist
 
+- Has each source precondition and relevant invalid partition been reconciled to a TC or explicit gap/question?
 - Which API contract is being violated?
 - Is the misuse caused by the caller rather than the environment?
 - Is the expected error result explicit?

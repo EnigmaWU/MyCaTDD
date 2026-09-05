@@ -54,7 +54,7 @@ flowchart LR
 2. Use [UT_designTypicalSkeleton](../commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) when the starting point is an interface or protocol and the primary valid behavior should be designed first.
 3. Use [UT_designEdgeSkeleton](../commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md), [UT_designMisuseSkeleton](../commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md), and [UT_designFaultSkeleton](../commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) to complete the P0 functional skeleton set.
 4. Use [UT_designFuncTestsSkeleton](../commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) when the full Typical, Edge, Misuse, and Fault skeleton set should be designed as one behavior.
-5. Use [UT_reviewFuncTestsSkeleton](../commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) before implementation begins.
+5. Use [UT_reviewFuncTestsSkeleton](../commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) before implementation begins. Hand off behavior sources, declared scope, and the discovery ledger for an independent source-first review. Both cardinality and the [Discovery Gate](../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md) must pass; four populated categories alone are insufficient.
 6. Use [UT_tellMeNextImplTest](../commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) to select the next TC.
 7. Use [UT_implTestCase](../commands/P0-FuncTestsFlow/UT_implTestCase.md) and [UT_reviewImplTestCase](../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) for TC-by-TC execution.
 8. Use [UT_refactTestCase](../commands/P0-FuncTestsFlow/UT_refactTestCase.md) only after a selected TC is GREEN and reviewed, then run [UT_reviewImplTestCase](../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) again to prove no skeleton drift.

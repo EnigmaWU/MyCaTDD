@@ -10,7 +10,8 @@ Checklist:
 
 - Read the component interface files.
 - Read relevant usage, detail, state, error, resource, performance, compatibility, diagnosis, or verification design docs.
-- Review nearby tests and fixtures.
+- Inventory source-backed operations/rules before reviewing nearby tests and fixtures as coverage evidence.
+- Consult available usage/deployment/incident evidence for overlooked conditions; record unavailable evidence and unknown expectations explicitly.
 - Identify dependencies, build commands, and test commands.
 - Ask the developer when product behavior, acceptance criteria, or category source evidence is missing.
 
@@ -33,23 +34,29 @@ Checklist:
 
 - Fill the OVERVIEW section.
 - Declare SUT explicitly.
-- Capture freely drafted scenarios.
-- Build a coverage matrix.
+- Apply [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md): capture freely drafted scenarios, systematic discovery dimensions, and a coverage matrix.
+- Keep a `discovery_ledger` with actual TC links or explicit questions, exclusions, referrals, and gaps.
 - Classify test points using `CaTDD_methodPrompt-categorySemantics.md`.
 - Write US/AC/TC comments.
 - Populate TODO/tracking status.
-- Stop if a category lacks source evidence and the developer has not approved `@[NoTestPoints]`.
+- Perform a source-first independent challenge and pass the **Discovery Gate** as well as cardinality before declaring readiness.
+- Stop if in-scope behavior lacks source evidence or an oracle. A missing-source `@[NoTestPoints]` cannot bypass this gate; an explicitly narrowed scope must be reported as a smaller slice.
 
 Checkpoint summary:
 
 ```text
-CaTDD design complete for [component].
+CaTDD design assessment for [component and declared scope].
+Inventory/discovery_ledger: [location]
 US count: [n]
 AC count: [n]
 TC count: [n]
 Category distribution: [P0/P1/P2/P3]
+Disposition counts: [DESIGNED / QUESTION / EXCLUDED / REFERRED / GAP]
+Cardinality gate: [PASS/FAIL]
+discovery_status: [PASS/GAPS/BLOCKED]
+Independent review evidence and residual risk: [references/list]
 Blocked categories: [list]
-Ready for RED/GREEN: yes/no
+ready_for_implementation: yes/no
 ```
 
 ## Phase 3: Implementation
@@ -75,6 +82,7 @@ Objective: finish with traceable design, passing tests, and visible residual ris
 Checklist:
 
 - Verify US -> AC -> TC traceability.
+- Reconcile source -> discovery ledger -> US/AC/TC after any changed requirement or newly discovered scenario; do not infer completeness from GREEN tests.
 - Verify category file placement.
 - Verify `@[NoTestPoints]` decisions are explicit.
 - Run focused and relevant broader tests.

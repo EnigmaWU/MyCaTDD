@@ -37,9 +37,13 @@ Edge proves that the feature still works correctly at the edges of valid use. In
 
 ## TestPointsInMind
 
+First apply the source inventory and Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Account for candidates in the shared discovery ledger; the ideas below are not a completeness quota.
+
 When this category applies, consider test points such as:
 
 - Named valid boundaries: zero, empty, first, last, minimum, maximum, exactly full, one below full, or last allowed item.
+- Distinct valid equivalence partitions and boundary values for each operation, not just the operation already covered by Typical. Absent, empty, null, and zero need separate treatment when the source distinguishes them.
+- Valid combinations of mode, input shape, and public state that change a documented outcome; record constraints and sampling limits rather than assuming isolated values prove combinations.
 - Valid mode variations that change behavior while keeping the caller correct: sync/async, blocking/non-blocking, timeout/no-timeout, callback/polling.
 - Boundary transitions that should remain safe: from empty to one item, from one item to empty, from capacity-1 to capacity, or from first to next.
 - Documented non-success edge results that are still valid contract behavior, such as timeout, no data, queue full, or already up to date.
@@ -91,6 +95,7 @@ verifyRead_byLastAvailableItem_expectSuccess
 - Is the input/state still within the documented valid or handled contract?
 - Is the exact edge named in the TC name?
 - Is "one below / exactly / one above" considered when relevant?
+- Are invalid neighboring values routed to Misuse, and unspecified results retained as questions instead of guessed Edge expectations?
 - Is the expected behavior documented rather than guessed?
 - Should this scenario move to Capability, Performance, State, Interaction, Concurrency, Diagnosis, Security, or another source-backed category instead?
 

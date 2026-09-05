@@ -25,6 +25,25 @@ Every class/category skeleton should preserve this minimum shape.
 
 Use coverage matrices to make hidden combinations visible before writing test code.
 
+Build dimensions from source rules, not from tests already written. Link each applicable cell to TP IDs in the discovery ledger, or record a source-backed not-applicable reason. Document feasible-combination constraints and sampling limits; blank cells are unexamined, not covered. Apply the **Discovery Gate** in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md).
+
+### Discovery Evidence in Living Comments
+
+Keep one feature-level inventory and `discovery_ledger` in FreelyDrafts or the OVERVIEW / UNIT TESTING DESIGN comments; category files link to it. These comments supplement, not replace, US/AC/TC or TODO status. The discovery subtopic owns the disposition/readiness semantics.
+
+```text
+// DISCOVERY SCOPE: [SUT, feature, test level, approved limits]
+// SOURCES / RULES: [artifact#section or rule ID -> distinct behavior/outcome]
+// DIMENSIONS: [dimension/partition/combination -> TP IDs or reason not applicable]
+// SAMPLING: [feasible dimensions/constraints, selection method, omissions/rationale, risk-significant additions; or not applicable]
+// REVIEW: [reviewer/process or labeled self-review, sources, independently derived operation/outcome checklist, residual risk]
+// TP ID | Source/rule | Setup/action | Observable oracle | Category/level | Disposition/evidence
+// TP-01 | [source/R1] | [condition]  | [expected result]  | Typical/unit   | DESIGNED: [file, US/AC/TC IDs]
+// TP-02 | [source/R2] | [condition]  | unknown            | provisional    | QUESTION: [question, decision owner]
+// Discovery Gate: [PASS/GAPS/BLOCKED, review evidence, residual risk]
+// ready_for_implementation: [yes/no for this scope; not release readiness]
+```
+
 ### Basic 2D Matrix
 
 ```text
