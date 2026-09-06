@@ -51,6 +51,7 @@ Expected result:
 - `granularity`: optional `US-by-US` or `AC-by-AC`; default is `US-by-US`.
 - `projectContext_file`: optional project context.
 - `target_todo_file`: optional file name under `.catdd/spec/todoUS/`.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record the mode in the todo story artifact; autonomous execution is strictly supported only for implementation-oriented stories once planned.
 
 ## Method References
 

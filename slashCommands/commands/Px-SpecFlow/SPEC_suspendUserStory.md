@@ -38,12 +38,12 @@ Expected result:
 2. `resume_ref` is a branch name, not a stash → check passes.
 3. Uncommitted changes detected, so the work is checkpointed first:
 
-```bash
-git switch -c us-123-suspend
-git add -A
-git commit -m "wip: suspend US-123 at current checkpoint"
-git push -u origin us-123-suspend
-```
+   ```bash
+   git switch -c us-123-suspend
+   git add -A
+   git commit -m "wip: suspend US-123 at current checkpoint"
+   git push -u origin us-123-suspend
+   ```
 
 4. Story and tasks moved to `.catdd/spec/suspendUS/`.
 5. Reason and `us-123-suspend` recorded in the suspended artifact.
@@ -57,6 +57,7 @@ git push -u origin us-123-suspend
 - `suspend_reason`: explicit reason for pausing instead of continuing in place.
 - `resume_ref`: durable git resume reference, typically a branch name or worktree path.
 - `working_tree_state`: optional note indicating whether uncommitted changes exist.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). In `autonomousMode`, upon suspending the story and verifying the durable resume_ref, exit cleanly.
 
 ## Resume Reference Guidance
 

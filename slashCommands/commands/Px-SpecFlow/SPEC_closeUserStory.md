@@ -56,6 +56,7 @@ Expected result:
 - `commit_ref`: completed commit.
 - `merge_summary`: merge/integration evidence when the story used a dedicated branch.
 - `ci_summary`: CI result or accepted verification summary.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). In `autonomousMode`, upon successful closure and commit checkpoints, exit cleanly with code 0.
 
 ## Method References
 

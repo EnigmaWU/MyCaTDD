@@ -42,6 +42,7 @@ Expected result:
 - `suspended_user_story_files`: optional `.catdd/spec/suspendUS/*-UserStory.md`.
 - `done_user_story_files`: optional `.catdd/spec/doneUS/*-UserStory.md`.
 - `working_log`: optional `.catdd/spec/WorkingProcessLog.md`.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, verify the active story's orientation in `*-UserStory-Tasks.md`. Autonomous execution is strictly supported only for implementation-oriented stories; if orientation is intent-clearing, requirement-oriented, or design-oriented, recommend manualMode.
 
 ## Method References
 
@@ -52,6 +53,7 @@ Expected result:
 
 - Exactly one recommended next command based on current SpecCoding artifacts.
 - A short rationale describing current lifecycle stage and why this command is next.
+- Execution mode applied and orientation guard status (reporting whether autonomousMode can proceed or manualMode is required).
 - Required input artifacts to prepare before running the recommended command.
 - If no reliable recommendation is possible, explicit blockers and questions for the developer.
 

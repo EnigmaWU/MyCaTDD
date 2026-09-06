@@ -39,7 +39,7 @@ grep -Fq 'TRANSIENT' "$UPDATE_CONTEXT" || fail "SPEC_updateProjectContext must d
 grep -Fq '200 lines or approximately 3,000 tokens' "$UPDATE_CONTEXT" || fail "SPEC_updateProjectContext must define a measurable soft context budget"
 grep -Fq '## Supersession Rule' "$UPDATE_CONTEXT" || fail "SPEC_updateProjectContext must replace superseded active facts"
 grep -Fq '## Lossless Compaction Gate' "$UPDATE_CONTEXT" || fail "SPEC_updateProjectContext must verify compaction preserves sources and guardrails"
-grep -Fq '## Usage Example' "$UPDATE_CONTEXT" || fail "SPEC_updateProjectContext must provide a copy-exec usage example"
+grep -E -q '(## Usage Example|### Worked Example)' "$UPDATE_CONTEXT" || fail "SPEC_updateProjectContext must provide a copy-exec usage example"
 grep -Fq 'pending, analyzed, todo, doing, suspend, done, or abort lifecycle state' "$UPDATE_CONTEXT" || fail "SPEC_updateProjectContext must guard suspended lifecycle state with live inventory"
 grep -Fq 'independently testable' "$ANALYZE_ISSUE" || fail "SPEC_analyzeIssue must require independently testable story output"
 grep -Fq 'independently testable' "$ANALYZE_FEATURE" || fail "SPEC_analyzeFeature must require independently testable story output"

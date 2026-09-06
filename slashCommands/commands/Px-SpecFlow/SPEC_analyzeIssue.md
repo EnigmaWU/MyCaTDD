@@ -70,7 +70,7 @@ analysis_mode: BRAINSTORM
 **Stage 0.2 (ToT)** — four candidates:
 
 | Candidate | Interpretation | Evidence Strength | Risk | Decision |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | A | Repair the user guide for new application developers integrating IOC APIs. | High: issue names developer usage and README_UserGuide target. | Medium: scope can grow into full documentation rewrite. | Preferred if developer confirms API integration is the primary journey. |
 | B | Split into multiple documentation stories: build/run, API integration, and usage scenarios. | Medium: guide likely has multiple reader paths. | Low per story, higher coordination cost. | Follow-up candidate if Candidate A is still too broad. |
 | C | Treat as an architecture/design issue. | Low: issue is documentation-facing, not a design failure. | High: would route work to the wrong lifecycle lane. | Reject unless new evidence shows design docs are incorrect. |
@@ -146,7 +146,7 @@ Extract from the issue: what was observed, what was expected, and any root-cause
 Before writing the story, extract insights in detail. At minimum, produce:
 
 | Insight Type | Required Questions |
-|---|---|
+| --- | --- |
 | Requirement insight | What requirement was missing, ambiguous, wrong, or too broad? |
 | Architecture/design insight | What design boundary, dependency, state, or interface is implicated? |
 | Test insight | What verification gap allowed the issue to survive? |
@@ -215,4 +215,4 @@ If the issue lacks reproducible intent or expected behavior, create questions an
 - If Step 9 finds vague terms: flag them, don't silently substitute thresholds.
 - If an insight is plausible but not evidenced, label it as a hypothesis with a disconfirming check — do not present it as fact.
 
-ONE-MORE-THING: ask developer if something not sure
+ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule: MUST halt and ask developer in both manualMode and autonomousMode)

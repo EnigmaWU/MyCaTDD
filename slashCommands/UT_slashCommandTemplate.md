@@ -138,4 +138,4 @@ Define the expected response shape:
 - Treat native Copilot, Cline, Continue, and `utCodeAgentCLI` forms as adapters over this command intent.
 - When command behavior conflicts with `methodPrompts`, treat `methodPrompts` as source of truth.
 
-ONE-MORE-THING: ask developer if something not sure
+ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule: MUST halt and ask developer in both manualMode and autonomousMode)

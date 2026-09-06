@@ -88,6 +88,15 @@ slashCommands/
 7. 保留 US/AC/TC 注释、分类标签、优先级关卡和 TC 状态标记。
 8. 按当前命令或流程文档指定的下一条命令继续。
 
+### 执行模式
+
+- 无论在何种模式下，执行的都是 `flows/Px-SpecFlow.md` 中定义的完全相同的生命周期流程。
+- `manualMode`（默认模式）：在聊天中进行交互式逐步协作。助手每次执行一条 slash 命令，在意图、验收标准或安全性模糊时暂停并提问，等待开发者确认后再推进。
+- `autonomousMode`（自主模式，需显式选择）：无人值守/命令行持续执行（例如通过 `specCodeAgentCLI` 或入口 slash 命令如 `SPEC_importIssue`、`SPEC_openUserStory` 携带 `execution_mode: autonomousMode` 触发）。
+- **工作导向边界**：`autonomousMode` **严格仅支持实现导向（implementation-oriented）的用户故事**。需求分析与系统架构涉及人类意图确认，必须留在交互式 `manualMode`。若在非实现故事上触发自主模式，流程将强制暂停并切回 `manualMode`。
+- **manualMode 下的分析模式**：在需求分析（`SPEC_analyzeIssue`、`SPEC_analyzeFeature`）期间，`analysis_mode` 允许在交互式逐步对话（`BRAINSTORM`，默认）与单次流水线生成（`AUTONOMOUS`）之间选择，以直接起草 `todoUS` 而不被逐步打断。
+- **通用暂停规则（ONE-MORE-THING）**：在所有模式下，只要遇到 `ONE-MORE-THING: ask developer if something not sure`，智能体**必须立即暂停**并提问。自主模式绝非猜测缺失需求、未确认决策或模糊边界的借口；在自主模式下遇到 `ONE-MORE-THING` 立即暂停并请求开发者指示。
+
 ## Usage Example
 
 在 MyCaTDD 仓库根目录运行以下命令，将 slash-command 资产安装到一个临时 Copilot 风格目标项目：

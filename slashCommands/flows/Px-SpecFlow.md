@@ -50,6 +50,51 @@ For deterministic lifecycle movement, flash-speed models are usually enough:
 /SPEC_closeUserStory
 ```
 
+## Execution Mode Guidance
+
+`Px-SpecFlow` executes the exact same flow whether running in interactive `manualMode` or CLI `autonomousMode`.
+
+### Mode Definition
+
+- `manualMode` (default): Interactive step-by-step collaboration in chat. The assistant moves one slash command at a time, asks focused questions when intent, criteria, or safety is unclear, and pauses for developer confirmation before proceeding.
+- `autonomousMode` (opt-in): Continuous headless / CLI execution (e.g. via `specCodeAgentCLI` or entry commands with `execution_mode: autonomousMode`). The agent automatically executes and advances through the next safe steps using explicit file artifacts, recording assumptions and questions without stopping at every turn.
+
+### Entry Trigger
+
+- By default, entry slash commands (`SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, or `SPEC_openUserStory`) accept `execution_mode: manualMode | autonomousMode` (default: `manualMode`).
+- When triggered with `execution_mode: autonomousMode`, the mode decision is recorded in `*-UserStory-Tasks.md` and flows down to subsequent steps.
+
+### Orientation Boundary: ONLY Implementation-Oriented Supports Autonomous Mode
+
+- In `Px-SpecFlow`, `SPEC_makePlan` classifies the active story into one of four orientations: `intent-clearing`, `requirement-oriented`, `design-oriented`, or `implementation-oriented`.
+- **Safety Boundary**: Requirements analysis and system architecture require human intent, trade-offs, and verification; they **CANNOT** run autonomously.
+  - If `execution_mode: autonomousMode` is triggered on an `intent-clearing`, `requirement-oriented`, or `design-oriented` story, the flow **MUST halt**, force `manualMode`, and require developer interactive review and confirmation.
+  - **ONLY `implementation-oriented` stories support `autonomousMode`**: Once requirements and architectural designs are locked and the story enters Part 2.b (`SPEC_designUnitTests` -> `SPEC_implUnitTests` -> `SPEC_implProductCodes` -> `SPEC_reviewProductCodes` & `SPEC_reviewImplUnitTests` -> `SPEC_commitWorks` -> `SPEC_closeUserStory`), the execution is governed by deterministic rules and tests, and the agent auto-advances through these steps to completion.
+
+### Analysis Mode vs. Flow Execution Mode
+
+- Flow-level `execution_mode` (`manualMode | autonomousMode`) governs the overarching SpecCoding lifecycle across story transitions.
+- Command-level `analysis_mode` (`BRAINSTORM | AUTONOMOUS`) operates locally within `SPEC_analyzeIssue` and `SPEC_analyzeFeature` under `manualMode`.
+  - In `BRAINSTORM` mode (default), the assistant discusses requirements interactively with the developer step by step.
+  - In `AUTONOMOUS` mode, the assistant executes the composed SKILL analysis pipeline in one shot to draft `todoUS` without interrupting on every step, but records assumptions and questions and marks the story NOT ready if blocking questions remain.
+- Using `analysis_mode: AUTONOMOUS` inside an analysis command does NOT switch the flow to `autonomousMode`; the story lifecycle remains in interactive `manualMode`.
+
+### The ONE-MORE-THING Universal Stop Rule
+
+Every slash command in CaTDD enforces the universal safety invariant: `ONE-MORE-THING: ask developer if something not sure`.
+
+- **In `manualMode`**: When encountering an ambiguous requirement, missing source contract, unconfirmed risk, or decision point, the assistant stops and asks the developer immediately.
+- **In `autonomousMode`**: Autonomy is **never** a license to guess, invent requirements, fabricate thresholds, or bypass human decisions.
+  - Whenever an agent encounters a condition matching `ONE-MORE-THING`, autonomous progression **MUST HALT IMMEDIATELY**.
+  - The agent preserves observed evidence, outputs a structured `status: manual_required: ONE-MORE-THING: <question>`, and waits for developer clarification before proceeding.
+
+### Autonomous Terminal Handling
+
+In `autonomousMode`, the runner automatically terminates on:
+1. **Completion (`SPEC_closeUserStory`)**: All tasks checked, all tests GREEN, reviews pass; automatically commits, moves story to `doneUS/`, and exits with code 0.
+2. **Abort (`SPEC_abortUserStory`)**: Unrecoverable contract violation, invalid assumptions, or Loop Guard budget exhausted (`maxStepRetry = 2`, `maxRunCorrectionLoop = 3`); preserves diagnostics, moves story/tasks to `abortUS/`, and exits with non-zero code.
+3. **Suspend (`SPEC_suspendUserStory`)**: Missing external dependency or offline hardware environment; preserves durable git reference (branch/worktree), moves story/tasks to `suspendUS/`, and cleanly exits.
+
 ## Refinements from GitHub Spec Kit
 
 Use this list first when explaining or adopting `Px SpecFlow` refinements from GitHub's Spec Kit.
@@ -72,6 +117,8 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 - As a Developer, when a CodeAgent starts active story work, I want both sides to clear intent before design so that the agent does not optimize for the wrong scope or success signal.
 - As a Developer, when an active story exposes a wrong scope, invalid assumptions, or quality problem that should not be patched in place, I want to abort the story into preserved history so the next improvement round can be analyzed deliberately.
 - As a Developer, when I forget where I paused or I am new to SpecFlow, I want a command that tells me the next task from current artifacts so I can continue without guessing.
+- As a Developer, when working interactively in chat, I want `manualMode` by default so I can inspect each step, answer questions, and control every lifecycle gate.
+- As a Developer, when requirements and design are locked for an implementation-oriented story, I want to trigger `autonomousMode` at entry so the agent can execute the test-first implementation loop to completion without pausing for conversational confirmations.
 
 ## Artifacts
 
@@ -367,6 +414,7 @@ Failure classification follows ASR-R3: retry only transient failures; route perm
 
 - `Px SpecFlow` defines lifecycle orchestration only; CaTDD method semantics remain in `methodPrompts`.
 - `SPEC_*` commands may call `UT_*` commands, but they must not replace P0/P1/P2 category rules.
+- Do not execute `autonomousMode` on `intent-clearing`, `requirement-oriented`, or `design-oriented` stories; only `implementation-oriented` stories support autonomous execution. If autonomous execution is triggered on non-implementation stories, halt and force interactive `manualMode`.
 - Do not skip `SPEC_reviewUserStory` after `SPEC_updateUserStory` in requirement-oriented work.
 - Do not treat story lifecycle as complete when `README_UserStories.md` TODO/DONE or AC trace status is stale.
 - `SPEC_takeArchDesign` and `SPEC_reviewArchDesign` must keep architecture module-context focused and explicitly document consuming-system context.

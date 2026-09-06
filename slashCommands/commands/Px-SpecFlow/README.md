@@ -49,6 +49,8 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 
 All commands should follow [../../SPEC_slashCommandTemplate.md](../../SPEC_slashCommandTemplate.md) and the lifecycle in [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md).
 
+Px-SpecFlow runs in `manualMode` by default. When an entry command is invoked with `execution_mode: autonomousMode`, autonomous execution is supported strictly and ONLY for `implementation-oriented` stories. Requirements and architecture work require developer confirmation and must remain in `manualMode`.
+
 Each command should declare its CoT pattern (`ReACT`, `ToT`, or `Linear`) as described in the template.
 
 ONE-MORE-THING: ask developer if something not sure

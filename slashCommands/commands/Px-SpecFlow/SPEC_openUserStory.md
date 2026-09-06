@@ -42,6 +42,7 @@ Expected result:
 - `projectContext_file`: current project context.
 - `working_log`: optional `.catdd/spec/WorkingProcessLog.md`.
 - `branch_strategy`: optional developer preference for whether to open this story on a dedicated git branch.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record the mode decision in the opened story; autonomous execution is strictly supported only for implementation-oriented stories once planned.
 
 ## Method References
 

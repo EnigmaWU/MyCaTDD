@@ -49,6 +49,51 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 /SPEC_closeUserStory
 ```
 
+## 执行模式指南
+
+无论运行在交互式 `manualMode` 还是命令行 `autonomousMode` 下，`Px-SpecFlow` 执行的都是完全相同的流程。
+
+### 模式定义
+
+- `manualMode`（默认模式）：在聊天中进行交互式逐步协作。助手每次前进一步，在意图、验收标准或安全性模糊时暂停并提问，等待开发者明确确认后再推进。
+- `autonomousMode`（自主模式，需显式选择）：无人值守/命令行持续执行（例如通过 `specCodeAgentCLI` 或入口命令携带 `execution_mode: autonomousMode`）。智能体基于显式文件制品自动执行并前行至下一步安全工序，记录假设与问题，无需每步均等待确认。
+
+### 入口触发
+
+- 默认情况下，入口 slash 命令（`SPEC_importIssue`、`SPEC_importFeature`、`SPEC_importUserStory` 或 `SPEC_openUserStory`）接受 `execution_mode: manualMode | autonomousMode` 参数（默认值：`manualMode`）。
+- 携带 `execution_mode: autonomousMode` 触发时，模式决策将记录在 `*-UserStory-Tasks.md` 中，并向下传递给后续步骤。
+
+### 导向边界：仅实现导向（Implementation-Oriented）支持自主模式
+
+- 在 `Px-SpecFlow` 中，`SPEC_makePlan` 会将活跃故事归类为四种工作导向之一：`intent-clearing`（意图澄清）、`requirement-oriented`（需求导向）、`design-oriented`（设计导向）或 `implementation-oriented`（实现导向）。
+- **安全边界**：需求分析与系统架构涉及人类业务意图、权衡与验收确认，**绝不能**无人值守自主运行。
+  - 若在 `intent-clearing`、`requirement-oriented` 或 `design-oriented` 的故事上触发了 `execution_mode: autonomousMode`，流程**必须暂停**，强制退回 `manualMode`，并要求开发者交互式评审与确认。
+  - **仅 `implementation-oriented` 故事支持 `autonomousMode`**：一旦需求与架构设计已被确认锁定，故事进入第二部分 b（`SPEC_designUnitTests` -> `SPEC_implUnitTests` -> `SPEC_implProductCodes` -> `SPEC_reviewProductCodes` 与 `SPEC_reviewImplUnitTests` -> `SPEC_commitWorks` -> `SPEC_closeUserStory`），此时执行受确定性规则与测试驱动，智能体可自主推进这些步骤直至完成。
+
+### 分析模式与流程执行模式
+
+- 流程级 `execution_mode`（`manualMode | autonomousMode`）管控跨故事生命周期流转的全局 SpecCoding 流程。
+- 命令级 `analysis_mode`（`BRAINSTORM | AUTONOMOUS`）在 `manualMode` 下局部作用于 `SPEC_analyzeIssue` 与 `SPEC_analyzeFeature`。
+  - 在 `BRAINSTORM` 模式（默认）下，助手与开发者就需求进行逐步交互式探讨。
+  - 在 `AUTONOMOUS` 模式下，助手一次性执行组合式多技能分析流水线草拟 `todoUS`，而不按单步逐一打断，但显式记录假设与疑问，且在存在阻塞性问题时将故事标记为未就绪（NOT ready）。
+  - 在分析命令内部使用 `analysis_mode: AUTONOMOUS` 并不会将流程切换为 `autonomousMode`；故事生命周期流程仍然保持在交互式 `manualMode`。
+
+### ONE-MORE-THING 通用暂停规则
+
+CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-THING: ask developer if something not sure`。
+
+- **在 `manualMode` 下**：遇到模糊需求、来源契约缺失、未确认风险或决策点时，助手立即暂停并向开发者提问。
+- **在 `autonomousMode` 下**：自主模式**绝非**猜测、臆造需求、捏造阈值或越过人类决策的许可。
+  - 无论处于何种执行模式，只要智能体遇到符合 `ONE-MORE-THING` 的条件，自主推进**必须立即暂停**。
+  - 智能体保留已观测证据，输出结构化的 `status: manual_required: ONE-MORE-THING: <question>`，并等待开发者答复后再继续。
+
+### 自主模式终态处理
+
+在 `autonomousMode` 下，运行器会自动在以下情况终止：
+1. **完成（`SPEC_closeUserStory`）**：所有任务已勾选，所有测试通过（GREEN），评审全部通过；自动提交，将故事移入 `doneUS/`，并以退出码 0 退出。
+2. **中止（`SPEC_abortUserStory`）**：遇到不可恢复的契约冲突、无效假设或 Loop Guard 预算耗尽（`maxStepRetry = 2`, `maxRunCorrectionLoop = 3`）；保留诊断信息，将故事与任务移入 `abortUS/`，并以非 0 错误码退出。
+3. **挂起（`SPEC_suspendUserStory`）**：缺少外部依赖或硬件环境离线；保留持久化 git 引用（分支/工作区），将故事与任务移入 `suspendUS/`，并干净退出。
+
 ## GitHub Spec Kit 的改进
 
 在解释或采用来自 GitHub Spec Kit 的 `Px SpecFlow` 改进时，首选此列表。
@@ -71,6 +116,8 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 - 作为一名开发者，当 CodeAgent 开始活跃故事工作时，我希望双方在设计前明确意图，以便代理不会针对错误的范围或成功信号进行优化。
 - 作为一名开发者，当活跃故事暴露出错误的范围、无效的假设或不应就地修补的质量问题时，我希望将故事中止到保留的历史中，以便下一个改进轮次可以经过审慎的分析。
 - 作为一名开发者，当我忘记暂停的位置或我是 SpecFlow 新手时，我希望有一个命令能从当前制品告诉我下一步任务，这样我无需猜测即可继续。
+- 作为一名开发者，在聊天交互中工作时，我希望默认使用 `manualMode`，这样我可以检查每一步骤，回答针对性提问并掌控每个生命周期关卡。
+- 作为一名开发者，当实现导向型故事的需求与设计已被完全锁定时，我希望在入口触发 `autonomousMode`，使智能体能够自动执行测试先行实现循环直至完成，无需每步都等待对话确认。
 
 ## 制品
 
@@ -329,10 +376,47 @@ flowchart TB
 23. 使用 [SPEC_commitWorks](../commands/Px-SpecFlow/SPEC_commitWorks.md) 和 [SPEC_closeUserStory](../commands/Px-SpecFlow/SPEC_closeUserStory.md) 完成生命周期，然后当关闭生成的元/生命周期文件发生变更时，强制进行 close-commit 检查点。
 24. 使用 [SPEC_patchOriginalCaTDD](../commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md)，当已安装 CaTDD 的项目产生了有效的元文件改进并需要在非默认分支上回补到原始 CaTDD 仓库时。
 
+## 循环守卫（死循环预防）
+
+死循环（DeadLoop）是指在两个 `SPEC_*` 命令之间反复执行相同步骤或往复震荡，而未朝着故事目标取得任何可观测的实质进展。Px-SpecFlow 中的每个返工循环都必须是有界的，并且遵循“收敛或中止”原则：绝不能无限循环“直到其工作”。持续循环直至 `PASS`/`GREEN`、有界的返工计数耗尽，或出现无进展/所有权边界/中止信号，随后明确路由或中止，而非静默重新运行。
+
+### 治理默认值
+
+循环上限由 `codeAgents/utCodeAgentCLI/` 中的智能体可靠性策略和契约设定：
+
+- `maxStepRetry = 2`：相同失败生命周期步骤的最大重试次数。
+- `maxRunCorrectionLoop = 3`：单次运行的最大纠错循环迭代次数。
+- `max_correction_attempts` 默认值 `3`：单命令局部限制输入（例如 `SPEC_implProductCodes`）。
+- ASR-R1：重试与纠错循环在预算耗尽时应是有界且确定性的。
+
+### 通用终止条件
+
+每个返工循环（`review -> update -> review`、`impl -> review -> impl` 及其测试/设计变体）在遇到以下首个条件时终止：
+
+1. `PASS`/`GREEN` —— 满足关卡的退出条件。
+2. 有界重试/纠错预算耗尽（`maxStepRetry`、`maxRunCorrectionLoop` 或 `max_correction_attempts`）。
+3. 重复的无进展证据 —— 相同失败持续存在，未向目标产生任何有效变更。
+4. 范围膨胀超出已评审的设计或活跃故事。
+5. 证据冲突或责任主体不明确 —— 向开发者提问（`ASK`）。
+6. 中止 —— 问题改变了故事意图或使假设失效；使用 `SPEC_abortUserStory`。
+7. 到达所有权边界 —— 路由至规范的 `SPEC_*`/`UT_*`/`HARNESS_*` 责任命令。
+
+无进展终止必须保留最新观测到的证据，报告遗留失败并进行路由或提问；绝不能谎称成功。
+
+### 路由而非重复循环
+
+- 架构审查失败 -> `SPEC_updateArchDesign`，随后通过 `SPEC_reviewArchDesign` 重新把关，有界。
+- 详细设计审查失败 -> `SPEC_updateDetailDesign`，随后通过 `SPEC_reviewDetailDesign` 重新把关，有界。
+- 需求审查失败 -> `SPEC_updateUserStory`，随后通过 `SPEC_reviewUserStory` 重新把关，有界。
+- 测试实现缺陷 -> `SPEC_implUnitTests`；测试设计/覆盖缺口 -> `SPEC_designUnitTests`；产品代码缺陷 -> 在 `SPEC_implProductCodes` 中局部有界纠正，或按其冲突守卫进行设计路由。
+
+故障分类遵循 ASR-R3：仅对瞬态故障进行重试；对永久性故障进行确定性路由。若在达到上限后仍无进展，使用 `SPEC_abortUserStory` 将故事移入 `.catdd/spec/abortUS/` 中止并供后续重新分析，而非继续就地打补丁。
+
 ## 冲突守卫
 
 - `Px SpecFlow` 仅定义生命周期编排；CaTDD 方法语义保留在 `methodPrompts` 中。
 - `SPEC_*` 命令可以调用 `UT_*` 命令，但不得替换 P0/P1/P2 类别规则。
+- 不得在意图澄清型、需求导向型或设计导向型故事上执行 `autonomousMode`；仅实现导向型故事支持自主执行。若在非实现故事上触发了自主模式，必须暂停并强制回到交互式 `manualMode`。
 - 在需求导向型工作中，不得跳过 `SPEC_reviewUserStory` 在 `SPEC_updateUserStory` 之后。
 - 当 `README_UserStories.md` 的 TODO/DONE 或 AC 追溯状态过期时，不得将故事生命周期视为完成。
 - `SPEC_takeArchDesign` 和 `SPEC_reviewArchDesign` 必须使架构保持以模块上下文为中心，并显式记录消费该模块的系统上下文。

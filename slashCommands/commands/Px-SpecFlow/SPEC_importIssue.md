@@ -44,6 +44,7 @@ Expected result:
 - `projectContext_file`: optional project context.
 - `target_pending_file`: optional file name under `.catdd/spec/pendingNews/`.
 - `import_mode`: optional `inline | subagent | auto` (default: `auto`).
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record the mode in the pending artifact or downstream handoff; autonomous execution is strictly supported only for implementation-oriented stories once planned.
 
 ## Method References
 
@@ -68,12 +69,12 @@ Use the following routing policy:
 `auto` selection rules:
 
 - Prefer `subagent` when any of these are true:
-	- issue source is long-form (roughly >120 lines or >8KB)
-	- multiple source artifacts are included (URL + logs + pasted report)
-	- active conversation context is already heavy and preserving working memory is more important than latency
+  - issue source is long-form (roughly >120 lines or >8KB)
+  - multiple source artifacts are included (URL + logs + pasted report)
+  - active conversation context is already heavy and preserving working memory is more important than latency
 - Prefer `inline` when:
-	- issue source is short and deterministic
-	- import is a simple single-file write with no bulky attachments
+  - issue source is short and deterministic
+  - import is a simple single-file write with no bulky attachments
 
 Cost note:
 

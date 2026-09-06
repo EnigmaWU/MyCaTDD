@@ -8,16 +8,20 @@ Analyze a pending feature request, enhancement, or imported structured user-stor
 
 **ReACT** — Reasoning + Acting. This command must inspect the raw feature or user-story input, reason about user value, actor, and outcome, draft a lifecycle-ready user story, and verify it against quality criteria before accepting the output. When inputs are ambiguous or incomplete, the reasoning loop surfaces questions instead of inventing requirements.
 
+Execution supports two local analysis modes:
+- `BRAINSTORM` mode (default): chat with the developer step by step, ask focused clarification questions, and refine the feature understanding interactively.
+- `AUTONOMOUS` mode (opt-in): execute the composed 9-step analysis pipeline in one shot to generate `todoUS`, record assumptions and open questions explicitly, and mark the story NOT ready if blocking questions remain.
+
 ### ReACT Execution
 
 The Analysis Pipeline below is not a straight run — wrap it in this loop.
 
-1. **Thought** — Identify which pipeline step is next and whether its inputs actually exist in the source. Never substitute a missing input with an invented one.
+1. **Thought** — Identify which pipeline step is next and whether its inputs actually exist in the source. Never substitute a missing input with an invented one. In `BRAINSTORM` mode, ask the developer for missing intent; in `AUTONOMOUS` mode, record missing intent as questions and continue the pipeline.
 2. **Action** — Run that single pipeline step.
 3. **Observation** — Inspect what the step produced:
    - Step 1 says oversized → propose a split and restart at Step 1 with the first slice.
    - Steps 4, 5, or 7 produced open questions → record them and continue; do not fill the gap.
-   - Step 2 lacks role, capability, or business value → stop and ask the developer.
+   - Step 2 lacks role, capability, or business value → in `BRAINSTORM` mode, stop and ask the developer; in `AUTONOMOUS` mode, record a blocking question.
 4. **Stop** — Exit after Step 9. If any Initial Acceptance Question is still open, mark the story NOT ready; it may not proceed to `SPEC_openUserStory`.
 
 ### Worked Example
@@ -46,6 +50,8 @@ Expected result:
 - `projectContext_file`: current project context.
 - `related_docs`: optional architecture, README, API, design, product, or test docs.
 - `SpecTodoUserStoryTemplate`: output template at `../../templates/SpecTodoUserStoryTemplate.md`.
+- `analysis_mode`: optional `BRAINSTORM | AUTONOMOUS` (default: `BRAINSTORM`; `AUTONOMOUS` must be explicit).
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record the mode in the pending artifact or downstream handoff; autonomous execution is strictly supported only for implementation-oriented stories once planned.
 
 ## Method References
 
@@ -96,9 +102,12 @@ Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. Move the
 
 If the feature or imported user-story source lacks user value, actor, or outcome, create questions and keep the story draft incomplete instead of inventing requirements.
 
+- Do not run `AUTONOMOUS` mode unless the developer explicitly requested it.
+- In `BRAINSTORM` mode, do not generate `todoUS` before key intent is clarified with the developer.
+- In `AUTONOMOUS` mode, do not hide missing intent behind assumptions; record every material unknown as an Initial Acceptance Question.
 - If Step 1 detects oversize: propose splitting, don't write one oversized story.
 - If Step 4 finds unhandled model gaps: list them as questions, don't invent paths.
 - If Step 5 finds implied but unspecified business rules: flag them, don't guess values.
 - If Step 7 finds vague terms: flag them, don't silently substitute thresholds.
 
-ONE-MORE-THING: ask developer if something not sure
+ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule: MUST halt and ask developer in both manualMode and autonomousMode)

@@ -88,6 +88,15 @@ Follow this workflow when using `slashCommands/`.
 7. Preserve US/AC/TC comments, category labels, priority gates, and TC status markers.
 8. Continue with the next command named by the current command or flow document.
 
+### Execution modes
+
+- Both modes run the exact same lifecycle flow defined in `flows/Px-SpecFlow.md`.
+- `manualMode` (default): Step-by-step interactive collaboration in chat. The assistant executes one slash command at a time, asks focused questions when intent, criteria, or safety is unclear, and pauses for developer confirmation before proceeding.
+- `autonomousMode` (opt-in): Continuous headless / CLI execution (e.g. via `specCodeAgentCLI` or entry slash commands such as `SPEC_importIssue` or `SPEC_openUserStory` with `execution_mode: autonomousMode`).
+- **Orientation Boundary**: `autonomousMode` is strictly supported **ONLY for `implementation-oriented` stories**. Requirements analysis and system architecture require human intent and must remain in interactive `manualMode`. If autonomous mode is triggered on non-implementation stories, the flow halts and forces `manualMode`.
+- **Analysis Modes under manualMode**: During requirements analysis (`SPEC_analyzeIssue`, `SPEC_analyzeFeature`), `analysis_mode` allows choosing between interactive step-by-step dialogue (`BRAINSTORM`, default) and single-pass pipeline generation (`AUTONOMOUS`) to draft `todoUS` without intermediate conversational prompts.
+- **Universal Stop Rule (ONE-MORE-THING)**: Across all modes, the agent **MUST STOP** whenever it meets `ONE-MORE-THING: ask developer if something not sure`. Autonomy never excuses guessing missing requirements, unconfirmed decisions, or ambiguous boundaries; hitting `ONE-MORE-THING` in autonomous mode immediately halts progression and requests developer input.
+
 ## Usage Example
 
 Run these commands from the MyCaTDD repository root to install slash-command assets into a temporary Copilot-style target project:

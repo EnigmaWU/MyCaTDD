@@ -41,6 +41,7 @@ Expected result:
 - `feature_source`: feature URL, copied request text, product note, design sketch, or chat summary.
 - `projectContext_file`: optional project context.
 - `target_pending_file`: optional file name under `.catdd/spec/pendingNews/`.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record the mode in the pending artifact or downstream handoff; autonomous execution is strictly supported only for implementation-oriented stories once planned.
 
 ## Method References
 

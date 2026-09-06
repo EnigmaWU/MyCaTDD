@@ -113,6 +113,13 @@ State why this command exists.
 
 The execution procedure lives in the `### <Pattern> Execution` subsection under `## CoT Pattern`, so the declared pattern and its loop cannot drift apart. Do not restate that procedure here or in a separate prompt-template section.
 
+Px-SpecFlow commands should declare how they behave in `manualMode` versus `autonomousMode`:
+- `manualMode` is the default for all commands. The assistant pauses after each step, asks focused questions when intent, criteria, or safety is unclear, and waits for developer confirmation before proceeding.
+- `autonomousMode` is opt-in, triggered at entry commands (e.g. `SPEC_importIssue`, `SPEC_openUserStory`) via `execution_mode: autonomousMode`.
+- **Orientation Boundary**: ONLY `implementation-oriented` stories support `autonomousMode`. If triggered on `intent-clearing`, `requirement-oriented`, or `design-oriented` work, commands must halt, force `manualMode`, and require developer interactive confirmation.
+- **Analysis Mode**: Within analysis commands (`SPEC_analyzeIssue`, `SPEC_analyzeFeature`) running under `manualMode`, local `analysis_mode` (`BRAINSTORM | AUTONOMOUS`) selects between interactive step-by-step discussion and one-shot pipeline execution, while the story lifecycle remains in `manualMode`.
+- **The ONE-MORE-THING Universal Stop Rule**: Whenever an agent encounters an uncertain, missing, conflicting, or unconfirmed condition, it **MUST STOP** and ask the developer for an answer, whether in `manualMode` or `autonomousMode`. Autonomy is never a license to guess or invent requirements. In `autonomousMode`, hitting a ONE-MORE-THING condition immediately halts progression and outputs `status: manual_required: ONE-MORE-THING: <question>`.
+
 ## Subagent Recommendation
 
 Include this section when the command is suitable for background delegation during an active conversation.
@@ -138,6 +145,7 @@ List command parameters using portable placeholders:
 - `{{readme_spec_files}}`: one or more project-root `README*.md` SPEC docs
 - `{{related_docs}}`: optional architecture, design, test, or reproduction notes
 - `{{developer_goal}}`: optional developer intent or context that is not captured in artifacts
+- `{{execution_mode}}`: optional `manualMode | autonomousMode` (default: `manualMode`; `autonomousMode` is strictly supported only for implementation-oriented stories)
 
 ## Output Contract
 
@@ -145,6 +153,7 @@ Define the expected response shape:
 
 - Artifact created, updated, reviewed, or moved
 - Lifecycle state change applied
+- Execution mode applied, why it was selected, and orientation guard status
 - Assumptions made and questions surfaced
 - Conflicts or quality failures found and reported
 - Next recommended command
@@ -158,4 +167,4 @@ Define the expected response shape:
 - Treat native Copilot, Cline, Continue, and `utCodeAgentCLI` forms as adapters over this command intent.
 - When command behavior conflicts with `methodPrompts` or `Px-SpecFlow`, treat those as source of truth.
 
-ONE-MORE-THING: ask developer if something not sure
+ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule: MUST halt and ask developer in both manualMode and autonomousMode)

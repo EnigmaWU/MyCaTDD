@@ -46,6 +46,7 @@ Expected result — one ToT pass:
 - `project_user_stories_doc`: project-root `README_UserStories.md` ledger for TODO/DONE and AC trace status.
 - `readme_spec_files`: optional project-root `README*` SPEC docs that already influence the next step.
 - `related_docs`: optional issue, feature, review, architecture, detail-design, or test notes relevant to next-step planning.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record that mode decision in `tasks_file`. Autonomous mode is strictly supported ONLY for implementation-oriented stories; if the story orientation is intent-clearing, requirement-oriented, or design-oriented, halt autonomous progression, force `manualMode`, and prompt the developer for interactive review.
 
 ## Method References
 
@@ -74,21 +75,23 @@ Expected result — one ToT pass:
  5. Implementation-oriented work with sufficient requirement and design readiness: route to `SPEC_designUnitTests`.
  6. Completed and verified work: route to `SPEC_commitWorks`, then `SPEC_closeUserStory`.
 - Distinguish initial design from follow-up design revision:
- 	- Initial architecture design routes to `SPEC_takeArchDesign`.
- 	- follow-up architecture revision routes to `SPEC_updateArchDesign` when prior architecture exists and the story is closing a known architecture gap, review finding, or story-level architecture feedback.
- 	- Initial detail design routes to `SPEC_takeDetailDesign`.
- 	- follow-up detail revision routes to `SPEC_updateDetailDesign` when prior detail design exists and the story is closing a known detail-design gap, review finding, or story-level detail feedback.
+  - Initial architecture design routes to `SPEC_takeArchDesign`.
+  - follow-up architecture revision routes to `SPEC_updateArchDesign` when prior architecture exists and the story is closing a known architecture gap, review finding, or story-level architecture feedback.
+  - Initial detail design routes to `SPEC_takeDetailDesign`.
+  - follow-up detail revision routes to `SPEC_updateDetailDesign` when prior detail design exists and the story is closing a known detail-design gap, review finding, or story-level detail feedback.
 - Distinguish requirement-oriented, design-oriented, and implementation-oriented work:
- 	- Requirement-oriented work updates formal requirement surfaces: project-root `README_UserStories.md` (TODO/DONE + AC trace/status), paired `README_UserGuide.md`, module/submodule requirement docs when used, US/AC IDs, acceptance wording, usage-facing behavior, priority/dependency notes, and trace links. It routes to `SPEC_updateUserStory` before design commands.
- 	- Requirement-oriented work routes to `SPEC_reviewUserStory` after `SPEC_updateUserStory`. Passing review can close requirement-only work through `SPEC_commitWorks` and `SPEC_closeUserStory`, or transfer to design-oriented next steps.
- 	- Design-oriented work routes to the appropriate architecture/detail take-or-update command before review.
- 	- Implementation-oriented work routes to `SPEC_designUnitTests` only when requirement docs, architecture, and detail readiness are already sufficient. Do not add a `SPEC_reviewUserStory` gate after `SPEC_reviewDetailDesign`.
+  - Requirement-oriented work updates formal requirement surfaces: project-root `README_UserStories.md` (TODO/DONE + AC trace/status), paired `README_UserGuide.md`, module/submodule requirement docs when used, US/AC IDs, acceptance wording, usage-facing behavior, priority/dependency notes, and trace links. It routes to `SPEC_updateUserStory` before design commands.
+  - Requirement-oriented work routes to `SPEC_reviewUserStory` after `SPEC_updateUserStory`. Passing review can close requirement-only work through `SPEC_commitWorks` and `SPEC_closeUserStory`, or transfer to design-oriented next steps.
+  - Design-oriented work routes to the appropriate architecture/detail take-or-update command before review.
+  - Implementation-oriented work routes to `SPEC_designUnitTests` only when requirement docs, architecture, and detail readiness are already sufficient. Do not add a `SPEC_reviewUserStory` gate after `SPEC_reviewDetailDesign`.
 - If developer and CodeAgent intent are not aligned, route to `SPEC_clearStoryIntent` before design or implementation-oriented work.
 - If the story changes both requirements and design, route to `SPEC_updateUserStory` first, then review the story, then transfer to design-oriented next steps.
 - If required requirement/design evidence is missing, mark the affected checklist item `[ ]`, reject downstream commands in the rationale, and ask the developer instead of guessing.
+- **Orientation Boundary for Autonomous Mode**: Check `execution_mode` against the selected work orientation. Autonomous execution is supported ONLY for `implementation-oriented` work. If `execution_mode` is `autonomousMode` but work orientation is `intent-clearing`, `requirement-oriented`, or `design-oriented`, halt autonomous execution, record that autonomous mode is held until requirements and architecture are locked, and output a warning requiring interactive `manualMode`.
 
 ## Conflict Guard
 
+Do not execute `autonomousMode` on `intent-clearing`, `requirement-oriented`, or `design-oriented` stories; only `implementation-oriented` stories support autonomous execution. If autonomous execution is triggered on non-implementation stories, halt and force interactive `manualMode`.
 Do not jump directly into implementation from planning. If the next safe step is unclear, stop with questions for the developer instead of guessing.
 Do not plan a story whose `README_UserStories.md` ledger state is SUSPENDED; route to `SPEC_resumeUserStory` first to resume before continuing planning.
 Do not skip `SPEC_updateUserStory` when the active story changes requirement surfaces, especially project-root `README_UserStories.md` or `README_UserGuide.md`.

@@ -56,6 +56,7 @@ Expected result:
     - `unsafe_if_continue`: one concise sentence explaining why in-place continuation is unsafe.
 - `followup_intent`: one of `SPEC_analyzeAbortedUserStory | SPEC_importIssue | undecided`.
   - Default when omitted: `SPEC_analyzeAbortedUserStory`.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). In `autonomousMode`, upon aborting the unsafe story, exit with a non-zero exit code while preserving diagnostic evidence.
 
 ## Method References
 
