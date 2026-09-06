@@ -83,6 +83,9 @@ methodPrompts/
   CaTDD_methodPrompt4Cat-Security.md
   CaTDD_methodPrompt4Cat-DemoExample.md
   CaTDD_designAndImplTemplate.cxx
+  CaTDD_designAndImplTemplate.ts
+  CaTDD_designAndImplTemplate.py
+  CaTDD_designAndImplTemplate.go
 ```
 
 ## Why
@@ -106,7 +109,7 @@ Follow this workflow when starting a CaTDD test file.
 1. Read `README.md` to choose the relevant method prompt.
 2. Read `CaTDD_methodPrompt.md` as the main method entry.
 3. Read the needed `CaTDD_methodPrompt-*.md` subtopic for detailed guidance.
-4. Copy `CaTDD_designAndImplTemplate.cxx` or adapt its section structure to your language.
+4. Copy `CaTDD_designAndImplTemplate.cxx`, `CaTDD_designAndImplTemplate.ts`, `CaTDD_designAndImplTemplate.py`, or `CaTDD_designAndImplTemplate.go`, or adapt its section structure to your language.
 5. Declare SUT, in-scope classes, domain profile(s), test level, and execution environment. Inventory source obligations before treating existing tests as coverage. Capture Stage-0 examples and questions through Example Mapping.
 6. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) for the applicable P0/P1/P2/P3 sweeps. OOPSI and business-rule extraction are optional aids for functional workflows; design models and quality constraints use their own sources. Record candidates and source references in a `discovery_ledger` in living comments.
 7. Classify drafts by verification lens, not rule type, domain, or priority. Use the priority order below for execution, adjusted by risk.
@@ -134,6 +137,10 @@ mkdir -p Test
 cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/test_your_feature_funcValidTypical.cxx
 # TypeScript target
 cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValidTypical.ts
+# Python target
+cp methodPrompts/CaTDD_designAndImplTemplate.py Test/test_your_feature_funcValidTypical.py
+# Go target
+cp methodPrompts/CaTDD_designAndImplTemplate.go Test/test_your_feature_funcValidTypical_test.go
 ```
 
 Use `test_{feature}_{category}.<ext>` for category-specific files, such as `test_your_feature_funcValidTypical.cxx`, `test_your_feature_funcValidTypical.ts`, or `test_your_feature_funcInvalidMisuse.py`. Choose `{feature}` from the module interface's usage scenarios and use the CaTDD category filename tokens from `CaTDD_methodPrompt.md`.
@@ -211,6 +218,9 @@ Use this default priority order unless project risk says otherwise.
 | Design protection-property checks under a threat model or policy | `CaTDD_methodPrompt4Cat-Security.md` |
 | Design documentation-oriented demos and examples | `CaTDD_methodPrompt4Cat-DemoExample.md` |
 | Start a C++ test file from a complete skeleton | `CaTDD_designAndImplTemplate.cxx` |
+| Start a TypeScript test file from a complete skeleton | `CaTDD_designAndImplTemplate.ts` |
+| Start a Python test file from a complete skeleton | `CaTDD_designAndImplTemplate.py` |
+| Start a Go test file from a complete skeleton | `CaTDD_designAndImplTemplate.go` |
 
 ## Comment Skeleton
 
@@ -220,6 +230,8 @@ Every category skeleton should preserve this minimum shape:
 //=================================================================================================
 // [Class] / [Category] Design Skeleton
 //=================================================================================================
+// @[SUT]: [Declared SUT matching file overview]
+// @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: What this category proves for this component

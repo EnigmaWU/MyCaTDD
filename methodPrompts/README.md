@@ -56,7 +56,7 @@ Default classification order:
 - Method subtopic prompts (`CaTDD_methodPrompt-*.md`)
 - Category-specific method prompts (`CaTDD_methodPrompt4Cat-*.md`)
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
-- Implementation template (`CaTDD_designAndImplTemplate.cxx`)
+- Implementation templates (`CaTDD_designAndImplTemplate.cxx`, `CaTDD_designAndImplTemplate.ts`, `CaTDD_designAndImplTemplate.py`, `CaTDD_designAndImplTemplate.go`)
 
 ## Documentation boundary
 

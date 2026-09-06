@@ -83,6 +83,9 @@ methodPrompts/
   CaTDD_methodPrompt4Cat-Security.md
   CaTDD_methodPrompt4Cat-DemoExample.md
   CaTDD_designAndImplTemplate.cxx
+  CaTDD_designAndImplTemplate.ts
+  CaTDD_designAndImplTemplate.py
+  CaTDD_designAndImplTemplate.go
 ```
 
 ## 原因
@@ -106,7 +109,7 @@ methodPrompts/
 1. 阅读 `README.md`，选择相关方法提示词。
 2. 阅读 `CaTDD_methodPrompt.md`，把它作为主入口。
 3. 阅读需要的 `CaTDD_methodPrompt-*.md` 子主题，获取详细方法指导。
-4. 复制 `CaTDD_designAndImplTemplate.cxx`，或把其中的分区结构适配到你的语言。
+4. 复制 `CaTDD_designAndImplTemplate.cxx`、`CaTDD_designAndImplTemplate.ts`、`CaTDD_designAndImplTemplate.py` 或 `CaTDD_designAndImplTemplate.go`，或把其中的分区结构适配到你的语言。
 5. 声明 SUT、范围内的类别族、适用领域、测试层级与执行环境。先从来源列出验证义务，再把已有测试当作覆盖证据。通过 Example Mapping 捕获 Stage-0 示例与开放问题。
 6. 使用 [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) 进行适用的 P0/P1/P2/P3 扫描。OOPSI 与业务规则提取只是功能工作流的可选辅助；设计模型和质量约束使用各自的来源。在活注释中的 `discovery_ledger` 记录候选点与来源。
 7. 按验证视角归类草稿，不按规则类型、领域或优先级归类。下面的优先级用于执行排序，并可按风险调整。
@@ -134,6 +137,10 @@ mkdir -p Test
 cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/test_your_feature_funcValidTypical.cxx
 # TypeScript target
 cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValidTypical.ts
+# Python target
+cp methodPrompts/CaTDD_designAndImplTemplate.py Test/test_your_feature_funcValidTypical.py
+# Go target
+cp methodPrompts/CaTDD_designAndImplTemplate.go Test/test_your_feature_funcValidTypical_test.go
 ```
 
 类别专属测试文件使用 `test_{feature}_{category}.<ext>`，例如 `test_your_feature_funcValidTypical.cxx`、`test_your_feature_funcValidTypical.ts` 或 `test_your_feature_funcInvalidMisuse.py`。`{feature}` 应来自模块接口的 usage scenarios，`{category}` 使用 `CaTDD_methodPrompt.md` 中的 CaTDD category filename tokens。
@@ -211,6 +218,9 @@ ready_for_implementation, exclusions, referrals, and residual risks separately.
 | 设计 threat model 或 policy 下的保护属性检查 | `CaTDD_methodPrompt4Cat-Security.md` |
 | 设计面向文档的演示和示例 | `CaTDD_methodPrompt4Cat-DemoExample.md` |
 | 从完整骨架开始编写 C++ 测试文件 | `CaTDD_designAndImplTemplate.cxx` |
+| 从完整骨架开始编写 TypeScript 测试文件 | `CaTDD_designAndImplTemplate.ts` |
+| 从完整骨架开始编写 Python 测试文件 | `CaTDD_designAndImplTemplate.py` |
+| 从完整骨架开始编写 Go 测试文件 | `CaTDD_designAndImplTemplate.go` |
 
 ## 注释骨架
 
@@ -220,6 +230,8 @@ ready_for_implementation, exclusions, referrals, and residual risks separately.
 //=================================================================================================
 // [Class] / [Category] Design Skeleton
 //=================================================================================================
+// @[SUT]: [Declared SUT matching file overview]
+// @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: What this category proves for this component

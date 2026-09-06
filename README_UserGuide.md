@@ -107,6 +107,10 @@ Use this guide as the user-facing entry point for CaTDD. Use the linked layer RE
 cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/test_your_feature_funcValidTypical.cxx
 # TypeScript target
 cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValidTypical.ts
+# Python target
+cp methodPrompts/CaTDD_designAndImplTemplate.py Test/test_your_feature_funcValidTypical.py
+# Go target
+cp methodPrompts/CaTDD_designAndImplTemplate.go Test/test_your_feature_funcValidTypical_test.go
 ```
 
 Use `test_{feature}_{category}.<ext>` for category-specific test files, such as `test_your_feature_funcValidTypical.cxx`, `test_your_feature_funcValidTypical.ts`, or `test_your_feature_funcInvalidMisuse.py`. Choose `{feature}` from module-interface usage scenarios and choose `{category}` from the CaTDD filename token table in `methodPrompts/CaTDD_methodPrompt.md`.
@@ -910,6 +914,10 @@ Ready to write your first CaTDD test file? Follow this checklist:
 cp methodPrompts/CaTDD_designAndImplTemplate.cxx Test/test_your_feature_funcValidTypical.cxx
 # TypeScript target
 cp methodPrompts/CaTDD_designAndImplTemplate.ts Test/test_your_feature_funcValidTypical.ts
+# Python target
+cp methodPrompts/CaTDD_designAndImplTemplate.py Test/test_your_feature_funcValidTypical.py
+# Go target
+cp methodPrompts/CaTDD_designAndImplTemplate.go Test/test_your_feature_funcValidTypical_test.go
 ```
 
 Use `test_{feature}_{category}.<ext>` for category-specific test files, such as `test_your_feature_funcValidTypical.cxx`, `test_your_feature_funcValidTypical.ts`, or `test_your_feature_funcInvalidMisuse.py`. Choose `{feature}` from module-interface usage scenarios and choose `{category}` from the CaTDD filename token table in `methodPrompts/CaTDD_methodPrompt.md`.
@@ -1258,7 +1266,7 @@ P3: Demo/Example
 - **Method standalone user guide**: See [methodPrompts/README_UserGuide.md](methodPrompts/README_UserGuide.md) or [methodPrompts/README_UserGuide_ZH.md](methodPrompts/README_UserGuide_ZH.md)
 - **Methodology Deep Dive**: See [methodPrompts/CaTDD_methodPrompt.md](methodPrompts/CaTDD_methodPrompt.md)
 - **Category method prompts**: See [methodPrompts/README.md](methodPrompts/README.md) for the full category prompt map
-- **Code Template**: See [methodPrompts/CaTDD_designAndImplTemplate.cxx](methodPrompts/CaTDD_designAndImplTemplate.cxx)
+- **Code Templates**: See [methodPrompts/CaTDD_designAndImplTemplate.cxx](methodPrompts/CaTDD_designAndImplTemplate.cxx), [methodPrompts/CaTDD_designAndImplTemplate.ts](methodPrompts/CaTDD_designAndImplTemplate.ts), [methodPrompts/CaTDD_designAndImplTemplate.py](methodPrompts/CaTDD_designAndImplTemplate.py), or [methodPrompts/CaTDD_designAndImplTemplate.go](methodPrompts/CaTDD_designAndImplTemplate.go)
 - **Slash command layer**: See [slashCommands/README.md](slashCommands/README.md)
 - **Slash command user guide**: See [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md) or [slashCommands/README_UserGuide_ZH.md](slashCommands/README_UserGuide_ZH.md)
 - **CLI agent layer**: See [codeAgents/utCodeAgentCLI/README.md](codeAgents/utCodeAgentCLI/README.md)

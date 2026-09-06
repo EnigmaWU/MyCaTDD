@@ -29,6 +29,10 @@
  *   [WHERE] in the [module name/subsystem] module
  *   [WHY] to ensure [key quality attributes: correctness/reliability/performance/etc.]
  *
+ * SUT & TEST LEVEL:
+ *   - @[SUT]: [Declared component/class under test, e.g., InvocationValidator or CommandService]
+ *   - @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
+ *
  * SCOPE:
  *   - [In scope]: What IS tested in this file
  *   - [Out of scope]: What is NOT tested here (covered elsewhere)
@@ -69,19 +73,45 @@
  *
  * DESIGN SKELETON CONTRACT:
  *   In CaTDD, "design" means a comment skeleton that lives in this test file.
- *   Each skeleton is organized by Class/Priority and Category, for example:
+ *   Each skeleton is organized by SUT, TestLevel, Class/Priority and Category, for example:
  *
- *     @[Class]: P0 Functional / ValidFunc
- *     @[Category]: Typical
- *     @[Intent]: Prove the core happy-path workflow.
- *     @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
- *     @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
- *     @[US]: US-1
- *     @[AC]: AC-1
- *     @[TC]: TC-1 verifyCore_byValidInput_expectSuccess
+ *     //=================================================================================================
+ *     // [Class] / [Category] Design Skeleton
+ *     //=================================================================================================
+ *     // @[SUT]: InvocationValidator
+ *     // @[TestLevel]: UnitTesting
+ *     // @[Class]: P0 Functional / ValidFunc
+ *     // @[Category]: Typical
+ *     // @[Intent]: Prove the core happy-path workflow.
+ *     // @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
+ *     // @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
+ *     // @[US]: US-1
+ *     // @[AC]: AC-1
+ *     // @[TP]: TP-1
+ *     // @[TC]: TC-1 verifyCore_byValidInput_expectSuccess
+ *     //=================================================================================================
  *
  *   Developers fill this skeleton to make verification intent clear.
  *   CodeAgents preserve and update this skeleton before generating TEST code.
+ *
+ * TEST EVIDENCE CHAIN (WHY & HOW):
+ *   Dual-tier evidentiary chain connecting source requirements to executable assertions:
+ *     WHY Tier (Obligation & Target):
+ *       Source Artifact -> Rule/Invariant -> Test Point (TP) -> Observable Oracle -> CaTDD Category
+ *     HOW Tier (Execution & Verification):
+ *       CaTDD Category -> US/AC/TC -> Four-Phase Test Body (SETUP->BEHAVIOR->VERIFY->CLEANUP) -> RED/GREEN
+ *
+ * SUT BOUNDARY INVARIANT:
+ *   The declared SUT establishes the contract dividing line:
+ *     - Misuse: Caller violates SUT contract/precondition (SUT rejects invalid input).
+ *     - Fault:  External dependency or environment fails SUT (SUT degrades or handles failure).
+ *
+ * CARDINALITIES & PERSPECTIVES:
+ *   - 1 AC : N TPs: AC is from User/Caller perspective (GIVEN context, WHEN action, THEN outcome).
+ *                   TP is from Developer/Defensive perspective (GIVEN state, WHEN action, THEN oracle).
+ *   - TP : TC: Target obligation (WHAT) vs. executable arrow (HOW).
+ *              Cardinality can be 1:1, 1:N (multiple checks), N:1 (parameterized test), or 1:0 (GAP).
+ *              Equating TC == TP hides untested requirements.
  *
  * PRIORITY FRAMEWORK:
  *   P0 FUNCTIONAL:      Must complete before P1 (ValidFunc + InvalidFunc)
@@ -196,6 +226,36 @@
  *************************************************************************************************/
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+//======>BEGIN OF DISCOVERY & EVIDENCE CHAIN (FreelyDrafts)========================================
+/**
+ * SOURCE-FIRST TEST-POINT DISCOVERY (Optional living ledger in test file or FreelyDrafts)
+ *
+ * DISCOVERY SCOPE: SUT=InvocationValidator, feature=cli_validation, level=UnitTesting
+ * DOMAIN / EXECUTION ENVIRONMENT: Node.js, TypeScript, POSIX CLI process boundary
+ * SOURCES / RULES:
+ *   - UserGuide § "IF: What You Want" (R-CLI-01: valid flag combo dispatches directly)
+ *   - UserGuide § "CLI Argument Reference" (R-CLI-02: unknown flag rejected with exit code 1)
+ *   - ArchDesign § 2.3 (R-CLI-03: mutually exclusive flags throw ValidationError)
+ *   - ArchDesign § 4.1 (R-CLI-04: missing required config file handled gracefully)
+ * DIMENSIONS: UserIntent(Design, Review, Implement) x TargetScope(Single, All) x InputSource(Inline, File)
+ * SAMPLING: Systematic sweep across all user-intent-driven patterns
+ * REVIEW: Self-reviewed against CLI specification; residual risk: platform shell escaping
+ *
+ * DISCOVERY LEDGER:
+ *  TP ID | Source/Rule  | Setup / Action                 | Observable Oracle                   | Category/Level | Disposition/Evidence
+ *  ------|--------------|--------------------------------|-------------------------------------|----------------|----------------------
+ *  TP-01 | Guide R-CLI-01| Valid invocation arguments      | Exit code 0, dispatch ready         | Typical/unit   | DESIGNED: US-1/AC-1/TC-1
+ *  TP-02 | Guide R-CLI-01| All-categories design command   | Exit code 0, all skeletons emitted  | Typical/unit   | DESIGNED: US-1/AC-1/TC-2
+ *  TP-03 | Guide R-CLI-02| Unknown CLI flag provided       | Exit code 1, stderr describes flag  | Misuse/unit    | DESIGNED: US-1/AC-2/TC-1
+ *  TP-04 | Arch R-CLI-03 | Conflicting flag combination   | Exit code 2, actionable conflict msg| Misuse/unit    | DESIGNED: US-1/AC-2/TC-2
+ *  TP-05 | Arch R-CLI-04 | Target story file not found    | Exit code 3, ENOENT handled cleanly | Fault/unit     | DESIGNED: US-2/AC-1/TC-1
+ *
+ * Discovery Gate: PASS (5 TPs identified, 0 GAPs, 0 BLOCKED)
+ * ready_for_implementation: yes
+ */
+//======>END OF DISCOVERY & EVIDENCE CHAIN=========================================================
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF USER STORY DESIGN================================================================
 /**
  * DESIGN PRINCIPLES: Define clear coverage strategy and scope
@@ -241,6 +301,23 @@
  *   - Use precise, unambiguous language
  *   - Include both success and failure scenarios
  *   - Consider edge conditions explicitly
+ *
+ * TEMPLATE:
+ *
+ * [@US-1] [Brief description of what US-1 covers]
+ *  AC-1: GIVEN [preconditions and initial context],
+ *         WHEN [specific trigger, action, or event occurs],
+ *         THEN [expected observable outcome or behavior],
+ *          AND [additional expected outcomes if any].
+ *
+ *  AC-2: GIVEN [preconditions and initial context],
+ *         WHEN [specific trigger, action, or event occurs],
+ *         THEN [expected observable outcome or behavior].
+ *
+ * [@US-2] [Brief description of what US-2 covers]
+ *  AC-1: GIVEN [preconditions and initial context],
+ *         WHEN [specific trigger, action, or event occurs],
+ *         THEN [expected observable outcome or behavior].
  */
 //=======>END OF ACCEPTANCE CRITERIA DESIGN========================================================
 
@@ -251,15 +328,82 @@
  *
  * ORGANIZATION STRATEGIES:
  *  By Feature/Component: Group related functionality tests together
- *  By Test Category: Typical → Edge → State → Error → Performance
+ *  By Test Category: Typical → Edge → Misuse → Fault → State → Concurrency → Performance
  *  By Coverage Matrix: Systematic coverage of identified dimensions
- *  By Priority: Critical functionality first, edge cases second
+ *  By Priority: P0 Functional first, P1 Design second, P2 Quality third, P3 Addons
  *
  * STATUS TRACKING:
- *  TODO = Designed but not implemented
- *  RED  = Test written and failing (need prod code)
- *  GREEN = Test written and passing
- *  ISSUES = Known problem needing attention
+ *  ⚪ TODO/PLANNED     - Designed but not implemented yet
+ *  🔴 RED/FAILING      - Test written and failing as expected (needs production code)
+ *  🟢 GREEN/PASSED     - Test written and passing
+ *  ⚠️ ISSUES           - Known problem needing attention
+ *
+ * NAMING CONVENTION:
+ *  Format: verifyBehavior_byCondition_expectResult
+ *  Example: verifyInvocation_byValidFlags_expectDispatchReady
+ *
+ * TEST STRUCTURE (4-phase pattern):
+ *  1. 🔧 SETUP:    Prepare environment, create resources, set preconditions
+ *  2. 🎯 BEHAVIOR: Execute the action being tested
+ *  3. ✅ VERIFY:   Assert outcomes (keep ≤3 key assertions)
+ *  4. 🧹 CLEANUP:  Release resources, reset state
+ *
+ *===================================================================================================
+ * DETAILED FORMAT WITH STATUS:
+ *===================================================================================================
+ *
+ * ═════════════════════════════════════════════════════════════════════════════════════════════
+ * 📋 [CLASS: P0 Functional / ValidFunc] [CATEGORY: Typical] Core Functionality Tests
+ * ═════════════════════════════════════════════════════════════════════════════════════════════
+ *  @[SUT]: InvocationValidator
+ *  @[TestLevel]: UnitTesting
+ *  @[Class]: P0 Functional / ValidFunc
+ *  @[Category]: Typical
+ *  @[Intent]: Prove the core happy-path workflow under valid ordinary use.
+ *  @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
+ *  @[AvoidWhen]: The scenario is mainly Edge, Misuse, Fault, State, Capability, or Concurrency.
+ *  @[US]: US-1
+ *  @[AC]: AC-1
+ *  @[TP]: TP-01, TP-02
+ *  @[TC]: TC-1, TC-2
+ *
+ * [@AC-1,US-1] Basic CLI invocation validation
+ *  🟢 TC-1: verifyInvocation_byValidFlags_expectDispatchReady
+ *      @[TP]: TP-01 (Source: UserGuide § "IF: What You Want", Rule R-CLI-01)
+ *      @[Purpose]: Validate that correct flags allow execution to proceed to dispatch
+ *      @[Brief]: Pass valid arguments, verify validator returns success and dispatch-ready state
+ *      @[Expect]: Validator returns isValid=true, exitCode=0, targetCommand resolved
+ *      @[Status]: PASSED/GREEN ✅
+ *
+ *  ⚪ TC-2: verifyInvocation_byAllCategoriesFlag_expectAllSkeletonsDispatched
+ *      @[TP]: TP-02 (Source: UserGuide § "IF: What You Want", Rule R-CLI-01)
+ *      @[Purpose]: Ensure all-skeleton generation mode validates successfully
+ *      @[Brief]: Pass --all-skeletons with valid target, verify dispatch readiness
+ *      @[Expect]: Validator returns isValid=true, mode="all-skeletons"
+ *      @[Status]: PLANNED/TODO
+ *
+ * ═════════════════════════════════════════════════════════════════════════════════════════════
+ * 📋 [CLASS: P0 Functional / InvalidFunc] [CATEGORY: Misuse] Incorrect API Usage
+ * ═════════════════════════════════════════════════════════════════════════════════════════════
+ *  @[SUT]: InvocationValidator
+ *  @[TestLevel]: UnitTesting
+ *  @[Class]: P0 Functional / InvalidFunc
+ *  @[Category]: Misuse
+ *  @[Intent]: Prove graceful error handling when caller provides invalid arguments.
+ *  @[UseWhen]: Caller violates the API contract or passes unrecognized options.
+ *  @[AvoidWhen]: The failure is caused by an external dependency or environment outage.
+ *  @[US]: US-1
+ *  @[AC]: AC-2
+ *  @[TP]: TP-03, TP-04
+ *  @[TC]: TC-1, TC-2
+ *
+ * [@AC-2,US-1] Invalid arguments handling
+ *  ⚪ TC-1: verifyInvocation_byUnknownFlag_expectValidationError
+ *      @[TP]: TP-03 (Source: UserGuide § "CLI Argument Reference", Rule R-CLI-02)
+ *      @[Purpose]: Ensure unrecognized flags are fast-failed with clear message
+ *      @[Brief]: Pass --unknown-flag, verify validator rejects with descriptive error
+ *      @[Expect]: Validator throws ValidationError with code ERR_UNKNOWN_FLAG
+ *      @[Status]: PLANNED/TODO
  */
 //======>END OF TEST CASES DESIGN==================================================================
 //======>END OF UNIT TESTING DESIGN================================================================
@@ -271,59 +415,126 @@
  * TEST CASE TEMPLATE (copy for each TC)
  *  @[Name]: ${verifyBehaviorX_byDoA_expectSomething}
  *  @[Steps]:
- *    1) SETUP: do ..., with ...
- *    2) BEHAVIOR: do ..., with ...
- *    3) VERIFY: assert ..., compare ...
- *    4) CLEANUP: release ..., reset ...
+ *    1) 🔧 SETUP: do ..., with ...
+ *    2) 🎯 BEHAVIOR: do ..., with ...
+ *    3) ✅ VERIFY: assert ..., compare ...
+ *    4) 🧹 CLEANUP: release ..., reset ...
  *  @[Expect]: ${how to verify}
  *  @[Notes]: ${additional notes}
  */
 
-//=== TEMPLATE: Single test ===
-// test("verifyBehaviorX_byDoA_expectSomething", () => {
-//   //===>>> SETUP <<<===
-//   console.log("SETUP: verifyBehaviorX_byDoA_expectSomething");
-//
-//   //===>>> BEHAVIOR <<<===
-//   console.log("BEHAVIOR: verifyBehaviorX_byDoA_expectSomething");
-//
-//   //===>>> VERIFY <<<===
-//   console.log("VERIFY: verifyBehaviorX_byDoA_expectSomething");
-//
-//   //===>>> CLEANUP <<<===
-//   console.log("CLEANUP: verifyBehaviorX_byDoA_expectSomething");
-// });
+// Example with node:test (built-in) or Jest/Vitest
+// import test from "node:test";
+// import assert from "node:assert/strict";
 
-//=== TEMPLATE: Another sample ===
-// test("verifyBehaviorY_byDoB_expectSomething", () => {
-//   // SETUP
-//   // ...
-//   // BEHAVIOR
-//   console.log("BEHAVIOR: verifyBehaviorY_byDoB_expectSomething");
-//   // VERIFY
-//   // CLEANUP
+// test("verifyInvocation_byValidFlags_expectDispatchReady", async () => {
+//   //===>>> 🔧 SETUP <<<===
+//   console.log("🔧 SETUP: verifyInvocation_byValidFlags_expectDispatchReady");
+//   const validator = new InvocationValidator();
+//   const rawArgs = ["--target", "test_feature_funcValidTypical.ts", "--category", "Typical"];
+//
+//   //===>>> 🎯 BEHAVIOR <<<===
+//   console.log("🎯 BEHAVIOR: verifyInvocation_byValidFlags_expectDispatchReady");
+//   const result = await validator.validate(rawArgs);
+//
+//   //===>>> ✅ VERIFY <<<===
+//   console.log("✅ VERIFY: verifyInvocation_byValidFlags_expectDispatchReady");
+//   assert.equal(result.isValid, true);
+//   assert.equal(result.exitCode, 0);
+//   assert.equal(result.resolvedCategory, "Typical");
+//
+//   //===>>> 🧹 CLEANUP <<<===
+//   console.log("🧹 CLEANUP: verifyInvocation_byValidFlags_expectDispatchReady");
+//   // Reset environment variables or test fixtures if needed
 // });
 
 //======>END OF UNIT TESTING IMPLEMENTATION=======================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF TODO/IMPLEMENTATION TRACKING SECTION============================================
-// RED IMPLEMENTATION STATUS TRACKING - Organized by Priority and Category
+// 🔴 IMPLEMENTATION STATUS TRACKING - Organized by Priority and Category
 //
 // PURPOSE:
 //   Track test implementation progress using TDD Red→Green methodology.
 //   Maintain visibility of what's done, in progress, and planned.
 //
 // STATUS LEGEND:
-//   TODO/PLANNED:       Designed but not implemented yet.
-//   RED/FAILING:        Test written, but production code is missing or incorrect.
-//   GREEN/PASSED:       Test written and passing.
-//   ISSUES:             Known problem needing attention.
-//   BLOCKED:            Cannot proceed due to a dependency.
+//   ⚪ TODO/PLANNED:      Designed but not implemented yet.
+//   🔴 RED/FAILING:       Test written, but production code is missing or incorrect.
+//   🟢 GREEN/PASSED:      Test written and passing.
+//   ⚠️  ISSUES:           Known problem needing attention.
+//   🚫 BLOCKED:          Cannot proceed due to a dependency.
 //
-// GATE P0: All P0 tests must be GREEN before proceeding to P1.
-// GATE P1: All P1 tests GREEN, architecture validated.
-// GATE P2: Quality attributes validated, production ready.
+// PRIORITY LEVELS:
+//   P0 🥇 FUNCTIONAL:     Must complete before P1 (ValidFunc + InvalidFunc).
+//   P1 🥈 DESIGN-ORIENTED: Test after P0 (State, Capability, Interaction, Concurrency).
+//   P2 🥉 QUALITY-ORIENTED: Test for quality attributes (Performance, Robust, Diagnosis, Security, etc.).
+//   P3 🎯 ADDONS:          Optional (Demo, Examples).
+//
+//===================================================================================================
+// P0 🥇 FUNCTIONAL TESTING – ValidFunc (Typical + Edge)
+//===================================================================================================
+//
+//   🟢 [@AC-1,US-1] TC-1: verifyInvocation_byValidFlags_expectDispatchReady
+//        - Description: Validate fundamental happy-path invocation.
+//        - Category: Typical (ValidFunc)
+//        - Status: GREEN
+//
+//   ⚪ [@AC-1,US-1] TC-2: verifyInvocation_byAllCategoriesFlag_expectAllSkeletonsDispatched
+//        - Description: Validate all-skeleton mode.
+//        - Category: Typical (ValidFunc)
+//        - Status: TODO
+//
+//===================================================================================================
+// P0 🥇 FUNCTIONAL TESTING – InvalidFunc (Misuse + Fault)
+//===================================================================================================
+//
+//   ⚪ [@AC-2,US-1] TC-1: verifyInvocation_byUnknownFlag_expectValidationError
+//        - Description: Reject unknown CLI options.
+//        - Category: Misuse (InvalidFunc)
+//        - Status: TODO
+//
+//   ⚪ [@AC-3,US-2] TC-1: verifyFault_byMissingTargetFile_expectCleanEnoent
+//        - Description: Handle file-system ENOENT gracefully.
+//        - Category: Fault (InvalidFunc)
+//        - Status: TODO
+//
+// 🚪 GATE P0: All P0 tests must be GREEN before proceeding to P1.
+//
+//===================================================================================================
+// P1 🥈 DESIGN-ORIENTED TESTING – State, Capability, Interaction, Concurrency
+//===================================================================================================
+//
+//   ⚪ [@AC-4,US-2] TC-1: verifyState_byInitToReadyTransition_expectSuccess
+//        - Category: State
+//        - Status: TODO
+//
+// 🚪 GATE P1: All P1 tests GREEN, architecture validated.
+//
+//===================================================================================================
+// P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility, Configuration, Diagnosis, Security
+//===================================================================================================
+//
+//   ⚪ [@AC-5,US-3] TC-1: verifyPerformance_byLargeArgSet_expectSubMillisecond
+//        - Category: Performance
+//        - Status: TODO
+//
+// 🚪 GATE P2: Quality attributes validated, production ready.
+//
+//===================================================================================================
+// P3 🎯 OTHER-ADDONS TESTING – Demo, Examples (Optional)
+//===================================================================================================
+//
+//   ⚪ [@AC-6,US-4] TC-1: verifyDemo_byFullWorkflow_expectOutput
+//        - Category: Demo
+//        - Status: TODO
+//
+//===================================================================================================
+// ✅ COMPLETED TESTS
+//===================================================================================================
+//
+//   🟢 [@AC-1,US-1] TC-1: verifyInvocation_byValidFlags_expectDispatchReady
+//
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================
 
 export {};

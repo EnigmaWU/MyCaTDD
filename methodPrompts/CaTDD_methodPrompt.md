@@ -28,7 +28,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 | Troubleshooting and recovery paths | `CaTDD_methodPrompt-troubleshooting.md` |
 | Worked examples and category placement examples | `CaTDD_methodPrompt-examples.md` |
 | Deep dive for one CaTDD category | `CaTDD_methodPrompt4Cat-*.md` |
-| Language-specific design and implementation skeletons | `CaTDD_designAndImplTemplate.cxx`, `CaTDD_designAndImplTemplate.ts` |
+| Language-specific design and implementation skeletons | `CaTDD_designAndImplTemplate.cxx`, `CaTDD_designAndImplTemplate.ts`, `CaTDD_designAndImplTemplate.py`, `CaTDD_designAndImplTemplate.go` |
 
 ## Design Skeleton Contract
 
@@ -45,6 +45,8 @@ Minimum skeleton shape:
 //=================================================================================================
 // [Class] / [Category] Design Skeleton
 //=================================================================================================
+// @[SUT]: [Declared SUT matching file overview]
+// @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: What this category proves for this component

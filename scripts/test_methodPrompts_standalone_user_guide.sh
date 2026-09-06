@@ -9,6 +9,8 @@ MAIN_GUIDE="$REPO_ROOT/README_UserGuide.md"
 MASTER_PROMPT="$METHOD_DIR/CaTDD_methodPrompt.md"
 CXX_TEMPLATE="$METHOD_DIR/CaTDD_designAndImplTemplate.cxx"
 TS_TEMPLATE="$METHOD_DIR/CaTDD_designAndImplTemplate.ts"
+PY_TEMPLATE="$METHOD_DIR/CaTDD_designAndImplTemplate.py"
+GO_TEMPLATE="$METHOD_DIR/CaTDD_designAndImplTemplate.go"
 
 fail() {
   echo "[methodPrompts-standalone-guide-test] $*" >&2
@@ -32,6 +34,10 @@ grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.cxx' "$GUIDE" || fail "stand
 grep -Fq 'Test/test_your_feature_funcValidTypical.cxx' "$GUIDE" || fail "standalone guide missing canonical test filename example"
 grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.ts' "$GUIDE" || fail "standalone guide missing TypeScript template copy command"
 grep -Fq 'Test/test_your_feature_funcValidTypical.ts' "$GUIDE" || fail "standalone guide missing TypeScript canonical test filename example"
+grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.py' "$GUIDE" || fail "standalone guide missing Python template copy command"
+grep -Fq 'Test/test_your_feature_funcValidTypical.py' "$GUIDE" || fail "standalone guide missing Python canonical test filename example"
+grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.go' "$GUIDE" || fail "standalone guide missing Go template copy command"
+grep -Fq 'Test/test_your_feature_funcValidTypical_test.go' "$GUIDE" || fail "standalone guide missing Go canonical test filename example"
 grep -Fq 'CaTDD_methodPrompt.md' "$GUIDE" || fail "standalone guide missing master method prompt reference"
 grep -Fq 'CaTDD_methodPrompt-categorySemantics.md' "$GUIDE" || fail "standalone guide missing category semantics subtopic reference"
 grep -Fq 'CaTDD_methodPrompt-testPointDiscovery.md' "$GUIDE" || fail "standalone guide missing test point discovery subtopic reference"
@@ -46,6 +52,10 @@ grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.cxx' "$GUIDE_ZH" || fail "Ch
 grep -Fq 'Test/test_your_feature_funcValidTypical.cxx' "$GUIDE_ZH" || fail "Chinese standalone guide missing canonical test filename example"
 grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.ts' "$GUIDE_ZH" || fail "Chinese standalone guide missing TypeScript template copy command"
 grep -Fq 'Test/test_your_feature_funcValidTypical.ts' "$GUIDE_ZH" || fail "Chinese standalone guide missing TypeScript canonical test filename example"
+grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.py' "$GUIDE_ZH" || fail "Chinese standalone guide missing Python template copy command"
+grep -Fq 'Test/test_your_feature_funcValidTypical.py' "$GUIDE_ZH" || fail "Chinese standalone guide missing Python canonical test filename example"
+grep -Fq 'methodPrompts/CaTDD_designAndImplTemplate.go' "$GUIDE_ZH" || fail "Chinese standalone guide missing Go template copy command"
+grep -Fq 'Test/test_your_feature_funcValidTypical_test.go' "$GUIDE_ZH" || fail "Chinese standalone guide missing Go canonical test filename example"
 grep -Fq 'CaTDD_methodPrompt-categorySemantics.md' "$GUIDE_ZH" || fail "Chinese standalone guide missing category semantics subtopic reference"
 grep -Fq 'CaTDD_methodPrompt-testPointDiscovery.md' "$GUIDE_ZH" || fail "Chinese standalone guide missing test point discovery subtopic reference"
 grep -Fq 'CaTDD_methodPrompt-fileNaming.md' "$GUIDE_ZH" || fail "Chinese standalone guide missing file naming subtopic reference"
@@ -75,8 +85,12 @@ grep -Fq 'qualitySecurity' "$MASTER_PROMPT" || fail "master method prompt missin
 for category_prompt in "$METHOD_DIR"/CaTDD_methodPrompt4Cat-*.md; do
   grep -Fq '## TestPointsInMind' "$category_prompt" || fail "category prompt missing TestPointsInMind: ${category_prompt#$METHOD_DIR/}"
 done
+[[ -f "$PY_TEMPLATE" ]] || fail "missing Python template: methodPrompts/CaTDD_designAndImplTemplate.py"
+[[ -f "$GO_TEMPLATE" ]] || fail "missing Go template: methodPrompts/CaTDD_designAndImplTemplate.go"
 grep -Fq 'test_{feature}_{category}.cxx' "$CXX_TEMPLATE" || fail "C++ template missing canonical test filename guidance"
 grep -Fq 'test_{feature}_{category}.ts' "$TS_TEMPLATE" || fail "TypeScript template missing canonical test filename guidance"
+grep -Fq 'test_{feature}_{category}.py' "$PY_TEMPLATE" || fail "Python template missing canonical test filename guidance"
+grep -Fq 'test_{feature}_{category}' "$GO_TEMPLATE" || fail "Go template missing canonical test filename guidance"
 grep -Fq 'Test/test_your_feature_funcValidTypical.cxx' "$MAIN_GUIDE" || fail "main user guide missing canonical test filename example"
 grep -Fq 'Test/test_your_feature_funcValidTypical.ts' "$MAIN_GUIDE" || fail "main user guide missing TypeScript canonical test filename example"
 

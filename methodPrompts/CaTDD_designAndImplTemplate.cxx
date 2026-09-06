@@ -31,6 +31,10 @@
  *   [WHERE] in the [module name/subsystem] module
  *   [WHY] to ensure [key quality attributes: correctness/reliability/performance/etc.]
  *
+ * SUT & TEST LEVEL:
+ *   - @[SUT]: [Declared component/class under test, e.g., IOC_CommandAPI]
+ *   - @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
+ *
  * SCOPE:
  *   - [In scope]: What IS tested in this file
  *   - [Out of scope]: What is NOT tested here (covered elsewhere)
@@ -71,19 +75,45 @@
  *
  * DESIGN SKELETON CONTRACT:
  *   In CaTDD, "design" means a comment skeleton that lives in this test file.
- *   Each skeleton is organized by Class/Priority and Category, for example:
+ *   Each skeleton is organized by SUT, TestLevel, Class/Priority and Category, for example:
  *
- *     @[Class]: P0 Functional / ValidFunc
- *     @[Category]: Typical
- *     @[Intent]: Prove the core happy-path workflow.
- *     @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
- *     @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
- *     @[US]: US-1
- *     @[AC]: AC-1
- *     @[TC]: TC-1 verifyCore_byValidInput_expectSuccess
+ *     //=================================================================================================
+ *     // [Class] / [Category] Design Skeleton
+ *     //=================================================================================================
+ *     // @[SUT]: IOC_CommandAPI
+ *     // @[TestLevel]: UnitTesting
+ *     // @[Class]: P0 Functional / ValidFunc
+ *     // @[Category]: Typical
+ *     // @[Intent]: Prove the core happy-path workflow.
+ *     // @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
+ *     // @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
+ *     // @[US]: US-1
+ *     // @[AC]: AC-1
+ *     // @[TP]: TP-1
+ *     // @[TC]: TC-1 verifyCore_byValidInput_expectSuccess
+ *     //=================================================================================================
  *
  *   Developers fill this skeleton to make verification intent clear.
  *   CodeAgents preserve and update this skeleton before generating TEST code.
+ *
+ * TEST EVIDENCE CHAIN (WHY & HOW):
+ *   Dual-tier evidentiary chain connecting source requirements to executable assertions:
+ *     WHY Tier (Obligation & Target):
+ *       Source Artifact -> Rule/Invariant -> Test Point (TP) -> Observable Oracle -> CaTDD Category
+ *     HOW Tier (Execution & Verification):
+ *       CaTDD Category -> US/AC/TC -> Four-Phase Test Body (SETUP->BEHAVIOR->VERIFY->CLEANUP) -> RED/GREEN
+ *
+ * SUT BOUNDARY INVARIANT:
+ *   The declared SUT establishes the contract dividing line:
+ *     - Misuse: Caller violates SUT contract/precondition (SUT rejects invalid input).
+ *     - Fault:  External dependency or environment fails SUT (SUT degrades or handles failure).
+ *
+ * CARDINALITIES & PERSPECTIVES:
+ *   - 1 AC : N TPs: AC is from User/Caller perspective (GIVEN context, WHEN action, THEN outcome).
+ *                   TP is from Developer/Defensive perspective (GIVEN state, WHEN action, THEN oracle).
+ *   - TP : TC: Target obligation (WHAT) vs. executable arrow (HOW).
+ *              Cardinality can be 1:1, 1:N (multiple checks), N:1 (parameterized test), or 1:0 (GAP).
+ *              Equating TC == TP hides untested requirements.
  *
  * PRIORITY FRAMEWORK:
  *   P0 🥇 FUNCTIONAL:     Must complete before P1 (ValidFunc + InvalidFunc)
@@ -196,6 +226,36 @@
  *   🥉 P2 (Quality): Test when quality attributes (performance, robustness, diagnosis, security) are critical.
  *   🎯 P3 (Addons): Optional, for documentation and examples.
  *************************************************************************************************/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//======>BEGIN OF DISCOVERY & EVIDENCE CHAIN (FreelyDrafts)========================================
+/**
+ * SOURCE-FIRST TEST-POINT DISCOVERY (Optional living ledger in test file or FreelyDrafts)
+ *
+ * DISCOVERY SCOPE: SUT=IOC_CommandAPI, feature=command_execution, level=UnitTesting
+ * DOMAIN / EXECUTION ENVIRONMENT: Host Linux, POSIX threads, zero-heap critical path
+ * SOURCES / RULES:
+ *   - IOC_ArchDesign#3.1 (R-CMD-01: synchronous P2P command execution)
+ *   - IOC_ArchDesign#3.4 (R-CMD-04: non-blocking return when EvtDescQueue full)
+ *   - IOC_ArchDesign#3.5 (R-CMD-07: fast-fail null pointer validation)
+ *   - IOC_ArchDesign#4.2 (R-CMD-12: worker thread allocation failure recovery)
+ * DIMENSIONS: ServiceRole(CmdExecutor, CmdInitiator) x ClientRole(CmdInitiator, CmdExecutor) x Mode(Sync, Callback)
+ * SAMPLING: Full pairwise exploration of service role x execution mode
+ * REVIEW: Self-reviewed against IOC API spec v2.1; residual risk: multi-core scheduler drift
+ *
+ * DISCOVERY LEDGER:
+ *  TP ID | Source/Rule  | Setup / Action                 | Observable Oracle                   | Category/Level | Disposition/Evidence
+ *  ------|--------------|--------------------------------|-------------------------------------|----------------|----------------------
+ *  TP-01 | Spec #3.1 R1 | Client sends PING via execCMD  | Callback returns PONG, code SUCCESS | Typical/unit   | DESIGNED: US-1/AC-1/TC-1
+ *  TP-02 | Spec #3.2 R2 | Client sends multiple cmd types| Correct handler invoked per cmd type| Typical/unit   | DESIGNED: US-1/AC-1/TC-2
+ *  TP-03 | Spec #3.4 R4 | Post to full queue in Async    | Return IOC_RESULT_TOO_MANY_QUEUING  | Edge/unit      | DESIGNED: US-1/AC-2/TC-1
+ *  TP-04 | Spec #3.5 R7 | Pass null callback pointer     | Return IOC_RESULT_INVALID_PARAM     | Misuse/unit    | DESIGNED: US-2/AC-1/TC-1
+ *  TP-05 | Spec #4.2 R2 | Worker thread fails allocation | Return error, log DIAG_WARN         | Fault/unit     | DESIGNED: US-2/AC-2/TC-1
+ *
+ * Discovery Gate: PASS (5 TPs identified, 0 GAPs, 0 BLOCKED)
+ * ready_for_implementation: yes
+ */
+//======>END OF DISCOVERY & EVIDENCE CHAIN=========================================================
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF USER STORY DESIGN================================================================
@@ -382,43 +442,69 @@
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  * 📋 [CLASS: P0 Functional / ValidFunc] [CATEGORY: Typical] Core Functionality Tests
  * ═════════════════════════════════════════════════════════════════════════════════════════════
+ *  @[SUT]: IOC_CommandAPI
+ *  @[TestLevel]: UnitTesting
+ *  @[Class]: P0 Functional / ValidFunc
+ *  @[Category]: Typical
  *  @[Intent]: Prove the core happy-path workflow under valid ordinary use.
  *  @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
  *  @[AvoidWhen]: The scenario is mainly Edge, Misuse, Fault, State, Capability, or Concurrency.
+ *  @[US]: US-1
+ *  @[AC]: AC-1
+ *  @[TP]: TP-01, TP-02
+ *  @[TC]: TC-1, TC-2
  *
  * [@AC-1,US-1] Basic command execution with callback
  *  🟢 TC-1: verifyServiceAsCmdExecutor_bySingleClient_expectSynchronousResponse
+ *      @[TP]: TP-01 (Source: IOC Spec #3.1, Rule R-CMD-01)
  *      @[Purpose]: Validate fundamental command execution from client to service
  *      @[Brief]: Service accepts client, processes PING via callback, returns PONG
+ *      @[Expect]: Returns IOC_RESULT_SUCCESS, callback invoked synchronously, output matches PONG
  *      @[Status]: PASSED/GREEN ✅ - All assertions passing
  *
  *  🔴 TC-2: verifyServiceAsCmdExecutor_byMultipleCommandTypes_expectProperExecution
+ *      @[TP]: TP-02 (Source: IOC Spec #3.2, Rule R-CMD-02)
  *      @[Purpose]: Ensure service handles different command types correctly
  *      @[Brief]: Test PING (no payload), ECHO (text), CALC (numeric) sequentially
+ *      @[Expect]: Each command processed by callback with correct handler and output
  *      @[Status]: IMPLEMENTED/RED - Need to implement CALC command handler
  *
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  * 📋 [CLASS: P0 Functional / ValidFunc] [CATEGORY: Edge] Edge Cases and Limits
  * ═════════════════════════════════════════════════════════════════════════════════════════════
+ *  @[SUT]: IOC_CommandAPI
+ *  @[TestLevel]: UnitTesting
+ *  @[Class]: P0 Functional / ValidFunc
+ *  @[Category]: Edge
  *  @[Intent]: Prove valid edge values, limits, and mode variations.
  *  @[UseWhen]: The caller is valid, but the condition is empty, zero, min, max, full, first, last, or mode-specific.
  *  @[AvoidWhen]: The caller violates the API contract, or the scenario is really capacity/performance/concurrency.
+ *  @[US]: US-1, US-2
+ *  @[AC]: AC-2, AC-3
+ *  @[TP]: TP-03, TP-04
+ *  @[TC]: TC-1, TC-2
  *
  * [@AC-2,US-1] Non-blocking behavior under load
  *  ⚪ TC-1: verifyNonBlockPost_byFullQueue_expectImmediateReturn
+ *      @[TP]: TP-03 (Source: IOC Spec #3.4, Rule R-CMD-04)
  *      @[Purpose]: Validate non-blocking semantics when queue is at capacity
  *      @[Brief]: Fill queue, post one more event, verify immediate return with error code
+ *      @[Expect]: Immediate return without blocking, error code IOC_RESULT_TOO_MANY_QUEUING
  *      @[Status]: PLANNED/TODO - Scheduled for next sprint
  *
  * [@AC-3,US-2] Null and invalid input handling
  *  ⚪ TC-1: verifyOperation_byNullPointer_expectInvalidParamError
+ *      @[TP]: TP-04 (Source: IOC Spec #3.5, Rule R-CMD-07)
  *      @[Purpose]: Fast-fail validation for null pointer inputs
  *      @[Brief]: Call API with NULL, verify IOC_RESULT_INVALID_PARAM
+ *      @[Expect]: Fast return with IOC_RESULT_INVALID_PARAM, no memory corruption
  *      @[Status]: PLANNED/TODO - Part of fast-fail six
  *
  *  ⚪ TC-2: verifyOperation_byZeroTimeout_expectImmediateTimeout
+ *      @[TP]: TP-05 (Source: IOC Spec #3.6, Rule R-CMD-08)
  *      @[Purpose]: Validate zero timeout behavior
  *      @[Brief]: Call wait API with timeout=0, verify immediate return
+ *      @[Expect]: Immediate timeout return without hanging
  *      @[Status]: PLANNED/TODO - Part of fast-fail six
  */
 //======>END OF TEST CASES DESIGN==================================================================

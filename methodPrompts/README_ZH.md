@@ -56,7 +56,7 @@ CaTDD 方法提示词支持两个设计阶段：
 - 方法子主题提示词（`CaTDD_methodPrompt-*.md`）
 - 分类方法提示词（`CaTDD_methodPrompt4Cat-*.md`）
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
-- 实现模板（`CaTDD_designAndImplTemplate.cxx`）
+- 实现模板（`CaTDD_designAndImplTemplate.cxx`、`CaTDD_designAndImplTemplate.ts`、`CaTDD_designAndImplTemplate.py`、`CaTDD_designAndImplTemplate.go`）
 
 ## 文档边界
 
