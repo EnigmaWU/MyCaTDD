@@ -26,14 +26,17 @@
 | GREEN | 产品代码修改后，测试通过状态。 |
 | SpecCoding | 将验证设计工件作为可执行规格生命周期的 CaTDD 工作流。 |
 | VibeCoding | 快速创意/原型模式；结果仍应回收并对齐到 CaTDD 追溯体系。 |
+| Source-First | 源头在先：先审视权威来源工件（契约、架构模型、质量策略）并独立推导预期验证义务，再查阅已有骨架或测试代码，消除作者自身盲区。 |
+| TestPointEvidenceChain | 测试点证据链：从来源工件 -> 规则/不变量 -> 具体场景 -> 可观测预期（Oracle） -> CaTDD 分类 -> US/AC/TC -> RED/GREEN 实现的完整无断裂证据链。 |
 
 ### Category Vocabulary
 
 | 层级 | 分类 |
 | --- | --- |
 | P0 Functional | Typical, Edge, Misuse, Fault |
-| P1 Design | State, Capability, Concurrency |
-| P2 Quality | Performance, Robust, Compatibility, Configuration |
+| P1 Design | State, Capability, Interaction, Concurrency |
+| P2 Quality | Performance, Robust, Compatibility, Configuration, Diagnosis, Security |
+| P3 Addons | Demo/Example |
 
 ### Ownership Vocabulary
 
@@ -77,7 +80,7 @@ CaTDD 是方法驱动的体系。关键词漂移会直接导致行为漂移。
 发布前进行术语一致性检查：
 
 ```bash
-rg -n "Typical|Edge|Misuse|Fault|State|Capability|Concurrency|Performance|Robust|Compatibility|Configuration|US/AC/TC|SpecCoding|VibeCoding" README*.md methodPrompts slashCommands codeAgents agentSkills
+rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestPointEvidenceChain" README*.md methodPrompts slashCommands codeAgents agentSkills
 ```
 
 预期结果：这些术语的含义与本文件定义保持一致。

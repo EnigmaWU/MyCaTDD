@@ -4,11 +4,11 @@
 
 Review the P1 design skeleton set before quality coverage or implementation continues.
 
-Use this command to review the declared State, Capability, Interaction, and Concurrency scope, including source-backed concerns for which no skeleton or TC exists yet.
+Use this command to review the declared State, Capability, Interaction, and Concurrency scope, including source-backed concerns for which no skeleton or TC exists yet. Apply **Source-First** review to audit the unbroken **TestPointEvidenceChain** across architecture design sources and models.
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This is a bounded, source-first independent review, not only an audit of existing skeleton links. A plausible skeleton without a confirmed design source cannot be approved. The command is read-only; return findings and proposed corrections without changing design or implementation files.
+**ReACT** — Reasoning + Acting. Apply **Source-First** review: independently audit the **TestPointEvidenceChain** across design sources (`README_ArchDesign.md`, `README_StateDesign.md`, `README_DetailDesign.md`, `README_ResourceDesign.md`) before examining existing skeletons. This is a bounded, source-first independent review, not only an audit of existing skeleton links. A plausible skeleton without a confirmed design source cannot be approved. The command is read-only; return findings and proposed corrections without changing design or implementation files.
 
 ### ReACT Execution
 
@@ -67,7 +67,7 @@ Expected result:
 ## Output Contract
 
 - SUT, declared scope across State/Capability/Interaction/Concurrency, source references, domain/test-level/environment, and verification methods.
-- `discovery_ledger`: location or explicit missing-evidence finding; disposition counts reconciled to actual rows, with exclusions, routing, and sampling limits separate from coverage.
+- `discovery_ledger`: location or explicit missing-evidence finding; disposition counts reconciled to actual rows, auditing the **TestPointEvidenceChain** with exclusions, routing, and sampling limits separate from coverage.
 - `review_evidence`: independent source-derived checklist, reviewer/process (or labeled self-review), sources examined, reconciliation, and residual risk.
 - Findings keyed by source/rule or TP ID, with US/AC/TC IDs only when they exist; identify gaps, unknowns, category conflicts, weak oracles, or unsupported assumptions and the required correction/decision.
 - `cardinality_gate`: PASS | FAIL; `discovery_status`: PASS | GAPS | BLOCKED; `ready_for_implementation`: yes | no. Any non-PASS gate means no; PASS applies only to the reviewed scope, not execution or release readiness.

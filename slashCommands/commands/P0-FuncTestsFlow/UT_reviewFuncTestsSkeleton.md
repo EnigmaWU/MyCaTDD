@@ -4,11 +4,11 @@
 
 Review the P0 functional skeleton set before test-case implementation begins.
 
-Use this command when Typical, Edge, Misuse, or Fault skeletons exist and the developer wants to know whether source-backed behavior is sufficiently discovered and specified for implementation in the declared scope.
+Use this command when Typical, Edge, Misuse, or Fault skeletons exist and the developer wants to know whether source-backed behavior is sufficiently discovered and specified for implementation in the declared scope. Apply **Source-First** review to audit the unbroken **TestPointEvidenceChain** (source -> rule -> scenario -> oracle -> category -> US/AC/TC) and prevent blind spots.
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. Independently inspect behavior sources before examining the designer's ledger and skeleton set. Judge discovery, oracles, traceability, and category placement. It is read-only — report findings without editing source, skeletons, or implementation code.
+**ReACT** — Reasoning + Acting. Apply **Source-First** review: independently inspect behavior sources before examining the designer's ledger and skeleton set. Audit the **TestPointEvidenceChain** for discovery completeness, observable oracles, traceability, and category placement. It is read-only — report findings without editing source, skeletons, or implementation code.
 
 ### ReACT Execution
 
@@ -53,14 +53,18 @@ Expected result:
 
 ## Method References
 
-- [../../flows/P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- [../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
+- [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
+- [MAIN::CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+  - [SUB::Typical](../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md)
+  - [SUB::Edge](../../../methodPrompts/CaTDD_methodPrompt4Cat-Edge.md)
+  - [SUB::Misuse](../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md)
+  - [SUB::Fault](../../../methodPrompts/CaTDD_methodPrompt4Cat-Fault.md)
+- [CaTDD_methodPrompt-testPointDiscovery](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
 
 ## Output Contract
 
 - Coverage summary for Typical, Edge, Misuse, and Fault.
-- Source-first inventory/reconciliation evidence and `discovery_ledger` findings, including wholly missing behaviors with rule/TP IDs rather than requiring pre-existing TCs.
+- Source-first inventory/reconciliation evidence and `discovery_ledger` findings, auditing the **TestPointEvidenceChain** and capturing wholly missing behaviors with rule/TP IDs rather than requiring pre-existing TCs.
 - Conflicts, duplicated scenarios, missing AC/TC links, and unclear assumptions.
 - Separate cardinality result, `discovery_status`, `ready_for_implementation`, reviewed scope/sources, exclusions, referrals, and residual risk as defined by the method.
 - A recommended next action: design more skeleton, select next TC, or block for clarification.

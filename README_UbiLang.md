@@ -26,14 +26,17 @@ This is the shared glossary for CaTDD execution environments.
 | GREEN | Passing test state after product-code changes. |
 | SpecCoding | CaTDD workflow that treats verification design artifacts as the executable spec lifecycle. |
 | VibeCoding | Fast ideation/prototyping mode; results should still be reconciled back into CaTDD traceability. |
+| Source-First | Review and discovery discipline that inspects authoritative source artifacts (contracts, design models, quality policies) and independently derives expected obligations before reading existing skeletons or test code, preventing author blind spots. |
+| TestPointEvidenceChain | The unbroken evidentiary chain from source artifact -> rule/invariant -> concrete scenario -> observable oracle -> CaTDD category -> US/AC/TC -> RED/GREEN implementation. |
 
 ### Category Vocabulary
 
 | Tier | Categories |
 | --- | --- |
 | P0 Functional | Typical, Edge, Misuse, Fault |
-| P1 Design | State, Capability, Concurrency |
-| P2 Quality | Performance, Robust, Compatibility, Configuration |
+| P1 Design | State, Capability, Interaction, Concurrency |
+| P2 Quality | Performance, Robust, Compatibility, Configuration, Diagnosis, Security |
+| P3 Addons | Demo/Example |
 
 ### Ownership Vocabulary
 
@@ -77,7 +80,7 @@ A shared ubiquitous language keeps generated prompts, command flows, review outp
 Check vocabulary consistency before release:
 
 ```bash
-rg -n "Typical|Edge|Misuse|Fault|State|Capability|Concurrency|Performance|Robust|Compatibility|Configuration|US/AC/TC|SpecCoding|VibeCoding" README*.md methodPrompts slashCommands codeAgents agentSkills
+rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestPointEvidenceChain" README*.md methodPrompts slashCommands codeAgents agentSkills
 ```
 
 Expected result: terms are used with the same meanings as defined in this file.

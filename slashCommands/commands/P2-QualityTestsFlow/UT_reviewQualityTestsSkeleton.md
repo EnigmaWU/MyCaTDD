@@ -4,11 +4,11 @@
 
 Review the P2 quality skeleton set before implementation, release-risk review, or TC-by-TC execution continues.
 
-Use this command to review the declared Performance, Robust, Compatibility, Configuration, Diagnosis, and Security scope, including source-backed concerns absent from the existing skeletons.
+Use this command to review the declared Performance, Robust, Compatibility, Configuration, Diagnosis, and Security scope, including source-backed concerns absent from the existing skeletons. Apply **Source-First** review to audit the unbroken **TestPointEvidenceChain** from quality requirements, budgets, matrices, and policies to observable response measures.
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This is a bounded, source-first review of quality obligations and observable evidence. Numeric budgets and exact symbolic predicates are both valid. The command is read-only; return findings and proposed corrections without changing design or implementation files.
+**ReACT** — Reasoning + Acting. Apply **Source-First** review: audit the **TestPointEvidenceChain** from quality sources and policies to observable response measures before examining existing skeletons. This is a bounded, source-first review of quality obligations and observable evidence. Numeric budgets and exact symbolic predicates are both valid. The command is read-only; return findings and proposed corrections without changing design or implementation files.
 
 ### ReACT Execution
 
@@ -70,7 +70,7 @@ Expected result:
 ## Output Contract
 
 - SUT, declared scope across Performance/Robust/Compatibility/Configuration/Diagnosis/Security, source references, domain/test-level/environment, and verification methods.
-- `discovery_ledger`: location or explicit missing-evidence finding; disposition counts reconciled to actual rows, with exclusions, routing, and sampling limits separate from coverage.
+- `discovery_ledger`: location or explicit missing-evidence finding; disposition counts reconciled to actual rows, auditing the **TestPointEvidenceChain** with exclusions, routing, and sampling limits separate from coverage.
 - `review_evidence`: independent source-derived checklist, reviewer/process (or labeled self-review), sources examined, reconciliation, and residual risk.
 - Findings keyed by source/rule or TP ID, with US/AC/TC IDs only when they exist; identify missing obligations, weak oracles, unknown targets/policies, and required corrections or decisions.
 - `cardinality_gate`: PASS | FAIL; `discovery_status`: PASS | GAPS | BLOCKED; `ready_for_implementation`: yes | no. Any non-PASS gate means no; PASS applies only to the reviewed scope, not execution or release readiness.

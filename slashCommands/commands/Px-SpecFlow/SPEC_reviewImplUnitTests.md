@@ -4,11 +4,11 @@
 
 Review implemented CaTDD unit tests for the active user story after `SPEC_implUnitTests`, and again after `SPEC_implProductCodes` plus `SPEC_reviewProductCodes` before refactor, commit, or closure.
 
-Use this command when one or more TC bodies have been implemented and the developer needs a story-level gate that confirms the implemented tests still match their US/AC/TC skeletons, category priority, status markers, product-code review findings, and verification evidence.
+Use this command when one or more TC bodies have been implemented and the developer needs a story-level gate that confirms the implemented tests preserve the **TestPointEvidenceChain**: verifying that implemented test bodies match their US/AC/TC skeletons, category priority, status markers, product-code review findings, and verification evidence.
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect implemented TC slices, reason about story-level completeness and per-TC alignment, act by applying `UT_reviewImplTestCase` mechanics to each implemented TC that lacks current review evidence, observe drift, status, and verification gaps, then decide the next lifecycle command.
+**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect implemented TC slices, reason about story-level completeness and per-TC alignment along the **TestPointEvidenceChain**, act by applying `UT_reviewImplTestCase` mechanics to each implemented TC that lacks current review evidence, observe drift, status, and verification gaps, then decide the next lifecycle command.
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
@@ -66,8 +66,8 @@ Expected result:
 
 - Skill-first rule: if the latest available `test-case-with-readme` skill exists in the workspace or installed agent skill registry, apply it during this review for each target test file.
 - Preferred skill and usage:
-   - `test-case-with-readme` to verify or create/update the companion `<test_filename_without_extension>_readme.md` file beside each implemented test file.
-   - The companion README must include Purpose, Status, Covered, and Manual sections grounded in the implemented test body, US/AC/TC comments, verification output, and product-code review status when present.
+  - `test-case-with-readme` to verify or create/update the companion `<test_filename_without_extension>_readme.md` file beside each implemented test file.
+  - The companion README must include Purpose, Status, Covered, and Manual sections grounded in the implemented test body, US/AC/TC comments, verification output, and product-code review status when present.
 - Builtin fallback rule: if `test-case-with-readme` is unavailable, do not block the whole review. Report the missing skill and run the builtin README gates below instead.
 - Completion rule: this command must remain executable without skill loading. Use the latest skill when present; otherwise make the fallback evidence explicit.
 

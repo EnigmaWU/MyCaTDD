@@ -23,11 +23,13 @@ CaTDD's usage emphasis is:
 
 Choose the profile(s) relevant to the declared SUT. These priorities do not change category identity or require every project to implement every technology below.
 
-Use this rule:
+Maintain the **TestPointEvidenceChain**: every test point must trace through an unbroken chain of evidence:
 
 ```text
-Source artifact -> Rule -> Concrete Example -> Open Question -> CaTDD category -> US/AC/TC
+Source artifact -> Rule/Invariant -> Concrete Scenario -> Observable Oracle -> CaTDD category -> US/AC/TC -> RED/GREEN test
 ```
+
+Reviewers and CodeAgents must follow **Source-First** review: examine authoritative source artifacts and independently derive expected obligations before consulting existing skeletons or test code.
 
 If an expected result cannot trace back to a source artifact, record a QUESTION and ask for the missing decision. A category marked `@[NoTestPoints]: <reason>` because its source is missing is BLOCKED, not proven inapplicable. Never use that marker to hide unknown behavior.
 
