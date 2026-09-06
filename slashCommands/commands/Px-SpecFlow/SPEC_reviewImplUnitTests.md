@@ -4,11 +4,11 @@
 
 Review implemented CaTDD unit tests for the active user story after `SPEC_implUnitTests`, and again after `SPEC_implProductCodes` plus `SPEC_reviewProductCodes` before refactor, commit, or closure.
 
-Use this command when one or more TC bodies have been implemented and the developer needs a story-level gate that confirms the implemented tests preserve the **TestPointEvidenceChain**: verifying that implemented test bodies match their US/AC/TC skeletons, category priority, status markers, product-code review findings, and verification evidence.
+Use this command when one or more TC bodies have been implemented and the developer needs a story-level gate that confirms the implemented tests preserve the **TestEvidenceChain**: verifying that implemented test bodies match their US/AC/TC skeletons, category priority, status markers, product-code review findings, and verification evidence (ensuring HOW the tests are implemented matches WHY they were designed).
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect implemented TC slices, reason about story-level completeness and per-TC alignment along the **TestPointEvidenceChain**, act by applying `UT_reviewImplTestCase` mechanics to each implemented TC that lacks current review evidence, observe drift, status, and verification gaps, then decide the next lifecycle command.
+**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect implemented TC slices, reason about story-level completeness and per-TC alignment along the **TestEvidenceChain**, act by applying `UT_reviewImplTestCase` mechanics to each implemented TC that lacks current review evidence, observe drift, status, and verification gaps, then decide the next lifecycle command.
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 

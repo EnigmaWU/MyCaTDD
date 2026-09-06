@@ -281,4 +281,34 @@ assert_discovery_section "$DISCOVERY" '## Test-Point Ledger' 'In scope; destinat
 assert_discovery_section "$DISCOVERY" '## Test-Point Ledger' 'Explicitly out of scope; destination/owner accepted | REFERRED'
 assert_discovery_section "$DISCOVERY" '## Test-Point Ledger' 'Handoff acceptance never changes scope'
 
+# [@AC-DISCOVERY-12,US-DISCOVERY-02] TC-DISCOVERY-12:
+# GIVEN UbiLang and method contracts, WHEN SUT, UT, TP, TC, and TestEvidenceChain are checked,
+# THEN SUT defines the Misuse vs Fault boundary, UT adheres to sut_unit_convention,
+# AC vs TP (User vs Developer perspective) and TP vs TC cardinality are explicit,
+# and TestEvidenceChain answers WHY and HOW.
+assert_discovery_contract "$REPO_ROOT/README_UbiLang.md" 'System Under Test'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang.md" 'Unit Testing'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang.md" 'Test Point'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang.md" 'Test Case'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang.md" 'TestEvidenceChain'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang.md" 'AC vs TP'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang.md" 'Discovery to Categorization'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang_ZH.md" '被测系统'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang_ZH.md" '单元测试'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang_ZH.md" '测试点'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang_ZH.md" '测试用例'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang_ZH.md" '测试证据链'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang_ZH.md" 'AC vs TP'
+assert_discovery_contract "$REPO_ROOT/README_UbiLang_ZH.md" 'Discovery to Categorization'
+assert_discovery_section "$MASTER_PROMPT" '## Mandatory Traceability Constraints' 'SUT (System Under Test)'
+assert_discovery_section "$MASTER_PROMPT" '## Mandatory Traceability Constraints' 'sut_unit_convention'
+assert_discovery_section "$MASTER_PROMPT" '## Test-Point Discovery Contract' 'TestEvidenceChain'
+assert_discovery_section "$MASTER_PROMPT" '## Test-Point Discovery Contract' 'Distinguish Acceptance Criteria (AC) from Test Point (TP)'
+assert_discovery_section "$MASTER_PROMPT" '## Test-Point Discovery Contract' 'Distinguish Test Point (TP) from Test Case (TC)'
+assert_discovery_section "$DISCOVERY" '## Test-Point Ledger' '### Acceptance Criteria (AC) vs. Test Point (TP)'
+assert_discovery_section "$DISCOVERY" '## Test-Point Ledger' '### Test Point (TP) vs. Test Case (TC)'
+assert_discovery_contract "$DISCOVERY" 'TestEvidenceChain'
+assert_discovery_absent "$DISCOVERY" 'TestPointEvidenceChain'
+assert_discovery_section "$METHOD_DIR/CaTDD_methodPrompt-categorySemantics.md" '## P0 Functional Split' 'declared SUT boundary'
+
 echo "[methodPrompts-standalone-guide-test] PASSED: methodPrompts has standalone user guide"

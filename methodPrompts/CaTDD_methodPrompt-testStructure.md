@@ -10,6 +10,8 @@ Every class/category skeleton should preserve this minimum shape.
 //=================================================================================================
 // [Class] / [Category] Design Skeleton
 //=================================================================================================
+// @[SUT]: [Declared SUT matching file overview]
+// @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: What this category proves for this component

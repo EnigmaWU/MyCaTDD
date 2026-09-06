@@ -4,11 +4,11 @@
 
 Review the P0 functional skeleton set before test-case implementation begins.
 
-Use this command when Typical, Edge, Misuse, or Fault skeletons exist and the developer wants to know whether source-backed behavior is sufficiently discovered and specified for implementation in the declared scope. Apply **Source-First** review to audit the unbroken **TestPointEvidenceChain** (source -> rule -> scenario -> oracle -> category -> US/AC/TC) and prevent blind spots.
+Use this command when Typical, Edge, Misuse, or Fault skeletons exist and the developer wants to know whether source-backed behavior is sufficiently discovered and specified for implementation in the declared scope. Apply **Source-First** review to audit the unbroken **TestEvidenceChain** (source -> rule -> TP -> oracle -> category -> US/AC/TC) answering WHY the test point is needed and HOW it will be verified, preventing blind spots.
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. Apply **Source-First** review: independently inspect behavior sources before examining the designer's ledger and skeleton set. Audit the **TestPointEvidenceChain** for discovery completeness, observable oracles, traceability, and category placement. It is read-only — report findings without editing source, skeletons, or implementation code.
+**ReACT** — Reasoning + Acting. Apply **Source-First** review: independently inspect behavior sources before examining the designer's ledger and skeleton set. Audit the **TestEvidenceChain** for discovery completeness, observable oracles, traceability, and category placement. It is read-only — report findings without editing source, skeletons, or implementation code.
 
 ### ReACT Execution
 
@@ -64,7 +64,7 @@ Expected result:
 ## Output Contract
 
 - Coverage summary for Typical, Edge, Misuse, and Fault.
-- Source-first inventory/reconciliation evidence and `discovery_ledger` findings, auditing the **TestPointEvidenceChain** and capturing wholly missing behaviors with rule/TP IDs rather than requiring pre-existing TCs.
+- Source-first inventory/reconciliation evidence and `discovery_ledger` findings, auditing the **TestEvidenceChain** and capturing wholly missing behaviors with rule/TP IDs rather than requiring pre-existing TCs.
 - Conflicts, duplicated scenarios, missing AC/TC links, and unclear assumptions.
 - Separate cardinality result, `discovery_status`, `ready_for_implementation`, reviewed scope/sources, exclusions, referrals, and residual risk as defined by the method.
 - A recommended next action: design more skeleton, select next TC, or block for clarification.

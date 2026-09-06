@@ -27,7 +27,14 @@ This is the shared glossary for CaTDD execution environments.
 | SpecCoding | CaTDD workflow that treats verification design artifacts as the executable spec lifecycle. |
 | VibeCoding | Fast ideation/prototyping mode; results should still be reconciled back into CaTDD traceability. |
 | Source-First | Review and discovery discipline that inspects authoritative source artifacts (contracts, design models, quality policies) and independently derives expected obligations before reading existing skeletons or test code, preventing author blind spots. |
-| TestPointEvidenceChain | The unbroken evidentiary chain from source artifact -> rule/invariant -> concrete scenario -> observable oracle -> CaTDD category -> US/AC/TC -> RED/GREEN implementation. |
+| TestEvidenceChain | The unbroken evidentiary chain answering WHY we need a test and HOW to test correctly: from source artifact -> rule/invariant -> Test Point (TP) -> observable oracle -> CaTDD category (WHY) -> US/AC/TC -> Test Case (TC) -> RED/GREEN implementation (HOW). |
+| SUT | System Under Test: The explicitly declared software boundary under verification (e.g. `SUT: utCodeAgentCLI`, `SUT: PaymentGatewayInterface`). It establishes the strict dividing line between caller behavior (`P0 Misuse` on caller contract violation) and external dependencies/runtime (`P0 Fault` on dependency failure). |
+| UT | Unit Testing: Verification focused on a single declared SUT adhering to the project's agreed `sut_unit_convention` (e.g. `module-interface`, `submodule-interface`, `class`, `header-file`, `function`, or `component`). Verifies public contracts, internal design models, and quality properties via CaTDD before implementation. |
+| TP | Test Point: A discovered verification obligation or condition (the target). Represents WHAT must be verified from the DEVELOPER / DEFENSIVE perspective (partitions, boundaries, failure phases, interleavings), extracted from sources during Stage-0/Stage-1 discovery and tracked in `discovery_ledger`. Described via concrete `GIVEN technical state/partition, WHEN action/interleaving, THEN observable oracle`. |
+| TC | Test Case: An executable verification specification artifact (the arrow). Represents HOW to verify an obligation, structured with `@[Name]`, `@[Expect]`, and four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`) linked to `[@AC-n, US-n]`. |
+| AC vs TP | AC is from the USER / CALLER perspective (defining external business rules for acceptance: `GIVEN context, WHEN action, THEN outcome`); TP is from the DEVELOPER / DEFENSIVE perspective (defining technical probes across boundaries, error paths, and concurrency to verify whether the AC holds). One AC typically unpacks into multiple TPs ($1:N$). Equating $TP == AC$ causes boundary and failure-mode omissions. |
+| TP vs TC | Cardinality between TP and TC is not strictly 1:1. A TP can exist without a TC (`1:0` -> GAP, exposing missing test points); a complex TP may require multiple TCs (`1:N`); and one TC may genuinely verify multiple TPs (`N:1`) when assertions distinguish each obligation. Equating `TC == TP` prematurely hides missing test points. |
+| Discovery to Categorization | Two-stage design bridge: In Stage-0 (Freely Drafting), discover TPs breadth-first across sources and sweeps without premature category lock-in. In Stage-1 (Classifying Design), route each discovered TP to its proper CaTDD category based on its verification lens (Contract -> P0, Model -> P1, Envelope -> P2, Learning Surface -> P3), then codify into US/AC/TC skeletons. |
 
 ### Category Vocabulary
 
@@ -46,6 +53,90 @@ This is the shared glossary for CaTDD execution environments.
 | `slashCommands/` | Portable command/flow wrappers over method semantics. |
 | `codeAgents/` | Goal-driven orchestration and execution policy. |
 | `agentSkills/` | Packaged skills for non-native code agents. |
+
+### Conceptual Diagrams and Examples
+
+#### 1. SUT Boundary Invariant (Misuse vs. Fault)
+
+The explicitly declared **SUT** defines the contract dividing line:
+
+```mermaid
+flowchart LR
+    Caller["Caller / Client"] -->|calls SUT public API| SUT["Declared SUT Boundary"]
+    SUT -->|interacts with| Dep["External Dependencies / Environment / OS / Hardware"]
+
+    subgraph ErrorTaxonomy["CaTDD Error Taxonomy"]
+        CallerBreak["Caller violates contract<br/>(bad params, wrong order)"] -.->|Classified as| Misuse["P0 Misuse"]
+        NormalExec["Valid caller on normal path"] -.->|Classified as| Typical["P0 Typical"]
+        ValidEdge["Valid caller on boundary or edge mode"] -.->|Classified as| Edge["P0 Edge"]
+        DepFail["Dependency fails<br/>(network drop, disk full, EIO, 503)"] -.->|Classified as| Fault["P0 Fault"]
+    end
+```
+
+#### 2. TestEvidenceChain (Answering WHY and HOW)
+
+Every test must establish an unbroken evidence chain connecting rationale to code:
+
+```mermaid
+flowchart TD
+    subgraph WHY["Tier 1: WHY (Rationale & Verification Obligation)"]
+        Source["Source Artifact (Contract / Spec / Model / Policy)"] --> Rule["Rule / Invariant / Threshold"]
+        Rule --> TP["Test Point (TP) — WHAT to verify (Target)"]
+        TP --> Oracle["Observable Oracle (Numeric budget or exact predicate)"]
+        Oracle --> Cat["CaTDD Category (Verification Lens: P0/P1/P2/P3)"]
+    end
+
+    subgraph HOW["Tier 2: HOW (Specification & Test Execution)"]
+        Cat --> Spec["US / AC / TC Living Skeleton Design"]
+        Spec --> TC["Test Case (TC) — HOW to verify (Arrow)"]
+        TC --> RedGreen["Four-phase Test Body (SETUP -> BEHAVIOR -> VERIFY -> CLEANUP) -> RED -> GREEN"]
+    end
+
+    WHY --> HOW
+```
+
+#### 3. AC vs. TP vs. TC ($1 \text{ AC} : N \text{ TPs} : M \text{ TCs}$)
+
+- **Acceptance Criteria (AC)**: User perspective — "What business rule must hold?"
+- **Test Point (TP)**: Developer perspective — "What technical boundary or failure probe must be verified?" (Target)
+- **Test Case (TC)**: Execution perspective — "How do we execute the test in code?" (Arrow)
+
+Worked Example:
+
+```text
+AC-01 (User Rule):
+  "GIVEN 1 to 100 valid records, WHEN write is called, THEN persist all records and return OK."
+
+Unpacks into Developer Test Points (TPs):
+  ├── TP-01 (Typical): Write 2 records (nominal valid partition) -> OK and persisted (P0 Typical)
+  ├── TP-02 (Edge):    Write 1 record (minimum valid boundary)   -> OK and persisted (P0 Edge)
+  ├── TP-03 (Edge):    Write 100 records (maximum valid boundary)-> OK and persisted (P0 Edge)
+  ├── TP-04 (Misuse):  Write 0 records (below valid range)       -> INVALID_COUNT (P0 Misuse)
+  └── TP-05 (Misuse):  Write 101 records (above valid range)     -> INVALID_COUNT (P0 Misuse)
+
+Implements into Executable Test Cases (TCs):
+  ├── TC-01: verifyWrite_byNominalBatch_expectSuccess      (implements TP-01)
+  ├── TC-02: verifyWrite_byBoundaryBatch_expectSuccess     (implements TP-02 & TP-03)
+  ├── TC-03: verifyWrite_byZeroBatch_expectInvalidCount    (implements TP-04)
+  └── TC-04: verifyWrite_byOversizedBatch_expectInvalidCount(implements TP-05)
+```
+
+#### 4. Discovery to Categorization (Stage-0 to Stage-1 Bridge)
+
+```mermaid
+flowchart LR
+    Sources["Source Artifacts"] --> Sweep["Multi-Class Discovery Sweeps<br/>(Partitions, Boundaries, Failures, Models, Budgets)"]
+    Sweep --> Stage0["Stage-0: Freely Drafting<br/>(Discover raw TPs in discovery_ledger without folder bias)"]
+    Stage0 --> Route["Routing by Verification Lens"]
+    Route --> P0["P0 Contract Lens<br/>(Typical, Edge, Misuse, Fault)"]
+    Route --> P1["P1 Model Lens<br/>(State, Capability, Interaction, Concurrency)"]
+    Route --> P2["P2 Envelope Lens<br/>(Perf, Robust, Compat, Config, Diag, Sec)"]
+    Route --> P3["P3 Learning Lens<br/>(Demo/Example)"]
+    P0 --> Stage1["Stage-1: Classifying Design<br/>(Codify into US/AC/TC living skeletons)"]
+    P1 --> Stage1
+    P2 --> Stage1
+    P3 --> Stage1
+```
 
 ## When
 
@@ -80,7 +171,7 @@ A shared ubiquitous language keeps generated prompts, command flows, review outp
 Check vocabulary consistency before release:
 
 ```bash
-rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestPointEvidenceChain" README*.md methodPrompts slashCommands codeAgents agentSkills
+rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|UT|TP|TC" README*.md methodPrompts slashCommands codeAgents agentSkills
 ```
 
 Expected result: terms are used with the same meanings as defined in this file.

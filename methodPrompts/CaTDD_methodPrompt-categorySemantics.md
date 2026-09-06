@@ -49,8 +49,8 @@ Classification rules:
 
 - Typical: valid caller, normal environment, common path.
 - Edge: valid caller, normal environment, unusual but accepted boundary or mode.
-- Misuse: invalid caller behavior, invalid input, invalid state request, or API contract violation.
-- Fault: valid caller behavior, but dependency, resource, filesystem, network, hardware, runtime, or environment fails.
+- Misuse: invalid caller behavior, invalid input, invalid state request, or API contract violation against the declared SUT boundary.
+- Fault: valid caller behavior, but dependency, resource, filesystem, network, hardware, runtime, or environment outside the SUT boundary fails.
 
 ## P1 Design Split
 

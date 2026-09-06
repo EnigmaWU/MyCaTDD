@@ -4,11 +4,11 @@
 
 Review one implemented CaTDD test case against its US/AC/TC skeleton.
 
-Use this command after `UT_implTestCase` or when the developer suspects a test implementation drifted away from the design comments. It audits the terminal implementation link in the **TestPointEvidenceChain**: verifying that the executable test body (`SETUP` -> `BEHAVIOR` -> `VERIFY` -> `CLEANUP`) faithfully implements the observable oracle defined in `@[Expect]` and the acceptance criteria without implementation drift.
+Use this command after `UT_implTestCase` or when the developer suspects a test implementation drifted away from the design comments. It audits the terminal implementation link in the **TestEvidenceChain**: verifying that the executable test body (`SETUP` -> `BEHAVIOR` -> `VERIFY` -> `CLEANUP`) faithfully implements the observable oracle defined in `@[Expect]` and the acceptance criteria without implementation drift (confirming HOW the test is executed matches WHY it was designed).
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This command compares one implementation against its design comments and reports drift in the **TestPointEvidenceChain**. The loop's defining constraint is that it must **not** resolve a disagreement on its own — when implementation and skeleton conflict, neither is automatically truth, so the finding is reported and the developer decides.
+**ReACT** — Reasoning + Acting. This command compares one implementation against its design comments and reports drift in the **TestEvidenceChain**. The loop's defining constraint is that it must **not** resolve a disagreement on its own — when implementation and skeleton conflict, neither is automatically truth, so the finding is reported and the developer decides.
 
 ### ReACT Execution
 
@@ -56,7 +56,7 @@ Expected result:
 
 ## Output Contract
 
-- Alignment check between implementation and US/AC/TC in the **TestPointEvidenceChain**.
+- Alignment check between implementation and US/AC/TC in the **TestEvidenceChain**.
 - Missing assertions, excessive assertions, setup/cleanup gaps, and status issues.
 - Recommendation: keep, fix implementation, revise skeleton, or select next TC.
 

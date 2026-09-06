@@ -23,10 +23,15 @@ CaTDD's usage emphasis is:
 
 Choose the profile(s) relevant to the declared SUT. These priorities do not change category identity or require every project to implement every technology below.
 
-Maintain the **TestPointEvidenceChain**: every test point must trace through an unbroken chain of evidence:
+Maintain the **TestEvidenceChain**: every test must trace through an unbroken chain of evidence answering **WHY** we need the test point and **HOW** we execute it correctly:
 
 ```text
-Source artifact -> Rule/Invariant -> Concrete Scenario -> Observable Oracle -> CaTDD category -> US/AC/TC -> RED/GREEN test
+[WHY: Rationale & Obligation]
+Source artifact -> Rule/Invariant -> Test Point (TP) -> Observable Oracle -> CaTDD category
+       │
+       ▼
+[HOW: Specification & Execution]
+CaTDD category -> US/AC/TC -> Test Case (TC) -> RED/GREEN test
 ```
 
 Reviewers and CodeAgents must follow **Source-First** review: examine authoritative source artifacts and independently derive expected obligations before consulting existing skeletons or test code.
@@ -202,6 +207,30 @@ This is a usage-priority guide, not a historical lineage or a source of product 
 ## Test-Point Ledger
 
 Keep one `discovery_ledger` in living comments, alongside the inventory and coverage matrix. Use stable local TP IDs distinct from US/AC/TC IDs. Each row represents a specific condition and observable obligation, not just a category name.
+
+### Acceptance Criteria (AC) vs. Test Point (TP)
+
+AC and TP serve different roles and perspectives in the TestEvidenceChain:
+
+- **Acceptance Criteria (AC)**: Formulated from the **USER / Stakeholder / Contract perspective** (WHAT external business behavior must hold for acceptance). Expressed in domain-level `GIVEN [context], WHEN [action], THEN [outcome]` specifying external conditions under which the story is accepted.
+- **Test Point (TP)**: Formulated from the **DEVELOPER / Defensive / Verification perspective** (WHAT technical condition, boundary offset, failure phase, or interleaving must be probed). Expressed in technical `GIVEN [state/partition], WHEN [action/schedule], THEN [observable oracle]` probing whether the AC holds under stress, misuse, and failure.
+
+Cardinality between AC and TP is typically **$1 : N$**:
+- One AC (e.g. "accept batches of 1..100 records") spawns multiple TPs: nominal partition (`TP-01 Typical`), valid lower boundary (`TP-02 Edge`), valid upper boundary (`TP-03 Edge`), and boundary-adjacent violations (`TP-04 Misuse`).
+- Equating $TP == AC$ causes boundary, negative, and dependency failure omissions, because a single happy-path test case is mistakenly assumed to satisfy the entire criterion.
+
+### Test Point (TP) vs. Test Case (TC)
+
+In CaTDD, TP and TC represent distinct concepts across the TestEvidenceChain:
+
+- **Test Point (TP)**: A discovered verification obligation or condition (the target). Represents WHAT must be verified, extracted from source artifacts during Stage-0/Stage-1 discovery. A TP exists in `discovery_ledger` even before any test code or skeleton is drafted.
+- **Test Case (TC)**: An executable specification artifact (the arrow). Represents HOW to verify an obligation, structured with `@[Name]`, `@[Expect]`, and four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`) linked to `[@AC-n, US-n]`.
+
+Cardinality between TP and TC is not strictly 1:1:
+- `1 : 0` (GAP): An identified obligation has no adequate test case. This is how the Discovery Gate exposes missing test points before implementation. Equating TC == TP hides this gap.
+- `1 : 1` (Standard): A single distinct obligation maps directly to one focused test case.
+- `1 : N` (Decomposed): A single complex obligation (e.g. multi-step reconnection under retry limits) requires multiple test cases to verify distinct phases or outcomes.
+- `N : 1` (Distinguished): A single test case covers multiple related test points only when its setup and assertions genuinely distinguish each obligation without masking failures.
 
 | Field | Required content |
 | --- | --- |
