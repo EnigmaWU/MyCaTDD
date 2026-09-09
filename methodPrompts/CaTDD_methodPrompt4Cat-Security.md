@@ -43,6 +43,12 @@ When this category applies, consider test points such as:
 - Trust-boundary attempts: cross-tenant access, sandbox escape, path traversal, command injection, replay, tampering, or privilege escalation.
 - Secret and sensitive-data handling: token redaction, credential omission, private data isolation, safe logs, and safe error output.
 - Integrity protection: signed payload validation, checksum mismatch, stale nonce, invalid signature, or unauthorized mutation is rejected.
+- Proactive CWE exclusion (K-SEC-01):
+  - CWE-89 / CWE-78: Injection attempts via malformed or injected command strings; verify safe parameterization.
+  - CWE-22: Path traversal attempts via '../' or absolute path inputs; verify path containment within workspace/sandbox.
+  - CWE-200 / CWE-312: Sensitive data exposure; verify credentials, tokens, and ApiKEYs are redacted or masked in logs, errors, and traces.
+  - CWE-287 / CWE-306: Authentication bypass; verify missing or forged credentials result in deterministic 401 denial.
+  - CWE-862 / CWE-639: Broken authorization and tenant boundary; verify cross-tenant access is denied with 403.
 - Source trace to SecurityDesign, threat model, policy, or compliance rule; if no source exists, stop and ask instead of inventing fear-based tests.
 - Domain-specific questions:
   - *Embedded Linux*: Which device-access, privilege, firmware-integrity, or memory-protection policy exists? Use controlled fixtures; a sanitizer run supports a particular check but does not certify overall memory safety or secure boot.
@@ -52,6 +58,8 @@ When this category applies, consider test points such as:
 ## Design Skeleton
 
 ```text
+// @[SUT]: [Declared SUT matching file overview]
+// @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
 // @[Class]: P2 Quality
 // @[Category]: Security
 // @[Intent]: Prove a defined protection property under a threat model or policy.
@@ -59,6 +67,7 @@ When this category applies, consider test points such as:
 // @[AvoidWhen]: The scenario is only ordinary misuse, design interaction, diagnosis, or unspecified fear.
 // @[ProtectedAsset]: [asset or boundary]
 // @[ThreatOrPolicy]: [threat actor, policy, or security rule]
+// @[ConstitutionalRule]: [K-rule-id or policy invariant, e.g., K-SEC-02 / CWE-200]
 // @[TC]: verify[Protection]_by[ThreatScenario]_expect[SafeDenialOrContainment]
 ```
 
@@ -76,6 +85,7 @@ AC-n: GIVEN [policy, actor, protected asset, and trust boundary],
 
 TC-n:
   @[Name]: verify[Protection]_by[ThreatScenario]_expect[SafeDenialOrContainment]
+  @[ConstitutionalRule]: [K-rule-id or CWE, e.g., K-SEC-02 / Token Masking]
   @[Purpose]: Validate a defined security protection property.
   @[Brief]: Arrange policy and actor context, attempt threat behavior, verify denial or containment.
   @[Expect]: Protection holds and observable failure remains safe.

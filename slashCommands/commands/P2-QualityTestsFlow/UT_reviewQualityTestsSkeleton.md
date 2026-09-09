@@ -67,6 +67,16 @@ Expected result:
 - [CaTDD_methodPrompt4Cat-Diagnosis](../../../methodPrompts/CaTDD_methodPrompt4Cat-Diagnosis.md)
 - [CaTDD_methodPrompt4Cat-Security](../../../methodPrompts/CaTDD_methodPrompt4Cat-Security.md)
 
+## Skill Integration Policy
+
+- Skill-first rule: if relevant quality, architecture, or security skills exist in the workspace, use them during this review.
+- Preferred skills and usage:
+  - `apply-architectural-tactics` to evaluate whether quality scenarios across Performance, Robust, Compatibility, Configuration, Diagnosis, and Security have valid, measurable response measures or exact predicates.
+  - `analyze-with-tactics-questionnaires` to audit quality skeletons against architectural questionnaires (Performance, Availability/Robustness, Security).
+  - `design-tool-use-sandboxing` to review agent tool-use test skeletons for safe vs. dangerous tool classification and human-in-the-loop approval coverage.
+- Builtin fallback rule: if one or more skills are unavailable, review with the learned builtin-skill checklist in this command.
+- Completion rule: this command must remain executable and decisive without skill loading.
+
 ## Output Contract
 
 - SUT, declared scope across Performance/Robust/Compatibility/Configuration/Diagnosis/Security, source references, domain/test-level/environment, and verification methods.

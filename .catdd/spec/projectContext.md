@@ -45,6 +45,15 @@ After self-install with `scripts/installCaTDD.sh --targetDir "$PWD" --targetCode
 - `SPEC_clearStoryIntent` is the early mutual-intent gate after `SPEC_openUserStory`; it records developer intent and CodeAgent intent before design begins. It does not replace the final `SPEC_reviewUserStory` readiness gate after detail design.
 - `utCodeAgentCLI` uses the subproject context at [projectContext-utCodeAgentCLI.md](projectContext-utCodeAgentCLI.md). Its reviewed architecture-only policy overrides generic DetailDesign routing for that subproject.
 
+## Constitutional Invariants (K)
+
+Non-negotiable security, safety, and governance guardrails governing all CodeAgent generation, specification authoring, and verification design in this repository:
+
+- `K-SEC-01 (Proactive CWE Exclusion)`: Code generation and test design must proactively eliminate high-risk weakness classes (injection CWE-89/78, path traversal CWE-22, insecure deserialization CWE-502) through safe APIs, parameterized interfaces, and bounded parsers by construction.
+- `K-SEC-02 (Credential & Secret Isolation)`: Sensitive credentials, ApiKEYs, tokens, passphrases, and private keys must never be output in cleartext in logs, exceptions, traces, test assertions, comments, or terminal output; masking and redaction are mandatory.
+- `K-SEC-03 (Least Privilege & Mutative Tool Sandboxing)`: Operations that mutate state (modifying filesystem, altering databases, executing external scripts, force pushing git) require explicit human approval or sandboxing; read-only inspection operations may proceed autonomously.
+- `K-SEC-04 (Deterministic Verification Oracles)`: Security verification must prove concrete protection properties via observable oracles (access denied, exception raised, status 401/403, sanitized output, redacting secrets); vacuous truthiness assertions or mock-asserting-mock are strictly forbidden.
+
 ## SUT Unit Convention
 
 The boundary treated as one **Unit** for CaTDD unit tests in this project:

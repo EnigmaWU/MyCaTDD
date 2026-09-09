@@ -10,7 +10,7 @@ Commands should follow their group contract so Copilot, Cline, Continue, `utCode
 - [Px-HarnessKits](Px-HarnessKits): Harness Engineering tool-point commands for CaTDD source, adapter, execution, diagnostic, and patch-back maintenance.
 - [P0-FuncTestsFlow](P0-FuncTestsFlow): first imported flow for functional test skeleton and TC implementation.
 - [P1-DesignTestsFlow](P1-DesignTestsFlow): design test skeleton flow for State, Capability, and Concurrency.
-- [P2-QualityTestsFlow](P2-QualityTestsFlow): quality test skeleton flow for Performance, Robust, Compatibility, and Configuration.
+- [P2-QualityTestsFlow](P2-QualityTestsFlow): quality test skeleton flow for Performance, Robust, Compatibility, Configuration, and Security.
 
 ## Contract
 

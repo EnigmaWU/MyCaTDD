@@ -607,6 +607,12 @@ P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility, Configu
        - Category: Robust
        - Status: TODO
 
+  ⚪ [@AC-8,US-2] TC-1: verifySecurity_byPanicLeakage_expectStackTraceSanitized
+       - Description: Ensure panic logs sanitize raw memory addresses and sensitive payloads.
+       - Category: Security
+       - Constitutional rule: K-SEC-02 (CWE-200 / Sensitive Data Exposure)
+       - Status: TODO
+
 🚪 GATE P2: Quality attributes validated, production ready.
 
 ===================================================================================================

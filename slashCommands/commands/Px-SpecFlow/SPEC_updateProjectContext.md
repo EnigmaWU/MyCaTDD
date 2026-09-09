@@ -39,6 +39,7 @@ Expected result — one ReACT pass:
 - `projectContext_file`: existing project context.
 - `change_source`: commit, discussion, issue, architecture decision, review result, or new project document.
 - `sut_unit_convention`: optional updated SUT unit boundary for CaTDD unit tests (for example, switching from `class` to `module-interface`, refining a project-specific scope, or adding per-layer conventions). Only change this when the project has explicitly decided a different unit granularity.
+- `constitutional_invariants`: optional updated list of non-negotiable security, compliance, privacy, or safety rules ($K$) to record under `## Constitutional Invariants (K)`.
 - `lifecycle_dirs`: optional `.catdd/spec/pendingNews`, `.catdd/spec/analyzedNews`, `.catdd/spec/todoUS`, `.catdd/spec/doingUS`, `.catdd/spec/suspendUS`, `.catdd/spec/doneUS`, and `.catdd/spec/abortUS` directories when refreshing SpecFlow lifecycle state.
 - `context_budget`: optional project-specific working-memory budget. Default soft limit: 200 lines or approximately 3,000 tokens.
 
@@ -49,7 +50,7 @@ Expected result — one ReACT pass:
 
 ## Output Contract
 
-- Updated `.catdd/spec/projectContext.md` team-shared persistent artifact containing compact, confirmed working memory and links to canonical detail.
+- Updated `.catdd/spec/projectContext.md` team-shared persistent artifact containing compact, confirmed working memory, `## Constitutional Invariants (K)` guardrails, and links to canonical detail.
 - Updated `sut_unit_convention` when the change source includes a unit-boundary decision, including the new scope, rationale, and example SUT name.
 - If `SpecFlow Lifecycle State` is updated, evidence that current lifecycle directories were read from the filesystem before editing, for example `ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/suspendUS .catdd/spec/doneUS .catdd/spec/abortUS` or an equivalent directory listing.
 - A short change log describing what was added, replaced, linked, compacted, or discarded and why.

@@ -43,7 +43,7 @@ Expected result — two passes:
 - `readme_arch_design_zh`: optional matching `README_ArchDesign_ZH.md` mirror.
 - `readme_detail_design`: project-root or module-scoped `README_DetailDesign.md`.
 - `readme_detail_design_zh`: optional matching `README_DetailDesign_ZH.md` mirror.
-- `readme_spec_files`: optional related README SPEC docs such as `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, or `README_VerifyDesign.md`.
+- `readme_spec_files`: optional related README SPEC docs such as `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_SecurityDesign.md`, or `README_VerifyDesign.md`.
 - `projectContext_file`: current project context.
 
 ## Method References
@@ -56,16 +56,18 @@ Expected result — two passes:
 - Skill-first rule: if relevant architecture skills exist in the workspace, use them for this detail-design review.
 - Preferred skills and usage:
 	- `design-architecture-viewpoints` to verify detail design does not violate architecture viewpoint boundaries and deployment/concurrency assumptions.
-	- `apply-architectural-tactics` to verify quality-attribute tactics remain valid at detail level and are not lost in implementation-facing design.
+	- `apply-architectural-tactics` to verify quality-attribute tactics and constitutional invariants ($K$) remain valid at detail level and are not lost in implementation-facing design.
 	- `document-architectural-decisions` to trigger ADR advice when detail choices cross into architecture-significant decisions.
-- Builtin fallback rule: if one or more relevant skills are unavailable, review with the learned builtin-skill gate set covering: API/schema explicitness, state/resource/error/compatibility constraints, and AC-to-US/AC/TC conversion readiness.
+	- `design-tool-use-sandboxing` to verify that mutative agent tools are strictly partitioned with schema validation and approval gates.
+- Builtin fallback rule: if one or more relevant skills are unavailable, review with the learned builtin-skill gate set covering: API/schema explicitness, state/resource/error/compatibility/security constraints, and AC-to-US/AC/TC conversion readiness.
 - Completion rule: this review command must remain operational without skill loading. Skills are preferred when present; builtin-skill behavior is mandatory fallback.
 
 ### Builtin Skill Gates (when skills are unavailable)
 
 - Boundary gate: FAIL if detailed design violates approved architecture boundaries or ownership direction.
 - API/state gate: REVISE if APIs, schemas, or state transitions are ambiguous or untestable.
-- Constraint gate: REVISE if resource/error/compatibility/performance constraints are missing for impacted components.
+- Constraint gate: REVISE if resource/error/compatibility/performance/security constraints are missing for impacted components.
+- Security & sandbox gate: REVISE if sensitive credentials may leak in APIs/logs or if mutative agent tools lack approval/sandbox boundaries.
 - Quality continuity gate: REVISE if architecture quality scenarios are not reflected in detail design decisions.
 - Testability gate: FAIL if acceptance criteria cannot be translated into CaTDD US/AC/TC skeleton design.
 

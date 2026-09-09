@@ -13,7 +13,7 @@ Create the first `.catdd/spec/projectContext.md` for a target project before Spe
 Repeat until every drafted fact is either sourced or explicitly marked as an assumption.
 
 1. **Thought** — Read `existing_docs` and `known_constraints`. Separate what the material actually states from what you would be guessing.
-2. **Action** — Before drafting, ask the two Setup Questions below in order, skipping either one only if it was supplied as input. Then draft `.catdd/spec/projectContext.md`.
+2. **Action** — Before drafting, ask the three Setup Questions below in order, skipping any question that was already supplied as input. Then draft `.catdd/spec/projectContext.md`.
 3. **Observation** — Walk every line of the draft: is it traceable to project material, or is it an assumption? Unmarked guesses return to **Thought**. Encoded CaTDD category rules must be replaced with a link to `methodPrompts`.
 4. **Stop** — Exit when facts and assumptions are cleanly separated. Report the assumption list needing developer confirmation and the next command.
 
@@ -21,6 +21,7 @@ Repeat until every drafted fact is either sourced or explicitly marked as an ass
 
 1. Which language should be used as `default_lang` for all subsequent SpecCoding progress: `US_EN` for English or `ZH_CN` for Chinese? Only skip this question if `default_lang` has already been provided as input.
 2. What boundary should be treated as one **Unit** (the SUT unit convention) for CaTDD unit tests in this project? Offer common options — `module-interface`, `submodule-interface`, `class`, `header-file` (one `*.H`), `function`, or `component` — and let the developer pick or propose a project-specific scope. Record the chosen scope, a one-line rationale, and an example SUT name such as `SUT: moduleFooInterface` or `SUT: ClassBar`. Only skip this question if `sut_unit_convention` has already been provided as input.
+3. Are there project-specific Constitutional Invariants (K) — non-negotiable security, compliance, privacy, or safety rules (such as OWASP policies, CWE exclusion lists, secret redaction, regulatory constraints) — that must govern all AI generation and test design? Record any project-specific rules or apply repository baseline invariants (`K-SEC-01..04`). Only skip this question if `constitutional_invariants` has already been provided as input.
 
 ### Worked Example
 
@@ -48,6 +49,7 @@ Expected result — two passes:
 - `existing_docs`: optional README, architecture notes, issue templates, or test docs.
 - `default_lang`: developer's preferred language for all subsequent SpecCoding progress, including artifact content, questions, comments, and summaries. Choose `US_EN` (English) or `ZH_CN` (Chinese). If not provided, ask the developer before proceeding.
 - `sut_unit_convention`: the boundary treated as one **Unit** for CaTDD unit tests in this project. Choose one of the predefined scopes or define a project-specific one. Common options: `module-interface`, `submodule-interface`, `class`, `header-file` (e.g., one `*.H`), `function`, `component`. If not provided, ask the developer before proceeding. Record the chosen scope, a one-line rationale, and an example SUT name (for example, `SUT: moduleFooInterface` or `SUT: ClassBar`).
+- `constitutional_invariants`: optional list of non-negotiable security, safety, privacy, and regulatory rules ($K$). If not provided, confirm with developer or apply default baseline invariants (`K-SEC-01..04`).
 
 ## Method References
 
@@ -56,8 +58,9 @@ Expected result — two passes:
 
 ## Output Contract
 
-- A `.catdd/spec/projectContext.md` team-shared persistent artifact with project facts, constraints, code conventions, test conventions, `sut_unit_convention`, constitution-level guardrails, `default_lang` (US_EN or ZH_CN), and open questions.
+- A `.catdd/spec/projectContext.md` team-shared persistent artifact with project facts, constraints, code conventions, test conventions, `sut_unit_convention`, constitution-level guardrails, `## Constitutional Invariants (K)`, `default_lang` (US_EN or ZH_CN), and open questions.
 - A clearly recorded `sut_unit_convention` with scope, rationale, and example SUT name so later `SPEC_designUnitTests` declarations stay consistent.
+- Clearly codified `## Constitutional Invariants (K)` that govern all downstream generation and verification.
 - A list of assumptions that must be confirmed by the developer.
 - Next recommended command: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, or `SPEC_updateProjectContext`.
 

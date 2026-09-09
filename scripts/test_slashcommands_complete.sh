@@ -95,6 +95,7 @@ p2_commands=(
   UT_designRobustSkeleton
   UT_designCompatibilitySkeleton
   UT_designConfigurationSkeleton
+  UT_designSecuritySkeleton
   UT_reviewQualityTestsSkeleton
 )
 
@@ -161,6 +162,11 @@ assert_design_source \
   "slashCommands/commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md" \
   "README_DetailDesign.md" \
   "../../templates/README_DetailDesignTemplate.md" \
+  "slashCommands/flows/P2-QualityTestsFlow.md"
+assert_design_source \
+  "slashCommands/commands/P2-QualityTestsFlow/UT_designSecuritySkeleton.md" \
+  "README_SecurityDesign.md" \
+  "../../templates/README_SecurityDesignTemplate.md" \
   "slashCommands/flows/P2-QualityTestsFlow.md"
 
 assert_contains "slashCommands/commands/README.md" "P1-DesignTestsFlow"

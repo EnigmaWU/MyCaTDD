@@ -55,10 +55,12 @@ Expected result — two passes:
 
 - Skill-first rule: if relevant architecture skills exist in the workspace, use them for this review.
 - Preferred skills and usage:
-	- `design-architecture-viewpoints` to strengthen viewpoint completeness and inter-view consistency findings.
-	- `apply-architectural-tactics` to evaluate measurable quality scenarios, tactic adequacy, and architecture tradeoff points.
+	- `design-architecture-viewpoints` to strengthen viewpoint completeness, inter-view consistency findings, and Security Perspective coverage (trust boundaries, STRIDE).
+	- `apply-architectural-tactics` to evaluate measurable quality scenarios, tactic adequacy (including security tactics: detect, resist, react, recover), and architecture tradeoff points.
 	- `document-architectural-decisions` to validate ADR completeness (alternatives, argument, implications, decision state, trace links).
-- Builtin fallback rule: if one or more relevant skills are unavailable, review with the learned builtin-skill gate set covering: boundary clarity, dependency direction, runtime/deployment clarity, measurable quality scenario coverage, and ADR traceability for architecture-changing decisions.
+	- `design-tool-use-sandboxing` to evaluate agentic tool-use safety, execution sandboxes, and human-in-the-loop approval gates.
+	- `analyze-with-tactics-questionnaires` to systematically audit security, availability, and performance questionnaires against architectural evidence.
+- Builtin fallback rule: if one or more relevant skills are unavailable, review with the learned builtin-skill gate set covering: boundary clarity, dependency direction, runtime/deployment clarity, measurable quality scenario coverage, security/trust-boundary completeness, and ADR traceability for architecture-changing decisions.
 - Completion rule: the review must remain executable and decisive without skill loading. Skills are preferred when present; builtin-skill behavior is mandatory fallback.
 
 ### Builtin Skill Gates (when skills are unavailable)
@@ -66,6 +68,7 @@ Expected result — two passes:
 - Viewpoint gate: FAIL if stakeholder concerns are not represented in architecture views.
 - Consistency gate: FAIL if major cross-view contradictions are found (module ownership, runtime placement, boundary direction).
 - Quality gate: REVISE if fewer than three measurable quality scenarios are documented.
+- Security & constitutional gate: REVISE if protected assets, trust boundaries, or constitutional invariants ($K$) are omitted when security design is in scope.
 - Tradeoff gate: REVISE if decisions lack explicit sensitivity/tradeoff analysis.
 - Decision gate: REVISE if architecture-significant decisions lack alternatives, rationale, implications, or trace links.
 

@@ -211,6 +211,7 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Design a Robust skeleton from `README_ErrorDesign.md` | [UT_designRobustSkeleton](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
 | Design a Compatibility skeleton from `README_CompatDesign.md` | [UT_designCompatibilitySkeleton](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
 | Design a Configuration skeleton from `README_DetailDesign.md` | [UT_designConfigurationSkeleton](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
+| Design a Security skeleton from `README_SecurityDesign.md` | [UT_designSecuritySkeleton](commands/P2-QualityTestsFlow/UT_designSecuritySkeleton.md) |
 | Review P2 Quality skeletons | [UT_reviewQualityTestsSkeleton](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
 | Select the next test case from existing skeletons | [UT_tellMeNextImplTest](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
 | Implement the selected test case | [UT_implTestCase](commands/P0-FuncTestsFlow/UT_implTestCase.md) |

@@ -158,6 +158,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 | `README_PerfDesign.md` | 性能预算、延迟限制和实时媒体调度。 |
 | `README_CompatDesign.md` | 兼容性边界、平台矩阵、工具链和协议版本。 |
 | `README_DiagnosisDesign.md` | 可观测性架构、日志级别、遥测和症状跟踪图。 |
+| `README_SecurityDesign.md` | 安全架构、威胁模型、宪法约束（K）、信任边界与凭据保护。 |
 | `README_VerifyDesign.md` | 验证和测试拓扑、模拟边界和 CI 测试循环。 |
 
 ### 2. 详细设计导向（由 `SPEC_takeDetailDesign` 管理）
@@ -182,7 +183,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 - `SpecTodoUserStoryTemplate.md` — 用于 `.catdd/spec/todoUS/*-UserStory.md` 制品的可重用模板，由 `.github/skills/` 需求分析 SKILLs 组合而成。
   - `SPEC_analyzeFeature` 和 `SPEC_analyzeIssue` 使用完整的 9 步 SKILL 流水线，并按此模板生成输出。
   - `SPEC_analyzeAbortedUserStory` 在输出格式上遵循此模板，但采用**选择性再分析**流水线（审计 → 诊断 → 保留 → 拒绝 → 选择性纠正），因为输入已经是结构化的用户故事。
-对于嵌入式软件和数字视频/音频领域的工作，当涉及硬件故障、有限资源、硬件状态、实时行为、兼容性矩阵、缓冲、媒体流水线时序、A/V 同步约束或现场调试证据时，使用 `README_ErrorDesign.md`、`README_ResourceDesign.md`、`README_StateDesign.md`、`README_PerfDesign.md`、`README_CompatDesign.md` 和 `README_DiagnosisDesign.md`。
+对于嵌入式软件和数字视频/音频领域的工作，当涉及硬件故障、有限资源、硬件状态、实时行为、兼容性矩阵、缓冲、媒体流水线时序、A/V 同步约束、硬件保护或现场调试证据时，使用 `README_ErrorDesign.md`、`README_ResourceDesign.md`、`README_StateDesign.md`、`README_PerfDesign.md`、`README_CompatDesign.md`、`README_DiagnosisDesign.md` 和 `README_SecurityDesign.md`。
 
 ## 制品持久化策略
 
@@ -362,10 +363,10 @@ flowchart TB
 9. 使用 [SPEC_updateUserStory](../commands/Px-SpecFlow/SPEC_updateUserStory.md)，当计划为需求导向型且项目级 `README_UserStories.md` 与配对 `README_UserGuide.md`（以及采用模块文档时的模块需求文档）必须在下游工作前更新时。
 10. 使用 [SPEC_reviewUserStory](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) 在需求更新之后，并验证 `README_UserStories.md` 的 TODO/DOING/DONE 与 AC 追溯状态是否与生命周期制品一致；然后或者关闭纯需求导向型工作（`SPEC_commitWorks` 然后 `SPEC_closeUserStory`，若关闭生成了文件变更则紧接一个 close-commit 检查点），或者转移到设计导向型的下一步。
 11. 使用 [SPEC_whatsNextTask](../commands/Px-SpecFlow/SPEC_whatsNextTask.md)，当你需要从当前状态获得单个下一步推荐时。
-12. 使用 [SPEC_takeArchDesign](../commands/Px-SpecFlow/SPEC_takeArchDesign.md)，当计划表明需要初始架构工作，在 `README_ArchDesign.md` 中产出初始高层架构设计和模块边界时。
+12. 使用 [SPEC_takeArchDesign](../commands/Px-SpecFlow/SPEC_takeArchDesign.md)，当计划表明需要初始架构工作，在 `README_ArchDesign.md` 中产出初始高层架构设计和模块边界时（应用架构与安全技能 `design-architecture-viewpoints`、`apply-architectural-tactics`、`document-architectural-decisions` 与 `design-tool-use-sandboxing`）。
 13. 使用 [SPEC_reviewArchDesign](../commands/Px-SpecFlow/SPEC_reviewArchDesign.md) 在详细设计开始前把关架构质量。
 14. 使用 [SPEC_updateArchDesign](../commands/Px-SpecFlow/SPEC_updateArchDesign.md) 进行后续架构修订，当架构审查、故事级反馈或已开启的更新故事识别出缺失或薄弱的架构设计时。
-15. 使用 [SPEC_takeDetailDesign](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) 产出初始详细设计和验收标准，包括按需创建其他项目根 `README*` SPEC 文档。
+15. 使用 [SPEC_takeDetailDesign](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) 产出初始详细设计和验收标准，包括按需创建其他项目根 `README*` SPEC 文档（如 `README_DetailDesign.md`、`README_StateDesign.md`、`README_SecurityDesign.md`，应用 `design-architecture-viewpoints`、`apply-architectural-tactics` 与 `design-tool-use-sandboxing`）。
 16. 使用 [SPEC_reviewDetailDesign](../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md) 在实现导向型步骤之前把关详细设计质量。
 17. 使用 [SPEC_updateDetailDesign](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) 进行后续详细设计修订，当详细审查发现缺失或薄弱的设计时。
 18. 使用 [SPEC_designUnitTests](../commands/Px-SpecFlow/SPEC_designUnitTests.md) 进入 CaTDD 测试设计，通常通过 P0/P1/P2 流程，当计划表明故事已为测试准备好时。

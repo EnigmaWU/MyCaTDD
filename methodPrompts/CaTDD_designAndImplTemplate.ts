@@ -519,6 +519,12 @@
 //        - Category: Performance
 //        - Status: TODO
 //
+//   ⚪ [@AC-6,US-3] TC-1: verifySecurity_bySensitiveArgs_expectCredentialsRedacted
+//        - Description: Validate that sensitive API keys are not leaked in CLI diagnostics or stderr.
+//        - Category: Security
+//        - Constitutional rule: K-SEC-02 (CWE-200 / Token Masking)
+//        - Status: TODO
+//
 // 🚪 GATE P2: Quality attributes validated, production ready.
 //
 //===================================================================================================

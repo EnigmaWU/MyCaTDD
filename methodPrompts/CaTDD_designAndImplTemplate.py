@@ -511,6 +511,7 @@ P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility, Configu
   ⚪ [@AC-6,US-2] TC-1: verifySecurity_byProviderError_expectApiKeyRedacted
        - Description: Ensure ApiKEY is masked in all logs and errors.
        - Category: Security
+       - Constitutional rule: K-SEC-02 (CWE-200 / Token Masking)
        - Status: TODO
 
   ⚪ [@AC-7,US-2] TC-1: verifyDiagnosis_byRoutingFailure_expectTraceIdInLog

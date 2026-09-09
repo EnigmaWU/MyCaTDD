@@ -210,6 +210,7 @@ bash scripts/test_makeSlashCmd4Continue.sh
 | 基于 `README_ErrorDesign.md` 设计 Robust 骨架 | [commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
 | 基于 `README_CompatDesign.md` 设计 Compatibility 骨架 | [commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
 | 基于 `README_DetailDesign.md` 设计 Configuration 骨架 | [commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
+| 基于 `README_SecurityDesign.md` 设计 Security 骨架 | [commands/P2-QualityTestsFlow/UT_designSecuritySkeleton.md](commands/P2-QualityTestsFlow/UT_designSecuritySkeleton.md) |
 | 审查 P2 Quality 骨架 | [commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
 | 从已有骨架中选择下一个测试用例 | [commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
 | 实现已选择的测试用例 | [commands/P0-FuncTestsFlow/UT_implTestCase.md](commands/P0-FuncTestsFlow/UT_implTestCase.md) |

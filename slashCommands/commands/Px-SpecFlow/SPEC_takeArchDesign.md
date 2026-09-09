@@ -61,10 +61,12 @@ Expected result — two passes:
 
 - Skill-first rule: if relevant architecture skills exist in the workspace, use them for this command execution.
 - Preferred skills and usage:
-	- `design-architecture-viewpoints` for stakeholder-to-viewpoint mapping, view coverage depth, and inter-view consistency checks.
-	- `apply-architectural-tactics` for ASR extraction, measurable quality-attribute scenarios, tactic selection, and tradeoff clarity.
+	- `design-architecture-viewpoints` for stakeholder-to-viewpoint mapping, view coverage depth, inter-view consistency checks, and the Security Perspective (trust boundaries, STRIDE threat models, principals vs. assets).
+	- `apply-architectural-tactics` for ASR extraction, measurable quality-attribute scenarios, tactic selection (including security tactics: detect, resist, react, recover), and tradeoff clarity.
 	- `document-architectural-decisions` for ADR-quality alternatives/argument/implication structure when architecture-significant choices are made.
-- Builtin fallback rule: if one or more relevant skills are unavailable, apply the learned builtin-skill checklist in this command covering: stakeholders and concerns, C4-style views, at least three measurable quality scenarios, explicit tradeoffs/risks, and decision traceability.
+	- `design-tool-use-sandboxing` when the architecture involves CodeAgents, LLM tool execution, or runtime sandboxes (partitioning safe read-only tools vs. dangerous mutative actions with human approval gates).
+	- `analyze-with-tactics-questionnaires` for evaluating security, availability, and modifiability tactics against architectural questionnaires.
+- Builtin fallback rule: if one or more relevant skills are unavailable, apply the learned builtin-skill checklist in this command covering: stakeholders and concerns, C4-style views, at least three measurable quality scenarios, explicit tradeoffs/risks, security/sandbox boundaries, and decision traceability.
 - Completion rule: command completion must not depend on skill availability. Skills are preferred when present; builtin-skill behavior is mandatory fallback.
 
 ### Builtin Skill Checklist (when skills are unavailable)
@@ -72,6 +74,7 @@ Expected result — two passes:
 - Viewpoint builtin: identify at least three stakeholder groups, map each to concerns, and cover them in Context/Container/Component/Deployment views.
 - Consistency builtin: explicitly check Context vs Functional boundaries, Functional vs Development ownership, and Concurrency vs Deployment placement.
 - Tactics builtin: define at least three measurable quality scenarios using `Source, Stimulus, Environment, Response, Response Measure`.
+- Security & trust boundary builtin: when security design is in scope, identify protected assets, trust boundaries, STRIDE threats, constitutional invariants ($K$), and least-privilege tool sandboxing.
 - Tradeoff builtin: record at least two sensitivity points and two tradeoff points for major design decisions.
 - Decision builtin: when architecture-significant choices exist, include alternatives, selected option, argument, implications, and trace links.
 

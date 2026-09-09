@@ -22,6 +22,7 @@ required_pairs=(
   "README_PerfDesign.md|slashCommands/templates/README_PerfDesignTemplate.md"
   "README_CompatDesign.md|slashCommands/templates/README_CompatDesignTemplate.md"
   "README_DiagnosisDesign.md|slashCommands/templates/README_DiagnosisDesignTemplate.md"
+  "README_SecurityDesign.md|slashCommands/templates/README_SecurityDesignTemplate.md"
   "README_VerifyDesign.md|slashCommands/templates/README_VerifyDesignTemplate.md"
   "README_UsageDesign.md|slashCommands/templates/README_UsageDesignLiteCliTemplate.md"
 )
@@ -39,6 +40,7 @@ domain_templates=(
   "slashCommands/templates/README_PerfDesignTemplate.md"
   "slashCommands/templates/README_CompatDesignTemplate.md"
   "slashCommands/templates/README_DiagnosisDesignTemplate.md"
+  "slashCommands/templates/README_SecurityDesignTemplate.md"
   "slashCommands/templates/README_VerifyDesignTemplate.md"
 )
 

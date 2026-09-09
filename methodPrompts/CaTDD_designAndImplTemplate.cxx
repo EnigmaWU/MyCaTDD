@@ -672,6 +672,7 @@ TEST_F(UT_NameofCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 //   ⚪ [@AC-10,US-3] TC-1: verifySecurity_byCrossTenantAccess_expectDeniedWithoutLeakage
 //        - Description: Validate a defined protection property under policy.
 //        - Category: Security
+//        - Constitutional rule: K-SEC-03 (CWE-862 / Tenant Isolation)
 //        - Depends on: SecurityDesign or threat model
 //        - Estimated effort: 2 hours
 //
