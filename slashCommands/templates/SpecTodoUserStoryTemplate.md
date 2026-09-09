@@ -248,13 +248,16 @@
 
 ## Ambiguity Warnings
 
-<!-- How: Scan the entire story for vague terms — "fast", "robust", "seamless", "always", "never".
-     For each, ask: "Is 'fast' 500ms or 5s?" Do not silently substitute precise thresholds.
+<!-- How: Scan the entire story for Ambiguity Smells using the Ambiguity Smell Taxonomy (AST):
+     SMELL-ACTOR (passive without actor), SMELL-BOUND (unbounded adjectives: "fast", "robust", "seamless"),
+     SMELL-BRANCH (missing negative branches), SMELL-STATE (unstated lifecycle bounds),
+     SMELL-VAGUE (vague verbs/loopholes: "handle", "manage", "etc."), SMELL-RACE (unstated concurrency).
+     For each, ask a clarifying question. Do not silently substitute thresholds or fabricate branches.
      (→ SKILL: validate-requirements-criteria) -->
 
-| # | Ambiguous Term | Found In Section | Clarifying Question |
-| --- | --- | --- | --- |
-| 1 | `"{{vague term}}"` | {{section name}} | `"{{precise question}}"` |
+| # | Smell Code | Ambiguous Term / Pattern | Found In Section | Clarifying Question |
+| --- | --- | --- | --- | --- |
+| 1 | `{{SMELL-CODE}}` | `"{{vague term or passive phrase}}"` | {{section name}} | `"{{precise question}}"` |
 
 ---
 

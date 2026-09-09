@@ -181,7 +181,14 @@ For each acceptance scenario: state the governing Rule, give at least one concre
 
 ### Step 9 — Hunt ambiguity
 
-Scan the entire story draft for vague terms: "fast", "robust", "seamless", "always", "never", "eventually". Also scan the original issue for ambiguous reproduction steps. Generate clarifying questions — do not silently substitute precise thresholds. `(→ SKILL: validate-requirements-criteria)`
+Scan the entire story draft and reproduction steps for Ambiguity Smells using the Ambiguity Smell Taxonomy (AST):
+- `SMELL-ACTOR`: Passive voice without actor ("repro steps state data is corrupted without specifying actor or trigger").
+- `SMELL-BOUND`: Unbounded / subjective adjectives ("fast", "robust", "seamless", "always", "never", "eventually", "properly").
+- `SMELL-BRANCH`: Missing negative/regression branches (silent on what happens if the fix encounters timeout, error, or bad input).
+- `SMELL-STATE`: Unstated lifecycle bounds (state machine prerequisites for the repair).
+- `SMELL-VAGUE`: Vague verbs & loophole words ("handle", "manage", "support", "etc.", "generally").
+- `SMELL-RACE`: Unstated concurrency bounds or race conditions causing the issue.
+Generate clarifying questions under `## Ambiguity Warnings` and `## Initial Acceptance Questions` — do not silently substitute precise thresholds or fabricate missing paths. `(→ SKILL: validate-requirements-criteria)`
 
 ### Step 10 — Prioritize
 
@@ -212,7 +219,7 @@ If the issue lacks reproducible intent or expected behavior, create questions an
 - If Step 3 detects oversize: propose splitting, don't write one oversized repair story.
 - If Step 6 finds unhandled model gaps: list them as questions, don't invent paths.
 - If Step 7 finds implied but unspecified business rules: flag them, don't guess values.
-- If Step 9 finds vague terms: flag them, don't silently substitute thresholds.
+- If Step 9 finds Ambiguity Smells or vague terms: flag them, don't silently substitute thresholds or fabricate branches.
 - If an insight is plausible but not evidenced, label it as a hypothesis with a disconfirming check — do not present it as fact.
 
 ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule: MUST halt and ask developer in both manualMode and autonomousMode)

@@ -41,6 +41,7 @@
 | ONE-MORE-THING | 跨 CaTDD 全局通用安全不变量：无论在 `manualMode` 还是 `autonomousMode` 下，只要遇到不确定、来源缺失、冲突或未明确的事项，智能体都必须暂停并向开发者提问以获取明确答案。自主模式绝非猜测或臆造需求的许可；在 `autonomousMode` 下遇到 ONE-MORE-THING 时立即暂停自主推进并输出结构化 `manual_required` 提问。 |
 | Semantic Falsification Gate | 语义证伪门禁：严格区分合法 `🔴 RED` 与 `⚠️ BROKEN_TEST` 的验证门禁。测试只有在编译/加载正常、完整执行 SETUP 与 BEHAVIOR 并**在 VERIFY 阶段严格触发预期的领域语义断言失败**（如 `AssertionError`、`Expected X but got Y`）时，才被认定为合法的 RED。若因语法错误、缺少依赖/导入、Fixture 崩溃或环境异常而失败，则标记为 `⚠️ BROKEN_TEST`，严禁借此进入生产代码编写，必须先修复测试底座。 |
 | Anti-Test-Theater | 反测试演戏机制：杜绝大模型生成空洞、伪装或自我证实的虚假测试工程纪律。严禁“Mock 测试 Mock”（未经 SUT 业务逻辑直接断言 Mock 自身的返回值），严禁空洞的真假/非空断言（如 `assert != null` 或 `assert True`），强制要求断言必须验证 SUT 真实的状态流转、计算产物或领域不变量。 |
+| Ambiguity Smell Classifier | 歧义坏味道分类器：在测试设计前系统性扫描自然语言需求中未声明、未详述或主观模糊之处的 Stage-0 诊断工具。基于歧义坏味道分类体系（AST），细分为六大坏味道类别：`SMELL-ACTOR`（无主语被动语态）、`SMELL-BOUND`（无边界形容词）、`SMELL-BRANCH`（缺失异常/负向分支）、`SMELL-STATE`（未声明的生命周期状态）、`SMELL-VAGUE`（含糊动词与漏洞词）以及 `SMELL-RACE`（未声明的并发规则）。一旦探测到任一坏味道，必须在 `discovery_ledger` 中记录为 `QUESTION` 状态，并强制触发全域通用的 `ONE-MORE-THING` 暂停规则，从根源切断 AI 脑补断言与幻觉。 |
 
 ### Category Vocabulary
 

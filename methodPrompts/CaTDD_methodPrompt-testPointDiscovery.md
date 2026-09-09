@@ -80,16 +80,35 @@ For functional sources containing business/domain rules, use the taxonomy to ask
 
 Rule type does not determine CaTDD category. An ordinary sensor-value computation can be Typical, its valid boundary can be Edge, and a State test requires an actual internal design model. Route each candidate by its verification lens after discovery. If a rule or boundary is unstated, record a QUESTION rather than inferring product policy.
 
-### 3. Ambiguity and Exception Path Hunting
+### 3. Ambiguity Smell Classifier & Exception Path Hunting
 
-Before accepting drafted requirements into design:
+Before accepting drafted requirements into design, systematically scan source texts and user stories using the **Ambiguity Smell Classifier (ASC)**. As established in empirical literature (arXiv:2606.06563 and arXiv:2607.16680), natural language ambiguity is the primary cause of AI hallucination in test assertions: when requirements are underspecified, stochastic generators silently fabricate thresholds, invent unstated assumptions, or omit negative paths.
 
-- **Hunt Ambiguity**: Flag subjective words ("fast", "reliable", "seamless", "graceful", "properly", "safe"). Ask for an observable predicate or, for a numeric budget, a threshold with units. Do not invent either.
-- **Probe Exception Paths**: Systematically ask "What if..." for every happy path:
-  - *What if* the caller is unauthenticated or unauthorized?
-  - *What if* the network, filesystem, or hardware is disconnected mid-transaction?
-  - *What if* the input is null, empty, negative, or max-sized?
-  - *What if* the operation is cancelled or repeated immediately?
+#### Ambiguity Smell Taxonomy (AST)
+
+| Smell Category | Code | Diagnostic Triggers & Examples | Mandatory ONE-MORE-THING Action |
+| --- | --- | --- | --- |
+| **Passive Voice Without Actor** | `SMELL-ACTOR` | "Data will be synchronized", "events are processed", "status is updated". The triggering principal, security context, or recipient is missing. | **QUESTION**: Ask which specific actor/component initiates the action, under what permission context, and who receives the outcome. |
+| **Unbounded / Subjective Adjectives** | `SMELL-BOUND` | Flag subjective words ("fast", "reliable", "seamless", "graceful", "properly", "safe", "efficient", "real-time", "sufficient"). | **QUESTION**: Demand an exact numeric threshold with units (e.g. latency $\le 50\text{ms}$) or an explicit discrete state predicate. Do not invent either. |
+| **Missing Negative Branches** | `SMELL-BRANCH` | The source describes the success path, but is completely silent on timeout, network drop, partial write, retry exhaustion, disk full, or cancellation. | **QUESTION**: Ask for the specified behavior under failure/timeout. Do not guess fallback or rollback semantics. |
+| **Unstated Lifecycle / State Bounds** | `SMELL-STATE` | Calling APIs before initialization, invoking methods during shutdown/drain, or invoking re-entrant operations without lifecycle state rules. | **QUESTION**: Ask what state prerequisites must hold and what status/error is returned if called out-of-order. |
+| **Vague Verbs & Loophole Words** | `SMELL-VAGUE` | "Handle", "manage", "support", "optimize", "etc.", "and so on", "where applicable", "generally", "if possible". | **QUESTION**: Ask what exact CRUD operations, data mutations, or supported sub-features are included. |
+| **Unstated Concurrency & Contention** | `SMELL-RACE` | "Multiple clients can post events simultaneously", without specifying thread safety, serialization, ordering guarantees, or backpressure behavior. | **QUESTION**: Ask what concurrency model, locking strategy, and capacity limits govern simultaneous access. |
+
+#### Binding to Universal ONE-MORE-THING Stop Rule
+
+When an Ambiguity Smell is detected:
+1. **Never Guess**: The agent is strictly forbidden from silently substituting precise numbers or fabricating negative branches.
+2. **Ledger Recording**: The obligation MUST be recorded in `discovery_ledger` with status `QUESTION`:
+   `TP-xx | [SourceRef] | [AmbiguousCondition] | UNCONFIRMED | QUESTION: [SMELL-ID]: [Exact clarifying question for developer]`
+3. **Execution Halt**: Invokes the universal `ONE-MORE-THING` stop rule. In `manualMode`, prompt the developer immediately. In `autonomousMode`, pause autonomous execution and emit a `manual_required` blocker.
+
+#### Probing Exception Paths
+Systematically ask "What if..." for every happy path:
+- *What if* the caller is unauthenticated or unauthorized?
+- *What if* the network, filesystem, or hardware is disconnected mid-transaction?
+- *What if* the input is null, empty, negative, or max-sized?
+- *What if* the operation is cancelled or repeated immediately?
 
 ## Example Mapping First
 

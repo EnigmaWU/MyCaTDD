@@ -90,7 +90,14 @@ Scan the feature text for policies, calculations, regulations, or constraints th
 For each acceptance scenario: state the governing Rule, provide at least one concrete Example and one counter-example, list any open Questions. If too many Rules accumulate, the story may be too big — consider splitting. `(→ SKILL: facilitate-example-mapping)`
 
 ### Step 7 — Hunt ambiguity
-Scan the entire story draft for vague terms: "fast", "robust", "seamless", "always", "never", "reliable". For each, generate a precise clarifying question (e.g., "Is 'fast' 500ms or 5s?"). Do not silently substitute your own threshold. Also verify each scenario tests exactly one behavior. `(→ SKILL: validate-requirements-criteria)`
+Scan the entire story draft for Ambiguity Smells using the Ambiguity Smell Taxonomy (AST):
+- `SMELL-ACTOR`: Passive voice without actor ("data will be synced", "events are processed").
+- `SMELL-BOUND`: Unbounded / subjective adjectives ("fast", "robust", "seamless", "always", "never", "reliable", "efficient", "real-time").
+- `SMELL-BRANCH`: Missing negative branches (silent on timeout, network drop, retry exhaustion, cancellation).
+- `SMELL-STATE`: Unstated lifecycle bounds (calling APIs before init, during drain, or after close).
+- `SMELL-VAGUE`: Vague verbs & loophole words ("handle", "manage", "support", "etc.", "generally", "if possible").
+- `SMELL-RACE`: Unstated concurrency bounds (simultaneous calls without synchronization rules).
+For each smell, generate a precise clarifying question under `## Ambiguity Warnings` and `## Initial Acceptance Questions` (e.g., "Is 'fast' 500ms or 5s?"). Do not silently substitute your own threshold or fabricate missing branches. Also verify each scenario tests exactly one behavior. `(→ SKILL: validate-requirements-criteria)`
 
 ### Step 8 — Prioritize
 Score Business Value, User Value, Cost/Effort, and Risk/Complexity each 1-9. Compute Priority Score = (BV + UV) / (Cost + Risk). Record the rationale for each score. If fewer than 3 items exist in total, skip formal scoring and use pairwise comparison instead. `(→ SKILL: prioritize-requirements)`
@@ -108,6 +115,6 @@ If the feature or imported user-story source lacks user value, actor, or outcome
 - If Step 1 detects oversize: propose splitting, don't write one oversized story.
 - If Step 4 finds unhandled model gaps: list them as questions, don't invent paths.
 - If Step 5 finds implied but unspecified business rules: flag them, don't guess values.
-- If Step 7 finds vague terms: flag them, don't silently substitute thresholds.
+- If Step 7 finds Ambiguity Smells or vague terms: flag them, don't silently substitute thresholds or fabricate branches.
 
 ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule: MUST halt and ask developer in both manualMode and autonomousMode)
