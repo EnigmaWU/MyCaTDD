@@ -409,7 +409,10 @@ def test_verifyRouting_byHealthyPrimary_expectPrimarySelected():
     selected = providers[0]
 
     # ===>>> ✅ VERIFY <<<===
-    # Check key expectations (keep <= 3 key assertions)
+    # ANTI-TEST-THEATER RULE:
+    # - Assert real SUT state mutation or domain invariants (<= 3 key assertions).
+    # - NEVER assert mock returns directly without SUT transformation (mock-testing-mock).
+    # - Semantic Falsification: test must fail on assertion in RED phase, not on syntax/setup crashes.
     assert selected["name"] == "primary"
     assert selected["healthy"] is True
 
@@ -453,8 +456,9 @@ def test_verifyRouting_byCachedRoute_expectInstantReturn(configured_router):
 
 STATUS LEGEND:
   ⚪ TODO/PLANNED:      Designed but not implemented yet.
-  🔴 RED/FAILING:       Test written, but production code is missing or failing.
+  🔴 RED/FAILING:       Test written, executing cleanly, and failing for expected semantic domain assertion.
   🟢 GREEN/PASSED:      Test written and passing.
+  ⚠️ BROKEN_TEST:      Test failing for wrong reason (syntax error, missing import, fixture crash).
   ⚠️ ISSUES:           Known problem needing attention.
   🚫 BLOCKED:          Cannot proceed due to external dependency.
 

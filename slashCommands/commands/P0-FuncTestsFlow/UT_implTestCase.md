@@ -20,7 +20,8 @@ Repeat for the one selected TC only.
    - `GREEN`: write the minimal production code. Never edit the test to manufacture a pass.
    - `REFACTOR`: apply the ordered cleanup in the Refactor Order below.
 3. **Observation** — Check the stage's own gate:
-   - `RED` must fail for the missing product behavior, not a fixture, import, or environment error → otherwise back to **Action**.
+   - `RED` must satisfy the **Semantic Falsification Gate**: the test must load/compile cleanly, execute through `SETUP` and `BEHAVIOR`, and fail **strictly on an expected domain assertion** in `VERIFY` (`AssertionError`, `Expected X but got Y`, `ASSERT_EQ mismatch`). If it fails due to syntax error, missing module/import, fixture crash, or unhandled exception in test setup, it is **`⚠️ BROKEN_TEST`**, not RED → back to **Action** to repair the test harness; do not proceed to production code.
+   - Check the **Anti-Test-Theater Rule**: assertions in `VERIFY` must verify real SUT state mutation or domain invariants; never assert mock returns directly without SUT transformation (mock-testing-mock), and avoid vacuous truthiness checks (`assert != null`).
    - The body must have visible `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` markers, with key assertions in `VERIFY` written as `VERIFY_KEYPOINT_xyz` → otherwise back to **Action**.
    - If a missing behavior, edge case, or acceptance point surfaces, stop expanding this TC and ask the developer for a new TC.
 4. **Stop** — Exit when the stage's gate passes. Update the TC status marker without deleting design comments, and report the verification result.
@@ -64,17 +65,28 @@ Expected result:
 - [../../flows/P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
 - [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
 
+## Skill Integration Policy
+
+- Skill-first rule: if relevant test-driven development or agent-reward skills exist in the workspace, apply them during test implementation.
+- Preferred skills and usage:
+  - `test-driven-development` to enforce strict Red-Green-Refactor discipline: confirm the test fails before writing production code, distinguish assertion failure (RED) from execution errors (BROKEN_TEST), and write minimal code to pass.
+  - `design-agent-reward-functions` to formulate observable, deterministic programmatic checks in `VERIFY` that act as hard boundary constraints rather than subjective or self-evaluating assertions.
+- Builtin fallback rule: if skills are unavailable, strictly apply the builtin Semantic Falsification Gate and Anti-Test-Theater rules in this command.
+- Completion rule: command completion must not depend on skill loading; builtin-skill behavior is mandatory fallback.
+
 ## Output Contract
 
 - Test implementation for exactly one selected TC.
-- Preserved US/AC/TC comments and status markers.
+- Preserved US/AC/TC comments and status markers (`⚪ TODO` -> `🔴 RED` / `⚠️ BROKEN_TEST` -> `🟢 GREEN`).
 - Minimal production changes only when needed for the requested TDD stage.
+- Evidence of passing the Semantic Falsification Gate in RED phase.
+- Anti-Test-Theater compliance: assertions verify real SUT state mutations or domain invariants, not trivial mock echoes.
 - For REFACTOR stage, an ordered no-behavior-change cleanup report covering design comments, test code, production code, and final GREEN regression proof.
 - Verification command or manual check result when available.
 - STRICT style conformance in implemented TC body:
- 	- Explicit `//===>>> SETUP <<<===`, `//===>>> BEHAVIOR <<<===`, `//===>>> VERIFY <<<===`, and `//===>>> CLEANUP <<<===` blocks.
- 	- In `VERIFY` block, use `VERIFY_KEYPOINT_xyz` macros instead of raw `ASSERT_/EXPECT_` for key assertions when those macros are available in the project; if not available, add a local compatibility mapping and still write `VERIFY_KEYPOINT_xyz` in test code.
- 	- Optional phase `printf` traces are allowed and recommended when they improve diagnosability.
+  - Explicit `//===>>> SETUP <<<===`, `//===>>> BEHAVIOR <<<===`, `//===>>> VERIFY <<<===`, and `//===>>> CLEANUP <<<===` blocks.
+  - In `VERIFY` block, use `VERIFY_KEYPOINT_xyz` macros instead of raw `ASSERT_/EXPECT_` for key assertions when those macros are available in the project; if not available, add a local compatibility mapping and still write `VERIFY_KEYPOINT_xyz` in test code.
+  - Optional phase `printf` traces are allowed and recommended when they improve diagnosability.
 
 ## Conflict Guard
 

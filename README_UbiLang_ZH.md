@@ -39,6 +39,8 @@
 | autonomousMode | 无人值守/命令行自治执行模式。通过入口命令（如 `SPEC_importIssue`、`SPEC_openUserStory`）携带 `execution_mode: autonomousMode` 触发。**严格仅支持实现导向（implementation-oriented）的用户故事**。在该模式下，智能体自动执行并推进 Part 2.b 的测试先行实现与评审步骤，直至最终状态（`closeUserStory`、`abortUserStory` 或 `suspendUserStory`）。需求与架构导向的工作必须保留人类意图，强制处于 `manualMode`。 |
 | analysis_mode | 分析命令内部（`SPEC_analyzeIssue`、`SPEC_analyzeFeature`）在 `manualMode` 流程下的命令级执行模式。`BRAINSTORM`（头脑风暴，默认）与开发者进行交互式逐步对话探讨；`AUTONOMOUS`（自主分析）单次执行多技能分析流水线草拟 `todoUS` 而不逐步打断，但会显式记录假设与疑问并在存在阻塞性问题时将故事标记为未就绪（NOT ready）。 |
 | ONE-MORE-THING | 跨 CaTDD 全局通用安全不变量：无论在 `manualMode` 还是 `autonomousMode` 下，只要遇到不确定、来源缺失、冲突或未明确的事项，智能体都必须暂停并向开发者提问以获取明确答案。自主模式绝非猜测或臆造需求的许可；在 `autonomousMode` 下遇到 ONE-MORE-THING 时立即暂停自主推进并输出结构化 `manual_required` 提问。 |
+| Semantic Falsification Gate | 语义证伪门禁：严格区分合法 `🔴 RED` 与 `⚠️ BROKEN_TEST` 的验证门禁。测试只有在编译/加载正常、完整执行 SETUP 与 BEHAVIOR 并**在 VERIFY 阶段严格触发预期的领域语义断言失败**（如 `AssertionError`、`Expected X but got Y`）时，才被认定为合法的 RED。若因语法错误、缺少依赖/导入、Fixture 崩溃或环境异常而失败，则标记为 `⚠️ BROKEN_TEST`，严禁借此进入生产代码编写，必须先修复测试底座。 |
+| Anti-Test-Theater | 反测试演戏机制：杜绝大模型生成空洞、伪装或自我证实的虚假测试工程纪律。严禁“Mock 测试 Mock”（未经 SUT 业务逻辑直接断言 Mock 自身的返回值），严禁空洞的真假/非空断言（如 `assert != null` 或 `assert True`），强制要求断言必须验证 SUT 真实的状态流转、计算产物或领域不变量。 |
 
 ### Category Vocabulary
 

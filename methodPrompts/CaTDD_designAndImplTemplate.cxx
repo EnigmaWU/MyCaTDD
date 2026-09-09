@@ -535,6 +535,10 @@ TEST(UT_NameOfCategory, verifyBehaviorX_byDoA_expectSomething) {
 
     //===>>> VERIFY <<<===
     printf("✅ VERIFY: verifyBehaviorX_byDoA_expectSomething\n");
+    // ANTI-TEST-THEATER RULE:
+    // - Assert real SUT state mutation or domain invariants (<= 3 key assertions).
+    // - NEVER assert mock returns directly without SUT transformation (mock-testing-mock).
+    // - Semantic Falsification: test must fail on assertion in RED phase, not on syntax/setup crashes.
     // ASSERT_...; (use VERIFY_KEYPOINT_xyz redefined macros from GTest's ASSERT_xyz)
 
     //===>>> CLEANUP <<<===
@@ -580,8 +584,9 @@ TEST_F(UT_NameofCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 //
 // STATUS LEGEND:
 //   ⚪ TODO/PLANNED:      Designed but not implemented yet.
-//   🔴 RED/FAILING:       Test written, but production code is missing or incorrect.
+//   🔴 RED/FAILING:       Test written, executing cleanly, and failing for expected semantic domain assertion.
 //   🟢 GREEN/PASSED:      Test written and passing.
+//   ⚠️  BROKEN_TEST:      Test failing for wrong reason (syntax error, missing import, fixture crash).
 //   ⚠️  ISSUES:           Known problem needing attention.
 //   🚫 BLOCKED:          Cannot proceed due to a dependency.
 //

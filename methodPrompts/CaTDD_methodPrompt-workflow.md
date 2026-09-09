@@ -43,9 +43,12 @@ CaTDD uses two design stages before implementation.
 
 For each selected TC:
 
-1. Write the test first.
-2. Run the test and confirm RED for the intended reason.
-3. Implement the minimum production code needed for GREEN.
+1. Write the test first following the 4-phase layout (SETUP -> BEHAVIOR -> VERIFY -> CLEANUP).
+2. Run the test and confirm **meaningful 🔴 RED** under the **Semantic Falsification Gate**:
+   - The test must fail strictly on a domain assertion failure (`AssertionError`, `Expected X but got Y`).
+   - If it fails due to syntax errors, missing imports, unhandled exceptions in setup, or fixture crashes, it is **`⚠️ BROKEN_TEST`**, not RED. Do not write production code until the test executes cleanly and fails on its assertion.
+   - Enforce the **Anti-Test-Theater Rule**: assertions must verify real SUT state mutation or domain invariants, never mock returns directly without transformation.
+3. Implement the minimum production code needed for 🟢 GREEN. Never modify the test to manufacture a pass.
 4. Run the focused test and confirm GREEN.
 5. Run the relevant regression scope.
 6. Update TC status markers.

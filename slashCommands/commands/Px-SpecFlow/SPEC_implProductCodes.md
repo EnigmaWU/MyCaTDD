@@ -57,12 +57,13 @@ A `ROUTE` variant: if TC-002 had failed because the design never defined the err
 
 ## Valid RED Gate
 
-Before editing product code, verify that the selected test:
+Before editing product code, verify that the selected test satisfies the **Semantic Falsification Gate**:
 
-- loads or compiles and executes in the current environment;
-- fails for the intended missing or incorrect product behavior;
-- traces to the active story, acceptance criterion, test case, and reviewed detail design;
-- is not failing because of a test defect, stale fixture, unavailable dependency, or unrelated environment error.
+- loads or compiles and executes cleanly through setup and behavior in the current environment;
+- fails **strictly on an expected semantic domain assertion** for the intended missing or incorrect product behavior;
+- is not failing because of a test defect, syntax error, missing module/import, stale fixture, unavailable dependency, or unhandled setup exception (such failures must be classified as `⚠️ BROKEN_TEST` and repaired in the test harness before product code work);
+- satisfies the **Anti-Test-Theater Rule**: assertions verify real SUT state mutations or domain invariants, never mock returns directly without SUT transformation;
+- traces to the active story, acceptance criterion, test case, and reviewed detail design.
 
 If valid RED evidence is absent, do not mutate product code. Route a test implementation defect to `SPEC_implUnitTests`, a test-design or coverage defect to `SPEC_designUnitTests`, a requirement ambiguity to `SPEC_updateUserStory` or `ASK`, and a design gap to `SPEC_updateDetailDesign`.
 

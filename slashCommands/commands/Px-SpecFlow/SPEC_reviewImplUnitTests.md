@@ -64,12 +64,13 @@ Expected result:
 
 ## Skill Integration Policy
 
-- Skill-first rule: if the latest available `test-case-with-readme` skill exists in the workspace or installed agent skill registry, apply it during this review for each target test file.
-- Preferred skill and usage:
-  - `test-case-with-readme` to verify or create/update the companion `<test_filename_without_extension>_readme.md` file beside each implemented test file.
-  - The companion README must include Purpose, Status, Covered, and Manual sections grounded in the implemented test body, US/AC/TC comments, verification output, and product-code review status when present.
-- Builtin fallback rule: if `test-case-with-readme` is unavailable, do not block the whole review. Report the missing skill and run the builtin README gates below instead.
-- Completion rule: this command must remain executable without skill loading. Use the latest skill when present; otherwise make the fallback evidence explicit.
+- Skill-first rule: if relevant testing, verification, or documentation skills exist in the workspace or installed agent skill registry, apply them during this review for each target test file.
+- Preferred skills and usage:
+  - `test-case-with-readme` to verify or create/update the companion `<test_filename_without_extension>_readme.md` file beside each implemented test file with Purpose, Status, Covered, and Manual sections.
+  - `test-driven-development` to audit test veracity: verify the test exercises real SUT behavior rather than mocked internals, and confirm that RED-phase evidence was based on a semantic assertion failure (`AssertionError`) rather than execution error (`BROKEN_TEST`).
+  - `design-agent-reward-functions` to audit that assertions in `VERIFY` act as deterministic, observable exit criteria rather than subjective or superficial checks.
+- Builtin fallback rule: if skills are unavailable, do not block the whole review. Report any missing skills and run the builtin gates below instead.
+- Completion rule: this command must remain executable without skill loading. Use skills when present; otherwise make the fallback evidence explicit.
 
 ### Builtin README Gates (when `test-case-with-readme` is unavailable)
 
@@ -83,6 +84,7 @@ Expected result:
 
 - Story-scoped implementation review result for unit tests: pass, fix implementation, revise skeleton, continue implementing tests, implement product code, refactor tests, review product code, or ask the developer.
 - Per-TC alignment summary against US/AC/TC design comments.
+- Anti-Test-Theater audit: verifies assertions test real SUT state mutations or domain invariants without vacuous checks or mock echoing.
 - Missing assertions, excessive assertions, setup/cleanup gaps, phase-layout issues, `VERIFY_KEYPOINT_xyz` issues, and status-marker inconsistencies.
 - Evidence that P0-first priority was preserved, or an explicit developer override/blocker for skipped P0 TCs.
 - Verification result summary, including whether RED is expected because product behavior is not implemented yet, or whether GREEN is traceable after product-code review.

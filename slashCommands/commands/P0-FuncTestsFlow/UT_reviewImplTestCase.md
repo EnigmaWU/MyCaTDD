@@ -15,7 +15,7 @@ Use this command after `UT_implTestCase` or when the developer suspects a test i
 Repeat until every drift finding is specific and correctly attributed.
 
 1. **Thought** — Read the implemented TC and its design comments. Compare implementation steps against what the TC promised, and read `test_result` when available.
-2. **Action** — Record findings: missing assertions, excessive assertions, assertions that verify something other than the promised expectation, setup/cleanup gaps, unclear phase layout, and status-marker issues.
+2. **Action** — Record findings: missing assertions, excessive assertions, assertions that verify something other than the promised expectation, Anti-Test-Theater violations (mock-testing-mock or vacuous non-null checks without SUT domain verification), setup/cleanup gaps, unclear phase layout, and status-marker issues.
 3. **Observation** — Check each finding names the TC, the specific line or phase, and what would resolve it. Then check attribution: if implementation and skeleton disagree, do **not** pick a winner — report the conflict and ask whether the design or the implementation should change. Silently rewriting design intent returns to **Action**.
 4. **Stop** — Exit when findings are specific and attributed. Recommend keep, fix implementation, revise skeleton, or select the next TC.
 
@@ -54,9 +54,19 @@ Expected result:
   - [SUB::Fault](../../../methodPrompts/CaTDD_methodPrompt4Cat-Fault.md)
 - [CaTDD_methodPrompt-testPointDiscovery](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
 
+## Skill Integration Policy
+
+- Skill-first rule: if relevant testing or verification skills exist in the workspace, use them during this implementation review.
+- Preferred skills and usage:
+  - `test-driven-development` to verify the test asserts real behavior rather than mocked internals, and check that RED-phase evidence was based on assertion failure rather than execution error.
+  - `design-agent-reward-functions` to audit whether `VERIFY` checks represent deterministic, observable exit criteria rather than subjective or superficial evaluations.
+- Builtin fallback rule: if skills are unavailable, review using the builtin Anti-Test-Theater and phase layout checks in this command.
+- Completion rule: this command must remain executable without skill loading.
+
 ## Output Contract
 
 - Alignment check between implementation and US/AC/TC in the **TestEvidenceChain**.
+- Anti-Test-Theater audit: confirms assertions verify real SUT state mutation or domain invariants, not trivial mock echoes.
 - Missing assertions, excessive assertions, setup/cleanup gaps, and status issues.
 - Recommendation: keep, fix implementation, revise skeleton, or select next TC.
 

@@ -131,11 +131,26 @@ TEST(CategoryName, verifyBehavior_byCondition_expectResult) {
 
     // === VERIFY ===
     // Check no more than three key expectations.
+    // ANTI-TEST-THEATER RULE:
+    // - Assertions MUST verify real SUT state mutation or domain invariants.
+    // - NEVER assert mock returns directly without SUT transformation (mock-testing-mock).
+    // - Avoid vacuous truthiness assertions (e.g., assert result is not None).
 
     // === CLEANUP ===
     // Reset or release state when needed.
 }
 ```
+
+### Anti-Test-Theater & Semantic Falsification Gate
+
+To prevent LLMs and agents from generating hollow tests or faking the RED phase:
+
+1. **Semantic Falsification Gate (Valid 🔴 RED vs. ⚠️ BROKEN_TEST)**:
+   - A test is validly `🔴 RED` **only if it fails on a semantic domain assertion** (e.g., `AssertionError`, `ASSERT_EQ mismatch`, `Expected X but got Y`).
+   - If execution fails due to syntax errors, missing imports, unhandled exceptions in test setup, or fixture crashes, it is **`⚠️ BROKEN_TEST`**, not valid RED. Production code generation is blocked until the test harness compiles and executes cleanly.
+2. **Anti-Tautology Assertions**:
+   - Forbid asserting on mock-injected data without an intervening SUT state transition or computation.
+   - Forbid bare null/truthiness checks (`assert != null`, `assert True`) when specific properties, schemas, or status codes are promised in `@[Expect]`.
 
 ## Category File Naming
 

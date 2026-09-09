@@ -458,6 +458,10 @@ func TestVerifyTaskDispatch_byValidJob_expectSuccessfulExecution(t *testing.T) {
 
 	// ===>>> ✅ VERIFY <<<===
 	t.Log("✅ VERIFY: verify submission returned nil error and task ran")
+	// ANTI-TEST-THEATER RULE:
+	// - Assert real SUT state mutation or domain invariants (<= 3 key assertions).
+	// - NEVER assert mock returns directly without SUT transformation (mock-testing-mock).
+	// - Semantic Falsification: test must fail on assertion in RED phase, not on syntax/setup crashes.
 	if err != nil {
 		t.Fatalf("expected nil error, got: %v", err)
 	}
@@ -537,8 +541,9 @@ func TestVerifyTaskDispatch_byContextCancelled_expectImmediateAbort(t *testing.T
 
 STATUS LEGEND:
   ⚪ TODO/PLANNED:      Designed but not implemented yet.
-  🔴 RED/FAILING:       Test written, but production code is missing or failing.
+  🔴 RED/FAILING:       Test written, executing cleanly, and failing for expected semantic domain assertion.
   🟢 GREEN/PASSED:      Test written and passing.
+  ⚠️ BROKEN_TEST:      Test failing for wrong reason (syntax error, missing import, fixture crash).
   ⚠️ ISSUES:           Known problem needing attention.
   🚫 BLOCKED:          Cannot proceed due to external dependency.
 
