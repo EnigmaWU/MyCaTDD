@@ -381,11 +381,12 @@ A DeadLoop is repeating the same lifecycle step, or oscillating between two `SPE
 
 ### Governing Defaults
 
-Loop bounds are set by the agentic reliability policy and contracts in `codeAgents/utCodeAgentCLI/`:
+Loop bounds are set by the agentic reliability policy and contracts in `codeAgents/utCodeAgentCLI/`, formally aligned with the **Closed-Loop Regeneration Budget ($B$)** of SGRM (Algorithm 1 in arXiv:2607.16680):
 
 - `maxStepRetry = 2`: maximum retries of the same failed lifecycle step.
-- `maxRunCorrectionLoop = 3`: maximum correction-loop iterations for one run.
-- `max_correction_attempts` default `3`: per-command local-bound input (for example `SPEC_implProductCodes`).
+- `maxRunCorrectionLoop = 3`: maximum correction-loop iterations for one run ($B \le 3$).
+- `max_correction_attempts` default `3`: per-command local-bound input (for example `SPEC_implProductCodes`, `UT_implTestCase`).
+- SGRM Budget Protocol ($B$): Rejection-sampling retry loops must be strictly bounded ($B \le 3$). Upon budget exhaustion, the agent must not loop indefinitely or silently lower acceptance criteria; it must restore the clean baseline, emit a structured failure diagnostic report, mark the TC as `⚠️ BLOCKED`, and escalate to human governance.
 - ASR-R1: retry and correction loops shall be bounded and deterministic at budget exhaustion.
 
 ### Universal Stop Conditions
@@ -393,14 +394,14 @@ Loop bounds are set by the agentic reliability policy and contracts in `codeAgen
 Every rework loop (`review -> update -> review`, `impl -> review -> impl`, and their test/design variants) stops on the first of:
 
 1. `PASS`/`GREEN` — the gate's exit condition is met.
-2. Bounded retry/correction budget exhausted (`maxStepRetry`, `maxRunCorrectionLoop`, or `max_correction_attempts`).
+2. Bounded retry/correction budget exhausted (`maxStepRetry`, `maxRunCorrectionLoop`, or `max_correction_attempts` $B \le 3$).
 3. Repeated no-progress evidence — the same failure persists with nothing changed toward the goal.
 4. Scope expansion beyond the reviewed design or active story.
 5. Conflicting evidence or unclear owner — `ASK` the developer.
 6. Abort — the problem changes story intent or invalidates assumptions; use `SPEC_abortUserStory`.
 7. Ownership boundary reached — route to the canonical `SPEC_*`/`UT_*`/`HARNESS_*` owner.
 
-A no-progress stop must preserve the latest observed evidence, report remaining failures, and route or ask; it must not claim success.
+A no-progress stop must preserve the latest observed evidence, restore the working directory to the last clean state (preventing partial/dirty code contamination), emit a structured failure diagnostic report (`failure_type`, `attempt_count`, `sut_snapshot`, `assertion_diff`), mark the TC as `⚠️ BLOCKED`, and route or ask; it must not claim success.
 
 ### Route Instead of Reloop
 

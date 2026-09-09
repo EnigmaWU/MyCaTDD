@@ -77,7 +77,12 @@ If valid RED evidence is absent, do not mutate product code. Route a test implem
    - `CORRECT`: the failure is local, understood, and another minimal correction remains inside the reviewed design.
    - `ROUTE`: evidence identifies a requirement, design, test, environment, or ownership defect.
    - `ASK`: evidence conflicts or the correct owner is unclear.
-5. **Correct or stop**: make the smallest evidence-grounded local correction, then re-run the same validation. Stop on `GREEN`, `max_correction_attempts`, repeated no-progress evidence, scope expansion, conflicting evidence, an ownership boundary, or unavailable validation.
+5. **Correct or stop**: make the smallest evidence-grounded local correction, then re-run the same validation. Stop on `GREEN`, `max_correction_attempts` ($B \le 3$), repeated no-progress evidence, scope expansion, conflicting evidence, an ownership boundary, or unavailable validation.
+   - Upon budget exhaustion ($B=3$ attempts reached without `GREEN`):
+     1) Restore the working directory to the clean baseline (revert unverified local mutations to prevent partial code contamination);
+     2) Emit a structured failure diagnostic report (`failure_type`, `attempt_count: 3`, `assertion_failure_diff`, and `sut_snapshot`);
+     3) Mark the affected TC as `⚠️ BLOCKED`;
+     4) Escalate with `ASK` to the human developer under Layer 4 governance.
 
 A no-progress stop must preserve the latest observed evidence, report remaining failures, and route or ask; it must not claim success.
 

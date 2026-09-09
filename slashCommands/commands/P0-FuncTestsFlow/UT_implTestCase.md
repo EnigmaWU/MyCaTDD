@@ -25,6 +25,7 @@ Repeat for the one selected TC only.
    - The body must have visible `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` markers, with key assertions in `VERIFY` written as `VERIFY_KEYPOINT_xyz` → otherwise back to **Action**.
    - If a missing behavior, edge case, or acceptance point surfaces, stop expanding this TC and ask the developer for a new TC.
 4. **Stop** — Exit when the stage's gate passes. Update the TC status marker without deleting design comments, and report the verification result.
+   - Bounded regeneration budget ($B \le 3$): If attempts to turn the test `GREEN` fail after 3 correction cycles, halt the loop, revert local unverified edits to prevent dirty workspace contamination, mark the TC as `⚠️ BLOCKED`, and output a structured diagnostic report for developer intervention.
 
 #### Refactor Order
 

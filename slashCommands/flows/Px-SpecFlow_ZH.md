@@ -383,11 +383,12 @@ flowchart TB
 
 ### 治理默认值
 
-循环上限由 `codeAgents/utCodeAgentCLI/` 中的智能体可靠性策略和契约设定：
+循环上限由 `codeAgents/utCodeAgentCLI/` 中的智能体可靠性策略和契约设定，并在理论上与 SGRM（arXiv:2607.16680 算法 1）的**闭环再生预算（Closed-Loop Regeneration Budget, $B$）**严格对齐：
 
 - `maxStepRetry = 2`：相同失败生命周期步骤的最大重试次数。
-- `maxRunCorrectionLoop = 3`：单次运行的最大纠错循环迭代次数。
-- `max_correction_attempts` 默认值 `3`：单命令局部限制输入（例如 `SPEC_implProductCodes`）。
+- `maxRunCorrectionLoop = 3`：单次运行的最大纠错循环迭代次数（$B \le 3$）。
+- `max_correction_attempts` 默认值 `3`：单命令局部限制输入（例如 `SPEC_implProductCodes`、`UT_implTestCase`）。
+- SGRM 算力预算协议（$B$）：拒绝采样重试循环必须是有界且有限的（$B \le 3$）。预算耗尽时，智能体严禁无限循环或暗中降低准入断言；必须回滚至干净工作区基线，输出结构化失败诊断报告，将 TC 标记为 `⚠️ BLOCKED`，并升级转交人类治理层。
 - ASR-R1：重试与纠错循环在预算耗尽时应是有界且确定性的。
 
 ### 通用终止条件
@@ -395,14 +396,14 @@ flowchart TB
 每个返工循环（`review -> update -> review`、`impl -> review -> impl` 及其测试/设计变体）在遇到以下首个条件时终止：
 
 1. `PASS`/`GREEN` —— 满足关卡的退出条件。
-2. 有界重试/纠错预算耗尽（`maxStepRetry`、`maxRunCorrectionLoop` 或 `max_correction_attempts`）。
+2. 有界重试/纠错预算耗尽（`maxStepRetry`、`maxRunCorrectionLoop` 或 `max_correction_attempts` $B \le 3$）。
 3. 重复的无进展证据 —— 相同失败持续存在，未向目标产生任何有效变更。
 4. 范围膨胀超出已评审的设计或活跃故事。
 5. 证据冲突或责任主体不明确 —— 向开发者提问（`ASK`）。
 6. 中止 —— 问题改变了故事意图或使假设失效；使用 `SPEC_abortUserStory`。
 7. 到达所有权边界 —— 路由至规范的 `SPEC_*`/`UT_*`/`HARNESS_*` 责任命令。
 
-无进展终止必须保留最新观测到的证据，报告遗留失败并进行路由或提问；绝不能谎称成功。
+无进展终止必须保留最新观测到的证据，将工作区回滚至上一个干净基线（防止半成品或脏代码污染），输出结构化失败诊断报告（`failure_type`、`attempt_count`、`sut_snapshot`、`assertion_diff`），将用例标记为 `⚠️ BLOCKED`，并进行路由或提问；绝不能谎称成功。
 
 ### 路由而非重复循环
 

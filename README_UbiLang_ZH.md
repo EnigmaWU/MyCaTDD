@@ -42,6 +42,7 @@
 | Semantic Falsification Gate | 语义证伪门禁：严格区分合法 `🔴 RED` 与 `⚠️ BROKEN_TEST` 的验证门禁。测试只有在编译/加载正常、完整执行 SETUP 与 BEHAVIOR 并**在 VERIFY 阶段严格触发预期的领域语义断言失败**（如 `AssertionError`、`Expected X but got Y`）时，才被认定为合法的 RED。若因语法错误、缺少依赖/导入、Fixture 崩溃或环境异常而失败，则标记为 `⚠️ BROKEN_TEST`，严禁借此进入生产代码编写，必须先修复测试底座。 |
 | Anti-Test-Theater | 反测试演戏机制：杜绝大模型生成空洞、伪装或自我证实的虚假测试工程纪律。严禁“Mock 测试 Mock”（未经 SUT 业务逻辑直接断言 Mock 自身的返回值），严禁空洞的真假/非空断言（如 `assert != null` 或 `assert True`），强制要求断言必须验证 SUT 真实的状态流转、计算产物或领域不变量。 |
 | Ambiguity Smell Classifier | 歧义坏味道分类器：在测试设计前系统性扫描自然语言需求中未声明、未详述或主观模糊之处的 Stage-0 诊断工具。基于歧义坏味道分类体系（AST），细分为六大坏味道类别：`SMELL-ACTOR`（无主语被动语态）、`SMELL-BOUND`（无边界形容词）、`SMELL-BRANCH`（缺失异常/负向分支）、`SMELL-STATE`（未声明的生命周期状态）、`SMELL-VAGUE`（含糊动词与漏洞词）以及 `SMELL-RACE`（未声明的并发规则）。一旦探测到任一坏味道，必须在 `discovery_ledger` 中记录为 `QUESTION` 状态，并强制触发全域通用的 `ONE-MORE-THING` 暂停规则，从根源切断 AI 脑补断言与幻觉。 |
+| Closed-Loop Regeneration Budget (B) | 闭环再生算力预算（B）：源自 SGRM 算法 1（arXiv:2607.16680）的形式化安全边界，将随机生成的重试循环严格限制在有限预算内（默认 $B \le 3$）。当智能体在 $B$ 次重试内无法通过验证（$V(S, I) = \top$）时，严禁无限循环或暗中降低断言；必须回滚未验证的本地修改、输出结构化失败诊断报告、将 TC 标记为 `⚠️ BLOCKED` 并升级上报人类治理层（L4）。 |
 
 ### Category Vocabulary
 
