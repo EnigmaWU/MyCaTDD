@@ -76,6 +76,30 @@ P2 Quality proves the operating envelope.
 
 Diagnosis is P2 because it asks whether the operating evidence remains useful under real conditions. Security is P2 by default because it asks whether protection properties hold under threat conditions. Security architecture shape can feed P1 Interaction or Capability, but protection behavior belongs to P2 Security.
 
+### ISO/IEC 25010 Quality Attribute Mapping
+
+Every P2 Quality category (and related P1 Design categories) maps directly to international product quality standards (ISO/IEC 25010 / SQuaRE):
+
+| CaTDD Category | ISO/IEC 25010 Characteristic | ISO/IEC 25010 Sub-characteristics Covered |
+| --- | --- | --- |
+| **Performance** (`qualityPerformance`) | **Performance Efficiency** | Time behavior (latency, response time), Resource utilization (CPU, memory, power/energy, I/O) |
+| **Robust** (`qualityRobust`) | **Reliability** | Fault tolerance, Recoverability, Availability, Maturity under sustained load |
+| **Compatibility** (`qualityCompatibility`) | **Compatibility** | Co-existence, Interoperability, Cross-platform ABI/format consistency |
+| **Configuration** (`qualityConfiguration`) | **Flexibility / Portability** | Adaptability, Installability, Deployment variability, Runtime setting precedence |
+| **Diagnosis** (`qualityDiagnosis`) | **Maintainability / Operability** | Analyzability, Testability, Diagnostic explainability, Telemetry & log observability |
+| **Security** (`qualitySecurity`) | **Security** | Confidentiality, Integrity, Non-repudiation, Authenticity, Accountability, Constitutional Invariants ($K$) |
+
+#### Interplay with P1 Design and Borderline Quality Concerns
+
+- **Capacity & Scalability** (ISO 25010 sub-characteristic of Performance Efficiency & Flexibility):
+  In CaTDD, maximum queue depth, architectural limits, buffer limits, and saturation ceilings are defined as structural models in **`P1 Design / Capability`** (`designCapability`), while the latency, throughput, and degradation behavior under that load are verified in **`P2 Quality / Performance`** (`qualityPerformance`) and **`P2 Quality / Robust`** (`qualityRobust`).
+- **Modularity & Reusability** (ISO 25010 sub-characteristic of Maintainability):
+  Verified through **`P1 Design / Interaction`** (collaborator handoff, protocol boundaries) and architectural conformance gates ($V_{\text{arch}}$).
+- **Functional Safety & Hazard Mitigation** (ISO/IEC 25010:2023 Safety):
+  In safety-critical embedded systems, fail-safe interlocks, emergency stop, and watchdog hardware cutoffs belong to **`P2 Robust`** (resilience and safe failure states, sourced from `README_ErrorDesign.md`), governed by non-negotiable safety guardrails defined in **`Constitutional Invariants (K)`**.
+- **User Interface Usability & Accessibility (a11y)**:
+  Human error protection is routed to **`P0 Misuse`**; learning onboarding is routed to **`P3 DemoExample`**; accessibility compliance (e.g. WCAG) is verified as contract checks in P0 or automated accessibility audits under P2.
+
 ## P3 Addons Split
 
 P3 Addons proves the learning surface.
