@@ -131,11 +131,13 @@ CaTDD Px-SpecFlow 既不是以文档为中心，也不是以变更为中心，�
 ### 故事生命周期
 
 ```
-pendingNews/  →  todoUS/  →  doingUS/  →  abortUS/ 或 doneUS/
-  (原始输入)      (已分析)      (活跃中)       (已保留)       (已完成)
+pendingNews/  →  analyzedNews/  →  todoUS/  →  doingUS/  →  doneUS/
+  (原始输入)      (输入存档)       (已分析)      (活跃中)       (已完成)
+                                               ↘ suspendUS/（暂停，可恢复）
+                                               ↘ abortUS/（已保留）
 ```
 
-六种生命周期状态，每种都在 `.catdd/spec/` 下的版本控制目录中：
+七个生命周期目录，每个都在 `.catdd/spec/` 下的版本控制目录中：
 
 | 状态 | 目录 | 含义 |
 |---|---|---|
@@ -143,12 +145,13 @@ pendingNews/  →  todoUS/  →  doingUS/  →  abortUS/ 或 doneUS/
 | **analyzedNews** | `analyzedNews/` | 分析后的原始输入，作为源追溯保留 |
 | **todoUS** | `todoUS/` | 已分析的用户故事，准备好被开启工作 |
 | **doingUS** | `doingUS/` | 活跃的用户故事，处于设计、测试或实现阶段 |
+| **suspendUS** | `suspendUS/` | 暂停的活跃故事，附带持久的恢复引用（分支/worktree）被保留 |
 | **abortUS** | `abortUS/` | 已中止的故事，保留以供后续重新分析或改进 |
 | **doneUS** | `doneUS/` | 已完成的故事，通过审查、提交和 CI 之后 |
 
 ### SPEC 命令家族
 
-Px-SpecFlow 提供 21 个 SPEC 命令，组织为三个生命周期阶段：
+Px-SpecFlow 提供 34 个 SPEC 命令，组织为三个生命周期阶段：
 
 **阶段 A — 故事前：输入与分析**
 ```
@@ -159,15 +162,17 @@ SPEC_importFeature          → 原始 feature → pendingNews/
 SPEC_importUserStory        → 结构化的 US → todoUS/（跳过分析）
 SPEC_analyzeIssue           → pending 输入 → todoUS/ 中的用户故事 + 存档于 analyzedNews/
 SPEC_analyzeFeature         → pending 输入 → todoUS/ 中的用户故事 + 存档于 analyzedNews/
+SPEC_analyzeAbortedUserStory → 对已中止故事进行选择性重新分析，供下一轮使用
 SPEC_openUserStory          → 将选定故事从 todoUS/ 移至 doingUS/（工作开始）
 ```
 
 **阶段 B — 设计与规划**
 ```
 SPEC_clearStoryIntent       → 对齐开发者与 CodeAgent 的意图（相互意图契约）
-SPEC_makePlan               → 分类工作导向，创建 *-TASKs.md，选择下一步命令
+SPEC_makePlan               → 分类工作导向，创建 *-UserStory-Tasks.md，选择下一步命令
 SPEC_updateUserStory        → 更新模块 README_UserStory.md + README_UserGuide.md
 SPEC_reviewUserStory        → 在下游工作前把关需求质量
+SPEC_whatsNextTask          → 根据当前状态推荐唯一下一步命令
 SPEC_takeArchDesign         → 初始架构设计（README_ArchDesign.md + 7 个其他文件）
 SPEC_reviewArchDesign       → 把关架构质量
 SPEC_updateArchDesign       → 后续架构修订
@@ -180,27 +185,33 @@ SPEC_updateDetailDesign     → 后续详细设计修订
 ```
 SPEC_designUnitTests        → 进入 CaTDD 测试设计（路由至 P0/P1/P2 UT 流程）
 SPEC_implUnitTests          → 实现测试用例（通过 UT 命令进行 RED→GREEN）
+SPEC_reviewImplUnitTests    → 在实现产品代码前把关单元测试实现
 SPEC_implProductCodes       → 实现生产代码以通过测试
 SPEC_reviewProductCodes     → 审查实现质量
-SPEC_refactorIssue          → 将质量问题路由回设计/测试/代码
+SPEC_refactUnitTests        → 对单个 GREEN 单元测试进行无行为变更的清理
+SPEC_suspendUserStory       → 暂停活跃故事 → suspendUS/，附恢复引用
+SPEC_resumeUserStory        → 将暂停的故事移回 doingUS/ 并继续
+SPEC_partialCloseUserStory  → 关闭已接受范围，将拒绝范围移至 abortUS/
 SPEC_abortUserStory         → 中止活跃故事 → abortUS/（保留以供重新分析）
 SPEC_commitWorks            → 准备并提交已完成的工作
 SPEC_closeUserStory         → 将已审查、已提交的故事移至 doneUS/
+SPEC_mergeWorks             → 当仍需集成时，合并已关闭的故事分支
+SPEC_patchOriginalCaTDD     → 将已安装项目的 CaTDD 改进补丁回写上游
 ```
 
 ### CaTDD 的独特之处
 
 Px-SpecFlow 的创新超越了 Spec Kit 和 OpenSpec 所提供的范畴：
 
-**1. 以用户故事为中心，而非以文档为中心或以变更为中心。** Spec Kit 围绕 `spec.md`/`plan.md`/`tasks.md` 这些文档展开。OpenSpec 围绕 `changes/` 这些提案文件夹展开。CaTDD 围绕**用户故事本身**作为鲜活制品展开，经历六种生命周期状态。每个 SPEC 命令都服务于故事的旅程。故事从原始导入、经分析待办、活跃进行中、可能中止、到最终闭环，拥有显式的存在状态。
+**1. 以用户故事为中心，而非以文档为中心或以变更为中心。** Spec Kit 围绕 `spec.md`/`plan.md`/`tasks.md` 这些文档展开。OpenSpec 围绕 `changes/` 这些提案文件夹展开。CaTDD 围绕**用户故事本身**作为鲜活制品展开，经历七个生命周期目录。每个 SPEC 命令都服务于故事的旅程。故事从原始导入、经分析存档、分析待办、活跃进行中、可能暂停或中止、到最终闭环，拥有显式的存在状态。
 
 **2. 相互意图契约。** Spec Kit 和 OpenSpec 都没有在开始设计前对齐人类与 LLM 意图的机制。CaTDD 的 `SPEC_clearStoryIntent` 记录一个契约：开发者认为故事是什么，CodeAgent 推断出什么，范围内工作，范围外工作，成功信号，假设和开放问题。意图未对齐，设计不开始。
 
 **3. `SPEC_abortUserStory` — 显式的失败保留。** 当活跃故事存在阻塞性的范围问题、无效假设或不应就地修补的质量问题时，CaTDD 将故事中止到 `abortUS/` 中作为保留历史。中止生命周期反馈到 `SPEC_analyzeAbortedUserStory` 或 `SPEC_importIssue`，以便进行深思熟虑的重新分析。Spec Kit 和 OpenSpec 都没有显式的中止并保留路径。
 
-**4. `SPEC_makePlan` — 工作导向分类。** 在任何下游工作之前，`SPEC_makePlan` 将故事分类为四种导向之一：意图澄清、需求导向、设计导向或实现导向。它区分初始设计（`SPEC_take*Design`）与后续修订（`SPEC_update*Design`）。它创建配对的 `*-TASKs.md` 制品，以 Markdown 复选框任务的形式展示所需的下一步步骤。
+**4. `SPEC_makePlan` — 工作导向分类。** 在任何下游工作之前，`SPEC_makePlan` 将故事分类为四种导向之一：意图澄清、需求导向、设计导向或实现导向。它区分初始设计（`SPEC_take*Design`）与后续修订（`SPEC_update*Design`）。它创建配对的 `*-UserStory-Tasks.md` 制品，以 Markdown 复选框任务的形式展示所需的下一步步骤。
 
-**5. 项目根 README SPEC 文档。** CaTDD 管理 11 种项目根架构/详细文档类型，每种有明确的用途和负责人：
+**5. 项目根 README SPEC 文档。** CaTDD 管理 13 种项目根 README SPEC 文档类型，分为面向架构、面向详细设计以及通用/需求三类，每种有明确的用途和负责人：
 
 | 面向架构 (Architecture-Oriented) | 面向详细设计 (Detail-Oriented) |
 |---|---|
@@ -212,6 +223,8 @@ Px-SpecFlow 的创新超越了 Spec Kit 和 OpenSpec 所提供的范畴：
 | `README_CompatDesign.md` — 兼容性矩阵、平台版本 | |
 | `README_DiagnosisDesign.md` — 可观测性、日志、遥测 | |
 | `README_VerifyDesign.md` — 验证拓扑、测试策略 | |
+
+在面向架构和面向详细设计的表格之外，通用/需求组还包含 `README.md`（项目概览与主 SPEC 目录）、`README_UserStories.md`（强制性的项目级 TODO/DONE 故事账本，含 AC 追踪状态）以及 `README_UserGuide.md`（面向用户的用法指南）。这些文档先由开发者创建，之后由 `SPEC_updateUserStory` 和 `SPEC_reviewUserStory` 更新。
 
 这些不是在初始化时一次性生成的模板——它们由 SPEC 命令按需创建，仅在项目需要该维度的文档时生成。
 
@@ -242,7 +255,8 @@ Px-SpecFlow 的创新超越了 Spec Kit 和 OpenSpec 所提供的范畴：
                               ▼                   ▼                   ▼
                          P0-FuncTestsFlow    P1-DesignTestsFlow   P2-QualityTestsFlow
                               │                   │                   │
-                    Typical→Edge→Misuse→Fault  State→Cap→Concur   Perf→Robust→Compat→Config
+                    Typical→Edge→Misuse→Fault  State→Cap→Interact  Perf→Robust→Compat→Config
+                                               →Concur             →Diagnosis→Security
                               │                   │                   │
                               ▼                   ▼                   ▼
                          UT_implTestCase (RED→GREEN cycle for each TC)
@@ -250,9 +264,11 @@ Px-SpecFlow 的创新超越了 Spec Kit 和 OpenSpec 所提供的范畴：
 
 当 `SPEC_designUnitTests` 运行时，它生成的不是"编写测试"这样的通用任务，而是路由到 CaTDD 的 UT 流程中——P0 功能验证、P1 面向设计的测试、P2 质量属性。每个流程有其自己的命令序列、审查关卡和 Design Source Gate（设计源关卡）要求。
 
+Interaction（P1）以及 Diagnosis/Security（P2）目前没有专门的 `UT_design*Skeleton` 命令：它们的流程直接通过对应的 `CaTDD_methodPrompt4Cat-*.md` method prompt 路由，在相同的 Discovery Gate 与审查契约下，将源关联的 US/AC/TC 写入规范的类别文件。在这些生命周期流程之外，`slashCommands` 还承载了一个运维性的 `HARNESS_*` 命令族（`Px-HarnessKits`），用于维护 harness，且绝不移动 SpecFlow 生命周期状态。
+
 ### UT 流程提供的、其他规格工具都不具备的能力
 
-**1. 按类别驱动的测试设计。** 12 种测试类别，每种有其自己的 method prompt（`CaTDD_methodPrompt4Cat-*.md`）、设计骨架契约、使用时机/避免时机规则和常见错误清单。一个设计 Typical 骨架的 CodeAgent 阅读 `4Cat-Typical.md` 后，会精确知道应用什么模式、词汇和约束。
+**1. 按类别驱动的测试设计。** 15 种测试类别，每种有其自己的 method prompt（`CaTDD_methodPrompt4Cat-*.md`），定义位置、使用时机/避免时机路由规则、测试点、设计骨架契约和检查清单；大多数 prompt 还带有命名示例与常见错误指引。一个设计 Typical 骨架的 CodeAgent 阅读 `CaTDD_methodPrompt4Cat-Typical.md` 后，会精确知道应用什么模式、词汇和约束。
 
 **2. 嵌入测试文件的 US/AC/TC 可追溯性。** 规格说明**不**存在于单独的文档中。User Story、Acceptance Criteria 和 Test Case 规格以结构化注释的形式存在于与测试代码相同的文件中。当规格变化时，注释随之变化。当注释变化时，LLM 重新生成测试。不存在规格与代码之间的间隙。
 
@@ -262,9 +278,21 @@ Px-SpecFlow 的创新超越了 Spec Kit 和 OpenSpec 所提供的范畴：
 |---|---|
 | State | `README_StateDesign.md` 或 `README_ArchDesign.md` 中的 `State Design` 章节 |
 | Capability | `README_DetailDesign.md` |
+| Interaction | `README_ArchDesign.md` 中的顺序、交互或协作章节 |
 | Concurrency | `README_ResourceDesign.md` |
 
-如果设计源缺失，UT 命令**停止并请求开发者**——不做猜测，不凭空编造架构决策。
+P2 采用同样的关卡，在任何骨架起草之前：
+
+| P2 类别 | 所需源文件 |
+|---|---|
+| Performance | `README_PerfDesign.md` |
+| Robust | `README_ErrorDesign.md` |
+| Compatibility | `README_CompatDesign.md` |
+| Configuration | `README_DetailDesign.md` |
+| Diagnosis | `README_DiagnosisDesign.md` / `README_VerifyDesign.md` 证据要求 |
+| Security | SecurityDesign 文档、威胁模型或安全策略 |
+
+如果设计源缺失，UT 命令或直接 method prompt 路由**停止并请求开发者**——不做猜测，不凭空编造架构决策。
 
 **4. 集成到生命周期的 TDD RED→GREEN 纪律。** 每个测试用例都有状态标记：
 ```
@@ -281,10 +309,10 @@ Px-SpecFlow 的创新超越了 Spec Kit 和 OpenSpec 所提供的范畴：
 | 维度 | GitHub Spec Kit | OpenSpec | CaTDD Px-SpecFlow |
 |---|---|---|---|
 | **重心** | 文档 (`spec.md`, `plan.md`) | 变更 (`openspec/changes/`) | **用户故事**（生命周期状态）|
-| **生命周期状态** | 3 种隐式 (spec → plan → tasks) | 3 种显式 (propose → apply → archive) | **6 种显式** (pending → analyzed → todo → doing → abort/done) |
+| **生命周期状态** | 3 种隐式 (spec → plan → tasks) | 3 种显式 (propose → apply → archive) | **7 种显式** (pending → analyzed → todo → doing → suspend/abort → done) |
 | **中止机制** | 无（手动关闭 issue/PR）| 无（手动删除变更文件夹）| **`SPEC_abortUserStory`** — 保留在 `abortUS/`，有重新分析路径 |
 | **意图对齐** | 自由形式的澄清对话 | 自由形式的对话 | **相互意图契约** (`SPEC_clearStoryIntent`) |
-| **测试方法论** | 无嵌入（仅检查清单）| 无嵌入 | **嵌入的 CaTDD** — P0/P1/P2 UT 流程，12 种类别 |
+| **测试方法论** | 无嵌入（仅检查清单）| 无嵌入 | **嵌入的 CaTDD** — P0/P1/P2 UT 流程，15 种类别 |
 | **规格-代码差距** | spec.md → plan.md → code (3 个文档) | proposal.md → design.md → code (3 个文档) | **无差距** — US/AC/TC 注释与测试代码存在于同一文件 |
 | **TDD 集成** | 不存在 | 不存在 | **RED→GREEN 循环**，配 ⚪→🔴→🟢 状态标记 |
 | **注释鲜活的设计** | 否 — 文档与代码分离 | 否 — 文档与代码分离 | **是** — 设计骨架存在于测试文件中 |
@@ -293,7 +321,7 @@ Px-SpecFlow 的创新超越了 Spec Kit 和 OpenSpec 所提供的范畴：
 | **模型层级指导** | 不存在 | 推荐高推理模型 | **按命令层级映射** (SOTA/HighPerf/Flash) |
 | **审查关卡** | `/speckit.analyze` (跨制品) | `/opsx:verify` (实现后) | **6 个审查关卡**：架构→详细→故事→测试→代码→提交 |
 | **制品持久化** | 文件系统 (specs 目录) | 文件系统 (changes 目录) | **团队共享的 `.catdd/spec/`，每种制品有提交策略** |
-| **项目根文档** | Spec + plan，然后手动 | Proposal + design，然后手动 | **11 种 README* SPEC 文档类型**，通过 SPEC 命令按需创建 |
+| **项目根文档** | Spec + plan，然后手动 | Proposal + design，然后手动 | **13 种 README* SPEC 文档类型**，通过 SPEC 命令按需创建 |
 | **既有代码库 (Brownfield)** | 主要是全新项目 (greenfield) | **优先既有代码库** (为现有代码库设计) | **两者皆可** — 将现有代码分析为 US/AC/TC |
 | **安装方式** | `uv tool install specify-cli` (Python) | `npm install -g @fission-ai/openspec` (TypeScript) | Markdown prompt 文件 (agent 无关) |
 | **Agent 集成** | 30+ | 25+ | Copilot, Cline, Continue, utCodeAgentCLI |

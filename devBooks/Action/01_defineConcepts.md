@@ -2,178 +2,318 @@
 
 ## What Is CaTDD?
 
-**CaTDD** — Comment-alive Test-Driven Development — is a methodology invented by EnigmaWU and practiced since 2023.10. It redefines what "design" means in software development by making comments first-class artifacts that LLMs can parse, preserve, and update.
+**CaTDD** stands for **Comment-alive Test-Driven Development**. It is a way to build software where the design lives *inside the code file* as structured comments, instead of in separate documents that slowly stop matching the code.
 
-The core slogan captures the essence:
+EnigmaWU created the method in 2023.10, and it has been used on real projects ever since.
+
+The whole idea fits in one sentence:
 
 > Comments is Verification Design. LLM Generates Code. Iterate Forward Together.
 
-In traditional development, design lives in separate documents that go stale the moment code changes. In CaTDD, design lives **in the test file** as structured comments that evolve with the code. Comments are not documentation — they are the verification specification.
+**Why it matters.** In a normal project, design is written once, then the code changes, and the document quietly becomes wrong. Nobody notices until someone trusts the old document and makes a bad decision. CaTDD removes that failure mode: the design sits next to the code it describes, so you cannot change one without seeing the other.
+
+```
+┌────────────────────────────┐      ┌────────────────────────────┐
+│     TRADITIONAL PROJECT    │      │        CaTDD PROJECT       │
+├────────────────────────────┤      ├────────────────────────────┤
+│  design.md                 │      │  test_<feature>.cxx        │
+│  architecture.md           │      │    ├── design comments     │
+│  test-plan.md              │  vs  │    ├── test cases          │
+│  ... three separate files  │      │    └── status tracking     │
+├────────────────────────────┤      ├────────────────────────────┤
+│  code changes              │      │  code changes              │
+│  → documents go stale      │      │  → comments change with it │
+└────────────────────────────┘      └────────────────────────────┘
+```
 
 ### What "Comment-alive" Means
 
-"Comment-alive" is the defining innovation of CaTDD. It has four dimensions:
+"Comment-alive" is the part that makes CaTDD different. It has four dimensions.
 
-1. **Design details live IN the test and source file as structured comments.** You don't maintain a separate spec doc, architecture doc, and test plan. The verification design is embedded right where the code lives.
+```
+   1. DESIGN LIVES IN THE FILE      test_feature.cxx
+      no separate spec doc          ├── // @[US-1] ...
+                                    ├── // @[AC-1] ...
+                                    └── // @[TC-1] ...
+   2. COMMENTS MOVE WITH CODE       code refactored → comments updated
+                                    in the same edit
 
-2. **Comments evolve WITH the code, not separate docs that go stale.** When you refactor production code, you update the comments in the same file. Design intent and implementation stay synchronized by construction.
+   3. MACHINES CAN READ THEM        an LLM sees @[US] @[AC] @[TC] markers
+                                    and knows what to build
 
-3. **Comments are first-class artifacts that LLMs can parse and update.** An LLM reading a CaTDD test file sees structured `@[US]`, `@[AC]`, `@[TC]` markers it can trace, validate, and generate code from. This is why CaTDD is "LLM-friendly TDD."
+   4. THE CHAIN NEVER BREAKS        human need → US → AC → TC → assertion
+```
 
-4. **US/AC/TC format bridges human intent and machine-executable tests.** User Stories express business value. Acceptance Criteria make stories testable. Test Cases connect criteria to concrete assertions. The chain runs from human need to machine verification without gaps.
+1. **Design detail lives in the test file.** You do not maintain a spec document, an architecture document, and a test plan in three places. The verification design sits where the code sits.
+
+2. **Comments evolve with the code.** When you refactor production code, you update the comments in the same file and the same commit. Intent and implementation stay in sync by construction, not by discipline.
+
+3. **Comments are first-class artifacts that LLMs can parse and update.** An LLM reading a CaTDD test file sees `@[US]`, `@[AC]`, and `@[TC]` markers it can trace, validate, and generate code from. That is why CaTDD is LLM-friendly TDD.
+
+4. **US/AC/TC connects human intent to machine checks.** A User Story states business value, Acceptance Criteria make it testable, and Test Cases turn it into concrete assertions. The chain runs from human need to machine verification without a gap.
 
 ### The "TDD" Part
 
-CaTDD inherits the traditional TDD Red→Green→Refactor cycle, but adds structure before code:
+CaTDD keeps the classic Red → Green → Refactor cycle. What it adds is structure *before* the code: you write the design as comments first.
 
 | Traditional TDD | CaTDD |
 |---|---|
-| Write a failing test | Write structured comment design first (US/AC/TC), then write the failing test |
-| Implement to pass | Implement minimal production code to pass |
-| Refactor | Refactor both test and production code |
-| Repeat | Mark TC status (⚪→🔴→🟢), advance to next |
-| No explicit design artifacts | Design lives in the same file as tests |
+| Write a failing test | Write the structured comment design first (US/AC/TC), then the failing test |
+| Implement to pass | Implement the smallest production code that passes |
+| Refactor | Refactor test and production code together |
+| Repeat | Move the TC status (⚪ → 🔴 → 🟢), then take the next test case |
+| Design is not captured | Design lives in the same file as the tests |
 
-CaTDD is not a replacement for TDD. It is TDD with design structure, traceability, and LLM-readability built in.
+> **Key point** — CaTDD is not a replacement for TDD. It is TDD with design structure, traceability, and machine-readability built in.
+
+**Example — the same fix, two ways.** Suppose `IOC_postEVT` starts failing when the queue is full.
+
+```
+Without CaTDD                          With CaTDD
+──────────────                         ──────────
+1. bug reported                        1. read the design comment:
+2. search the code                        // @[AC-2] WHEN queue is full
+3. guess the intent                          THEN return immediately
+4. patch, hope nothing breaks          2. the intent is already written down
+5. no record of why                    3. write the test that proves it
+                                       4. patch until it is GREEN
+                                       5. the reason stays in the file
+```
+
+The second path is faster because the *why* was never lost.
 
 ---
 
 ## Category-Specific Method Prompts
 
-Beyond the master method prompt, CaTDD provides 12 category-specific prompts — one for each test category. These deep-dive files (`CaTDD_methodPrompt4Cat-*.md`) guide CodeAgents when working within a specific category:
+CaTDD does not treat every test as the same kind of test. It defines **15 test categories**, and gives each one its own method prompt: `CaTDD_methodPrompt4Cat-*.md`. A CodeAgent reads the prompt for the category it is working in, so it uses the right vocabulary, the right test points, and the right constraints.
 
-| Category | Prompt File | Key Guidance |
+```
+                         15 TEST CATEGORIES
+                                │
+   ┌────────────────┬───────────┴───────────┬────────────────┐
+   │      P0        │          P1           │      P2        │      P3
+   │  functional    │       design          │    quality     │   addons
+   ├────────────────┼───────────────────────┼────────────────┼──────────
+   │  Typical       │  State                │  Performance   │  Demo/
+   │  Edge          │  Capability           │  Robust        │  Example
+   │  Misuse        │  Interaction          │  Compatibility │
+   │  Fault         │  Concurrency          │  Configuration │
+   │                │                       │  Diagnosis     │
+   │                │                       │  Security      │
+   └────────────────┴───────────────────────┴────────────────┴──────────
+```
+
+| Category | Prompt File | What it is for |
 |---|---|---|
-| Typical | `4Cat-Typical.md` | Core happy-path design, one behavior per test, ≤3 assertions |
-| Edge | `4Cat-Edge.md` | Boundary values, mode variations, one edge per test for diagnostics |
-| Misuse | `4Cat-Misuse.md` | API contract violations, error prevention, invalid sequences |
-| Fault | `4Cat-Fault.md` | External failures, recovery, graceful degradation |
-| State | `4Cat-State.md` | Lifecycle transitions, FSM validation, invalid state rejection |
-| Capability | `4Cat-Capability.md` | System limits, capacity planning, documented boundaries |
-| Concurrency | `4Cat-Concurrency.md` | Thread safety, race conditions, parallel access patterns |
-| Performance | `4Cat-Performance.md` | SLO validation, benchmarks, resource usage |
-| Robust | `4Cat-Robust.md` | Stress testing, soak tests, long-running stability |
-| Compatibility | `4Cat-Compatibility.md` | Cross-platform, version upgrades, integration surfaces |
-| Configuration | `4Cat-Configuration.md` | Build flags, deployment variations, feature toggles |
-| Demo/Example | `4Cat-DemoExample.md` | Tutorials, documentation, best practice illustrations |
+| Typical | `CaTDD_methodPrompt4Cat-Typical.md` | The happy path: one behavior per test, at most 3 assertions |
+| Edge | `CaTDD_methodPrompt4Cat-Edge.md` | Boundaries, limits, and modes; one edge per test |
+| Misuse | `CaTDD_methodPrompt4Cat-Misuse.md` | Wrong API usage: bad order, invalid parameters, double init |
+| Fault | `CaTDD_methodPrompt4Cat-Fault.md` | Outside failures and recovery: network down, disk full |
+| State | `CaTDD_methodPrompt4Cat-State.md` | Lifecycle and state machines; invalid transitions |
+| Capability | `CaTDD_methodPrompt4Cat-Capability.md` | Designed limits and responsibilities |
+| Interaction | `CaTDD_methodPrompt4Cat-Interaction.md` | Order between collaborators and handoff contracts |
+| Concurrency | `CaTDD_methodPrompt4Cat-Concurrency.md` | Threads, races, deadlocks, ordering |
+| Performance | `CaTDD_methodPrompt4Cat-Performance.md` | SLOs, latency, throughput, resource budgets |
+| Robust | `CaTDD_methodPrompt4Cat-Robust.md` | Stress, repetition, long runs, degraded conditions |
+| Compatibility | `CaTDD_methodPrompt4Cat-Compatibility.md` | Versions, platforms, protocols, schemas, toolchains |
+| Configuration | `CaTDD_methodPrompt4Cat-Configuration.md` | Defaults, precedence, feature flags, bad config |
+| Diagnosis | `CaTDD_methodPrompt4Cat-Diagnosis.md` | Observability, debuggability, useful failure evidence |
+| Security | `CaTDD_methodPrompt4Cat-Security.md` | Threats, trust boundaries, secrets, protection |
+| Demo/Example | `CaTDD_methodPrompt4Cat-DemoExample.md` | Tutorials and documented examples |
 
-Each category prompt defines: **Position** (where it sits in the priority framework), **Use When** (valid conditions), **Do Not Use When** (when to move the scenario to another category), **Design Focus** (what to emphasize), **Design Skeleton** (the contract shape), **US/AC/TC Pattern** (the canonical format), **Naming Examples** (concrete test names), a **Checklist** (quality validation), and **Common Mistakes** (what to avoid).
+Every category prompt answers the same questions, so you always know where to look:
 
-These prompts are the LLM's "style guide" for each category. When a CodeAgent designs a Typical skeleton, it reads `4Cat-Typical.md` to apply the right patterns, vocabulary, and constraints. When it classifies a draft into categories, it checks the "Do Not Use When" rules to avoid misclassification.
+| Section | The question it answers |
+|---|---|
+| **Position** | Where does this category sit in the priority framework? |
+| **Use When** | When is this the right category? |
+| **Do Not Use When** | When should this scenario move to another category? |
+| **TestPointsInMind** | What should I probe for in this category? |
+| **Design Skeleton** | What is the contract shape for this category? |
+| **Checklist** | How do I know the work is good enough? |
+
+Ten of the fifteen files (the four P0 categories plus State, Capability, Interaction, Concurrency, Diagnosis, and Security) also carry **Design Focus**, **US/AC/TC Pattern**, **Naming Examples**, and **Common Mistakes**. The five remaining files (Performance, Robust, Compatibility, Configuration, Demo/Example) stay lean and route discovery through `TestPointsInMind`.
+
+> **Why one file per category?** Because "write a test" is not one skill. A boundary test, a race-condition test, and a security test fail in different ways and need different design habits. Splitting them keeps each habit sharp.
+
+**Example — category discipline prevents a weak test.** A developer writes one test that fills a queue and checks five things at once: it is full, the return code is right, no event was queued, the counter did not change, and the next call still works.
+
+```
+One test, five checks                    Split by category
+────────────────────                     ─────────────────
+Typical? Edge? Misuse? Fault?            Edge   : fill to capacity, one more
+When it fails, you must re-read          Misuse : call again after full
+the whole test to learn why              Typical: normal post still works
+```
+
+Four small tests tell you *which* rule broke. One large test only tells you *something* broke.
 
 ---
 
 ## The Four-Layer Architecture
 
-MyCaTDD organizes the CaTDD methodology into four layers, each with a clear responsibility:
+MyCaTDD is built in four layers. Each layer has one job, and each layer depends only on the one above it.
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│ [1] methodPrompts       — Method source              │
+│ [1] methodPrompts   — where the method is defined   │
 │     CaTDD semantics, category meaning, US/AC/TC     │
 │     skeleton rules, status discipline, templates    │
 ├─────────────────────────────────────────────────────┤
-│ [2] slashCommands       — Command flow               │
-│     Portable UT_* and SPEC_* commands, flow order   │
-│     input/output handoff, tool-neutral execution     │
+│ [2] slashCommands   — how the method is invoked     │
+│     Portable UT_*, SPEC_*, HARNESS_* commands       │
+│     input/output handoff, tool-neutral execution    │
 ├─────────────────────────────────────────────────────┤
-│ [3] codeAgents          — Intelligent execution      │
-│     utCodeAgentCLI (unit testing), specCodeAgentCLI │
-│     planning, trace collection, reflection loops     │
+│ [3] codeAgents      — who executes it               │
+│     utCodeAgentCLI (unit testing)                   │
+│     specCodeAgentCLI (SpecCoding lifecycle)         │
+│     planning, trace collection, reflection loops    │
 ├─────────────────────────────────────────────────────┤
-│ [4] agentSkills         — Reusable capability packs  │
-│     Comment-alive TDD skill, SpecCoding skill        │
-│     packaged for Copilot, Cline, and other agents    │
+│ [4] agentSkills     — how it is packaged to go      │
+│     Comment-alive TDD skill, SpecCoding skill       │
+│     packaged for Copilot, Cline, and other agents   │
 └─────────────────────────────────────────────────────┘
+```
+
+A simple way to remember the layers:
+
+```
+   methodPrompts   =  the RULES
+   slashCommands   =  the BUTTONS
+   codeAgents      =  the WORKERS
+   agentSkills     =  the SHIPPING BOX
 ```
 
 ### Layer 1: methodPrompts — The Source of Truth
 
-`methodPrompts/` is the canonical definition of CaTDD. Everything downstream derives from this layer. If the methodology changes, this layer changes first.
+`methodPrompts/` is the official definition of CaTDD. Everything else is derived from it. If the method changes, this layer changes first.
 
-What it contains:
+| What is in it | What it gives you |
+|---|---|
+| `CaTDD_methodPrompt.md` | The master entry point and the stable CaTDD contract: skeleton shape, category semantics, mandatory traceability, test-point discovery, workflow, and the default execution order |
+| `CaTDD_methodPrompt-*.md` | Subtopic prompts with the deeper material: category semantics, test-point discovery, workflow, test structure, file naming, agent workflow, troubleshooting, and worked examples |
+| `CaTDD_methodPrompt4Cat-*.md` | One deep-dive prompt per test category, so a CodeAgent can apply the right rules inside that category |
+| `CaTDD_designAndImplTemplate.cxx/.ts/.py/.go` | Working file templates for C++, TypeScript, Python, and Go. They all follow the same OVERVIEW → DESIGN → IMPLEMENTATION → TODO structure. No language is required by the method |
+| `README_UserGuide.md`, `README_UserGuide_ZH.md` | Standalone guides that explain how to use the prompts, who uses them, when to apply them, and where to put them |
 
-- **`CaTDD_methodPrompt.md`** — The master method specification. Every aspect of CaTDD is defined here: priority framework, category semantics, US/AC/TC contract, TDD Red→Green cycle, quality gates, status tracking, risk-driven prioritization, and the complete agent workflow checklist from understanding through finalization.
-
-- **`CaTDD_methodPrompt4Cat-*.md`** — Category-specific method prompts. Each of the 12 test categories (Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, Configuration, Demo/Example) has its own deep-dive prompt that CodeAgents can reference when working within that category.
-
-- **`CaTDD_designAndImplTemplate.cxx`** — A C++ implementation template that demonstrates the complete CaTDD file structure. Despite using C++ syntax, the template is language-agnostic in concept: any language can adopt the OVERVIEW → DESIGN → IMPLEMENTATION → TODO structure.
-
-- **Standalone user guides** — `README_UserGuide.md` and `README_UserGuide_ZH.md` explain HOW to use method prompts, WHO uses them, WHEN to apply them, and WHERE to place them. They exist so someone can use just this directory without reading the entire repository.
+> **Why a "source of truth" matters.** When two documents disagree, someone must decide which one wins. CaTDD makes that decision once: methodPrompts wins. Every other layer is a projection of it.
 
 ### Layer 2: slashCommands — The Commandization Layer
 
-`slashCommands/` turns stable method steps into portable commands. It is the connector between method semantics and CodeAgent invocation surfaces (Copilot, Cline, Continue, utCodeAgentCLI).
+`slashCommands/` turns the stable steps of the method into commands you can invoke. It is the bridge between method semantics and the tool you happen to use: Copilot, Cline, Continue, or `utCodeAgentCLI`.
 
-Key principle: slashCommands does NOT redefine method semantics. It takes what methodPrompts defines and wraps it into executable command units. When a command conflicts with methodPrompts, methodPrompts wins.
+The rule is simple:
+
+```
+   methodPrompts  ──defines──►  what must happen
+   slashCommands  ──wraps────►  how to ask for it
+
+   if a command and the method disagree:
+        methodPrompts wins
+```
 
 The layer contains:
 
-- **Flow documents** under `flows/` — P0-FuncTestsFlow, P1-DesignTestsFlow, P2-QualityTestsFlow, and Px-SpecFlow. Each flow defines a repeatable command sequence with entry points, gates, and loop-back paths.
-
-- **Command templates** — `UT_slashCommandTemplate.md` and `SPEC_slashCommandTemplate.md` ensure every command follows the same WHO/WHAT/WHEN/WHERE/WHY/HOW structure.
-
-- **Concrete command files** under `commands/` — Each command file tells a CodeAgent exactly what to do: what to read, what to produce, what to preserve, and what command comes next.
+| Part | Location | What it is |
+|---|---|---|
+| Flow documents | `flows/` | P0-FuncTestsFlow, P1-DesignTestsFlow, P2-QualityTestsFlow, Px-SpecFlow. Each flow is a repeatable command sequence with entry points, gates, and loop-back paths |
+| Kit documents | `kits/` | Px-HarnessKits groups the `HARNESS_*` tool points that maintain CaTDD source, adapters, execution, diagnostics, and patch-back safety, without forcing a strict lifecycle |
+| Command templates | `UT_slashCommandTemplate.md`, `SPEC_slashCommandTemplate.md` | The shared shape every command follows: Command Header / CoT Pattern / WHO / WHAT / WHEN / WHERE / WHY / HOW / Input Contract / Output Contract / CodeAgent Compatibility. The SPEC template adds a Subagent Recommendation |
+| Command files | `commands/` | The three families `UT_*`, `SPEC_*`, and `HARNESS_*`, grouped by flow or kit. Each file tells a CodeAgent what to read, what to produce, what to preserve, and what to do next |
 
 ### Layer 3: codeAgents — The Execution Layer
 
-`codeAgents/` contains the CaTDD-native CLI agent concepts. Currently these are design documents and architecture specifications — the runnable implementations are in progress.
+`codeAgents/` describes the CaTDD-native agents. Today these are design and architecture specifications; the runnable implementations are in progress. Two agents are defined.
 
-Two agents are defined:
+```
+  developer goal
+        │
+        ▼
+  ┌───────────────────┐      ┌────────────────────────┐
+  │ utCodeAgentCLI    │      │ specCodeAgentCLI       │
+  │ unit testing      │      │ specification          │
+  ├───────────────────┤      ├────────────────────────┤
+  │ plans from method │      │ runs module-level      │
+  │ constraints       │      │ SpecCoding flow        │
+  │ invokes UT_*      │      │ invokes SPEC_*         │
+  │ collects traces   │      │ reuses utCodeAgentCLI  │
+  │ reflects and      │      │ keeps traceability     │
+  │ feeds back        │      │ from intent to checks  │
+  └───────────────────┘      └────────────────────────┘
+        └───────────────┬───────────────┘
+                        ▼
+              spec  →  unit tests  →  results
+```
 
-- **`utCodeAgentCLI`** — The unit-testing code agent. It takes developer goals as input, plans work from CaTDD method constraints, invokes standardized slash command steps, collects traces, reflects on outcomes, and feeds reusable patterns back into the method and command layers. It preserves CaTDD's design skeleton contracts, US/AC/TC traceability, category classification, and RED/GREEN status discipline.
+- **`utCodeAgentCLI`** takes a developer goal, plans the work from CaTDD method constraints, invokes standardized slash command steps, collects traces, reflects on the outcome, and feeds reusable patterns back into the method and command layers. It preserves the design skeleton contract, US/AC/TC traceability, category classification, and the RED/GREEN status discipline.
 
-- **`specCodeAgentCLI`** — The specification code agent. It orchestrates module-level SpecCoding flow from input to output. Based on Px-SpecFlow, it reuses utCodeAgentCLI's unit-testing strengths and organizes scenario-level verification from spec intent to executable checks. It keeps traceability between spec flow, validation checkpoints, and implementation outcomes.
-
-These two agents together form a pipeline: spec → ut → results.
+- **`specCodeAgentCLI`** orchestrates module-level SpecCoding from input to output. It is built on Px-SpecFlow, reuses the unit-testing strength of `utCodeAgentCLI`, and organizes scenario-level verification from spec intent to executable checks. It keeps traceability between the spec flow, the validation checkpoints, and the implementation outcome.
 
 ### Layer 4: agentSkills — The Packaging Layer
 
-`agentSkills/` packages CaTDD and SpecCoding as reusable skills that any CodeAgent can consume. Two skills are authored:
+`agentSkills/` packages CaTDD and SpecCoding as skills any CodeAgent can pick up. Two are authored:
 
-1. **`comment-alive-test-driven-development`** — The CaTDD testing methodology packaged as a skill. It includes WHO/WHAT/WHEN/WHERE/WHY sections, phase-by-phase execution instructions, input/output contracts, constraints, and validation rules. When a developer says "use CaTDD" to a CodeAgent, this skill provides the agent with everything it needs.
+1. **`comment-alive-test-driven-development`** — the CaTDD testing method as a skill: WHO / WHAT / WHEN / WHERE / WHY sections, phase-by-phase instructions, input and output contracts, constraints, and validation rules. When a developer says "use CaTDD", this skill gives the agent everything it needs.
 
-2. **`user-story-centered-spec-coding`** — The SpecCoding lifecycle orchestration packaged as a skill. It covers the full story lifecycle: pendingNews → todoUS → doingUS → doneUS, with abortUS preserving unsafe active stories for later analysis, and CaTDD as the default unit-testing method.
+2. **`user-story-centered-spec-coding`** — the SpecCoding lifecycle as a skill. It covers the full story path `pendingNews → todoUS → doingUS → doneUS`, with `abortUS` preserving unsafe active stories for later analysis, and CaTDD as the default unit-testing method.
 
-The packaging script `makeSkill.sh` generates self-contained distributable packages by copying references from methodPrompts and slashCommands. The authored source is the durable asset; generated packages are build output.
+The packaging script `makeSkill.sh` produces self-contained distributable packages by copying references from `methodPrompts/` and `slashCommands/`. The authored source is the durable asset; the packages are build output.
 
 ---
 
 ## The Feedback Loop
 
-The four layers are not a one-way pipeline. They form a bidirectional improvement loop:
+The four layers are not a one-way pipe. Information flows back up.
 
 ```
-methodPrompts ──→ slashCommands ──→ codeAgents
-      ↑               ↑                │
-      └───────────────┴────────────────┘
-           feedback loop
+   methodPrompts ──► slashCommands ──► codeAgents
+         ▲                ▲                │
+         │                │                │
+         └────────────────┴────────────────┘
+                    feedback loop
 ```
 
-- **methodPrompts → slashCommands**: Stable method steps are commandized into slash commands.
-- **methodPrompts → codeAgents**: Agent behavior is constrained by method semantics.
-- **slashCommands → codeAgents**: Agents invoke standardized command steps.
-- **slashCommands → methodPrompts**: Command execution reveals method gaps — the method improves.
-- **codeAgents → slashCommands**: Agent reflection identifies reusable command patterns — slash commands grow.
-- **codeAgents → methodPrompts**: Execution experience feeds back into methodology improvements.
+| Direction | What moves |
+|---|---|
+| methodPrompts → slashCommands | Stable method steps become slash commands |
+| methodPrompts → codeAgents | Method semantics constrain what agents may do |
+| slashCommands → codeAgents | Agents invoke standardized command steps |
+| slashCommands → methodPrompts | Running commands exposes gaps in the method |
+| codeAgents → slashCommands | Reflection finds reusable command patterns |
+| codeAgents → methodPrompts | Real execution experience improves the methodology |
 
-This loop ensures CaTDD evolves from real usage, not theoretical design. Every downstream layer both consumes and improves the upstream layers.
+**Why the loop matters.** A method that cannot learn from being used turns into folklore. Every downstream layer both consumes and improves the layers above it, so CaTDD evolves from real usage rather than from theory.
+
+**Example — a gap found by using it.** A CodeAgent repeatedly stops mid-flow because the command it just ran never says which command comes next.
+
+```
+today    : command ends → agent guesses → wrong next step → rework
+feedback : "Output Contract must name the next command"
+result   : the template is updated once, every command benefits
+```
+
+One fix in `slashCommands/` removes the same confusion from every future run.
 
 ---
 
 ## The Design Skeleton Contract
 
-In CaTDD, "design" is not a UML diagram or a Word document. It is a **reusable comment skeleton** inside the test file. Each skeleton is organized by:
+In CaTDD, "design" is not a UML diagram or a Word file. It is a **reusable comment skeleton inside the test file**.
 
-- **Class**: The priority family — `P0 Functional`, `P1 Design`, `P2 Quality`, `P3 Addons`
-- **Category**: The specific verification angle — `Typical`, `Edge`, `Misuse`, `Fault`, `State`, `Capability`, `Concurrency`, `Performance`, `Robust`, `Compatibility`, `Configuration`, `Demo/Example`
+Every skeleton is organized by two labels:
 
-Every skeleton preserves this minimum shape:
+- **Class** — the priority family: `P0 Functional`, `P1 Design`, `P2 Quality`, `P3 Addons`
+- **Category** — the verification angle: `Typical`, `Edge`, `Misuse`, `Fault`, `State`, `Capability`, `Interaction`, `Concurrency`, `Performance`, `Robust`, `Compatibility`, `Configuration`, `Diagnosis`, `Security`, `Demo/Example`
+
+Every skeleton keeps this minimum shape:
 
 ```text
 //=================================================================================================
 // [Class] / [Category] Design Skeleton
 //=================================================================================================
+// @[SUT]: [Declared SUT matching file overview]
+// @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: What this category proves for this component
@@ -185,332 +325,489 @@ Every skeleton preserves this minimum shape:
 //=================================================================================================
 ```
 
-This skeleton is the "contract" that developers and CodeAgents both honor. Developers fill the skeleton with verification intent. CodeAgents read the skeleton and generate test code that satisfies the intent. Both sides update the skeleton as the code evolves.
+Read the skeleton as a set of promises:
+
+```
+   @[SUT]        what is under test        → stops scope creep
+   @[TestLevel]  unit / system / user      → sets how deep to test
+   @[Intent]     what this proves          → the one-sentence "why"
+   @[UseWhen]    when it applies           → protects the category
+   @[AvoidWhen]  when to move elsewhere    → prevents misclassification
+   @[US] [AC]    what requirement it serves→ traceability upward
+   @[TC]         the cases and their status→ the work list
+```
+
+This skeleton is the contract that developers and CodeAgents both honor. A developer fills it with verification intent. A CodeAgent reads it and writes test code that satisfies that intent. Both sides update it as the code evolves.
+
+> **What the contract buys you.** A new engineer, or a new LLM session, can open the file and answer "what does this prove, for whom, and what is still missing?" without asking anyone.
+
+**Example — an empty skeleton beats an empty promise.** A reviewer asks "is the full-queue path covered?" Two possible answers:
+
+```
+   file with a skeleton                     file without one
+   ────────────────────                     ────────────────
+   // @[Category]: Edge                     (nothing)
+   // @[Intent]: queue boundary behavior
+   // @[TC]: TC-1 ⚪ TODO                   "I think so?"
+          "not yet — TC-1 is still TODO"    (search code for 20 minutes)
+```
+
+The skeleton turns an unanswerable question into a status line.
 
 ---
 
 ## The Priority Framework
 
-CaTDD organizes tests into four priority levels with a strict execution order. This is the architecture of verification.
+Not every test is equally urgent. CaTDD sorts tests into four priority levels and gives a default order to run them in.
+
+```
+                     default order
+
+   P0 Functional ──► P1 Design ──► P2 Quality ──► P3 Addons ──► release
+   "does it work?"   "is the      "is it fast,    "can someone
+                      design       stable, safe,   learn from it?"
+                      right?"      compatible?"
+```
+
+| Level | Question it answers | Categories |
+|---|---|---|
+| **P0 Functional** | Does it work, and does it fail safely? | Typical, Edge, Misuse, Fault |
+| **P1 Design** | Are the architectural decisions real? | State, Capability, Interaction, Concurrency |
+| **P2 Quality** | Does it hold up under real conditions? | Performance, Robust, Compatibility, Configuration, Diagnosis, Security |
+| **P3 Addons** | Can others learn to use it? | Demo/Example |
 
 ### P0: Functional Testing
 
-**Formula**: `P0 = ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`
+P0 has two halves. One proves the system works; the other proves it fails in a controlled way.
 
-P0 is the default gate before everything else. In the standard order, you complete P0 before advancing to P1 — this ensures the API contract is verified for both success and failure paths. However, context-specific adjustments (described below) may promote certain P1 categories to interleave with P0 completion when the domain demands it.
+```
+   P0 Functional = ValidFunc + InvalidFunc
+
+   ValidFunc   ── the system works correctly
+      │  Typical   core happy path
+      │  Edge      boundaries, limits, modes
+      │
+   InvalidFunc ── the system fails gracefully
+      │  Misuse    the caller used the API wrongly
+      │  Fault     the outside world failed
+```
 
 #### ValidFunc — Proves the system works correctly
 
-| Category | Purpose | Examples |
+| Category | What it covers | Example test points |
 |---|---|---|
 | **Typical** ⭐ | Core happy-path workflows | Service registration, event publishing, command execution |
-| **Edge** 🔲 | Boundary values, limits, modes | Min/max values, empty inputs, Block/NonBlock/Timeout modes |
+| **Edge** 🔲 | Boundary values, limits, modes | Min/max values, empty inputs, Block / NonBlock / Timeout modes |
 
 #### InvalidFunc — Proves the system fails gracefully
 
-| Category | Purpose | Examples |
+| Category | What it covers | Example test points |
 |---|---|---|
-| **Misuse** 🚫 | Incorrect API usage patterns | Wrong call sequence, double-init, invalid parameters |
-| **Fault** ⚠️ | External failures and recovery | Network failures, disk full, process crash recovery |
+| **Misuse** 🚫 | Incorrect API usage | Wrong call sequence, double init, invalid parameters |
+| **Fault** ⚠️ | Outside failures and recovery | Network failure, disk full, process crash recovery |
+
+> **Why split ValidFunc and InvalidFunc?** A function that passes every success case can still corrupt data on the first bad call. The two halves catch different bugs, and both belong to P0.
 
 ### P1: Design-Oriented Testing
 
-Tests that validate architectural decisions: state management, capacity planning, and concurrency models.
+P1 tests the architectural decisions: state, limits, collaboration order, and concurrency. These are the choices that are expensive to change later.
 
-| Category | Purpose | Examples |
+| Category | What it covers | Example test points |
 |---|---|---|
-| **State** 🔄 | State machine transitions and lifecycle | Init→Ready→Running→Stopped |
-| **Capability** 🏆 | Maximum capacity and system limits | Max connections, queue limits, resource pool exhaustion |
-| **Concurrency** 🚀 | Thread safety and race conditions | Parallel access, deadlock scenarios, lock-free validation |
+| **State** 🔄 | Lifecycle and state machines | `Init → Ready → Running → Stopped` |
+| **Capability** 🏆 | Designed capacity and limits | Max connections, queue limits, pool exhaustion |
+| **Interaction** 🔗 | Collaborator order and handoffs | Orchestrator → plugin order, validate-before-dispatch, rollback after partial failure |
+| **Concurrency** 🚀 | Threads and races | Parallel access, deadlock, lock-free validation |
+
+**Example — Design versus functional.** Registering a plugin is a Typical test. The rule that *all plugins must be validated before any plugin is dispatched* is an Interaction test. The first checks a feature; the second checks an architectural promise.
 
 ### P2: Quality-Oriented Testing
 
-Non-functional requirements: performance, stability, and compatibility.
+P2 covers non-functional requirements: speed, stability, compatibility, configuration, diagnosability, and security.
 
-| Category | Purpose | Examples |
+| Category | What it covers | Example test points |
 |---|---|---|
-| **Performance** ⚡ | Speed, throughput, resource usage | Latency benchmarks, memory leak detection |
-| **Robust** 🛡️ | Stress, repetition, long-running stability | 1000x repetition, 24-hour soak tests |
-| **Compatibility** 🔄 | Cross-platform, version testing | Windows/Linux/macOS, API version compatibility |
-| **Configuration** 🎛️ | Settings and deployment variations | Debug vs Release, feature flags, environment variables |
+| **Performance** ⚡ | Speed, throughput, resources | Latency benchmarks, memory growth |
+| **Robust** 🛡️ | Stress, repetition, long runs | 1000x repetition, 24-hour soak |
+| **Compatibility** 🔄 | Platforms, versions | Windows / Linux / macOS, API version compatibility |
+| **Configuration** 🎛️ | Settings and deployment | Debug versus Release, feature flags, environment variables |
+| **Diagnosis** 🔎 | Observability and evidence | Correlation IDs in logs, actionable errors, health output |
+| **Security** 🔐 | Protection under threat | AuthN / authZ denial, secret redaction, trust boundaries, injection defense |
 
 ### P3: Addons Testing
 
-| Category | Purpose |
+| Category | What it covers |
 |---|---|
-| **Demo/Example** 🎨 | End-to-end demonstrations, tutorials, best practice illustrations |
+| **Demo/Example** 🎨 | End-to-end demonstrations, tutorials, and best-practice illustrations |
 
 ### Default Test Order
 
 ```
-P0: Typical → Edge → Misuse → Fault
-P1: State → Capability → Concurrency
-P2: Performance → Robust → Compatibility → Configuration
-P3: Demo/Example
+   P0:  Typical → Edge → Misuse → Fault
+   P1:  State → Capability → Interaction → Concurrency
+   P2:  Performance → Robust → Compatibility → Configuration → Diagnosis → Security
+   P3:  Demo/Example
 ```
 
-This order is not rigid — it adapts to context.
+This is the default, not a law. The rest of this section explains when to move a category earlier.
 
 ---
 
 ## Context-Specific Priority Adjustments
 
-Different project types demand different test priorities. CaTDD provides adjustment rules for common contexts:
+Different products carry different risk. A device driver and a batch report generator should not be tested in the same order. CaTDD lists adjustment rules for common situations.
+
+```
+             default order            adjusted order
+   ┌──────────────────────────┐   ┌──────────────────────────┐
+   │ P0 Typical Edge Misuse   │   │ P0 Typical Edge Fault    │
+   │    Fault                 │   │    Misuse                │
+   │ P1 State Capability ...  │   │ P1 State Capability ...  │
+   │ P2 Performance Robust    │   │ P2 Robust Performance    │
+   └──────────────────────────┘   └──────────────────────────┘
+                                    reliability-critical service
+```
 
 ### New Public API
 
 ```
-P0: Typical → Edge → Misuse → Fault (complete P0 thoroughly)
-P1: State → Capability → Concurrency
+P0: Typical → Edge → Misuse → Fault       (complete P0 thoroughly)
+P1: State → Capability → Interaction → Concurrency
 P2: Performance
 ```
 
-*Rationale*: API contract correctness before advanced testing.
+*Why*: the API contract must be correct before anything advanced is worth testing.
 
 ### Stateful/FSM-Heavy Component
 
 ```
-P0: Typical → Edge (basic functional)
-P1: State (promote to early) → Capability → Concurrency
-P0: Misuse → Fault (complete functional)
+P0: Typical → Edge                        (basic functional first)
+P1: State (promoted early) → Capability → Interaction → Concurrency
+P0: Misuse → Fault                        (finish functional coverage)
 P2: Performance → Robust
 ```
 
-*Rationale*: State transitions are architectural core — test them after basic functionality.
+*Why*: the state machine is the architectural core. Test it right after basic function works.
 
 ### Reliability-Critical Service
 
 ```
-P0: Typical → Edge → Fault (promote) → Misuse
-P1: State → Capability → Concurrency
-P2: Robust (promote) → Performance → Compatibility
+P0: Typical → Edge → Fault (promoted) → Misuse
+P1: State → Capability → Interaction → Concurrency
+P2: Robust (promoted) → Performance → Compatibility
 ```
 
-*Rationale*: Error handling and stability are paramount.
+*Why*: when downtime is expensive, error handling and stability outrank feature breadth.
 
 ### High-Performance System (SLOs)
 
 ```
 P0: Typical → Edge → Misuse
-P2: Performance (promote within P2) → Robust
-P1: State → Capability → Concurrency
-P0: Fault (complete P0)
+P2: Performance (promoted) → Robust
+P1: State → Capability → Interaction → Concurrency
+P0: Fault                                 (finish functional coverage)
 ```
 
-*Rationale*: Performance characteristics are design constraints, not afterthoughts.
+*Why*: when a latency budget is a design constraint, measuring it early prevents a redesign later.
 
 ### Highly Concurrent Design
 
 ```
 P0: Typical → Edge → Misuse
-P1: Concurrency (promote to first P1) → State → Capability
-P0: Fault (complete P0)
+P1: Concurrency (promoted first) → State → Capability → Interaction
+P0: Fault                                 (finish functional coverage)
 P2: Performance → Robust
 ```
 
-*Rationale*: Thread safety is the architectural foundation.
+*Why*: thread safety is the foundation everything else sits on.
 
 ### Data Processing Pipeline
 
 ```
 P0: Typical → Edge → Fault → Misuse
-P2: Performance (promote) → Robust (promote)
-P1: State → Capability → Concurrency
+P2: Performance (promoted) → Robust (promoted)
+P1: State → Capability → Interaction → Concurrency
 ```
 
-*Rationale*: Data integrity and throughput are critical quality attributes.
+*Why*: data integrity and throughput are the quality attributes that define the product.
+
+> **Common mistake** — promoting a category and then never finishing P0. A promoted category is a *temporary* reorder. The rule that P0 completes before P1 still holds.
 
 ---
 
 ## Risk-Driven Priority Adjustment
 
-When context-specific adjustments are not enough, use the risk scoring formula:
+When a component fits none of the situations above, score the risk instead of guessing.
 
 ```
-Risk Score = Impact × Likelihood × Uncertainty
+   Risk Score = Impact × Likelihood × Uncertainty
 
-Impact:      1 (low) → 3 (critical)
-Likelihood:  1 (rare) → 3 (frequent)
-Uncertainty: 1 (known) → 3 (unknown)
+   Impact        1 (low)      →  3 (critical)
+   Likelihood    1 (rare)     →  3 (frequent)
+   Uncertainty   1 (known)    →  3 (unknown)
 
-Max score: 27
+   maximum score: 27
 ```
 
-**Priority Rules**:
+Then move the category:
 
-- Score ≥ 18: Move category immediately after Edge
-- Score 12-17: Move up 2 positions from default
-- Score 9-11: Move up 1 position from default
-- Score ≤ 8: Keep default position
+| Score | Action |
+|---|---|
+| ≥ 18 | Move it immediately after Edge |
+| 12 – 17 | Move it up 2 positions |
+| 9 – 11 | Move it up 1 position |
+| ≤ 8 | Keep the default position |
 
-**Example Assessment**:
+**Example — two categories, two very different scores.**
 
 ```
-Concurrency in multi-threaded queue:
-  Impact: 3 (data corruption)
-  Likelihood: 3 (many threads)
-  Uncertainty: 3 (complex interactions)
-  Score: 27 → Test immediately after Edge
+Concurrency in a multi-threaded queue
+  Impact       3   data corruption
+  Likelihood   3   many threads touch the queue
+  Uncertainty  3   interactions are hard to reason about
+  ─────────────────────────────────────────────────
+  Score       27   → test right after Edge
 
-Performance in batch processor:
-  Impact: 2 (slower but functional)
-  Likelihood: 2 (depends on load)
-  Uncertainty: 2 (some benchmarks exist)
-  Score: 8 → Keep default position
+Performance in a batch processor
+  Impact       2   slower, but still correct
+  Likelihood   2   depends on the load
+  Uncertainty  2   some benchmarks already exist
+  ─────────────────────────────────────────────────
+  Score        8   → keep the default position
 ```
+
+> **Why multiply instead of add?** Multiplying keeps a category low when *any* factor is low. A rare failure with huge impact and unknown behavior still scores 18 and moves up; a harmless and well-understood one does not.
 
 ---
 
 ## The US/AC/TC Contract
 
-The heart of CaTDD is the traceable chain from human need to machine-executable test:
+CaTDD connects a human need to a machine check with three linked artifacts. Each one answers a different question, and each one points at the next.
 
 ```
-User Story (US) → Acceptance Criteria (AC) → Test Case (TC)
-      ↓                    ↓                      ↓
-  Business value       Testable condition      Concrete assertion
+   User Story (US)          Acceptance Criteria (AC)        Test Case (TC)
+   ───────────────          ───────────────────────        ─────────────
+   why anyone cares    ──►  what must be true      ──►     how we check it
+
+   business value           testable condition             concrete assertion
+
+        └────────────────────────┴──────────────────────────────┘
+                       every TC cites an AC, every AC cites a US
 ```
 
 ### User Story (US) Template
 
-```
+```text
 US-n: As a [specific role/persona],
       I want [specific capability or feature],
       So that [concrete business value or benefit].
 ```
 
-Each US represents a distinct user value. A module typically has 2-5 User Stories.
+A module usually carries 2–5 User Stories. Each one should represent a distinct piece of user value, not a piece of code.
 
-**Real example from the IOC Event System**:
+**Example from the IOC Event System:**
 
-```
+```text
 US-1: As an event producer in high-load scenarios,
       I want to post events without blocking when the queue is full,
       So that my application remains responsive under load.
 ```
 
+> **Test for a good US:** can a product owner read it and say "yes, that is what I asked for"? If only an engineer can judge it, it is too technical.
+
 ### Acceptance Criteria (AC) Template
 
-```
+```text
 AC-n: GIVEN [initial context and preconditions],
       WHEN [specific trigger, action, or event],
       THEN [expected observable outcome or behavior],
        AND [additional expected outcomes if any].
 ```
 
-For each US, define 1-4 ACs. Each AC must be independently verifiable.
+Define 1–4 ACs per User Story. Each AC must be verifiable on its own.
 
-**Real example**:
+**Example:**
 
-```
+```text
 AC-1: GIVEN an event producer calling IOC_postEVT_inConlesMode,
       WHEN IOC's EvtDescQueue is full in ASyncMode by blocking consumer,
       THEN producer returns immediately without waiting,
-       AND returns IOC_RESULT_TOO_MANY_QUEUING_EVTDESC,
+       AND returns IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC,
        AND the event is not queued for processing.
 ```
 
+This is one sentence, and it already tells the tester three separate facts to check.
+
 ### Test Case (TC) Template
 
-```
+```text
 [@AC-n,US-n]
  TC-n:
    @[Name]: verifyBehavior_byCondition_expectResult
    @[Purpose]: Why this test matters and what it validates
    @[Brief]: What the test does in simple terms
-   @[Steps]: Detailed execution steps (optional for complex tests)
+   @[Steps]: Detailed execution steps (optional, for complex tests)
    @[Expect]: How to verify success
    @[Notes]: Additional context, gotchas, or dependencies
 ```
 
-**Naming Convention**: `verifyBehavior_byCondition_expectResult`
+The name follows one pattern everywhere, so a test name reads like a sentence:
 
 ```
 verifyServiceRegistration_byValidName_expectSuccess
 verifyEventPost_byFullQueue_expectNonBlockReturn
 verifyCommandExec_byMultipleClients_expectIsolatedExecution
 verifyStateTransition_byInvalidSequence_expectError
+       └──── behavior ────┘ └── condition ──┘ └── outcome ──┘
 ```
 
-The chain must be traceable: every TC references its AC, every AC references its US. CaTDD CodeAgents read this traceability chain to understand what to generate and why.
+### The full chain in one place
+
+A single requirement is traceable end to end:
+
+```
+  US-1   a producer must not block when the queue is full
+   │
+   ├─► AC-1  returns immediately, with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
+   │    │
+   │    ├─► TC-1  verifyEventPost_byFullQueue_expectNonBlockReturn
+   │    ├─► TC-2  verifyEventPost_byFullQueue_expectNotQueued
+   │    └─► TC-3  verifyEventPost_byFullQueue_expectImmediateReturn
+   │
+   └─► code    the queue check in IOC_postEVT_inConlesMode
+        │
+        └─► commit   "AC-1: non-blocking post when queue is full"
+```
+
+One AC can produce several TCs, because "returns immediately", "returns this code", and "does not queue the event" are three different claims.
+
+**Example — the same requirement, badly written.** Compare these two ways to record the same intent:
+
+```
+Weak AC                                  Strong AC
+───────                                  ─────────
+"handle full queue properly"             GIVEN the queue is full
+                                         WHEN the producer posts
+  → what does "properly" mean?           THEN it returns immediately
+  → how would a test fail?               AND returns
+                                            IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
+                                         AND the event is not queued
+```
+
+Only the right-hand version can be turned into a test without asking a question.
 
 ---
 
 ## The TDD Red→Green Cycle (CaTDD Style)
 
-CaTDD formalizes the TDD cycle with explicit status tracking:
+CaTDD keeps the classic cycle and adds an explicit status for every test case.
 
 ```
-⚪ TODO/PLANNED  →  🔴 RED/FAILING  →  🟢 GREEN/PASSED
-   (designed)         (test written,        (test passing)
-                       code missing)
+   ⚪ TODO / PLANNED  ──►  🔴 RED / FAILING  ──►  🟢 GREEN / PASSED
+        designed              test written,           test passes,
+        in comments           code missing            move to next
+
+        └──────────────────────────────────────────────────────┘
+                        status lives in the file
 ```
 
-Each test case starts as ⚪ TODO (designed in comments). You implement the test, mark it 🔴 RED (should fail because production code is missing). You implement minimal production code, run the test, mark it 🟢 GREEN. Then you advance to the next test case.
+| Status | Meaning | What you do next |
+|---|---|---|
+| ⚪ TODO | The test is designed in comments but not written | Write the test code |
+| 🔴 RED | The test exists and fails because production code is missing | Implement the smallest production code that passes |
+| 🟢 GREEN | The test passes | Move to the next test case |
+
+> **Never skip RED.** If a test is green the first time you run it, either the code already exists or the test is not checking anything. Both are worth knowing before you trust it.
 
 ### The 4-Phase Test Structure
 
-Every test follows a consistent pattern:
+Every test is written in the same four phases, in the same order.
 
 ```cpp
 TEST(CategoryName, verifyBehavior_byCondition_expectResult) {
     //===SETUP===
-    // Initialize environment, create resources, configure preconditions
+    // Create resources and set up the preconditions.
 
     //===BEHAVIOR===
     printf("🎯 BEHAVIOR: verifyBehavior_byCondition_expectResult\n");
-    // Execute the action being tested
+    // Perform the single action this test is about.
 
     //===VERIFY===
-    // Validate outcomes (keep ≤3 key assertions)
+    // Check the outcome. Keep at most three key assertions.
 
     //===CLEANUP===
-    // Release resources, reset state
+    // Release resources and restore the state.
 }
 ```
 
-**Why ≤3 assertions per test?**
+```
+   SETUP ──► BEHAVIOR ──► VERIFY ──► CLEANUP
+      │          │           │          │
+   preconditions  one     at most    no leaks
+   are explicit   action   3 checks   for the next test
+```
 
-- Easier to identify what failed
-- Better test isolation
-- Clearer test purpose
-- If you need more assertions, create additional test cases
+**Example — why three assertions is a real limit.** One test that checks return code, queue depth, counter value, log output, and thread state fails with a wall of output. You then spend ten minutes finding out which claim broke. Three focused tests fail with one clear message each.
+
+### Why at most 3 assertions per test?
+
+- You can see immediately **what** failed
+- Tests stay independent of each other
+- Each test has one clear purpose
+- Need more checks? Write another test case
 
 ---
 
 ## Quality Gates
 
-CaTDD defines explicit gates between priority levels. You do not proceed through a gate until all criteria are satisfied.
+Between priority levels there are gates. A gate is not paperwork; it is a checkpoint that stops a known-bad state from moving forward.
+
+```
+   P0 Functional  ──►  ┌ GATE P0 ┐  ──►  P1 Design
+                       └─────────┘
+                            │
+   P1 Design      ──►  ┌ GATE P1 ┐  ──►  P2 Quality
+                       └─────────┘
+                            │
+   P2 Quality     ──►  ┌ GATE P2 ┐  ──►  release
+                       └─────────┘
+                            │
+   P3 Addons      ──►  ┌ GATE P3 ┐  ──►  documentation complete
+                       └─────────┘
+```
 
 ### Gate P0: Before Leaving Functional Testing
 
-Must complete: ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
+Must complete: `ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`
 
-- All Typical tests GREEN (80-90% core workflow coverage)
-- All Edge tests GREEN (edge cases, boundaries, limits validated)
-- All Misuse tests GREEN or documented (wrong usage handled)
-- All Fault tests GREEN or documented (error recovery verified)
+- All Typical tests GREEN (80–90% core workflow coverage)
+- All Edge tests GREEN (boundaries and limits validated)
+- All Misuse tests GREEN or documented
+- All Fault tests GREEN or documented
 - No critical correctness bugs
 - **Fast-Fail Six** tests all passing
-- Basic memory/resource leak checks clean
+- Basic memory and resource leak checks clean
 
-**Exit criteria**: Complete API contract tested — both success and failure paths.
+**Exit criteria**: the API contract is tested on both the success and the failure path.
 
 ### Gate P1: Before Quality-Oriented Testing
 
-- State tests GREEN (if stateful component)
-- Capability tests GREEN (limits characterized)
-- Concurrency tests GREEN (if multi-threaded)
-- No known deadlock or race conditions
-- ThreadSanitizer/AddressSanitizer clean
-- Architecture validated against design requirements
+- State tests GREEN (if the component is stateful)
+- Capability tests GREEN (limits are characterized)
+- Interaction tests GREEN (if sequence, collaboration, or handoff rules exist)
+- Concurrency tests GREEN (if the component is multi-threaded)
+- No known deadlocks or races
+- ThreadSanitizer / AddressSanitizer clean
+- The architecture matches the design requirements
 
 ### Gate P2: Before Release
 
-- Performance tests GREEN (SLOs met if defined)
-- Robust tests GREEN (stress/soak tests passing)
+- Performance tests GREEN (SLOs met, if defined)
+- Robust tests GREEN (stress and soak tests pass)
 - Compatibility tests GREEN (if multi-platform)
 - Configuration tests GREEN (if configurable)
+- Diagnosis tests GREEN (when observability or explainability is required)
+- Security tests GREEN (when threat, policy, or protection requirements exist)
 - Production readiness criteria met
 
 ### Optional Gate P3: Documentation Complete
@@ -519,56 +816,109 @@ Must complete: ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)
 - Tutorial code validated
 - Best practices documented
 
+> **Common mistake** — treating a gate as a formality because the tests are green. A gate asks "is the *claim* covered?", not "did the run pass?" Fifty green tests that never touch the failure path still fail Gate P0.
+
 ---
 
 ## The Fast-Fail Six
 
-Run these six tests early and often to catch common issues before they waste time in detailed testing:
+Six cheap tests catch the majority of API-level mistakes. Run them early, before detailed test design.
 
-1. **Null/Empty Input Handling** — Does every API reject `NULL` and empty strings with proper error codes?
+```
+   ┌──────────────────────────────────────────────────────────────┐
+   │  1 null / empty input        4 illegal call sequence         │
+   │  2 zero / negative timeout   5 buffer full and buffer empty  │
+   │  3 duplicate registration    6 double close / re-init        │
+   └──────────────────────────────────────────────────────────────┘
+                 minutes to write  →  hours of debugging saved
+```
 
-2. **Zero/Negative Timeout** — What happens when timeout is 0, -1, or UINT_MAX?
+| # | Test | The question it asks |
+|---|---|---|
+| 1 | **Null / Empty Input** | Does every API reject `NULL` and empty strings with a proper error code? |
+| 2 | **Zero / Negative Timeout** | What happens with timeout `0`, `-1`, or `UINT_MAX`? |
+| 3 | **Duplicate Registration** | Does double registration return ALREADY_EXISTS? |
+| 4 | **Illegal Call Sequence** | What happens if you call before init, or after cleanup? |
+| 5 | **Buffer Full / Empty** | Fill to capacity and try one more. Empty it and try one more. |
+| 6 | **Double Close / Re-Init** | Is the operation idempotent, or does it return a proper error? |
 
-3. **Duplicate Registration/Subscription** — Does double-registration return ALREADY_EXISTS?
+**Example — the failure these tests prevent.**
 
-4. **Illegal Call Sequence** — What happens if you call APIs before init or after cleanup?
+```c
+// Looks harmless, ships a segfault
+handle = IOC_create();
+IOC_destroy(handle);
+IOC_destroy(handle);          // ← second close, no check anywhere
+```
 
-5. **Buffer Full/Empty Edge Cases** — Fill to capacity, try one more. Empty completely, try one more.
+```
+   Fast-Fail Test 6 would have caught this at design time:
 
-6. **Double-Close/Re-Init Idempotency** — Is the system idempotent or does it return proper errors?
+   IOC_destroy(handle);       →  OK
+   IOC_destroy(handle);       →  must return an error, not crash
+```
 
-These six tests are the minimum defense against API misuse. They establish the contract boundaries before deeper test design begins.
+Six small tests, written once, protect every caller of the API.
 
 ---
 
 ## Test Organization Strategies
 
-CaTDD supports two organizational strategies depending on project size:
+CaTDD supports two layouts. Pick by project size, not by preference.
 
-### Single File Strategy (simpler projects, <50 tests)
+```
+   SINGLE FILE                        MULTI-FILE
+   ───────────                        ──────────
+   test_queue.cxx                     test_queue_funcValidTypical.cxx
+     ├── Typical suite                test_queue_funcValidEdge.cxx
+     ├── Edge suite                   test_queue_funcInvalidMisuse.cxx
+     ├── Misuse suite                 test_queue_funcInvalidFault.cxx
+     └── Fault suite                  test_queue_designState.cxx
+                                      test_queue_qualityPerformance.cxx
+                                        └── one file per category
 
-Keep all tests for a component in one file. Use TEST suites to organize by category. Good for small-to-medium modules.
+   < 50 tests                         grows without collisions
+   simplest to start                  clearer ownership per category
+```
+
+### Single File Strategy (simpler projects, under 50 tests)
+
+Keep every test for a component in one file and organize it with TEST suites per category. Good for small and medium modules, and the fastest way to start.
 
 ### Multi-File Strategy (larger projects)
 
-All test files in a `Test/` directory:
+One file per category, using the canonical name `test_{feature}_{category}.<ext>`. `{feature}` is a stable `lower_snake_case` usage slice; `{category}` is a fixed CaTDD token.
 
-- `UT_Component_FreelyDrafts.cxx` — Exploration and idea capture
-- `UT_Component_Typical.cxx` — Core workflows
-- `UT_Component_Edge.cxx` — Edge cases, boundaries, limits
-- `UT_Component_Misuse.cxx` — API abuse patterns
-- `UT_Component_Fault.cxx` — Error handling and recovery
-- `UT_Component_State.cxx` — State transitions
-- `UT_Component_Concurrency.cxx` — Thread safety
-- Common utilities in `_UT_Common.h`
+| File | Category |
+|---|---|
+| `test_{feature}_freelyDrafts.cxx` | Exploration and idea capture (Stage-0 drafts) |
+| `test_{feature}_funcValidTypical.cxx` | Core workflows |
+| `test_{feature}_funcValidEdge.cxx` | Edge cases, boundaries, limits |
+| `test_{feature}_funcInvalidMisuse.cxx` | API abuse patterns |
+| `test_{feature}_funcInvalidFault.cxx` | Error handling and recovery |
+| `test_{feature}_designState.cxx` | State transitions |
+| `test_{feature}_designCapability.cxx` | Capability limits and responsibilities |
+| `test_{feature}_designInteraction.cxx` | Collaborator sequence and handoffs |
+| `test_{feature}_designConcurrency.cxx` | Thread safety |
+| `test_{feature}_qualityPerformance.cxx` | SLOs and resource budgets |
+| `test_{feature}_qualityRobust.cxx` | Stress and long-running stability |
+| `test_{feature}_qualityCompatibility.cxx` | Version, platform, and toolchain compatibility |
+| `test_{feature}_qualityConfiguration.cxx` | Feature flags and environment variations |
+| `test_{feature}_qualityDiagnosis.cxx` | Observability and failure evidence |
+| `test_{feature}_qualitySecurity.cxx` | Protection properties under threat |
+| `test_{feature}_addonDemoExample.cxx` | Tutorials and documented examples |
 
-Mature, stable tests move from exploration files to category-specific files.
+Mature test points move out of the freely-drafts file into their category file. Each feature keeps one file per canonical token; a category with nothing to test keeps `@[NoTestPoints]: <reason>`, which is a living decision rather than an empty file.
+
+> **Why keep a file for a category with no tests?** Because "we decided this does not apply" and "we forgot about it" look identical in a repository. The `@[NoTestPoints]` line makes the decision visible.
+
+**Example — a name that tells you where to look.** A failing build reports `test_queue_designConcurrency.cxx`. You already know the failure is about thread safety, not about the happy path, before you open the file.
 
 ---
 
 ## The Implementation Tracking Template
 
-Every CaTDD test file includes a TODO/Implementation Tracking section that records all test cases with their status:
+Every CaTDD test file carries a TODO / Implementation Tracking section. It lists every test case, its status, and where the work stands.
 
 ```
 //===========================================================================================
@@ -591,31 +941,64 @@ Every CaTDD test file includes a TODO/Implementation Tracking section that recor
 // 🚪 GATE P0: All P0 tests must be GREEN before proceeding to P1.
 ```
 
-This tracking section is the dashboard for the entire test effort. Developers and CodeAgents both read it to know what is done, what is in progress, and what is planned.
+Read it as a dashboard:
+
+```
+   ⚪  not written yet        → the backlog for this file
+   🔴  written, still failing → what you are working on now
+   🟢  passing                → done, and provably done
+
+   every line also names its @[AC] and @[US], so a status
+   report can be traced back to a requirement
+```
+
+**Example — the section answers the daily question.** "What is left before I can start P1?" You read the P0 block, count the ⚪ and 🔴 lines, and answer in seconds. No separate status meeting and no separate tracker to update.
 
 ---
 
 ## Design as a Living Contract
 
-CaTDD fundamentally redefines design. Design is not an upstream activity that finishes before coding begins. Design is a living contract that lives in the test file, evolves with the code, and is readable by both humans and LLMs.
+CaTDD redefines design. Design is not an activity that finishes before coding starts. It is a living contract that lives in the test file, changes with the code, and is readable by both people and LLMs.
 
-The contract states:
+The contract answers five questions, in one place:
 
-1. **What matters** — expressed in User Stories with business value
-2. **What to verify** — expressed in Acceptance Criteria with GIVEN/WHEN/THEN
-3. **How to verify** — expressed in Test Cases with concrete assertions
-4. **What priority** — expressed in the P0→P1→P2→P3 framework
-5. **What status** — expressed in ⚪→🔴→🟢 markers
+```
+   ┌──────────────────────────────────────────────────────────┐
+   │  1  WHAT MATTERS      User Stories with business value    │
+   │  2  WHAT TO VERIFY    Acceptance Criteria, GIVEN/WHEN/THEN│
+   │  3  HOW TO VERIFY     Test Cases with concrete assertions │
+   │  4  WHAT PRIORITY     P0 → P1 → P2 → P3                   │
+   │  5  WHAT STATUS       ⚪ → 🔴 → 🟢                        │
+   └──────────────────────────────────────────────────────────┘
+                       the design skeleton holds all five
+```
 
-This is the foundation of everything CaTDD. It is what methodPrompts defines, what slashCommands operationalize, what codeAgents execute, and what agentSkills package. Every other layer depends on these concepts.
+This is the foundation of everything else in CaTDD. It is what `methodPrompts` defines, what `slashCommands` operationalizes, what `codeAgents` execute, and what `agentSkills` package. Every other layer depends on these concepts.
 
 ---
 
 ## From Concepts to Action
 
-The remaining chapters move from "what" to "how":
+The remaining chapters move from *what* to *how*.
 
-- **Chapter 2: chatVibeCoding** — How to use LLMs with CaTDD in chat-based development, the distinction between VibeCoding and SpecCoding
-- **Chapter 3: callSlashCommands** — How to invoke the slash command system for structured, repeatable CaTDD execution
-- **Chapter 4: asyncCodeAgent** — How code agents automate test design, test implementation, and the full SpecCoding lifecycle
-- **Chapter 5: applyClassicSWE** — The Knowledge Book of Software Engineering (TDD, BDD, DDD) applied in the LLM era through CaTDD's synthesis of all three disciplines
+```
+   Ch 1  defineConcepts     ── the vocabulary            (you are here)
+    │
+   Ch 2  chatVibeCoding     ── talk to an LLM, with structure
+    │
+   Ch 3  callSlashCommands  ── run the command flows
+    │
+   Ch 4  asyncCodeAgent     ── let an agent do the work
+    │
+   Ch 5  applyClassicSWE    ── the TDD / BDD / DDD foundation
+    │
+   Ch 6  beyondXyzSpec      ── where CaTDD sits next to other tools
+```
+
+| Chapter | Chapter | What you get |
+|---|---|---|
+| **Chapter 2** | chatVibeCoding | How to work with an LLM in chat, and the difference between VibeCoding and SpecCoding |
+| **Chapter 3** | callSlashCommands | How to invoke the slash command system for repeatable execution |
+| **Chapter 4** | asyncCodeAgent | How code agents automate test design, test implementation, and the SpecCoding lifecycle |
+| **Chapter 5** | applyClassicSWE | The Knowledge Book of Software Engineering (TDD, BDD, DDD) and how CaTDD combines them |
+| **Chapter 6** | beyondXyzSpec | How CaTDD compares with other spec-driven tools, and what it adds |

@@ -245,10 +245,12 @@ DDD 战略设计                    CaTDD US/AC/TC
   是什么让你独特？                  Typical, Edge, Misuse, Fault
 
 支撑子域 (Supporting Subdomain) →  P1 Design（架构测试）
-  必要但非竞争优势                    State, Capability, Concurrency
+  必要但非竞争优势                    State, Capability, Interaction,
+                                      Concurrency
 
 通用子域 (Generic Subdomain)   →    P2 Quality（基础设施测试）
-  购买，不自行构建                    Performance, Robust, Compatibility
+  购买，不自行构建                    Performance, Robust, Compatibility,
+                                      Configuration, Diagnosis, Security
 
 文档/示例 (Documentation/Examples) → P3 Addons（教程和演示）
 ```
@@ -522,14 +524,14 @@ DDD 战略分类                            CaTDD 优先级映射
 └── 在这里投入最多精力                   └── 在任何其他测试之前完成
 
 支撑子域 (Supporting Subdomain)         P1 Design
-（必要但非独有）                         (State, Capability, Concurrency)
+（必要但非独有）                         (State, Capability, Interaction, Concurrency)
 │                                      │
 ├── 支撑核心域的内容                     ├── 架构验证
 ├── 可以外包的内容                       ├── 生命周期与 FSM
 └── 投入足够保持它运行的精力              └── 在 P0 之后完成
 
 通用子域 (Generic Subdomain)            P2 Quality
-（购买，不自行构建）                     (Performance, Robust, Compatibility)
+（购买，不自行构建）                     (Performance, Robust, Compatibility, Configuration, Diagnosis, Security)
 │                                      │
 ├── 所有业务都通用的内容                  ├── 非功能性质量
 ├── 使用现有解决方案                     ├── 平台兼容性

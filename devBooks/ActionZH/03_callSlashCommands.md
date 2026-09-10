@@ -8,9 +8,9 @@ Slash 命令是 CaTDD 的操作层——它们将 methodPrompts 转化为可执�
 
 ---
 
-## 两大命令族系
+## 三大命令族系
 
-Slash 命令按不同用途分为两个族系：
+Slash 命令按不同用途分为三个族系：
 
 ### UT 命令 —— 单元测试设计与实现
 
@@ -42,6 +42,22 @@ SPEC 命令驱动工作沿着可追溯的 SpecCoding 生命周期前进。它们
 - `SPEC_commitWorks` —— 准备并提交已完成的工作
 - `SPEC_closeUserStory` —— 将审核通过的已完成工作移至 done 归档
 
+### HARNESS 命令 —— Harness 工程工具点
+
+```text
+HARNESS_<verb><Object>
+```
+
+HARNESS 命令是运维性的工具点命令，而非用户故事生命周期命令。它们围绕方法源维护 CaTDD harness：已安装目标项目资产、原生适配器包装、执行与诊断，以及向原始 CaTDD 仓库的受控补丁回写。它们绝不移动 SpecFlow 生命周期状态，也绝不重新定义 CaTDD 类别含义。
+
+**示例**：
+- `HARNESS_verifyInstallation` —— 验证已安装的 CaTDD 目标项目包含完整、一致的适配器资产
+- `HARNESS_diagnoseInstallation` —— 诊断安装失败或异常的 CaTDD 安装并推荐修复
+- `HARNESS_diagnoseProject` —— 在不改动源码的前提下诊断仓库正确性与 SpecCoding/CaTDD 漂移
+- `HARNESS_newTaskSession` —— 捕获会话上下文，使新的 CodeAgent 会话无需重新调查即可续接
+- `HARNESS_evolveHarness` —— 从已验证的成功/失败中学习，并演进最窄的规范属主
+- `HARNESS_patchCaTDDSource` —— 将有效的已安装项目 CaTDD 改进补丁回写原始源仓库
+
 ---
 
 ## 通用命令模板
@@ -51,12 +67,14 @@ SPEC 命令驱动工作沿着可追溯的 SpecCoding 生命周期前进。它们
 | 区域 | 内容 |
 |---|---|
 | **Command Header** | 命令名、流程、CaTDD 类、类别、方法来源、适配器目标 |
+| **CoT Pattern** | 声明的推理模式——ReACT、ToT 或 Linear——附该模式的执行步骤 |
 | **WHO** | 谁调用此命令、谁应执行此命令 |
 | **WHAT** | 此命令具体做什么——它执行的单个工作流步骤 |
 | **WHEN** | 有效的启动条件、何时不应使用、前序/后续命令 |
 | **WHERE** | 输入文件、输出文件、方法引用、相关流程文档 |
 | **WHY** | 开发者价值、CaTDD 方法理由、如何减少歧义 |
 | **HOW** | 执行流程——读取什么、保留什么、执行什么、报告什么 |
+| **Subagent Recommendation** | （仅 SPEC 命令）此命令是否适合后台子代理委派 |
 | **Input Contract** | 使用可移植占位符的命令参数 |
 | **Output Contract** | 期望的响应格式——摘要、涉及的文件、下一步命令 |
 | **CodeAgent Compatibility** | 纯 Markdown，无工具特定假设 |
@@ -65,19 +83,24 @@ SPEC 命令驱动工作沿着可追溯的 SpecCoding 生命周期前进。它们
 
 ---
 
-## 四种命令流程
+## 四种命令流程与 HarnessKits 套件
 
-命令按四种流程组织，每种流程都有文档化的命令序列：
+命令按四种流程加一个运维套件组织：
 
 ```
 slashCommands/flows/
-├── P0-FuncTestsFlow.md    ← UT 命令：功能测试设计
-├── P1-DesignTestsFlow.md   ← UT 命令：设计导向测试
-├── P2-QualityTestsFlow.md  ← UT 命令：质量导向测试
-└── Px-SpecFlow.md          ← SPEC 命令：完整生命周期编排
+├── P0-FuncTestsFlow.md      ← UT 命令：功能测试设计
+├── P1-DesignTestsFlow.md    ← UT 命令：设计导向测试
+├── P2-QualityTestsFlow.md   ← UT 命令：质量导向测试
+└── Px-SpecFlow.md           ← SPEC 命令：完整生命周期编排
+
+slashCommands/kits/
+└── Px-HarnessKits.md        ← HARNESS_* 运维工具点
 ```
 
 SpecFlow 中的 `Px` 意为"跨优先级"——它并非像 P0/P1/P2 那样的测试类别优先级，而是一个编排各测试层的流程。
+
+`Px-HarnessKits` 同样是跨优先级的，但它是一个套件而非生命周期流程：它分组工具点命令，不要求严格的命令顺序。未来的附加/演示命令应属于 `P3 Addons`，以与 `methodPrompts` 保持一致。
 
 ---
 
@@ -94,7 +117,8 @@ P0 是最常见的入口点，因为它涵盖了功能测试设计——每个�
           └───────────┬─────────────┘
                       │
                       ▼
-     接口/协议 ──→ UT_designTypicalSkeleton
+     接口/协议 ──┬─→ UT_designTypicalSkeleton
+                 └─→ UT_designFuncTestsSkeleton（Typical+Edge+Misuse+Fault）
                                        │
                                        ▼
                                Typical 骨架
@@ -117,8 +141,12 @@ P0 是最常见的入口点，因为它涵盖了功能测试设计——每个�
                ▼
        UT_implTestCase ──→ UT_reviewImplTestCase
                │                       │
-               └───────────────────────┘
-                       (循环)
+               └───────────┬───────────┘
+                           ▼
+                 UT_refactTestCase（可选，GREEN 清理）
+                           │
+                           ▼
+                  UT_reviewImplTestCase（复审）
 ```
 
 ### 入口点
@@ -128,6 +156,8 @@ P0 是最常见的入口点，因为它涵盖了功能测试设计——每个�
 1. **现有 Demo 测试**：如果你有用以演练组件的 Demo/Example 代码，使用 `UT_convertDemoToTypical` 将核心行为提炼为 CaTDD Typical 骨架。这能保留已有的工作成果，而非从零开始。
 
 2. **接口或协议**：如果你有 API 头文件或规格文档，使用 `UT_designTypicalSkeleton` 从接口契约出发设计 Typical 骨架。
+
+3. **一次性完成完整功能集**：当你想将完整 P0 集作为单一行为设计时，使用 `UT_designFuncTestsSkeleton` 一次性产出全部四个骨架（Typical + Edge + Misuse + Fault）。
 
 ### 逐命令详解
 
@@ -213,6 +243,14 @@ P0 是最常见的入口点，因为它涵盖了功能测试设计——每个�
 
 **输出**：包含 PASS/FAIL 的审查报告。若 PASS，循环回到 `UT_tellMeNextImplTest` 获取下一个 TC。若 FAIL，返回修复。
 
+#### 步骤 10：UT_refactTestCase（可选）
+
+**何时使用**：选定的 TC 已 GREEN 且已审查，但测试体难以阅读或维护。
+
+**做什么**：在不改变行为、类别路由或 US/AC/TC 可追溯性的前提下，重构该单个测试用例以提高清晰度。缺失行为、缺失覆盖或错误类别路由必须回到设计/实现命令，而非在重构中加入。
+
+**下一步命令**：再次执行 `UT_reviewImplTestCase`——证明清理后没有骨架漂移。
+
 ---
 
 ## Slash 命令中的 RED→GREEN 纪律
@@ -271,28 +309,31 @@ P1 和 P2 命令在开始起草任何骨架之前，需要有已确认的设计�
 |---|---|---|
 | P1 | State | `README_StateDesign.md` 或 `README_ArchDesign.md` 中的 `State Design` 章节 |
 | P1 | Capability | `README_DetailDesign.md` |
+| P1 | Interaction | `README_ArchDesign.md` 中的顺序、交互或协作章节 |
 | P1 | Concurrency | `README_ResourceDesign.md` |
 | P2 | Performance | `README_PerfDesign.md` |
 | P2 | Robust | `README_ErrorDesign.md` |
 | P2 | Compatibility | `README_CompatDesign.md` |
 | P2 | Configuration | `README_DetailDesign.md` |
+| P2 | Diagnosis | `README_DiagnosisDesign.md` / `README_VerifyDesign.md` 证据要求 |
+| P2 | Security | SecurityDesign 文档、威胁模型或安全策略 |
 
-如果缺少必需的设计源，命令会在起草骨架前**发出警告并停止**。它会询问开发者："状态架构设计在哪里？我在设计状态测试之前需要它。"这个关卡贯彻了一个原则：P1 和 P2 测试验证的是**架构决策**，而不仅是 API 行为。
+如果缺少必需的设计源，命令会在起草骨架前**发出警告并停止**，询问开发者设计在哪里，而不是凭空编造架构决策。这个关卡贯彻了一个原则：P1 和 P2 测试验证的是**架构决策**，而不仅是 API 行为。
 
 ### P1-DesignTestsFlow
 
-处理架构验证：State、Capability 和 Concurrency。
+处理架构验证：State、Capability、Interaction 和 Concurrency。
 
 ```
 P0 功能骨架（已完成）
          │
-    ┌────┼────┐
-    ▼    ▼    ▼
-UT_designStateSkeleton  UT_designCapabilitySkeleton  UT_designConcurrencySkeleton
-    │         │                    │
-    └────┬────┘                    │
-         ▼                         │
- UT_reviewDesignTestsSkeleton ←────┘
+    ┌────┼────┬──────┐
+    ▼    ▼    ▼      ▼
+UT_designStateSkeleton  UT_designCapabilitySkeleton  UT_designConcurrencySkeleton  Interaction（直接 method prompt）
+    │         │                    │                                   │
+    └────┬────┘                    │                                   │
+         ▼                         │                                   │
+ UT_reviewDesignTestsSkeleton ←────┴───────────────────────────────────┘
          │
          ▼
  UT_tellMeNextImplTest → UT_implTestCase → UT_reviewImplTestCase
@@ -300,22 +341,24 @@ UT_designStateSkeleton  UT_designCapabilitySkeleton  UT_designConcurrencySkeleto
 
 **入口条件**：P0 功能骨架必须存在（尤其是 Typical 和 Edge）。每个 P1 类别都需要已确认的设计源。P1 在骨架起草开始之前必须有 DESIGN。
 
-**关卡 P1**：进入 P1 前，所有 P0 测试必须为 GREEN。离开 P1 前，架构必须经过验证（无死锁、无竞态条件、ThreadSanitizer 干净）。
+**路由说明**：State、Capability 和 Concurrency 有专门的 `UT_design*Skeleton` 命令。Interaction 目前还没有专门的 slash 命令——流程直接通过 `CaTDD_methodPrompt4Cat-Interaction.md` 路由，在相同的 Discovery Gate 与审查契约下，将源关联的 US/AC/TC 写入规范的 `designInteraction` 类别文件。
+
+**关卡 P1**：进入 P1 前，所有 P0 测试必须为 GREEN。离开 P1 前，架构必须经过验证：存在状态行为时 State 测试 GREEN，存在设计极限时 Capability 测试 GREEN，存在顺序/协作/交接规则时 Interaction 测试 GREEN，存在共享执行时 Concurrency 测试 GREEN——且无死锁、无竞态条件、ThreadSanitizer 干净。
 
 ### P2-QualityTestsFlow
 
-处理非功能质量属性：Performance、Robust、Compatibility、Configuration。
+处理非功能质量属性：Performance、Robust、Compatibility、Configuration、Diagnosis、Security。
 
 ```
 P0/P1 稳定覆盖（已完成）
          │
-    ┌────┼────┬────┐
-    ▼    ▼    ▼    ▼
-UT_designPerformanceSkeleton  UT_designRobustSkeleton  UT_designCompatibilitySkeleton  UT_designConfigurationSkeleton
-    │         │                    │                              │
-    └────┬────┘                    │                              │
-         ▼                         │                              │
- UT_reviewQualityTestsSkeleton ←───┘──────────────────────────────┘
+    ┌────┼────┬────┬──────────┬──────────┐
+    ▼    ▼    ▼    ▼          ▼          ▼
+UT_designPerformanceSkeleton  UT_designRobustSkeleton  UT_designCompatibilitySkeleton  UT_designConfigurationSkeleton  Diagnosis（直接）  Security（直接）
+    │         │                    │                              │                    │                  │
+    └────┬────┘                    │                              │                    │                  │
+         ▼                         │                              │                    │                  │
+ UT_reviewQualityTestsSkeleton ←───┴──────────────────────────────┴────────────────────┴──────────────────┘
          │
          ▼
  UT_tellMeNextImplTest → UT_implTestCase → UT_reviewImplTestCase
@@ -323,7 +366,9 @@ UT_designPerformanceSkeleton  UT_designRobustSkeleton  UT_designCompatibilitySke
 
 **入口条件**：P0 功能覆盖存在，相关的 P1 设计覆盖存在，且每个 P2 类别都有已确认的项目根设计源。
 
-**关卡 P2**：进入 P2 前，P1 必须完成。离开 P2 前，质量 SLO 必须满足，生产就绪标准必须达标。
+**路由说明**：Performance、Robust、Compatibility 和 Configuration 有专门的 `UT_design*Skeleton` 命令。Diagnosis 和 Security 目前还没有专门的 slash 命令——流程直接通过 `CaTDD_methodPrompt4Cat-Diagnosis.md` 和 `CaTDD_methodPrompt4Cat-Security.md` 路由，将源关联的 US/AC/TC 写入规范的 `qualityDiagnosis` 与 `qualitySecurity` 文件。
+
+**关卡 P2**：进入 P2 前，P1 必须完成。离开 P2 前，质量 SLO 必须满足，所需诊断/可观测性证据已验证，存在威胁模型或策略时安全保护测试 GREEN，生产就绪标准必须达标。
 
 ---
 
@@ -334,23 +379,27 @@ Px-SpecFlow 是最大、最重要的流程，因为它编排完整的 SpecCoding
 ### SpecFlow 生命周期
 
 ```
-pendingNews → todoUS → doingUS → doneUS
-                         ↘ abortUS（针对不应继续的活跃故事）
+pendingNews ──(分析)──→ todoUS → doingUS → doneUS
+                  │                  ↘ suspendUS（暂停，可恢复）
+                  ▼                  ↘ abortUS（不应继续的活跃故事）
+              analyzedNews（分析后的原始输入存档）
 ```
 
-每个工作项通常经历四个阶段，其中 `abortUS` 用于保留不应继续进行的活跃故事：
+每个工作项都会经历已分析、活跃与归档通道，其中 `abortUS` 和 `suspendUS` 用于保留不应继续进行的活跃故事：
 
 | 阶段 | 目录 | 含义 |
 |---|---|---|
-| **pendingNews** | `.catdd/spec/pendingNews/` | 等待分析的工作。原始 Issue、功能请求、导入的用户故事。 |
+| **pendingNews** | `.catdd/spec/pendingNews/` | 等待分析的工作。原始 Issue 与功能请求。 |
+| **analyzedNews** | `.catdd/spec/analyzedNews/` | 分析后存档的原始输入——保留源追溯。 |
 | **todoUS** | `.catdd/spec/todoUS/` | 已分析、可领取的工作。结构化用户故事及候选验收标准。 |
 | **doingUS** | `.catdd/spec/doingUS/` | 正在进行中的活跃工作。处于设计、测试或实现阶段的已开启用户故事。 |
+| **suspendUS** | `.catdd/spec/suspendUS/` | 暂停的活跃故事，附持久恢复引用（分支/worktree），供暂停而非就地继续时使用。 |
 | **abortUS** | `.catdd/spec/abortUS/` | 已中止的活跃工作，保留以供后续分析或作为下一轮改进的输入。 |
 | **doneUS** | `.catdd/spec/doneUS/` | 已完成的工作。经审查、已提交、CI 通过的故事。 |
 
 ### 完整命令序列
 
-完整的 SpecFlow 生命周期包含 21+ 个命令，分为三个阶段：
+完整的 SpecFlow 生命周期包含 34 个 SPEC 命令，分为三个阶段：
 
 #### 阶段 A：故事前（输入和分析）
 
@@ -358,88 +407,113 @@ pendingNews → todoUS → doingUS → doneUS
 1. SPEC_initProjectContext
    创建 .catdd/spec/projectContext.md —— 共享的项目宪章
 
-2. SPEC_importIssue / SPEC_importFeature
+2. SPEC_updateProjectContext
+   当项目事实、约束或约定变化时更新
+
+3. SPEC_importIssue / SPEC_importFeature
    将工作输入导入 pendingNews/
 
-3. SPEC_importUserStory
+4. SPEC_importUserStory
    将已结构化的用户故事直接排入 todoUS/（跳过分析）
 
-4. SPEC_analyzeIssue / SPEC_analyzeFeature
+5. SPEC_analyzeIssue / SPEC_analyzeFeature
    将待处理输入转化为 todoUS/ 中的可追溯用户故事
    将原始输入从 pendingNews/ 移至 analyzedNews/ 以便追溯
 
-5. SPEC_openUserStory
+6. SPEC_openUserStory
    将选定的故事从 todoUS/ 移至 doingUS/（工作开始）
+   询问是否应创建/切换专属故事分支
 ```
 
 #### 阶段 B：设计与规划
 
 ```
-6. SPEC_clearStoryIntent（可选但推荐）
+7. SPEC_clearStoryIntent（可选但推荐）
    在设计前对齐开发者意图与 CodeAgent 意图
    记录双向意图契约（Mutual Intent Contract）：范围、非目标、成功信号、假设
 
-7. SPEC_makePlan
-   在 doingUS/ 中创建配对任务工作制品（*-TASKs.md）
+8. SPEC_makePlan
+   在 doingUS/ 中创建配对任务工作制品（*-UserStory-Tasks.md）
    将工作分类为：意图澄清类、需求导向类、设计导向类或实现导向类
    决定下一步执行哪个 SPEC_* 步骤
 
    ┌─ 若为需求导向 ────────────────────────────────┐
-   │ 8.  SPEC_updateUserStory                            │
-   │     更新模块 README_UserStory.md 和 README_UserGuide.md
-   │ 9.  SPEC_reviewUserStory                            │
+   │ 9.  SPEC_updateUserStory                            │
+   │     更新 README_UserStories.md 账本及配对的         │
+   │     README_UserGuide.md（以及模块级文档）            │
+   │ 10. SPEC_reviewUserStory                            │
    │     审查需求质量                                      │
-   │     若 PASS：SPEC_commitWorks → SPEC_closeUserStory  │
-   │     或转入设计导向的下一步骤                          │
+   │     若 PASS：提交/关闭，或转入设计导向               │
    └─────────────────────────────────────────────────────┘
 
    ┌─ 若为设计导向（初始架构） ─────────────────────┐
-   │ 10. SPEC_takeArchDesign                              │
+   │ 11. SPEC_takeArchDesign                              │
    │     产出 README_ArchDesign.md                         │
-   │ 11. SPEC_reviewArchDesign                            │
+   │ 12. SPEC_reviewArchDesign                            │
    │     在进入详细设计前把关架构质量                       │
-   │ 12. SPEC_updateArchDesign（若审查未通过）             │
+   │ 13. SPEC_updateArchDesign（若审查未通过）             │
    └─────────────────────────────────────────────────────┘
 
    ┌─ 若为设计导向（初始详细设计） ─────────────────┐
-   │ 13. SPEC_takeDetailDesign                            │
+   │ 14. SPEC_takeDetailDesign                            │
    │     产出 README_DetailDesign.md 和 AC                │
-   │ 14. SPEC_reviewDetailDesign                          │
+   │ 15. SPEC_reviewDetailDesign                          │
    │     把关详细设计质量                                   │
-   │ 15. SPEC_updateDetailDesign（若审查未通过）           │
+   │ 16. SPEC_updateDetailDesign（若审查未通过）           │
    └─────────────────────────────────────────────────────┘
+
+   SPEC_whatsNextTask 可随时调用，读取当前状态并
+   推荐唯一下一步命令。
 ```
 
 #### 阶段 C：实现与关闭
 
 ```
    ┌─ 若为实现导向 ──────────────────────────────────┐
-   │ 16. SPEC_designUnitTests                             │
+   │ 17. SPEC_designUnitTests                             │
    │     经 P0/P1/P2 流程进入 CaTDD 测试设计              │
-   │ 17. SPEC_implUnitTests                               │
+   │ 18. SPEC_implUnitTests                               │
    │     实现选定的 TC（RED→GREEN）                       │
-   │ 18. SPEC_implProductCodes                            │
+   │     然后执行 SPEC_reviewImplUnitTests                │
+   │ 19. SPEC_implProductCodes                            │
    │     实现产品代码以使测试通过                           │
-   │ 19. SPEC_reviewProductCodes                          │
-   │     审查实现质量                                      │
+   │ 20. SPEC_reviewProductCodes                          │
+   │     审查实现质量；提交前重新运行                      │
+   │     SPEC_reviewImplUnitTests                          │
+   │     SPEC_refactUnitTests（可选）清理单个 GREEN 测试， │
+   │     然后再次审查                                      │
    │                                                       │
    │     若审查 FAIL：                                     │
-   │ 20. SPEC_abortUserStory（当继续推进不安全时）         │
+   │ 21. SPEC_abortUserStory（当继续推进不安全时）         │
    │     将活跃故事移至 abortUS 以供后续分析               │
    └─────────────────────────────────────────────────────┘
 
-21. SPEC_commitWorks
+   暂停/恢复是任何已开启且未关闭步骤的全局中断：
+   SPEC_suspendUserStory → suspendUS/，附持久恢复引用
+   SPEC_resumeUserStory  → 回到 doingUS/ 并继续
+
+22. SPEC_commitWorks
     准备并提交已完成的工作
 
-22. SPEC_closeUserStory
+23. SPEC_closeUserStory
     将已审查、已提交的故事从 doingUS/ 移至 doneUS/
-    将配对的 TASKs 工作制品从 doingUS/ 移至 doneUS/
+    将配对的任务工作制品从 doingUS/ 移至 doneUS/
+
+24. SPEC_mergeWorks（当使用了专属故事分支时）
+    将已关闭的分支合并到集成分支
+    未创建故事分支时自动跳过
+
+SPEC_partialCloseUserStory 拆分活跃故事：已接受部分带可追溯性
+关闭，被拒绝/延后的部分连同理由移入 abortUS/。
+
+SPEC_patchOriginalCaTDD（非默认分支）将有效的已安装项目
+CaTDD 元文件改进回写上游。
 ```
 
 ### 流程图：完整生命周期
 
 ```
-                    SPEC_initProjectContext
+                    SPEC_initProjectContext /
                     SPEC_updateProjectContext
                             │
                             ▼
@@ -450,14 +524,13 @@ pendingNews → todoUS → doingUS → doneUS
      SPEC_importIssue  SPEC_importFeature  SPEC_importUserStory
               │             │                     │
               ▼             ▼                     │
-      pendingNews/*.md  pendingNews/*.md           │
+             pendingNews/*.md                      │
               │             │                     │
               ▼             ▼                     │
      SPEC_analyzeIssue  SPEC_analyzeFeature        │
               │             │                     │
-              └──────┬──────┘                     │
-                     ▼                            ▼
-              todoUS/*-UserStory.md
+              ▼             ▼                     │
+        analyzedNews/*.md  todoUS/*-UserStory.md ◄┘
                      │
                      ▼
               SPEC_openUserStory
@@ -466,26 +539,34 @@ pendingNews → todoUS → doingUS → doneUS
               doingUS/*-UserStory.md
                      │
                      ▼
-              SPEC_clearStoryIntent（对齐意图）
+        SPEC_clearStoryIntent（若意图不清晰）
                      │
                      ▼
-              SPEC_makePlan（创建任务工作制品）
+        SPEC_makePlan（创建 *-UserStory-Tasks.md）
                      │
          ┌───────────┼───────────┐
          ▼           ▼           ▼
-    需求导向     设计导向     实现导向
+    需求导向      设计导向      实现导向
          │           │           │
          ▼           ▼           ▼
-    updateStory  takeDesign  designTests
-    reviewStory  reviewDesign implTests
-         │           │       implCode
-         ▼           ▼       reviewCode
-    commitWorks  commitWorks commitWorks
-    closeStory   closeStory  closeStory
-         │           │           │
-         └───────────┼───────────┘
+    updateStory  takeDesign  designUnitTests
+    reviewStory  reviewDesign 实现/审查测试
+         │           │       实现/审查代码
+         ▼           ▼           │
+    commitWorks  commitWorks    │
+    closeStory   closeStory     ▼
+         │           │    SPEC_commitWorks
+         └───────────┼──── SPEC_closeUserStory
                      ▼
-              doneUS/*-UserStory.md
+    任何活跃步骤中的全局中断：
+    SPEC_suspendUserStory → suspendUS/（恢复引用）
+    SPEC_resumeUserStory  → 回到 doingUS/
+    SPEC_abortUserStory   → abortUS/（之后分析或重新导入）
+    SPEC_partialCloseUserStory 拆分已接受与已拒绝范围
+                     ▼
+              doneUS/*-UserStory.md + 任务制品
+                     ▼
+    SPEC_mergeWorks 当使用了专属故事分支时
 ```
 
 ### 关键 SpecFlow 命令详解
@@ -621,9 +702,19 @@ pendingNews → todoUS → doingUS → doneUS
 **做什么**：
 1. 验证故事确实已完成（审查、测试、提交均已完成）
 2. 将故事从 `doingUS/` 移至 `doneUS/`
-3. 将配对的 TASKs 工作制品一并移入
+3. 将配对的任务工作制品一并移入
 4. 记录关闭日期和所有经验教训
 5. 不关闭未经审查和提交的故事
+
+#### SPEC_updateProjectContext、SPEC_suspendUserStory、SPEC_resumeUserStory、SPEC_mergeWorks 与 SPEC_partialCloseUserStory
+
+- `SPEC_updateProjectContext` —— 项目事实、约束或约定变化时刷新共享项目宪章；合并改变了生命周期或项目上下文事实后也应运行。
+- `SPEC_suspendUserStory` —— 外部依赖或环境阻塞时，在任何已开启且未关闭的步骤暂停活跃故事。故事与任务制品移至 `suspendUS/`，附持久恢复引用（分支或 worktree）。
+- `SPEC_resumeUserStory` —— 验证恢复引用仍然存在后，将暂停的故事及其任务制品移回 `doingUS/`，然后通过 `SPEC_whatsNextTask` 继续。
+- `SPEC_mergeWorks` —— 在 `SPEC_closeUserStory` 之后、仍需分支集成时，将已关闭的故事分支合并到目标集成分支；未使用专属故事分支时自动跳过。
+- `SPEC_partialCloseUserStory` —— 当活跃故事只有部分范围被接受时拆分：已接受部分带可追溯性关闭，被拒绝或延后部分连同显式理由与证据移入 `abortUS/`。
+
+`SPEC_whatsNextTask` 可随时调用，读取当前 `.catdd/spec/` 状态并推荐唯一下一步命令。
 
 ---
 
@@ -634,10 +725,10 @@ Px-SpecFlow 提供了明确的模型层级指引——使用能够保持决策�
 | 层级 | 用途 | SPEC 命令 |
 |---|---|---|
 | **SOTA reasoning** | 架构决策、系统边界、质量权衡、不可逆选择 | `SPEC_takeArchDesign`、`SPEC_reviewArchDesign` |
-| **High Performance** | 多工作制品推理、设计、审查、规划 | `SPEC_initProjectContext`、`SPEC_analyzeIssue`、`SPEC_analyzeAbortedUserStory`、`SPEC_makePlan`、`SPEC_takeDetailDesign`、`SPEC_reviewDetailDesign`、`SPEC_designUnitTests`、`SPEC_reviewProductCodes` |
-| **Flash Speed** | 确定性工作制品移动、导入、提交、关闭 | `SPEC_importIssue`、`SPEC_openUserStory`、`SPEC_abortUserStory`、`SPEC_implUnitTests`、`SPEC_implProductCodes`、`SPEC_commitWorks`、`SPEC_closeUserStory` |
+| **High Performance** | 需求分析、意图对齐、规划、需求更新、局部设计、审查关卡、测试设计、代码审查、纠正路由、受控上游补丁回写 | `SPEC_initProjectContext`、`SPEC_updateProjectContext`、`SPEC_analyzeIssue`、`SPEC_analyzeFeature`、`SPEC_analyzeAbortedUserStory`、`SPEC_clearStoryIntent`、`SPEC_makePlan`、`SPEC_updateUserStory`、`SPEC_whatsNextTask`、`SPEC_takeArchDesign`、`SPEC_reviewArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_reviewDetailDesign`、`SPEC_updateDetailDesign`、`SPEC_reviewUserStory`、`SPEC_designUnitTests`、`SPEC_reviewImplUnitTests`、`SPEC_reviewProductCodes`、`SPEC_patchOriginalCaTDD` |
+| **Flash Speed** | 确定性的导入、移动、暂停、恢复、部分关闭、中止、提交、关闭，或小型测试驱动实现/重构步骤 | `SPEC_importIssue`、`SPEC_importFeature`、`SPEC_importUserStory`、`SPEC_openUserStory`、`SPEC_suspendUserStory`、`SPEC_resumeUserStory`、`SPEC_partialCloseUserStory`、`SPEC_abortUserStory`、`SPEC_implUnitTests`、`SPEC_implProductCodes`、`SPEC_refactUnitTests`、`SPEC_commitWorks`、`SPEC_closeUserStory` |
 
-**升级规则**：当命令暴露出架构层面显著的不确定性时，从较低层级升级到较高层级：竞争性非功能需求、安全/保密风险、实时约束、并发边界或不可逆的 API 决策。
+**升级规则**：当命令暴露出架构层面显著的不确定性时，从较低层级升级到较高层级：竞争性非功能需求、安全/保密风险、实时或嵌入式约束、并发边界、数据迁移、兼容性矩阵，或不可逆的模块/API 所有权决策。
 
 ---
 
@@ -697,9 +788,13 @@ SpecFlow 创建并维护一组可追溯的工作制品：
 | `analyzedNews/*.md` | 分析后归档的原始输入 | 提交——保留可追溯性 |
 | `todoUS/*-UserStory.md` | 已分析、可领取的故事 | 提交——团队待办列表 |
 | `doingUS/*-UserStory.md` | 正在进行中的活跃故事 | 提交——跨机器可见性 |
-| `doingUS/*-TASKs.md` | 活跃任务计划，含复选框任务 | 提交——显式、可检查的步骤 |
+| `doingUS/*-UserStory-Tasks.md` | 活跃任务计划，含复选框任务 | 提交——显式、可检查的步骤 |
+| `suspendUS/*-UserStory.md` | 暂停的故事，附持久恢复引用 | 提交——保留可追溯性 |
+| `suspendUS/*-UserStory-Tasks.md` | 与故事并存的暂停任务工作制品 | 提交——下一步恢复保持显式 |
+| `abortUS/*-UserStory.md` | 为重新分析保留的中止故事 | 提交——保留可追溯性 |
+| `abortUS/*-UserStory-Tasks.md` | 与故事并存的中止任务工作制品 | 提交——供后续分析或下一轮使用 |
 | `doneUS/*-UserStory.md` | 已完成、已审查、已提交的故事 | 提交——项目历史 |
-| `doneUS/*-TASKs.md` | 已完成的任务工作制品 | 提交——后续诊断 |
+| `doneUS/*-UserStory-Tasks.md` | 已完成的任务工作制品 | 提交——后续诊断 |
 | `WorkingProcessLog.md` | 本地工作状态跟踪 | Gitignore——个人的，非团队共享 |
 
 ### 项目根 SPEC 文档
@@ -709,8 +804,8 @@ SpecFlow 创建并维护一组可追溯的工作制品：
 | `README.md` | 项目概览、所有权、主目录 | 其他 SPEC 步骤 |
 | `README_ArchDesign.md` | 高层架构、模块、依赖关系 | `SPEC_takeArchDesign` |
 | `README_DetailDesign.md` | 类设计、API 签名、数据结构 | `SPEC_takeDetailDesign` |
-| `README_UserStories.md` | 项目范围用户故事、追溯链接 | 其他 SPEC 步骤 |
-| `README_UserGuide.md` | 面向用户的运行时使用指南 | 其他 SPEC 步骤 |
+| `README_UserStories.md` | 项目级 TODO/DONE 故事账本，含 AC 追溯/状态 | `SPEC_updateUserStory`、`SPEC_reviewUserStory` |
+| `README_UserGuide.md` | 面向用户的运行时使用指南 | `SPEC_updateUserStory`、`SPEC_reviewUserStory` |
 | `README_VerifyDesign.md` | 验证拓扑、测试策略、US/AC/TC 可追溯性 | SpecFlow + UT 流程 |
 | `README_ErrorDesign.md` | 容错架构、故障安全状态 | `SPEC_takeArchDesign` |
 | `README_ResourceDesign.md` | 资源分配、内存/CPU 预算 | `SPEC_takeArchDesign` |
@@ -749,6 +844,25 @@ Px-SpecFlow 定义了严格的冲突保护规则，防止各层违反彼此的�
 5. **在 SPEC_makePlan 之后，SPEC_take*Design 仅用于初始设计工作，SPEC_update*Design 仅用于跟进设计修订。**
 6. **每个产生设计的步骤必须在下游生命周期步骤之前经过其审查关卡的把关。**
 7. **如果产品意图不明确，保持用户故事开放并询问开发者，而不是凭空捏造需求。**
+8. **HARNESS_* 命令是运维工具点：它们不得移动 SpecFlow 生命周期状态，也不得重新定义 CaTDD 类别含义。**
+9. **在专属故事分支上执行 SPEC_closeUserStory 之后，若仍需分支集成，请运行仓库合并/集成步骤（例如 SPEC_mergeWorks）；未创建分支则跳过合并。**
+
+---
+
+## 执行模式与 ONE-MORE-THING 停止规则
+
+Px-SpecFlow 无论以交互式还是无人值守方式运行，都执行完全相同的流程：
+
+- **manualMode**（默认）：交互式聊天。一次执行一个 slash 命令；当意图、标准或安全性不清晰时，助手提出聚焦问题。
+- **autonomousMode**（可选加入）：通过 `specCodeAgentCLI` 或带 `execution_mode: autonomousMode` 的入口命令进行连续的无头/CLI 执行。agent 借助显式文件工作制品自动执行并推进安全的下一步，记录假设而不在每个回合停下。
+
+**安全边界**：只有实现导向的故事支持 `autonomousMode`。若在意图澄清、需求导向或设计导向的故事上触发自主模式，流程必须停止、强制 `manualMode` 并要求开发者确认。需求分析与系统架构需要人的意图与权衡。
+
+命令级的 `analysis_mode`（默认 `BRAINSTORM`，或 `AUTONOMOUS`）是 `SPEC_analyzeIssue` / `SPEC_analyzeFeature` 内部的局部设置；它不会把流程切换到 `autonomousMode`。
+
+每个 CaTDD 命令都执行 **ONE-MORE-THING** 通用停止规则：不确定时询问开发者。在 `manualMode` 下，助手立即停止并提问。在 `autonomousMode` 下，自主绝不是猜测的许可——运行必须停止，输出 `status: manual_required: ONE-MORE-THING: <question>` 并等待。
+
+自主运行在完成（`SPEC_closeUserStory` → 退出码 0）、中止（`SPEC_abortUserStory` → 非零退出码）或暂停（`SPEC_suspendUserStory` → 干净退出）时终止。
 
 ---
 
@@ -768,7 +882,7 @@ Copilot 提示词包装器（由 `scripts/makeSlashCmd4Copilot.sh` 生成）将�
 
 直接读取命令提示词文件。开发者输入命令名称或从助手的命令面板中选择。
 
-### 在 utCodeAgentCLI 中（未来）
+### 在 utCodeAgentCLI 中
 
 ```bash
 utCodeAgentCLI --target myTestFile.ts --input spec/IOC.h --behave designTypicalSkeleton
@@ -802,9 +916,12 @@ CLI 将 `--behave` 的值映射到 slash 命令行为。别名如 `reviewFuncTes
 | 来自产品团队的新功能请求 | Px-SpecFlow → `SPEC_importFeature` → `SPEC_analyzeFeature` |
 | 来自 QA 的 Bug 报告 | Px-SpecFlow → `SPEC_importIssue` → `SPEC_analyzeIssue` |
 | 已有用户故事 | Px-SpecFlow → `SPEC_importUserStory` → `SPEC_openUserStory` |
-| 恢复暂停的工作 | Px-SpecFlow → `SPEC_whatsNextTask`（读取当前状态并推荐下一步） |
+| 不知道下一步做什么 | Px-SpecFlow → `SPEC_whatsNextTask`（读取当前状态并推荐唯一下一步） |
+| 恢复已暂停的故事 | Px-SpecFlow → `SPEC_resumeUserStory`（验证持久恢复引用） |
 | 需要架构决策 | Px-SpecFlow → `SPEC_takeArchDesign` |
 | 设计完成后准备编码 | Px-SpecFlow → `SPEC_designUnitTests` → P0/P1/P2 流程 |
+| 已安装的 CaTDD harness 疑似损坏 | Px-HarnessKits → `HARNESS_verifyInstallation` → `HARNESS_diagnoseInstallation` |
+| 已验证运行中的可复用经验 | Px-HarnessKits → `HARNESS_evolveHarness` |
 
 ---
 

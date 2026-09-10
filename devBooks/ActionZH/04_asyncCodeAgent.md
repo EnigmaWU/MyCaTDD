@@ -190,15 +190,15 @@ Agent 报告关卡状态并询问："P0 完成。是否继续 P1？"
 
 #### 3D：P1 设计导向测试（如适用）
 
-State → Capability → Concurrency，遵循相同的 RED→GREEN 循环。
+State → Capability → Interaction → Concurrency，遵循相同的 RED→GREEN 循环。
 
-**关卡 P1 要求**：ThreadSanitizer/AddressSanitizer 干净，无死锁，无竞态条件，架构按设计要求验证通过。
+**关卡 P1 要求**：ThreadSanitizer/AddressSanitizer 干净，无死锁，无竞态条件，交互/协作契约已对照其设计源验证，架构按设计要求验证通过。
 
 #### 3E：P2 质量导向测试（如需要）
 
-Performance → Robust → Compatibility → Configuration。
+Performance → Robust → Compatibility → Configuration → Diagnosis → Security。
 
-**关卡 P2 要求**：性能 SLO 已满足，压力/浸泡测试通过，生产就绪标准达标。
+**关卡 P2 要求**：性能 SLO 已满足，压力/浸泡测试通过，需要时诊断/可观测性证据已验证，存在威胁模型或策略时安全保护测试 GREEN，生产就绪标准达标。
 
 ### 阶段 4：收尾与文档
 

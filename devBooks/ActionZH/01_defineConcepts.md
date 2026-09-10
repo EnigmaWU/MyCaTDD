@@ -40,26 +40,29 @@ CaTDD 不是 TDD 的替代品。它是内置了设计结构、可追溯性和 LL
 
 ## 按类别划分的 Method Prompt
 
-除了主 method prompt 之外，CaTDD 提供了 12 个按类别划分的 prompt——每个测试类别一个。这些深入指导文件（`CaTDD_methodPrompt4Cat-*.md`）在 CodeAgent 针对特定类别工作时给予指引：
+除了主 method prompt 之外，CaTDD 提供了 15 个按类别划分的 prompt——每个测试类别一个。这些深入指导文件（`CaTDD_methodPrompt4Cat-*.md`）在 CodeAgent 针对特定类别工作时给予指引：
 
 | 类别 | Prompt 文件 | 核心指引 |
 |---|---|---|
-| Typical | `4Cat-Typical.md` | 核心正常路径设计，每个测试一个行为，≤3 个断言 |
-| Edge | `4Cat-Edge.md` | 边界值、模式变体，每个边界一个测试以便诊断 |
-| Misuse | `4Cat-Misuse.md` | API 合约违规、错误预防、非法调用序列 |
-| Fault | `4Cat-Fault.md` | 外部故障、恢复、优雅降级 |
-| State | `4Cat-State.md` | 生命周期转换、FSM 验证、非法状态拒绝 |
-| Capability | `4Cat-Capability.md` | 系统极限、容量规划、文档化边界 |
-| Concurrency | `4Cat-Concurrency.md` | 线程安全、竞态条件、并行访问模式 |
-| Performance | `4Cat-Performance.md` | SLO 验证、基准测试、资源使用 |
-| Robust | `4Cat-Robust.md` | 压力测试、浸泡测试、长期运行稳定性 |
-| Compatibility | `4Cat-Compatibility.md` | 跨平台、版本升级、集成接口 |
-| Configuration | `4Cat-Configuration.md` | 构建标志、部署变体、功能开关 |
-| Demo/Example | `4Cat-DemoExample.md` | 教程、文档、最佳实践示例 |
+| Typical | `CaTDD_methodPrompt4Cat-Typical.md` | 核心正常路径设计，每个测试一个行为，≤3 个关键断言 |
+| Edge | `CaTDD_methodPrompt4Cat-Edge.md` | 边界值、模式变体，每个边界一个测试以便诊断 |
+| Misuse | `CaTDD_methodPrompt4Cat-Misuse.md` | API 合约违规、错误预防、非法调用序列 |
+| Fault | `CaTDD_methodPrompt4Cat-Fault.md` | 外部故障、恢复、优雅降级 |
+| State | `CaTDD_methodPrompt4Cat-State.md` | 生命周期转换、不变量、非法转换拒绝 |
+| Capability | `CaTDD_methodPrompt4Cat-Capability.md` | 设计的能力边界、极限与组件职责 |
+| Interaction | `CaTDD_methodPrompt4Cat-Interaction.md` | 协作者顺序、交接契约、编排顺序 |
+| Concurrency | `CaTDD_methodPrompt4Cat-Concurrency.md` | 线程安全、并发访问下的顺序、竞态/死锁自由 |
+| Performance | `CaTDD_methodPrompt4Cat-Performance.md` | SLO 验证、延迟/吞吐/资源预算 |
+| Robust | `CaTDD_methodPrompt4Cat-Robust.md` | 压力、重复、降级条件、长期运行稳定性 |
+| Compatibility | `CaTDD_methodPrompt4Cat-Compatibility.md` | 版本、平台、协议、schema、工具链与集成接口 |
+| Configuration | `CaTDD_methodPrompt4Cat-Configuration.md` | 默认值、优先级、功能开关、环境变量与非法配置 |
+| Diagnosis | `CaTDD_methodPrompt4Cat-Diagnosis.md` | 可观测性、可调试性、可操作证据、失败可解释性 |
+| Security | `CaTDD_methodPrompt4Cat-Security.md` | 威胁模型下的保护属性、信任边界、机密处理 |
+| Demo/Example | `CaTDD_methodPrompt4Cat-DemoExample.md` | 教程、文档、最佳实践示例 |
 
-每个类别 prompt 定义了：**Position**（在优先级框架中的位置）、**Use When**（适用条件）、**Do Not Use When**（何时应将场景移至其他类别）、**Design Focus**（设计重点）、**Design Skeleton**（合约骨架）、**US/AC/TC Pattern**（标准格式）、**Naming Examples**（具体测试命名）、**Checklist**（质量验证清单）以及 **Common Mistakes**（常见错误）。
+每个类别 prompt 都定义了：**Position**（在优先级框架中的位置）、**Use When**（适用条件）、**Do Not Use When**（何时应将场景移至其他类别）、**TestPointsInMind**（该类别应考虑的测试点）、**Design Skeleton**（合约骨架）以及 **Checklist**（质量验证清单）。其中 10 个（4 个 P0 类别加上 State、Capability、Interaction、Concurrency、Diagnosis、Security）还保留了 **Design Focus**、**US/AC/TC Pattern**、**Naming Examples** 和 **Common Mistakes** 指引；其余质量/附加文件（Performance、Robust、Compatibility、Configuration、Demo/Example）保持精简，通过 `TestPointsInMind` 引导发现。
 
-这些 prompt 是 LLM 针对每个类别的"风格指南"。当 CodeAgent 设计一个 Typical 设计骨架时，它会读取 `4Cat-Typical.md` 来应用正确的模式、术语和约束。当它将草案分类到类别中时，它会检查"Do Not Use When"规则以避免错误分类。
+这些 prompt 是 LLM 针对每个类别的"风格指南"。当 CodeAgent 设计一个 Typical 设计骨架时，它会读取 `CaTDD_methodPrompt4Cat-Typical.md` 来应用正确的模式、术语和约束。当它将草案分类到类别中时，它会检查"Do Not Use When"规则以避免错误分类。
 
 ---
 
@@ -74,7 +77,7 @@ MyCaTDD 将 CaTDD 方法论组织为四个层级，每个层级职责清晰：
 │     骨架规则、状态纪律、模板                          │
 ├─────────────────────────────────────────────────────┤
 │ [2] slashCommands       — 命令流程                    │
-│     可移植的 UT_* 和 SPEC_* 命令、流程顺序            │
+│     可移植的 UT_*、SPEC_*、HARNESS_* 命令           │
 │     输入/输出传递、工具中立的执行                      │
 ├─────────────────────────────────────────────────────┤
 │ [3] codeAgents          — 智能执行                    │
@@ -93,11 +96,13 @@ MyCaTDD 将 CaTDD 方法论组织为四个层级，每个层级职责清晰：
 
 它包含：
 
-- **`CaTDD_methodPrompt.md`** — 主方法规约。CaTDD 的每个方面都在此定义：优先级框架、类别语义、US/AC/TC 合约、TDD 红→绿循环、质量关卡、状态跟踪、风险驱动的优先级排序，以及从理解到最终完成的完整 agent 工作流检查清单。
+- **`CaTDD_methodPrompt.md`** — 主方法入口与稳定的 CaTDD 合约：设计骨架形态、类别语义、强制可追溯性、测试点发现、工作流与默认执行顺序。
 
-- **`CaTDD_methodPrompt4Cat-*.md`** — 按类别划分的 method prompt。12 个测试类别（Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility、Configuration、Demo/Example）各自都有专门的深入 prompt，CodeAgent 在该类别下工作时可以参考。
+- **`CaTDD_methodPrompt-*.md`** — 方法子主题 prompt，承载主入口引用的深入材料：类别语义、测试点发现、工作流、测试结构、文件命名、agent 工作流、故障排查与示例。
 
-- **`CaTDD_designAndImplTemplate.cxx`** — 一个 C++ 实现模板，展示了完整的 CaTDD 文件结构。尽管使用 C++ 语法，该模板在概念上是语言无关的：任何语言都可以采用 OVERVIEW → DESIGN → IMPLEMENTATION → TODO 结构。
+- **`CaTDD_methodPrompt4Cat-*.md`** — 按类别划分的 method prompt。15 个测试类别（Typical、Edge、Misuse、Fault、State、Capability、Interaction、Concurrency、Performance、Robust、Compatibility、Configuration、Diagnosis、Security、Demo/Example）各自都有专门的深入 prompt，CodeAgent 在该类别下工作时可以参考。
+
+- **`CaTDD_designAndImplTemplate.cxx/.ts/.py/.go`** — 针对 C++、TypeScript、Python 和 Go 的语言实现模板，展示完整的 CaTDD 文件结构。每个模板都遵循相同的 OVERVIEW → DESIGN → IMPLEMENTATION → TODO 结构；没有任何语言是方法上的硬性要求。
 
 - **独立用户指南** — `README_UserGuide.md` 和 `README_UserGuide_ZH.md` 解释了如何使用 method prompt、谁使用它们、何时应用以及放在哪里。它们的存在使得用户无需阅读整个仓库，仅使用此目录即可上手。
 
@@ -111,9 +116,11 @@ MyCaTDD 将 CaTDD 方法论组织为四个层级，每个层级职责清晰：
 
 - **`flows/` 下的流程文档** — P0-FuncTestsFlow、P1-DesignTestsFlow、P2-QualityTestsFlow 和 Px-SpecFlow。每个流程定义了可重复的命令序列，包含入口点、关卡和循环返回路径。
 
-- **命令模板** — `UT_slashCommandTemplate.md` 和 `SPEC_slashCommandTemplate.md` 确保每个命令遵循相同的 WHO/WHAT/WHEN/WHERE/WHY/HOW 结构。
+- **`kits/` 下的套件文档** — Px-HarnessKits 将运维性的 `HARNESS_*` 工具点命令分组，用于维护 CaTDD 源码、适配器、执行、诊断与补丁回写安全，不要求严格的生命周期顺序。
 
-- **`commands/` 下的具体命令文件** — 每个命令文件告诉 CodeAgent 具体做什么：读取什么、产出什么、保留什么，以及接下来执行什么命令。
+- **命令模板** — `UT_slashCommandTemplate.md` 和 `SPEC_slashCommandTemplate.md` 确保每个命令遵循相同的 Command Header / CoT Pattern / WHO / WHAT / WHEN / WHERE / WHY / HOW / Input Contract / Output Contract / CodeAgent Compatibility 结构；SPEC 模板额外包含 Subagent Recommendation。
+
+- **`commands/` 下的具体命令文件** — 三个命令族（`UT_*`、`SPEC_*`、`HARNESS_*`）按流程与套件分组。每个命令文件告诉 CodeAgent 具体做什么：读取什么、产出什么、保留什么，以及接下来执行什么命令。
 
 ### 第 3 层：codeAgents — 执行层
 
@@ -166,7 +173,7 @@ methodPrompts ──→ slashCommands ──→ codeAgents
 在 CaTDD 中，"设计"不是 UML 图或 Word 文档。它是测试文件内部的**可复用注释骨架**。每个骨架按以下方式组织：
 
 - **Class**：优先级族 — `P0 Functional`、`P1 Design`、`P2 Quality`、`P3 Addons`
-- **Category**：具体的验证角度 — `Typical`、`Edge`、`Misuse`、`Fault`、`State`、`Capability`、`Concurrency`、`Performance`、`Robust`、`Compatibility`、`Configuration`、`Demo/Example`
+- **Category**：具体的验证角度 — `Typical`、`Edge`、`Misuse`、`Fault`、`State`、`Capability`、`Interaction`、`Concurrency`、`Performance`、`Robust`、`Compatibility`、`Configuration`、`Diagnosis`、`Security`、`Demo/Example`
 
 每个骨架保留以下最小形态：
 
@@ -174,6 +181,8 @@ methodPrompts ──→ slashCommands ──→ codeAgents
 //=================================================================================================
 // [Class] / [Category] Design Skeleton
 //=================================================================================================
+// @[SUT]: [声明的 SUT，与文件 OVERVIEW 一致]
+// @[TestLevel]: UnitTesting（或 SysTesting / UserTesting）
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: 此类别对该组件要验证什么
@@ -215,17 +224,18 @@ P0 是其他一切之前的默认关卡。按照标准顺序，在推进到 P1 �
 
 ### P1：面向设计的测试（Design-Oriented Testing）
 
-验证架构决策的测试：状态管理、容量规划和并发模型。
+验证架构决策的测试：状态管理、能力与职责边界、协作者交互契约和并发模型。
 
 | 类别 | 目的 | 示例 |
 |---|---|---|
 | **State** 🔄 | 状态机转换与生命周期 | Init→Ready→Running→Stopped |
 | **Capability** 🏆 | 最大容量与系统极限 | 最大连接数、队列极限、资源池耗尽 |
+| **Interaction** 🔗 | 协作者顺序与交接契约 | 编排器→插件调用顺序、先验证后分发、部分失败后回滚 |
 | **Concurrency** 🚀 | 线程安全与竞态条件 | 并行访问、死锁场景、无锁验证 |
 
 ### P2：面向质量的测试（Quality-Oriented Testing）
 
-非功能需求：性能、稳定性和兼容性。
+非功能需求：性能、稳定性、兼容性、配置行为、可观测性和安全性。
 
 | 类别 | 目的 | 示例 |
 |---|---|---|
@@ -233,6 +243,8 @@ P0 是其他一切之前的默认关卡。按照标准顺序，在推进到 P1 �
 | **Robust** 🛡️ | 压力、重复、长期运行稳定性 | 1000 次重复、24 小时浸泡测试 |
 | **Compatibility** 🔄 | 跨平台、版本测试 | Windows/Linux/macOS、API 版本兼容 |
 | **Configuration** 🎛️ | 设置与部署变体 | Debug vs Release、功能开关、环境变量 |
+| **Diagnosis** 🔎 | 可观测性与失败可解释性 | 日志中的关联 ID、可操作的错误输出、健康/状态证据 |
+| **Security** 🔐 | 威胁条件下的保护 | 认证/授权拒绝、机密脱敏、信任边界与注入防御 |
 
 ### P3：附加项测试（Addons Testing）
 
@@ -244,8 +256,8 @@ P0 是其他一切之前的默认关卡。按照标准顺序，在推进到 P1 �
 
 ```
 P0: Typical → Edge → Misuse → Fault
-P1: State → Capability → Concurrency
-P2: Performance → Robust → Compatibility → Configuration
+P1: State → Capability → Interaction → Concurrency
+P2: Performance → Robust → Compatibility → Configuration → Diagnosis → Security
 P3: Demo/Example
 ```
 
@@ -261,7 +273,7 @@ P3: Demo/Example
 
 ```
 P0: Typical → Edge → Misuse → Fault（彻底完成 P0）
-P1: State → Capability → Concurrency
+P1: State → Capability → Interaction → Concurrency
 P2: Performance
 ```
 
@@ -271,7 +283,7 @@ P2: Performance
 
 ```
 P0: Typical → Edge（基本功能）
-P1: State（提前提升）→ Capability → Concurrency
+P1: State（提前提升）→ Capability → Interaction → Concurrency
 P0: Misuse → Fault（完成功能测试）
 P2: Performance → Robust
 ```
@@ -282,7 +294,7 @@ P2: Performance → Robust
 
 ```
 P0: Typical → Edge → Fault（提升）→ Misuse
-P1: State → Capability → Concurrency
+P1: State → Capability → Interaction → Concurrency
 P2: Robust（提升）→ Performance → Compatibility
 ```
 
@@ -293,7 +305,7 @@ P2: Robust（提升）→ Performance → Compatibility
 ```
 P0: Typical → Edge → Misuse
 P2: Performance（在 P2 内提升）→ Robust
-P1: State → Capability → Concurrency
+P1: State → Capability → Interaction → Concurrency
 P0: Fault（完成 P0）
 ```
 
@@ -303,7 +315,7 @@ P0: Fault（完成 P0）
 
 ```
 P0: Typical → Edge → Misuse
-P1: Concurrency（提升为 P1 第一个）→ State → Capability
+P1: Concurrency（提升为 P1 第一个）→ State → Capability → Interaction
 P0: Fault（完成 P0）
 P2: Performance → Robust
 ```
@@ -315,7 +327,7 @@ P2: Performance → Robust
 ```
 P0: Typical → Edge → Fault → Misuse
 P2: Performance（提升）→ Robust（提升）
-P1: State → Capability → Concurrency
+P1: State → Capability → Interaction → Concurrency
 ```
 
 *理由*：数据完整性和吞吐量是关键质量属性。
@@ -500,6 +512,7 @@ CaTDD 在各优先级级别之间定义了显式的关卡。在满足所有条�
 
 - State 测试 GREEN（如果有状态组件）
 - Capability 测试 GREEN（极限已表征）
+- Interaction 测试 GREEN（如果存在顺序、协作或交接规则）
 - Concurrency 测试 GREEN（如果多线程）
 - 没有已知的死锁或竞态条件
 - ThreadSanitizer/AddressSanitizer 通过
@@ -511,6 +524,8 @@ CaTDD 在各优先级级别之间定义了显式的关卡。在满足所有条�
 - Robust 测试 GREEN（压力/浸泡测试通过）
 - Compatibility 测试 GREEN（如果跨平台）
 - Configuration 测试 GREEN（如果可配置）
+- Diagnosis 测试 GREEN（当需要可观测性或失败可解释性时）
+- Security 测试 GREEN（当定义了威胁、策略或保护要求时）
 - 满足生产就绪标准
 
 ### 可选关卡 P3：文档完成
@@ -551,18 +566,26 @@ CaTDD 根据项目规模支持两种组织策略：
 
 ### 多文件策略（较大项目）
 
-所有测试文件放在 `Test/` 目录中：
+按类别划分的测试文件遵循规范命名规则 `test_{feature}_{category}.<ext>`，其中 `{feature}` 是稳定的 lower_snake_case 用法切片，`{category}` 是固定的 CaTDD 类别 token：
 
-- `UT_Component_FreelyDrafts.cxx` — 探索与想法捕获
-- `UT_Component_Typical.cxx` — 核心工作流
-- `UT_Component_Edge.cxx` — 边界情况、边界值、极限
-- `UT_Component_Misuse.cxx` — API 滥用模式
-- `UT_Component_Fault.cxx` — 错误处理与恢复
-- `UT_Component_State.cxx` — 状态转换
-- `UT_Component_Concurrency.cxx` — 线程安全
-- 公共工具放在 `_UT_Common.h`
+- `test_{feature}_freelyDrafts.cxx` — 探索与想法捕获（Stage-0 草案）
+- `test_{feature}_funcValidTypical.cxx` — 核心工作流
+- `test_{feature}_funcValidEdge.cxx` — 边界情况、边界值、极限
+- `test_{feature}_funcInvalidMisuse.cxx` — API 滥用模式
+- `test_{feature}_funcInvalidFault.cxx` — 错误处理与恢复
+- `test_{feature}_designState.cxx` — 状态转换
+- `test_{feature}_designCapability.cxx` — 能力极限与职责
+- `test_{feature}_designInteraction.cxx` — 协作者顺序与交接
+- `test_{feature}_designConcurrency.cxx` — 线程安全
+- `test_{feature}_qualityPerformance.cxx` — SLO 与资源预算
+- `test_{feature}_qualityRobust.cxx` — 压力与长期运行稳定性
+- `test_{feature}_qualityCompatibility.cxx` — 版本/平台/工具链兼容性
+- `test_{feature}_qualityConfiguration.cxx` — 功能开关与环境变化
+- `test_{feature}_qualityDiagnosis.cxx` — 可观测性与失败证据
+- `test_{feature}_qualitySecurity.cxx` — 威胁下的保护属性
+- `test_{feature}_addonDemoExample.cxx` — 教程与文档化示例
 
-成熟、稳定的测试从探索文件迁移到按类别划分的文件。
+成熟、稳定的测试点从 freely-drafts 文件迁移到按类别划分的文件；每个 feature 都为每个规范 token 保留一个文件（没有适用测试点的类别以 `@[NoTestPoints]: <reason>` 作为活决策保留）。
 
 ---
 
