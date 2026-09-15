@@ -57,7 +57,7 @@ Expected result — one ReACT pass:
 - Review result recorded against team-shared `.catdd/spec/doingUS/` work state: pass, revise requirements, transfer to design-oriented work, close requirement-only work, or ask developer.
 - Explicit consistency check that `README_UserStories.md` TODO/DONE story state and AC trace/status match lifecycle artifacts and active story content.
 - Missing acceptance criteria, ambiguity, README SPEC doc gaps, edge cases, measurable outcomes, and risk list from a clarify/analyze/checklist-style review gate.
-- Next recommended command: `SPEC_updateUserStory`, `SPEC_commitWorks`, `SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, or `SPEC_updateDetailDesign`.
+- Next recommended command: `SPEC_updateUserStory`, `SPEC_commitStoryWorks`, `SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, or `SPEC_updateDetailDesign`.
 
 ## Loop Guard
 

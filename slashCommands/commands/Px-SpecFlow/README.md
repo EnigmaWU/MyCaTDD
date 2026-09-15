@@ -41,7 +41,10 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_abortUserStory.md](SPEC_abortUserStory.md) | Move an unsafe active story to abortUS for later analysis or next-round improvement. |
 | [SPEC_partialCloseUserStory.md](SPEC_partialCloseUserStory.md) | Split accepted and rejected scope, close the accepted portion, and preserve the rejected portion in abortUS. |
 | [SPEC_patchOriginalCaTDD.md](SPEC_patchOriginalCaTDD.md) | Patch effective installed-project CaTDD modifications back to the original CaTDD repository. |
-| [SPEC_commitWorks.md](SPEC_commitWorks.md) | Prepare and commit completed work. |
+| [SPEC_commitPreStoryWorks.md](SPEC_commitPreStoryWorks.md) | Commit the pre-story intake/analysis span before `SPEC_openUserStory`. |
+| [SPEC_commitStepWorks.md](SPEC_commitStepWorks.md) | Commit one verified lifecycle step inside the story span. |
+| [SPEC_commitStoryWorks.md](SPEC_commitStoryWorks.md) | Commit the whole `openUserStory -> closeUserStory` span as the just-done-story commit. |
+| [SPEC_commitWorks.md](SPEC_commitWorks.md) | Generate a general, story-agnostic commit message from staged files first, most recently modified files second. |
 | [SPEC_closeUserStory.md](SPEC_closeUserStory.md) | Move completed story to done state. |
 | [SPEC_mergeWorks.md](SPEC_mergeWorks.md) | Merge a closed story branch into the target branch when integration is still required. |
 
@@ -50,6 +53,8 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 All commands should follow [../../SPEC_slashCommandTemplate.md](../../SPEC_slashCommandTemplate.md) and the lifecycle in [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md).
 
 Px-SpecFlow runs in `manualMode` by default. When an entry command is invoked with `execution_mode: autonomousMode`, autonomous execution is supported strictly and ONLY for `implementation-oriented` stories. Requirements and architecture work require developer confirmation and must remain in `manualMode`.
+
+Commits are split by span, not by file set. `SPEC_makePlan` records the commit plan in the paired `*-UserStory-Tasks.md`: `SPEC_commitPreStoryWorks` covers the intake/analysis span before the story opens, `SPEC_commitStepWorks` covers planned step boundaries inside the story span, `SPEC_commitStoryWorks` covers the whole `openUserStory -> closeUserStory` span including close-generated lifecycle/meta changes, and `SPEC_commitWorks` stays the general story-agnostic commit command. In `manualMode` the span commands are options the developer chooses; in `autonomousMode` they are the defaults.
 
 Each command should declare its CoT pattern (`ReACT`, `ToT`, or `Linear`) as described in the template.
 

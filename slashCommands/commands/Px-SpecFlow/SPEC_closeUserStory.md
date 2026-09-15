@@ -19,7 +19,7 @@ Run these steps once, in order. The branches below are deterministic gates, not 
 3. Rewrite story-specific references that still point at `.catdd/spec/doingUS/` to `.catdd/spec/doneUS/`.
 4. Synchronize `README_UserStories.md`: story TODO/DOING → DONE, and AC status aligned with closure evidence.
 5. Classify project-context impact: **minor** (file movement or link normalization only) → remind the developer to run `SPEC_updateProjectContext`; **major** (next-command recommendation, lifecycle summary, or project rules changed) → run `SPEC_updateProjectContext` in-flow before declaring closure complete.
-6. Evaluate the close-commit checkpoint: if steps 2–5 changed no file, report `close_commit_required = no`; otherwise report `close_commit_required = yes` with either a `close_commit_ref` or `next_command = /SPEC_commitWorks`, and do not mark closure complete.
+6. Evaluate the close-commit checkpoint: if steps 2–5 changed no file, report `close_commit_required = no`; otherwise report `close_commit_required = yes` with either a `close_commit_ref` or `next_command = /SPEC_commitStoryWorks` with `commit_checkpoint = post_close`, and do not mark closure complete.
 7. Evaluate the merge checkpoint: dedicated story branch still unintegrated → `next_command = SPEC_mergeWorks`; otherwise `next_command = no_command`.
 8. Report the completion summary plus the non-blocking `learning_command = /HARNESS_evolveHarness` checkpoint, without displacing a required lifecycle command.
 
@@ -42,7 +42,7 @@ Expected result:
 3. Two links inside the story rewritten from `doingUS/` to `doneUS/`.
 4. `README_UserStories.md`: `US-07` moved to DONE, AC-01..AC-04 marked satisfied.
 5. Impact classified **minor** — only file movement and link normalization → developer reminded to run `SPEC_updateProjectContext`.
-6. Steps 2–4 changed files → `close_commit_required = yes`, `next_command = /SPEC_commitWorks`; closure is **not** yet complete.
+6. Steps 2–4 changed files → `close_commit_required = yes`, `next_command = /SPEC_commitStoryWorks` with `commit_checkpoint = post_close`; closure is **not** yet complete.
 7. Merge already done → merge checkpoint auto-skipped.
 8. Reported alongside: `learning_command = /HARNESS_evolveHarness`.
 
@@ -80,7 +80,7 @@ Expected result:
   - If no file changed during close: report `close_commit_required = no`.
   - If close generated file changes: report `close_commit_required = yes` and either:
     - include `close_commit_ref` for the commit that captured close-generated changes, or
-    - include explicit handoff `next_command = /SPEC_commitWorks` and do not mark closure complete yet.
+    - include explicit handoff `next_command = /SPEC_commitStoryWorks` with `commit_checkpoint = post_close` and do not mark closure complete yet.
 - Remaining follow-up work, if any.
 - Non-blocking post-success learning hook:
   - Report `success_learning_checkpoint = recommended`.

@@ -226,6 +226,10 @@ bash scripts/test_makeSlashCmd4Codex.sh
 | 审查当前 story 范围内已实现的 unit tests | [commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md](commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md) |
 | 在不改变行为的前提下重构一个 GREEN 测试用例 | [commands/P0-FuncTestsFlow/UT_refactTestCase.md](commands/P0-FuncTestsFlow/UT_refactTestCase.md) |
 | 编排当前 story 范围内的 unit-test 重构 | [commands/Px-SpecFlow/SPEC_refactUnitTests.md](commands/Px-SpecFlow/SPEC_refactUnitTests.md) |
+| 在开启故事前提交导入/分析区间 | [commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md](commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) |
+| 提交故事区间内单个已验证的生命周期步骤 | [commands/Px-SpecFlow/SPEC_commitStepWorks.md](commands/Px-SpecFlow/SPEC_commitStepWorks.md) |
+| 把整个 open-to-close 故事区间提交为 just-done 提交 | [commands/Px-SpecFlow/SPEC_commitStoryWorks.md](commands/Px-SpecFlow/SPEC_commitStoryWorks.md) |
+| 从暂存或最近修改的文件生成通用提交信息 | [commands/Px-SpecFlow/SPEC_commitWorks.md](commands/Px-SpecFlow/SPEC_commitWorks.md) |
 
 ## 质量检查清单
 

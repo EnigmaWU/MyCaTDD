@@ -227,6 +227,10 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Review story-scoped implemented unit tests | [SPEC_reviewImplUnitTests](commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md) |
 | Refactor one GREEN test case without behavior change | [UT_refactTestCase](commands/P0-FuncTestsFlow/UT_refactTestCase.md) |
 | Orchestrate story-scoped unit-test refactor | [SPEC_refactUnitTests](commands/Px-SpecFlow/SPEC_refactUnitTests.md) |
+| Commit the intake/analysis span before opening a story | [SPEC_commitPreStoryWorks](commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) |
+| Commit one verified lifecycle step inside a story span | [SPEC_commitStepWorks](commands/Px-SpecFlow/SPEC_commitStepWorks.md) |
+| Commit the whole open-to-close story span as the just-done commit | [SPEC_commitStoryWorks](commands/Px-SpecFlow/SPEC_commitStoryWorks.md) |
+| Generate a general commit message from staged or recently modified files | [SPEC_commitWorks](commands/Px-SpecFlow/SPEC_commitWorks.md) |
 
 ## Quality Checklist
 

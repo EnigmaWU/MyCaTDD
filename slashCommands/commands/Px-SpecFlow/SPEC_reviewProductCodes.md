@@ -15,7 +15,7 @@ Repeat until all four review criteria are explicitly addressed.
 1. **Thought** — Read `changed_files` against `doing_user_story` and `readme_spec_files`. Check four criteria in order: correctness, traceability to a README SPEC doc, minimality, and quality risk.
 2. **Action** — Write the verdict — `pass`, `update design`, `add tests`, `abort story`, or `ask developer` — with findings ordered by those criteria.
 3. **Observation** — Check that `verification_output` explains the result, and that each finding names a file and a route. Code changed but traced to no README SPEC doc, or an unexplained verification gap, returns to **Thought**.
-4. **Stop** — Exit on a stable verdict. On `pass`, report `next_command = SPEC_reviewImplUnitTests`; never route straight to `SPEC_commitWorks`.
+4. **Stop** — Exit on a stable verdict. On `pass`, report `next_command = SPEC_reviewImplUnitTests`; never route straight to `SPEC_commitStoryWorks`.
 
 ### Worked Example
 
@@ -44,8 +44,8 @@ Expected result:
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 
 ## Output Contract
 
@@ -59,6 +59,6 @@ Rework routes from this review to `SPEC_updateDetailDesign` or `SPEC_designUnitT
 
 ## Conflict Guard
 
-Do not commit when quality is not met or when verification evidence is missing without explanation. Do not route directly to `SPEC_commitWorks`; run `SPEC_reviewImplUnitTests` after product-code review when product code changed.
+Do not commit when quality is not met or when verification evidence is missing without explanation. Do not route directly to `SPEC_commitStoryWorks`; run `SPEC_reviewImplUnitTests` after product-code review when product code changed.
 
 ONE-MORE-THING: ask developer if something not sure

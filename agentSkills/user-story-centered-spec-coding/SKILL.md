@@ -176,8 +176,8 @@ If the testing method is unclear, default UnitTesting to CaTDD and explicitly no
 
 ### Phase 7: Commit, CI, and Closure
 
-1. Use `SPEC_commitWorks` intent to prepare and commit completed work.
-2. Use `SPEC_closeUserStory` intent to move reviewed completed work to `.catdd/spec/doneUS/`.
+1. Use `SPEC_commitStoryWorks` intent to commit the whole `SPEC_openUserStory -> SPEC_closeUserStory` span, using `SPEC_commitStepWorks` at the step boundaries the plan marked committable and `SPEC_commitPreStoryWorks` for the intake span that preceded the story. `SPEC_commitWorks` stays available as the general, story-agnostic commit command.
+2. Use `SPEC_closeUserStory` intent to move reviewed completed work to `.catdd/spec/doneUS/`, then rerun `SPEC_commitStoryWorks` with `commit_checkpoint = post_close` when close generated lifecycle/meta changes.
 3. Record any reusable lessons that should feed back into `methodPrompts`, `slashCommands`, or `agentSkills`.
 
 ## Resources

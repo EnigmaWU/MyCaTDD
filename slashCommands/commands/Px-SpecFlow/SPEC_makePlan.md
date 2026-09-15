@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Create or update the task artifact paired with the active user story and decide which `SPEC_*` command should run next.
+Create or update the task artifact paired with the active user story, decide which `SPEC_*` command should run next, and decide the story's commit plan.
 
 ## CoT Pattern
 
@@ -13,7 +13,7 @@ Create or update the task artifact paired with the active user story and decide 
 1. **Generate** — From the story's current readiness, list every next command that is *not yet excluded* by the Planning Decision Rules. Produce at least two branches; one branch per candidate command.
 2. **Evaluate** — For each branch, state the evidence that would make it correct and whether that evidence exists today. A branch whose prerequisite artifact is missing is rejected, not deferred.
 3. **Select** — Take the surviving branch that is earliest in the Planning Decision Rules order. If two branches survive at the same rank, stop and ask the developer.
-4. **Execute** — Write the branches, the rejections with reasons, and the selection into the paired `*-UserStory-Tasks.md` as `[ ]`/`[x]` checkbox tasks.
+4. **Execute** — Write the branches, the rejections with reasons, and the selection into the paired `*-UserStory-Tasks.md` as `[ ]`/`[x]` checkbox tasks. Record the commit plan in the same artifact: which step boundaries SHOULD call `SPEC_commitStepWorks`, which steps are no-op boundaries to skip, and whether the span ends with `SPEC_commitStoryWorks`.
 5. **Verify** — Print the checklist. Confirm the selected command's own prerequisites are all `[x]`. If any is `[ ]`, the selection is wrong; return to **Select**.
 
 ### Worked Example
@@ -32,7 +32,7 @@ Expected result — one ToT pass:
 - **Generate**: three branches — `SPEC_updateUserStory`, `SPEC_takeDetailDesign`, `SPEC_designUnitTests`.
 - **Evaluate**: `SPEC_designUnitTests` rejected (no detail design exists). `SPEC_takeDetailDesign` rejected (AC wording is still changing, so design would be built on a moving target). `SPEC_updateUserStory` survives (requirement surface `README_UserStories.md` is being changed).
 - **Select**: `SPEC_updateUserStory` — rank 2, earliest surviving.
-- **Execute**: tasks file records all three branches, the two rejections with reasons, and the selection.
+- **Execute**: tasks file records all three branches, the two rejections with reasons, the selection, and the commit plan — `SPEC_commitStepWorks` planned after `SPEC_implUnitTests` and `SPEC_implProductCodes` (`commit_step = yes`), no commit after no-op gates, and `SPEC_commitStoryWorks` as the final just-done story commit.
 - **Verify**: prerequisites of `SPEC_updateUserStory` are `[x]` (story opened, intent clear) → selection stands.
 
 ## Inputs
@@ -46,12 +46,14 @@ Expected result — one ToT pass:
 - `project_user_stories_doc`: project-root `README_UserStories.md` ledger for TODO/DONE and AC trace status.
 - `readme_spec_files`: optional project-root `README*` SPEC docs that already influence the next step.
 - `related_docs`: optional issue, feature, review, architecture, detail-design, or test notes relevant to next-step planning.
+- `commit_policy`: optional team or repository commit policy, such as requiring one commit per story or one commit per verified step.
+- `commit_granularity`: optional explicit request to plan `step commits`, `story commit`, or `both`.
 - `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record that mode decision in `tasks_file`. Autonomous mode is strictly supported ONLY for implementation-oriented stories; if the story orientation is intent-clearing, requirement-oriented, or design-oriented, halt autonomous progression, force `manualMode`, and prompt the developer for interactive review.
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
-- [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
+- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [methodPrompts](../../../methodPrompts/README.md)
 
 ## Output Contract
 
@@ -64,8 +66,25 @@ Expected result — one ToT pass:
 - Explicit trace to the requirement source for the active story: issue/feature pending input, imported user-story input, or module/submodule `README_UserStory.md` plus paired `README_UserGuide.md`.
 - Explicit check of project-level `README_UserStories.md` consistency: TODO/DONE state and AC trace/status must match lifecycle artifacts. SUSPENDED stories should be routed to `SPEC_resumeUserStory` before planning continues.
 - Open questions or blockers that must be resolved before the selected next command can run safely.
+- A commit plan recorded in the same task artifact, stating:
+  - Which step boundaries SHOULD call [SPEC_commitStepWorks](SPEC_commitStepWorks.md), recorded as `commit_step = yes`.
+  - Which step boundaries change no file and must be skipped, recorded as `commit_step = no`.
+  - That the story span ends with [SPEC_commitStoryWorks](SPEC_commitStoryWorks.md) as the final just-done UserStory commit, unless the developer replaces it with [SPEC_commitWorks](SPEC_commitWorks.md).
+  - Whether [SPEC_commitPreStoryWorks](SPEC_commitPreStoryWorks.md) applies to the intake/analysis span that preceded the opened story.
+  - Whether `single_story_commit = yes`, meaning the span is squashed into one story commit at the end instead of keeping step commits.
 
 ## Planning Decision Rules
+
+### Commit Plan Decision Rules
+
+- Decide commit granularity per story, not per project, and record the decision in `tasks_file` so later commands never re-decide it.
+- `manualMode` default: plan the story span commit through `SPEC_commitStoryWorks`, and record `SPEC_commitStepWorks` boundaries as available options (`commit_step = optional`) that the developer may take or decline.
+- `autonomousMode` default: plan `SPEC_commitStepWorks` at every deterministic step boundary whose gate is `PASS`/`GREEN`, then `SPEC_commitStoryWorks` as the final just-done story commit.
+- Mark `commit_step = yes` only for steps that produce file changes and have an explicit verification gate, such as `SPEC_designUnitTests`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_reviewProductCodes`, and `SPEC_reviewImplUnitTests` when it changed files.
+- Mark `commit_step = no` for review, planning, or analysis gates that changed no file, and for any step whose gate is not deterministic.
+- Plan `single_story_commit = yes` when the story is small, low-risk, or repository policy requires one commit per story; step commits are still allowed, and `SPEC_commitStoryWorks` squashes them at the end with developer confirmation in `manualMode`.
+- Plan `SPEC_commitPreStoryWorks` for the intake and analysis span only when the story was queued through import or analysis in the same working session; record it as `pre_story_commit = yes|no`.
+- Never plan a commit boundary for a step whose pass condition is undefined; a commit boundary requires an explicit gate first.
 
 - Evaluate lifecycle readiness in this order and stop at the first required next command:
  1. Intent unclear or developer/CodeAgent intent not aligned: route to `SPEC_clearStoryIntent`.
@@ -73,7 +92,7 @@ Expected result — one ToT pass:
  3. Requirement update already done but not reviewed: route to `SPEC_reviewUserStory`.
  4. Design-oriented work: route to the appropriate architecture/detail take-or-update command.
  5. Implementation-oriented work with sufficient requirement and design readiness: route to `SPEC_designUnitTests`.
- 6. Completed and verified work: route to `SPEC_commitWorks`, then `SPEC_closeUserStory`.
+ 6. Completed and verified work: route to `SPEC_commitStoryWorks` for the story span, then `SPEC_closeUserStory`, then the `post_close` checkpoint of `SPEC_commitStoryWorks` when close generated lifecycle/meta changes.
 - Distinguish initial design from follow-up design revision:
   - Initial architecture design routes to `SPEC_takeArchDesign`.
   - follow-up architecture revision routes to `SPEC_updateArchDesign` when prior architecture exists and the story is closing a known architecture gap, review finding, or story-level architecture feedback.
@@ -96,5 +115,8 @@ Do not jump directly into implementation from planning. If the next safe step is
 Do not plan a story whose `README_UserStories.md` ledger state is SUSPENDED; route to `SPEC_resumeUserStory` first to resume before continuing planning.
 Do not skip `SPEC_updateUserStory` when the active story changes requirement surfaces, especially project-root `README_UserStories.md` or `README_UserGuide.md`.
 Do not route to design-oriented commands before requirement-oriented updates are reviewed when requirement intent is still changing.
+Do not leave the commit plan implicit; record `commit_step` decisions, `pre_story_commit`, and the closing strategy in `tasks_file` instead of deciding them later.
+Do not plan a `commit_step = yes` boundary for a step whose gate is missing, non-deterministic, or not yet defined.
+Do not plan step commits for requirement-oriented or design-oriented spans; those spans close through `SPEC_commitStoryWorks` after their review gates pass.
 
 ONE-MORE-THING: ask developer if something not sure

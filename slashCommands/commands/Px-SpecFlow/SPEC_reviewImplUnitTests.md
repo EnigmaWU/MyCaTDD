@@ -91,7 +91,7 @@ Expected result:
 - Product-code review correlation when this command runs after `SPEC_reviewProductCodes`.
 - Test README evidence: `test-case-with-readme` applied, unavailable with builtin fallback, missing companion README, updated companion README, or ask the developer.
 - Drift findings that distinguish implementation drift from skeleton/design drift.
-- Next recommended command: `SPEC_implUnitTests`, `UT_implTestCase`, `UT_reviewImplTestCase`, `SPEC_designUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_reviewProductCodes`, `SPEC_commitWorks`, or ask the developer.
+- Next recommended command: `SPEC_implUnitTests`, `UT_implTestCase`, `UT_reviewImplTestCase`, `SPEC_designUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_reviewProductCodes`, `SPEC_commitStoryWorks`, or ask the developer.
 
 ## Flow Coupling
 
@@ -108,7 +108,7 @@ Expected result:
    - If implemented tests are aligned and product behavior is missing, route to `SPEC_implProductCodes`.
    - If implemented tests are aligned and product code has not been reviewed, route to `SPEC_reviewProductCodes`.
    - If implemented tests are aligned and GREEN but need cleanup, route to `SPEC_refactUnitTests`.
-   - If implemented tests, product code, and product-code review are aligned and no cleanup is needed, route to `SPEC_commitWorks`.
+   - If implemented tests, product code, and product-code review are aligned and no cleanup is needed, route to `SPEC_commitStoryWorks`.
    - If implementation drift exists, route to `SPEC_implUnitTests`, `UT_implTestCase`, or `UT_reviewImplTestCase`.
    - If skeleton/design intent is wrong or incomplete, route to `SPEC_designUnitTests` or ask the developer.
 
@@ -131,7 +131,7 @@ Rework routes from this review to `SPEC_implUnitTests`, `UT_implTestCase`, `UT_r
 
 If implementation and skeleton disagree, do not choose automatically which one is truth. Report the conflict and ask whether method design or implementation should change.
 Do not skip story-level review evidence before `SPEC_implProductCodes`, `SPEC_refactUnitTests`, or `SPEC_reviewProductCodes` when implemented unit tests changed.
-Do not skip the post-product-code `SPEC_reviewImplUnitTests` pass before `SPEC_commitWorks` when product code changed or product-code review findings touched test behavior.
+Do not skip the post-product-code `SPEC_reviewImplUnitTests` pass before `SPEC_commitStoryWorks` when product code changed or product-code review findings touched test behavior.
 Do not claim the `test-case-with-readme` skill was applied when it is unavailable; report the fallback gates used instead.
 Do not claim review complete when implemented TCs are missing verification evidence, unless the missing evidence is explicitly reported as a blocker.
 
