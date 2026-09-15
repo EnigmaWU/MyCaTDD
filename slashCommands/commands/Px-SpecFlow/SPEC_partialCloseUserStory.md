@@ -21,7 +21,8 @@ Run these steps once, in order. There is no retry loop; a failed split validatio
 5. Move the rejected slice into the abort lane with its `rejection_reason` and `evidence_refs` preserved.
 6. Synchronize `README_UserStories.md` so accepted ACs show DONE and rejected ACs show the abort state.
 7. Verify no duplicate same-ID story remains across the doing, done, and abort lanes.
-8. Record `followup_intent` for the rejected side and report the next command per lane.
+8. Evaluate the terminal commit checkpoint: if steps 4–6 changed files, report `commit_checkpoint = span_end` with `next_command = /SPEC_commitStoryWorks`, and do not treat the split as fully recorded until those lifecycle/meta moves are committed.
+9. Record `followup_intent` for the rejected side and report the next command per lane.
 
 ### Worked Example
 
@@ -90,6 +91,9 @@ Expected result:
   - reason for rejection
   - evidence retained
   - recommended next command for the rejected slice
+- Terminal commit checkpoint result:
+  - If the lane moves and ledger sync changed no file: report `span_commit_required = no`.
+  - If they changed files: report `span_commit_required = yes` with `next_command = /SPEC_commitStoryWorks` and `commit_checkpoint = span_end`.
 - Next recommended command:
   - `SPEC_closeUserStory` for the accepted slice after review/verification is complete.
   - `SPEC_analyzeAbortedUserStory` for the rejected slice when the team should reuse the preserved evidence.

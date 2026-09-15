@@ -25,7 +25,7 @@ Run these steps once, in order. There is no retry loop; an ambiguous scope stops
 5. Read `recent_commit_messages` (latest 5) and extract tone, tense, capitalization, and scope format.
 6. Draft the message with `WHAT` / `HOW` / `WHY` sections in that style.
 7. Present the draft. Commit only after approval, or immediately when `auto_commit` is set.
-8. Report the commit reference and state plainly that no SpecFlow lifecycle state advanced. Report `next_command = no_command` unless the developer named a next command explicitly.
+8. Report the commit reference and state plainly that no SpecFlow lifecycle state advanced. Report `next_command = no_command` unless the developer named a next command explicitly, and report the learning hook separately as `learning_command` so it never overwrites the lifecycle handoff.
 
 ### Worked Example
 
@@ -101,8 +101,8 @@ WHY
 - Explicit statement that no SpecFlow lifecycle state advanced, so a general commit is never mistaken for a span commit.
 - Non-blocking post-success learning hook:
   - Report `success_learning_checkpoint = recommended`.
-  - When another command has precedence, preserve it as `next_command` and report `learning_command = /HARNESS_evolveHarness` separately.
-  - Report `next_command = /HARNESS_evolveHarness` with `suggested_evolution_mode = auto` only when no other command has precedence.
+  - Report `learning_command = /HARNESS_evolveHarness` with `suggested_evolution_mode = auto`.
+  - Keep `next_command = no_command`; the learning command is never reported as `next_command`, because a general commit has no lifecycle successor.
 
 ## Conflict Guard
 

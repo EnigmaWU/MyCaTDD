@@ -31,6 +31,12 @@ assert_contains() {
   grep -Fq -- "$text" "$file" || fail "${file#$REPO_ROOT/} missing expected text: $text"
 }
 
+assert_not_contains() {
+  local file="$1"
+  local text="$2"
+  ! grep -Fq -- "$text" "$file" || fail "${file#$REPO_ROOT/} must not contain: $text"
+}
+
 assert_absent_file() {
   [[ ! -e "$1" ]] || fail "unexpected file: ${1#$REPO_ROOT/}"
 }
@@ -45,21 +51,27 @@ done
 assert_contains "$COMMIT_WORKS" 'story-agnostic'
 assert_contains "$COMMIT_WORKS" 'staged files first, most recently modified files second'
 assert_contains "$COMMIT_WORKS" 'Do not advance SpecFlow lifecycle state'
-assert_absent_file "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_commitStoryWorks.pre_close.md"
+assert_contains "$COMMIT_WORKS" 'learning_command = /HARNESS_evolveHarness'
+assert_not_contains "$COMMIT_WORKS" 'Report `next_command = /HARNESS_evolveHarness`'
+assert_absent_file "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_commitWorks.pre_close.md"
 
 # 2. Pre-story span: before openUserStory, never story-span work.
 assert_contains "$COMMIT_PRE_STORY" 'before `SPEC_openUserStory`'
 assert_contains "$COMMIT_PRE_STORY" 'still lives in `.catdd/spec/todoUS/`'
 assert_contains "$COMMIT_PRE_STORY" 'route to `SPEC_commitStoryWorks`'
 assert_contains "$COMMIT_PRE_STORY" 'analysis_mode: AUTONOMOUS'
-assert_contains "$COMMIT_PRE_STORY" 'autonomousMode`, this checkpoint is the default'
+assert_contains "$COMMIT_PRE_STORY" 'this checkpoint is the default'
+assert_contains "$COMMIT_PRE_STORY" 'not applicable to the pre-story span'
 assert_contains "$COMMIT_PRE_STORY" 'next_command = SPEC_openUserStory'
 assert_contains "$COMMIT_PRE_STORY" 'Do not run after the story moved to `.catdd/spec/doingUS/`'
+assert_not_contains "$COMMIT_PRE_STORY" '`autonomousMode`: default pre-story checkpoint'
 
 # 3. Step span: only planned boundaries, only after the gate passed.
 assert_contains "$COMMIT_STEP" 'inside the `SPEC_openUserStory -> SPEC_closeUserStory` story span'
 assert_contains "$COMMIT_STEP" 'commit_step = yes'
 assert_contains "$COMMIT_STEP" 'commit_step = no'
+assert_contains "$COMMIT_STEP" 'commit_step = optional'
+assert_contains "$COMMIT_STEP" 'committable only when the developer explicitly invokes this command'
 assert_contains "$COMMIT_STEP" 'Never commit failed, blocked, partial, or unverified step output.'
 assert_contains "$COMMIT_STEP" 'Step: <SPEC command>'
 assert_contains "$COMMIT_STEP" 'Do not include story-level lifecycle or meta artifacts'
@@ -68,13 +80,15 @@ assert_contains "$COMMIT_STEP" 'Do not include story-level lifecycle or meta art
 assert_contains "$COMMIT_STORY" 'whole `SPEC_openUserStory -> SPEC_closeUserStory` story span'
 assert_contains "$COMMIT_STORY" 'commit_checkpoint = pre_close'
 assert_contains "$COMMIT_STORY" 'commit_checkpoint = post_close'
+assert_contains "$COMMIT_STORY" 'commit_checkpoint = span_end'
 assert_contains "$COMMIT_STORY" 'next_command = SPEC_closeUserStory'
 assert_contains "$COMMIT_STORY" 'next_command = SPEC_mergeWorks'
 assert_contains "$COMMIT_STORY" 'single_story_commit = yes'
 assert_contains "$COMMIT_STORY" 'Do not mark closure complete while post-close lifecycle/meta changes remain uncommitted.'
 
-# 5. Manual mode is optional, autonomous mode is default, for all span commands.
-for span_command in "$COMMIT_PRE_STORY" "$COMMIT_STEP" "$COMMIT_STORY"; do
+# 5. Manual mode is optional, autonomous mode is default, for the two story-span commands;
+#    the pre-story span stays in manualMode and defaults on headless intake instead.
+for span_command in "$COMMIT_STEP" "$COMMIT_STORY"; do
   assert_contains "$span_command" '`manualMode`'
   assert_contains "$span_command" 'autonomousMode'
   grep -Eq 'manualMode`: (option|optional|optional command|Optional)' "$span_command" \
@@ -82,6 +96,11 @@ for span_command in "$COMMIT_PRE_STORY" "$COMMIT_STEP" "$COMMIT_STORY"; do
   grep -Eq 'autonomousMode`: (default|default |the default)' "$span_command" \
     || fail "${span_command#$REPO_ROOT/} must state that autonomousMode is the default"
 done
+
+# 5b. Terminal transitions other than close also end the span.
+assert_contains "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_partialCloseUserStory.md" 'commit_checkpoint = span_end'
+assert_contains "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_abortUserStory.md" 'commit_checkpoint = span_end'
+assert_contains "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_suspendUserStory.md" 'commit_checkpoint = span_end'
 
 # 6. SPEC_makePlan decides the commit plan.
 assert_contains "$MAKE_PLAN" 'Commit Plan Decision Rules'
@@ -93,6 +112,8 @@ assert_contains "$MAKE_PLAN" 'single_story_commit = yes'
 assert_contains "$MAKE_PLAN" 'pre_story_commit = yes|no'
 assert_contains "$MAKE_PLAN" 'SPEC_commitStoryWorks.md'
 assert_contains "$MAKE_PLAN" 'Never plan a commit boundary for a step whose pass condition is undefined'
+assert_contains "$MAKE_PLAN" 'close requirement-only work through `SPEC_commitStoryWorks`'
+assert_not_contains "$MAKE_PLAN" 'close requirement-only work through `SPEC_commitWorks`'
 
 # 7. Close routes its checkpoints to the story-span commit command.
 assert_contains "$CLOSE_STORY" 'next_command = /SPEC_commitStoryWorks'
@@ -107,7 +128,7 @@ for flow_doc in "$FLOW_DOC" "$FLOW_DOC_ZH"; do
   assert_contains "$flow_doc" 'Commit["SPEC_commitStoryWorks"]'
   assert_contains "$flow_doc" 'PreStoryCommit["SPEC_commitPreStoryWorks"]'
   assert_contains "$flow_doc" 'StepCommit["SPEC_commitStepWorks"]'
-  assert_contains "$flow_doc" 'CommitFinalize["SPEC_commitStoryWorks (post_close)"]'
+  assert_contains "$flow_doc" 'CommitFinalize["SPEC_commitStoryWorks (post_close / span_end)"]'
 done
 
 assert_contains "$FLOW_DOC" '## Commit Spans'
@@ -124,5 +145,11 @@ for command_name in SPEC_commitPreStoryWorks SPEC_commitStepWorks SPEC_commitSto
 done
 assert_contains "$UBILANG" '| commit span |'
 assert_contains "$UBILANG_ZH" '| commit span（提交区间） |'
+assert_contains "$UBILANG" 'the `span_end` checkpoint'
+assert_contains "$UBILANG_ZH" '`span_end` 检查点'
+assert_contains "$UBILANG" 'The pre-story span never runs in `autonomousMode`'
+assert_contains "$UBILANG_ZH" '故事前区间绝不运行于 `autonomousMode`'
+assert_not_contains "$UBILANG" 'default pre-story checkpoint in `autonomousMode`'
+assert_not_contains "$UBILANG_ZH" '在 `autonomousMode` 下，当导入阶段以 `analysis_mode: AUTONOMOUS`'
 
 echo "[specflow-commit-spans-test] PASSED: commit spans are split by pre-story, step, story, and general commit commands"

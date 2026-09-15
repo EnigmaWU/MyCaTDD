@@ -90,9 +90,9 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 ### 自主模式终态处理
 
 在 `autonomousMode` 下，运行器会自动在以下情况终止：
-1. **完成（`SPEC_closeUserStory`）**：所有任务已勾选，所有测试通过（GREEN），评审全部通过；自动提交，将故事移入 `doneUS/`，并以退出码 0 退出。
-2. **中止（`SPEC_abortUserStory`）**：遇到不可恢复的契约冲突、无效假设或 Loop Guard 预算耗尽（`maxStepRetry = 2`, `maxRunCorrectionLoop = 3`）；保留诊断信息，将故事与任务移入 `abortUS/`，并以非 0 错误码退出。
-3. **挂起（`SPEC_suspendUserStory`）**：缺少外部依赖或硬件环境离线；保留持久化 git 引用（分支/工作区），将故事与任务移入 `suspendUS/`，并干净退出。
+1. **完成（`SPEC_closeUserStory`）**：所有任务已勾选，所有测试通过（GREEN），评审全部通过；在已规划的步骤边界执行 `SPEC_commitStepWorks`，由 `SPEC_commitStoryWorks` 完成最终提交（`pre_close`，若关闭产生变更则再执行 `post_close`），将故事移入 `doneUS/`，并以退出码 0 退出。
+2. **中止（`SPEC_abortUserStory`）**：遇到不可恢复的契约冲突、无效假设或 Loop Guard 预算耗尽（`maxStepRetry = 2`, `maxRunCorrectionLoop = 3`）；保留诊断信息，将故事与任务移入 `abortUS/`，通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 提交泳道移动，并以非 0 错误码退出。
+3. **挂起（`SPEC_suspendUserStory`）**：缺少外部依赖或硬件环境离线；保留持久化 git 引用（分支/工作区），将故事与任务移入 `suspendUS/`，通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 或等价的恢复分支提交记录 WIP 检查点，并干净退出。
 
 ## GitHub Spec Kit 的改进
 
@@ -222,9 +222,9 @@ Px-SpecFlow 按"区间"而不是按"文件集合"切分提交，使每个提交�
 
 | 提交命令 | 覆盖的区间 | `manualMode` | `autonomousMode` |
 | --- | --- | --- | --- |
-| `SPEC_commitPreStoryWorks` | `SPEC_openUserStory` 之前的导入、分析与规划输入制品，例如 `pendingNews/` 移动、`analyzedNews/` 归档、`todoUS/` 故事以及 `README_UserStories.md` 台账。 | 可选 | 当导入阶段以 `analysis_mode: AUTONOMOUS` 无值守运行时，作为故事前阶段的默认提交 |
+| `SPEC_commitPreStoryWorks` | `SPEC_openUserStory` 之前的导入、分析与规划输入制品，例如 `pendingNews/` 移动、`analyzedNews/` 归档、`todoUS/` 故事以及 `README_UserStories.md` 台账。 | 可选 | 不适用：故事前阶段始终处于 `manualMode`。当导入阶段以 `analysis_mode: AUTONOMOUS` 无值守运行时该检查点成为默认，但这是命令级参数，不是 `execution_mode`。 |
 | `SPEC_commitStepWorks` | 故事区间内单个已验证的生命周期步骤，且仅在 `SPEC_makePlan` 标记为 `commit_step = yes` 的边界上。 | 可选 | 每个已规划的步骤边界上的默认提交 |
-| `SPEC_commitStoryWorks` | 整个 `SPEC_openUserStory -> SPEC_closeUserStory` 区间，包含关闭产生的生命周期/元文件变更；承担 `pre_close` 与 `post_close` 两个检查点。 | 可选 | 故事完成时的默认提交 |
+| `SPEC_commitStoryWorks` | 整个 `SPEC_openUserStory -> SPEC_closeUserStory` 区间，包含终态生命周期/元文件变更；承担 `pre_close`、`post_close` 与 `span_end` 三个检查点。 | 可选 | 故事完成时的默认提交 |
 | `SPEC_commitWorks` | 任意已暂存或最近修改的变更；与故事无关，先取暂存文件，其次取最近修改文件。 | 按需始终可用 | 仍可用，但绝不自动执行 |
 
 ```text
@@ -241,6 +241,7 @@ SPEC_commitPreStoryWorks                SPEC_commitStepWorks   在已规划的�
 - `autonomousMode` 默认：在每个已规划的步骤边界执行 `SPEC_commitStepWorks`，并由 `SPEC_commitStoryWorks` 完成最终的 just-done 故事提交。
 - `single_story_commit = yes` 表示最后把步骤提交压缩为一个故事提交；在 `manualMode` 下 `SPEC_commitStoryWorks` 必须先与开发者确认再改写历史。
 - 仅当故事在同一次工作会话中经由导入或分析排队时，才规划 `SPEC_commitPreStoryWorks`。
+- 每个终态转换都会结束故事区间并路由到 `SPEC_commitStoryWorks`：`SPEC_closeUserStory` 之后为 `commit_checkpoint = post_close`，`SPEC_partialCloseUserStory`、`SPEC_abortUserStory` 或 `SPEC_suspendUserStory` 之后为 `commit_checkpoint = span_end`，确保没有任何泳道移动被留在未提交状态。
 - `SPEC_commitWorks` 仍然是不属于任何区间的通用提交命令（例如文档或工具修复），它绝不推进生命周期状态。
 
 ## 流程图
@@ -372,8 +373,9 @@ flowchart TB
     ImplCode -. "step commit at planned boundaries" .-> StepCommit
     Close --> Done[".catdd/spec/doneUS/*-UserStory.md"]
     Close --> DoneTasks[".catdd/spec/doneUS/*-UserStory-Tasks.md"]
-    Close -. "post-close lifecycle/meta changes" .-> CommitFinalize["SPEC_commitStoryWorks (post_close)"]
+    Close -. "post-close lifecycle/meta changes" .-> CommitFinalize["SPEC_commitStoryWorks (post_close / span_end)"]
     Abort2b --> AbortUS2b[".catdd/spec/abortUS/*-UserStory.md"]
+    AbortUS2b -. "span_end commit" .-> CommitFinalize
     AbortUS2b -. "later re-analysis" .-> AnalyzeAbort2b["SPEC_analyzeAbortedUserStory"]
     AbortUS2b -. "new improvement input" .-> ImportIssue2b["SPEC_importIssue"]
 ```
@@ -388,7 +390,7 @@ flowchart TB
    - 这些分析命令使用由 `.github/skills/` 中的需求分析 SKILLs 组合而成的流水线：`write-user-story`、`build-feature-tree`、`elicit-requirements-models`、`extract-business-rules`、`facilitate-example-mapping`、`validate-requirements-criteria`、`prioritize-requirements`。
    - 输出遵循 `SpecTodoUserStoryTemplate.md`。
    - 对于需要对已中止故事进行选择性纠正而非全范围重新分析的中止故事，使用 `SPEC_analyzeAbortedUserStory.md`。
-   - 分析将故事排入队列后，使用 [SPEC_commitPreStoryWorks](../commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) 在开启故事前提交故事前导入/分析区间；在 `autonomousMode` 下，当导入阶段以 `analysis_mode: AUTONOMOUS` 无值守运行时，该检查点为默认行为。
+   - 分析将故事排入队列后，使用 [SPEC_commitPreStoryWorks](../commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) 在开启故事前提交故事前导入/分析区间；当导入阶段以 `analysis_mode: AUTONOMOUS` 无值守运行时，该检查点为默认行为，否则故事前区间始终处于 `manualMode`。
 6. 使用 [SPEC_openUserStory](../commands/Px-SpecFlow/SPEC_openUserStory.md) 将选定的用户故事移入 `.catdd/spec/doingUS/`。
 7. 可选使用 [SPEC_clearStoryIntent](../commands/Px-SpecFlow/SPEC_clearStoryIntent.md)，当开发者意图与 CodeAgent 意图在规划前仍需对齐时。
 8. 使用 [SPEC_makePlan](../commands/Px-SpecFlow/SPEC_makePlan.md) 创建配对的 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品，将工作以 Markdown 复选框任务的形式表达，区分意图澄清型、需求导向型、设计导向型和实现导向型工作，区分初始设计与后续设计修订，并为已开启的故事选择下一步所需的 `SPEC_*` 步骤。
@@ -403,9 +405,9 @@ flowchart TB
 17. 使用 [SPEC_updateDetailDesign](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) 进行后续详细设计修订，当详细审查发现缺失或薄弱的设计时。
 18. 使用 [SPEC_designUnitTests](../commands/Px-SpecFlow/SPEC_designUnitTests.md) 进入 CaTDD 测试设计，通常通过 P0/P1/P2 流程，当计划表明故事已为测试准备好时。
 19. 使用 [SPEC_implUnitTests](../commands/Px-SpecFlow/SPEC_implUnitTests.md)、[SPEC_reviewImplUnitTests](../commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md)、[SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md) 和 [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) 进行测试优先的执行和审查，然后在故事区间提交前再次运行 `SPEC_reviewImplUnitTests`。可选使用 [SPEC_refactUnitTests](../commands/Px-SpecFlow/SPEC_refactUnitTests.md) 进行 GREEN 状态下不改变行为的 unit-test cleanup；重构后运行 `SPEC_reviewImplUnitTests`，当审查范围变化时重跑 `SPEC_reviewProductCodes`，并在故事区间提交前再次运行 `SPEC_reviewImplUnitTests`。在计划标记为 `commit_step = yes` 的步骤边界上，该步骤门禁通过后使用 [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md)。
-20. 使用 [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md)，当活跃工作需要暂停且必须保留可恢复的持久引用（例如 git 分支或 worktree）时。
+20. 使用 [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md)，当活跃工作需要暂停且必须保留可恢复的持久引用（例如 git 分支或 worktree）时；随后通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 或等价的恢复分支 WIP 提交记录 `suspendUS/` 泳道移动。
 21. 使用 [SPEC_resumeUserStory](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) 将挂起故事恢复到活跃工作态并继续执行。
-22. 使用 [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md)，从第二部分 a 或第二部分 b，当活跃故事存在阻塞性的范围、假设、设计、测试或产品质量问题，应被保留而非继续就地修补时。中止后，或者使用 `SPEC_analyzeAbortedUserStory` 分析已中止的故事以供后续故事轮次，或者使用 `SPEC_importIssue` 创建新的改进/细化输入。
+22. 使用 [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md)，从第二部分 a 或第二部分 b，当活跃故事存在阻塞性的范围、假设、设计、测试或产品质量问题，应被保留而非继续就地修补时；随后通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 提交 `abortUS/` 泳道移动。中止后，或者使用 `SPEC_analyzeAbortedUserStory` 分析已中止的故事以供后续故事轮次，或者使用 `SPEC_importIssue` 创建新的改进/细化输入。
 23. 使用 [SPEC_commitStoryWorks](../commands/Px-SpecFlow/SPEC_commitStoryWorks.md) 以 `commit_checkpoint = pre_close` 提交整个 `SPEC_openUserStory -> SPEC_closeUserStory` 区间，然后使用 [SPEC_closeUserStory](../commands/Px-SpecFlow/SPEC_closeUserStory.md)，当关闭生成的元/生命周期文件发生变更时再以 `commit_checkpoint = post_close` 运行一次 `SPEC_commitStoryWorks`，随后在需要时执行合并/集成（例如 [SPEC_mergeWorks](../commands/Px-SpecFlow/SPEC_mergeWorks.md)）；若未使用专用故事分支，合并会自动跳过。区间内的已规划步骤提交使用 [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md)，不属于任何区间的通用变更使用 [SPEC_commitWorks](../commands/Px-SpecFlow/SPEC_commitWorks.md)。
 24. 使用 [SPEC_patchOriginalCaTDD](../commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md)，当已安装 CaTDD 的项目产生了有效的元文件改进并需要在非默认分支上回补到原始 CaTDD 仓库时。
 
@@ -458,7 +460,7 @@ flowchart TB
 - 当活跃工作有必须稍后恢复的变更时，不得在未保留可恢复的持久工作引用（如 git 分支或 worktree）时挂起故事。
 - 在 `SPEC_makePlan` 之后，仅将 `SPEC_take*Design` 用于初始设计工作，将 `SPEC_update*Design` 仅用于针对现有设计证据、审查反馈或故事级设计缺口的后续设计修订。
 - 每个产生设计的步骤（`SPEC_takeArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_updateDetailDesign`）必须在后续生命周期步骤之前跟随其审查关卡。
-- 每个已实现 unit-test 步骤（`SPEC_implUnitTests`、`SPEC_refactUnitTests`）必须在产品代码实现、产品代码审查交接或提交之前跟随 `SPEC_reviewImplUnitTests`。
+- 每个已实现 unit-test 步骤（`SPEC_implUnitTests`、`SPEC_refactUnitTests`）必须在产品代码实现、产品代码审查交接或任何提交检查点（`SPEC_commitStoryWorks` 或已规划的 `SPEC_commitStepWorks` 边界）之前跟随 `SPEC_reviewImplUnitTests`。
 - 每个产品代码实现/审查步骤（`SPEC_implProductCodes`、`SPEC_reviewProductCodes`）必须在故事区间提交（`SPEC_commitStoryWorks`）或覆盖产品代码的已规划 `SPEC_commitStepWorks` 边界之前，跟随 `SPEC_reviewImplUnitTests`。
 - `SPEC_refactUnitTests` 只能清理已经 GREEN 的已实现测试；若发现缺失行为、新覆盖、错误分类或验收歧义，必须路由回相应的设计或实现命令。
 - 当发现的问题改变了故事意图、使假设失效或需要新的分析/改进轮次时，使用 `SPEC_abortUserStory` 而不是继续活跃故事。

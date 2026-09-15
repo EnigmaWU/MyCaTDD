@@ -65,6 +65,7 @@ Expected result:
 - Also valid: an explicit worktree path tied to the suspended story.
 - Fallback only: stash identifiers; use only when branch/worktree creation is not possible.
 - Recommended checkpoint before suspend: create at least one commit on the resume branch, and push when team handoff is expected.
+- Terminal commit checkpoint: when the suspend moved story/tasks files into `.catdd/spec/suspendUS/` and normalized links, report `commit_checkpoint = span_end` with `next_command = /SPEC_commitStoryWorks` so the lane move and the WIP checkpoint land on the resume branch instead of being left dirty. If the story was not planned through `SPEC_makePlan`, the equivalent WIP commit shown below is sufficient.
 
 Example:
 

@@ -54,7 +54,7 @@ All commands should follow [../../SPEC_slashCommandTemplate.md](../../SPEC_slash
 
 Px-SpecFlow runs in `manualMode` by default. When an entry command is invoked with `execution_mode: autonomousMode`, autonomous execution is supported strictly and ONLY for `implementation-oriented` stories. Requirements and architecture work require developer confirmation and must remain in `manualMode`.
 
-Commits are split by span, not by file set. `SPEC_makePlan` records the commit plan in the paired `*-UserStory-Tasks.md`: `SPEC_commitPreStoryWorks` covers the intake/analysis span before the story opens, `SPEC_commitStepWorks` covers planned step boundaries inside the story span, `SPEC_commitStoryWorks` covers the whole `openUserStory -> closeUserStory` span including close-generated lifecycle/meta changes, and `SPEC_commitWorks` stays the general story-agnostic commit command. In `manualMode` the span commands are options the developer chooses; in `autonomousMode` they are the defaults.
+Commits are split by span, not by file set. `SPEC_makePlan` records the commit plan in the paired `*-UserStory-Tasks.md`: `SPEC_commitPreStoryWorks` covers the intake/analysis span before the story opens, `SPEC_commitStepWorks` covers planned step boundaries inside the story span, `SPEC_commitStoryWorks` covers the whole `openUserStory -> closeUserStory` span including terminal lifecycle/meta changes (`post_close` after close, `span_end` after partial close, abort, or suspend), and `SPEC_commitWorks` stays the general story-agnostic commit command. In `manualMode` the span commands are options the developer chooses; in `autonomousMode` they are the defaults.
 
 Each command should declare its CoT pattern (`ReACT`, `ToT`, or `Linear`) as described in the template.
 

@@ -69,6 +69,7 @@ Expected result — one ToT pass:
 - A commit plan recorded in the same task artifact, stating:
   - Which step boundaries SHOULD call [SPEC_commitStepWorks](SPEC_commitStepWorks.md), recorded as `commit_step = yes`.
   - Which step boundaries change no file and must be skipped, recorded as `commit_step = no`.
+  - Which step boundaries are available on developer request in `manualMode`, recorded as `commit_step = optional`.
   - That the story span ends with [SPEC_commitStoryWorks](SPEC_commitStoryWorks.md) as the final just-done UserStory commit, unless the developer replaces it with [SPEC_commitWorks](SPEC_commitWorks.md).
   - Whether [SPEC_commitPreStoryWorks](SPEC_commitPreStoryWorks.md) applies to the intake/analysis span that preceded the opened story.
   - Whether `single_story_commit = yes`, meaning the span is squashed into one story commit at the end instead of keeping step commits.
@@ -100,7 +101,7 @@ Expected result — one ToT pass:
   - follow-up detail revision routes to `SPEC_updateDetailDesign` when prior detail design exists and the story is closing a known detail-design gap, review finding, or story-level detail feedback.
 - Distinguish requirement-oriented, design-oriented, and implementation-oriented work:
   - Requirement-oriented work updates formal requirement surfaces: project-root `README_UserStories.md` (TODO/DONE + AC trace/status), paired `README_UserGuide.md`, module/submodule requirement docs when used, US/AC IDs, acceptance wording, usage-facing behavior, priority/dependency notes, and trace links. It routes to `SPEC_updateUserStory` before design commands.
-  - Requirement-oriented work routes to `SPEC_reviewUserStory` after `SPEC_updateUserStory`. Passing review can close requirement-only work through `SPEC_commitWorks` and `SPEC_closeUserStory`, or transfer to design-oriented next steps.
+  - Requirement-oriented work routes to `SPEC_reviewUserStory` after `SPEC_updateUserStory`. Passing review can close requirement-only work through `SPEC_commitStoryWorks` and `SPEC_closeUserStory`, or transfer to design-oriented next steps.
   - Design-oriented work routes to the appropriate architecture/detail take-or-update command before review.
   - Implementation-oriented work routes to `SPEC_designUnitTests` only when requirement docs, architecture, and detail readiness are already sufficient. Do not add a `SPEC_reviewUserStory` gate after `SPEC_reviewDetailDesign`.
 - If developer and CodeAgent intent are not aligned, route to `SPEC_clearStoryIntent` before design or implementation-oriented work.

@@ -15,7 +15,10 @@ Commit exactly one verified lifecycle step inside the `SPEC_openUserStory -> SPE
 Run these steps once, in order. There is no retry loop; an unplanned or unverified step stops and asks the developer.
 
 1. Read the commit plan recorded by `SPEC_makePlan` in the paired `.catdd/spec/doingUS/*-UserStory-Tasks.md`. If no commit plan exists, stop and route to `SPEC_makePlan`.
-2. Locate the current step entry. Require `commit_step = yes` for that step. If the plan records `commit_step = no` because the step changes no file, or the step is absent from the plan, stop and ask instead of committing.
+2. Locate the current step entry and read its recorded decision:
+   - `commit_step = yes`: the step is committable in both modes; continue.
+   - `commit_step = optional`: the step is committable only when the developer explicitly invokes this command in `manualMode`. Continue on that explicit invocation and keep the draft-approval step; when the developer did not invoke it, skip the boundary and leave the work for `SPEC_commitStoryWorks`.
+   - `commit_step = no` because the step changes no file, or the step is absent from the plan: stop and ask instead of committing.
 3. Require the step's own gate to be satisfied: `PASS` or `GREEN` verification, review, or lint evidence for this step. Never commit failed, blocked, partial, or unverified step output.
 4. Resolve scope: only files produced or changed by this step. Stop and ask when in-scope files include another step's output, story-level lifecycle or meta artifacts, or unrelated changes.
 5. Read `recent_commit_messages` (latest 5) and extract tone, tense, capitalization, and scope format.
@@ -85,10 +88,10 @@ Step: SPEC_implProductCodes
   - `Story: <story id>`
   - `Step: <SPEC command>`
 - Mode behavior:
-  - `manualMode`: optional command the developer may run at any planned step boundary, or skip to leave the work for `SPEC_commitStoryWorks`.
+  - `manualMode`: optional command the developer may run at any `commit_step = yes` or `commit_step = optional` boundary, or skip to leave the work for `SPEC_commitStoryWorks`.
   - `autonomousMode`: default checkpoint at each planned step boundary; the flow auto-advances after the step commit.
 - Reported `step_commit_ref`, the remaining planned step commits, and the plan's next command.
-- Explicit statement of which planned step boundaries were skipped because they changed no file.
+- Explicit statement of which boundaries were skipped: `commit_step = no` boundaries because they changed no file, and `commit_step = optional` boundaries the developer declined.
 - Non-blocking post-success learning hook:
   - Report `success_learning_checkpoint = recommended`.
   - Preserve the plan's next command as `next_command`, and report `learning_command = /HARNESS_evolveHarness` separately.

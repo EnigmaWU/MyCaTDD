@@ -19,7 +19,7 @@ Run these steps once, in order. There is no retry loop; an ambiguous or already-
 3. Exclude `.catdd/spec/WorkingProcessLog.md` and generated adapter output. Stop and ask when an in-scope file is unrelated to the imported or analyzed work.
 4. Read `recent_commit_messages` (latest 5) and extract tone, tense, capitalization, and scope format.
 5. Draft the message with `WHAT` / `HOW` / `WHY` sections in that style, plus a `Span: pre-story -> SPEC_openUserStory` trace line and the issue/feature source trace.
-6. In `manualMode`, present the draft and commit only after approval. In `autonomousMode`, this checkpoint is the default when the intake ran headless with `analysis_mode: AUTONOMOUS`; otherwise it stays an optional developer-invoked command.
+6. In `manualMode`, present the draft and commit only after approval. When the intake ran headless with `analysis_mode: AUTONOMOUS`, this checkpoint is the default and commits without a per-step approval pause, while the universal stop rule still halts on any unresolved question. `execution_mode: autonomousMode` never applies to the pre-story span, because the flow restricts autonomous execution to `implementation-oriented` story work.
 7. Hand off with `next_command = SPEC_openUserStory` for the selected story.
 
 ### Worked Example
@@ -64,7 +64,7 @@ WHY
 - `project_context_file`: optional `.catdd/spec/projectContext.md` updated because intake changed project facts or constraints.
 - `analysis_mode_context`: optional note recording whether the intake ran with `analysis_mode: BRAINSTORM` or `analysis_mode: AUTONOMOUS`.
 - `recent_commit_messages`: latest 5 commit log messages from `git log`, used as the style reference for the new commit message.
-- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). In `autonomousMode`, this checkpoint is the default only when the intake ran headless; analysis remains subject to the universal stop rule.
+- `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). The pre-story span always runs in `manualMode`; its automatic checkpoint is driven by `analysis_mode: AUTONOMOUS` on the intake, not by `execution_mode`.
 - `auto_commit`: optional flag that allows committing without an approval step when explicitly requested.
 
 ## Method References
@@ -81,7 +81,8 @@ WHY
   - Source trace to the imported issue, feature, or imported user-story input.
 - Mode behavior:
   - `manualMode`: optional command the developer invokes when the pre-story phase should be committed before opening.
-  - `autonomousMode`: default pre-story checkpoint when the intake ran headless with `analysis_mode: AUTONOMOUS`; otherwise it remains an option and the flow continues to `SPEC_openUserStory`.
+  - Headless intake (`analysis_mode: AUTONOMOUS`): default pre-story checkpoint; commit without a per-step approval pause, and still halt on any `ONE-MORE-THING` condition.
+  - `execution_mode: autonomousMode`: not applicable to the pre-story span; if it is requested here, halt and force `manualMode` per the flow's implementation-oriented boundary.
 - Reported `pre_story_commit_ref` and `next_command = SPEC_openUserStory`.
 - Non-blocking post-success learning hook:
   - Report `success_learning_checkpoint = recommended`.
@@ -94,6 +95,7 @@ Do not run after the story moved to `.catdd/spec/doingUS/`; route to `SPEC_commi
 Do not commit story-span work such as opened-story artifacts, test skeletons, product code, or review results.
 Do not commit unrelated files; ask the developer before including ambiguous files.
 Do not treat this checkpoint as mandatory in `manualMode`; it is an option the developer chooses.
+Do not run this checkpoint under `execution_mode: autonomousMode`; the pre-story span is driven by `analysis_mode` and stays in `manualMode`.
 Do not claim the story span started or finished because the pre-story span was committed.
 Do not commit `.catdd/spec/WorkingProcessLog.md` or other gitignored local work state.
 

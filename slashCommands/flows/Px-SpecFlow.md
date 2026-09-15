@@ -91,9 +91,9 @@ Every slash command in CaTDD enforces the universal safety invariant: `ONE-MORE-
 ### Autonomous Terminal Handling
 
 In `autonomousMode`, the runner automatically terminates on:
-1. **Completion (`SPEC_closeUserStory`)**: All tasks checked, all tests GREEN, reviews pass; automatically commits, moves story to `doneUS/`, and exits with code 0.
-2. **Abort (`SPEC_abortUserStory`)**: Unrecoverable contract violation, invalid assumptions, or Loop Guard budget exhausted (`maxStepRetry = 2`, `maxRunCorrectionLoop = 3`); preserves diagnostics, moves story/tasks to `abortUS/`, and exits with non-zero code.
-3. **Suspend (`SPEC_suspendUserStory`)**: Missing external dependency or offline hardware environment; preserves durable git reference (branch/worktree), moves story/tasks to `suspendUS/`, and cleanly exits.
+1. **Completion (`SPEC_closeUserStory`)**: All tasks checked, all tests GREEN, reviews pass; takes `SPEC_commitStepWorks` at the planned step boundaries, makes the final `SPEC_commitStoryWorks` commit (`pre_close`, then `post_close` when close generated changes), moves the story to `doneUS/`, and exits with code 0.
+2. **Abort (`SPEC_abortUserStory`)**: Unrecoverable contract violation, invalid assumptions, or Loop Guard budget exhausted (`maxStepRetry = 2`, `maxRunCorrectionLoop = 3`); preserves diagnostics, moves story/tasks to `abortUS/`, commits the lane move through `SPEC_commitStoryWorks` with `commit_checkpoint = span_end`, and exits with non-zero code.
+3. **Suspend (`SPEC_suspendUserStory`)**: Missing external dependency or offline hardware environment; preserves the durable git reference (branch/worktree), moves story/tasks to `suspendUS/`, records the WIP checkpoint through `SPEC_commitStoryWorks` with `commit_checkpoint = span_end` or the equivalent resume-branch commit, and cleanly exits.
 
 ## Refinements from GitHub Spec Kit
 
@@ -223,9 +223,9 @@ Px-SpecFlow splits commits by span, not by file set, so every commit states whic
 
 | Commit command | Span it covers | `manualMode` | `autonomousMode` |
 | --- | --- | --- | --- |
-| `SPEC_commitPreStoryWorks` | Intake, analysis, and planning-input artifacts produced before `SPEC_openUserStory`, such as `pendingNews/` moves, `analyzedNews/` archives, `todoUS/` stories, and the `README_UserStories.md` ledger. | Option | Default for the pre-story phase when the intake ran headless with `analysis_mode: AUTONOMOUS` |
+| `SPEC_commitPreStoryWorks` | Intake, analysis, and planning-input artifacts produced before `SPEC_openUserStory`, such as `pendingNews/` moves, `analyzedNews/` archives, `todoUS/` stories, and the `README_UserStories.md` ledger. | Option | Not applicable: pre-story work always stays in `manualMode`. The checkpoint defaults when the intake ran headless with `analysis_mode: AUTONOMOUS`, which is a command-level flag, not `execution_mode`. |
 | `SPEC_commitStepWorks` | Exactly one verified lifecycle step inside the story span, only at boundaries `SPEC_makePlan` marked `commit_step = yes`. | Option | Default at each planned step boundary |
-| `SPEC_commitStoryWorks` | The whole `SPEC_openUserStory -> SPEC_closeUserStory` span, including close-generated lifecycle/meta changes; serves the `pre_close` and `post_close` checkpoints. | Option | Default at story completion |
+| `SPEC_commitStoryWorks` | The whole `SPEC_openUserStory -> SPEC_closeUserStory` span, including terminal lifecycle/meta changes; serves the `pre_close`, `post_close`, and `span_end` checkpoints. | Option | Default at story completion |
 | `SPEC_commitWorks` | Any staged or recently modified change; story-agnostic, staged files first, most recently modified second. | Always available on demand | Still available, never automatic |
 
 ```text
@@ -242,6 +242,7 @@ SPEC_commitPreStoryWorks                SPEC_commitStepWorks   at planned step b
 - `autonomousMode` default: `SPEC_commitStepWorks` runs at every planned step boundary, and `SPEC_commitStoryWorks` makes the final just-done story commit.
 - `single_story_commit = yes` squashes step commits into one story commit at the end; `SPEC_commitStoryWorks` must confirm with the developer in `manualMode` before rewriting history.
 - `SPEC_commitPreStoryWorks` is planned only when the story was queued through import or analysis in the same working session.
+- Every terminal transition ends the span and routes to `SPEC_commitStoryWorks`: `commit_checkpoint = post_close` after `SPEC_closeUserStory`, and `commit_checkpoint = span_end` after `SPEC_partialCloseUserStory`, `SPEC_abortUserStory`, or `SPEC_suspendUserStory`, so no lane move is left uncommitted.
 - `SPEC_commitWorks` remains the general command for changes that belong to no span, such as documentation or tooling fixes; it never advances lifecycle state.
 
 ## Flow Diagram
@@ -370,8 +371,9 @@ flowchart TB
     ImplCode -. "step commit at planned boundaries" .-> StepCommit
     Close --> Done[".catdd/spec/doneUS/*-UserStory.md"]
     Close --> DoneTasks[".catdd/spec/doneUS/*-UserStory-Tasks.md"]
-    Close -. "post-close lifecycle/meta changes" .-> CommitFinalize["SPEC_commitStoryWorks (post_close)"]
+    Close -. "post-close lifecycle/meta changes" .-> CommitFinalize["SPEC_commitStoryWorks (post_close / span_end)"]
     Abort2b --> AbortUS2b[".catdd/spec/abortUS/*-UserStory.md"]
+    AbortUS2b -. "span_end commit" .-> CommitFinalize
     AbortUS2b -. "later re-analysis" .-> AnalyzeAbort2b["SPEC_analyzeAbortedUserStory"]
     AbortUS2b -. "new improvement input" .-> ImportIssue2b["SPEC_importIssue"]
 ```
@@ -386,7 +388,7 @@ flowchart TB
    - These analysis commands use a composed pipeline of `.github/skills/` requirements-analysis SKILLs: `write-user-story`, `build-feature-tree`, `elicit-requirements-models`, `extract-business-rules`, `facilitate-example-mapping`, `validate-requirements-criteria`, `prioritize-requirements`.
    - Output follows `SpecTodoUserStoryTemplate.md`.
    - Use `SPEC_analyzeAbortedUserStory.md` for re-analyzing an aborted story that needs selective correction rather than full-scope analysis.
-   - After analysis queues the story, use [SPEC_commitPreStoryWorks](../commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) to commit the pre-story intake/analysis span before opening; in `autonomousMode` this checkpoint is the default when the intake ran headless with `analysis_mode: AUTONOMOUS`.
+   - After analysis queues the story, use [SPEC_commitPreStoryWorks](../commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) to commit the pre-story intake/analysis span before opening; when the intake ran headless with `analysis_mode: AUTONOMOUS`, this checkpoint is the default, and the pre-story span otherwise stays in `manualMode`.
 6. Use [SPEC_openUserStory](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/spec/doingUS/`, and ask whether a dedicated story branch should be created/switched before planning.
 7. Optionally use [SPEC_clearStoryIntent](../commands/Px-SpecFlow/SPEC_clearStoryIntent.md) when developer intent and CodeAgent intent still need to be aligned before planning.
 8. Use [SPEC_makePlan](../commands/Px-SpecFlow/SPEC_makePlan.md) to create the paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact, express the work as Markdown checkbox tasks, distinguish intent-clearing, requirement-oriented, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next required `SPEC_*` step for the opened story.
@@ -401,9 +403,9 @@ flowchart TB
 17. Use [SPEC_updateDetailDesign](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) for follow-up detail revision when detail review finds missing or weak design.
 18. Use [SPEC_designUnitTests](../commands/Px-SpecFlow/SPEC_designUnitTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows, when the plan says the story is test-ready.
 19. Use [SPEC_implUnitTests](../commands/Px-SpecFlow/SPEC_implUnitTests.md), [SPEC_reviewImplUnitTests](../commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md), [SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md), and [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review, then run `SPEC_reviewImplUnitTests` again after product-code review before the story-span commit. Use optional [SPEC_refactUnitTests](../commands/Px-SpecFlow/SPEC_refactUnitTests.md) for GREEN no-behavior-change unit-test cleanup; after refactor, run `SPEC_reviewImplUnitTests`, rerun `SPEC_reviewProductCodes` when review scope changed, and run `SPEC_reviewImplUnitTests` again before the story-span commit. At step boundaries the plan marked `commit_step = yes`, use [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md) once that step's gate passed.
-20. Use [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md) at any active post-open and pre-close point when work must pause without losing traceability and a durable resume reference, such as a git branch or worktree, already exists or can be created.
+20. Use [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md) at any active post-open and pre-close point when work must pause without losing traceability and a durable resume reference, such as a git branch or worktree, already exists or can be created; then commit the `suspendUS/` lane move through `SPEC_commitStoryWorks` with `commit_checkpoint = span_end` or the equivalent resume-branch WIP commit.
 21. Use [SPEC_resumeUserStory](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) to move a suspended story back into active work and continue from the preserved reference.
-22. Use [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md) from Part 2.a or Part 2.b when the active story has a blocking scope, assumption, design, test, or product-quality problem that should be preserved rather than continued in place. After aborting, either use `SPEC_analyzeAbortedUserStory` to analyze the aborted story for a later story round or use `SPEC_importIssue` to create a new improvement/refinement input.
+22. Use [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md) from Part 2.a or Part 2.b when the active story has a blocking scope, assumption, design, test, or product-quality problem that should be preserved rather than continued in place; then commit the `abortUS/` lane move through `SPEC_commitStoryWorks` with `commit_checkpoint = span_end`. After aborting, either use `SPEC_analyzeAbortedUserStory` to analyze the aborted story for a later story round or use `SPEC_importIssue` to create a new improvement/refinement input.
 23. Use [SPEC_commitStoryWorks](../commands/Px-SpecFlow/SPEC_commitStoryWorks.md) with `commit_checkpoint = pre_close` to commit the whole `SPEC_openUserStory -> SPEC_closeUserStory` span, then use [SPEC_closeUserStory](../commands/Px-SpecFlow/SPEC_closeUserStory.md), then use `SPEC_commitStoryWorks` again with `commit_checkpoint = post_close` when close-generated lifecycle/meta files changed, then run merge/integration when required (for example [SPEC_mergeWorks](../commands/Px-SpecFlow/SPEC_mergeWorks.md)); if no dedicated story branch was used, merge is auto-skipped. Use [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md) for planned step commits inside the span, and [SPEC_commitWorks](../commands/Px-SpecFlow/SPEC_commitWorks.md) for general changes that belong to no span.
 24. Use [SPEC_patchOriginalCaTDD](../commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md) when an installed project has effective CaTDD meta-file improvements that should be patched back to the original CaTDD repository on a non-default branch.
 
@@ -456,7 +458,7 @@ Failure classification follows ASR-R3: retry only transient failures; route perm
 - Do not suspend a story without preserving a durable resume reference, such as a git branch or worktree, when the active work has changes that must be resumed later.
 - After `SPEC_makePlan`, use `SPEC_take*Design` only for initial design work and `SPEC_update*Design` only for follow-up design revision against existing design evidence, review feedback, or story-level design gaps.
 - Every design-producing step (`SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_updateDetailDesign`) must be followed by its review gate before downstream lifecycle steps.
-- Every implemented-unit-test step (`SPEC_implUnitTests`, `SPEC_refactUnitTests`) must be followed by `SPEC_reviewImplUnitTests` before product-code implementation, product-code review handoff, or commit.
+- Every implemented-unit-test step (`SPEC_implUnitTests`, `SPEC_refactUnitTests`) must be followed by `SPEC_reviewImplUnitTests` before product-code implementation, product-code review handoff, or any commit checkpoint (`SPEC_commitStoryWorks` or a planned `SPEC_commitStepWorks` boundary).
 - Every product-code implementation/review pass (`SPEC_implProductCodes`, `SPEC_reviewProductCodes`) must be followed by `SPEC_reviewImplUnitTests` before the story-span commit (`SPEC_commitStoryWorks`) or any planned `SPEC_commitStepWorks` boundary that covers product code.
 - `SPEC_refactUnitTests` must only clean GREEN implemented tests; it must route missing behavior, new coverage, wrong category, or acceptance ambiguity back to the appropriate design or implementation command.
 - Use `SPEC_abortUserStory` instead of continuing an active story when the discovered problem changes the story's intent, invalidates its assumptions, or needs a new analysis/improvement round.

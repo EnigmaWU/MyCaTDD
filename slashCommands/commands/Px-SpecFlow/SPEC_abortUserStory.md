@@ -71,6 +71,9 @@ Expected result:
   - After completion, the same story ID must not remain simultaneously active in both `.catdd/spec/doingUS/` and `.catdd/spec/abortUS/`.
   - The aborted lane must be the single source of truth for that story ID.
 - Next recommended command: `SPEC_analyzeAbortedUserStory` when the next work should reuse the preserved story evidence, or `SPEC_importIssue` when the problem should become a new improvement/refinement input for the next round.
+- Terminal commit checkpoint result:
+  - If the abort moved story/tasks files and normalized the ledger, report `next_command = /SPEC_commitStoryWorks` with `commit_checkpoint = span_end` so the `abortUS/` lane move is committed before the next round starts.
+  - If nothing changed on disk, report `span_commit_required = no`.
 
 ## Conflict Guard
 
