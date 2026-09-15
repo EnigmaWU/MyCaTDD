@@ -55,7 +55,11 @@ grep -Fq 'Unknown --targetCodeAgent' <<< "$err_out" || fail "unknown agent not d
 echo "[installCaTDD-test] Test: dryRunner"
 dry_output="$("$INSTALLER" --targetDir "$WORK/dry" --targetCodeAgent dryRunner 2>&1)"
 grep -Fq 'dryRunner' <<< "$dry_output" || fail "dryRunner missing dryRunner label"
-grep -Fq 'Copilot | Continue | Cline | Antigravity' <<< "$dry_output" || fail "dryRunner missing supported agents"
+grep -Fq 'Copilot | Continue | Cline | Antigravity | Codex' <<< "$dry_output" || fail "dryRunner missing supported agents"
+
+echo "[installCaTDD-test] Test: --codex-prompts-dir requires the Codex agent"
+err_out="$("$INSTALLER" --targetDir "$WORK" --targetCodeAgent Copilot --codex-prompts-dir "$WORK/prompts" 2>&1)" || true
+grep -Fq -e '--codex-prompts-dir requires --targetCodeAgent Codex' <<< "$err_out" || fail "--codex-prompts-dir without Codex not detected"
 
 echo "[installCaTDD-test] Test: per-agent fresh installs"
 install_fresh() {
@@ -104,6 +108,21 @@ install_fresh() {
       assert_file "$dir/.antigravityrules/catdd.md"
       assert_contains "$dir/.antigravityrules/catdd.md" '/HARNESS_evolveHarness'
       ;;
+    Codex)
+      assert_file "$dir/AGENTS.md"
+      assert_contains "$dir/AGENTS.md" 'BEGIN CaTDD Codex instructions'
+      assert_contains "$dir/AGENTS.md" '.agents/skills'
+      assert_contains "$dir/AGENTS.md" '/HARNESS_evolveHarness'
+      assert_file "$dir/.agents/skills/ut-convert-demo-to-typical/SKILL.md"
+      assert_file "$dir/.agents/skills/spec-open-user-story/SKILL.md"
+      assert_file "$dir/.agents/skills/harness-patch-ca-tdd-source/SKILL.md"
+      assert_contains "$dir/.agents/skills/ut-convert-demo-to-typical/SKILL.md" 'UT_convertDemoToTypical'
+      assert_contains "$dir/.agents/skills/ut-convert-demo-to-typical/SKILL.md" 'thin Codex Skill adapter'
+      codex_source_total="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+      skill_count="$(find "$dir/.agents/skills" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d '[:space:]')"
+      [[ "$skill_count" == "$codex_source_total" ]] || fail "expected $codex_source_total installed Codex skills, got $skill_count"
+      assert_absent "$dir/.codex/prompts"
+      ;;
   esac
 
   replacement_output="$("$INSTALLER" --targetDir "$dir" --targetCodeAgent "$agent" --clean-prompts --yes 2>&1)"
@@ -112,9 +131,30 @@ install_fresh() {
   rm -rf "$dir"
 }
 
-for agent in Copilot Continue Cline Antigravity; do
+for agent in Copilot Continue Cline Antigravity Codex; do
   install_fresh "$agent"
 done
+
+echo "[installCaTDD-test] Test: Codex legacy custom prompts mode"
+CODEX_PROMPTS="$WORK/codex-home/prompts"
+CODEX_TARGET="$WORK/fresh-Codex-prompts"
+"$INSTALLER" --targetDir "$CODEX_TARGET" --targetCodeAgent Codex --init --clean-prompts \
+  --codex-prompts-dir "$CODEX_PROMPTS" --yes >/dev/null 2>&1
+codex_source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+codex_prompt_count="$(find "$CODEX_PROMPTS" -maxdepth 1 -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+[[ "$codex_prompt_count" == "$codex_source_count" ]] || fail "expected $codex_source_count Codex custom prompts, got $codex_prompt_count"
+assert_file "$CODEX_PROMPTS/UT_convertDemoToTypical.md"
+assert_file "$CODEX_PROMPTS/HARNESS_patchCaTDDSource.md"
+assert_contains "$CODEX_PROMPTS/UT_convertDemoToTypical.md" 'argument-hint:'
+assert_contains "$CODEX_PROMPTS/UT_convertDemoToTypical.md" '$ARGUMENTS'
+assert_contains "$CODEX_PROMPTS/UT_convertDemoToTypical.md" '.catdd/slashCommands/commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md'
+assert_file "$CODEX_TARGET/.agents/skills/ut-convert-demo-to-typical/SKILL.md"
+
+echo "[installCaTDD-test] Test: Codex --codex-prompts-dir default resolves to the Codex home"
+CODEX_HOME_FAKE="$WORK/codex-home-default"
+CODEX_HOME="$CODEX_HOME_FAKE" "$INSTALLER" --targetDir "$WORK/fresh-Codex-home" --targetCodeAgent Codex --init \
+  --codex-prompts-dir default --yes >/dev/null 2>&1
+assert_file "$CODEX_HOME_FAKE/prompts/UT_convertDemoToTypical.md"
 
 echo "[installCaTDD-test] Test: GitHub/Copilot alias works"
 TARGET2="$WORK/alias"

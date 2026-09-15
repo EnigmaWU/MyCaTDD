@@ -121,12 +121,19 @@ scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot -
 scripts/installCaTDD.sh --targetDir /path/to/new-project --targetCodeAgent Copilot --init --clean-prompts
 ```
 
-可以通过选择智能体把 CaTDD 安装或刷新到 Continue、Cline 或 Antigravity 项目：
+可以通过选择智能体把 CaTDD 安装或刷新到 Continue、Cline、Antigravity 或 Codex 项目：
 
 ```bash
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex
+```
+
+Codex skill 是受支持且可随仓库共享的适配面。需要精确的 `/prompts:<Command>` 名称时，再附加已废弃的 Codex custom prompt 适配面：
+
+```bash
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex --codex-prompts-dir default
 ```
 
 如果需要在重新生成前删除旧的 prompt 包装，可增加 `--clean-prompts`。
@@ -144,9 +151,14 @@ scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravi
 - `.clinerules/catdd.md`：指向 `.catdd/` 的 Cline 项目规则。
 - `.cline/skills/`：从 `slashCommands` 生成的 Cline 命令技能适配。
 - `.antigravityrules/catdd.md`：指向 `.catdd/` 的 Antigravity 项目规则。
+- `AGENTS.md`：Codex 指令，以受管的 `CaTDD Codex instructions` 块写入，因此既有项目指引会被保留。
+- `.agents/skills/`：从 `slashCommands` 生成的 Codex 技能适配，可通过 `$ut-*`、`$spec-*`、`$harness-*` 或 `/skills` 触发。
+- `<codex-prompts-dir>/`：可选的已废弃 Codex custom prompt，通过 `/prompts:<Command>` 触发；传 `default` 表示 `$CODEX_HOME/prompts`，即 `~/.codex/prompts`。Codex 只从本地 Codex home 读取 custom prompt，因此该适配面属于单用户，不随仓库共享。
 - `.catdd/CaTDD_INSTALL.manifest` 与 `.catdd/.install-baseline/`：用于检测并合并目标演进文件的补丁感知刷新状态。
 
-在本源仓库中，生成的 `.github/prompts/UT_*.prompt.md`、`.github/prompts/SPEC_*.prompt.md`、`.continue/rules/catdd.md`、`.continue/prompts/UT_*.prompt`、`.continue/prompts/SPEC_*.prompt`、`.clinerules/catdd.md` 文件只是临时适配输出，并被刻意忽略。应提交 `methodPrompts`、`slashCommands`、脚本与文档；需要时再为目标项目重新生成原生适配。
+在本源仓库中，生成的 `.github/prompts/UT_*.prompt.md`、`.github/prompts/SPEC_*.prompt.md`、`.continue/rules/catdd.md`、`.continue/prompts/UT_*.prompt`、`.continue/prompts/SPEC_*.prompt`、`.clinerules/catdd.md`、`.antigravityrules/catdd.md`、`.agents/skills/` 与 `.codex/prompts/` 文件只是临时适配输出，并被刻意忽略。应提交 `methodPrompts`、`slashCommands`、脚本与文档；需要时再为目标项目重新生成原生适配。
+
+Codex 技能名称只接受小写字母、数字与连字符，因此 `UT_convertDemoToTypical` 会安装为 `$ut-convert-demo-to-typical`；规范命令名会保留在每个包装的 description 与正文中。
 
 ## 快速开始
 

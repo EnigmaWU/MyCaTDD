@@ -87,8 +87,8 @@
 
 - 上游输入：`methodPrompts` 方法定义。
 - 下游消费方：
-  - 面向 Copilot 和 Continue 的原生适配生成器。
-  - 面向 Copilot、Continue 和 Cline 目标项目的安装器。
+  - 面向 Copilot、Continue、Cline 和 Codex 的原生适配生成器。
+  - 面向 Copilot、Continue、Cline、Antigravity 和 Codex 目标项目的安装器。
   - 调用命令单元的 `utCodeAgentCLI` 智能体流水线。
   - 使用助手 GUI/聊天模式的开发者。
   - 任意能消费提示词文本的兼容 code assistant。

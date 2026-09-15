@@ -10,7 +10,7 @@
 
 - 想通过可触发 prompt command 运行 CaTDD，而不是反复编写长聊天提示词的开发者。
 - 需要可移植命令文件和清晰下一步流程顺序的 CodeAgent。
-- 将 CaTDD 安装到 Copilot、Continue 或 Cline 目标项目的维护者。
+- 将 CaTDD 安装到 Copilot、Continue、Cline、Antigravity 或 Codex 目标项目的维护者。
 - 为其他 assistant 或 CLI 包装可移植 CaTDD 命令的工具作者。
 
 ## 内容
@@ -25,7 +25,7 @@
 
 - 想使用结构化 SpecCoding，而不是自由对话式 VibeCoding。
 - 某个 CaTDD 方法步骤已经足够稳定，可以成为可重复命令。
-- 想让 Copilot、Continue、Cline 或其他助手暴露同一份可移植命令意图。
+- 想让 Copilot、Continue、Cline、Codex 或其他助手暴露同一份可移植命令意图。
 - 正在转换 demo tests、设计骨架、审查骨架、选择下一个 TC、实现 TC 或审查实现。
 - 正在运行 Px SpecFlow 生命周期，从项目上下文和 work item 推进到完成审查的 story。
 
@@ -142,12 +142,19 @@ scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot -
 scripts/makeSlashCmd4Continue.sh --clean
 ```
 
-安装或刷新 CaTDD 到 Continue、Cline 或 Antigravity 项目：
+生成 Codex 原生包装：
+
+```bash
+scripts/makeSlashCmd4Codex.sh --clean
+```
+
+安装或刷新 CaTDD 到 Continue、Cline、Antigravity 或 Codex 项目：
 
 ```bash
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex
 ```
 
 验证安装器和生成器行为：
@@ -155,6 +162,7 @@ scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravi
 ```bash
 bash scripts/test_installCaTDD.sh
 bash scripts/test_makeSlashCmd4Continue.sh
+bash scripts/test_makeSlashCmd4Codex.sh
 ```
 
 ## SpecCoding 产物策略

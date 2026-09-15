@@ -89,6 +89,9 @@ If the target path, symptom, or adapter surface is unclear, stop and ask the dev
 | Wrapper count does not match portable command count | Generated wrappers are stale, `--clean-prompts` was skipped, wrong output directory | Regenerate wrappers or rerun installer with `--clean-prompts`. |
 | Wrapper points to source repo instead of installed `.catdd` | Wrapper generated from source layout but installed incorrectly | Rerun adapter installer so native wrappers point at `.catdd/slashCommands`. |
 | Cline skill slug missing or malformed | Slug conversion regression, old generated skill directory, skipped clean | Regenerate Cline skills and check expected slug, such as `harness-diagnose-installation`. |
+| Codex skill slug missing or malformed | Codex skill naming rules violated (uppercase, underscores, consecutive hyphens, over 64 characters), old generated skill directory, skipped clean | Regenerate Codex skills and check expected slug, such as `harness-diagnose-installation`; every directory name must match its `SKILL.md` `name`. |
+| Codex `/prompts:` command missing | Custom-prompt directory not passed to the installer, prompts written outside the active `CODEX_HOME`, or Codex not restarted after refresh | Rerun the installer with `--codex-prompts-dir default`, then restart Codex; remember custom prompts are per-user and never come from the target repository. |
+| Codex `AGENTS.md` CaTDD guidance missing or duplicated | Managed block deleted, AGENTS.md replaced by another tool, or two installers wrote the same file | Rerun the Codex installer; the `CaTDD Codex instructions` block is rewritten in place and existing project guidance is preserved. |
 | Rule file missing command-family guidance | Old installer version or overwritten native rule | Rerun installer and compare rule marker against current CaTDD source. |
 | Antigravity prompt wrapper missing | Not a failure unless Antigravity wrapper generation is explicitly supported | Verify `.antigravityrules/catdd.md` and portable `.catdd` assets instead. |
 | Command exists but editor cannot invoke it | Editor cache, extension reload needed, command palette indexing lag | Reload the editor or refresh the relevant CodeAgent command surface after file checks pass. |
@@ -119,6 +122,7 @@ Do not skip `HARNESS_verifyInstallation` evidence when the symptom is ambiguous.
 Do not treat generated adapter wrappers as source-of-truth when portable command files are available.
 Do not classify product-code, test-design, or SpecFlow lifecycle failures as installation failures unless installed CaTDD assets or adapter surfaces are inconsistent.
 Do not fail Antigravity installations for missing prompt wrappers unless Antigravity wrapper generation is explicitly added later.
+Do not fail Codex installations for a missing custom-prompt directory unless the developer asked for that deprecated surface.
 Do not move SpecFlow lifecycle state or create `.catdd/spec/doingUS/` entries.
 Do not expose secrets from target project files in the diagnosis report.
 

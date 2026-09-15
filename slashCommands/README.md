@@ -87,8 +87,8 @@ Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPr
 
 - Upstream input: `methodPrompts` method definitions.
 - Downstream consumers:
-  - Native adapter generators for Copilot and Continue.
-  - Installers for Copilot, Continue, and Cline target projects.
+  - Native adapter generators for Copilot, Continue, Cline, and Codex.
+  - Installers for Copilot, Continue, Cline, Antigravity, and Codex target projects.
   - `utCodeAgentCLI` agent pipelines calling command units.
   - Developers using assistant GUI/chat mode.
   - Any compatible code assistant that can consume prompt text.

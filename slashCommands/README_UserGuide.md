@@ -10,7 +10,7 @@ Use this guide if you are one of these readers:
 
 - A developer who wants to run CaTDD through triggerable prompt commands instead of long manual chat prompts.
 - A CodeAgent that needs portable command files and clear next-step flow order.
-- A maintainer installing CaTDD into a Copilot, Continue, or Cline target project.
+- A maintainer installing CaTDD into a Copilot, Continue, Cline, Antigravity, or Codex target project.
 - A tooling author wrapping portable CaTDD commands for another assistant or CLI.
 
 ## What
@@ -25,7 +25,7 @@ Use `slashCommands/` when:
 
 - You want structured SpecCoding instead of free-form VibeCoding.
 - A CaTDD method step is stable enough to become a repeatable command.
-- You want Copilot, Continue, Cline, or another assistant to expose the same portable command intent.
+- You want Copilot, Continue, Cline, Codex, or another assistant to expose the same portable command intent.
 - You are converting demo tests, designing skeletons, reviewing skeletons, selecting the next TC, implementing a TC, or reviewing an implementation.
 - You are running the Px SpecFlow lifecycle from project context and work item to reviewed story completion.
 
@@ -142,12 +142,19 @@ Generate Continue-native wrappers:
 scripts/makeSlashCmd4Continue.sh --clean
 ```
 
-Install or refresh CaTDD into Continue, Cline, or Antigravity projects:
+Generate Codex-native wrappers:
+
+```bash
+scripts/makeSlashCmd4Codex.sh --clean
+```
+
+Install or refresh CaTDD into Continue, Cline, Antigravity, or Codex projects:
 
 ```bash
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex
 ```
 
 Validate installer and generator behavior:
@@ -155,6 +162,7 @@ Validate installer and generator behavior:
 ```bash
 bash scripts/test_installCaTDD.sh
 bash scripts/test_makeSlashCmd4Continue.sh
+bash scripts/test_makeSlashCmd4Codex.sh
 ```
 
 ## SpecCoding Artifact Policy

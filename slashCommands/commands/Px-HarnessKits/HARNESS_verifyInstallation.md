@@ -44,7 +44,8 @@ Expected result:
 ## Inputs
 
 - `target_project_repo`: installed project repository to verify.
-- `code_agent`: target adapter surface to verify. Allowed values: `copilot`, `continue`, `cline`, `custom`, `antigravity`, or `auto`.
+- `code_agent`: target adapter surface to verify. Allowed values: `copilot`, `continue`, `cline`, `custom`, `antigravity`, `codex`, or `auto`.
+- `codex_prompts_dir`: optional deprecated Codex custom-prompt directory to verify when `code_agent=codex`. When omitted, verify only the `.agents/skills/` surface, because Codex custom prompts live outside the target project.
 - `custom_adapter_dir`: optional custom adapter directory when `code_agent=custom`. Default: `.customCodeAgent`.
 - `expected_command_families`: optional command family list. Default: `UT_*`, `SPEC_*`, and `HARNESS_*`.
 - `expected_source_repo`: optional CaTDD source repository used as the reference command inventory.
@@ -87,6 +88,7 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 - `cline`: verify `.clinerules/catdd.md` plus `.cline/skills/*/SKILL.md`; ensure `HARNESS_verifyInstallation` maps to `harness-verify-installation`.
 - `custom`: verify the configured custom rule and prompt directories, using Continue-format prompt wrappers.
 - `antigravity`: verify `.antigravityrules/catdd.md`; no native prompt wrapper count is expected unless the installation adds one later.
+- `codex`: verify the managed `CaTDD Codex instructions` block in `AGENTS.md` plus `.agents/skills/*/SKILL.md`; ensure `HARNESS_verifyInstallation` maps to `harness-verify-installation`. When `codex_prompts_dir` is provided, additionally verify `<codex_prompts_dir>/*.md` custom prompts and warn when the directory is missing, since that surface is a deprecated per-user add-on outside the target project.
 - `auto`: infer the adapter surfaces that exist and verify each detected surface.
 
 ### Wrapper Fidelity
@@ -118,6 +120,7 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 Do not modify files unless the developer explicitly asks for repair.
 Do not treat generated adapter wrappers as source-of-truth when portable command files are available.
 Do not fail Antigravity installations for missing prompt wrappers unless Antigravity wrapper generation is explicitly added later.
+Do not fail Codex installations for a missing custom-prompt directory unless `codex_prompts_dir` was explicitly provided.
 Do not move SpecFlow lifecycle state or create `.catdd/spec/doingUS/` entries.
 Do not verify against a different source repository unless `expected_source_repo` is explicitly provided.
 

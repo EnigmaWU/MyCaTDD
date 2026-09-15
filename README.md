@@ -125,12 +125,19 @@ For a new target directory, add `--init`:
 scripts/installCaTDD.sh --targetDir /path/to/new-project --targetCodeAgent Copilot --init --clean-prompts
 ```
 
-Install or refresh CaTDD into Continue, Cline, or Antigravity projects by selecting the agent:
+Install or refresh CaTDD into Continue, Cline, Antigravity, or Codex projects by selecting the agent:
 
 ```bash
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex
+```
+
+Codex skills are the supported, repository-shareable surface. Add the deprecated Codex custom-prompt surface when you want exact `/prompts:<Command>` names:
+
+```bash
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex --codex-prompts-dir default
 ```
 
 Add `--clean-prompts` when you want to remove old generated prompt wrappers before regenerating them.
@@ -148,9 +155,14 @@ The installer creates or refreshes these target-project assets:
 - `.clinerules/catdd.md`: Cline project rule that points agents back to `.catdd/`.
 - `.cline/skills/`: Cline slash-command skill adapters generated from `slashCommands`.
 - `.antigravityrules/catdd.md`: Antigravity project rule that points agents back to `.catdd/`.
+- `AGENTS.md`: Codex instructions, written as a managed `CaTDD Codex instructions` block so existing project guidance is preserved.
+- `.agents/skills/`: Codex skill adapters generated from `slashCommands`, invoked as `$ut-*`, `$spec-*`, and `$harness-*` or from `/skills`.
+- `<codex-prompts-dir>/`: optional deprecated Codex custom prompts invoked as `/prompts:<Command>`; use `default` for `$CODEX_HOME/prompts`, that is `~/.codex/prompts`. Codex reads custom prompts from the local Codex home only, so this surface is per-user, not shared through the repository.
 - `.catdd/CaTDD_INSTALL.manifest` and `.catdd/.install-baseline/`: patch-aware refresh state used to detect and merge target-evolved files.
 
-In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, `.continue/rules/catdd.md`, `.continue/prompts/UT_*.prompt`, `.continue/prompts/SPEC_*.prompt`, `.clinerules/catdd.md`, and `.antigravityrules/catdd.md` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
+In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, `.continue/rules/catdd.md`, `.continue/prompts/UT_*.prompt`, `.continue/prompts/SPEC_*.prompt`, `.clinerules/catdd.md`, `.antigravityrules/catdd.md`, `.agents/skills/`, and `.codex/prompts/` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
+
+Codex skill names accept lowercase letters, numbers, and hyphens only, so `UT_convertDemoToTypical` installs as `$ut-convert-demo-to-typical`; the canonical command name stays in each wrapper description and body.
 
 ## Quick Start
 
