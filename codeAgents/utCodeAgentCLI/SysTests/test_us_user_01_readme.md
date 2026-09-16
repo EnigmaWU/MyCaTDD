@@ -18,10 +18,10 @@ All tests GREEN (passing in local node test run across all four categories).
 
 | File | Category | Func Class | ACs | TCs | Status |
 |------|----------|------------|-----|-----|--------|
-| `UT_US-USER-01-Typical.ts` | Typical | ValidFunc | AC-01 ~ AC-10 (10 ACs) | TC-ARG-001 ~ TC-ARG-010 (10 TCs) | GREEN |
-| `UT_US-USER-01-Edge.ts` | Edge | ValidFunc | AC-11 ~ AC-20 (10 ACs) | TC-ARG-011 ~ TC-ARG-020 (10 TCs) | GREEN |
-| `UT_US-USER-01-Misuse.ts` | Misuse | InvalidFunc | AC-21 ~ AC-28, AC-32 (9 ACs) | TC-ARG-021 ~ TC-ARG-031 (9 TCs) | GREEN |
-| `UT_US-USER-01-Fault.ts` | Fault | InvalidFunc | AC-29 ~ AC-31 (3 ACs) | TC-ARG-029 ~ TC-ARG-035 (7 TCs*) | GREEN |
+| `test_us_user_01_funcValidTypical.ts` | Typical | ValidFunc | AC-01 ~ AC-10 (10 ACs) | TC-ARG-001 ~ TC-ARG-010 (10 TCs) | GREEN |
+| `test_us_user_01_funcValidEdge.ts` | Edge | ValidFunc | AC-11 ~ AC-20 (10 ACs) | TC-ARG-011 ~ TC-ARG-020 (10 TCs) | GREEN |
+| `test_us_user_01_funcInvalidMisuse.ts` | Misuse | InvalidFunc | AC-21 ~ AC-28, AC-32 (9 ACs) | TC-ARG-021 ~ TC-ARG-031 (9 TCs) | GREEN |
+| `test_us_user_01_funcInvalidFault.ts` | Fault | InvalidFunc | AC-29 ~ AC-31 (3 ACs) | TC-ARG-029 ~ TC-ARG-035 (7 TCs*) | GREEN |
 
 \* Fault uses multiple TCs per AC because each file-path failure mode (nonexistent, unreadable,
 invalid YAML, directory-as-config) is a distinct test case.
@@ -48,10 +48,10 @@ invalid YAML, directory-as-config) is a distinct test case.
 ```bash
 # Run all 33 test cases across all four categories:
 node --test \
-  codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts \
-  codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts \
-  codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts \
-  codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts
+  codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidTypical.ts \
+  codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidEdge.ts \
+  codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts \
+  codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidFault.ts
 ```
 
 Expected result: **all tests pass** (exit code 0, no failures).

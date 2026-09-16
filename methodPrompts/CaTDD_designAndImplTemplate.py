@@ -152,11 +152,11 @@ ValidFunc - Verifies correct behavior with valid inputs/states.
      - Examples: Empty payload, maximum token ceiling, single-candidate fallback.
 
 InvalidFunc - Verifies graceful failure with invalid inputs or states.
-  🚫 MISUSE: Incorrect API usage patterns. (ERROR PREVENTION)
+  MISUSE: Incorrect API usage patterns. (ERROR PREVENTION)
      - Purpose: Ensure proper error handling for API abuse.
      - Examples: Missing required model name, negative temperature, invalid parameter types.
 
-  ⚠️ FAULT: Error handling and recovery. (RELIABILITY)
+  FAULT: Error handling and recovery. (RELIABILITY)
      - Purpose: Test system behavior under external error conditions.
      - Examples: Upstream provider returns 503, connection dropped mid-stream, disk full.
 
@@ -393,6 +393,8 @@ TEST CASE TEMPLATE:
     2) 🎯 BEHAVIOR: execute function under test
     3) ✅ VERIFY: assert <= 3 key outcomes
     4) 🧹 CLEANUP: teardown resources if needed
+  @[Expect]: [How to verify success]
+  @[Notes]: [Additional context, gotchas, dependencies]
 """
 
 

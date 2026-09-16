@@ -367,7 +367,7 @@ test("TC-ARG-018 verifyConfigFileValidYAML_byExistingPath_expectLoaded", () => {
 		"--behave",
 		"designFuncTestsSkeleton",
 		"--config-file",
-		"codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01_README.md",
+		"codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_readme.md",
 	]);
 
 	assert.equal(result.exitCode, 0);

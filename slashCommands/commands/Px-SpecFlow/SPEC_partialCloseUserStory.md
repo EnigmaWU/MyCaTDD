@@ -37,7 +37,7 @@ accepted_scope:
 rejected_scope:
   rejected_summary: AC-04 automatic retry of partially-settled charges
   rejection_reason: assumption-gap
-  evidence_refs: SysTests/UT_Retry-Fault.ts (TC-RETRY-009 FAILS)
+  evidence_refs: SysTests/test_payment_retry_funcInvalidFault.ts (TC-RETRY-009 FAILS)
   followup_intent: SPEC_importIssue
 ```
 

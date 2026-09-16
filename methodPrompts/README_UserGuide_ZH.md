@@ -245,15 +245,23 @@ ready_for_implementation, exclusions, referrals, and residual risks separately.
 
 ## 状态标记
 
-使用明确的状态标记，让人类与 CodeAgent 都能安全接续工作。
+使用明确的状态标记，让人类与 CodeAgent 都能安全接续工作。字形是规范渲染形式；文字形式是纯文本场景（如 CI 日志与纯文本报告）可接受的别名。
 
-| 标记 | 含义 | 下一步 |
-| --- | --- | --- |
-| TODO/PLANNED | 已设计但尚未实现 | 编写失败测试。 |
-| RED/IMPLEMENTED | 测试已存在且按预期失败 | 实现生产代码。 |
-| GREEN/PASSED | 测试通过 | 重构或选择下一个 TC。 |
-| ISSUES | 已知问题需要处理 | 诊断并修复后再声明完成。 |
-| BLOCKED | 缺少依赖或产品意图不清 | 先询问或解除阻塞。 |
+| 标记 | 别名 | 含义 | 下一步 |
+| --- | --- | --- | --- |
+| ⚪ | TODO/PLANNED | 已设计但尚未实现 | 编写失败测试。 |
+| 🔴 | RED/FAILING | 测试已存在、可干净执行，并按预期在领域断言上失败 | 实现生产代码。 |
+| 🟢 | GREEN/PASSED | 测试通过 | 重构或选择下一个 TC。 |
+| ⚠️ BROKEN_TEST | BROKEN_TEST | 因错误原因失败：语法错误、缺少导入或夹具崩溃 | 先修复测试骨架，再生成生产代码。 |
+| ⚠️ ISSUES | ISSUES | 已知问题需要处理 | 诊断并修复后再声明完成。 |
+| 🚫 BLOCKED | BLOCKED | 无法继续：缺少依赖、来源未决或产品意图不清 | 先询问或解除阻塞。 |
+
+标记规则：
+
+- `RED/IMPLEMENTED` 是已废弃的别名。测试仅"已存在"但从未执行，不构成 RED；只有在具备语义证伪门禁（Semantic Falsification Gate）证据时才能使用 `🔴 RED/FAILING`。
+- `✅` 不是独立状态，只能作为 `🟢 GREEN/PASSED` 的确认后缀出现。
+- 分类图例图标不得复用状态字形。分类列表中出现 `⚠️` 或 `🚫` 即与本表冲突。
+- 发现处置结果（`PASS | GAPS | BLOCKED`）是门禁结论，不是测试标记，绝不替代 TC 标记。
 
 ## 质量检查清单
 

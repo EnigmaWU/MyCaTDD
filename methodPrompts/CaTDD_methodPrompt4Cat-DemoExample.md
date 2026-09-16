@@ -24,6 +24,13 @@ DemoExample proves that a user-visible workflow can be followed and observed as 
 - The scenario verifies architecture or quality attributes; use P1/P2 categories.
 - The example would invent behavior not present in the user guide or requirements.
 
+## Design Focus
+
+- Anchor every demo to a real UserGuide or README section.
+- Define setup, run, visible output, and cleanup explicitly.
+- Show that the demo exercises already-proven P0/P1/P2 behavior instead of replacing it.
+- Label simulated, recorded, or manual steps honestly.
+
 ## TestPointsInMind
 
 First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
@@ -53,9 +60,44 @@ When this category applies, consider test points such as:
 // @[TC]: verifyDemo_by[Workflow]_expect[DocumentedOutput]
 ```
 
+## US/AC/TC Pattern
+
+```text
+US-n: As a new user,
+      I want [documented workflow] to run as written,
+      So that I can learn the feature by following the guide.
+
+AC-n: GIVEN [documented prerequisites and setup],
+      WHEN [the guide's workflow is executed as written],
+      THEN [the documented visible output appears],
+       AND [cleanup and re-run leave a repeatable state].
+
+TC-n:
+  @[Name]: verifyDemo_by[Workflow]_expect[DocumentedOutput]
+  @[Purpose]: Validate the user-visible documented workflow.
+  @[Brief]: Follow the guide step by step, capture the promised output, then clean up.
+  @[Expect]: Output matches the guide; prerequisites and any simulation are explicit.
+```
+
+## Naming Examples
+
+```text
+verifyDemo_byQuickStartWalkthrough_expectDocumentedCliOutput
+verifyOnboarding_bySampleConfigRun_expectGeneratedFilesListed
+verifyExample_byCopyExecCommands_expectSameResultAsGuide
+verifyTutorial_byCleanupAndRerun_expectRepeatableState
+```
+
 ## Checklist
 
 - Does the demo map to a real user guide section?
 - Are setup, run, expected output, and cleanup clear?
 - Does the demo avoid replacing required P0/P1/P2 tests?
 - Can a new user understand the feature by reading or running it?
+
+## Common Mistakes
+
+- Using the demo as a substitute for required functional or quality tests.
+- Letting the guide and the runnable example drift out of sync.
+- Presenting simulated or recorded dependencies as live behavior.
+- Omitting prerequisites, cleanup, or re-run behavior.

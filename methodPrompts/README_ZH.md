@@ -13,7 +13,7 @@
 - comment-alive 验证设计的主方法入口和子主题规范。
 - 面向 P0/P1/P2/P3 测试设计优先级的分类方法提示词。
 - 面向只使用本目录的人类与 CodeAgent 的独立用户指南。
-- 展示方法形态的 C++ 实现模板，但 C++ 不是方法要求。
+- 四份实现模板（C++、TypeScript、Python、Go），展示同一套方法形态，任何一种语言都不是方法要求。
 
 这一层既适合人类阅读，也适合 LLM 理解；它与编程语言无关，并可被多种 code-agent 工具复用。
 
@@ -38,7 +38,7 @@ CaTDD 方法提示词支持两个设计阶段：
 
 默认分类顺序：
 
-- P0 功能型：Typical -> Edge -> Misuse -> Fault
+- P0 功能型：`ValidFunc(Typical + Edge)` -> `InvalidFunc(Misuse + Fault)`，展开为 Typical -> Edge -> Misuse -> Fault
 - P1 设计型：State -> Capability -> Interaction -> Concurrency
 - P2 质量型：Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security
 - P3 附加型：Demo/Example

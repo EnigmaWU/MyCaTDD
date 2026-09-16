@@ -24,6 +24,13 @@ Performance proves that the feature is fast or efficient enough under defined co
 - The concern is long-running stability or repeated cycles; use Robust.
 - The concern is correctness under multiple threads; use Concurrency.
 
+## Design Focus
+
+- Name the metric with units and take the target from the performance source, not from intuition.
+- Define the workload shape: data size, operation mix, concurrency level, warm or cold start, and measurement duration.
+- Keep the measurement environment stable enough that a regression result means something.
+- Separate "fast enough against a threshold" from correctness, capacity, or stability checks.
+
 ## TestPointsInMind
 
 First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
@@ -53,9 +60,44 @@ When this category applies, consider test points such as:
 // @[TC]: verify[Operation]_by[MeasuredCondition]_expect[PerformanceTarget]
 ```
 
+## US/AC/TC Pattern
+
+```text
+US-n: As a performance stakeholder,
+      I want [operation] to stay within [budget],
+      So that [user-visible timing or cost value is preserved].
+
+AC-n: GIVEN [workload shape and environment] with [metric and unit],
+      WHEN [operation is measured under the defined conditions],
+      THEN [metric meets the threshold from the performance source],
+       AND [sample count, tolerance, and environment metadata are recorded].
+
+TC-n:
+  @[Name]: verify[Operation]_by[MeasuredCondition]_expect[PerformanceTarget]
+  @[Purpose]: Validate a source-backed performance target under a defined workload.
+  @[Brief]: Run the defined workload, collect the named metric, compare against the source threshold.
+  @[Expect]: Metric meets the target; conditions and tolerance are recorded for triage.
+```
+
+## Naming Examples
+
+```text
+verifyRequestLatency_byP95UnderLoad_expectWithinBudget
+verifyStartupTime_byColdStart_expectWithinTarget
+verifyThroughput_byConcurrentClients_expectAtLeastTargetRate
+verifyAllocationCount_byRepeatedParse_expectNoGrowthOverBudget
+```
+
 ## Checklist
 
 - Is the target measurable and written with units?
 - Is the workload size explicit?
 - Is the environment stable enough for the result to be meaningful?
 - Does the test avoid mixing correctness and benchmark goals in one unclear check?
+
+## Common Mistakes
+
+- Turning a benchmark into a correctness test, or a correctness test into a benchmark.
+- Omitting units, workload shape, or sample count so the number cannot be judged.
+- Comparing host or sanitizer timing against a target-board deadline.
+- Reporting one noisy run as evidence instead of a bounded, repeated measurement.

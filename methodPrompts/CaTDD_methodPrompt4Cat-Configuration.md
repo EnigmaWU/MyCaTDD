@@ -24,6 +24,13 @@ Configuration proves that supported settings produce the intended behavior.
 - The scenario is an unsupported caller action; use Misuse.
 - The scenario is cross-platform behavior rather than settings; use Compatibility.
 
+## Design Focus
+
+- Name every setting source and its precedence from the configuration source.
+- Test defaults explicitly, not only explicit overrides.
+- Cover invalid or conflicting configuration and the failure behavior it must produce.
+- Restore global, environment, and file state after each case.
+
 ## TestPointsInMind
 
 First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
@@ -53,9 +60,44 @@ When this category applies, consider test points such as:
 // @[TC]: verify[Behavior]_by[ConfigSetting]_expect[ConfiguredResult]
 ```
 
+## US/AC/TC Pattern
+
+```text
+US-n: As a deployer,
+      I want [setting source] to select [behavior],
+      So that the system can be configured safely per environment.
+
+AC-n: GIVEN [setting combination and precedence order],
+      WHEN [the system reads configuration or starts],
+      THEN [behavior matches the configured intent],
+       AND [invalid or conflicting configuration fails clearly before unsafe behavior].
+
+TC-n:
+  @[Name]: verify[Behavior]_by[ConfigSetting]_expect[ConfiguredResult]
+  @[Purpose]: Validate that supported settings and precedence produce the intended behavior.
+  @[Brief]: Apply the setting combination, exercise the behavior, verify the resulting mode, then restore state.
+  @[Expect]: Configured behavior is selected; invalid configuration fails clearly; state is restored.
+```
+
+## Naming Examples
+
+```text
+verifyLogLevel_byEnvironmentOverride_expectCliPrecedence
+verifyService_byDefaultConfig_expectDocumentedDefaults
+verifyFeature_byConflictingFlags_expectStartupError
+verifyPaths_byProfileSelection_expectConfiguredDirectory
+```
+
 ## Checklist
 
 - Is each setting source explicit?
 - Are default values tested?
 - Is invalid configuration handled or documented?
 - Does cleanup restore global or environment state?
+
+## Common Mistakes
+
+- Treating an invalid input value as Configuration; that is Edge or Misuse.
+- Testing only overrides and never documented defaults.
+- Assuming a precedence hierarchy the design never declared.
+- Leaving feature flags, environment variables, or temp config files behind.

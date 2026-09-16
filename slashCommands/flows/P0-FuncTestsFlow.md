@@ -64,6 +64,6 @@ flowchart LR
 - Existing demo tests are input material. They do not automatically belong to CaTDD `P3 Demo/Example`.
 - `UT_convertDemoToTypical` extracts core behavior from demo tests into `P0 Functional / Typical` skeletons.
 - Category semantics must come from `methodPrompts/CaTDD_methodPrompt4Cat-*.md`.
-- Commands must stay language agnostic. Use C++ names such as `UT_FeatureX-Typical.cxx` only as examples.
+- Commands must stay language agnostic. Use canonical CaTDD file names such as `test_feature_x_funcValidTypical.cxx` only as examples (`UT_<Feature>-<Category>` names are deprecated; see `methodPrompts/CaTDD_methodPrompt-fileNaming.md`).
 - `UT_designFuncTestsSkeleton` and the category-specific `UT_design*Skeleton` commands own skeleton design, not executable implementation bodies.
 - `UT_refactTestCase` is a no-behavior-change cleanup step for one GREEN TC. Missing behavior, missing coverage, or wrong category routing must go back to design or implementation commands instead of being added during refactor.

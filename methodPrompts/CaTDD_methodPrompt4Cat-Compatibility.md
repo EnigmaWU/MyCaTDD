@@ -24,6 +24,13 @@ Compatibility proves that the same contract works across supported environments 
 - The scenario is a fault from an unavailable dependency; use Fault.
 - The scenario is performance variation across platforms; use Performance with platform metadata.
 
+## Design Focus
+
+- Read the supported matrix rows from the compatibility source; never invent supported combinations.
+- Separate behavior that must be identical across the matrix from behavior allowed to vary.
+- Capture environment metadata per row so a failing row can be reproduced.
+- State explicitly which environments are out of scope.
+
 ## TestPointsInMind
 
 First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
@@ -53,9 +60,44 @@ When this category applies, consider test points such as:
 // @[TC]: verify[Contract]_by[CompatibilityMatrix]_expect[ConsistentBehavior]
 ```
 
+## US/AC/TC Pattern
+
+```text
+US-n: As a maintainer,
+      I want [contract] to behave consistently across [supported matrix],
+      So that upgrades and mixed versions do not break users.
+
+AC-n: GIVEN [matrix row: environment or version combination],
+      WHEN [the documented contract is exercised],
+      THEN [behavior matches the promised contract],
+       AND [allowed variation and environment metadata are recorded].
+
+TC-n:
+  @[Name]: verify[Contract]_by[CompatibilityMatrix]_expect[ConsistentBehavior]
+  @[Purpose]: Validate the contract across supported environments or versions.
+  @[Brief]: Run the scenario on the matrix row, compare with the promised contract, record environment metadata.
+  @[Expect]: Contract holds for the row; variation matches the documented allowance.
+```
+
+## Naming Examples
+
+```text
+verifyRequest_byOldClientNewServer_expectBackwardCompatible
+verifyParser_bySchemaVersionMatrix_expectStableFields
+verifyPathHandling_byPlatformMatrix_expectDocumentedBehavior
+verifyProtocol_byDependencyUpgrade_expectUnchangedContract
+```
+
 ## Checklist
 
 - Is the compatibility matrix explicit?
 - Which behavior must be identical, and which may vary?
 - Are unsupported environments clearly out of scope?
 - Does the test record enough environment metadata to debug failures?
+
+## Common Mistakes
+
+- Treating one configurable setting as Compatibility; that is Configuration.
+- Folding platform performance variance into Compatibility; that is Performance.
+- Assuming every environment is supported without a documented matrix.
+- Omitting the environment metadata needed to reproduce a failing row.

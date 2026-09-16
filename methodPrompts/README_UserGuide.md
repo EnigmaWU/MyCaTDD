@@ -245,15 +245,23 @@ Every category skeleton should preserve this minimum shape:
 
 ## Status Markers
 
-Use explicit status markers so humans and CodeAgents can continue work safely.
+Use explicit status markers so humans and CodeAgents can continue work safely. The glyph is the canonical rendering; the word form is the accepted alias for text-only surfaces such as CI logs and plain-text reports.
 
-| Marker | Meaning | Next action |
-| --- | --- | --- |
-| TODO/PLANNED | Designed but not implemented | Write the failing test. |
-| RED/IMPLEMENTED | Test exists and fails as expected | Implement production code. |
-| GREEN/PASSED | Test passes | Refactor or pick next TC. |
-| ISSUES | Known problem needs attention | Diagnose and fix before declaring done. |
-| BLOCKED | Missing dependency or unclear product intent | Ask or unblock before implementing. |
+| Marker | Alias | Meaning | Next action |
+| --- | --- | --- | --- |
+| ⚪ | TODO/PLANNED | Designed but not implemented | Write the failing test. |
+| 🔴 | RED/FAILING | Test exists, runs cleanly, and fails on the expected domain assertion | Implement production code. |
+| 🟢 | GREEN/PASSED | Test passes | Refactor or pick the next TC. |
+| ⚠️ BROKEN_TEST | BROKEN_TEST | Test fails for the wrong reason: syntax error, missing import, or fixture crash | Repair the test harness before generating production code. |
+| ⚠️ ISSUES | ISSUES | Known problem needs attention | Diagnose and fix before declaring done. |
+| 🚫 BLOCKED | BLOCKED | Cannot proceed: missing dependency, unresolved source, or unclear product intent | Ask or unblock before continuing. |
+
+Marker rules:
+
+- `RED/IMPLEMENTED` is a superseded alias. A test that exists but has not executed is not RED; use `🔴 RED/FAILING` only with Semantic Falsification Gate evidence.
+- `✅` is not a status of its own. It may appear only as a confirmation suffix for `🟢 GREEN/PASSED`.
+- Category legend icons must not reuse status glyphs. A `⚠️` or `🚫` in a category list contradicts this table.
+- Discovery dispositions (`PASS | GAPS | BLOCKED`) are gate results, not test markers, and never replace a TC marker.
 
 ## Quality Checklist
 

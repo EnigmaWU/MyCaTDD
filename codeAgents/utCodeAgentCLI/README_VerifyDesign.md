@@ -17,14 +17,14 @@ This document captures module-scoped verification strategy and US/AC/TC traceabi
 - [SPEC_designUnitTests.md](../../slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md)
 - [UT_designFuncTestsSkeleton.md](../../slashCommands/commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md)
 - [CaTDD_designAndImplTemplate.ts](../../methodPrompts/CaTDD_designAndImplTemplate.ts)
-- [test_catdd_asset_delegation_funcValidTypical.ts](tests/test_catdd_asset_delegation_funcValidTypical.ts) - AC-01..AC-04
-- [test_catdd_asset_delegation_funcValidEdge.ts](tests/test_catdd_asset_delegation_funcValidEdge.ts) - AC-07..AC-08
-- [test_catdd_asset_delegation_funcInvalidMisuse.ts](tests/test_catdd_asset_delegation_funcInvalidMisuse.ts) - AC-11..AC-12
-- [test_catdd_asset_delegation_funcInvalidFault.ts](tests/test_catdd_asset_delegation_funcInvalidFault.ts) - AC-05..AC-06, AC-09..AC-10, AC-13..AC-16
-- [UT_US-USER-01-Typical.ts](tests/UT_US-USER-01-Typical.ts) — 10 Typical ACs (AC-01~AC-10)
-- [UT_US-USER-01-Edge.ts](tests/UT_US-USER-01-Edge.ts) — 10 Edge ACs (AC-11~AC-20)
-- [UT_US-USER-01-Misuse.ts](tests/UT_US-USER-01-Misuse.ts) — 9 Misuse ACs (AC-21~AC-28, AC-32)
-- [UT_US-USER-01-Fault.ts](tests/UT_US-USER-01-Fault.ts) — 3 Fault ACs (AC-29~AC-31)
+- [test_catdd_asset_delegation_funcValidTypical.ts](SysTests/test_catdd_asset_delegation_funcValidTypical.ts) - AC-01..AC-04
+- [test_catdd_asset_delegation_funcValidEdge.ts](SysTests/test_catdd_asset_delegation_funcValidEdge.ts) - AC-07..AC-08
+- [test_catdd_asset_delegation_funcInvalidMisuse.ts](SysTests/test_catdd_asset_delegation_funcInvalidMisuse.ts) - AC-11..AC-12
+- [test_catdd_asset_delegation_funcInvalidFault.ts](SysTests/test_catdd_asset_delegation_funcInvalidFault.ts) - AC-05..AC-06, AC-09..AC-10, AC-13..AC-16
+- [test_us_user_01_funcValidTypical.ts](SysTests/test_us_user_01_funcValidTypical.ts) — 10 Typical ACs (AC-01~AC-10)
+- [test_us_user_01_funcValidEdge.ts](SysTests/test_us_user_01_funcValidEdge.ts) — 10 Edge ACs (AC-11~AC-20)
+- [test_us_user_01_funcInvalidMisuse.ts](SysTests/test_us_user_01_funcInvalidMisuse.ts) — 9 Misuse ACs (AC-21~AC-28, AC-32)
+- [test_us_user_01_funcInvalidFault.ts](SysTests/test_us_user_01_funcInvalidFault.ts) — 3 Fault ACs (AC-29~AC-31)
 
 ## Current Lifecycle Status
 
@@ -85,11 +85,11 @@ The redesigned TypeScript UnitTesting files use `UT_designFuncTestsSkeleton` sem
 
 | US | AC | TC | Test File | Status |
 | --- | --- | --- | --- | --- |
-| US-INVENTOR-01 | AC-01..AC-04 | TC-DELEGATE-001..004 | tests/test_catdd_asset_delegation_funcValidTypical.ts | TC-001 GREEN; TC-002..004 PLANNED |
-| US-INVENTOR-01 | AC-07..AC-08 | TC-DELEGATE-007..008 | tests/test_catdd_asset_delegation_funcValidEdge.ts | PLANNED |
-| US-INVENTOR-01 | AC-11..AC-12 | TC-DELEGATE-011..012 | tests/test_catdd_asset_delegation_funcInvalidMisuse.ts | PLANNED |
-| US-INVENTOR-01 | AC-05..06, AC-09..10, AC-13..16 | TC-DELEGATE-005..006,009..010,013..016 | tests/test_catdd_asset_delegation_funcInvalidFault.ts | PLANNED |
-| US-USER-01 | AC-01~AC-32 | TC-ARG-001..TC-ARG-035 | tests/UT_US-USER-01-*.ts | GREEN |
+| US-INVENTOR-01 | AC-01..AC-04 | TC-DELEGATE-001..004 | SysTests/test_catdd_asset_delegation_funcValidTypical.ts | TC-001 GREEN; TC-002..004 PLANNED |
+| US-INVENTOR-01 | AC-07..AC-08 | TC-DELEGATE-007..008 | SysTests/test_catdd_asset_delegation_funcValidEdge.ts | PLANNED |
+| US-INVENTOR-01 | AC-11..AC-12 | TC-DELEGATE-011..012 | SysTests/test_catdd_asset_delegation_funcInvalidMisuse.ts | PLANNED |
+| US-INVENTOR-01 | AC-05..06, AC-09..10, AC-13..16 | TC-DELEGATE-005..006,009..010,013..016 | SysTests/test_catdd_asset_delegation_funcInvalidFault.ts | PLANNED |
+| US-USER-01 | AC-01~AC-32 | TC-ARG-001..TC-ARG-035 | SysTests/test_us_user_01_*.ts | GREEN |
 
 ## US-INVENTOR-01 Flow Coupling Decision
 
@@ -220,12 +220,12 @@ The four test files can be implemented in parallel after shared fake-port interf
 The existing `US-USER-01` CLI validation tests must remain GREEN after any redesign:
 
 ```bash
-node --test codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts
+node --test codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidTypical.ts codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidEdge.ts codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidFault.ts
 ```
 
 Expected result: all 38 executable USER-01 regression cases pass.
 
-All executable `UT_US-USER-01` cases invoke `utCodeAgentCLI` as a subprocess. They do not call `validateInvocation(...)` directly.
+All executable `test_us_user_01_*` cases invoke `utCodeAgentCLI` as a subprocess. They do not call `validateInvocation(...)` directly.
 
 ## Risks and Deferred Coverage
 

@@ -28,7 +28,7 @@ Two TCs were just implemented and product code does not exist yet:
 ```text
 /SPEC_reviewImplUnitTests
 doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
-target_test_files: services/payment/SysTests/UT_Gateway-Typical.ts
+target_test_files: services/payment/SysTests/test_payment_gateway_funcValidTypical.ts
 implementation_status: TC-001 RED, TC-002 RED
 verification_output: 0 passing, 2 failing (module not found)
 ```

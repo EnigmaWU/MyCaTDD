@@ -420,7 +420,7 @@ Loop bounds are set by the agentic reliability policy and contracts in `codeAgen
 - `maxStepRetry = 2`: maximum retries of the same failed lifecycle step.
 - `maxRunCorrectionLoop = 3`: maximum correction-loop iterations for one run ($B \le 3$).
 - `max_correction_attempts` default `3`: per-command local-bound input (for example `SPEC_implProductCodes`, `UT_implTestCase`).
-- SGRM Budget Protocol ($B$): Rejection-sampling retry loops must be strictly bounded ($B \le 3$). Upon budget exhaustion, the agent must not loop indefinitely or silently lower acceptance criteria; it must restore the clean baseline, emit a structured failure diagnostic report, mark the TC as `⚠️ BLOCKED`, and escalate to human governance.
+- SGRM Budget Protocol ($B$): Rejection-sampling retry loops must be strictly bounded ($B \le 3$). Upon budget exhaustion, the agent must not loop indefinitely or silently lower acceptance criteria; it must restore the clean baseline, emit a structured failure diagnostic report, mark the TC as `🚫 BLOCKED`, and escalate to human governance.
 - ASR-R1: retry and correction loops shall be bounded and deterministic at budget exhaustion.
 
 ### Universal Stop Conditions
@@ -435,7 +435,7 @@ Every rework loop (`review -> update -> review`, `impl -> review -> impl`, and t
 6. Abort — the problem changes story intent or invalidates assumptions; use `SPEC_abortUserStory`.
 7. Ownership boundary reached — route to the canonical `SPEC_*`/`UT_*`/`HARNESS_*` owner.
 
-A no-progress stop must preserve the latest observed evidence, restore the working directory to the last clean state (preventing partial/dirty code contamination), emit a structured failure diagnostic report (`failure_type`, `attempt_count`, `sut_snapshot`, `assertion_diff`), mark the TC as `⚠️ BLOCKED`, and route or ask; it must not claim success.
+A no-progress stop must preserve the latest observed evidence, restore the working directory to the last clean state (preventing partial/dirty code contamination), emit a structured failure diagnostic report (`failure_type`, `attempt_count`, `sut_snapshot`, `assertion_diff`), mark the TC as `🚫 BLOCKED`, and route or ask; it must not claim success.
 
 ### Route Instead of Reloop
 

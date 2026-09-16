@@ -188,9 +188,11 @@ Use a TODO/tracking block that records category, status, and next action.
 ```text
 STATUS LEGEND:
   TODO/PLANNED: designed but not implemented
-  RED/IMPLEMENTED: test written and failing for expected reason
+  RED/FAILING: test written, executing cleanly, and failing for the expected semantic domain assertion
   GREEN/PASSED: test written and passing
+  BROKEN_TEST: failing for the wrong reason; repair the harness before writing production code
   ISSUES: known problem needing attention
+  BLOCKED: cannot proceed due to a dependency or unresolved source
 
 P0 Functional:
   [@AC-1,US-1] TC-1: verifyCore_byBasicOperation_expectSuccess - TODO

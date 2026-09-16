@@ -52,7 +52,7 @@ WHAT
 - Retry authorization up to 3 times with exponential backoff
 
 HOW
-- retry.ts wraps the gateway call; UT_Retry-Typical.ts covers TC-RETRY-001..003
+- retry.ts wraps the gateway call; test_payment_gateway_funcValidTypical.ts covers TC-RETRY-001..003
 
 WHY
 - Fixed backoff caused thundering-herd retries against the gateway under outage

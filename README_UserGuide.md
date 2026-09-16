@@ -693,9 +693,9 @@ stateDiagram-v2
     end note
     
     note right of RED
-        🔴 RED/IMPLEMENTED
+        🔴 RED/FAILING
         Test code written
-        Test fails (expected!)
+        Test runs and fails on the expected assertion
     end note
     
     note right of GREEN
@@ -719,11 +719,14 @@ stateDiagram-v2
 
 ```
 ⚪ TODO/PLANNED     - Designed but not implemented yet
-🔴 RED/IMPLEMENTED  - Test written and failing (need production code)
+🔴 RED/FAILING      - Test written, executing cleanly, failing on the expected domain assertion
 🟢 GREEN/PASSED     - Test written and passing
+⚠️ BROKEN_TEST      - Failing for the wrong reason (syntax error, missing import, fixture crash)
 ⚠️ ISSUES           - Known problem requiring attention
 🚫 BLOCKED          - Cannot proceed due to dependency
 ```
+
+`RED/IMPLEMENTED` is a superseded alias: a test that exists but has not executed is not RED. The canonical status table lives in `methodPrompts/README_UserGuide.md`.
 
 ### When to Use Each Status
 
@@ -733,10 +736,10 @@ stateDiagram-v2
 - Test code not yet written
 - Planning phase complete
 
-**🔴 RED/IMPLEMENTED**
+**🔴 RED/FAILING**
 
 - Test code is written
-- Test runs but FAILS (expected!)
+- Test runs cleanly but FAILS on the expected semantic domain assertion
 - Production code not yet implemented
 - This is the "RED" in TDD Red→Green
 

@@ -156,11 +156,11 @@
  *
  * InvalidFunc - Verifies graceful failure with invalid inputs or states.
  *
- *   🚫 MISUSE: Incorrect API usage patterns. (ERROR PREVENTION)
+ *   MISUSE: Incorrect API usage patterns. (ERROR PREVENTION)
  *      - Purpose: Ensure proper error handling for API abuse.
  *      - Examples: Wrong call sequence, invalid parameters, double-init.
  *
- *   ⚠️ FAULT: Error handling and recovery. (RELIABILITY)
+ *   FAULT: Error handling and recovery. (RELIABILITY)
  *      - Purpose: Test system behavior under error conditions.
  *      - Examples: Network failures, disk full, process crash recovery.
  *
@@ -555,7 +555,7 @@ TEST(UT_NameOfCategory, verifyBehaviorY_byDoB_expectSomething) {
 }
 
 //=== TEMPLATE: Fixture style ===
-class UT_NameofCategoryFixture : public ::testing::Test {
+class UT_NameOfCategoryFixture : public ::testing::Test {
    protected:
     static void SetUpTestSuite() {}
     static void TearDownTestSuite() {}
@@ -563,11 +563,11 @@ class UT_NameofCategoryFixture : public ::testing::Test {
     void TearDown() override {}
 };
 
-TEST_F(UT_NameofCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
+TEST_F(UT_NameOfCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
     // SETUP
     // ...
     // BEHAVIOR
-    printf("🎯 NameofCategoryFixture->BEHAVIOR: verifyBehaviorX_byDoA_expectSomething\n");
+    printf("🎯 NameOfCategoryFixture->BEHAVIOR: verifyBehaviorX_byDoA_expectSomething\n");
     // VERIFY
     // CLEANUP
 }

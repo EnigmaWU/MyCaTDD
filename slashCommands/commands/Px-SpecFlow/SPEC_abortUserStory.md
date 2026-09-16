@@ -30,7 +30,7 @@ doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
 abort_reason:
   primary_gap_type: assumption-gap
   problem_summary: The gateway is not idempotent, so blind retries can double-charge.
-  evidence_refs: services/payment/SysTests/UT_Retry-Fault.ts (TC-RETRY-009 FAILS)
+  evidence_refs: services/payment/SysTests/test_payment_retry_funcInvalidFault.ts (TC-RETRY-009 FAILS)
   unsafe_if_continue: Continuing would ship a retry path that can charge a customer twice.
 ```
 

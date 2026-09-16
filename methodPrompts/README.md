@@ -13,7 +13,7 @@ It defines the stable CaTDD method contract:
 - Main method entry and subtopic specifications for comment-alive verification design.
 - Category-specific method prompts for P0/P1/P2/P3 test design priorities.
 - Standalone user guides for people and CodeAgents who use only this directory.
-- A C++ implementation template that demonstrates the method shape without making C++ a method requirement.
+- Four implementation templates (C++, TypeScript, Python, Go) that demonstrate the same method shape without making any language a method requirement.
 
 The layer is human-readable, LLM-friendly, programming-language agnostic, and reusable across code-agent tools.
 
@@ -38,7 +38,7 @@ CaTDD method prompts support two design stages:
 
 Default classification order:
 
-- P0 Functional: Typical -> Edge -> Misuse -> Fault
+- P0 Functional: `ValidFunc(Typical + Edge)` -> `InvalidFunc(Misuse + Fault)`, expanded as Typical -> Edge -> Misuse -> Fault
 - P1 Design: State -> Capability -> Interaction -> Concurrency
 - P2 Quality: Performance -> Robust -> Compatibility -> Configuration -> Diagnosis -> Security
 - P3 Addons: Demo/Example

@@ -24,8 +24,8 @@ Implementing against a reviewed RED test:
 ```text
 /SPEC_implProductCodes
 doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
-failing_tests: UT_Gateway-Typical.ts TC-001 (RED: module not found)
-focused_validation: node --test services/payment/SysTests/UT_Gateway-Typical.ts
+failing_tests: test_payment_gateway_funcValidTypical.ts TC-001 (RED: module not found)
+focused_validation: node --test services/payment/SysTests/test_payment_gateway_funcValidTypical.ts
 max_correction_attempts: 3
 ```
 
@@ -81,7 +81,7 @@ If valid RED evidence is absent, do not mutate product code. Route a test implem
    - Upon budget exhaustion ($B=3$ attempts reached without `GREEN`):
      1) Restore the working directory to the clean baseline (revert unverified local mutations to prevent partial code contamination);
      2) Emit a structured failure diagnostic report (`failure_type`, `attempt_count: 3`, `assertion_failure_diff`, and `sut_snapshot`);
-     3) Mark the affected TC as `⚠️ BLOCKED`;
+     3) Mark the affected TC as `🚫 BLOCKED`;
      4) Escalate with `ASK` to the human developer under Layer 4 governance.
 
 A no-progress stop must preserve the latest observed evidence, report remaining failures, and route or ask; it must not claim success.

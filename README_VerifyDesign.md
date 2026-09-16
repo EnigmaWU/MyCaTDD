@@ -8,10 +8,10 @@ This document captures verification strategy and US/AC/TC traceability for activ
 - Active TASKs: [.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md](.catdd/spec/doneUS/20260628-utCodeAgentCLI-US-USER-01-TASKs.md)
 - Module design authority: [codeAgents/utCodeAgentCLI/README_ArchDesign.md](codeAgents/utCodeAgentCLI/README_ArchDesign.md)
 - Target test files (32-AC redesign):
-  - [codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts](codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts) — 10 Typical ACs (AC-01~AC-10)
-  - [codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts](codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts) — 10 Edge ACs (AC-11~AC-20)
-  - [codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts](codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts) — 9 Misuse ACs (AC-21~AC-28, AC-32)
-  - [codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts](codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts) — 3 Fault ACs (AC-29~AC-31)
+  - [codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidTypical.ts](codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidTypical.ts) — 10 Typical ACs (AC-01~AC-10)
+  - [codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidEdge.ts](codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidEdge.ts) — 10 Edge ACs (AC-11~AC-20)
+  - [codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts](codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts) — 9 Misuse ACs (AC-21~AC-28, AC-32)
+  - [codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidFault.ts](codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidFault.ts) — 3 Fault ACs (AC-29~AC-31)
 
 ## Testing Definition
 
@@ -33,10 +33,10 @@ Design P0 Functional coverage first for argument validation because this story i
 
 | Priority | Category | Scope | Required Now | Notes |
 | --- | --- | --- | --- | --- |
-| P0 | Functional: Typical | Valid invocation success path (AC-01~AC-10) | Yes | Covers `TC-ARG-001..TC-ARG-010` in `UT_US-USER-01-Typical.ts`. |
-| P0 | Functional: Edge | Valid boundary or mode variation (AC-11~AC-20) | Yes | Redesigned from non-required to required with 10 Edge ACs in `UT_US-USER-01-Edge.ts`. |
-| P0 | Functional: Misuse | Invalid caller argument checks (AC-21~AC-28, AC-32) | Yes | `TC-ARG-021..TC-ARG-026` GREEN, `TC-ARG-027..TC-ARG-031` PLANNED in `UT_US-USER-01-Misuse.ts`. |
-| P0 | Functional: Fault | File-path failure handling (AC-29~AC-31) | Yes | `TC-ARG-029..TC-ARG-033` GREEN, `TC-ARG-034..TC-ARG-035` PLANNED in `UT_US-USER-01-Fault.ts`. |
+| P0 | Functional: Typical | Valid invocation success path (AC-01~AC-10) | Yes | Covers `TC-ARG-001..TC-ARG-010` in `test_us_user_01_funcValidTypical.ts`. |
+| P0 | Functional: Edge | Valid boundary or mode variation (AC-11~AC-20) | Yes | Redesigned from non-required to required with 10 Edge ACs in `test_us_user_01_funcValidEdge.ts`. |
+| P0 | Functional: Misuse | Invalid caller argument checks (AC-21~AC-28, AC-32) | Yes | `TC-ARG-021..TC-ARG-026` GREEN, `TC-ARG-027..TC-ARG-031` PLANNED in `test_us_user_01_funcInvalidMisuse.ts`. |
+| P0 | Functional: Fault | File-path failure handling (AC-29~AC-31) | Yes | `TC-ARG-029..TC-ARG-033` GREEN, `TC-ARG-034..TC-ARG-035` PLANNED in `test_us_user_01_funcInvalidFault.ts`. |
 | P1 | Design: State/Capability/Concurrency | Parser/validator internals | No | Defer until runtime state model requires dedicated tests. |
 | P2 | Quality: Performance/Robust/Compatibility/Configuration | CLI quality envelopes | No | Defer until executable implementation baseline exists. |
 
@@ -44,19 +44,19 @@ Design P0 Functional coverage first for argument validation because this story i
 
 | US | AC | TC | Test File | Status |
 | --- | --- | --- | --- | --- |
-| US-USER-01 | AC-01~AC-10 | TC-ARG-001..TC-ARG-010 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts | PLANNED/GREEN |
-| US-USER-01 | AC-11~AC-20 | TC-ARG-011..TC-ARG-020 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Edge.ts | PLANNED |
-| US-USER-01 | AC-21 | TC-ARG-021..TC-ARG-023 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-25 | TC-ARG-024 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-23, AC-24 | TC-ARG-025..TC-ARG-026 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | GREEN |
-| US-USER-01 | AC-22 | TC-ARG-027 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-26 | TC-ARG-028 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-27 | TC-ARG-029 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-28 | TC-ARG-030 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-32 | TC-ARG-031 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Misuse.ts | PLANNED |
-| US-USER-01 | AC-29 | TC-ARG-029..TC-ARG-033 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts | GREEN |
-| US-USER-01 | AC-30 | TC-ARG-034 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts | PLANNED |
-| US-USER-01 | AC-31 | TC-ARG-035 | codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Fault.ts | PLANNED |
+| US-USER-01 | AC-01~AC-10 | TC-ARG-001..TC-ARG-010 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidTypical.ts | PLANNED/GREEN |
+| US-USER-01 | AC-11~AC-20 | TC-ARG-011..TC-ARG-020 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidEdge.ts | PLANNED |
+| US-USER-01 | AC-21 | TC-ARG-021..TC-ARG-023 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts | GREEN |
+| US-USER-01 | AC-25 | TC-ARG-024 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts | GREEN |
+| US-USER-01 | AC-23, AC-24 | TC-ARG-025..TC-ARG-026 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts | GREEN |
+| US-USER-01 | AC-22 | TC-ARG-027 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts | PLANNED |
+| US-USER-01 | AC-26 | TC-ARG-028 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts | PLANNED |
+| US-USER-01 | AC-27 | TC-ARG-029 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts | PLANNED |
+| US-USER-01 | AC-28 | TC-ARG-030 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts | PLANNED |
+| US-USER-01 | AC-32 | TC-ARG-031 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidMisuse.ts | PLANNED |
+| US-USER-01 | AC-29 | TC-ARG-029..TC-ARG-033 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidFault.ts | GREEN |
+| US-USER-01 | AC-30 | TC-ARG-034 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidFault.ts | PLANNED |
+| US-USER-01 | AC-31 | TC-ARG-035 | codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcInvalidFault.ts | PLANNED |
 
 ## Test Case Design Notes
 
@@ -96,7 +96,7 @@ digital video/audio points:
 Run from repository root to inspect the designed skeleton file:
 
 ```bash
-sed -n '1,220p' codeAgents/utCodeAgentCLI/SysTests/UT_US-USER-01-Typical.ts
+sed -n '1,220p' codeAgents/utCodeAgentCLI/SysTests/test_us_user_01_funcValidTypical.ts
 ```
 
 Expected result: category-specific CaTDD UnitTesting files with `@[US]`, `@[AC]`, `@[TC]`, `@[Category]`, and `@[Status]: GREEN` tags where executable TCs exist.

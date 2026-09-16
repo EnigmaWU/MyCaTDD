@@ -160,11 +160,11 @@ ValidFunc - Verifies correct behavior with valid inputs/states.
      - Examples: Zero-capacity buffer, nil task slice, timeout deadline exact match.
 
 InvalidFunc - Verifies graceful failure with invalid inputs or states.
-  🚫 MISUSE: Incorrect API usage patterns. (ERROR PREVENTION)
+  MISUSE: Incorrect API usage patterns. (ERROR PREVENTION)
      - Purpose: Ensure proper error handling for API abuse.
      - Examples: Submit to unstarted pool, submit nil job func, double close.
 
-  ⚠️ FAULT: Error handling and recovery. (RELIABILITY)
+  FAULT: Error handling and recovery. (RELIABILITY)
      - Purpose: Test system behavior under external error conditions.
      - Examples: Task panic recovery, worker context cancelled mid-execution.
 
@@ -411,6 +411,8 @@ TEST CASE TEMPLATE:
     2) 🎯 BEHAVIOR: invoke target function/method
     3) ✅ VERIFY: check return values, error assertions (keep <= 3 key assertions)
     4) 🧹 CLEANUP: teardown resources, await workers, cancel context
+  @[Expect]: [How to verify success]
+  @[Notes]: [Additional context, gotchas, dependencies]
 */
 
 // Mock errors for template illustration

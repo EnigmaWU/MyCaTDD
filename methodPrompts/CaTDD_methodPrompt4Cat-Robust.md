@@ -24,6 +24,13 @@ Robust proves that the system remains stable after repeated or sustained use.
 - The scenario is a latency/throughput target; use Performance.
 - The scenario is a maximum designed amount; use Capability.
 
+## Design Focus
+
+- Make the repeat count or duration explicit and source-backed.
+- Assert the invariant that must survive the cycles, not just "no crash".
+- Include residue checks: memory, handles, temp files, subscriptions, timers, threads, and queues.
+- Keep failure evidence diagnosable after a late-cycle failure without requiring huge logs.
+
 ## TestPointsInMind
 
 First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
@@ -53,9 +60,44 @@ When this category applies, consider test points such as:
 // @[TC]: verify[Operation]_by[StressCondition]_expect[StableInvariant]
 ```
 
+## US/AC/TC Pattern
+
+```text
+US-n: As an operator,
+      I want [operation] to stay stable across [repetition or duration],
+      So that long-running use does not degrade or leak.
+
+AC-n: GIVEN [repeat count or duration] with [resource or state invariant],
+      WHEN [the operation repeats under the defined conditions],
+      THEN [the invariant still holds after the cycles],
+       AND [resources return to baseline and cleanup completes].
+
+TC-n:
+  @[Name]: verify[Operation]_by[StressCondition]_expect[StableInvariant]
+  @[Purpose]: Validate stability across sustained or repeated operation.
+  @[Brief]: Repeat the cycle for the source-defined count or duration, then verify the invariant and residue state.
+  @[Expect]: Invariant holds; no leak or residue remains; failing cycle is identifiable.
+```
+
+## Naming Examples
+
+```text
+verifyConnectionPool_byRepeatedReconnect_expectStableHandles
+verifyService_byLongRunningSoak_expectNoMemoryGrowth
+verifyQueue_byEnqueueDequeueChurn_expectBoundedBacklog
+verifyRestartCycle_byRepeatedStopStart_expectCleanState
+```
+
 ## Checklist
 
 - Is the repeat count or duration explicit?
 - What invariant proves stability?
 - Are cleanup and resource checks included?
 - Can failures be diagnosed without reading huge logs?
+
+## Common Mistakes
+
+- Treating one injected external failure as Robust; that is Fault.
+- Using Robust for a maximum supported amount; that is Capability.
+- Asserting "no crash" instead of a named invariant that must hold.
+- Skipping residue checks so a leak passes as stability.
