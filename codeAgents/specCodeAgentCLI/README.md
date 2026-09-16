@@ -38,6 +38,17 @@ The CLI implementation must be based on the upstream layers:
 - `methodPrompts` provides the language-agnostic CaTDD method contract.
 - `slashCommands` provides the reusable SpecCoding commands and flow steps.
 - `utCodeAgentCLI` provides the execution model and unit-test discipline that spec orchestration can reuse.
+
+## Execution Mode Contract
+
+`specCodeAgentCLI` is a flow driver, so it runs Px-SpecFlow in `autonomousMode` by default:
+
+- The runner declares its mode explicitly instead of relying on the absence of a chat window; the declared value is recorded in `*-UserStory-Tasks.md` and carried to later steps.
+- `autonomousMode` is only a default, never an exemption. `SPEC_makePlan` still classifies orientation, and intent-clearing, requirement-oriented, or design-oriented stories halt back to `manualMode` for human confirmation.
+- The runner calls the next `SPEC_doXYZ` itself, takes `SPEC_commitStepWorks` at the step boundaries `SPEC_makePlan` planned, and makes the final `SPEC_commitStoryWorks` commits at `pre_close` and `post_close`.
+- A question that cannot be answered from artifacts halts the run through `ONE-MORE-THING` with a structured `manual_required` inquiry; the runner never guesses.
+- A discipline switch is not available headlessly. VibeCoding needs a human intent source, so when the flow cannot name what is wrong the run halts and the developer chooses `ASK`, abort, or `SPEC_whatsWrong` in `manualMode`.
+- When the run hands control back to a human, it records the mode change so the artifacts never claim an autonomy that is no longer active.
 - `specCodeAgentCLI` adds higher-level workflow sequencing, lifecycle observability, and module-oriented execution planning.
 
 It may target many programming languages, but it must preserve the repository's comment-alive verification design and CaTDD story traceability.
@@ -91,4 +102,3 @@ When recurring spec-flow patterns emerge, formalize them here.
 When those patterns stabilize as reusable prompt steps or command flows, feed them back into `slashCommands` and `methodPrompts`.
 
 The design goal is simple: keep the module-level SpecCoding layer explicit, bounded, and traceable instead of letting it become an informal wrapper around unit-test execution.
-

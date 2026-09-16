@@ -41,7 +41,7 @@ This prevents every tool integration from inventing its own CaTDD workflow while
 - Living artifacts are US/AC/TC comments, category labels, priority gates, TC status markers, test files, and SpecFlow state under `.catdd/spec/`.
 - Command files describe what to do now, what to read, what to produce, what to preserve, and what command should come next.
 
-In CaTDD terminology, using `methodPrompts` directly in CodeAgent chat is **VibeCoding**: flexible, method-guided conversation. Using `slashCommands` is **SpecCoding**: structured Spec-Driven Development flow based on the same method definitions.
+In CaTDD terminology, using `methodPrompts` directly in CodeAgent chat is **VibeCoding**: flexible, method-guided conversation. Using `slashCommands` is **SpecCoding**: structured Spec-Driven Development flow based on the same method definitions. When a story is already open and the Flow cannot name what is wrong, `SPEC_whatsWrong` is the sanctioned bridge between the two: it freezes SpecCoding, opens a `manualMode`-only VibeCoding excursion recorded in local work state, reconciles each finding back through its owning command, and resumes the Flow with any `SPEC_doXYZ` after `HARNESS_evolveHarness` captures reusable tactics.
 
 ## Layer boundary
 

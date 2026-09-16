@@ -93,9 +93,11 @@ slashCommands/
 - 无论在何种模式下，执行的都是 `flows/Px-SpecFlow.md` 中定义的完全相同的生命周期流程。
 - `manualMode`（默认模式）：在聊天中进行交互式逐步协作。助手每次执行一条 slash 命令，在意图、验收标准或安全性模糊时暂停并提问，等待开发者确认后再推进。
 - `autonomousMode`（自主模式，需显式选择）：无人值守/命令行持续执行（例如通过 `specCodeAgentCLI` 或入口 slash 命令如 `SPEC_importIssue`、`SPEC_openUserStory` 携带 `execution_mode: autonomousMode` 触发）。
+- **驱动方默认值**：人类聊天会话默认 `manualMode`；驱动流程的 code agent 或 CLI 运行器（如 `specCodeAgentCLI`）在导向边界内默认 `autonomousMode`。驱动方必须显式声明模式，并在把控制权交还人类时重新声明，因此执行模式绝不根据运行环境推断。
 - **工作导向边界**：`autonomousMode` **严格仅支持实现导向（implementation-oriented）的用户故事**。需求分析与系统架构涉及人类意图确认，必须留在交互式 `manualMode`。若在非实现故事上触发自主模式，流程将强制暂停并切回 `manualMode`。
 - **manualMode 下的分析模式**：在需求分析（`SPEC_analyzeIssue`、`SPEC_analyzeFeature`）期间，`analysis_mode` 允许在交互式逐步对话（`BRAINSTORM`，默认）与单次流水线生成（`AUTONOMOUS`）之间选择，以直接起草 `todoUS` 而不被逐步打断。
 - **通用暂停规则（ONE-MORE-THING）**：在所有模式下，只要遇到 `ONE-MORE-THING: ask developer if something not sure`，智能体**必须立即暂停**并提问。自主模式绝非猜测缺失需求、未确认决策或模糊边界的借口；在自主模式下遇到 `ONE-MORE-THING` 立即暂停并请求开发者指示。
+- **纪律模式（SpecCoding 与 VibeCoding）**：故事开启后通常遵循 SpecCoding，由流程决定下一步 `SPEC_doXYZ`。当确实存在问题、但没有任何门禁或归属命令能说清时，[SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md) 会冻结流程，并在 `manualMode` 下把会话切换到 VibeCoding 进行自由但受方法引导的探索。泳道移动与团队制品写入均被冻结，`ONE-MORE-THING` 始终生效，探索性修改在某个 `SPEC_*` 步骤重新采纳前保持未采纳状态。之后，发现按归属命令路由，`HARNESS_evolveHarness` 以 `evolution_mode=auto` 沉淀可复用战术，再用任意 `SPEC_doXYZ`（包括 `SPEC_whatsNextTask`）恢复 SpecCoding。`autonomousMode` 下绝不提供 VibeCoding。
 
 ## Usage Example
 
@@ -201,6 +203,7 @@ bash scripts/test_makeSlashCmd4Codex.sh
 | 在开始新任务会话前捕获当前会话上下文 | [commands/Px-HarnessKits/HARNESS_newTaskSession.md](commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | 在有意义的成功或重复 Harness 证据后学习并演进 | 使用 `evolution_mode=auto` 的 [commands/Px-HarnessKits/HARNESS_evolveHarness.md](commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
 | 告诉我当前 SpecCoding 下一步该做什么 | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
+| 问"哪里不对"并切换到 VibeCoding 探索 | [commands/Px-SpecFlow/SPEC_whatsWrong.md](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
 | 为已打开的 user story 规划下一条 SPEC 步骤 | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | 导入已有结构化 User Story 或 AC 切片 | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |

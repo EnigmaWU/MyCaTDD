@@ -59,7 +59,7 @@ Expected result:
 - **Thought**: the tasks file shows `SPEC_updateUserStory → SPEC_reviewUserStory` three times with identical findings → possible `deadloop-risk`.
 - **Action**: compare the story file across the three passes for changed evidence.
 - **Observation**: the story is byte-identical between passes 2 and 3 → no progress → `deadloop-risk` confirmed and traceable.
-- **Stop**: two findings ranked — `deadloop-risk` first → route to `SPEC_abortUserStory` or `ASK`, never a fourth retry; `consistency-risk` second → remove the stale `doingUS` copy. No repair performed by this command.
+- **Stop**: two findings ranked — `deadloop-risk` first → route to `SPEC_abortUserStory`, `SPEC_whatsWrong` when the run is in `manualMode` and the problem is still unproven, or `ASK`; never a fourth retry. `consistency-risk` second → remove the stale `doingUS` copy. No repair performed by this command.
 
 ## Inputs
 
@@ -120,7 +120,7 @@ If the target path or evidence base is unclear, stop and ask the developer.
 | correctness-risk | project behavior or state does not match the intended contract | run the relevant product/test or verification command |
 | consistency-risk | docs, commands, or filesystem state disagree with each other | fix the drift and re-check the contract |
 | speccoding-drift | lifecycle or CaTDD rules are being skipped, duplicated, or misapplied | route to the narrowest `SPEC_*` or `HARNESS_*` command |
-| deadloop-risk | the same story or command bounces across lifecycle artifacts, task checkboxes, or review passes with no state progress (see `Px-SpecFlow` Loop Guard) | route to `SPEC_abortUserStory`, `SPEC_whatsNextTask`, or `ASK`; do not continue the same rework loop |
+| deadloop-risk | the same story or command bounces across lifecycle artifacts, task checkboxes, or review passes with no state progress (see `Px-SpecFlow` Loop Guard) | route to `SPEC_abortUserStory`, `SPEC_whatsWrong` in `manualMode`, `SPEC_whatsNextTask`, or `ASK`; do not continue the same rework loop |
 | healthy | no strong evidence of project drift | continue with the current task |
 
 ## Method References

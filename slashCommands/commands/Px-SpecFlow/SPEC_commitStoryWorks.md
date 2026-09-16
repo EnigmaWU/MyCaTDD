@@ -124,6 +124,7 @@ Do not treat the pre-close `commit_ref` as sufficient evidence for close-generat
 Do not mark closure complete while post-close lifecycle/meta changes remain uncommitted.
 Do not report the lifecycle as fully finished when branch integration is still required after close.
 Do not leave an abort, suspend, or partial-close lane move uncommitted; those terminal transitions end the span and route here with `commit_checkpoint = span_end`.
+Do not include unadopted VibeCoding excursion edits in the span commit; they enter story work only after a `SPEC_*` step re-adopts them or they are reverted.
 Do not commit `.catdd/spec/WorkingProcessLog.md` or other gitignored local work state.
 
 ONE-MORE-THING: ask developer if something not sure

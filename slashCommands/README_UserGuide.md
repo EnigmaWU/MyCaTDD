@@ -93,9 +93,11 @@ Follow this workflow when using `slashCommands/`.
 - Both modes run the exact same lifecycle flow defined in `flows/Px-SpecFlow.md`.
 - `manualMode` (default): Step-by-step interactive collaboration in chat. The assistant executes one slash command at a time, asks focused questions when intent, criteria, or safety is unclear, and pauses for developer confirmation before proceeding.
 - `autonomousMode` (opt-in): Continuous headless / CLI execution (e.g. via `specCodeAgentCLI` or entry slash commands such as `SPEC_importIssue` or `SPEC_openUserStory` with `execution_mode: autonomousMode`).
+- **Driver defaults**: a human chat session defaults to `manualMode`; a code agent or CLI runner that drives the flow, such as `specCodeAgentCLI`, defaults to `autonomousMode` inside the orientation boundary. The driver declares the mode explicitly and re-declares it whenever it hands control back to a human, so execution mode is never inferred from the environment.
 - **Orientation Boundary**: `autonomousMode` is strictly supported **ONLY for `implementation-oriented` stories**. Requirements analysis and system architecture require human intent and must remain in interactive `manualMode`. If autonomous mode is triggered on non-implementation stories, the flow halts and forces `manualMode`.
 - **Analysis Modes under manualMode**: During requirements analysis (`SPEC_analyzeIssue`, `SPEC_analyzeFeature`), `analysis_mode` allows choosing between interactive step-by-step dialogue (`BRAINSTORM`, default) and single-pass pipeline generation (`AUTONOMOUS`) to draft `todoUS` without intermediate conversational prompts.
 - **Universal Stop Rule (ONE-MORE-THING)**: Across all modes, the agent **MUST STOP** whenever it meets `ONE-MORE-THING: ask developer if something not sure`. Autonomy never excuses guessing missing requirements, unconfirmed decisions, or ambiguous boundaries; hitting `ONE-MORE-THING` in autonomous mode immediately halts progression and requests developer input.
+- **Discipline mode (SpecCoding vs VibeCoding)**: An open story normally follows SpecCoding, where the Flow decides the next `SPEC_doXYZ` step. When something is wrong but no gate or owning command can name it yet, [SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md) freezes the Flow and switches a `manualMode` session into VibeCoding for free, method-guided investigation. Lane moves and team-artifact writes are frozen, `ONE-MORE-THING` stays binding, and exploratory edits remain unadopted until a `SPEC_*` step re-adopts them. Afterwards, findings route to their owning commands, `HARNESS_evolveHarness` with `evolution_mode=auto` keeps reusable tactics, and any `SPEC_doXYZ` (including `SPEC_whatsNextTask`) resumes SpecCoding. VibeCoding is never available in `autonomousMode`.
 
 ## Usage Example
 
@@ -202,6 +204,7 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Capture session context before starting a new task session | [HARNESS_newTaskSession](commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | Learn and evolve after a meaningful verified success or repeated harness evidence | [HARNESS_evolveHarness](commands/Px-HarnessKits/HARNESS_evolveHarness.md) with `evolution_mode=auto` |
 | Tell me what SpecCoding task to do next | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
+| Ask what is wrong and switch into a VibeCoding investigation | [SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
 | Create checkbox TASKs and choose the next SPEC step for an opened user story | [SPEC_makePlan](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | Import an existing structured User Story or AC slice | [SPEC_importUserStory](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | Convert demo tests into CaTDD Typical skeleton | [UT_convertDemoToTypical](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |

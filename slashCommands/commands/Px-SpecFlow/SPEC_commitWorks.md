@@ -111,5 +111,6 @@ Do not create an empty commit when the resolved scope is empty.
 Do not read, write, or resolve scope from `.catdd/spec/doingUS/` story artifacts; span-scoped commits belong to `SPEC_commitPreStoryWorks`, `SPEC_commitStepWorks`, and `SPEC_commitStoryWorks`.
 Do not advance SpecFlow lifecycle state, and do not claim an active story is committed because a general commit happened.
 Do not commit `.catdd/spec/WorkingProcessLog.md` or other gitignored local work state.
+Do not commit unadopted VibeCoding excursion edits as a general commit while a story is open; route them through the owning `SPEC_*` step or revert them first.
 
 ONE-MORE-THING: ask developer if something not sure

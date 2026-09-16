@@ -10,6 +10,7 @@ USER_GUIDE="$REPO_ROOT/slashCommands/README_UserGuide.md"
 USER_GUIDE_ZH="$REPO_ROOT/slashCommands/README_UserGuide_ZH.md"
 UBILANG="$REPO_ROOT/README_UbiLang.md"
 UBILANG_ZH="$REPO_ROOT/README_UbiLang_ZH.md"
+SPEC_CODE_AGENT_CLI="$REPO_ROOT/codeAgents/specCodeAgentCLI/README.md"
 
 NEXT_TASK="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_whatsNextTask.md"
 MAKE_PLAN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_makePlan.md"
@@ -105,5 +106,23 @@ assert_contains "$ANALYZE_FEATURE" 'ONE-MORE-THING: ask developer if something n
 
 assert_contains "$MAKE_PLAN" 'Orientation Boundary for Autonomous Mode'
 assert_contains "$MAKE_PLAN" 'Do not execute `autonomousMode` on `intent-clearing`, `requirement-oriented`, or `design-oriented` stories'
+
+# 7. Driver defaults: manualMode for a human session, autonomousMode for a flow driver
+assert_contains "$FLOW_DOC" 'Both modes are SpecCoding: the difference is who issues the `SPEC_doXYZ` command.'
+assert_contains "$FLOW_DOC" '**Driver defaults**: a human chat session defaults to `manualMode`.'
+assert_contains "$FLOW_DOC" 'defaults to `autonomousMode` inside the orientation boundary'
+assert_contains "$FLOW_DOC" 'never inferred from the absence of a chat window'
+assert_contains "$FLOW_DOC" 'Do not infer `execution_mode` from the environment'
+assert_contains "$FLOW_DOC_ZH" '**驱动方默认值**'
+assert_contains "$FLOW_DOC_ZH" '绝不根据"是否存在聊天窗口"来推断'
+assert_contains "$FLOW_DOC_ZH" '不得根据运行环境推断 `execution_mode`'
+assert_contains "$USER_GUIDE" '**Driver defaults**: a human chat session defaults to `manualMode`'
+assert_contains "$USER_GUIDE_ZH" '**驱动方默认值**'
+assert_contains "$UBILANG" 'The human-driven form of SpecCoding'
+assert_contains "$UBILANG" 'The flow-driven form of SpecCoding'
+assert_contains "$UBILANG_ZH" 'SpecCoding 的流程驱动形态'
+assert_contains "$SPEC_CODE_AGENT_CLI" 'runs Px-SpecFlow in `autonomousMode` by default'
+assert_contains "$SPEC_CODE_AGENT_CLI" 'only a default, never an exemption'
+assert_contains "$SPEC_CODE_AGENT_CLI" 'A discipline switch is not available headlessly'
 
 echo "[specflow-execution-modes-test] PASSED: SpecFlow documents manual/autonomous execution modes with implementation-oriented guard and ONE-MORE-THING stop rule"

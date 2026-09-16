@@ -19,6 +19,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_analyzeFeature.md](SPEC_analyzeFeature.md) | Analyze pending feature input, archive raw input, and generate a value-oriented user story. |
 | [SPEC_analyzeAbortedUserStory.md](SPEC_analyzeAbortedUserStory.md) | Re-analyze aborted story evidence into a later todo story. |
 | [SPEC_whatsNextTask.md](SPEC_whatsNextTask.md) | Recommend the next SpecCoding task from current lifecycle state. |
+| [SPEC_whatsWrong.md](SPEC_whatsWrong.md) | Switch a `manualMode` session from SpecCoding into VibeCoding when the Flow cannot name what is wrong, then reconcile findings back into the Flow. |
 | [SPEC_openUserStory.md](SPEC_openUserStory.md) | Move a selected user story into active work. |
 | [SPEC_makePlan.md](SPEC_makePlan.md) | Create the active story TASKs artifact and choose the next SPEC step. |
 | [SPEC_updateUserStory.md](SPEC_updateUserStory.md) | Update requirement-oriented README_UserStory and README_UserGuide for the active story. |

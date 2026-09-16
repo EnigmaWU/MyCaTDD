@@ -105,5 +105,6 @@ Do not include story-level lifecycle or meta artifacts such as `.catdd/spec/doin
 Do not include another step's output in this commit.
 Do not auto-commit in `manualMode` unless `auto_commit` is explicitly enabled.
 Do not claim the story span is complete because a step commit exists.
+Do not include unadopted VibeCoding excursion edits in the step commit; they enter story work only after a `SPEC_*` step re-adopts them or they are reverted.
 
 ONE-MORE-THING: ask developer if something not sure

@@ -25,7 +25,8 @@
 | RED | 产品代码修改前，处于可执行且预期失败的测试状态。 |
 | GREEN | 产品代码修改后，测试通过状态。 |
 | SpecCoding | 将验证设计工件作为可执行规格生命周期的 CaTDD 工作流。 |
-| VibeCoding | 快速创意/原型模式；结果仍应回收并对齐到 CaTDD 追溯体系。 |
+| VibeCoding | 快速创意/原型模式；结果仍应回收并对齐到 CaTDD 追溯体系。在已开启的故事内，它必须通过 `SPEC_whatsWrong` 显式进入，仅在 `manualMode` 下可用，`ONE-MORE-THING` 始终生效，且探索性修改在某个 `SPEC_*` 步骤重新采纳前始终保持 `unadopted`。 |
+| SPEC_whatsWrong | Px-SpecFlow 升级阶梯的第三级，也是从 SpecCoding 进入 VibeCoding 的桥梁。它判定触发原因、校验 `manualMode`、在不移动泳道也不写团队制品的前提下冻结流程、把本次探索以 `adoption_status = unadopted` 记录到 `.catdd/spec/WorkingProcessLog.md`、把每项发现路由到归属命令、报告 `learning_command = /HARNESS_evolveHarness` 且 `evolution_mode=auto`，并用任意 `SPEC_doXYZ`（例如 `SPEC_whatsNextTask`）恢复流程。 |
 | Source-First | 源头在先：先审视权威来源工件（契约、架构模型、质量策略）并独立推导预期验证义务，再查阅已有骨架或测试代码，消除作者自身盲区。 |
 | TestEvidenceChain | 测试证据链：回答“为什么需要这个测试（WHY）”与“如何正确进行测试（HOW）”的完整无断裂证据链：从来源工件 -> 规则/不变量 -> 测试点（TP） -> 可观测预期（Oracle） -> CaTDD 分类（WHY 层面） -> US/AC/TC -> 测试用例（TC） -> RED/GREEN 实现（HOW 层面）。 |
 | SUT | 被测系统 / 被测目标（System Under Test）：在测试中显式声明的被测软件边界（如 `SUT: utCodeAgentCLI`）。它确立了调用方（调用者违反契约属于 `P0 Misuse`）与外部依赖/环境（依赖故障属于 `P0 Fault`）之间的严格分界线。 |
@@ -35,8 +36,8 @@
 | AC vs TP | AC 出自用户/调用方视角（定义外部业务验收规则：`GIVEN 业务上下文, WHEN 触发操作, THEN 业务结果`）；TP 出自开发者/防御性视角（定义深入边界、异常路径、并发交织的技术探针，用于验证 AC 是否坚挺成立）。一条 AC 通常分解为多个具体 TP（$1:N$ 关系）。将 $TP == AC$ 画等号会导致边界和故障模式遗漏。 |
 | TP vs TC | 概念与基数并非绝对 1:1。TP 可以独立存在而尚未编写 TC（`1:0` -> GAP，从而暴露遗漏测试点）；复杂义务可能需要多个用例（`1:N`）；一个用例也可以在断言明确区分时覆盖多个测试点（`N:1`）。过早假设 `TC == TP` 会掩盖测试点遗漏。 |
 | Discovery to Categorization | 发现到归类的两阶段桥梁：在 Stage-0（自由草拟）阶段，基于来源和全面扫描广度优先发掘 TP，避免过早陷入分类偏见；在 Stage-1（分类设计）阶段，依据验证视角将各 TP 路由到正确的 CaTDD 类别（契约 -> P0，模型 -> P1，包络 -> P2，认知表面 -> P3），随后形式化为 US/AC/TC 骨架。 |
-| manualMode | 默认交互执行模式，适用于所有 SpecFlow 工作导向。助手逐步推进，在意图、验收标准或安全性模糊时暂停并提出针对性问题，等待开发者明确确认。 |
-| autonomousMode | 无人值守/命令行自治执行模式。通过入口命令（如 `SPEC_importIssue`、`SPEC_openUserStory`）携带 `execution_mode: autonomousMode` 触发。**严格仅支持实现导向（implementation-oriented）的用户故事**。在该模式下，智能体自动执行并推进 Part 2.b 的测试先行实现与评审步骤，直至最终状态（`closeUserStory`、`abortUserStory` 或 `suspendUserStory`）。需求与架构导向的工作必须保留人类意图，强制处于 `manualMode`。 |
+| manualMode | SpecCoding 的人类驱动形态：由开发者逐条输入 `SPEC_doXYZ`，助手逐步推进，在意图、验收标准或安全性模糊时暂停并提出针对性问题，等待开发者明确确认。它是人类聊天会话的默认值，也是 `autonomousMode` 运行在导向边界处必须暂停时的回退模式。 |
+| autonomousMode | SpecCoding 的流程驱动形态：由流程自身调用下一条 `SPEC_doXYZ`。对于驱动 Px-SpecFlow 的 code agent 或 CLI 运行器（如 `specCodeAgentCLI`）它是默认值；对人类会话则需在入口命令上显式传入 `execution_mode: autonomousMode`。**严格仅支持实现导向（implementation-oriented）的用户故事**：需求与架构需要人类意图，运行会在该边界暂停并退回 `manualMode`。模式由驱动方显式声明而非推断，自动推进 Part 2.b 的实现与评审步骤直至最终状态（`closeUserStory`、`abortUserStory` 或 `suspendUserStory`），并且因为缺少人类意图来源而永远无法进入 VibeCoding。 |
 | analysis_mode | 分析命令内部（`SPEC_analyzeIssue`、`SPEC_analyzeFeature`）在 `manualMode` 流程下的命令级执行模式。`BRAINSTORM`（头脑风暴，默认）与开发者进行交互式逐步对话探讨；`AUTONOMOUS`（自主分析）单次执行多技能分析流水线草拟 `todoUS` 而不逐步打断，但会显式记录假设与疑问并在存在阻塞性问题时将故事标记为未就绪（NOT ready）。 |
 | ONE-MORE-THING | 跨 CaTDD 全局通用安全不变量：无论在 `manualMode` 还是 `autonomousMode` 下，只要遇到不确定、来源缺失、冲突或未明确的事项，智能体都必须暂停并向开发者提问以获取明确答案。自主模式绝非猜测或臆造需求的许可；在 `autonomousMode` 下遇到 ONE-MORE-THING 时立即暂停自主推进并输出结构化 `manual_required` 提问。 |
 | commit span（提交区间） | 一次提交所关闭的生命周期区间，也是 Px-SpecFlow 的提交切分单位（按区间而非按文件集合切分）。`pre-story` 区间 = `SPEC_openUserStory` 之前的导入/分析制品；`story` 区间 = `SPEC_openUserStory -> SPEC_closeUserStory`；`step` 区间 = 故事区间内单个已验证的生命周期步骤。 |

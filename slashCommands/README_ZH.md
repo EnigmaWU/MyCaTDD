@@ -41,7 +41,7 @@
 - 活的产物是 US/AC/TC 注释、分类标签、优先级关卡、TC 状态标记、测试文件，以及 `.catdd/spec/` 下的 SpecFlow 状态。
 - 命令文件描述现在做什么、读什么、产出什么、保留什么，以及下一条命令是什么。
 
-在 CaTDD 术语中，直接在 CodeAgent 对话中使用 `methodPrompts` 是 **VibeCoding**：灵活、由方法引导的对话。使用 `slashCommands` 是 **SpecCoding**：基于同一套方法定义的结构化 Spec-Driven Development 流程。
+在 CaTDD 术语中，直接在 CodeAgent 对话中使用 `methodPrompts` 是 **VibeCoding**：灵活、由方法引导的对话。使用 `slashCommands` 是 **SpecCoding**：基于同一套方法定义的结构化 Spec-Driven Development 流程。当故事已经开启、而流程无法说清"哪里不对"时，`SPEC_whatsWrong` 是两者之间被正式认可的桥梁：它冻结 SpecCoding，开启一次仅限 `manualMode`、记录在本地工作状态中的 VibeCoding 探索，把每项发现回收到归属命令，并在 `HARNESS_evolveHarness` 沉淀可复用战术后，用任意 `SPEC_doXYZ` 恢复流程。
 
 ## Layer boundary
 

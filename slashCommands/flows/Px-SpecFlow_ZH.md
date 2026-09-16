@@ -25,7 +25,7 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 | 默认层级 | 使用场景 | Px-SpecFlow 命令 |
 | --- | --- | --- |
 | SOTA reasoning，如 GPT-5.5-xHigh | 涉及决定或审批系统边界、依赖方向、运行时放置、质量权衡以及跨模块约束的架构工作。 | `SPEC_takeArchDesign`、`SPEC_reviewArchDesign` |
-| High Performance | 需求分析、意图对齐、规划、需求更新、局部设计、审查关卡、测试设计、代码审查、修正路由，以及依赖跨制品推理的受控上游回补。 | `SPEC_initProjectContext`、`SPEC_updateProjectContext`、`SPEC_analyzeIssue`、`SPEC_analyzeFeature`、`SPEC_analyzeAbortedUserStory`、`SPEC_clearStoryIntent`、`SPEC_makePlan`、`SPEC_updateUserStory`、`SPEC_whatsNextTask`、`SPEC_takeArchDesign`、`SPEC_reviewArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_reviewDetailDesign`、`SPEC_updateDetailDesign`、`SPEC_reviewUserStory`、`SPEC_designUnitTests`、`SPEC_reviewImplUnitTests`、`SPEC_reviewProductCodes`、`SPEC_patchOriginalCaTDD` |
+| High Performance | 需求分析、意图对齐、规划、需求更新、局部设计、审查关卡、测试设计、代码审查、修正路由，以及依赖跨制品推理的受控上游回补。 | `SPEC_initProjectContext`、`SPEC_updateProjectContext`、`SPEC_analyzeIssue`、`SPEC_analyzeFeature`、`SPEC_analyzeAbortedUserStory`、`SPEC_clearStoryIntent`、`SPEC_makePlan`、`SPEC_updateUserStory`、`SPEC_whatsNextTask`、`SPEC_whatsWrong`、`SPEC_takeArchDesign`、`SPEC_reviewArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_reviewDetailDesign`、`SPEC_updateDetailDesign`、`SPEC_reviewUserStory`、`SPEC_designUnitTests`、`SPEC_reviewImplUnitTests`、`SPEC_reviewProductCodes`、`SPEC_patchOriginalCaTDD` |
 | Flash Speed | 确定性的导入、移动、挂起、恢复、中止、提交、关闭，或当所需输入制品已明确时的小型测试驱动实现/重构步骤。 | `SPEC_importIssue`、`SPEC_importFeature`、`SPEC_importUserStory`、`SPEC_openUserStory`、`SPEC_suspendUserStory`、`SPEC_resumeUserStory`、`SPEC_partialCloseUserStory`、`SPEC_abortUserStory`、`SPEC_implUnitTests`、`SPEC_implProductCodes`、`SPEC_refactUnitTests`、`SPEC_commitPreStoryWorks`、`SPEC_commitStepWorks`、`SPEC_commitStoryWorks`、`SPEC_commitWorks`、`SPEC_closeUserStory` |
 
 当命令暴露出架构级别的不确定性时，从 High Performance 或 Flash Speed 升级到 SOTA 级别：竞争性的非功能需求、安全/安保风险、实时或嵌入式约束、并发边界、数据迁移、兼容性矩阵或不可逆的模块/API 所有权决策。
@@ -58,10 +58,15 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 - `manualMode`（默认模式）：在聊天中进行交互式逐步协作。助手每次前进一步，在意图、验收标准或安全性模糊时暂停并提问，等待开发者明确确认后再推进。
 - `autonomousMode`（自主模式，需显式选择）：无人值守/命令行持续执行（例如通过 `specCodeAgentCLI` 或入口命令携带 `execution_mode: autonomousMode`）。智能体基于显式文件制品自动执行并前行至下一步安全工序，记录假设与问题，无需每步均等待确认。
 
+两种模式都属于 SpecCoding：区别在于由谁发出 `SPEC_doXYZ` 命令。`manualMode` 下由开发者逐条输入命令；`autonomousMode` 下由流程自身调用下一条命令。
+
+**驱动方默认值**：人类聊天会话默认 `manualMode`。驱动流程的 code agent 或 CLI 运行器（例如 `specCodeAgentCLI`）在下方导向边界内默认 `autonomousMode`。模式必须由驱动方显式声明——或传入 `execution_mode`，或应用其文档化默认值；绝不根据"是否存在聊天窗口"来推断。
+
 ### 入口触发
 
 - 默认情况下，入口 slash 命令（`SPEC_importIssue`、`SPEC_importFeature`、`SPEC_importUserStory` 或 `SPEC_openUserStory`）接受 `execution_mode: manualMode | autonomousMode` 参数（默认值：`manualMode`）。
 - 携带 `execution_mode: autonomousMode` 触发时，模式决策将记录在 `*-UserStory-Tasks.md` 中，并向下传递给后续步骤。
+- code agent 驱动方需预先声明其默认模式，并在把控制权交还人类时重新声明，使记录的模式始终与实际驱动方一致。
 
 ### 导向边界：仅实现导向（Implementation-Oriented）支持自主模式
 
@@ -93,6 +98,20 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 1. **完成（`SPEC_closeUserStory`）**：所有任务已勾选，所有测试通过（GREEN），评审全部通过；在已规划的步骤边界执行 `SPEC_commitStepWorks`，由 `SPEC_commitStoryWorks` 完成最终提交（`pre_close`，若关闭产生变更则再执行 `post_close`），将故事移入 `doneUS/`，并以退出码 0 退出。
 2. **中止（`SPEC_abortUserStory`）**：遇到不可恢复的契约冲突、无效假设或 Loop Guard 预算耗尽（`maxStepRetry = 2`, `maxRunCorrectionLoop = 3`）；保留诊断信息，将故事与任务移入 `abortUS/`，通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 提交泳道移动，并以非 0 错误码退出。
 3. **挂起（`SPEC_suspendUserStory`）**：缺少外部依赖或硬件环境离线；保留持久化 git 引用（分支/工作区），将故事与任务移入 `suspendUS/`，通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 或等价的恢复分支提交记录 WIP 检查点，并干净退出。
+
+当无人值守运行需要切换纪律时，它同样必须暂停：VibeCoding 需要人类意图来源，因此流程停止，由开发者选择 `ASK`、中止，或 [SPEC_whatsWrong](../commands/Px-SpecFlow/SPEC_whatsWrong.md)。
+
+### 纪律模式：SpecCoding 与 VibeCoding
+
+- `SpecCoding` 是命令驱动的：由 `SPEC_doXYZ` 决定下一步，既可由开发者在 `manualMode` 下逐条输入，也可由流程在 `autonomousMode` 下自动调用。
+- `VibeCoding` 是意图驱动的：开发者用自然语言表述意图，由智能体生成，不再按 `SPEC_doXYZ` 排序推进。它是显式的、仅限 `manualMode` 的探索，通过 [SPEC_whatsWrong](../commands/Px-SpecFlow/SPEC_whatsWrong.md) 从任意已开启且未关闭的活跃节点进入。
+- 由于 VibeCoding 需要人类意图来源，无人值守的 `autonomousMode` 运行永远无法进入它：流程暂停，由开发者选择 `ASK`、中止或执行该切换。
+- 升级阶梯：失败门禁内的有界返工 -> 当问题能被表述为提问时使用 `ONE-MORE-THING` 暂停 -> 当问题尚无法表述为提问时使用 `SPEC_whatsWrong`。
+- VibeCoding 进行期间按制品类别冻结流程。冻结：除 `WorkingProcessLog.md` 之外的 `.catdd/spec/**`、`README_UserStories.md`、`projectContext.md` 以及配对的 `*-UserStory-Tasks.md`；活跃故事保持当前步骤。允许但未采纳：产品代码、测试与设计文档。始终为本地状态：`.catdd/spec/WorkingProcessLog.md`。
+- `ONE-MORE-THING` 在 VibeCoding 内依然生效；该切换绝不暂停通用暂停规则。
+- 允许探索性修改，但在某个 `SPEC_*` 步骤重新采纳之前始终保持 `unadopted`，且任何故事区间提交都不覆盖探索内容。
+- 退出顺序：把每项发现回收到归属命令，使用 `evolution_mode=auto` 运行 [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) 以沉淀可复用战术，然后用任意 `SPEC_doXYZ`（包括 `SPEC_whatsNextTask`）恢复 SpecCoding。
+- 在 `autonomousMode` 下绝不提供 VibeCoding：智能体可以提出切换建议，但无人值守运行必须暂停并强制回到 `manualMode`。
 
 ## GitHub Spec Kit 的改进
 
@@ -397,19 +416,20 @@ flowchart TB
 9. 使用 [SPEC_updateUserStory](../commands/Px-SpecFlow/SPEC_updateUserStory.md)，当计划为需求导向型且项目级 `README_UserStories.md` 与配对 `README_UserGuide.md`（以及采用模块文档时的模块需求文档）必须在下游工作前更新时。
 10. 使用 [SPEC_reviewUserStory](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) 在需求更新之后，并验证 `README_UserStories.md` 的 TODO/DOING/DONE 与 AC 追溯状态是否与生命周期制品一致；然后或者关闭纯需求导向型工作（`SPEC_commitStoryWorks` 然后 `SPEC_closeUserStory`，若关闭生成了文件变更则紧接 `SPEC_commitStoryWorks` 的 `post_close` 检查点），或者转移到设计导向型的下一步。
 11. 使用 [SPEC_whatsNextTask](../commands/Px-SpecFlow/SPEC_whatsNextTask.md)，当你需要从当前状态获得单个下一步推荐时。
-12. 使用 [SPEC_takeArchDesign](../commands/Px-SpecFlow/SPEC_takeArchDesign.md)，当计划表明需要初始架构工作，在 `README_ArchDesign.md` 中产出初始高层架构设计和模块边界时（应用架构与安全技能 `design-architecture-viewpoints`、`apply-architectural-tactics`、`document-architectural-decisions` 与 `design-tool-use-sandboxing`）。
-13. 使用 [SPEC_reviewArchDesign](../commands/Px-SpecFlow/SPEC_reviewArchDesign.md) 在详细设计开始前把关架构质量。
-14. 使用 [SPEC_updateArchDesign](../commands/Px-SpecFlow/SPEC_updateArchDesign.md) 进行后续架构修订，当架构审查、故事级反馈或已开启的更新故事识别出缺失或薄弱的架构设计时。
-15. 使用 [SPEC_takeDetailDesign](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) 产出初始详细设计和验收标准，包括按需创建其他项目根 `README*` SPEC 文档（如 `README_DetailDesign.md`、`README_StateDesign.md`、`README_SecurityDesign.md`，应用 `design-architecture-viewpoints`、`apply-architectural-tactics` 与 `design-tool-use-sandboxing`）。
-16. 使用 [SPEC_reviewDetailDesign](../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md) 在实现导向型步骤之前把关详细设计质量。
-17. 使用 [SPEC_updateDetailDesign](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) 进行后续详细设计修订，当详细审查发现缺失或薄弱的设计时。
-18. 使用 [SPEC_designUnitTests](../commands/Px-SpecFlow/SPEC_designUnitTests.md) 进入 CaTDD 测试设计，通常通过 P0/P1/P2 流程，当计划表明故事已为测试准备好时。
-19. 使用 [SPEC_implUnitTests](../commands/Px-SpecFlow/SPEC_implUnitTests.md)、[SPEC_reviewImplUnitTests](../commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md)、[SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md) 和 [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) 进行测试优先的执行和审查，然后在故事区间提交前再次运行 `SPEC_reviewImplUnitTests`。可选使用 [SPEC_refactUnitTests](../commands/Px-SpecFlow/SPEC_refactUnitTests.md) 进行 GREEN 状态下不改变行为的 unit-test cleanup；重构后运行 `SPEC_reviewImplUnitTests`，当审查范围变化时重跑 `SPEC_reviewProductCodes`，并在故事区间提交前再次运行 `SPEC_reviewImplUnitTests`。在计划标记为 `commit_step = yes` 的步骤边界上，该步骤门禁通过后使用 [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md)。
-20. 使用 [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md)，当活跃工作需要暂停且必须保留可恢复的持久引用（例如 git 分支或 worktree）时；随后通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 或等价的恢复分支 WIP 提交记录 `suspendUS/` 泳道移动。
-21. 使用 [SPEC_resumeUserStory](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) 将挂起故事恢复到活跃工作态并继续执行。
-22. 使用 [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md)，从第二部分 a 或第二部分 b，当活跃故事存在阻塞性的范围、假设、设计、测试或产品质量问题，应被保留而非继续就地修补时；随后通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 提交 `abortUS/` 泳道移动。中止后，或者使用 `SPEC_analyzeAbortedUserStory` 分析已中止的故事以供后续故事轮次，或者使用 `SPEC_importIssue` 创建新的改进/细化输入。
-23. 使用 [SPEC_commitStoryWorks](../commands/Px-SpecFlow/SPEC_commitStoryWorks.md) 以 `commit_checkpoint = pre_close` 提交整个 `SPEC_openUserStory -> SPEC_closeUserStory` 区间，然后使用 [SPEC_closeUserStory](../commands/Px-SpecFlow/SPEC_closeUserStory.md)，当关闭生成的元/生命周期文件发生变更时再以 `commit_checkpoint = post_close` 运行一次 `SPEC_commitStoryWorks`，随后在需要时执行合并/集成（例如 [SPEC_mergeWorks](../commands/Px-SpecFlow/SPEC_mergeWorks.md)）；若未使用专用故事分支，合并会自动跳过。区间内的已规划步骤提交使用 [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md)，不属于任何区间的通用变更使用 [SPEC_commitWorks](../commands/Px-SpecFlow/SPEC_commitWorks.md)。
-24. 使用 [SPEC_patchOriginalCaTDD](../commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md)，当已安装 CaTDD 的项目产生了有效的元文件改进并需要在非默认分支上回补到原始 CaTDD 仓库时。
+12. 当"确实有问题、但没有任何门禁或归属命令能说清问题是什么"时，使用 [SPEC_whatsWrong](../commands/Px-SpecFlow/SPEC_whatsWrong.md)：它会冻结流程、在 `manualMode` 下把会话从 SpecCoding 切换到 VibeCoding、把这次探索记录到本地工作状态，随后把发现按归属命令逐一回收，并通过 `HARNESS_evolveHarness`（`evolution_mode=auto`）与任意 `SPEC_doXYZ` 恢复命令回到流程。
+13. 使用 [SPEC_takeArchDesign](../commands/Px-SpecFlow/SPEC_takeArchDesign.md)，当计划表明需要初始架构工作，在 `README_ArchDesign.md` 中产出初始高层架构设计和模块边界时（应用架构与安全技能 `design-architecture-viewpoints`、`apply-architectural-tactics`、`document-architectural-decisions` 与 `design-tool-use-sandboxing`）。
+14. 使用 [SPEC_reviewArchDesign](../commands/Px-SpecFlow/SPEC_reviewArchDesign.md) 在详细设计开始前把关架构质量。
+15. 使用 [SPEC_updateArchDesign](../commands/Px-SpecFlow/SPEC_updateArchDesign.md) 进行后续架构修订，当架构审查、故事级反馈或已开启的更新故事识别出缺失或薄弱的架构设计时。
+16. 使用 [SPEC_takeDetailDesign](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) 产出初始详细设计和验收标准，包括按需创建其他项目根 `README*` SPEC 文档（如 `README_DetailDesign.md`、`README_StateDesign.md`、`README_SecurityDesign.md`，应用 `design-architecture-viewpoints`、`apply-architectural-tactics` 与 `design-tool-use-sandboxing`）。
+17. 使用 [SPEC_reviewDetailDesign](../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md) 在实现导向型步骤之前把关详细设计质量。
+18. 使用 [SPEC_updateDetailDesign](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) 进行后续详细设计修订，当详细审查发现缺失或薄弱的设计时。
+19. 使用 [SPEC_designUnitTests](../commands/Px-SpecFlow/SPEC_designUnitTests.md) 进入 CaTDD 测试设计，通常通过 P0/P1/P2 流程，当计划表明故事已为测试准备好时。
+20. 使用 [SPEC_implUnitTests](../commands/Px-SpecFlow/SPEC_implUnitTests.md)、[SPEC_reviewImplUnitTests](../commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md)、[SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md) 和 [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) 进行测试优先的执行和审查，然后在故事区间提交前再次运行 `SPEC_reviewImplUnitTests`。可选使用 [SPEC_refactUnitTests](../commands/Px-SpecFlow/SPEC_refactUnitTests.md) 进行 GREEN 状态下不改变行为的 unit-test cleanup；重构后运行 `SPEC_reviewImplUnitTests`，当审查范围变化时重跑 `SPEC_reviewProductCodes`，并在故事区间提交前再次运行 `SPEC_reviewImplUnitTests`。在计划标记为 `commit_step = yes` 的步骤边界上，该步骤门禁通过后使用 [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md)。
+21. 使用 [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md)，当活跃工作需要暂停且必须保留可恢复的持久引用（例如 git 分支或 worktree）时；随后通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 或等价的恢复分支 WIP 提交记录 `suspendUS/` 泳道移动。
+22. 使用 [SPEC_resumeUserStory](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) 将挂起故事恢复到活跃工作态并继续执行。
+23. 使用 [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md)，从第二部分 a 或第二部分 b，当活跃故事存在阻塞性的范围、假设、设计、测试或产品质量问题，应被保留而非继续就地修补时；随后通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 提交 `abortUS/` 泳道移动。中止后，或者使用 `SPEC_analyzeAbortedUserStory` 分析已中止的故事以供后续故事轮次，或者使用 `SPEC_importIssue` 创建新的改进/细化输入。
+24. 使用 [SPEC_commitStoryWorks](../commands/Px-SpecFlow/SPEC_commitStoryWorks.md) 以 `commit_checkpoint = pre_close` 提交整个 `SPEC_openUserStory -> SPEC_closeUserStory` 区间，然后使用 [SPEC_closeUserStory](../commands/Px-SpecFlow/SPEC_closeUserStory.md)，当关闭生成的元/生命周期文件发生变更时再以 `commit_checkpoint = post_close` 运行一次 `SPEC_commitStoryWorks`，随后在需要时执行合并/集成（例如 [SPEC_mergeWorks](../commands/Px-SpecFlow/SPEC_mergeWorks.md)）；若未使用专用故事分支，合并会自动跳过。区间内的已规划步骤提交使用 [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md)，不属于任何区间的通用变更使用 [SPEC_commitWorks](../commands/Px-SpecFlow/SPEC_commitWorks.md)。
+25. 使用 [SPEC_patchOriginalCaTDD](../commands/Px-SpecFlow/SPEC_patchOriginalCaTDD.md)，当已安装 CaTDD 的项目产生了有效的元文件改进并需要在非默认分支上回补到原始 CaTDD 仓库时。
 
 ## 循环守卫（死循环预防）
 
@@ -445,8 +465,9 @@ flowchart TB
 - 详细设计审查失败 -> `SPEC_updateDetailDesign`，随后通过 `SPEC_reviewDetailDesign` 重新把关，有界。
 - 需求审查失败 -> `SPEC_updateUserStory`，随后通过 `SPEC_reviewUserStory` 重新把关，有界。
 - 测试实现缺陷 -> `SPEC_implUnitTests`；测试设计/覆盖缺口 -> `SPEC_designUnitTests`；产品代码缺陷 -> 在 `SPEC_implProductCodes` 中局部有界纠正，或按其冲突守卫进行设计路由。
+- 达到上限且无进展 -> 请求 `ASK` 决策；在 `manualMode` 下问题仍未证实时可使用 [SPEC_whatsWrong](../commands/Px-SpecFlow/SPEC_whatsWrong.md)；当问题改变了故事意图或使假设失效时，必须使用 `SPEC_abortUserStory`。
 
-故障分类遵循 ASR-R3：仅对瞬态故障进行重试；对永久性故障进行确定性路由。若在达到上限后仍无进展，使用 `SPEC_abortUserStory` 将故事移入 `.catdd/spec/abortUS/` 中止并供后续重新分析，而非继续就地打补丁。
+故障分类遵循 ASR-R3：仅对瞬态故障进行重试；对永久性故障进行确定性路由。若在达到上限后仍无进展，不要继续就地打补丁：`manualMode` 会话可在问题仍未证实时升级到 `SPEC_whatsWrong`；`autonomousMode` 运行无法切换纪律，必须暂停并把选择交给开发者；当问题改变了故事意图或使假设失效时，必须使用 `SPEC_abortUserStory` 将故事移入 `.catdd/spec/abortUS/` 供后续重新分析。
 
 ## 冲突守卫
 
@@ -469,3 +490,8 @@ flowchart TB
 - 不得在故事已移入 `.catdd/spec/doingUS/` 之后运行 `SPEC_commitPreStoryWorks`，也不得在 `SPEC_makePlan` 未标记为可提交的边界上运行 `SPEC_commitStepWorks`。
 - `SPEC_patchOriginalCaTDD` 是仅下游到上游的（已安装项目到原始 CaTDD），不得用作上游到已安装的同步命令。
 - 如果产品意图不明确，保持用户故事开启并向开发者询问，而不是编造需求。
+- 不得使用 `SPEC_whatsWrong` 规避门禁、缺失需求、验收标准或写入验证；当存在归属命令时，应路由到该命令而不是切换纪律。
+- 不得在 `autonomousMode` 下运行 `SPEC_whatsWrong`；智能体可以提出切换建议，但无人值守运行必须暂停并强制回到 `manualMode`。
+- 不得在 VibeCoding 内暂停 `ONE-MORE-THING`，也不得在某个 `SPEC_*` 步骤重新采纳之前把探索性修改当成已采纳的故事工作，或纳入任何故事区间提交。
+- 不得根据运行环境推断 `execution_mode`：人类聊天驱动方与 code agent 驱动方各自声明其模式，记录到制品中的就是该声明值。
+- 不得让 code agent 驱动方越过导向边界：`autonomousMode` 默认值仍仅限实现导向工作，遇到意图澄清型、需求导向型或设计导向型故事必须暂停并退回 `manualMode`。
