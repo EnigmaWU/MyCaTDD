@@ -114,6 +114,42 @@ A headless run also halts when it would need a discipline switch: VibeCoding req
 - Exit sequence: reconcile each finding into its owning command, run [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) with `evolution_mode=auto` to keep reusable tactics, then resume SpecCoding with any `SPEC_doXYZ`, including `SPEC_whatsNextTask`.
 - VibeCoding is never available in `autonomousMode`: the agent may propose the switch, but a headless run halts and forces `manualMode` instead.
 
+### Review Gate Contract
+
+Every review command in this flow reports the same gate vocabulary, so a verdict reads the same wherever it appears.
+
+| Field | Values | Notes |
+| --- | --- | --- |
+| `review_verdict` | `PASS`, `REVISE`, `BLOCKED`, `ASK` | Exactly one per pass. `ASK` brings the human developer into the loop and is the same outcome `ONE-MORE-THING` produces. |
+| `severity` | `blocking`, `advisory` | Optional, defaults to `blocking`. `advisory` marks findings that do not stop the gate. |
+| `rework_route` | owning command | Required whenever the verdict is not `PASS`. |
+| Sub-gates | `cardinality_gate`, `discovery_status`, `ready_for_implementation` | Reported as evidence that feeds the verdict; they are not separate verdict vocabularies. |
+
+Invariants every review gate states: read-only by default, with repair only on explicit developer approval; source-first, reading the upstream artifact before judging the reviewed one; every finding cites a file, an ID, or a verification signal; one verdict per pass, stable across passes; a repeat pass with identical findings and no changed evidence is the last pass; rework bounded by `max_rework_attempts` (default `3`) and the Loop Guard; `next_command` reported whenever the verdict is not `PASS`.
+
+Every gate also states its own scope pair, `Reviews:` and `Does not:`, so two gates can share an artifact without sharing a lens: `SPEC_reviewUserStory` owns acceptance-criteria content and `SPEC_reviewDetailDesign` owns their testability; `SPEC_reviewImplUnitTests` owns test implementation and `SPEC_reviewProductCodes` owns code plus traceability. The gate names follow the same split: `*review*` commands gate an authored artifact, while `HARNESS_verifyInstallation` verifies an installed surface. Both report the same vocabulary.
+
+Not every artifact carries a dedicated gate, and the flow names the owner so the absence is a decision rather than a gap:
+
+- The paired `*-UserStory-Tasks.md` artifact is owned by `SPEC_makePlan` at authoring time, verified at close by `SPEC_closeUserStory` (`plan_drift` when a checked task has no gate evidence or the commit plan disagrees with the commits taken), and diagnosed by `SPEC_whatsWrong`.
+- `.catdd/spec/projectContext.md` is gated internally by the Lossless Compaction Gate in `SPEC_updateProjectContext` and externally by `HARNESS_diagnoseProject`'s consistency bucket.
+- The project-root README SPEC doc set is covered by `HARNESS_diagnoseProject` drift for the whole set, and by the architecture or detail-design gate for the documents those gates own.
+- `P3 Addons / Demo-Example` has no design or review gate by intent: it is a learning surface. `UT_convertDemoToTypical` converts demo material into `P0 Functional / Typical` work, and a P3 skeleton is authored as an explicit learning artifact that never substitutes for P0/P1/P2 coverage.
+
+Mapping from the older vocabularies:
+
+| Older result | Review gate result |
+| --- | --- |
+| `pass`, `HEALTHY`, installation `PASS` | `PASS` |
+| `GAPS`, `cardinality_gate: FAIL`, `REVISE`, `WARN`, `RISKY`, installation `FAIL` | `REVISE` + `rework_route`; `WARN` keeps `severity = advisory` |
+| `BLOCKED`, `CONFIRMED_INSTALLATION_FAILURE`, `LIKELY_INSTALLATION_FAILURE` | `BLOCKED` + `rework_route` |
+| `ASK`, `INSUFFICIENT_EVIDENCE`, an unresolved `ONE-MORE-THING` halt | `ASK` |
+| `WATCHLIST` | `PASS` with `severity = advisory`, or `ASK` when the observation needs a decision |
+| Action verdicts such as `revise requirements`, `transfer to design`, `update design`, `add tests`, `abort story`, `fix implementation`, `revise skeleton` | `REVISE` + that owner as `rework_route` |
+| `pass` with `close requirement-only` | `PASS` + `next_command = SPEC_commitStoryWorks` |
+| `UT_reviewImplTestCase` recommendation `keep` | `PASS`; any other recommendation is `REVISE` + the named owner |
+| Diagnosis taxonomies such as `CONFIRMED_INSTALLATION_FAILURE` or `RISKY` | Keep the command's own diagnosis taxonomy unchanged and report the mapped `review_verdict` alongside it; the taxonomy explains why, the verdict decides the gate. Mapping: `HEALTHY` -> `PASS`, `WATCHLIST` -> `PASS` with `severity = advisory`, `RISKY` -> `REVISE`, `BLOCKED` -> `BLOCKED`, `INSUFFICIENT_EVIDENCE` -> `ASK`, and the installation failure classes -> `REVISE` or `BLOCKED` per their own definitions |
+
 ## Refinements from GitHub Spec Kit
 
 Use this list first when explaining or adopting `Px SpecFlow` refinements from GitHub's Spec Kit.

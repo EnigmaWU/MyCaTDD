@@ -106,14 +106,28 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 
 ## Output Contract
 
-- Installation verdict: `PASS`, `WARN`, or `FAIL`.
+- Installation `review_verdict`: `PASS`, `REVISE`, `BLOCKED`, or `ASK`, with optional `severity: blocking | advisory`. A previously reported `WARN` is `PASS` with `severity = advisory`; a previously reported `FAIL` is `REVISE` with `rework_route = HARNESS_diagnoseInstallation`. Use `ASK` when the developer must decide whether an optional surface is in scope, and `BLOCKED` when the target project or the reference command inventory cannot be read.
 - Verified target path, adapter surfaces, and command inventory counts.
 - Checklist results grouped by core assets, command inventory, adapter surfaces, and wrapper fidelity.
 - Failure inventory with exact missing, stale, or inconsistent paths.
 - Recommended next action:
-  - `PASS`: use the installed CaTDD commands.
-  - `WARN`: review optional or strict-mode findings before daily use.
-  - `FAIL`: run or create `HARNESS_diagnoseInstallation` to identify root cause and repair options.
+  - `PASS`: use the installed CaTDD commands. When `severity = advisory`, review the optional or strict-mode findings before daily use.
+  - `REVISE`: report `next_command = HARNESS_diagnoseInstallation` to identify root cause and repair options.
+  - `BLOCKED` or `ASK`: report the unreadable artifact or the pending developer decision.
+
+## Review Gate Contract
+
+- Reviews: the installed adapter assets, command inventory, and wrapper fidelity against the portable CaTDD command source.
+- Does not: repair the installation, treat generated wrappers as source-of-truth when portable commands exist, or judge project correctness, tests, or product code.
+- `review_verdict`: exactly one of `PASS`, `REVISE`, `BLOCKED`, or `ASK` per pass. `ASK` brings the human developer into the loop and is the same outcome `ONE-MORE-THING` produces.
+- `severity`: optional `blocking | advisory` (default `blocking`); `advisory` marks findings that do not stop the gate, which is how optional-surface findings are reported.
+- `rework_route`: required whenever the verdict is not `PASS`; it names the owning command for each finding.
+- Read-only by default: report and route. Do not repair the installation unless the developer explicitly approves a repair.
+- Source-first: read the portable command source and the expected adapter surface before judging the installed wrappers.
+- Every finding cites a file, an ID, or a verification signal; an uncitable finding is dropped or chased with one more read.
+- One verdict per pass, stable across passes; a repeat pass with identical findings and no changed evidence is the last pass.
+- Re-verification after a repair is bounded by the `Px-SpecFlow` Loop Guard stop conditions; do not re-run verification without changed evidence.
+- Report `next_command = <COMMAND>` whenever the verdict is not `PASS`. The mapping from older verdict wording lives in the flow's Review Gate Contract table.
 
 ## Conflict Guard
 

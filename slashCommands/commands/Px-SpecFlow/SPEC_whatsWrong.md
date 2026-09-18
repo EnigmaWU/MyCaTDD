@@ -26,6 +26,7 @@ Run these steps once, in order. There is no retry loop; a trigger that belongs t
 
 1. Classify the trigger against the allowed list:
    - Contradictory evidence between artifacts and observed reality, such as reviews passing while the same behavior keeps failing.
+   - Plan drift: a `*-UserStory-Tasks.md` artifact whose checked tasks have no gate evidence behind them, or whose commit plan disagrees with the commits actually taken.
    - A bounded rework loop that exhausted `maxStepRetry` or `maxRunCorrectionLoop` with no observable progress, in `manualMode`. A headless `autonomousMode` run cannot switch discipline; it halts and lets the developer choose `ASK`, abort, or the switch.
    - A problem for which no owning `SPEC_*` or `UT_*` command can be named.
    - Escalation after a `ONE-MORE-THING` halt that could not be answered immediately.

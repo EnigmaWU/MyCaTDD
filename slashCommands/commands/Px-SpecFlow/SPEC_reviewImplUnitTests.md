@@ -82,7 +82,8 @@ Expected result:
 
 ## Output Contract
 
-- Story-scoped implementation review result for unit tests: pass, fix implementation, revise skeleton, continue implementing tests, implement product code, refactor tests, review product code, or ask the developer.
+- `review_verdict`: `PASS` when the implemented tests are aligned and the next step is implementation, review, or commit; `REVISE` with the owning `rework_route` for implementation drift (`SPEC_implUnitTests`, `UT_implTestCase`, `UT_reviewImplTestCase`), skeleton or design drift (`SPEC_designUnitTests`), or cleanup (`SPEC_refactUnitTests`); `ASK` when the developer must settle a conflict; `BLOCKED` when the test result or design evidence needed for the review is unavailable.
+- `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Per-TC alignment summary against US/AC/TC design comments.
 - Anti-Test-Theater audit: verifies assertions test real SUT state mutations or domain invariants without vacuous checks or mock echoing.
 - Missing assertions, excessive assertions, setup/cleanup gaps, phase-layout issues, `VERIFY_KEYPOINT_xyz` issues, and status-marker inconsistencies.
@@ -92,6 +93,20 @@ Expected result:
 - Test README evidence: `test-case-with-readme` applied, unavailable with builtin fallback, missing companion README, updated companion README, or ask the developer.
 - Drift findings that distinguish implementation drift from skeleton/design drift.
 - Next recommended command: `SPEC_implUnitTests`, `UT_implTestCase`, `UT_reviewImplTestCase`, `SPEC_designUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_reviewProductCodes`, `SPEC_commitStoryWorks`, or ask the developer.
+
+## Review Gate Contract
+
+- Reviews: the implemented unit tests across the active story's selected slices, including their TestEvidenceChain alignment and companion README evidence.
+- Does not: implement product code, refactor tests, redesign skeletons, or review product code (that lens belongs to `SPEC_reviewProductCodes`).
+- `review_verdict`: exactly one of `PASS`, `REVISE`, `BLOCKED`, or `ASK` per pass. `ASK` brings the human developer into the loop and is the same outcome `ONE-MORE-THING` produces.
+- `severity`: optional `blocking | advisory` (default `blocking`); `advisory` marks findings that do not stop the gate.
+- `rework_route`: required whenever the verdict is not `PASS`; it names the owning command for each finding.
+- Read-only by default: report and route. Do not repair the reviewed artifact unless the developer explicitly approves a repair.
+- Source-first: read the upstream source artifact before judging the artifact under review.
+- Every finding cites a file, an ID, or a verification signal; an uncitable finding is dropped or chased with one more read.
+- One verdict per pass, stable across passes; a repeat pass with identical findings and no changed evidence is the last pass.
+- Rework is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions.
+- Report `next_command = <COMMAND>` whenever the verdict is not `PASS`. The mapping from older verdict wording lives in the flow's Review Gate Contract table.
 
 ## Flow Coupling
 

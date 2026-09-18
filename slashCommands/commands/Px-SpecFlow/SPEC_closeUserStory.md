@@ -14,7 +14,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 
 Run these steps once, in order. The branches below are deterministic gates, not a retry loop; any unresolved gate stops and asks the developer.
 
-1. Verify the close gates: review passed, `commit_ref` present, `ci_summary` acceptable, and the story is not listed under `.catdd/spec/suspendUS/`. Stop on any failure.
+1. Verify the close gates: review passed, `commit_ref` present, `ci_summary` acceptable, the story is not listed under `.catdd/spec/suspendUS/`, and — when the story was planned through `SPEC_makePlan` — the paired `*-UserStory-Tasks.md` is truthful: every checked task has gate evidence behind it and the recorded commit plan matches the commits actually taken. A story without a tasks artifact skips only this clause. Stop on any failure; a plan that claims work the gates never ran is a close-gate failure, reported as `plan_drift` and routed to `SPEC_whatsWrong` or asked, not closed over.
 2. Move the story and its paired tasks artifact from `.catdd/spec/doingUS/` to `.catdd/spec/doneUS/`. Remove the doingUS copy so the ID exists in exactly one lane.
 3. Rewrite story-specific references that still point at `.catdd/spec/doingUS/` to `.catdd/spec/doneUS/`.
 4. Synchronize `README_UserStories.md`: story TODO/DOING → DONE, and AC status aligned with closure evidence.
@@ -90,6 +90,7 @@ Expected result:
 ## Conflict Guard
 
 Do not close if product intent, acceptance criteria, tests, review, commit, or CI status remains unresolved.
+Do not close over a tasks artifact that claims completed work without gate evidence or records a commit plan that disagrees with the commits actually taken; report `plan_drift` instead. When the story was never planned through `SPEC_makePlan`, this clause does not apply.
 Do not close if `README_UserStories.md` TODO/DONE or AC status is not synchronized with closure evidence.
 Do not close a story whose README_UserStories.md ledger state is SUSPENDED; require `SPEC_resumeUserStory` first to resume before closing.
 Do not leave stale story-specific trace links pointing to `.catdd/spec/doingUS/` after closure.

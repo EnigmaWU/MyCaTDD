@@ -113,6 +113,42 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 - 退出顺序：把每项发现回收到归属命令，使用 `evolution_mode=auto` 运行 [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) 以沉淀可复用战术，然后用任意 `SPEC_doXYZ`（包括 `SPEC_whatsNextTask`）恢复 SpecCoding。
 - 在 `autonomousMode` 下绝不提供 VibeCoding：智能体可以提出切换建议，但无人值守运行必须暂停并强制回到 `manualMode`。
 
+### 评审门禁契约（Review Gate Contract）
+
+本流程中的每个 review 命令都报告同一套门禁词汇，使评审结论在任何位置含义一致。
+
+| 字段 | 取值 | 说明 |
+| --- | --- | --- |
+| `review_verdict` | `PASS`、`REVISE`、`BLOCKED`、`ASK` | 每轮有且仅有一个。`ASK` 表示把人类开发者拉入回路，与 `ONE-MORE-THING` 的产出相同。 |
+| `severity` | `blocking`、`advisory` | 可选，默认 `blocking`。`advisory` 表示不阻断门禁的发现。 |
+| `rework_route` | 归属命令 | 只要结论不是 `PASS` 就必填。 |
+| 子门禁 | `cardinality_gate`、`discovery_status`、`ready_for_implementation` | 作为支撑结论的证据上报，不构成独立的结论词汇。 |
+
+每个评审门禁都必须声明的不变量：默认只读，仅当开发者显式批准时才修复；来源优先，先读上游制品再评判被评审制品；每条发现都引用文件、ID 或验证信号；每轮一个结论且跨轮稳定；重复一轮且发现完全相同、证据无变化即为最后一轮；返工受 `max_rework_attempts`（默认 `3`）与 Loop Guard 约束；只要结论不是 `PASS` 就报告 `next_command`。
+
+每个门禁还要声明自己的范围对：`Reviews:`（评审什么）与 `Does not:`（不评审什么），使两个门禁可以共享同一制品而职责不同：`SPEC_reviewUserStory` 负责验收标准的内容，`SPEC_reviewDetailDesign` 负责其可测试性；`SPEC_reviewImplUnitTests` 负责测试实现，`SPEC_reviewProductCodes` 负责代码与追溯关系。命名遵循同一分工：`*review*` 命令为已撰写制品把关，`HARNESS_verifyInstallation` 校验已安装的适配面，两者报告同一套词汇。
+
+并非每个制品都有专属门禁，因此流程显式指明归属，让"没有门禁"成为决策而非缺口：
+
+- 配对的 `*-UserStory-Tasks.md` 制品在撰写时由 `SPEC_makePlan` 负责，在关闭时由 `SPEC_closeUserStory` 校验（已勾选任务缺少门禁证据，或提交计划与实际提交不一致时报告 `plan_drift`），并由 `SPEC_whatsWrong` 诊断。
+- `.catdd/spec/projectContext.md` 由 `SPEC_updateProjectContext` 的无损压缩门禁在内部把关，并由 `HARNESS_diagnoseProject` 的一致性检查在外部把关。
+- 项目根 README SPEC 文档集整体由 `HARNESS_diagnoseProject` 的漂移检查覆盖，其专属文档则由架构或详细设计门禁覆盖。
+- `P3 Addons / Demo-Example` 按设计意图不设设计与评审门禁：它属于认知/学习表面。`UT_convertDemoToTypical` 把 demo 材料转换为 `P0 Functional / Typical` 工作，而 P3 骨架只作为显式学习制品撰写，绝不替代 P0/P1/P2 覆盖。
+
+旧词汇到门禁结论的映射：
+
+| 旧结论 | 门禁结论 |
+| --- | --- |
+| `pass`、`HEALTHY`、安装校验 `PASS` | `PASS` |
+| `GAPS`、`cardinality_gate: FAIL`、`REVISE`、`WARN`、`RISKY`、安装校验 `FAIL` | `REVISE` + `rework_route`；`WARN` 保留 `severity = advisory` |
+| `BLOCKED`、`CONFIRMED_INSTALLATION_FAILURE`、`LIKELY_INSTALLATION_FAILURE` | `BLOCKED` + `rework_route` |
+| `ASK`、`INSUFFICIENT_EVIDENCE`、未解决的 `ONE-MORE-THING` 暂停 | `ASK` |
+| `WATCHLIST` | `PASS` 且 `severity = advisory`；需要决策时用 `ASK` |
+| 动作型结论（`revise requirements`、`transfer to design`、`update design`、`add tests`、`abort story`、`fix implementation`、`revise skeleton`） | `REVISE` + 该归属命令作为 `rework_route` |
+| `pass` 且 `close requirement-only` | `PASS` + `next_command = SPEC_commitStoryWorks` |
+| `UT_reviewImplTestCase` 的建议 `keep` | `PASS`；其他建议为 `REVISE` + 对应归属命令 |
+| 诊断分类（如 `CONFIRMED_INSTALLATION_FAILURE`、`RISKY`） | 保留命令自身的诊断分类不变，并在旁补齐映射后的 `review_verdict`；分类解释原因，结论决定门禁。映射：`HEALTHY` -> `PASS`，`WATCHLIST` -> `PASS` 且 `severity = advisory`，`RISKY` -> `REVISE`，`BLOCKED` -> `BLOCKED`，`INSUFFICIENT_EVIDENCE` -> `ASK`，安装失败分类按各自定义映射为 `REVISE` 或 `BLOCKED` |
+
 ## GitHub Spec Kit 的改进
 
 在解释或采用来自 GitHub Spec Kit 的 `Px SpecFlow` 改进时，首选此列表。

@@ -12,6 +12,8 @@ P3 Addons = Demo/Example
 
 DemoExample proves that a user-visible workflow can be followed and observed as documented.
 
+P3 Addons is a learning surface only. DemoExample evidence never substitutes for P0 Functional, P1 Design, or P2 Quality verification, and behavior that must be guaranteed belongs to those classes regardless of how well the demo documents it.
+
 ## Use When
 
 - You need a tutorial, user guide demo, sample workflow, or onboarding example.

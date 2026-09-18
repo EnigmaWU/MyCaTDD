@@ -17,7 +17,7 @@ Use the Discovery Gate and bounded review budget in [CaTDD_methodPrompt-testPoin
 1. **Thought** — Resolve and read the original behavior sources from `behavior_sources` or declared skeleton references. If unavailable, report BLOCKED, not a completeness verdict from tests alone. Independently inventory operations, outcomes, relevant partitions/combinations, public workflows, dependency phases, and production differences before consulting existing coverage.
 2. **Action** — Read skeletons and `discovery_ledger`; reconcile source -> TP -> US/AC/TC and back. Verify each DESIGNED row actually specifies its scenario and observable oracle. Audit exclusions, missing-source `@[NoTestPoints]`, weak mocks, referrals, unanswered questions, and sampling limits as well as duplicates and category conflicts. A missing ledger is a design gap; report a proposed source-first reconciliation without editing files.
 3. **Observation** — Ask which source-backed behavior could still fail while every proposed TC passes. Make findings actionable (source/R2: no Typical capture path; source/R4: no partial-write fault oracle). Unknown policy becomes a question, not a demanded fabricated test. Report independent evidence even when the designer's ledger looks complete; confirm no files were modified.
-4. **Stop** — Apply the method's Report Consistency Audit, then return separate cardinality and discovery results plus `ready_for_implementation`. Derive counts/status from the ledger; preserve shared source rules and let unresolved in-scope questions take precedence over GAPS. Only when both gates pass for the stated scope and review is complete may the next action be `UT_tellMeNextImplTest`. Otherwise recommend more design for GAP or developer clarification for QUESTION/BLOCKED. Do not turn a bounded review stop into PASS or claim deployment completeness.
+4. **Stop** — Apply the method's Report Consistency Audit, then return separate cardinality and discovery results, the `review_verdict`, and `ready_for_implementation`. Derive counts/status from the ledger; preserve shared source rules and let unresolved in-scope questions take precedence over gaps. Only when both sub-gates pass for the stated scope and review is complete may the next action be `UT_tellMeNextImplTest`. Otherwise route `REVISE` with `rework_route = SPEC_designUnitTests` for a gap, `BLOCKED` when the required source is unavailable, or `ASK` when the developer must decide. Do not turn a bounded review stop into `PASS` or claim deployment completeness.
 
 ### Worked Example
 
@@ -66,10 +66,27 @@ Expected result:
 - Coverage summary for Typical, Edge, Misuse, and Fault.
 - Source-first inventory/reconciliation evidence and `discovery_ledger` findings, auditing the **TestEvidenceChain** and capturing wholly missing behaviors with rule/TP IDs rather than requiring pre-existing TCs.
 - Conflicts, duplicated scenarios, missing AC/TC links, and unclear assumptions.
-- Separate cardinality result, `discovery_status`, `ready_for_implementation`, reviewed scope/sources, exclusions, referrals, and residual risk as defined by the method.
-- A recommended next action: design more skeleton, select next TC, or block for clarification.
+- Separate `cardinality_gate`, `discovery_status`, `ready_for_implementation`, reviewed scope/sources, exclusions, referrals, and residual risk as defined by the method.
+- `review_verdict`: one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`, derived from the cardinality and discovery sub-gates. `ready_for_implementation: yes` requires `PASS` with no blocking sub-gate.
+- A recommended next action: design more skeleton (`REVISE`), select next TC (`PASS` + `UT_tellMeNextImplTest`), block for an unavailable source (`BLOCKED`), or ask the developer (`ASK`).
+
+## Review Gate Contract
+
+- Reviews: the P0 functional skeleton set (Typical, Edge, Misuse, Fault) for one declared SUT scope, before test-case implementation begins.
+- Does not: draft or edit skeletons, redefine category rules, implement tests, or approve readiness from link cardinality alone.
+- `review_verdict`: exactly one of `PASS`, `REVISE`, `BLOCKED`, or `ASK` per pass. `ASK` brings the human developer into the loop and is the same outcome `ONE-MORE-THING` produces.
+- `severity`: optional `blocking | advisory` (default `blocking`); `advisory` marks findings that do not stop the gate.
+- `rework_route`: required whenever the verdict is not `PASS`; it names the owning command for each finding.
+- Read-only by default: report and route. Do not repair the reviewed artifact unless the developer explicitly approves a repair.
+- Source-first: read the upstream source artifact before judging the artifact under review.
+- Every finding cites a file, an ID, or a verification signal; an uncitable finding is dropped or chased with one more read.
+- One verdict per pass, stable across passes; a repeat pass with identical findings and no changed evidence is the last pass.
+- Rework is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions.
+- Report `next_command = <COMMAND>` whenever the verdict is not `PASS`. The mapping from older verdict wording lives in the flow's Review Gate Contract table.
 
 ## Conflict Guard
 
 This command reviews functional skeleton design. It should not redefine category rules or implement tests.
 Do not approve readiness solely from four populated categories, valid link cardinality, TC counts, or passing tests. Review is read-only, and pending P1/P2 referrals remain visible follow-up rather than P0 implementation or release approval.
+
+ONE-MORE-THING: ask developer if something not sure

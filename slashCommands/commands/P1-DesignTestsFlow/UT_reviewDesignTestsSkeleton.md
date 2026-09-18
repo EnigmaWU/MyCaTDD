@@ -17,7 +17,7 @@ Use one discovery sweep and one independent challenge, with at most two repair/r
 1. **Thought** — Read source artifacts first, before the designer's ledger or skeletons. Declare SUT, in-scope categories, domain profile(s), test level, and execution environment. Independently derive the source-backed state/guard, capability/responsibility, handoff, and interleaving obligations. Record a source-derived checklist and any missing source or applicability question.
 2. **Action** — Read the discovery_ledger and skeletons, then reconcile the independent checklist in both directions. Check source-backed setup/oracles, category placement, verification procedures, and US/AC/TC links. A missing obligation may have no existing US/AC/TC ID: identify it by source/rule or TP ID, category, and a concrete correction or question. A TODO TC can be DESIGNED; it is not a discovery gap merely because it is unimplemented.
 3. **Observation** — Audit actual disposition counts, exclusions, routing, and review provenance. In-scope handoffs retain GAP/QUESTION until resolved; do not count referrals as coverage. Check manual/model-facing evidence as well as automated assertions. Report missing ledger/review evidence as a gap. Correct vague or inconsistent findings only within the remaining review budget; confirm no files were modified.
-4. **Stop** — Report BLOCKED for unresolved in-scope source/oracle/ownership/scope questions; otherwise GAPS for missing design or review evidence; otherwise PASS for this scope only. `ready_for_implementation: yes` requires both cardinality and discovery gates to pass. Recommend clarification/design repair on non-PASS, or `UT_tellMeNextImplTest` or further P2 design on PASS; do not claim release readiness.
+4. **Stop** — Report `BLOCKED` for unresolved in-scope source, oracle, ownership, or scope questions; otherwise `REVISE` with `rework_route = SPEC_updateDetailDesign` for missing design or review evidence; otherwise `PASS` for this scope only. `ready_for_implementation: yes` requires both sub-gates to pass. Route `ASK` when the developer must settle a decision. Report `next_command = UT_tellMeNextImplTest` or the further P2 design command on `PASS`; do not claim release readiness.
 
 ### Worked Example
 
@@ -70,8 +70,23 @@ Expected result:
 - `discovery_ledger`: location or explicit missing-evidence finding; disposition counts reconciled to actual rows, auditing the **TestEvidenceChain** with exclusions, routing, and sampling limits separate from coverage.
 - `review_evidence`: independent source-derived checklist, reviewer/process (or labeled self-review), sources examined, reconciliation, and residual risk.
 - Findings keyed by source/rule or TP ID, with US/AC/TC IDs only when they exist; identify gaps, unknowns, category conflicts, weak oracles, or unsupported assumptions and the required correction/decision.
-- `cardinality_gate`: PASS | FAIL; `discovery_status`: PASS | GAPS | BLOCKED; `ready_for_implementation`: yes | no. Any non-PASS gate means no; PASS applies only to the reviewed scope, not execution or release readiness.
-- Bounded-review stop reason and next action: clarify/repair on non-PASS, or choose a TC or continue P2 design on PASS.
+- `cardinality_gate`: `PASS | FAIL`; `discovery_status`: `PASS | GAPS | BLOCKED`; `ready_for_implementation`: `yes | no`. Any non-PASS sub-gate means no; `PASS` applies only to the reviewed scope, not execution or release readiness.
+- `review_verdict`: one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`, derived from the two sub-gates: both `PASS` → `PASS`; any `FAIL` or `GAPS` → `REVISE` with `rework_route = SPEC_updateDetailDesign`; unresolved source or scope question → `BLOCKED`; developer decision required → `ASK`.
+- Bounded-review stop reason and next action: `rework_route` on non-PASS, or `next_command = UT_tellMeNextImplTest` / continue P2 design on `PASS`.
+
+## Review Gate Contract
+
+- Reviews: the P1 design skeleton set (State, Capability, Interaction, Concurrency) and its discovery ledger for one declared SUT scope.
+- Does not: draft or edit skeletons, change category semantics, implement tests, or review P0/P2 skeletons owned by their own gates.
+- `review_verdict`: exactly one of `PASS`, `REVISE`, `BLOCKED`, or `ASK` per pass. `ASK` brings the human developer into the loop and is the same outcome `ONE-MORE-THING` produces.
+- `severity`: optional `blocking | advisory` (default `blocking`); `advisory` marks findings that do not stop the gate.
+- `rework_route`: required whenever the verdict is not `PASS`; it names the owning command for each finding.
+- Read-only by default: report and route. Do not repair the reviewed artifact unless the developer explicitly approves a repair.
+- Source-first: read the upstream source artifact before judging the artifact under review.
+- Every finding cites a file, an ID, or a verification signal; an uncitable finding is dropped or chased with one more read.
+- One verdict per pass, stable across passes; a repeat pass with identical findings and no changed evidence is the last pass.
+- Rework is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions.
+- Report `next_command = <COMMAND>` whenever the verdict is not `PASS`. The mapping from older verdict wording lives in the flow's Review Gate Contract table.
 
 ## Conflict Guard
 

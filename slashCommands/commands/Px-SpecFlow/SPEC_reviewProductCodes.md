@@ -49,9 +49,24 @@ Expected result:
 
 ## Output Contract
 
-- Review result for committed-scope product/test changes: pass, update design, add tests, abort story, or ask developer.
+- `review_verdict`: `PASS` when the product code matches its design and tests and the next step is `SPEC_reviewImplUnitTests`; `REVISE` with `rework_route = SPEC_updateDetailDesign` for a design gap, `SPEC_designUnitTests` for missing coverage, or `SPEC_abortUserStory` when the story must be abandoned; `ASK` when the developer must decide; `BLOCKED` when the design or verification evidence needed for the review is unavailable.
+- `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Findings prioritized by correctness, traceability to project-root README SPEC docs, and quality risk.
 - Next recommended command: `SPEC_reviewImplUnitTests` when product-code review passes, `SPEC_updateDetailDesign`, `SPEC_designUnitTests`, `SPEC_abortUserStory`, or `SPEC_importIssue`.
+
+## Review Gate Contract
+
+- Reviews: product code and its traceability to the approved design and to the tests that prove it.
+- Does not: review the test implementation itself (that lens belongs to `SPEC_reviewImplUnitTests`), fix code, redesign, or commit.
+- `review_verdict`: exactly one of `PASS`, `REVISE`, `BLOCKED`, or `ASK` per pass. `ASK` brings the human developer into the loop and is the same outcome `ONE-MORE-THING` produces.
+- `severity`: optional `blocking | advisory` (default `blocking`); `advisory` marks findings that do not stop the gate.
+- `rework_route`: required whenever the verdict is not `PASS`; it names the owning command for each finding.
+- Read-only by default: report and route. Do not repair the reviewed artifact unless the developer explicitly approves a repair.
+- Source-first: read the upstream source artifact before judging the artifact under review.
+- Every finding cites a file, an ID, or a verification signal; an uncitable finding is dropped or chased with one more read.
+- One verdict per pass, stable across passes; a repeat pass with identical findings and no changed evidence is the last pass.
+- Rework is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions.
+- Report `next_command = <COMMAND>` whenever the verdict is not `PASS`. The mapping from older verdict wording lives in the flow's Review Gate Contract table.
 
 ## Loop Guard
 

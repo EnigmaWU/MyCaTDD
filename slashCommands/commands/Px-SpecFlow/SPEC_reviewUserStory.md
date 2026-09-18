@@ -54,10 +54,25 @@ Expected result — one ReACT pass:
 
 ## Output Contract
 
-- Review result recorded against team-shared `.catdd/spec/doingUS/` work state: pass, revise requirements, transfer to design-oriented work, close requirement-only work, or ask developer.
+- `review_verdict` recorded against team-shared `.catdd/spec/doingUS/` work state: `PASS` with `next_command = SPEC_commitStoryWorks` for close requirement-only; `REVISE` with `rework_route = SPEC_updateUserStory` for revise requirements or `SPEC_takeDetailDesign` for transfer to design; `ASK` when the developer must decide; `BLOCKED` when the requirement source or ledger needed for the review is unavailable.
+- `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Explicit consistency check that `README_UserStories.md` TODO/DONE story state and AC trace/status match lifecycle artifacts and active story content.
 - Missing acceptance criteria, ambiguity, README SPEC doc gaps, edge cases, measurable outcomes, and risk list from a clarify/analyze/checklist-style review gate.
 - Next recommended command: `SPEC_updateUserStory`, `SPEC_commitStoryWorks`, `SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, or `SPEC_updateDetailDesign`.
+
+## Review Gate Contract
+
+- Reviews: the active story, its acceptance-criteria content and measurability, the `README_UserStories.md` ledger, and usage guidance.
+- Does not: author or revise requirements, judge acceptance-criteria testability from the design side (that lens belongs to `SPEC_reviewDetailDesign`), or review design documents, tests, or code.
+- `review_verdict`: exactly one of `PASS`, `REVISE`, `BLOCKED`, or `ASK` per pass. `ASK` brings the human developer into the loop and is the same outcome `ONE-MORE-THING` produces.
+- `severity`: optional `blocking | advisory` (default `blocking`); `advisory` marks findings that do not stop the gate.
+- `rework_route`: required whenever the verdict is not `PASS`; it names the owning command for each finding.
+- Read-only by default: report and route. Do not repair the reviewed artifact unless the developer explicitly approves a repair.
+- Source-first: read the upstream source artifact before judging the artifact under review.
+- Every finding cites a file, an ID, or a verification signal; an uncitable finding is dropped or chased with one more read.
+- One verdict per pass, stable across passes; a repeat pass with identical findings and no changed evidence is the last pass.
+- Rework is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions.
+- Report `next_command = <COMMAND>` whenever the verdict is not `PASS`. The mapping from older verdict wording lives in the flow's Review Gate Contract table.
 
 ## Loop Guard
 

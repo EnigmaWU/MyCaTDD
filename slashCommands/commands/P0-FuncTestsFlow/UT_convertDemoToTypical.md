@@ -6,6 +6,8 @@ Convert existing demo tests into CaTDD `P0 Functional / Typical` skeletons.
 
 Use this command when a developer has demo tests and wants to convert them into CaTDD instead of starting from a blank template.
 
+Scope note: this is the only command-layer entry for demo material, and it converts demos into `P0 Functional / Typical` work. `P3 Addons / Demo-Example` is a learning-surface category with no design or review gate of its own, so a P3 skeleton is authored as an explicit learning artifact and never treated as functional coverage.
+
 ## CoT Pattern
 
 **ReACT** — Reasoning + Acting. Demo tests mix the happy path with incidental setup and stray edge assertions. This command must extract the core valid behavior, then check that nothing non-Typical was dragged along and that nothing was invented to fill a gap the demo left.
