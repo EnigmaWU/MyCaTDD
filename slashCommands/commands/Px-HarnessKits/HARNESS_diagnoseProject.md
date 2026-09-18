@@ -109,6 +109,7 @@ If the target path or evidence base is unclear, stop and ask the developer.
    - `consistency-risk`
    - `speccoding-drift`
    - `deadloop-risk`
+   - `agent-surface-drift`
    - `healthy`
 6. Rank findings by severity and traceability.
 7. Recommend the smallest next command or action for each risk.
@@ -121,6 +122,7 @@ If the target path or evidence base is unclear, stop and ask the developer.
 | consistency-risk | docs, commands, or filesystem state disagree with each other | fix the drift and re-check the contract |
 | speccoding-drift | lifecycle or CaTDD rules are being skipped, duplicated, or misapplied | route to the narrowest `SPEC_*` or `HARNESS_*` command |
 | deadloop-risk | the same story or command bounces across lifecycle artifacts, task checkboxes, or review passes with no state progress (see `Px-SpecFlow` Loop Guard) | route to `SPEC_abortUserStory`, `SPEC_whatsWrong` in `manualMode`, `SPEC_whatsNextTask`, or `ASK`; do not continue the same rework loop |
+| agent-surface-drift | a recorded `AGENTS.md` family file is missing, an unrecorded one is present, or its CaTDD-managed region no longer matches `.catdd/spec/projectContext.md` | refresh the inventory with `SPEC_updateProjectContext`; let the installer regenerate the managed region, and never hand-edit a project-owned region |
 | healthy | no strong evidence of project drift | continue with the current task |
 
 ## Method References

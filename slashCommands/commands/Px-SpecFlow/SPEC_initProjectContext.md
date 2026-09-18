@@ -12,9 +12,9 @@ Create the first `.catdd/spec/projectContext.md` for a target project before Spe
 
 Repeat until every drafted fact is either sourced or explicitly marked as an assumption.
 
-1. **Thought** — Read `existing_docs` and `known_constraints`. Separate what the material actually states from what you would be guessing.
-2. **Action** — Before drafting, ask the three Setup Questions below in order, skipping any question that was already supplied as input. Then draft `.catdd/spec/projectContext.md`.
-3. **Observation** — Walk every line of the draft: is it traceable to project material, or is it an assumption? Unmarked guesses return to **Thought**. Encoded CaTDD category rules must be replaced with a link to `methodPrompts`.
+1. **Thought** — Read `existing_docs` and `known_constraints`. Detect the project's `AGENTS.md` family (see Agent Instruction Surface Rule below) and resolve each file's provenance and ownership. Separate what the material actually states from what you would be guessing.
+2. **Action** — Before drafting, ask the three Setup Questions below in order, skipping any question that was already supplied as input. Then draft `.catdd/spec/projectContext.md`, including the `## Agent Instruction Surfaces` section.
+3. **Observation** — Walk every line of the draft: is it traceable to project material, or is it an assumption? Unmarked guesses return to **Thought**. Encoded CaTDD category rules must be replaced with a link to `methodPrompts`. A file entry that claims authority over method semantics, category meaning, gates, or project facts returns to **Thought** and is reframed as an operating convention or an open question.
 4. **Stop** — Exit when facts and assumptions are cleanly separated. Report the assumption list needing developer confirmation and the next command.
 
 #### Setup Questions
@@ -47,6 +47,7 @@ Expected result — two passes:
 - `project_root`: target project directory.
 - `known_constraints`: language, framework, test framework, architecture, product goals, and team conventions.
 - `existing_docs`: optional README, architecture notes, issue templates, or test docs.
+- `agents_md_files`: optional detected list of repository `AGENTS.md` files (root and nested, including `AGENTS.override.md`). When omitted, detect them from the repository root and the current working directory chain before drafting.
 - `default_lang`: developer's preferred language for all subsequent SpecCoding progress, including artifact content, questions, comments, and summaries. Choose `US_EN` (English) or `ZH_CN` (Chinese). If not provided, ask the developer before proceeding.
 - `sut_unit_convention`: the boundary treated as one **Unit** for CaTDD unit tests in this project. Choose one of the predefined scopes or define a project-specific one. Common options: `module-interface`, `submodule-interface`, `class`, `header-file` (e.g., one `*.H`), `function`, `component`. If not provided, ask the developer before proceeding. Record the chosen scope, a one-line rationale, and an example SUT name (for example, `SUT: moduleFooInterface` or `SUT: ClassBar`).
 - `constitutional_invariants`: optional list of non-negotiable security, safety, privacy, and regulatory rules ($K$). If not provided, confirm with developer or apply default baseline invariants (`K-SEC-01..04`).
@@ -61,11 +62,28 @@ Expected result — two passes:
 - A `.catdd/spec/projectContext.md` team-shared persistent artifact with project facts, constraints, code conventions, test conventions, `sut_unit_convention`, constitution-level guardrails, `## Constitutional Invariants (K)`, `default_lang` (US_EN or ZH_CN), and open questions.
 - A clearly recorded `sut_unit_convention` with scope, rationale, and example SUT name so later `SPEC_designUnitTests` declarations stay consistent.
 - Clearly codified `## Constitutional Invariants (K)` that govern all downstream generation and verification.
+- A `## Agent Instruction Surfaces` section listing every detected `AGENTS.md` family file with its path, scope, provenance (`pre-existing`, `mixed`, `catdd-created`, or `present-empty`), ownership by region, managed-region markers when present, and a one-line summary limited to the operating conventions it owns.
+- An explicit statement of the authority ceiling for that section: `AGENTS.md` owns operating conventions only, and never method semantics, category meaning, gate rules, traceability, or project facts.
 - A list of assumptions that must be confirmed by the developer.
 - Next recommended command: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, or `SPEC_updateProjectContext`.
 
 ## Conflict Guard
 
 Do not encode CaTDD category rules here. Link to `methodPrompts` for method semantics.
+Do not treat any `AGENTS.md` as authority over method semantics, category meaning, gate rules, traceability, or project facts; record such a claim as a conflict and ask.
+Do not rewrite hand-written text in a `pre-existing` or `mixed` surface, and do not record `~/.codex/AGENTS.md` as team context.
+Do not resolve provenance from file timestamps; use the managed-region markers and the presence or absence of hand-written text.
+
+## Agent Instruction Surface Rule
+
+The agent instruction surface in scope for project context is the `AGENTS.md` family: `AGENTS.md` and `AGENTS.override.md` at the repository root and in nested directories along the path to the working directory.
+
+- Record only the repo-scoped chain. `~/.codex/AGENTS.md` is personal scope and never enters team project context.
+- Resolve provenance from the file itself, not from timestamps: a file containing only the CaTDD managed block is `catdd-created`; a file with hand-written text and no managed block is `pre-existing`; a file with both is `mixed`; an empty file is `present-empty`.
+- Ownership follows the region, not the file: the CaTDD managed region between `<!-- BEGIN CaTDD Codex instructions -->` and `<!-- END CaTDD Codex instructions -->` always belongs to CaTDD, and every other line always belongs to the project. This works because `AGENTS.md` is the one surface the installer patches in place instead of rewriting.
+- `pre-existing` and `mixed` files are followed, never overwritten: record the operating conventions they own and treat any project fact they state as a signal to confirm with the developer, not as authority.
+- `catdd-created` files are mastered: project context owns the rules and the managed region is its projection.
+- Authority ceiling: `AGENTS.md` may own operating conventions only. Method semantics, category meaning, gate rules, traceability, and project facts stay with `methodPrompts` and this context file; an `AGENTS.md` that contradicts them is reported as a conflict.
+- Out of scope: the other adapter files the installer generates — `.github/instructions/catdd.instructions.md`, `.clinerules/catdd.md`, `.continue/rules/catdd.md`, `.antigravityrules/catdd.md` — and generated adapter trees such as `.agents/skills/` and `.codex/prompts/`. The installer rewrites them wholesale on every refresh, so they carry no hand-written region to follow and no provenance to resolve.
 
 ONE-MORE-THING: ask developer if something not sure

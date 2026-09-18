@@ -27,6 +27,7 @@
 | SpecCoding | 将验证设计工件作为可执行规格生命周期的 CaTDD 工作流。 |
 | VibeCoding | 快速创意/原型模式；结果仍应回收并对齐到 CaTDD 追溯体系。在已开启的故事内，它必须通过 `SPEC_whatsWrong` 显式进入，仅在 `manualMode` 下可用，`ONE-MORE-THING` 始终生效，且探索性修改在某个 `SPEC_*` 步骤重新采纳前始终保持 `unadopted`。 |
 | SPEC_whatsWrong | Px-SpecFlow 升级阶梯的第三级，也是从 SpecCoding 进入 VibeCoding 的桥梁。它判定触发原因、校验 `manualMode`、在不移动泳道也不写团队制品的前提下冻结流程、把本次探索以 `adoption_status = unadopted` 记录到 `.catdd/spec/WorkingProcessLog.md`、把每项发现路由到归属命令、报告 `learning_command = /HARNESS_evolveHarness` 且 `evolution_mode=auto`，并用任意 `SPEC_doXYZ`（例如 `SPEC_whatsNextTask`）恢复流程。 |
+| agent instruction surface（智能体指令面） | 告诉 code agent 如何在本项目中工作的仓库文件：`AGENTS.md`，以及目录级覆盖用的 `AGENTS.override.md`。`SPEC_initProjectContext` 会记录每个文件的位置、作用域、来源、按区域的归属以及一行摘要；`SPEC_updateProjectContext` 负责对齐它们。来源判定取自文件本身：仅有受管区域 = `catdd-created`，仅有手写内容 = `pre-existing`，两者都有 = `mixed`，空文件 = `present-empty`。归属按区域划分：CaTDD 受管标记之间的区域可重新生成且归 CaTDD 所有，其余归项目所有。其权限上限为"操作约定"，绝不凌驾于方法语义、分类语义、门禁规则、追溯关系或项目事实之上。由安装器生成的适配文件（`.github/instructions/*.md`、`.clinerules/*.md`、`.continue/rules/*.md`、`.antigravityrules/*.md`）与生成目录会被整体重写，不在该模型范围内。 |
 | Source-First | 源头在先：先审视权威来源工件（契约、架构模型、质量策略）并独立推导预期验证义务，再查阅已有骨架或测试代码，消除作者自身盲区。 |
 | TestEvidenceChain | 测试证据链：回答“为什么需要这个测试（WHY）”与“如何正确进行测试（HOW）”的完整无断裂证据链：从来源工件 -> 规则/不变量 -> 测试点（TP） -> 可观测预期（Oracle） -> CaTDD 分类（WHY 层面） -> US/AC/TC -> 测试用例（TC） -> RED/GREEN 实现（HOW 层面）。 |
 | SUT | 被测系统 / 被测目标（System Under Test）：在测试中显式声明的被测软件边界（如 `SUT: utCodeAgentCLI`）。它确立了调用方（调用者违反契约属于 `P0 Misuse`）与外部依赖/环境（依赖故障属于 `P0 Fault`）之间的严格分界线。 |

@@ -176,6 +176,7 @@ Quick rules:
 - Team-shared lifecycle state lives under `.catdd/spec/` and should be committed: `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, and other lifecycle directories.
 - Team-shared `README*` SPEC docs live in the project root and should be committed.
 - Local process trace stays gitignored: `.catdd/spec/WorkingProcessLog.md`.
+- `AGENTS.md` and its directory overrides are recorded by `SPEC_initProjectContext` and reconciled by `SPEC_updateProjectContext`. Ownership follows the region: the CaTDD-managed markers belong to CaTDD and are regenerable, everything else belongs to the project and is never rewritten. A file that existed before CaTDD is followed; one CaTDD created is mastered. `AGENTS.md` owns operating conventions only, never method semantics, gates, or project facts. The installer-generated adapters such as `.clinerules/catdd.md` are rewritten wholesale and stay out of this model.
 - If policy details and this guide ever diverge, follow [Px-SpecFlow](flows/Px-SpecFlow.md) as the source of detailed lifecycle rules.
 
 ## Flow and Kit Map

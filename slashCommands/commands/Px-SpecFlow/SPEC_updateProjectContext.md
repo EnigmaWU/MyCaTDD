@@ -12,9 +12,9 @@ Refresh `.catdd/spec/projectContext.md` when project facts, constraints, convent
 
 Run this loop until the context file satisfies the Output Contract and the Context Budget.
 
-1. **Thought** — Read `change_source` and `projectContext_file`. Classify each candidate fact as `CORE`, `REFERENCE`, `OPERATIONAL`, `EPISODIC`, or `TRANSIENT` per the Memory Classification Rule. Use filesystem-backed lifecycle inventory before touching `SpecFlow Lifecycle State`.
-2. **Action** — Apply the minimum update: edit existing facts in place, link rather than copy `REFERENCE` material, and delete superseded wording per the Supersession Rule.
-3. **Observation** — Run `wc -l .catdd/spec/projectContext.md` against the Context Budget, and check that provenance survived and assumptions are still separated from confirmed rules. If over budget, compact per the Compaction Procedure and return to **Action**. If a fact lost its source, return to **Thought**.
+1. **Thought** — Read `change_source` and `projectContext_file`. Classify each candidate fact as `CORE`, `REFERENCE`, `OPERATIONAL`, `EPISODIC`, or `TRANSIENT` per the Memory Classification Rule. Diff the recorded `## Agent Instruction Surfaces` inventory against the `AGENTS.md` family on disk (added, removed, changed, or managed region added) and resolve each difference against the Agent Surface Reconcile Rule. Use filesystem-backed lifecycle inventory before touching `SpecFlow Lifecycle State`.
+2. **Action** — Apply the minimum update: edit existing facts in place, link rather than copy `REFERENCE` material, delete superseded wording per the Supersession Rule, and reconcile surfaces per their ownership.
+3. **Observation** — Run `wc -l .catdd/spec/projectContext.md` against the Context Budget, and check that provenance survived and assumptions are still separated from confirmed rules. If over budget, compact per the Compaction Procedure and return to **Action**. If a fact lost its source, or a project-owned surface region was rewritten, return to **Thought**.
 4. **Stop** — Exit when the file is within budget with no semantic loss. Report classifications applied, removals, and line count.
 
 ### Worked Example
@@ -38,6 +38,7 @@ Expected result — one ReACT pass:
 
 - `projectContext_file`: existing project context.
 - `change_source`: commit, discussion, issue, architecture decision, review result, or new project document.
+- `agents_md_files`: optional detected list of repository `AGENTS.md` files to diff against the recorded inventory. When omitted, detect them from the repository root and the current working directory chain.
 - `sut_unit_convention`: optional updated SUT unit boundary for CaTDD unit tests (for example, switching from `class` to `module-interface`, refining a project-specific scope, or adding per-layer conventions). Only change this when the project has explicitly decided a different unit granularity.
 - `constitutional_invariants`: optional updated list of non-negotiable security, compliance, privacy, or safety rules ($K$) to record under `## Constitutional Invariants (K)`.
 - `lifecycle_dirs`: optional `.catdd/spec/pendingNews`, `.catdd/spec/analyzedNews`, `.catdd/spec/todoUS`, `.catdd/spec/doingUS`, `.catdd/spec/suspendUS`, `.catdd/spec/doneUS`, and `.catdd/spec/abortUS` directories when refreshing SpecFlow lifecycle state.
@@ -56,6 +57,23 @@ Expected result — one ReACT pass:
 - A short change log describing what was added, replaced, linked, compacted, or discarded and why.
 - A budget report with the resulting line count and, when available, approximate token count.
 - Open questions for uncertain project intent.
+- `agent_surface_drift` reporting each difference between the recorded inventory and the `AGENTS.md` family on disk, with the resolution applied: `updated-managed-region`, `recorded-new-surface`, `recorded-removal`, `provenance-changed`, or `conflict-reported`.
+
+## Agent Surface Reconcile Rule
+
+Reconcile each `AGENTS.md` file by ownership, never by file. This is the one agent surface the installer patches in place, so the region model applies to it and only to it.
+
+| Recorded or observed state | Action |
+| --- | --- |
+| `catdd-created` | Update the managed region so it matches project context, and never touch text outside it. |
+| `mixed` | Update only the managed region; treat the surrounding text as project-owned, re-read it, and report any conflict with project facts instead of editing it. |
+| `pre-existing` | Never rewrite it. Record the operating conventions it owns, treat project facts it states as signals to confirm, and report conflicts. |
+| `present-empty` | Record it as existing but contributing no guidance; do not treat it as authority. |
+| Surface appeared or removed since the last update | Record the change and its new provenance before any other edit. |
+
+Authority ceiling: `AGENTS.md` may own operating conventions only. Method semantics, category meaning, gate rules, traceability, and project facts stay with `methodPrompts` and this context file, so an `AGENTS.md` that contradicts them produces a reported conflict rather than a context edit.
+
+Out of scope: the installer-generated adapters (`.github/instructions/catdd.instructions.md`, `.clinerules/catdd.md`, `.continue/rules/catdd.md`, `.antigravityrules/catdd.md`) and generated adapter trees such as `.agents/skills/` and `.codex/prompts/`. They are rewritten wholesale on refresh, so they carry no project-owned region and no drift to reconcile here.
 
 ## Project Memory Architecture
 
@@ -79,6 +97,7 @@ Before editing, classify every candidate item into exactly one class:
 | `OPERATIONAL` | Reproducible current state such as lifecycle contents, branch status, generated files, latest test output, or next task. | Do not persist the snapshot; record the command or artifact location used to retrieve it. |
 | `EPISODIC` | Historical event, completed story, superseded decision, review result, failure lesson, or commit evidence. | Keep it in an ADR, `analyzedNews/`, `doneUS/`, `abortUS/`, review artifact, or Git history; retain a context link only when it explains an active guardrail. |
 | `TRANSIENT` | Temporary chat detail, exploration note, intermediate plan, or fact with no expected future use. | Do not write it to durable project context. |
+| `AGENTS.md` family file | A repository `AGENTS.md` or `AGENTS.override.md` at the root or in a nested directory. | Record path, scope, provenance, ownership by region, and a one-line summary of the operating conventions it owns; never copy the file's content into project context. |
 
 If an item fits more than one class, choose the narrowest canonical owner. Promote it to `CORE` only when most future `SPEC_*` commands need it without first knowing the current story or module.
 
@@ -140,5 +159,8 @@ Before completing the update, verify all of the following:
 Do not use project context to override CaTDD method rules; update `methodPrompts` first if the method itself changes.
 Do not update pending, analyzed, todo, doing, suspend, done, or abort lifecycle state without first inspecting the corresponding `.catdd/spec/` directories. Do not turn `projectContext.md` into a duplicated lifecycle file index.
 Do not satisfy the budget by deleting provenance, unresolved project-wide questions, active guardrails, or the only surviving copy of a decision.
+Do not rewrite a hand-written region of any `AGENTS.md` file, and do not update its CaTDD managed region without checking it against project context first.
+Do not treat an `AGENTS.md` as authority over method semantics, category meaning, gate rules, traceability, or project facts; report the conflict and ask.
+Do not add the installer-generated adapters or generated adapter trees to the surface inventory; they are rewritten wholesale and carry no project-owned region.
 
 ONE-MORE-THING: ask developer if something not sure

@@ -176,6 +176,7 @@ bash scripts/test_makeSlashCmd4Codex.sh
 - 团队共享生命周期状态位于 `.catdd/spec/` 并应提交：`.catdd/spec/doingUS/`、`.catdd/spec/suspendUS/`、`.catdd/spec/abortUS/` 及其他生命周期目录。
 - 团队共享的 `README*` SPEC 文档位于项目根目录并应提交。
 - 本地过程追踪保持 gitignore：`.catdd/spec/WorkingProcessLog.md`。
+- `AGENTS.md` 及其目录级 override 由 `SPEC_initProjectContext` 记录、由 `SPEC_updateProjectContext` 对齐。归属按区域划分：CaTDD 受管标记之间归 CaTDD 所有且可重新生成，其余归项目所有，绝不重写。早于 CaTDD 存在的文件被遵循；由 CaTDD 创建的被掌管。`AGENTS.md` 只拥有操作约定，绝不拥有方法语义、门禁或项目事实。`.clinerules/catdd.md` 等安装器生成的适配文件会被整体重写，不在该模型范围内。
 - 若本指南与细节策略出现差异，以 [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) 的详细生命周期规则为准。
 
 ## 流程与工具包地图

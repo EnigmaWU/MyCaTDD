@@ -312,6 +312,8 @@ update_codex_agents_md() {
 
 This managed block is installed by `scripts/installCaTDD.sh` from MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or UT_*, SPEC_*, and HARNESS_* commands.
 
+This block is the CaTDD-owned region and projects the rules recorded in `.catdd/spec/projectContext.md`; text outside these markers belongs to the project and is never rewritten by CaTDD.
+
 ### Installed Sources
 
 - CaTDD method source: `.catdd/methodPrompts/`

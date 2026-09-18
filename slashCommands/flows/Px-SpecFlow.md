@@ -160,6 +160,7 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 - `README_UserStories.md`: mandatory project-level story ledger containing TODO and DONE story state plus acceptance-criteria trace summaries.
 - `README*.md`: project-root SPEC docs created as needed for overview, architecture, stories, guide, detail design, and verification design.
 - `.catdd/spec/WorkingProcessLog.md`: optional trace log for decisions, command transitions, and unresolved questions.
+- `AGENTS.md` and `AGENTS.override.md` (root and nested): the repository files that tell a code agent how to work here. `SPEC_initProjectContext` records them, and `SPEC_updateProjectContext` keeps their CaTDD-owned region in step with project context. The installer-generated adapters (`.github/instructions/catdd.instructions.md`, `.clinerules/catdd.md`, `.continue/rules/catdd.md`, `.antigravityrules/catdd.md`) and generated trees such as `.agents/skills/` and `.codex/prompts/` are rewritten wholesale on refresh and stay out of scope.
 
 ## Project-Root README SPEC Docs
 
@@ -229,6 +230,7 @@ SpecFlow lifecycle state lives under `.catdd/spec/`. Shared `README*` SPEC docs 
 | `README*.md` | Team-shared | Commit project-root SPEC docs such as README, architecture design, user stories, user guide, detail design, error design, resource design, state design, performance design, compatibility design, diagnosis design, and verify design as needed. |
 | `slashCommands/templates/SpecTodoUserStoryTemplate.md` | Team-shared | Commit reusable per-story template for `.catdd/spec/todoUS/*-UserStory.md`. |
 | `.catdd/spec/WorkingProcessLog.md` | Local work state | Gitignore personal command traces, temporary decisions, and unresolved local notes. |
+| `AGENTS.md` / `AGENTS.override.md` (root and nested) | Team-shared | Commit the file. It is the one agent surface the installer patches in place: the region between the `CaTDD Codex instructions` markers is regenerable and CaTDD-owned, and every other line is project-owned and never rewritten. Installer-generated adapters such as `.clinerules/catdd.md` are rewritten wholesale and are not tracked here. |
 
 Recommended target-project `.gitignore` rules:
 
@@ -498,3 +500,5 @@ Failure classification follows ASR-R3: retry only transient failures; route perm
 - Do not suspend `ONE-MORE-THING` inside VibeCoding, and do not treat exploratory edits as adopted story work before a `SPEC_*` step re-adopts them or as part of a story-span commit.
 - Do not infer `execution_mode` from the environment: the human chat driver and the code agent driver each declare their mode, and the declared mode is what the recorded artifacts carry.
 - Do not let a code agent driver escape the orientation boundary: an `autonomousMode` default is still limited to `implementation-oriented` work and must halt to `manualMode` for intent-clearing, requirement-oriented, or design-oriented stories.
+- Do not let `AGENTS.md` override method semantics, category meaning, gate rules, traceability, or project facts; it owns operating conventions only, and conflicts are reported rather than obeyed.
+- Do not rewrite the hand-written region of a `pre-existing` or `mixed` `AGENTS.md`; only the CaTDD-managed region between its markers is CaTDD-owned and regenerable. The installer-generated adapters carry no such region and are out of scope.

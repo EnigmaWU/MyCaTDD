@@ -159,6 +159,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 - `<module-or-submodule>/README_ArchDesign.md` 和 `<module-or-submodule>/README_DetailDesign.md`：派生自并可追溯到模块 `README_UserStory.md` ID 的设计制品。
 - `README*.md`：按需创建的项目根 SPEC 文档，用于概述、架构、故事、指南、详细设计和验证设计。
 - `.catdd/spec/WorkingProcessLog.md`：用于决策、命令转换和未解决问题的可选跟踪日志。
+- `AGENTS.md` 与 `AGENTS.override.md`（根目录与嵌套）：告诉 code agent 如何在本仓库工作的文件。`SPEC_initProjectContext` 记录它们，`SPEC_updateProjectContext` 让其中由 CaTDD 拥有的区域与项目上下文保持一致。由安装器生成的适配文件（`.github/instructions/catdd.instructions.md`、`.clinerules/catdd.md`、`.continue/rules/catdd.md`、`.antigravityrules/catdd.md`）以及 `.agents/skills/`、`.codex/prompts/` 等生成目录在刷新时被整体重写，不在范围内。
 
 ## 项目根 README SPEC 文档
 
@@ -228,6 +229,7 @@ SpecFlow 生命周期状态位于 `.catdd/spec/` 下。共享的 `README*` SPEC 
 | `README*.md` | 团队共享 | 按需提交项目根 SPEC 文档，如 README、架构设计、用户故事、用户指南、详细设计、错误设计、资源设计、状态设计、性能设计、兼容性设计、诊断设计和验证设计。 |
 | `slashCommands/templates/SpecTodoUserStoryTemplate.md` | 团队共享 | 提交用于 `.catdd/spec/todoUS/*-UserStory.md` 的可重用每故事模板。 |
 | `.catdd/spec/WorkingProcessLog.md` | 本地工作状态 | 通过 gitignore 忽略个人命令跟踪、临时决策和未解决的本地笔记。 |
+| `AGENTS.md` / `AGENTS.override.md`（根目录与嵌套） | 团队共享 | 提交该文件。它是安装器唯一就地修补的智能体文件：`CaTDD Codex instructions` 标记之间的区域可重新生成并归 CaTDD 所有，其余每一行归项目所有且绝不重写。`.clinerules/catdd.md` 等安装器生成的适配文件会被整体重写，不在此登记。 |
 
 推荐的目标项目 `.gitignore` 规则：
 
@@ -495,3 +497,5 @@ flowchart TB
 - 不得在 VibeCoding 内暂停 `ONE-MORE-THING`，也不得在某个 `SPEC_*` 步骤重新采纳之前把探索性修改当成已采纳的故事工作，或纳入任何故事区间提交。
 - 不得根据运行环境推断 `execution_mode`：人类聊天驱动方与 code agent 驱动方各自声明其模式，记录到制品中的就是该声明值。
 - 不得让 code agent 驱动方越过导向边界：`autonomousMode` 默认值仍仅限实现导向工作，遇到意图澄清型、需求导向型或设计导向型故事必须暂停并退回 `manualMode`。
+- 不得让 `AGENTS.md` 凌驾于方法语义、分类语义、门禁规则、追溯关系或项目事实之上；它只拥有"操作约定"，冲突必须上报而不是照办。
+- 不得重写 `pre-existing` 或 `mixed` 的 `AGENTS.md` 手写区域；只有标记之间由 CaTDD 受管的区域归 CaTDD 所有且可重新生成。安装器生成的适配文件不含此类区域，不在范围内。
