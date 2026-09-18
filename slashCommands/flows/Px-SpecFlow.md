@@ -129,6 +129,8 @@ Invariants every review gate states: read-only by default, with repair only on e
 
 Every gate also states its own scope pair, `Reviews:` and `Does not:`, so two gates can share an artifact without sharing a lens: `SPEC_reviewUserStory` owns acceptance-criteria content and `SPEC_reviewDetailDesign` owns their testability; `SPEC_reviewImplUnitTests` owns test implementation and `SPEC_reviewProductCodes` owns code plus traceability. The gate names follow the same split: `*review*` commands gate an authored artifact, while `HARNESS_verifyInstallation` verifies an installed surface. Both report the same vocabulary.
 
+Canonical definitions of `PASS`, `REVISE`, `BLOCKED`, and `ASK` live in [README_UbiLang.md](../../README_UbiLang.md); this table maps the older per-command wording onto them. In short: `PASS` proceeds with the artifact as-is, `REVISE` changes it first and re-runs the gate, `BLOCKED` waits for a missing input that an owner can supply, and `ASK` waits for a decision only the developer can make. When the flow cannot yet phrase the question, the escalation is `SPEC_whatsWrong`, not `ASK`.
+
 Not every artifact carries a dedicated gate, and the flow names the owner so the absence is a decision rather than a gap:
 
 - The paired `*-UserStory-Tasks.md` artifact is owned by `SPEC_makePlan` at authoring time, verified at close by `SPEC_closeUserStory` (`plan_drift` when a checked task has no gate evidence or the commit plan disagrees with the commits taken), and diagnosed by `SPEC_whatsWrong`.
@@ -143,12 +145,12 @@ Mapping from the older vocabularies:
 | `pass`, `HEALTHY`, installation `PASS` | `PASS` |
 | `GAPS`, `cardinality_gate: FAIL`, `REVISE`, `WARN`, `RISKY`, installation `FAIL` | `REVISE` + `rework_route`; `WARN` keeps `severity = advisory` |
 | `BLOCKED`, `CONFIRMED_INSTALLATION_FAILURE`, `LIKELY_INSTALLATION_FAILURE` | `BLOCKED` + `rework_route` |
-| `ASK`, `INSUFFICIENT_EVIDENCE`, an unresolved `ONE-MORE-THING` halt | `ASK` |
+| `ASK`, `INSUFFICIENT_EVIDENCE`, an unresolved `ONE-MORE-THING` halt | `ASK`; `BLOCKED` instead when a named owner can supply the missing evidence |
 | `WATCHLIST` | `PASS` with `severity = advisory`, or `ASK` when the observation needs a decision |
 | Action verdicts such as `revise requirements`, `transfer to design`, `update design`, `add tests`, `abort story`, `fix implementation`, `revise skeleton` | `REVISE` + that owner as `rework_route` |
 | `pass` with `close requirement-only` | `PASS` + `next_command = SPEC_commitStoryWorks` |
 | `UT_reviewImplTestCase` recommendation `keep` | `PASS`; any other recommendation is `REVISE` + the named owner |
-| Diagnosis taxonomies such as `CONFIRMED_INSTALLATION_FAILURE` or `RISKY` | Keep the command's own diagnosis taxonomy unchanged and report the mapped `review_verdict` alongside it; the taxonomy explains why, the verdict decides the gate. Mapping: `HEALTHY` -> `PASS`, `WATCHLIST` -> `PASS` with `severity = advisory`, `RISKY` -> `REVISE`, `BLOCKED` -> `BLOCKED`, `INSUFFICIENT_EVIDENCE` -> `ASK`, and the installation failure classes -> `REVISE` or `BLOCKED` per their own definitions |
+| Diagnosis taxonomies such as `CONFIRMED_INSTALLATION_FAILURE` or `RISKY` | Keep the command's own diagnosis taxonomy unchanged and report the mapped `review_verdict` alongside it; the taxonomy explains why, the verdict decides the gate. Mapping: `HEALTHY` -> `PASS`, `WATCHLIST` -> `PASS` with `severity = advisory`, `RISKY` -> `REVISE`, `BLOCKED` -> `BLOCKED`, `INSUFFICIENT_EVIDENCE` -> `ASK` (or `BLOCKED` when a named owner can supply the missing evidence), and the installation failure classes -> `REVISE` or `BLOCKED` per their own definitions |
 
 ## Refinements from GitHub Spec Kit
 

@@ -128,6 +128,8 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 
 每个门禁还要声明自己的范围对：`Reviews:`（评审什么）与 `Does not:`（不评审什么），使两个门禁可以共享同一制品而职责不同：`SPEC_reviewUserStory` 负责验收标准的内容，`SPEC_reviewDetailDesign` 负责其可测试性；`SPEC_reviewImplUnitTests` 负责测试实现，`SPEC_reviewProductCodes` 负责代码与追溯关系。命名遵循同一分工：`*review*` 命令为已撰写制品把关，`HARNESS_verifyInstallation` 校验已安装的适配面，两者报告同一套词汇。
 
+`PASS`、`REVISE`、`BLOCKED`、`ASK` 的规范定义见 [README_UbiLang_ZH.md](../../README_UbiLang_ZH.md)；本表只负责把旧有的各命令说法映射到这套词汇。简要地说：`PASS` 让制品照原样继续，`REVISE` 先修改制品再重跑门禁，`BLOCKED` 等待某个归属方能提供的缺失输入，`ASK` 等待只有开发者才能作出的决定。当流程连问题本身都还无法表述时，应升级为 `SPEC_whatsWrong`，而不是 `ASK`。
+
 并非每个制品都有专属门禁，因此流程显式指明归属，让"没有门禁"成为决策而非缺口：
 
 - 配对的 `*-UserStory-Tasks.md` 制品在撰写时由 `SPEC_makePlan` 负责，在关闭时由 `SPEC_closeUserStory` 校验（已勾选任务缺少门禁证据，或提交计划与实际提交不一致时报告 `plan_drift`），并由 `SPEC_whatsWrong` 诊断。
@@ -142,12 +144,12 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 | `pass`、`HEALTHY`、安装校验 `PASS` | `PASS` |
 | `GAPS`、`cardinality_gate: FAIL`、`REVISE`、`WARN`、`RISKY`、安装校验 `FAIL` | `REVISE` + `rework_route`；`WARN` 保留 `severity = advisory` |
 | `BLOCKED`、`CONFIRMED_INSTALLATION_FAILURE`、`LIKELY_INSTALLATION_FAILURE` | `BLOCKED` + `rework_route` |
-| `ASK`、`INSUFFICIENT_EVIDENCE`、未解决的 `ONE-MORE-THING` 暂停 | `ASK` |
+| `ASK`、`INSUFFICIENT_EVIDENCE`、未解决的 `ONE-MORE-THING` 暂停 | `ASK`；当某个归属方能提供缺失证据时改用 `BLOCKED` |
 | `WATCHLIST` | `PASS` 且 `severity = advisory`；需要决策时用 `ASK` |
 | 动作型结论（`revise requirements`、`transfer to design`、`update design`、`add tests`、`abort story`、`fix implementation`、`revise skeleton`） | `REVISE` + 该归属命令作为 `rework_route` |
 | `pass` 且 `close requirement-only` | `PASS` + `next_command = SPEC_commitStoryWorks` |
 | `UT_reviewImplTestCase` 的建议 `keep` | `PASS`；其他建议为 `REVISE` + 对应归属命令 |
-| 诊断分类（如 `CONFIRMED_INSTALLATION_FAILURE`、`RISKY`） | 保留命令自身的诊断分类不变，并在旁补齐映射后的 `review_verdict`；分类解释原因，结论决定门禁。映射：`HEALTHY` -> `PASS`，`WATCHLIST` -> `PASS` 且 `severity = advisory`，`RISKY` -> `REVISE`，`BLOCKED` -> `BLOCKED`，`INSUFFICIENT_EVIDENCE` -> `ASK`，安装失败分类按各自定义映射为 `REVISE` 或 `BLOCKED` |
+| 诊断分类（如 `CONFIRMED_INSTALLATION_FAILURE`、`RISKY`） | 保留命令自身的诊断分类不变，并在旁补齐映射后的 `review_verdict`；分类解释原因，结论决定门禁。映射：`HEALTHY` -> `PASS`，`WATCHLIST` -> `PASS` 且 `severity = advisory`，`RISKY` -> `REVISE`，`BLOCKED` -> `BLOCKED`，`INSUFFICIENT_EVIDENCE` -> `ASK`（若某个归属方能提供缺失证据则改用 `BLOCKED`），安装失败分类按各自定义映射为 `REVISE` 或 `BLOCKED` |
 
 ## GitHub Spec Kit 的改进
 

@@ -132,4 +132,24 @@ assert_contains "$FLOW_DOC_ZH" '并非每个制品都有专属门禁，因此流
 assert_contains "$FLOW_DOC_ZH" '`P3 Addons / Demo-Example` 按设计意图不设设计与评审门禁'
 assert_contains "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md" 'no design or review gate of its own'
 
+# 10. The canonical verdict definitions live in UbiLang, and the flow points at them.
+UBILANG="$REPO_ROOT/README_UbiLang.md"
+UBILANG_ZH="$REPO_ROOT/README_UbiLang_ZH.md"
+for glossary in "$UBILANG" "$UBILANG_ZH"; do
+  assert_contains "$glossary" 'review_verdict'
+  assert_contains "$glossary" 'PASS'
+  assert_contains "$glossary" 'REVISE'
+  assert_contains "$glossary" 'BLOCKED'
+  assert_contains "$glossary" 'ASK'
+done
+assert_contains "$UBILANG" 'PASS = proceed with the artifact as-is; REVISE = change the artifact first, then re-run the gate'
+assert_contains "$UBILANG" 'Distinct from the TC status marker `🚫 BLOCKED`'
+assert_contains "$UBILANG" 'the human-in-the-loop token and the same outcome `ONE-MORE-THING` produces'
+assert_contains "$UBILANG" 'the escalation is `SPEC_whatsWrong` rather than ASK'
+assert_contains "$UBILANG_ZH" 'PASS = 制品照原样继续；REVISE = 先修改制品，再重新跑门禁'
+assert_contains "$UBILANG_ZH" '注意与 TC 状态标记 `🚫 BLOCKED` 区分'
+assert_contains "$UBILANG_ZH" '应升级为 `SPEC_whatsWrong` 而非 ASK'
+assert_contains "$FLOW_DOC" 'Canonical definitions of `PASS`, `REVISE`, `BLOCKED`, and `ASK` live in [README_UbiLang.md](../../README_UbiLang.md)'
+assert_contains "$FLOW_DOC_ZH" '`PASS`、`REVISE`、`BLOCKED`、`ASK` 的规范定义见 [README_UbiLang_ZH.md](../../README_UbiLang_ZH.md)'
+
 echo "[review-class-consistency-test] PASSED: all review gates report PASS/REVISE/BLOCKED/ASK with the same invariants, and the older vocabularies map in the flow"
