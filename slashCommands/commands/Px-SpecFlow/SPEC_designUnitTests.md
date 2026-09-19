@@ -16,7 +16,7 @@ Repeat per category until the P0 Functional set is complete; the loop is priorit
 
 1. **Thought** — Read the active story and reviewed design. Decide the category routing: which ACs are normal success, valid boundary, invalid caller usage, and external/environment fault.
 2. **Action** — Draft or update the CaTDD US/AC/TC skeletons for that routing, including SUT, category labels, `@[SourceSPEC]`, `@[SourceUT]`, and template provenance per the Language Template Selection.
-3. **Observation** — Check the coverage invariants: every US has at least one AC, every AC has at least one TC, and every skeleton names its design source. A missing link returns to **Action**. A P1/P2 skeleton drafted without the design-source evidence required by the P1/P2 Promotion Gate returns to **Thought** and is dropped.
+3. **Observation** — Check the coverage invariants: every US has at least one AC, every AC has at least one TC, and every skeleton names its design source. Every designed skeleton traces to a `discovery_ledger` row in `README_DetailVerifyDesign.md` or records a QUESTION; a missing link returns to **Action**. A P1/P2 skeleton drafted without the design-source evidence required by the P1/P2 Promotion Gate returns to **Thought** and is dropped.
 4. **Stop** — Exit when the P0 Functional set `Typical + Edge + Misuse + Fault` is decided. Report `next_command = UT_reviewFuncTestsSkeleton`, then hand ready P0 slices to `SPEC_implUnitTests`.
 
 ### Worked Example
@@ -47,7 +47,7 @@ Expected result:
 - `perf_design`: optional project-root `README_PerfDesign.md` for real-time, latency, throughput, memory, CPU, power, or media quality constraints.
 - `compat_design`: optional project-root `README_CompatDesign.md` for supported versions, platforms, protocols, formats, toolchains, or integration boundaries.
 - `diagnosis_design`: optional project-root `README_DiagnosisDesign.md` for symptoms, logs, counters, traces, debug hooks, and root-cause evidence.
-- `verify_design`: optional project-root `README_VerifyDesign.md` to create or update, using `slashCommands/templates/README_VerifyDesignTemplate.md` when first created.
+- `verify_design`: optional project-root `README_DetailVerifyDesign.md` whose Behavior Inventory, `discovery_ledger`, and CaTDD category strategy this command inherits. `README_VerifyDesign.md` is only the routing index. A needed verification-design change routes to `SPEC_updateDetailDesign`.
 - `target_test_files`: test files to create or update.
 - `category_scope`: P0 Functional first; then P1 Design or P2 Quality only if the active story, accepted design, or risk surface requires it.
 - `existing_skeletons`: optional existing P0/P1/P2 skeleton files and their current TC status markers.
@@ -62,15 +62,16 @@ Expected result:
 - [../../flows/P1-DesignTestsFlow.md](../../flows/P1-DesignTestsFlow.md)
 - [../../flows/P2-QualityTestsFlow.md](../../flows/P2-QualityTestsFlow.md)
 - [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
 
 ## Output Contract
 
 - CaTDD US/AC/TC skeletons in committed test files, linked back to local gitignored active story context and project-root README SPEC docs.
 - Enforced minimum traceability cardinality: each US has >=1 AC, and each AC has >=1 TC.
 - Explicit SUT declaration in each designed test-file overview section.
-- Updated project-root verification design in `README_VerifyDesign.md` when test strategy or category coverage changes.
+- This command inherits the strategy from `README_DetailVerifyDesign.md`; it never creates or redefines verification design.
 - Error, resource, state, performance, compatibility, and diagnostic coverage linked to `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when those design surfaces exist.
-- First-time verification design should be based on `slashCommands/templates/README_VerifyDesignTemplate.md`.
+- A missing or stale `README_DetailVerifyDesign.md` is reported and routed to `SPEC_updateDetailDesign`; first-time creation happens in `SPEC_takeDetailDesign` from `slashCommands/templates/README_DetailVerifyDesignTemplate.md`.
 - Evidence that existing `UT_design*Skeleton` command contracts were inspected before drafting category skeletons.
 - Source-command provenance for each generated or redesigned category skeleton, including the orchestrating `SPEC_designUnitTests` command and the matching `UT_designXYZ` command when one exists.
 - Language-template provenance when a matching `methodPrompts/CaTDD_designAndImplTemplate.<language>` file exists for the target test file language or extension.

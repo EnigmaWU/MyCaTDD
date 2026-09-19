@@ -43,7 +43,7 @@ Expected result — two passes:
 - `readme_arch_design_zh`: optional matching `README_ArchDesign_ZH.md` mirror.
 - `readme_detail_design`: project-root or module-scoped `README_DetailDesign.md`.
 - `readme_detail_design_zh`: optional matching `README_DetailDesign_ZH.md` mirror.
-- `readme_spec_files`: optional related README SPEC docs such as `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_SecurityDesign.md`, or `README_VerifyDesign.md`.
+- `readme_spec_files`: optional related README SPEC docs such as `README_DetailVerifyDesign.md`, `README_ArchVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_SecurityDesign.md`, or `README_VerifyDesign.md`.
 - `projectContext_file`: current project context.
 
 ## Method References
@@ -75,7 +75,7 @@ Expected result — two passes:
 
 - `review_verdict`: one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`, with optional `severity: blocking | advisory` and a required `rework_route` whenever the verdict is not `PASS`.
 - Evidence for each finding, grounded in the active story, architecture design, detail design, project context, and mirror documents when present.
-- Checks for API signatures, class/module responsibilities, local state model, error/resource/performance/compatibility/diagnosis impacts, acceptance-criteria testability, and readiness for CaTDD US/AC/TC skeleton design.
+- Checks for API signatures, class/module responsibilities, local state model, error/resource/performance/compatibility/diagnosis impacts, acceptance-criteria testability, test-point discovery evidence (`discovery_ledger` + Discovery Gate), `TestLevel` routing and `SysTesting`/`UserTesting` promotion, and readiness for CaTDD US/AC/TC skeleton design.
 - If `PASS`: next recommended command is `SPEC_reviewUserStory` for final story/design readiness.
 - If `REVISE`: next recommended command is `SPEC_updateDetailDesign`.
 - If `ASK`: stop and ask the developer for the missing product, design, or review decision.
@@ -101,6 +101,9 @@ Expected result — two passes:
 - Public APIs, data schemas, and ownership rules are explicit enough to test.
 - State transitions, resource constraints, error behavior, and compatibility constraints are covered or intentionally deferred.
 - Acceptance criteria can be converted into CaTDD US/AC/TC skeletons.
+- `README_DetailVerifyDesign.md` exists for the reviewed scope and carries a Behavior Inventory, `discovery_ledger` with dispositions, and a Discovery Gate report; a missing or stale one is a blocking finding.
+- Every ledger row carries a canonical `TestLevel` (`UnitTesting`/`SysTesting`/`UserTesting`), `ModuleTesting` appears only as a module-scope qualifier, and every `SysTesting`/`UserTesting` row names its promotion into `README_ArchVerifyDesign.md` under the same TP ID.
+- Verification constraints state WHAT must be proven and WHY before test mechanics, and design content is not duplicated from `README_ArchVerifyDesign.md`.
 - The detailed design does not contradict approved architecture boundaries.
 - EN/ZH detail-design mirrors have matching heading structure when both are present.
 

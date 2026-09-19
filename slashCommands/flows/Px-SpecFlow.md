@@ -218,7 +218,8 @@ These document module-context architecture plus consuming-system context, along 
 | `README_CompatDesign.md` | Compatibility boundaries, platform matrices, toolchains, and protocol versions. |
 | `README_DiagnosisDesign.md` | Observability architecture, logging levels, telemetry, and symptom trace maps. |
 | `README_SecurityDesign.md` | Security architecture, threat models, constitutional invariants (K), trust boundaries, and credential protection. |
-| `README_VerifyDesign.md` | Verification and testing topologies, mocking boundaries, and CI test loops. |
+| `README_ArchVerifyDesign.md` | Verification topology, level-and-boundary map, target runtime environment, peer/dependency doubles, and evidence/equipment ownership for `SysTesting` and `UserTesting`. |
+| `README_VerifyDesign.md` | Routing index for the architecture-level and detail-level verification designs, plus the dynamic status companion; retired once inbound links migrate. |
 
 ### 2. DetailDesign-Oriented (Managed by `SPEC_takeDetailDesign`)
 
@@ -228,6 +229,9 @@ These document local implementation details, code tactics, and class/API behavio
 | --- | --- |
 | `README_DetailDesign.md` | Detailed class design, API signatures, and data structures for the story. |
 | `README_StateDesign.md` | Local state machines, lifecycle transitions, lock synchronization, and thread concurrency. |
+| `README_DetailVerifyDesign.md` | Behavior inventory, test-point discovery and `discovery_ledger`, CaTDD category x quadrant coverage, submodule strategy, and fixtures/oracles for `UnitTesting`. |
+
+Verification-design placement: `README_DetailVerifyDesign.md` owns the behavior inventory, test-point discovery, row-level CaTDD category x Agile quadrant coverage, submodule strategy, and category files. `README_ArchVerifyDesign.md` owns the level-and-boundary map, runtime environment matrix, double credibility, system-scope quality scenarios, and the quadrant balance across levels and evidence. A cell naming a category file belongs to detail design; a cell naming a level, environment, operator, or equipment belongs to architecture design. `README_VerifyStatusTraces.md` is the optional dynamic companion for live status; story TASKs or test-file comments are valid alternatives.
 
 ### 3. General & Requirements (Created by DEVELOPER first, later updated by `SPEC_updateUserStory` and `SPEC_reviewUserStory`)
 

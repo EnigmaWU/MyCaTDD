@@ -8,14 +8,14 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This command must inspect the architecture-changing active user story, requirements (e.g. `README_UserStory.md` / `doingUS/`), and project context, reason about the structural decomposition and adapter boundaries, draft or update the project-root `README_ArchDesign.md`, and verify that component structures are traceable to requirements and fit the project guidelines before finalizing. Include Mermaid-renderable C4-style architecture views (system context, container, component, runtime execution, and deployment) or explicitly mark a view as not applicable. Also declare how Px-SpecFlow architecture-oriented surfaces (`README_UsageDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_VerifyDesign.md`, and relevant state design sources) are covered, delegated, deferred, or not applicable. When the architecture document already contains earlier architectural work, update its traceability to distinguish baseline architecture stories from the current architecture-changing update story instead of replacing everything with the newest opened story. For embedded software or digital video/audio domain work, add hardware boundaries, RTOS task structures, media pipelines, and synchronization boundaries to the architecture design.
+**ReACT** — Reasoning + Acting. This command must inspect the architecture-changing active user story, requirements (e.g. `README_UserStory.md` / `doingUS/`), and project context, reason about the structural decomposition and adapter boundaries, draft or update the project-root `README_ArchDesign.md`, and verify that component structures are traceable to requirements and fit the project guidelines before finalizing. Include Mermaid-renderable C4-style architecture views (system context, container, component, runtime execution, and deployment) or explicitly mark a view as not applicable. Also declare how Px-SpecFlow architecture-oriented surfaces (`README_UsageDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and relevant state design sources) are covered, delegated, deferred, or not applicable. When the architecture document already contains earlier architectural work, update its traceability to distinguish baseline architecture stories from the current architecture-changing update story instead of replacing everything with the newest opened story. For embedded software or digital video/audio domain work, add hardware boundaries, RTOS task structures, media pipelines, and synchronization boundaries to the architecture design.
 
 ### ReACT Execution
 
 Repeat until every architecture view and SPEC surface is either covered or explicitly marked not applicable.
 
 1. **Thought** — Read `doing_user_story`, `projectContext_file`, and any existing `README_ArchDesign.md`. Identify which structural decisions the story actually forces, and which existing architecture it merely consumes.
-2. **Action** — Draft or update `README_ArchDesign.md` from `README_ArchDesignTemplate.md`: module context, consuming-system context, C4-style views, SPEC surface coverage, and Key Decisions. Apply the Skill Integration Policy, falling back to the Builtin Skill Checklist when skills are unavailable.
+2. **Action** — Draft or update `README_ArchDesign.md` from `README_ArchDesignTemplate.md`: module context, consuming-system context, C4-style views, SPEC surface coverage, and Key Decisions. When the story changes verification topology, the level-and-boundary map, the target runtime environment, peer/dependency doubles, or evidence and equipment ownership, create or update `README_ArchVerifyDesign.md` from `README_ArchVerifyDesignTemplate.md` and promote the affected `SysTesting`/`UserTesting` TP IDs from `README_DetailVerifyDesign.md`; if that detail design does not exist yet, record a QUESTION instead of inventing obligations. Apply the Skill Integration Policy, falling back to the Builtin Skill Checklist when skills are unavailable.
 3. **Observation** — Check the draft:
    - A view is missing and not marked not-applicable → back to **Action**.
    - A component traces to no requirement, or a requirement reaches no component → back to **Thought**.
@@ -51,6 +51,9 @@ Expected result — two passes:
 - `projectContext_file`: current project context.
 - `readme_arch_design`: project-root `README_ArchDesign.md` to create or update.
 - `readme_arch_template`: matching template under `slashCommands/templates/README_ArchDesignTemplate.md`.
+- `arch_verify_design`: optional project-root `README_ArchVerifyDesign.md` to create or update when the story changes verification topology, the level-and-boundary map, target runtime environments, peer/dependency doubles, or evidence/equipment ownership.
+- `arch_verify_template`: matching template under `slashCommands/templates/README_ArchVerifyDesignTemplate.md`.
+- `detail_verify_design`: optional project-root `README_DetailVerifyDesign.md` that supplies promoted `SysTesting`/`UserTesting` TP IDs.
 
 ## Method References
 
@@ -85,6 +88,7 @@ Expected result — two passes:
 - Explicit consuming-system context section: upstream/downstream systems, integration responsibilities, and trust/failure boundaries.
 - Architecture views, at minimum Mermaid-renderable C4-style system context, container, component, runtime execution, and deployment views, unless a view is explicitly not applicable.
 - Architecture-oriented SPEC surface coverage, declaring whether usage, error, resource, performance, compatibility, diagnosis, verification, and state concerns are covered here, delegated, deferred, or not applicable.
+- `README_ArchVerifyDesign.md` when verification topology changes, carrying the level-and-boundary map, target runtime environment matrix, peer/dependency double credibility, promoted TP IDs, and evidence/equipment ownership.
 - Created `README_ArchDesign.md` must be based on the `slashCommands/templates/README_ArchDesignTemplate.md` template.
 - Integration alignment between components and interfaces, establishing adapter boundaries for IDEs/agents.
 - Explicit technical trade-offs and rationale recorded under Key Decisions.

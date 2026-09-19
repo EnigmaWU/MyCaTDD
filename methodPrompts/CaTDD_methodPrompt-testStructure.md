@@ -23,6 +23,20 @@ Every class/category skeleton should preserve this minimum shape.
 //=================================================================================================
 ```
 
+### Test Level and Verification Design Ownership
+
+`@[TestLevel]` declares where a test point is executed. Use exactly one canonical token:
+
+| `@[TestLevel]` | Means | Verification design stage that owns the strategy |
+| --- | --- | --- |
+| `UnitTesting` | One declared SUT inside its own boundary under the project's `sut_unit_convention`. | The detail-level verification design owns the behavior inventory, `discovery_ledger`, and CaTDD category design. |
+| `SysTesting` | The declared SUT assembled with its real peers, dependencies, and runtime environment. | The architecture-level verification design owns topology, environment matrix, double credibility, and evidence ownership. The TP row stays in the detail ledger and is promoted by ID. |
+| `UserTesting` | Full-flow end-to-end verification of the deployed composition, including documented demo/example flows. | The architecture-level verification design; it is not CaTDD category testing. |
+
+`ModuleTesting` is a superseded level name. It survives only as a detail-level scope qualifier meaning module-level Package/Service/Interface scope, as in "the module scope of `UnitTesting`". Route a module-scope test by peer reality: real peers or target runtime -> `SysTesting` (architecture level); fakes or stubs inside the module boundary -> `UnitTesting` (detail level).
+
+This layer names design stages, not workflow artifacts. The mapping from these stages to project documents is owned by the workflow layer.
+
 ## Coverage Matrix
 
 Use coverage matrices to make hidden combinations visible before writing test code.

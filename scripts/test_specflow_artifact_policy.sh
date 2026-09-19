@@ -39,6 +39,8 @@ grep -Fq '`README_PerfDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs mu
 grep -Fq '`README_CompatDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include compatibility design README"
 grep -Fq '`README_DiagnosisDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include diagnosis design README"
 grep -Fq '`README_VerifyDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include verify design README"
+grep -Fq '`README_ArchVerifyDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include architecture-level verify design README"
+grep -Fq '`README_DetailVerifyDesign.md`' "$FLOW_DOC" || fail "project-root SPEC docs must include detail-level verify design README"
 grep -Fq 'embedded software and digital video/audio domain work' "$FLOW_DOC" || fail "Px-SpecFlow missing embedded and digital video/audio domain guidance"
 
 grep -Fq 'team-shared persistent artifact' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_initProjectContext.md" || fail "SPEC_initProjectContext must mark projectContext as team-shared persistent output"
@@ -46,7 +48,29 @@ grep -Fq 'team-shared active work file' "$REPO_ROOT/slashCommands/commands/Px-Sp
 grep -Fq 'team-shared aborted story artifact' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_abortUserStory.md" || fail "SPEC_abortUserStory must mark abortUS as team-shared aborted output"
 grep -Fq 'team-shared completed story artifact' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md" || fail "SPEC_closeUserStory must mark doneUS as team-shared completed output"
 grep -Fq 'Project-root README SPEC docs as needed' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeDetailDesign.md" || fail "SPEC_takeDetailDesign must create or update project-root README SPEC docs as needed"
-grep -Fq 'Updated project-root verification design in `README_VerifyDesign.md`' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md" || fail "SPEC_designUnitTests must update project-root verification design when coverage changes"
+grep -Fq 'inherits the strategy from `README_DetailVerifyDesign.md`' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md" || fail "SPEC_designUnitTests must inherit the detail verification design instead of redefining it"
+
+# Verification-design ownership contract: each half has exactly one owning command pair.
+TAKE_ARCH_DESIGN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeArchDesign.md"
+UPDATE_ARCH_DESIGN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_updateArchDesign.md"
+TAKE_DETAIL_DESIGN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeDetailDesign.md"
+UPDATE_DETAIL_DESIGN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_updateDetailDesign.md"
+ARCH_VERIFY_TEMPLATE="$REPO_ROOT/slashCommands/templates/README_ArchVerifyDesignTemplate.md"
+DETAIL_VERIFY_TEMPLATE="$REPO_ROOT/slashCommands/templates/README_DetailVerifyDesignTemplate.md"
+
+grep -Fq '`README_ArchVerifyDesign.md`' "$TAKE_ARCH_DESIGN" || fail "SPEC_takeArchDesign must own README_ArchVerifyDesign.md creation"
+grep -Fq '`README_ArchVerifyDesignTemplate.md`' "$TAKE_ARCH_DESIGN" || fail "SPEC_takeArchDesign must seed README_ArchVerifyDesign.md from its template"
+grep -Fq '`README_ArchVerifyDesign.md`' "$UPDATE_ARCH_DESIGN" || fail "SPEC_updateArchDesign must revise README_ArchVerifyDesign.md"
+grep -Fq '`README_DetailVerifyDesign.md`' "$TAKE_DETAIL_DESIGN" || fail "SPEC_takeDetailDesign must own README_DetailVerifyDesign.md creation"
+grep -Fq '`README_DetailVerifyDesignTemplate.md`' "$TAKE_DETAIL_DESIGN" || fail "SPEC_takeDetailDesign must seed README_DetailVerifyDesign.md from its template"
+grep -Fq '`README_DetailVerifyDesign.md`' "$UPDATE_DETAIL_DESIGN" || fail "SPEC_updateDetailDesign must revise README_DetailVerifyDesign.md"
+grep -Fq 'README_DetailVerifyDesign.md` exists for the reviewed scope' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewDetailDesign.md" || fail "SPEC_reviewDetailDesign must gate the detail verification design"
+
+# Quadrant placement: row coverage in detail design, balance across levels/evidence in architecture design.
+grep -Fq '## CaTDD x Agile Testing Quadrants Coverage' "$DETAIL_VERIFY_TEMPLATE" || fail "detail verification template must carry row-level category x quadrant coverage"
+grep -Fq '## Quadrant Balance and Evidence Ownership' "$ARCH_VERIFY_TEMPLATE" || fail "architecture verification template must carry quadrant balance across levels and evidence"
+grep -Fq 'Quadrant Balance and Evidence Ownership' "$FLOW_DOC" || grep -Fq 'quadrant balance across levels and evidence' "$FLOW_DOC" || fail "Px-SpecFlow must state the quadrant placement rule"
+grep -Fq 'README_VerifyStatusTraces.md` is the optional dynamic companion' "$FLOW_DOC" || fail "Px-SpecFlow must declare the dynamic status companion as optional"
 grep -Fq '.catdd/spec/analyzedNews/' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_analyzeIssue.md" || fail "SPEC_analyzeIssue must archive analyzed raw input"
 grep -Fq '.catdd/spec/analyzedNews/' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_analyzeFeature.md" || fail "SPEC_analyzeFeature must archive analyzed raw input"
 
@@ -105,7 +129,7 @@ grep -Fq '# END CaTDD SpecCoding local state' "$TARGET_GITIGNORE" || fail "targe
 
 instructions="$TARGET_DIR/.github/instructions/catdd.instructions.md"
 grep -Fq 'Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.' "$instructions" || fail "instructions missing commit guidance for shared SpecCoding artifacts"
-grep -Fq 'Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_VerifyDesign.md` as needed.' "$instructions" || fail "instructions missing project-root README SPEC docs guidance"
+grep -Fq 'Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.' "$instructions" || fail "instructions missing project-root README SPEC docs guidance"
 grep -Fq 'Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.' "$instructions" || fail "instructions missing gitignore guidance for local SpecCoding state"
 
 echo "[specflow-artifact-policy-test] PASSED: SpecFlow artifact persistence policy is documented and installed"

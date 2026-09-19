@@ -77,7 +77,7 @@ The boundary treated as one **Unit** for CaTDD unit tests in this project:
 | `utCodeAgentCLI` public argument and behavior contract | [README_UsageDesign](../../codeAgents/utCodeAgentCLI/README_UsageDesign.md) | Read before changing CLI inputs, aliases, diagnostics, or invocation behavior. |
 | `utCodeAgentCLI` subproject constraints and routing | [projectContext-utCodeAgentCLI.md](projectContext-utCodeAgentCLI.md) | Read before planning or changing the subproject. |
 | `utCodeAgentCLI` architecture, implementation constraints, runtime decisions, and rationale | [README_ArchDesign](../../codeAgents/utCodeAgentCLI/README_ArchDesign.md) and [ADRs](../../codeAgents/utCodeAgentCLI/ADRs/) | This is the sole module design route; executable detail remains in source/tests. |
-| Verification strategy and traceability | [README_VerifyDesign.md](../../README_VerifyDesign.md) and module `README_VerifyDesign.md` files | Read the project or module scope relevant to the active story. |
+| Verification design and traceability | [README_VerifyDesign.md](../../README_VerifyDesign.md) routing index; `README_ArchVerifyDesign.md` for `SysTesting`/`UserTesting` and `README_DetailVerifyDesign.md` for `UnitTesting` once the templates instantiate them; module `README_*VerifyDesign.md` files | Read the project or module scope relevant to the active story. Live status belongs in `README_VerifyStatusTraces.md` when the project keeps one, otherwise in story TASKs or test-file comments. |
 
 ## Validation Commands
 

@@ -90,7 +90,7 @@ test_command_execution_qualitySecurity.cxx
 test_command_execution_qualityConfiguration.ts
 ```
 
-The same token rule applies across languages and test levels. A SystemTesting file and a UserTesting file for the same feature use the same `{feature}_{category}` tail and differ only by `@[TestLevel]`.
+The same token rule applies across languages and test levels. A `SysTesting` file and a `UserTesting` file for the same feature use the same `{feature}_{category}` tail and differ only by `@[TestLevel]`.
 
 ## Related
 

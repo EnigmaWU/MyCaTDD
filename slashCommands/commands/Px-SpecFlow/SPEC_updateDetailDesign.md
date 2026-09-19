@@ -13,7 +13,7 @@ Revise detailed design and acceptance criteria after story review, implementatio
 Repeat within `max_rework_attempts`; each pass must show changed evidence.
 
 1. **Thought** — For each item in `review_feedback`, decide whether it is a design defect (fix here) or a new requirement (route out, do not absorb).
-2. **Action** — Apply the smallest design change that resolves the defect, updating only the README SPEC docs the finding actually touches.
+2. **Action** — Apply the smallest design change that resolves the defect, updating only the README SPEC docs the finding actually touches. When the finding changes test points, category coverage, submodule seams, fixtures, oracles, or `TestLevel` routing, revise `README_DetailVerifyDesign.md` and keep its `discovery_ledger` and Discovery Gate report consistent; when it changes `SysTesting`/`UserTesting` strategy, update the promotion entry and route the change to `README_ArchVerifyDesign.md` instead of restating it here.
 3. **Observation** — Check the review-feedback checklist: every finding marked addressed, deferred, or still open, and every changed AC still convertible to a CaTDD skeleton. A masked failure or a widened scope returns to **Thought**.
 4. **Stop** — Exit when the checklist is complete. Report `next_command = SPEC_reviewDetailDesign`; this gate is never bypassed.
 
@@ -41,7 +41,7 @@ Expected result:
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `detail_design`: project-root README detail design file or active story design section to update.
-- `readme_spec_files`: optional project-root `README*` SPEC files to create or update using matching `slashCommands/templates/README_*Template.md` files when first created, including `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when feedback changes error, resource, state, performance, compatibility, or diagnosis design.
+- `readme_spec_files`: optional project-root `README*` SPEC files to create or update using matching `slashCommands/templates/README_*Template.md` files when first created, including `README_DetailVerifyDesign.md`, `README_ArchVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when feedback changes verification, error, resource, state, performance, compatibility, or diagnosis design. `README_DetailVerifyDesign.md` is the detail-owned verification design; `README_ArchVerifyDesign.md` is architecture-owned and is only referenced by TP ID here; `README_VerifyDesign.md` is the routing index.
 - `review_feedback`: findings from story, code, test, or CI review.
 - `max_rework_attempts`: optional maximum number of detail-design rework attempts in the `SPEC_updateDetailDesign -> SPEC_reviewDetailDesign` cycle. Default: `3`.
 
@@ -53,7 +53,7 @@ Expected result:
 ## Output Contract
 
 - Updated design and acceptance criteria in team-shared `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
-- Updated `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, or `README_VerifyDesign.md` when the feedback changes module, error, resource, state, performance, compatibility, diagnosis, or verification design.
+- Updated `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, or `README_VerifyDesign.md` when the feedback changes module, error, resource, state, performance, compatibility, diagnosis, or verification design.
 - Review-feedback checklist showing what was addressed.
 - Remaining risks and next recommended command.
 - Next recommended command after any update is `SPEC_reviewDetailDesign` so updated design is always re-gated before downstream steps.

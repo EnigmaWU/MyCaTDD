@@ -15,7 +15,7 @@ This file is the team-shared, durable subproject context for `codeAgents/utCodeA
 - Standalone `README_DetailDesign.md`, `README_DetailDesign_ZH.md`, and project-root DetailDesign files created for `utCodeAgentCLI` are forbidden.
 - Durable design decisions belong in `codeAgents/utCodeAgentCLI/ADRs/` and must be reflected in ArchDesign.
 - User-observable requirements belong in UserStory, UserGuide, and UsageDesign documents.
-- Verification strategy and US/AC/TC traceability belong in `README_VerifyDesign.md` and executable tests.
+- Verification strategy and US/AC/TC traceability belong in the module verification design (`README_ArchVerifyDesign.md` for `SysTesting`/`UserTesting`; detail-level test points may live in `README_DetailVerifyDesign.md` or in the test-file overview comments) and in executable tests. `ADR_ArchitectureOnlyDesignPolicy` still bans standalone DetailDesign artifacts for this module; verification artifacts are not DetailDesign.
 - Exact executable behavior belongs in `src/` and is proved by `tests/`; ArchDesign owns module boundaries, responsibilities, dependency direction, state/control policy, and quality tradeoffs.
 
 Decision source: `codeAgents/utCodeAgentCLI/ADRs/ADR_ArchitectureOnlyDesignPolicy.md`.
@@ -36,7 +36,7 @@ Decision source: `codeAgents/utCodeAgentCLI/ADRs/ADR_ArchitectureOnlyDesignPolic
 | Product requirements | `codeAgents/utCodeAgentCLI/README_UserStory.md` and `USs/` |
 | Public CLI contract | `codeAgents/utCodeAgentCLI/README_UsageDesign.md` |
 | Operational guidance | `codeAgents/utCodeAgentCLI/README_UserGuide.md` |
-| Verification and traceability | `codeAgents/utCodeAgentCLI/README_VerifyDesign.md` and `tests/` |
+| Verification and traceability | module `README_VerifyDesign.md` (routing index or detail design), module `README_ArchVerifyDesign.md`, and `tests/` |
 | Executable implementation | `codeAgents/utCodeAgentCLI/SrcTS/` |
 | Method semantics | `methodPrompts/` |
 | Portable commands | `slashCommands/` |

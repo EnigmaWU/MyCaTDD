@@ -217,7 +217,8 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 | `README_CompatDesign.md` | 兼容性边界、平台矩阵、工具链和协议版本。 |
 | `README_DiagnosisDesign.md` | 可观测性架构、日志级别、遥测和症状跟踪图。 |
 | `README_SecurityDesign.md` | 安全架构、威胁模型、宪法约束（K）、信任边界与凭据保护。 |
-| `README_VerifyDesign.md` | 验证和测试拓扑、模拟边界和 CI 测试循环。 |
+| `README_ArchVerifyDesign.md` | `SysTesting` 与 `UserTesting` 的验证拓扑、层级与边界图、目标运行时环境、同级组件/依赖替身，以及证据与设备归属。 |
+| `README_VerifyDesign.md` | 架构层与详细层验证设计（含动态状态伴随文档）的路由索引；inbound 链接迁移完成后退役。 |
 
 ### 2. 详细设计导向（由 `SPEC_takeDetailDesign` 管理）
 
@@ -227,6 +228,9 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 | --- | --- |
 | `README_DetailDesign.md` | 故事的详细类设计、API 签名和数据结构。 |
 | `README_StateDesign.md` | 本地状态机、生命周期转换、锁同步和线程并发。 |
+| `README_DetailVerifyDesign.md` | `UnitTesting` 的行为清单、测试点发掘与 `discovery_ledger`、CaTDD 分类 x 象限覆盖、子模块策略以及夹具/预期设计。 |
+
+验证设计归属：`README_DetailVerifyDesign.md` 拥有行为清单、测试点发掘、行级的 CaTDD 分类 x 敏捷象限覆盖、子模块策略与分类文件；`README_ArchVerifyDesign.md` 拥有层级与边界图、运行时环境矩阵、替身可信度、系统级质量场景，以及跨层级与证据的象限平衡。单元格提到分类文件则归详细层设计，提到层级、环境、操作者或设备则归架构层设计。`README_VerifyStatusTraces.md` 是可选的动态状态伴随文档；story TASKs 或测试文件注释同样是有效选项。
 
 ### 3. 通用与需求（由开发者首先创建，之后由 `SPEC_updateUserStory` 和 `SPEC_reviewUserStory` 更新）
 

@@ -36,6 +36,11 @@ This is the shared glossary for CaTDD execution environments.
 | Source-First | Review and discovery discipline that inspects authoritative source artifacts (contracts, design models, quality policies) and independently derives expected obligations before reading existing skeletons or test code, preventing author blind spots. |
 | TestEvidenceChain | The unbroken evidentiary chain answering WHY we need a test and HOW to test correctly: from source artifact -> rule/invariant -> Test Point (TP) -> observable oracle -> CaTDD category (WHY) -> US/AC/TC -> Test Case (TC) -> RED/GREEN implementation (HOW). |
 | SUT | System Under Test: The explicitly declared software boundary under verification (e.g. `SUT: utCodeAgentCLI`, `SUT: PaymentGatewayInterface`). It establishes the strict dividing line between caller behavior (`P0 Misuse` on caller contract violation) and external dependencies/runtime (`P0 Fault` on dependency failure). |
+| TestLevel | The declared scope at which a test point is executed: exactly one of `UnitTesting`, `SysTesting`, or `UserTesting`. Declared inside the test file with `@[TestLevel]` and never encoded in the filename. It answers how much of the system is assembled for this verification, not which design document owns the strategy. |
+| UnitTesting | A `TestLevel`: verification of one declared SUT inside its own boundary under the project's `sut_unit_convention` (submodule, class, header file, function, or component). CaTDD categories and the Discovery Gate apply. Its strategy is designed in `README_DetailVerifyDesign.md`. |
+| SysTesting | A `TestLevel`: verification of the declared SUT assembled with its real peers, dependencies, and runtime environment. CaTDD categories and the Discovery Gate apply; the peer boundary, environment matrix, and double credibility belong to `README_ArchVerifyDesign.md`. Supersedes the legacy level name `ModuleTesting`. |
+| UserTesting | A `TestLevel`: full-flow end-to-end verification of the deployed composition, including documented demo/example flows. It is not CaTDD category testing: it consumes US/AC expectations and category-covered behavior instead of defining category skeletons. Its strategy is designed in `README_ArchVerifyDesign.md`. |
+| ModuleTesting | Superseded `TestLevel` name, retained only as a detail-level scope qualifier meaning module-level Package/Service/Interface scope, as in "the module scope of `UnitTesting`". It is never a fourth level beside `UnitTesting`/`SysTesting`/`UserTesting`. Route a module-scope test by peer reality: real peers or target runtime -> `SysTesting` (architecture level); fakes or stubs inside the module boundary -> `UnitTesting` (detail level). |
 | UT | Unit Testing: Verification focused on a single declared SUT adhering to the project's agreed `sut_unit_convention` (e.g. `module-interface`, `submodule-interface`, `class`, `header-file`, `function`, or `component`). Verifies public contracts, internal design models, and quality properties via CaTDD before implementation. |
 | TP | Test Point: A discovered verification obligation or condition (the target). Represents WHAT must be verified from the DEVELOPER / DEFENSIVE perspective (partitions, boundaries, failure phases, interleavings), extracted from sources during Stage-0/Stage-1 discovery and tracked in `discovery_ledger`. Described via concrete `GIVEN technical state/partition, WHEN action/interleaving, THEN observable oracle`. |
 | TC | Test Case: An executable verification specification artifact (the arrow). Represents HOW to verify an obligation, structured with `@[Name]`, `@[Expect]`, and four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`) linked to `[@AC-n, US-n]`. |
@@ -73,6 +78,20 @@ This is the shared glossary for CaTDD execution environments.
 | `slashCommands/` | Portable command/flow wrappers over method semantics. |
 | `codeAgents/` | Goal-driven orchestration and execution policy. |
 | `agentSkills/` | Packaged skills for non-native code agents. |
+
+### Verification Design Vocabulary
+
+| Artifact | Owner commands | Level ownership | Owns |
+| --- | --- | --- | --- |
+| `README_ArchVerifyDesign.md` | create/update `SPEC_takeArchDesign`; revise `SPEC_updateArchDesign`; gate `SPEC_reviewArchDesign` | `SysTesting`, `UserTesting` | Verification topology, the level-and-boundary map (which levels exist for this SUT and what each does not prove), target-runtime environment matrix, peer/dependency double credibility, evidence and equipment ownership, and system-scope quality scenarios. |
+| `README_DetailVerifyDesign.md` | create/update `SPEC_takeDetailDesign`; revise `SPEC_updateDetailDesign`; gate `SPEC_reviewDetailDesign` | `UnitTesting`, with `ModuleTesting` as a scope qualifier | Behavior inventory, test-point discovery (`discovery_ledger`, P0-P3 sweeps, Discovery Gate report), CaTDD category x Agile quadrant coverage, submodule strategy, fixture and oracle design, and the promotion table for `SysTesting`/`UserTesting` obligations. |
+
+Rules:
+
+- One behavior inventory and one `discovery_ledger` exist for a feature, owned by the detail design; every row carries its `Category and test level`.
+- Test-point promotion moves an obligation from detail to architecture design when its `TestLevel` is `SysTesting` or `UserTesting`. The TP ID is preserved; the architecture design references the obligation and never restates category design.
+- `README_VerifyStatusTraces.md` remains the dynamic companion holding live status and evidence for both designs.
+- `SPEC_designUnitTests` inherits the strategy from `README_DetailVerifyDesign.md`; it does not redefine verification design.
 
 ### Conceptual Diagrams and Examples
 
@@ -191,7 +210,7 @@ A shared ubiquitous language keeps generated prompts, command flows, review outp
 Check vocabulary consistency before release:
 
 ```bash
-rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING" README*.md methodPrompts slashCommands codeAgents agentSkills
+rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|TestLevel|UnitTesting|SysTesting|UserTesting|ArchVerifyDesign|DetailVerifyDesign|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING" README*.md methodPrompts slashCommands codeAgents agentSkills
 ```
 
 Expected result: terms are used with the same meanings as defined in this file.

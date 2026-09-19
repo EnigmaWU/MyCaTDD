@@ -257,7 +257,7 @@ Cardinality between TP and TC is not strictly 1:1:
 | Scenario | Concrete inputs, state, relevant environment/dependencies, and action. |
 | Oracle | Expected observable result and important promised side effects/non-effects; write unknown if unresolved. |
 | Verification method | Automated, manual, or hybrid procedure; execution environment and evidence capture. |
-| Category and test level | Owning verification lens and intended verification boundary; provisional when unresolved. |
+| Category and test level | Owning verification lens, intended verification boundary, and one canonical level token: `UnitTesting`, `SysTesting`, or `UserTesting`; provisional when unresolved. `ModuleTesting` is not a level; keep it only as a module-scope qualifier. |
 | Scope and routing | In-scope or out-of-scope relative to this review; destination artifact/work item and owner when handing off. Unresolved scope must be a QUESTION. |
 | Disposition and evidence | One disposition below, with actual links, rationale, question, or destination. |
 
@@ -268,6 +268,8 @@ Cardinality between TP and TC is not strictly 1:1:
 | EXCLUDED | Source-backed not-applicable condition or explicit developer-approved scope exclusion, with rationale and approval reference. Difficulty or low execution priority is not an exclusion. |
 | REFERRED | An accepted out-of-scope handoff with its scope boundary, reason, concrete destination artifact/work item, and responsible owner. A pending ownership decision is QUESTION. Referral is not designed or verified coverage in this scope. |
 | GAP | A known in-scope source-backed point has no adequate TC. Name what must be designed; a weak oracle or a dangling TC link is also a gap. |
+
+Level routing is independent of both category routing and disposition: it decides which verification design stage owns the strategy, not whether the row exists. `UnitTesting` rows are designed in the detail-level verification design. `SysTesting` and `UserTesting` rows are promoted to the architecture-level verification design through the detail design's promotion table under the **same TP ID**, so the obligation is never duplicated and the architecture design never restates category design.
 
 Routing is independent of disposition. An in-scope point awaiting a TC at another test level stays GAP (or QUESTION if its source/oracle/ownership is unresolved), with the destination recorded separately. Once that design is linked and adequate, it is DESIGNED. Use REFERRED only for an accepted handoff outside the declared scope; never duplicate a TP ID merely to record its destination.
 
@@ -301,6 +303,7 @@ Scope/SUT, in-scope classes, domain profile(s), and source references: ...
 Inventory and discovery_ledger location: ...
 Verification methods / execution environments / evidence capture: ...
 Dimensions considered / sampling limits: ...
+Verification design routing: detail design (UnitTesting TP IDs) / promoted to architecture design (SysTesting, UserTesting TP IDs)
 Review provenance and source-derived checklist: ...
 Disposition counts: DESIGNED / QUESTION / EXCLUDED / REFERRED / GAP
 Cardinality gate: PASS | FAIL

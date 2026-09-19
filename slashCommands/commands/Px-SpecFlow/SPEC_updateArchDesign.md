@@ -13,7 +13,7 @@ Revise high-level architecture design after architecture review feedback, story-
 Repeat within `max_rework_attempts`; each pass must show changed evidence.
 
 1. **Thought** — Read each item in `review_feedback` and decide whether it is an architecture defect (fix here) or new product intent (route out, do not absorb).
-2. **Action** — Apply the smallest architecture change that resolves the defect. Update affected views, module/consuming-system context, and tradeoff notes.
+2. **Action** — Apply the smallest architecture change that resolves the defect. Update affected views, module/consuming-system context, and tradeoff notes, and revise `README_ArchVerifyDesign.md` when the finding changes verification topology, the level-and-boundary map, target runtime environments, doubles, or evidence ownership.
 3. **Observation** — Check the feedback checklist: every finding must be marked addressed, deferred, or still open. A finding silently dropped, or a fix that widens scope beyond the story, returns to **Thought**.
 4. **Stop** — Exit when the checklist is complete. Report `next_command = SPEC_reviewArchDesign`; this gate is never bypassed.
 
@@ -41,6 +41,7 @@ Expected result:
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `arch_design`: project-root `README_ArchDesign.md` (and optional mirror) to update.
+- `arch_verify_design`: optional project-root `README_ArchVerifyDesign.md` to revise when the finding changes verification topology, the level-and-boundary map, target runtime environments, doubles, or evidence/equipment ownership.
 - `projectContext_file`: current project context.
 - `review_feedback`: findings from architecture review or upstream story-quality feedback.
 - `reference_docs`: optional related architecture notes, ADRs, usage/error/resource/state/perf/compat/diagnosis docs affected by the architecture revision.
@@ -54,6 +55,7 @@ Expected result:
 ## Output Contract
 
 - Updated architecture design in `README_ArchDesign.md` (and optional mirror when present).
+- Updated `README_ArchVerifyDesign.md` when the revision changes verification topology, environments, doubles, promoted TP IDs, or evidence ownership; first-time creation uses `slashCommands/templates/README_ArchVerifyDesignTemplate.md`.
 - Updated architecture decisions, boundaries, dependencies, and tradeoff notes tied to the review feedback.
 - Updated module-context and consuming-system context sections when the revision affects module responsibilities, interfaces, or integration boundaries.
 - Architecture-feedback checklist showing what was addressed, deferred, or still open.

@@ -13,8 +13,8 @@ Create or update detailed design and acceptance criteria for the active user sto
 Repeat until every acceptance criterion is convertible to a CaTDD skeleton.
 
 1. **Thought** — Decide which design surfaces this story actually changes. Do not open a README SPEC doc the story does not touch.
-2. **Action** — Draft or update only those docs, seeding first-time files from the matching `slashCommands/templates/README_*Template.md`. Include the story's lightweight implementation plan: technical context, structure decisions, constraints, verification strategy. Apply the Skill Integration Policy, falling back to the Builtin Skill Checklist.
-3. **Observation** — Test each acceptance criterion against the Verification builtin: can it become a US/AC/TC skeleton as written? An untestable AC, an undocumented state transition, or an architecture quality scenario that was dropped instead of carried into detail constraints returns to **Action**.
+2. **Action** — Draft or update only those docs, seeding first-time files from the matching `slashCommands/templates/README_*Template.md`. Include the story's lightweight implementation plan: technical context, structure decisions, constraints, verification strategy. When the story changes test points, category coverage, submodule seams, fixtures, or oracles, create or update `README_DetailVerifyDesign.md` from `README_DetailVerifyDesignTemplate.md` and apply the `methodPrompts` discovery contract there: Behavior Inventory, applicable P0/P1/P2/P3 sweeps, `discovery_ledger`, and the Discovery Gate report. Promote every `SysTesting`/`UserTesting` row to `README_ArchVerifyDesign.md` under the same TP ID. Apply the Skill Integration Policy, falling back to the Builtin Skill Checklist.
+3. **Observation** — Test each acceptance criterion against the Verification builtin: can it become a US/AC/TC skeleton as written? An untestable AC, an undocumented state transition, an architecture quality scenario dropped instead of carried into detail constraints, an undiscovered test point, or a TP whose `TestLevel`/owner is unresolved returns to **Action**.
 4. **Stop** — Exit when all ACs are convertible and assumptions/constraints/open questions are explicit. Report `next_command = SPEC_reviewDetailDesign`. Coding does not start here.
 
 For embedded or digital video/audio work, step 2 must also design localized state lifecycles and thread concurrency primitives.
@@ -42,8 +42,8 @@ Expected result — two passes:
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `projectContext_file`: current project context.
-- `readme_spec_files`: optional project-root README SPEC files to create or update, including `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_SecurityDesign.md`, `README_VerifyDesign.md`, and `README_UsageDesign.md` when the active story changes those design surfaces.
-- `readme_spec_templates`: matching templates under `slashCommands/templates/`, such as `README_DetailDesignTemplate.md`, `README_ErrorDesignTemplate.md`, `README_ResourceDesignTemplate.md`, `README_StateDesignTemplate.md`, `README_PerfDesignTemplate.md`, `README_CompatDesignTemplate.md`, `README_DiagnosisDesignTemplate.md`, `README_SecurityDesignTemplate.md`, `README_VerifyDesignTemplate.md`, `README_UsageDesignLiteCliTemplate.md`, and `README_UsageDesignMicroServiceTemplate.md`.
+- `readme_spec_files`: optional project-root README SPEC files to create or update, including `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_SecurityDesign.md`, `README_ArchVerifyDesign.md`, `README_VerifyDesign.md`, and `README_UsageDesign.md` when the active story changes those design surfaces. `README_DetailVerifyDesign.md` is owned here; `README_ArchVerifyDesign.md` is architecture-owned and is only declared or deferred here; `README_VerifyDesign.md` is the routing index.
+- `readme_spec_templates`: matching templates under `slashCommands/templates/`, such as `README_DetailDesignTemplate.md`, `README_DetailVerifyDesignTemplate.md`, `README_ErrorDesignTemplate.md`, `README_ResourceDesignTemplate.md`, `README_StateDesignTemplate.md`, `README_PerfDesignTemplate.md`, `README_CompatDesignTemplate.md`, `README_DiagnosisDesignTemplate.md`, `README_SecurityDesignTemplate.md`, `README_ArchVerifyDesignTemplate.md`, `README_VerifyDesignTemplate.md`, `README_UsageDesignLiteCliTemplate.md`, and `README_UsageDesignMicroServiceTemplate.md`.
 - `design_target`: optional project-root README SPEC file, API contract, architecture note, or detail design target.
 
 ## Method References
@@ -69,15 +69,16 @@ Expected result — two passes:
 - Constraint builtin: document error/resource/compatibility/performance/security constraints that affect implementation choices.
 - Security & sandbox builtin: ensure sensitive credentials are never exposed in APIs, parameters, or logs, and mutative agent tools require approval gates.
 - Tactics carryover builtin: preserve architecture quality scenarios as detail-level acceptance constraints.
-- Verification builtin: ensure each acceptance criterion is convertible to CaTDD US/AC/TC skeletons.
+- Verification builtin: ensure each acceptance criterion is convertible to CaTDD US/AC/TC skeletons, and that test points are discovered through the `methodPrompts` discovery contract rather than asserted from the first happy path.
 
 ## Output Contract
 
-- Project-root README SPEC docs as needed: `README_DetailDesign.md` and `README_StateDesign.md`.
+- Project-root README SPEC docs as needed: `README_DetailDesign.md`, `README_StateDesign.md`, and `README_DetailVerifyDesign.md`.
+- `README_DetailVerifyDesign.md` carries the Behavior Inventory (`discovery_ledger`), test-level routing, CaTDD category x Agile quadrant coverage, submodule strategy, and the promotion table for `SysTesting`/`UserTesting` obligations.
 - First-time README SPEC docs should be based on the corresponding `slashCommands/templates/README_*Template.md` file.
 - A lightweight implementation plan inside the relevant README SPEC docs, covering technical context, structure decisions, constraints, and verification strategy for the active story.
 - Detailed design notes tied to the active user story in team-shared `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
-- Acceptance criteria that can be converted into CaTDD US/AC/TC skeletons.
+- Acceptance criteria that can be converted into CaTDD US/AC/TC skeletons, plus test-point discovery evidence for the scope reviewed.
 - Explicit assumptions, constraints, and unresolved questions.
 
 ## Conflict Guard

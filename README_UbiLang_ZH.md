@@ -36,6 +36,11 @@
 | Source-First | 源头在先：先审视权威来源工件（契约、架构模型、质量策略）并独立推导预期验证义务，再查阅已有骨架或测试代码，消除作者自身盲区。 |
 | TestEvidenceChain | 测试证据链：回答“为什么需要这个测试（WHY）”与“如何正确进行测试（HOW）”的完整无断裂证据链：从来源工件 -> 规则/不变量 -> 测试点（TP） -> 可观测预期（Oracle） -> CaTDD 分类（WHY 层面） -> US/AC/TC -> 测试用例（TC） -> RED/GREEN 实现（HOW 层面）。 |
 | SUT | 被测系统 / 被测目标（System Under Test）：在测试中显式声明的被测软件边界（如 `SUT: utCodeAgentCLI`）。它确立了调用方（调用者违反契约属于 `P0 Misuse`）与外部依赖/环境（依赖故障属于 `P0 Fault`）之间的严格分界线。 |
+| TestLevel（测试层级） | 测试点被执行时声明的范围，取且仅取 `UnitTesting`、`SysTesting`、`UserTesting` 三者之一。在测试文件内以 `@[TestLevel]` 声明，绝不写入文件名。它回答"本次验证装配了多少系统"，而不是"哪份设计文档拥有该策略"。 |
+| UnitTesting（单元级） | `TestLevel` 之一：在被测 SUT 自身边界内、遵循项目 `sut_unit_convention`（子模块、类、头文件、函数或组件）进行的验证。CaTDD 分类与发现门禁适用，其策略设计归属 `README_DetailVerifyDesign.md`。 |
+| SysTesting（系统级） | `TestLevel` 之一：把被测 SUT 与真实同级组件、依赖以及运行时环境装配在一起进行的验证。CaTDD 分类与发现门禁适用；同级组件边界、环境矩阵与替身可信度归属 `README_ArchVerifyDesign.md`。取代旧的层级名 `ModuleTesting`。 |
+| UserTesting（用户流程级） | `TestLevel` 之一：面向已部署组合的端到端全流程验证，包含有文档的演示/示例流程。它不属于 CaTDD 分类测试：它消费 US/AC 预期与已被分类覆盖的行为，而不是定义分类骨架。其策略设计归属 `README_ArchVerifyDesign.md`。 |
+| ModuleTesting（已废弃） | 已废弃的 `TestLevel` 名称，仅作为详细层的作用域限定词保留，表示模块级 Package/Service/Interface 范围，例如"`UnitTesting` 的模块作用域"。它绝不是与 `UnitTesting`/`SysTesting`/`UserTesting` 并列的第四个层级。模块作用域的测试按同级组件实况路由：使用真实同级组件或目标运行时 -> `SysTesting`（架构层）；模块边界内使用 fake/stub -> `UnitTesting`（详细层）。 |
 | UT | 单元测试（Unit Testing）：聚焦于单个显式声明的 SUT 的验证活动，遵循项目约定的 `sut_unit_convention`（如模块接口、子模块接口、类、头文件接口、函数或组件）。在编码前通过 CaTDD 验证其公开契约、内部模型与质量属性。 |
 | TP | 测试点（Test Point）：从来源规则、模型、边界或故障模式中发掘出的具体验证义务或条件，记录在 `discovery_ledger` 中。从开发者/防御性视角表达“必须验证什么”（目标靶心），通常采用具体的 `GIVEN 技术状态/分区, WHEN 动作/交织时序, THEN 可观测预期` 描述。 |
 | TC | 测试用例（Test Case）：具有结构化元数据（`@[Name]`、`@[Expect]`、`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`）并链接到 `[@AC-n, US-n]` 的可执行规格工件。从执行视角表达“如何具体验证”（射向靶心的箭）。 |
@@ -73,6 +78,20 @@
 | `slashCommands/` | 对方法语义的可移植命令/流程封装。 |
 | `codeAgents/` | 目标驱动编排与执行策略。 |
 | `agentSkills/` | 面向非原生代码智能体的技能打包。 |
+
+### 验证设计词汇（Verification Design Vocabulary）
+
+| 制品 | 归属命令 | 层级归属 | 拥有内容 |
+| --- | --- | --- | --- |
+| `README_ArchVerifyDesign.md` | 创建/更新 `SPEC_takeArchDesign`；修订 `SPEC_updateArchDesign`；门禁 `SPEC_reviewArchDesign` | `SysTesting`、`UserTesting` | 验证拓扑、层级与边界图（本 SUT 存在哪些层级、每个层级不证明什么）、目标运行时环境矩阵、同级组件/依赖替身可信度、证据与设备归属，以及系统级质量场景。 |
+| `README_DetailVerifyDesign.md` | 创建/更新 `SPEC_takeDetailDesign`；修订 `SPEC_updateDetailDesign`；门禁 `SPEC_reviewDetailDesign` | `UnitTesting`，并以 `ModuleTesting` 作为作用域限定词 | 行为清单、测试点发掘（`discovery_ledger`、P0-P3 扫描、Discovery Gate 报告）、CaTDD 分类 x 敏捷象限覆盖、子模块策略、夹具与预期设计，以及把 `SysTesting`/`UserTesting` 义务上提的 promotion 表。 |
+
+规则：
+
+- 每个特性只存在一份行为清单与一份 `discovery_ledger`，归属详细层设计；每行都携带其 `Category and test level`。
+- 测试点上提（test-point promotion）在其 `TestLevel` 为 `SysTesting` 或 `UserTesting` 时，把义务从详细层设计移交到架构层设计。TP ID 保持不变；架构层设计只引用该义务，绝不重述分类设计。
+- `README_VerifyStatusTraces.md` 仍是承载两份设计实时状态与证据的动态伴随文档。
+- `SPEC_designUnitTests` 继承 `README_DetailVerifyDesign.md` 的策略，不重新定义验证设计。
 
 ### 概念图解与实例（Diagrams and Examples）
 
@@ -191,7 +210,7 @@ CaTDD 是方法驱动的体系。关键词漂移会直接导致行为漂移。
 发布前进行术语一致性检查：
 
 ```bash
-rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING" README*.md methodPrompts slashCommands codeAgents agentSkills
+rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|TestLevel|UnitTesting|SysTesting|UserTesting|ArchVerifyDesign|DetailVerifyDesign|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING" README*.md methodPrompts slashCommands codeAgents agentSkills
 ```
 
 预期结果：这些术语的含义与本文件定义保持一致。
