@@ -5,9 +5,13 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 GENERATOR="$REPO_ROOT/scripts/makeSlashCmd4Codex.sh"
 OUT_DIR="$(mktemp -d)"
 PROMPTS_DIR="$(mktemp -d)"
+PROMPTS_ONLY_DIR="$(mktemp -d)"
+SKILLS_SKIP_DIR="$(mktemp -d)"
+CATDD_ROOT="$(mktemp -d)"
+CATDD_PROMPTS_DIR="$(mktemp -d)"
 
 cleanup() {
-  rm -rf "$OUT_DIR" "$PROMPTS_DIR"
+  rm -rf "$OUT_DIR" "$PROMPTS_DIR" "$PROMPTS_ONLY_DIR" "$SKILLS_SKIP_DIR" "$CATDD_ROOT" "$CATDD_PROMPTS_DIR"
 }
 trap cleanup EXIT
 
@@ -73,5 +77,38 @@ done < <(find "$OUT_DIR" -mindepth 1 -maxdepth 1 -type d | sort)
 
 # Clean mode must remove previously generated wrappers.
 "$GENERATOR" --output "$OUT_DIR" --prompts-output "$PROMPTS_DIR" --clean >/dev/null
+
+# --no-skills must emit only custom prompts and no skill wrappers.
+"$GENERATOR" --output "$SKILLS_SKIP_DIR" --prompts-output "$PROMPTS_ONLY_DIR" --no-skills --clean >/dev/null
+prompts_only_count="$(find "$PROMPTS_ONLY_DIR" -maxdepth 1 -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+[[ "$prompts_only_count" == "$source_count" ]] || fail "--no-skills expected $source_count custom prompts, got $prompts_only_count"
+[[ -z "$(find "$SKILLS_SKIP_DIR" -mindepth 1 -maxdepth 1 | head -1)" ]] || fail "--no-skills must not generate Codex skill wrappers"
+[[ -f "$PROMPTS_ONLY_DIR/UT_showMeStatus.md" ]] || fail "--no-skills missing sample custom prompt: UT_showMeStatus.md"
+
+if "$GENERATOR" --output "$SKILLS_SKIP_DIR" --no-skills >/dev/null 2>&1; then
+  fail "--no-skills without --prompts-output must fail fast"
+fi
+
+# A project-root workspace must yield .catdd-relative references so the installed
+# prompt stays a thin adapter over the target project's own portable command source.
+mkdir -p \
+  "$CATDD_ROOT/.catdd/slashCommands/commands/Px-StatusKits" \
+  "$CATDD_ROOT/.catdd/slashCommands/flows" \
+  "$CATDD_ROOT/.catdd/slashCommands/kits" \
+  "$CATDD_ROOT/.catdd/methodPrompts"
+cp "$REPO_ROOT/slashCommands/commands/Px-StatusKits/UT_showMeStatus.md" \
+  "$CATDD_ROOT/.catdd/slashCommands/commands/Px-StatusKits/"
+cp "$REPO_ROOT/slashCommands/UT_slashCommandTemplate.md" "$CATDD_ROOT/.catdd/slashCommands/"
+cp "$REPO_ROOT/methodPrompts/README.md" "$CATDD_ROOT/.catdd/methodPrompts/"
+
+"$GENERATOR" \
+  --source-dir "$CATDD_ROOT/.catdd/slashCommands/commands" \
+  --workspace-root "$CATDD_ROOT" \
+  --prompts-output "$CATDD_PROMPTS_DIR" \
+  --no-skills --clean >/dev/null
+grep -Fq 'Portable command path: .catdd/slashCommands/commands/Px-StatusKits/UT_showMeStatus.md' "$CATDD_PROMPTS_DIR/UT_showMeStatus.md" \
+  || fail "installed-project prompt must reference the project-root .catdd command source"
+grep -Fq 'CaTDD method index: .catdd/methodPrompts/README.md' "$CATDD_PROMPTS_DIR/UT_showMeStatus.md" \
+  || fail "installed-project prompt must reference the project-root .catdd method source"
 
 echo "[makeSlashCmd4Codex-test] PASSED: generated $skill_count Codex skills and $prompt_count Codex custom prompts"

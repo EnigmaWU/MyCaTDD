@@ -7,10 +7,11 @@ OUTPUT_DIR="$REPO_ROOT/.agents/skills"
 PROMPTS_OUTPUT_DIR=""
 WORKSPACE_ROOT="$REPO_ROOT"
 CLEAN=0
+NO_SKILLS=0
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/makeSlashCmd4Codex.sh [--source-dir DIR] [--output DIR] [--prompts-output DIR] [--workspace-root DIR] [--clean]
+Usage: scripts/makeSlashCmd4Codex.sh [--source-dir DIR] [--output DIR] [--prompts-output DIR] [--workspace-root DIR] [--clean] [--no-skills]
 
 Generate Codex-native adapters from portable slashCommands:
 
@@ -30,6 +31,7 @@ Options:
   --prompts-output DIR  Optional output directory for deprecated Codex custom prompts.
   --workspace-root DIR  Workspace root used for generated path references. Defaults to this repository root.
   --clean               Remove previously generated wrappers from the output directories first.
+  --no-skills           Skip Codex skill generation and emit only custom prompts. Requires --prompts-output.
   -h, --help            Show this help.
 USAGE
 }
@@ -60,6 +62,10 @@ while [[ $# -gt 0 ]]; do
       CLEAN=1
       shift
       ;;
+    --no-skills)
+      NO_SKILLS=1
+      shift
+      ;;
     -h|--help)
       usage
       exit 0
@@ -80,6 +86,11 @@ fi
 if [[ ! -d "$WORKSPACE_ROOT" ]]; then
   echo "[makeSlashCmd4Codex] Missing workspace root: $WORKSPACE_ROOT" >&2
   exit 1
+fi
+
+if [[ "$NO_SKILLS" -eq 1 && -z "$PROMPTS_OUTPUT_DIR" ]]; then
+  echo "[makeSlashCmd4Codex] --no-skills requires --prompts-output" >&2
+  exit 2
 fi
 
 SOURCE_DIR="$(cd "$SOURCE_DIR" && pwd)"
@@ -105,8 +116,10 @@ rel_to_workspace() {
   fi
 }
 
-mkdir -p "$OUTPUT_DIR"
-OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
+if [[ "$NO_SKILLS" -eq 0 ]]; then
+  mkdir -p "$OUTPUT_DIR"
+  OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
+fi
 
 if [[ -n "$PROMPTS_OUTPUT_DIR" ]]; then
   mkdir -p "$PROMPTS_OUTPUT_DIR"
@@ -114,9 +127,11 @@ if [[ -n "$PROMPTS_OUTPUT_DIR" ]]; then
 fi
 
 if [[ "$CLEAN" -eq 1 ]]; then
-  for existing in "$OUTPUT_DIR"/ut-* "$OUTPUT_DIR"/spec-* "$OUTPUT_DIR"/harness-*; do
-    [[ -d "$existing" ]] && rm -rf "$existing"
-  done
+  if [[ "$NO_SKILLS" -eq 0 ]]; then
+    for existing in "$OUTPUT_DIR"/ut-* "$OUTPUT_DIR"/spec-* "$OUTPUT_DIR"/harness-*; do
+      [[ -d "$existing" ]] && rm -rf "$existing"
+    done
+  fi
   if [[ -n "$PROMPTS_OUTPUT_DIR" ]]; then
     find "$PROMPTS_OUTPUT_DIR" -maxdepth 1 -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) -delete
   fi
@@ -155,10 +170,11 @@ while IFS= read -r source_file; do
   fi
   description="$(printf '%s' "${description:0:400}" | sed -E 's/[[:space:]]+$//')"
 
-  skill_dir="$OUTPUT_DIR/$skill_name"
-  mkdir -p "$skill_dir"
+  if [[ "$NO_SKILLS" -eq 0 ]]; then
+    skill_dir="$OUTPUT_DIR/$skill_name"
+    mkdir -p "$skill_dir"
 
-  cat > "$skill_dir/SKILL.md" <<SKILL
+    cat > "$skill_dir/SKILL.md" <<SKILL
 ---
 name: $skill_name
 description: "$description"
@@ -193,7 +209,8 @@ You are running a Codex Skill wrapper around a portable CaTDD slash command.
 ONE-MORE-THING: ask developer if something not sure
 SKILL
 
-  skill_count=$((skill_count + 1))
+    skill_count=$((skill_count + 1))
+  fi
 
   if [[ -n "$PROMPTS_OUTPUT_DIR" ]]; then
     prompt_file="$PROMPTS_OUTPUT_DIR/$raw_name.md"
@@ -241,7 +258,9 @@ PROMPT
   fi
 done < <(find "$SOURCE_DIR" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
 
-echo "[makeSlashCmd4Codex] Generated $skill_count Codex skill wrappers in $(rel_to_workspace "$OUTPUT_DIR")"
+if [[ "$NO_SKILLS" -eq 0 ]]; then
+  echo "[makeSlashCmd4Codex] Generated $skill_count Codex skill wrappers in $(rel_to_workspace "$OUTPUT_DIR")"
+fi
 
 if [[ -n "$PROMPTS_OUTPUT_DIR" ]]; then
   echo "[makeSlashCmd4Codex] Generated $prompt_count Codex custom prompts in $(rel_to_workspace "$PROMPTS_OUTPUT_DIR")"
