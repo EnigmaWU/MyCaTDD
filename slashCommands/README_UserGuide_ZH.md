@@ -150,6 +150,27 @@ scripts/makeSlashCmd4Continue.sh --clean
 scripts/makeSlashCmd4Codex.sh --clean
 ```
 
+为项目安装 Codex custom prompts（`/prompts:<Command>`），同时保持每条 prompt 只是项目自身 `.catdd` 源的轻量适配器：
+
+```bash
+scripts/installCaTDD.sh --targetDir "$PWD" --targetCodeAgent Codex \
+  --codex-prompts-dir default --clean-prompts --yes
+```
+
+`default` 表示 `$CODEX_HOME/prompts`，即 `~/.codex/prompts`。生成的 prompt 文件不包含 CaTDD 方法正文：每条只声明规范命令名，并指向项目根目录的 `.catdd/slashCommands/commands/<group>/<Command>.md`，因此项目的 `.catdd` 始终是唯一真理源。Codex custom prompts 属于本机用户级资产，不通过仓库共享，生成后需要重启 Codex。
+
+只刷新已安装项目的 prompts、不改写目标项目时：
+
+```bash
+scripts/makeSlashCmd4Codex.sh \
+  --source-dir "$PWD/.catdd/slashCommands/commands" \
+  --workspace-root "$PWD" \
+  --prompts-output "$HOME/.codex/prompts" \
+  --no-skills --clean
+```
+
+第二种方式要求项目的 `.catdd/slashCommands/commands/` 已包含可移植源；当上游新增命令时，请先刷新安装。
+
 安装或刷新 CaTDD 到 Continue、Cline、Antigravity 或 Codex 项目：
 
 ```bash
@@ -185,13 +206,14 @@ bash scripts/test_makeSlashCmd4Codex.sh
 | --- | --- | --- |
 | Px SpecFlow | 从项目上下文和 work item 驱动 SpecCoding，直到故事完成审查与提交 | [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) |
 | Px HarnessKits | 运行维护 CaTDD 源、适配器、执行、诊断和 patch-back 的 Harness Engineering 工具点命令 | [kits/Px-HarnessKits.md](kits/Px-HarnessKits.md) |
+| Px StatusKits | 只读地查看 UT、SPEC、HARNESS 当前状态，并给出下一条命令 | [kits/Px-StatusKits.md](kits/Px-StatusKits.md) |
 | P0 FuncTestsFlow | 转换或设计功能测试骨架，然后逐个 TC 实现 | [flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md) |
 | P1 DesignTestsFlow | 在稳定功能覆盖基础上扩展 State、Capability、Concurrency | [flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md) |
 | P2 QualityTestsFlow | 在稳定行为基础上扩展 Performance、Robust、Compatibility、Configuration | [flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md) |
 
 ## 命令地图
 
-仅保留关键命令。完整的分流程或工具包命令地图请查看 [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md)、[commands/Px-HarnessKits/README.md](commands/Px-HarnessKits/README.md)、[flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md)、[flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md)、[flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md)。
+仅保留关键命令。完整的分流程或工具包命令地图请查看 [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md)、[commands/Px-HarnessKits/README.md](commands/Px-HarnessKits/README.md)、[commands/Px-StatusKits/README.md](commands/Px-StatusKits/README.md)、[flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md)、[flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md)、[flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md)。
 
 | Developer need | Command template |
 | --- | --- |
@@ -204,6 +226,9 @@ bash scripts/test_makeSlashCmd4Codex.sh
 | 在开始新任务会话前捕获当前会话上下文 | [commands/Px-HarnessKits/HARNESS_newTaskSession.md](commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | 在有意义的成功或重复 Harness 证据后学习并演进 | 使用 `evolution_mode=auto` 的 [commands/Px-HarnessKits/HARNESS_evolveHarness.md](commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
 | 告诉我当前 SpecCoding 下一步该做什么 | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
+| 告诉我当前 SpecCoding 在全部 `.catdd/spec/` 泳道的状态，并给出 Level-0…Level-5 maturity 评级 | [commands/Px-StatusKits/SPEC_showMeStatus.md](commands/Px-StatusKits/SPEC_showMeStatus.md) |
+| 告诉我当前 unit test 状态和下一条 UT 命令，并给出 Level-0…Level-5 completeness 评级 | [commands/Px-StatusKits/UT_showMeStatus.md](commands/Px-StatusKits/UT_showMeStatus.md) |
+| 告诉我当前 harness 与安装状态，并给出 Level-0…Level-5 integrity 评级 | [commands/Px-StatusKits/HARNESS_showMeStatus.md](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 | 问"哪里不对"并切换到 VibeCoding 探索 | [commands/Px-SpecFlow/SPEC_whatsWrong.md](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
 | 为已打开的 user story 规划下一条 SPEC 步骤 | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | 导入已有结构化 User Story 或 AC 切片 | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |

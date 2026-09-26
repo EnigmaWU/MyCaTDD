@@ -14,7 +14,7 @@ This is the SpecCoding template for project-root `README_DetailVerifyDesign.md`.
 - State design: [README_StateDesign.md](README_StateDesign.md)
 - Architecture-level verification design: [README_ArchVerifyDesign.md](README_ArchVerifyDesign.md)
 - Related design surfaces: [README_ErrorDesign.md](README_ErrorDesign.md), [README_ResourceDesign.md](README_ResourceDesign.md), [README_PerfDesign.md](README_PerfDesign.md), [README_CompatDesign.md](README_CompatDesign.md), [README_DiagnosisDesign.md](README_DiagnosisDesign.md), [README_SecurityDesign.md](README_SecurityDesign.md)
-- SUT and target verification level: {{declared SUT}} / {{UnitTesting / mixed, with ModuleTesting only as a scope qualifier}}
+- SUT, target verification level, and runtime scope: {{declared SUT}} / {{UnitTesting / SysTesting / UserTesting}} / {{mockSysRtm / realSysRtm}}
 - Target test files or future file pattern: `test_{{feature_token}}_{{category_token}}.{{ext}}`
 - Dynamic trace artifact: {{README_VerifyStatusTraces.md / story TASKs / test-file comments / not needed}}
 
@@ -44,7 +44,7 @@ Build this from sources before consulting existing skeletons. Existing tests are
 
 Rules:
 
-- Use one canonical level token. `ModuleTesting` is a superseded name and survives only as a module-scope qualifier; route by peer reality instead.
+- Use one canonical level token from `UnitTesting` / `SysTesting` / `UserTesting`, and one runtime scope from `mockSysRtm` / `realSysRtm`. `ModuleTesting` is retired: module-level scope is `SysTesting` when the module is the declared SUT.
 - A `SysTesting` or `UserTesting` row keeps its TP ID, discovery evidence, and disposition here, and is promoted to the architecture design for strategy.
 - Unresolved level applicability is a QUESTION, never an assumed routing decision.
 
@@ -156,7 +156,7 @@ Expected result: the temporary file shows verification constraints, the behavior
 
 - The behavior inventory and `discovery_ledger` were built from sources before existing skeletons were read.
 - Every rule and applicable sweep dimension links to a ledger row with a disposition.
-- Every row carries one canonical `TestLevel` token; `ModuleTesting` appears only as a module-scope qualifier.
+- Every row carries one canonical `TestLevel` token and one `TestScope`; `ModuleTesting` is retired.
 - Every `SysTesting`/`UserTesting` row names its promotion into `README_ArchVerifyDesign.md` under the same TP ID.
 - P0 Functional coverage is decided before P1/P2 promotion, or an explicit `@[NoTestPoints]: <reason>` decision exists.
 - Room is made for Q3 exploratory and Q4 technology-critique needs instead of silently omitting them.

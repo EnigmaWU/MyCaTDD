@@ -102,7 +102,7 @@ Expected result — two passes:
 - State transitions, resource constraints, error behavior, and compatibility constraints are covered or intentionally deferred.
 - Acceptance criteria can be converted into CaTDD US/AC/TC skeletons.
 - `README_DetailVerifyDesign.md` exists for the reviewed scope and carries a Behavior Inventory, `discovery_ledger` with dispositions, and a Discovery Gate report; a missing or stale one is a blocking finding.
-- Every ledger row carries a canonical `TestLevel` (`UnitTesting`/`SysTesting`/`UserTesting`), `ModuleTesting` appears only as a module-scope qualifier, and every `SysTesting`/`UserTesting` row names its promotion into `README_ArchVerifyDesign.md` under the same TP ID.
+- Every ledger row carries a canonical `TestLevel` (`UnitTesting`/`SysTesting`/`UserTesting`) and a `TestScope` (`mockSysRtm`/`realSysRtm`), `ModuleTesting` is retired, and every `SysTesting`/`UserTesting` row names its promotion into `README_ArchVerifyDesign.md` under the same TP ID.
 - Verification constraints state WHAT must be proven and WHY before test mechanics, and design content is not duplicated from `README_ArchVerifyDesign.md`.
 - The detailed design does not contradict approved architecture boundaries.
 - EN/ZH detail-design mirrors have matching heading structure when both are present.

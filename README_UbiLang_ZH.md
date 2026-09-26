@@ -36,11 +36,12 @@
 | Source-First | 源头在先：先审视权威来源工件（契约、架构模型、质量策略）并独立推导预期验证义务，再查阅已有骨架或测试代码，消除作者自身盲区。 |
 | TestEvidenceChain | 测试证据链：回答“为什么需要这个测试（WHY）”与“如何正确进行测试（HOW）”的完整无断裂证据链：从来源工件 -> 规则/不变量 -> 测试点（TP） -> 可观测预期（Oracle） -> CaTDD 分类（WHY 层面） -> US/AC/TC -> 测试用例（TC） -> RED/GREEN 实现（HOW 层面）。 |
 | SUT | 被测系统 / 被测目标（System Under Test）：在测试中显式声明的被测软件边界（如 `SUT: utCodeAgentCLI`）。它确立了调用方（调用者违反契约属于 `P0 Misuse`）与外部依赖/环境（依赖故障属于 `P0 Fault`）之间的严格分界线。 |
-| TestLevel（测试层级） | 测试点被执行时声明的范围，取且仅取 `UnitTesting`、`SysTesting`、`UserTesting` 三者之一。在测试文件内以 `@[TestLevel]` 声明，绝不写入文件名。它回答"本次验证装配了多少系统"，而不是"哪份设计文档拥有该策略"。 |
-| UnitTesting（单元级） | `TestLevel` 之一：在被测 SUT 自身边界内、遵循项目 `sut_unit_convention`（子模块、类、头文件、函数或组件）进行的验证。CaTDD 分类与发现门禁适用，其策略设计归属 `README_DetailVerifyDesign.md`。 |
-| SysTesting（系统级） | `TestLevel` 之一：把被测 SUT 与真实同级组件、依赖以及运行时环境装配在一起进行的验证。CaTDD 分类与发现门禁适用；同级组件边界、环境矩阵与替身可信度归属 `README_ArchVerifyDesign.md`。取代旧的层级名 `ModuleTesting`。 |
-| UserTesting（用户流程级） | `TestLevel` 之一：面向已部署组合的端到端全流程验证，包含有文档的演示/示例流程。它不属于 CaTDD 分类测试：它消费 US/AC 预期与已被分类覆盖的行为，而不是定义分类骨架。其策略设计归属 `README_ArchVerifyDesign.md`。 |
-| ModuleTesting（已废弃） | 已废弃的 `TestLevel` 名称，仅作为详细层的作用域限定词保留，表示模块级 Package/Service/Interface 范围，例如"`UnitTesting` 的模块作用域"。它绝不是与 `UnitTesting`/`SysTesting`/`UserTesting` 并列的第四个层级。模块作用域的测试按同级组件实况路由：使用真实同级组件或目标运行时 -> `SysTesting`（架构层）；模块边界内使用 fake/stub -> `UnitTesting`（详细层）。 |
+| TestLevel（测试层级） | 测试点被执行时声明的 SUT 范围，取且仅取 `UnitTesting`、`SysTesting`、`UserTesting` 三者之一。在测试文件内以 `@[TestLevel]` 声明，绝不写入文件名。它回答"所开发的系统有多少在 SUT 之内"，而不是"该系统的运行时由什么构成"（那属于 `TestScope`），也不是"哪份设计文档拥有该策略"。 |
+| UnitTesting（单元级） | `TestLevel` 之一：以单个单元为 SUT，在其自身边界内、遵循项目 `sut_unit_convention`（子模块、类、头文件、函数或组件）进行的验证。当项目没有再做细分时，`UnitTesting` 与 `SysTesting` 指向同一个 SUT，二者等价。CaTDD 分类与发现门禁适用，其策略设计归属 `README_DetailVerifyDesign.md`。 |
+| SysTesting（系统级） | `TestLevel` 之一：以单元的组合为 SUT——在含子模块的项目中是模块，在无细分项目中就是整个项目。CaTDD 分类与发现门禁适用；组合边界与其 `TestScope` 策略归属 `README_ArchVerifyDesign.md`，TP 行仍留在详细层台账中并按 ID 上提。 |
+| UserTesting（用户流程级） | 属于 `SysTesting` 的一种 `TestLevel`：同一个系统 SUT，面向使用场景——有文档的端到端、演示与示例流程。它不属于 CaTDD 分类测试：它消费 US/AC 预期与已被分类覆盖的行为，而不是定义分类骨架。 |
+| ModuleTesting（已废弃） | 已废弃的层级名，不再使用。当模块本身是被声明的 SUT 时，模块级范围就是 `SysTesting`，因此它绝不是与三个 `TestLevel` 取值并列的第四个值。 |
+| `TestScope`（测试范围） | 测试点被执行时声明的运行时范围：`mockSysRtm`（把 SUT 的系统运行时——同级组件、依赖、运行时环境——替换为替身）或 `realSysRtm`（SUT 运行在真实系统运行时之上）。以 `@[TestScope]` 声明，独立于 `TestLevel`，因此任何层级都可在任一范围下运行。`mockSysRtm` 是第一范围并获得 `CLOSED`；`realSysRtm` 是第二范围，提供附加证据。 |
 | UT | 单元测试（Unit Testing）：聚焦于单个显式声明的 SUT 的验证活动，遵循项目约定的 `sut_unit_convention`（如模块接口、子模块接口、类、头文件接口、函数或组件）。在编码前通过 CaTDD 验证其公开契约、内部模型与质量属性。 |
 | TP | 测试点（Test Point）：从来源规则、模型、边界或故障模式中发掘出的具体验证义务或条件，记录在 `discovery_ledger` 中。从开发者/防御性视角表达“必须验证什么”（目标靶心），通常采用具体的 `GIVEN 技术状态/分区, WHEN 动作/交织时序, THEN 可观测预期` 描述。 |
 | TC | 测试用例（Test Case）：具有结构化元数据（`@[Name]`、`@[Expect]`、`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`）并链接到 `[@AC-n, US-n]` 的可执行规格工件。从执行视角表达“如何具体验证”（射向靶心的箭）。 |
@@ -84,7 +85,7 @@
 | 制品 | 归属命令 | 层级归属 | 拥有内容 |
 | --- | --- | --- | --- |
 | `README_ArchVerifyDesign.md` | 创建/更新 `SPEC_takeArchDesign`；修订 `SPEC_updateArchDesign`；门禁 `SPEC_reviewArchDesign` | `SysTesting`、`UserTesting` | 验证拓扑、层级与边界图（本 SUT 存在哪些层级、每个层级不证明什么）、目标运行时环境矩阵、同级组件/依赖替身可信度、证据与设备归属，以及系统级质量场景。 |
-| `README_DetailVerifyDesign.md` | 创建/更新 `SPEC_takeDetailDesign`；修订 `SPEC_updateDetailDesign`；门禁 `SPEC_reviewDetailDesign` | `UnitTesting`，并以 `ModuleTesting` 作为作用域限定词 | 行为清单、测试点发掘（`discovery_ledger`、P0-P3 扫描、Discovery Gate 报告）、CaTDD 分类 x 敏捷象限覆盖、子模块策略、夹具与预期设计，以及把 `SysTesting`/`UserTesting` 义务上提的 promotion 表。 |
+| `README_DetailVerifyDesign.md` | 创建/更新 `SPEC_takeDetailDesign`；修订 `SPEC_updateDetailDesign`；门禁 `SPEC_reviewDetailDesign` | `UnitTesting` | 行为清单、测试点发掘（`discovery_ledger`、P0-P3 扫描、Discovery Gate 报告）、CaTDD 分类 x 敏捷象限覆盖、子模块策略、夹具与预期设计，以及把 `SysTesting`/`UserTesting` 义务上提的 promotion 表。 |
 
 规则：
 
@@ -92,6 +93,21 @@
 - 测试点上提（test-point promotion）在其 `TestLevel` 为 `SysTesting` 或 `UserTesting` 时，把义务从详细层设计移交到架构层设计。TP ID 保持不变；架构层设计只引用该义务，绝不重述分类设计。
 - `README_VerifyStatusTraces.md` 仍是承载两份设计实时状态与证据的动态伴随文档。
 - `SPEC_designUnitTests` 继承 `README_DetailVerifyDesign.md` 的策略，不重新定义验证设计。
+
+### 状态与等级词汇（Status and Level Vocabulary）
+
+状态报告与等级评定的规范含义。`Px-StatusKits` 命令报告这些术语并指向本处；报告流程属于那些命令，不属于本表。本表只收录 CaTDD 自有的术语，以及 CaTDD 对借用名称的绑定——借用名称标注为 *(borrowed)*，其定义只写到"映射到哪个 CaTDD 取值"为止。
+
+| 术语 | 含义 |
+| --- | --- |
+| `status_signal` | 状态报告的安全轴：`healthy`、`attention`、`blocked`、`unknown`。它回答当前状态是否可安全据以行动，与工作推进到哪一步无关。`unknown` 表示该范围无法读取；可读但为空的范围是 `Level-0`。 |
+| 等级字段（level fields） | 每个视角在各自的字段名下报告一个 `Level-0` 到 `Level-5` 的有序等级：`completeness_level`（UT）、`maturity_level`（SPEC）、`integrity_level`（HARNESS，助记 `neatness`）。等级单调且由证据决定：`Level-N` 以 `Level-(N-1)` 为前提；无法引用证据的等级，按低一级报告。 |
+| `level_evidence` / `level_gap` | 决定所报等级的依据，以及阻止进入下一等级的唯一决定性障碍。 |
+| `CLOSED` / `testPassOnMock` | UT 的关闭谓词及其证据记号。测试用例已设计、已链接 US/AC，并在 `@[TestScope]: mockSysRtm`、其声明的 `@[TestLevel]` 下、满足 Anti-Test-Theater 规则通过时，即为 CLOSED，因此关闭不依赖运行时环境。它绝不声称替身验证了真实系统：`realSysRtm` 是提供该证据的第二范围。 |
+| `test_scope` | 所报通过背后的 `TestScope`，即 `mockSysRtm` 或 `realSysRtm`。`mockSysRtm` 的结果绝不作为系统级已验证。 |
+| disposition（处置） | 单个测试点的台账状态：`DESIGNED`、`QUESTION`、`EXCLUDED`、`REFERRED`、`GAP`。覆盖率只统计 `DESIGNED` 行；其余四种是未覆盖的原因，其总和绝不作为覆盖率报告。每种处置的具体含义由 `CaTDD_methodPrompt-testPointDiscovery.md` 拥有。 |
+| `SpecCoding share` | SPEC 的量化度量：既追溯到开放故事、又由一个因预期原因失败过的测试先行、并通过了门禁的生产改动占比。它度量纪律而非正确性，始终与漂移事件一并解读。 |
+| Spec-First / Spec-Anchored / Spec-as-Source *(borrowed)* | `maturity_level` 所命名的取值，按"规格对代码拥有多少权威"排序：`Level-1` Spec-First（先写规格，任其漂移）、`Level-3` Spec-Anchored（用门禁把规格与代码连起来，漂移必须解决）、`Level-4` Spec-as-Source（规格即来源，代码是再生输出）。`Level-5` 是在其之上的自我演进。能力阶梯本身的定义属于其来源，不在本表。 |
 
 ### 概念图解与实例（Diagrams and Examples）
 
@@ -210,7 +226,7 @@ CaTDD 是方法驱动的体系。关键词漂移会直接导致行为漂移。
 发布前进行术语一致性检查：
 
 ```bash
-rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|TestLevel|UnitTesting|SysTesting|UserTesting|ArchVerifyDesign|DetailVerifyDesign|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING" README*.md methodPrompts slashCommands codeAgents agentSkills
+rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|TestLevel|TestScope|UnitTesting|SysTesting|UserTesting|mockSysRtm|realSysRtm|ArchVerifyDesign|DetailVerifyDesign|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING|status_signal|completeness_level|maturity_level|integrity_level|level_evidence|level_gap|testPassOnMock|discovery_ledger|Spec-First|Spec-Anchored|Spec-as-Source" README*.md methodPrompts slashCommands codeAgents agentSkills
 ```
 
 预期结果：这些术语的含义与本文件定义保持一致。

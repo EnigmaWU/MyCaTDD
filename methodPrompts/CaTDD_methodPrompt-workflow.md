@@ -54,6 +54,15 @@ For each selected TC:
 6. Update TC status markers.
 7. Refactor design comments, test code, then production code while preserving behavior.
 
+### Closure: When a Test Case Is CLOSED
+
+A test case is **CLOSED** when it is designed, US/AC-linked, and passes at `@[TestScope]: mockSysRtm` at its declared `@[TestLevel]`, with the Anti-Test-Theater Rule satisfied. Its evidence token is `testPassOnMock`: the test passes with every external dependency replaced by a double, so closure never depends on a provisioned runtime environment.
+
+- **Design for closure.** Push each external dependency behind a seam so the oracle is reachable on a double. Testability is a design obligation, not an afterthought; a test that needs the world to exist cannot be closed.
+- **A double is a contract double.** Its behavior comes from a source-derived contract, not from convenience. Prefer stable interaction seams, fakes, spies, or contract fixtures over brittle mocks, and never let a mock's return stand in for the SUT's behavior.
+- **A mock never proves the real system.** `testPassOnMock` does not claim that simulated behavior validates the real system. Running at `realSysRtm` is the second scope that supplies that evidence, and it is available at every `TestLevel`. Where a verification is meaningful only against the real runtime, leaving it unrun is a recorded unknown rather than a silent pass.
+- **Report the test scope.** `CLOSED` is earned at `mockSysRtm`; the passing marker is `GREEN`. A pass also records its `TestScope`, and a `mockSysRtm` result is never reported as system-verified.
+
 ## Default Execution Order
 
 | Order | Category Family |

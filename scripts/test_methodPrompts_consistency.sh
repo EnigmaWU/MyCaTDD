@@ -83,6 +83,8 @@ assert_contains "$FILE_NAMING" 'test_{feature}_{category}.<ext>'
 assert_contains "$FILE_NAMING" '## Superseded Names'
 assert_contains "$FILE_NAMING" 'deprecated'
 assert_contains "$FILE_NAMING" '@[TestLevel]'
+assert_contains "$TEST_STRUCTURE" '@[TestScope]'
+assert_contains "$TEST_STRUCTURE" 'mockSysRtm <marker> | realSysRtm <marker>'
 assert_contains "$MASTER" 'test_{feature}_{category}.<ext>'
 assert_contains "$TEST_STRUCTURE" 'test_{feature}_{category}.<ext>'
 

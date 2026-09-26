@@ -29,9 +29,10 @@
  *   [WHERE] in the [module name/subsystem] module
  *   [WHY] to ensure [key quality attributes: correctness/reliability/performance/etc.]
  *
- * SUT & TEST LEVEL:
+ * SUT, TEST LEVEL & SCOPE:
  *   - @[SUT]: [Declared component/class under test, e.g., InvocationValidator or CommandService]
  *   - @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
+ *   - @[TestScope]: mockSysRtm (or realSysRtm)
  *
  * SCOPE:
  *   - [In scope]: What IS tested in this file
@@ -80,6 +81,7 @@
  *     //=================================================================================================
  *     // @[SUT]: InvocationValidator
  *     // @[TestLevel]: UnitTesting
+ *     // @[TestScope]: mockSysRtm
  *     // @[Class]: P0 Functional / ValidFunc
  *     // @[Category]: Typical
  *     // @[Intent]: Prove the core happy-path workflow.
@@ -357,6 +359,7 @@
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  *  @[SUT]: InvocationValidator
  *  @[TestLevel]: UnitTesting
+ *  @[TestScope]: mockSysRtm
  *  @[Class]: P0 Functional / ValidFunc
  *  @[Category]: Typical
  *  @[Intent]: Prove the core happy-path workflow under valid ordinary use.
@@ -368,25 +371,26 @@
  *  @[TC]: TC-1, TC-2
  *
  * [@AC-1,US-1] Basic CLI invocation validation
- *  🟢 TC-1: verifyInvocation_byValidFlags_expectDispatchReady
+ *  TC-1: verifyInvocation_byValidFlags_expectDispatchReady
  *      @[TP]: TP-01 (Source: UserGuide § "IF: What You Want", Rule R-CLI-01)
  *      @[Purpose]: Validate that correct flags allow execution to proceed to dispatch
  *      @[Brief]: Pass valid arguments, verify validator returns success and dispatch-ready state
  *      @[Expect]: Validator returns isValid=true, exitCode=0, targetCommand resolved
- *      @[Status]: PASSED/GREEN ✅
+ *      @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior)
  *
- *  ⚪ TC-2: verifyInvocation_byAllCategoriesFlag_expectAllSkeletonsDispatched
+ *  TC-2: verifyInvocation_byAllCategoriesFlag_expectAllSkeletonsDispatched
  *      @[TP]: TP-02 (Source: UserGuide § "IF: What You Want", Rule R-CLI-01)
  *      @[Purpose]: Ensure all-skeleton generation mode validates successfully
  *      @[Brief]: Pass --all-skeletons with valid target, verify dispatch readiness
  *      @[Expect]: Validator returns isValid=true, mode="all-skeletons"
- *      @[Status]: PLANNED/TODO
+ *      @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure argument validation)
  *
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  * 📋 [CLASS: P0 Functional / InvalidFunc] [CATEGORY: Misuse] Incorrect API Usage
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  *  @[SUT]: InvocationValidator
  *  @[TestLevel]: UnitTesting
+ *  @[TestScope]: mockSysRtm
  *  @[Class]: P0 Functional / InvalidFunc
  *  @[Category]: Misuse
  *  @[Intent]: Prove graceful error handling when caller provides invalid arguments.
@@ -398,12 +402,12 @@
  *  @[TC]: TC-1, TC-2
  *
  * [@AC-2,US-1] Invalid arguments handling
- *  ⚪ TC-1: verifyInvocation_byUnknownFlag_expectValidationError
+ *  TC-1: verifyInvocation_byUnknownFlag_expectValidationError
  *      @[TP]: TP-03 (Source: UserGuide § "CLI Argument Reference", Rule R-CLI-02)
  *      @[Purpose]: Ensure unrecognized flags are fast-failed with clear message
  *      @[Brief]: Pass --unknown-flag, verify validator rejects with descriptive error
  *      @[Expect]: Validator throws ValidationError with code ERR_UNKNOWN_FLAG
- *      @[Status]: PLANNED/TODO
+ *      @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure argument validation)
  */
 //======>END OF TEST CASES DESIGN==================================================================
 //======>END OF UNIT TESTING DESIGN================================================================
@@ -469,6 +473,12 @@
 //   ⚠️  BROKEN_TEST:      Test failing for wrong reason (syntax error, missing import, fixture crash).
 //   ⚠️  ISSUES:           Known problem needing attention.
 //   🚫 BLOCKED:          Cannot proceed due to a dependency.
+//   ➖ N/A:               realSysRtm only: the case has no runtime-meaningful behavior, and the reason is recorded.
+//
+// TEST SCOPE:
+//   Every TC closes its block with one @[Status] line naming both scopes explicitly:
+//     @[Status]: mockSysRtm <marker> | realSysRtm <marker>
+//   mockSysRtm is the first scope and earns CLOSED; realSysRtm is the second scope and only adds evidence.
 //
 // PRIORITY LEVELS:
 //   P0 🥇 FUNCTIONAL:     Must complete before P1 (ValidFunc + InvalidFunc).
@@ -480,29 +490,29 @@
 // P0 🥇 FUNCTIONAL TESTING – ValidFunc (Typical + Edge)
 //===================================================================================================
 //
-//   🟢 [@AC-1,US-1] TC-1: verifyInvocation_byValidFlags_expectDispatchReady
+//   [@AC-1,US-1] TC-1: verifyInvocation_byValidFlags_expectDispatchReady
 //        - Description: Validate fundamental happy-path invocation.
 //        - Category: Typical (ValidFunc)
-//        - Status: GREEN
+//        @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior)
 //
-//   ⚪ [@AC-1,US-1] TC-2: verifyInvocation_byAllCategoriesFlag_expectAllSkeletonsDispatched
+//   [@AC-1,US-1] TC-2: verifyInvocation_byAllCategoriesFlag_expectAllSkeletonsDispatched
 //        - Description: Validate all-skeleton mode.
 //        - Category: Typical (ValidFunc)
-//        - Status: TODO
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure argument validation)
 //
 //===================================================================================================
 // P0 🥇 FUNCTIONAL TESTING – InvalidFunc (Misuse + Fault)
 //===================================================================================================
 //
-//   ⚪ [@AC-2,US-1] TC-1: verifyInvocation_byUnknownFlag_expectValidationError
+//   [@AC-2,US-1] TC-1: verifyInvocation_byUnknownFlag_expectValidationError
 //        - Description: Reject unknown CLI options.
 //        - Category: Misuse (InvalidFunc)
-//        - Status: TODO
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure argument validation)
 //
-//   ⚪ [@AC-3,US-2] TC-1: verifyFault_byMissingTargetFile_expectCleanEnoent
+//   [@AC-3,US-2] TC-1: verifyFault_byMissingTargetFile_expectCleanEnoent
 //        - Description: Handle file-system ENOENT gracefully.
 //        - Category: Fault (InvalidFunc)
-//        - Status: TODO
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (real filesystem error path)
 //
 // 🚪 GATE P0: All P0 tests must be GREEN before proceeding to P1.
 //
@@ -510,9 +520,9 @@
 // P1 🥈 DESIGN-ORIENTED TESTING – State, Capability, Interaction, Concurrency
 //===================================================================================================
 //
-//   ⚪ [@AC-4,US-2] TC-1: verifyState_byInitToReadyTransition_expectSuccess
+//   [@AC-4,US-2] TC-1: verifyState_byInitToReadyTransition_expectSuccess
 //        - Category: State
-//        - Status: TODO
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (driven by an injected clock)
 //
 // 🚪 GATE P1: All P1 tests GREEN, architecture validated.
 //
@@ -520,15 +530,15 @@
 // P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility, Configuration, Diagnosis, Security
 //===================================================================================================
 //
-//   ⚪ [@AC-5,US-3] TC-1: verifyPerformance_byLargeArgSet_expectSubMillisecond
+//   [@AC-5,US-3] TC-1: verifyPerformance_byLargeArgSet_expectSubMillisecond
 //        - Category: Performance
-//        - Status: TODO
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (sub-millisecond budget is measured on the real runtime)
 //
-//   ⚪ [@AC-6,US-3] TC-1: verifySecurity_bySensitiveArgs_expectCredentialsRedacted
+//   [@AC-6,US-3] TC-1: verifySecurity_bySensitiveArgs_expectCredentialsRedacted
 //        - Description: Validate that sensitive API keys are not leaked in CLI diagnostics or stderr.
 //        - Category: Security
 //        - Constitutional rule: K-SEC-02 (CWE-200 / Token Masking)
-//        - Status: TODO
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 //
 // 🚪 GATE P2: Quality attributes validated, production ready.
 //
@@ -536,15 +546,16 @@
 // P3 🎯 OTHER-ADDONS TESTING – Demo, Examples (Optional)
 //===================================================================================================
 //
-//   ⚪ [@AC-6,US-4] TC-1: verifyDemo_byFullWorkflow_expectOutput
+//   [@AC-6,US-4] TC-1: verifyDemo_byFullWorkflow_expectOutput
 //        - Category: Demo
-//        - Status: TODO
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 //
 //===================================================================================================
 // ✅ COMPLETED TESTS
 //===================================================================================================
 //
-//   🟢 [@AC-1,US-1] TC-1: verifyInvocation_byValidFlags_expectDispatchReady
+//   [@AC-1,US-1] TC-1: verifyInvocation_byValidFlags_expectDispatchReady
+//        @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior)
 //
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================
 

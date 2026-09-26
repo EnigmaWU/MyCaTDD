@@ -261,7 +261,9 @@ ready_for_implementation, exclusions, referrals, and residual risks separately.
 - `RED/IMPLEMENTED` 是已废弃的别名。测试仅"已存在"但从未执行，不构成 RED；只有在具备语义证伪门禁（Semantic Falsification Gate）证据时才能使用 `🔴 RED/FAILING`。
 - `✅` 不是独立状态，只能作为 `🟢 GREEN/PASSED` 的确认后缀出现。
 - 分类图例图标不得复用状态字形。分类列表中出现 `⚠️` 或 `🚫` 即与本表冲突。
-- 发现处置结果（`PASS | GAPS | BLOCKED`）是门禁结论，不是测试标记，绝不替代 TC 标记。
+- 发现门禁结论（`PASS | GAPS | BLOCKED`）不等于台账处置（`DESIGNED | QUESTION | EXCLUDED | REFERRED | GAP`）；两者都不替代 TC 标记。
+- 标记不等于覆盖。覆盖率只统计 `DESIGNED` 台账行；`QUESTION`、`EXCLUDED`、`REFERRED`、`GAP` 作为未覆盖的原因单独报告。
+- `CLOSED` 是单个测试用例的关闭谓词：已设计、已链接 US/AC，并在 `@[TestScope]: mockSysRtm`、其声明的 `@[TestLevel]` 下、满足 Anti-Test-Theater 规则通过。其证据记号为 `testPassOnMock`；`mockSysRtm` 的结果绝不作为系统级已验证报告。规范定义见 [README_UbiLang_ZH.md](../README_UbiLang_ZH.md)。
 
 ## 质量检查清单
 

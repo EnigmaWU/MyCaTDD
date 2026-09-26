@@ -10,7 +10,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 
 `Comment-alive` means:
 
-- Design details live in the test and source file as structured comments.
+- Design details live in the test or source file itself, in that language's documentation form (comments, doc comments, or docstrings).
 - Comments evolve with code instead of drifting in separate documents.
 - Comments are first-class artifacts that humans and LLMs can parse.
 - US/AC/TC structure bridges human intent and machine-executable tests.

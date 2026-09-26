@@ -12,6 +12,7 @@ Every class/category skeleton should preserve this minimum shape.
 //=================================================================================================
 // @[SUT]: [Declared SUT matching file overview]
 // @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
+// @[TestScope]: mockSysRtm (or realSysRtm)
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: What this category proves for this component
@@ -23,17 +24,32 @@ Every class/category skeleton should preserve this minimum shape.
 //=================================================================================================
 ```
 
+Each tracked test case carries one `@[Status]` line that names both scopes explicitly, so a case can be green on doubles while the real runtime is still outstanding:
+
+```
+// @[Status]: mockSysRtm <marker> | realSysRtm <marker>
+```
+
+`mockSysRtm` is the first scope and is where `CLOSED` is earned. `realSysRtm` uses the same markers plus `➖ N/A`, which may only be used with a recorded reason that the case has no runtime-meaningful behavior.
+
 ### Test Level and Verification Design Ownership
 
 `@[TestLevel]` declares where a test point is executed. Use exactly one canonical token:
 
 | `@[TestLevel]` | Means | Verification design stage that owns the strategy |
 | --- | --- | --- |
-| `UnitTesting` | One declared SUT inside its own boundary under the project's `sut_unit_convention`. | The detail-level verification design owns the behavior inventory, `discovery_ledger`, and CaTDD category design. |
-| `SysTesting` | The declared SUT assembled with its real peers, dependencies, and runtime environment. | The architecture-level verification design owns topology, environment matrix, double credibility, and evidence ownership. The TP row stays in the detail ledger and is promoted by ID. |
-| `UserTesting` | Full-flow end-to-end verification of the deployed composition, including documented demo/example flows. | The architecture-level verification design; it is not CaTDD category testing. |
+| `UnitTesting` | One unit is the SUT, verified inside its own boundary under the project's `sut_unit_convention`. When the project has no subdivision, `UnitTesting` and `SysTesting` name the same SUT and are equivalent. | The detail-level verification design owns the behavior inventory, `discovery_ledger`, and CaTDD category design. |
+| `SysTesting` | The composition of units is the SUT: the module in a multi-submodule project, or the whole project when it has no subdivision. | The architecture-level verification design owns the composition boundary, the `TestScope` strategy, and double credibility. The TP row stays in the detail ledger and is promoted by ID. |
+| `UserTesting` | A `SysTesting` scope oriented to usage scenarios: documented end-to-end, demo, and example flows. | The architecture-level verification design; it is not CaTDD category testing. |
 
-`ModuleTesting` is a superseded level name. It survives only as a detail-level scope qualifier meaning module-level Package/Service/Interface scope, as in "the module scope of `UnitTesting`". Route a module-scope test by peer reality: real peers or target runtime -> `SysTesting` (architecture level); fakes or stubs inside the module boundary -> `UnitTesting` (detail level).
+`TestLevel` says how much of the developed system is inside the SUT. What the SUT's runtime is made of is a separate axis, declared independently so any level can run at either scope:
+
+| `@[TestScope]` | Means |
+| --- | --- |
+| `mockSysRtm` | The SUT's system runtime - peers, dependencies, runtime environment - is replaced by doubles. The first scope, always attempted first, and the scope that earns `CLOSED`. |
+| `realSysRtm` | The SUT runs against its real system runtime. The second scope: it adds evidence and never replaces a `mockSysRtm` closure. |
+
+`ModuleTesting` is a retired level name and is never used. Module-level scope is `SysTesting` when the module is the declared SUT, so it is not a fourth value beside the three level values.
 
 This layer names design stages, not workflow artifacts. The mapping from these stages to project documents is owned by the workflow layer.
 

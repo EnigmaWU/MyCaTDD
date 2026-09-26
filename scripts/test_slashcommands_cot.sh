@@ -5,6 +5,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 COMMAND_DIRS=(
   "slashCommands/commands/Px-SpecFlow"
   "slashCommands/commands/Px-HarnessKits"
+  "slashCommands/commands/Px-StatusKits"
   "slashCommands/commands/P0-FuncTestsFlow"
   "slashCommands/commands/P1-DesignTestsFlow"
   "slashCommands/commands/P2-QualityTestsFlow"

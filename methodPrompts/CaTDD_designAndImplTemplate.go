@@ -39,9 +39,10 @@ OVERVIEW:
   [WHERE] in the [module name/subsystem] package
   [WHY] to ensure [key quality attributes: correctness/reliability/performance/etc.]
 
-SUT & TEST LEVEL:
+SUT, TEST LEVEL & SCOPE:
   - @[SUT]: [Declared component/struct under test, e.g., WorkerPool or TaskDispatcher]
   - @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
+  - @[TestScope]: mockSysRtm (or realSysRtm)
 
 SCOPE:
   - [In scope]: What IS tested in this file
@@ -88,6 +89,7 @@ DESIGN SKELETON CONTRACT:
     //=================================================================================================
     // @[SUT]: WorkerPool
     // @[TestLevel]: UnitTesting
+    // @[TestScope]: mockSysRtm
     // @[Class]: P0 Functional / ValidFunc
     // @[Category]: Typical
     // @[Intent]: Prove the core happy-path workflow.
@@ -325,6 +327,7 @@ DETAILED FORMAT WITH STATUS:
 ═════════════════════════════════════════════════════════════════════════════════════════════════
  @[SUT]: WorkerPool
  @[TestLevel]: UnitTesting
+ @[TestScope]: mockSysRtm
  @[Class]: P0 Functional / ValidFunc
  @[Category]: Typical
  @[Intent]: Prove the core happy-path workflow under valid ordinary use.
@@ -336,18 +339,19 @@ DETAILED FORMAT WITH STATUS:
  @[TC]: TC-1
 
 [@AC-1,US-1] Happy path task dispatch
- 🟢 TC-1: verifyTaskDispatch_byValidJob_expectSuccessfulExecution
+ TC-1: verifyTaskDispatch_byValidJob_expectSuccessfulExecution
      @[TP]: TP-01 (Source: WorkerPoolSpec#2.1, Rule R-POOL-01)
      @[Purpose]: Validate that a submitted task is picked up by a worker and executes
      @[Brief]: Submit valid increment job, wait for completion, verify result
      @[Expect]: Task executes, pool returns nil error, output state is updated
-     @[Status]: PASSED/GREEN ✅
+     @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior)
 
 ═════════════════════════════════════════════════════════════════════════════════════════════════
 📋 [CLASS: P0 Functional / InvalidFunc] [CATEGORY: Misuse] Incorrect API Usage
 ═════════════════════════════════════════════════════════════════════════════════════════════════
  @[SUT]: WorkerPool
  @[TestLevel]: UnitTesting
+ @[TestScope]: mockSysRtm
  @[Class]: P0 Functional / InvalidFunc
  @[Category]: Misuse
  @[Intent]: Prove fast-fail validation when caller violates API contracts.
@@ -359,18 +363,19 @@ DETAILED FORMAT WITH STATUS:
  @[TC]: TC-1
 
 [@AC-3,US-1] Nil task submission
- ⚪ TC-1: verifyTaskDispatch_byNilJob_expectErrNilTask
+ TC-1: verifyTaskDispatch_byNilJob_expectErrNilTask
      @[TP]: TP-03 (Source: WorkerPoolSpec#3.1, Rule R-POOL-03)
      @[Purpose]: Validate immediate fast-fail return when task is nil
      @[Brief]: Call pool.Submit(nil), verify ErrNilTask returned
      @[Expect]: Returns ErrNilTask, no worker dispatched
-     @[Status]: PLANNED/TODO
+     @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure argument validation)
 
 ═════════════════════════════════════════════════════════════════════════════════════════════════
 📋 [CLASS: P0 Functional / InvalidFunc] [CATEGORY: Fault] Panic Isolation & Cancellation
 ═════════════════════════════════════════════════════════════════════════════════════════════════
  @[SUT]: WorkerPool
  @[TestLevel]: UnitTesting
+ @[TestScope]: mockSysRtm
  @[Class]: P0 Functional / InvalidFunc
  @[Category]: Fault
  @[Intent]: Prove system resilience under worker failure conditions.
@@ -382,20 +387,20 @@ DETAILED FORMAT WITH STATUS:
  @[TC]: TC-1, TC-2
 
 [@AC-1,US-2] Worker panic recovery
- ⚪ TC-1: verifyTaskDispatch_byPanickingJob_expectPanicRecoveredAndPoolAlive
+ TC-1: verifyTaskDispatch_byPanickingJob_expectPanicRecoveredAndPoolAlive
      @[TP]: TP-04 (Source: WorkerPoolSpec#3.4, Rule R-POOL-04)
      @[Purpose]: Ensure task panic does not crash process or deadlock pool
      @[Brief]: Submit job that calls panic(), verify pool recovers and handles subsequent jobs
      @[Expect]: Pool stays operational, subsequent tasks succeed, panic logged
-     @[Status]: PLANNED/TODO
+     @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (real worker panic path)
 
 [@AC-2,US-2] Context cancellation
- ⚪ TC-2: verifyTaskDispatch_byContextCancelled_expectImmediateAbort
+ TC-2: verifyTaskDispatch_byContextCancelled_expectImmediateAbort
      @[TP]: TP-05 (Source: WorkerPoolSpec#2.1, Rule R-POOL-01)
      @[Purpose]: Ensure long-running task responds to context cancellation
      @[Brief]: Submit job with cancelled ctx, verify task aborts promptly
      @[Expect]: Task exits on ctx.Done(), elapsed time < 50ms
-     @[Status]: PLANNED/TODO
+     @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (elapsed-time oracle needs real scheduling)
 */
 //======>END OF TEST CASES DESIGN==================================================================
 //======>END OF UNIT TESTING DESIGN================================================================
@@ -548,39 +553,45 @@ STATUS LEGEND:
   ⚠️ BROKEN_TEST:      Test failing for wrong reason (syntax error, missing import, fixture crash).
   ⚠️ ISSUES:           Known problem needing attention.
   🚫 BLOCKED:          Cannot proceed due to external dependency.
+  ➖ N/A:               realSysRtm only: the case has no runtime-meaningful behavior, and the reason is recorded.
+
+TEST SCOPE:
+  Every TC closes its block with one @[Status] line naming both scopes explicitly:
+    @[Status]: mockSysRtm <marker> | realSysRtm <marker>
+  mockSysRtm is the first scope and earns CLOSED; realSysRtm is the second scope and only adds evidence.
 
 ===================================================================================================
 P0 🥇 FUNCTIONAL TESTING – ValidFunc (Typical + Edge)
 ===================================================================================================
 
-  🟢 [@AC-1,US-1] TC-1: verifyTaskDispatch_byValidJob_expectSuccessfulExecution
+  [@AC-1,US-1] TC-1: verifyTaskDispatch_byValidJob_expectSuccessfulExecution
        - Description: Validate happy-path task dispatch and execution.
        - Category: Typical (ValidFunc)
-       - Status: GREEN
+       @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior)
 
-  ⚪ [@AC-2,US-1] TC-1: verifyTaskDispatch_byFullQueue_expectErrQueueFull
+  [@AC-2,US-1] TC-1: verifyTaskDispatch_byFullQueue_expectErrQueueFull
        - Description: Fast-fail non-blocking submit on saturated queue.
        - Category: Edge (ValidFunc)
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (queue saturation needs a real producer)
 
 ===================================================================================================
 P0 🥇 FUNCTIONAL TESTING – InvalidFunc (Misuse + Fault)
 ===================================================================================================
 
-  🟢 [@AC-3,US-1] TC-1: verifyTaskDispatch_byNilJob_expectErrNilTask
+  [@AC-3,US-1] TC-1: verifyTaskDispatch_byNilJob_expectErrNilTask
        - Description: Fast-fail nil job submission with ErrNilTask.
        - Category: Misuse (InvalidFunc)
-       - Status: GREEN
+       @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (pure argument validation)
 
-  ⚪ [@AC-1,US-2] TC-1: verifyTaskDispatch_byPanickingJob_expectPanicRecoveredAndPoolAlive
+  [@AC-1,US-2] TC-1: verifyTaskDispatch_byPanickingJob_expectPanicRecoveredAndPoolAlive
        - Description: Panic containment and recovery across workers.
        - Category: Fault (InvalidFunc)
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (real worker panic path)
 
-  🟢 [@AC-2,US-2] TC-2: verifyTaskDispatch_byContextCancelled_expectImmediateAbort
+  [@AC-2,US-2] TC-2: verifyTaskDispatch_byContextCancelled_expectImmediateAbort
        - Description: Verify prompt cancellation via ctx.Done().
        - Category: Fault (InvalidFunc)
-       - Status: GREEN
+       @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ⚪ TODO/PLANNED (elapsed-time oracle needs real scheduling)
 
 🚪 GATE P0: All P0 tests must be GREEN before proceeding to P1.
 
@@ -588,15 +599,15 @@ P0 🥇 FUNCTIONAL TESTING – InvalidFunc (Misuse + Fault)
 P1 🥈 DESIGN-ORIENTED TESTING – State, Capability, Interaction, Concurrency
 ===================================================================================================
 
-  ⚪ [@AC-4,US-2] TC-1: verifyState_byDrainingToClosed_expectGracefulDrain
+  [@AC-4,US-2] TC-1: verifyState_byDrainingToClosed_expectGracefulDrain
        - Description: Ensure in-flight jobs finish before pool terminates.
        - Category: State
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (driven by an injected clock)
 
-  ⚪ [@AC-5,US-1] TC-1: verifyConcurrency_byParallelSubmissions_expectNoDataRace
+  [@AC-5,US-1] TC-1: verifyConcurrency_byParallelSubmissions_expectNoDataRace
        - Description: Stress test 100 concurrent submitters with -race flag.
        - Category: Concurrency
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (race oracle needs real scheduling)
 
 🚪 GATE P1: All P1 tests GREEN, architecture validated.
 
@@ -604,21 +615,21 @@ P1 🥈 DESIGN-ORIENTED TESTING – State, Capability, Interaction, Concurrency
 P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility, Configuration, Diagnosis, Security
 ===================================================================================================
 
-  ⚪ [@AC-6,US-1] TC-1: verifyPerformance_byZeroAllocDispatch_expectUnderBenchmarkTarget
+  [@AC-6,US-1] TC-1: verifyPerformance_byZeroAllocDispatch_expectUnderBenchmarkTarget
        - Description: Benchmark allocations per submit using testing.B.
        - Category: Performance
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (allocation budget is measured on the real runtime)
 
-  ⚪ [@AC-7,US-2] TC-1: verifyRobust_byContinuousChurn_expectNoGoroutineLeak
+  [@AC-7,US-2] TC-1: verifyRobust_byContinuousChurn_expectNoGoroutineLeak
        - Description: 10,000 tasks churn, verify runtime.NumGoroutine() baseline.
        - Category: Robust
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (goroutine baseline needs the real runtime)
 
-  ⚪ [@AC-8,US-2] TC-1: verifySecurity_byPanicLeakage_expectStackTraceSanitized
+  [@AC-8,US-2] TC-1: verifySecurity_byPanicLeakage_expectStackTraceSanitized
        - Description: Ensure panic logs sanitize raw memory addresses and sensitive payloads.
        - Category: Security
        - Constitutional rule: K-SEC-02 (CWE-200 / Sensitive Data Exposure)
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 
 🚪 GATE P2: Quality attributes validated, production ready.
 
@@ -626,17 +637,20 @@ P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility, Configu
 P3 🎯 OTHER-ADDONS TESTING – Demo, Examples (Optional)
 ===================================================================================================
 
-  ⚪ [@AC-8,US-1] TC-1: verifyDemo_byExampleWorkerPool_expectRunnableGodoc
+  [@AC-8,US-1] TC-1: verifyDemo_byExampleWorkerPool_expectRunnableGodoc
        - Description: Godoc-compatible example for package documentation.
        - Category: Demo
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 
 ===================================================================================================
 ✅ COMPLETED TESTS
 ===================================================================================================
 
-  🟢 [@AC-1,US-1] TC-1: verifyTaskDispatch_byValidJob_expectSuccessfulExecution
-  🟢 [@AC-3,US-1] TC-1: verifyTaskDispatch_byNilJob_expectErrNilTask
-  🟢 [@AC-2,US-2] TC-2: verifyTaskDispatch_byContextCancelled_expectImmediateAbort
+  [@AC-1,US-1] TC-1: verifyTaskDispatch_byValidJob_expectSuccessfulExecution
+       @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior)
+  [@AC-3,US-1] TC-1: verifyTaskDispatch_byNilJob_expectErrNilTask
+       @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (pure argument validation)
+  [@AC-2,US-2] TC-2: verifyTaskDispatch_byContextCancelled_expectImmediateAbort
+       @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ⚪ TODO/PLANNED (elapsed-time oracle needs real scheduling)
 */
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

@@ -150,6 +150,27 @@ Generate Codex-native wrappers:
 scripts/makeSlashCmd4Codex.sh --clean
 ```
 
+Install Codex custom prompts (`/prompts:<Command>`) for a project, keeping every prompt a thin adapter over that project's own `.catdd` source:
+
+```bash
+scripts/installCaTDD.sh --targetDir "$PWD" --targetCodeAgent Codex \
+  --codex-prompts-dir default --clean-prompts --yes
+```
+
+`default` means `$CODEX_HOME/prompts`, that is `~/.codex/prompts`. The generated prompt files carry no CaTDD method text: each one names the canonical command and points at `.catdd/slashCommands/commands/<group>/<Command>.md` in the project root, so the project's `.catdd` stays the single source of truth. Codex custom prompts are per-user and are not shared through the repository, so restart Codex after generating them.
+
+To refresh only the prompts for an already-installed project, without rewriting the target project:
+
+```bash
+scripts/makeSlashCmd4Codex.sh \
+  --source-dir "$PWD/.catdd/slashCommands/commands" \
+  --workspace-root "$PWD" \
+  --prompts-output "$HOME/.codex/prompts" \
+  --no-skills --clean
+```
+
+This second form requires the project's `.catdd/slashCommands/commands/` to already contain the portable source, so refresh the install first when new commands were added upstream.
+
 Install or refresh CaTDD into Continue, Cline, Antigravity, or Codex projects:
 
 ```bash
@@ -185,13 +206,14 @@ Quick rules:
 | --- | --- | --- |
 | Px SpecFlow | Drive SpecCoding from project context and work item to reviewed, committed story | [Px-SpecFlow](flows/Px-SpecFlow.md) |
 | Px HarnessKits | Run Harness Engineering tool-point commands for CaTDD source, adapter, execution, diagnostic, and patch-back maintenance | [Px-HarnessKits](kits/Px-HarnessKits.md) |
+| Px StatusKits | Ask where UT, SPEC, or HARNESS work stands right now, read-only, and get one next command | [Px-StatusKits](kits/Px-StatusKits.md) |
 | P0 FuncTestsFlow | Convert or design functional test skeletons, then implement TC-by-TC | [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md) |
 | P1 DesignTestsFlow | Extend stable functional coverage into design-gated State, Capability, and Concurrency skeletons | [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md) |
 | P2 QualityTestsFlow | Extend stable behavior into Performance, Robust, Compatibility, and Configuration | [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md) |
 
 ## Command Map
 
-Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow](commands/Px-SpecFlow/README.md), [Px-HarnessKits](commands/Px-HarnessKits/README.md), [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md), [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md), and [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md).
+Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow](commands/Px-SpecFlow/README.md), [Px-HarnessKits](commands/Px-HarnessKits/README.md), [Px-StatusKits](commands/Px-StatusKits/README.md), [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md), [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md), and [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md).
 
 | Developer need | Command template |
 | --- | --- |
@@ -205,6 +227,9 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Capture session context before starting a new task session | [HARNESS_newTaskSession](commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | Learn and evolve after a meaningful verified success or repeated harness evidence | [HARNESS_evolveHarness](commands/Px-HarnessKits/HARNESS_evolveHarness.md) with `evolution_mode=auto` |
 | Tell me what SpecCoding task to do next | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
+| Tell me the current SpecCoding status across every `.catdd/spec/` lane, with a Level-0…Level-5 maturity grade | [SPEC_showMeStatus](commands/Px-StatusKits/SPEC_showMeStatus.md) |
+| Tell me the current unit-test status and the next UT command, with a Level-0…Level-5 completeness grade | [UT_showMeStatus](commands/Px-StatusKits/UT_showMeStatus.md) |
+| Tell me the current harness and installation status, with a Level-0…Level-5 integrity grade | [HARNESS_showMeStatus](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 | Ask what is wrong and switch into a VibeCoding investigation | [SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
 | Create checkbox TASKs and choose the next SPEC step for an opened user story | [SPEC_makePlan](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | Import an existing structured User Story or AC slice | [SPEC_importUserStory](commands/Px-SpecFlow/SPEC_importUserStory.md) |

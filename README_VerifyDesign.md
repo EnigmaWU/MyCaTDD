@@ -16,13 +16,13 @@ This document captures verification strategy and US/AC/TC traceability for activ
 ## Testing Definition
 
 - UnitTesting verifies behavior at parser/validator function scope.
-- ModuleTesting verifies behavior at CLI invocation validation scope.
+- SysTesting verifies behavior at CLI invocation validation scope.
 - UserTesting verifies end-to-end CLI interaction flow.
 
 Rules:
 
-- For this slice, UnitTesting and ModuleTesting are aligned at CLI validation boundary.
-- UnitTesting and ModuleTesting both use CaTDD categories.
+- For this slice, UnitTesting and SysTesting are aligned at the CLI validation boundary, because this project declares no subdivision below it.
+- UnitTesting and SysTesting both use CaTDD categories.
 - UserTesting remains full-flow verification outside category skeleton design.
 
 ## Test Strategy

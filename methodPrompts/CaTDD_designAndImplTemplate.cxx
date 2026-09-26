@@ -31,9 +31,10 @@
  *   [WHERE] in the [module name/subsystem] module
  *   [WHY] to ensure [key quality attributes: correctness/reliability/performance/etc.]
  *
- * SUT & TEST LEVEL:
+ * SUT, TEST LEVEL & SCOPE:
  *   - @[SUT]: [Declared component/class under test, e.g., IOC_CommandAPI]
  *   - @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
+ *   - @[TestScope]: mockSysRtm (or realSysRtm)
  *
  * SCOPE:
  *   - [In scope]: What IS tested in this file
@@ -82,6 +83,7 @@
  *     //=================================================================================================
  *     // @[SUT]: IOC_CommandAPI
  *     // @[TestLevel]: UnitTesting
+ *     // @[TestScope]: mockSysRtm
  *     // @[Class]: P0 Functional / ValidFunc
  *     // @[Category]: Typical
  *     // @[Intent]: Prove the core happy-path workflow.
@@ -444,6 +446,7 @@
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  *  @[SUT]: IOC_CommandAPI
  *  @[TestLevel]: UnitTesting
+ *  @[TestScope]: mockSysRtm
  *  @[Class]: P0 Functional / ValidFunc
  *  @[Category]: Typical
  *  @[Intent]: Prove the core happy-path workflow under valid ordinary use.
@@ -455,25 +458,26 @@
  *  @[TC]: TC-1, TC-2
  *
  * [@AC-1,US-1] Basic command execution with callback
- *  🟢 TC-1: verifyServiceAsCmdExecutor_bySingleClient_expectSynchronousResponse
+ *  TC-1: verifyServiceAsCmdExecutor_bySingleClient_expectSynchronousResponse
  *      @[TP]: TP-01 (Source: IOC Spec #3.1, Rule R-CMD-01)
  *      @[Purpose]: Validate fundamental command execution from client to service
  *      @[Brief]: Service accepts client, processes PING via callback, returns PONG
  *      @[Expect]: Returns IOC_RESULT_SUCCESS, callback invoked synchronously, output matches PONG
- *      @[Status]: PASSED/GREEN ✅ - All assertions passing
+ *      @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior) - All assertions passing
  *
- *  🔴 TC-2: verifyServiceAsCmdExecutor_byMultipleCommandTypes_expectProperExecution
+ *  TC-2: verifyServiceAsCmdExecutor_byMultipleCommandTypes_expectProperExecution
  *      @[TP]: TP-02 (Source: IOC Spec #3.2, Rule R-CMD-02)
  *      @[Purpose]: Ensure service handles different command types correctly
  *      @[Brief]: Test PING (no payload), ECHO (text), CALC (numeric) sequentially
  *      @[Expect]: Each command processed by callback with correct handler and output
- *      @[Status]: IMPLEMENTED/RED - Need to implement CALC command handler
+ *      @[Status]: mockSysRtm 🔴 RED/FAILING | realSysRtm ➖ N/A (double-covered behavior) - Need to implement CALC command handler
  *
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  * 📋 [CLASS: P0 Functional / ValidFunc] [CATEGORY: Edge] Edge Cases and Limits
  * ═════════════════════════════════════════════════════════════════════════════════════════════
  *  @[SUT]: IOC_CommandAPI
  *  @[TestLevel]: UnitTesting
+ *  @[TestScope]: mockSysRtm
  *  @[Class]: P0 Functional / ValidFunc
  *  @[Category]: Edge
  *  @[Intent]: Prove valid edge values, limits, and mode variations.
@@ -485,27 +489,27 @@
  *  @[TC]: TC-1, TC-2
  *
  * [@AC-2,US-1] Non-blocking behavior under load
- *  ⚪ TC-1: verifyNonBlockPost_byFullQueue_expectImmediateReturn
+ *  TC-1: verifyNonBlockPost_byFullQueue_expectImmediateReturn
  *      @[TP]: TP-03 (Source: IOC Spec #3.4, Rule R-CMD-04)
  *      @[Purpose]: Validate non-blocking semantics when queue is at capacity
  *      @[Brief]: Fill queue, post one more event, verify immediate return with error code
  *      @[Expect]: Immediate return without blocking, error code IOC_RESULT_TOO_MANY_QUEUING
- *      @[Status]: PLANNED/TODO - Scheduled for next sprint
+ *      @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED - Scheduled for next sprint
  *
  * [@AC-3,US-2] Null and invalid input handling
- *  ⚪ TC-1: verifyOperation_byNullPointer_expectInvalidParamError
+ *  TC-1: verifyOperation_byNullPointer_expectInvalidParamError
  *      @[TP]: TP-04 (Source: IOC Spec #3.5, Rule R-CMD-07)
  *      @[Purpose]: Fast-fail validation for null pointer inputs
  *      @[Brief]: Call API with NULL, verify IOC_RESULT_INVALID_PARAM
  *      @[Expect]: Fast return with IOC_RESULT_INVALID_PARAM, no memory corruption
- *      @[Status]: PLANNED/TODO - Part of fast-fail six
+ *      @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure argument validation) - Part of fast-fail six
  *
- *  ⚪ TC-2: verifyOperation_byZeroTimeout_expectImmediateTimeout
+ *  TC-2: verifyOperation_byZeroTimeout_expectImmediateTimeout
  *      @[TP]: TP-05 (Source: IOC Spec #3.6, Rule R-CMD-08)
  *      @[Purpose]: Validate zero timeout behavior
  *      @[Brief]: Call wait API with timeout=0, verify immediate return
  *      @[Expect]: Immediate timeout return without hanging
- *      @[Status]: PLANNED/TODO - Part of fast-fail six
+ *      @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED - Part of fast-fail six
  */
 //======>END OF TEST CASES DESIGN==================================================================
 //======>END OF UNIT TESTING DESIGN================================================================
@@ -589,6 +593,12 @@ TEST_F(UT_NameOfCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 //   ⚠️  BROKEN_TEST:      Test failing for wrong reason (syntax error, missing import, fixture crash).
 //   ⚠️  ISSUES:           Known problem needing attention.
 //   🚫 BLOCKED:          Cannot proceed due to a dependency.
+//   ➖ N/A:               realSysRtm only: the case has no runtime-meaningful behavior, and the reason is recorded.
+//
+// TEST SCOPE:
+//   Every TC closes its block with one @[Status] line naming both scopes explicitly:
+//     @[Status]: mockSysRtm <marker> | realSysRtm <marker>
+//   mockSysRtm is the first scope and earns CLOSED; realSysRtm is the second scope and only adds evidence.
 //
 // PRIORITY LEVELS:
 //   P0 🥇 FUNCTIONAL:     Must complete before P1 (ValidFunc + InvalidFunc).
@@ -601,35 +611,39 @@ TEST_F(UT_NameOfCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 //   2. Move to P1 tests based on design complexity.
 //   3. Add P2 tests for specific quality requirements.
 //   4. Add P3 tests for documentation purposes.
-//   5. Mark status as you go: ⚪ TODO → 🔴 RED → 🟢 GREEN.
+//   5. Mark both scopes as you go: one @[Status] line per TC.
 //
 //===================================================================================================
 // P0 🥇 FUNCTIONAL TESTING – ValidFunc (Typical + Edge)
 //===================================================================================================
 //
-//   ⚪ [@AC-1,US-1] TC-1: verifyTypical_byBasicOperation_expectSuccess
+//   [@AC-1,US-1] TC-1: verifyTypical_byBasicOperation_expectSuccess
 //        - Description: Validate fundamental happy-path workflow.
 //        - Category: Typical (ValidFunc)
 //        - Estimated effort: 1-2 hours
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (double-covered behavior)
 //
-//   ⚪ [@AC-2,US-1] TC-1: verifyEdge_byNullInput_expectInvalidParamError
+//   [@AC-2,US-1] TC-1: verifyEdge_byNullInput_expectInvalidParamError
 //        - Description: Fast-fail validation for null pointer (Fast-Fail Six #1).
 //        - Category: Edge (ValidFunc)
 //        - Estimated effort: 30 min
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure argument validation)
 //
 //===================================================================================================
 // P0 🥇 FUNCTIONAL TESTING – InvalidFunc (Misuse + Fault)
 //===================================================================================================
 //
-//   ⚪ [@AC-3,US-1] TC-1: verifyMisuse_byDoubleInit_expectIdempotentOrError
+//   [@AC-3,US-1] TC-1: verifyMisuse_byDoubleInit_expectIdempotentOrError
 //        - Description: Test double-initialization handling (Fast-Fail Six #6).
 //        - Category: Misuse (InvalidFunc)
 //        - Estimated effort: 30 min
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (double-covered behavior)
 //
-//   ⚪ [@AC-4,US-2] TC-1: verifyFault_byResourceExhaustion_expectGracefulDegradation
+//   [@AC-4,US-2] TC-1: verifyFault_byResourceExhaustion_expectGracefulDegradation
 //        - Description: Test behavior when resources are exhausted.
 //        - Category: Fault (InvalidFunc)
 //        - Estimated effort: 1 hour
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 //
 // 🚪 GATE P0: All P0 tests must be GREEN before proceeding to P1.
 //
@@ -637,23 +651,26 @@ TEST_F(UT_NameOfCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 // P1 🥈 DESIGN-ORIENTED TESTING – State, Capability, Interaction, Concurrency
 //===================================================================================================
 //
-//   ⚪ [@AC-5,US-2] TC-1: verifyState_byValidTransitions_expectSuccess
+//   [@AC-5,US-2] TC-1: verifyState_byValidTransitions_expectSuccess
 //        - Description: Validate normal state transitions (Init→Ready→Running).
 //        - Category: State
 //        - Depends on: P0 complete
 //        - Estimated effort: 2 hours
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (driven by an injected clock)
 //
-//   ⚪ [@AC-6,US-2] TC-1: verifyInteraction_byAdapterSequence_expectTranslateBeforeDispatch
+//   [@AC-6,US-2] TC-1: verifyInteraction_byAdapterSequence_expectTranslateBeforeDispatch
 //        - Description: Validate collaborator sequence and handoff design.
 //        - Category: Interaction
 //        - Depends on: P0 complete
 //        - Estimated effort: 1 hour
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 //
-//   🚫 [@AC-7,US-3] TC-1: verifyConcurrency_byMultipleThreads_expectThreadSafe
+//   [@AC-7,US-3] TC-1: verifyConcurrency_byMultipleThreads_expectThreadSafe
 //        - Description: Test concurrent access from 10 threads.
 //        - Category: Concurrency
 //        - Depends on: P0 complete, run with ThreadSanitizer.
 //        - Estimated effort: 3 hours
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (race oracle needs real scheduling)
 //
 // 🚪 GATE P1: All P1 tests GREEN, architecture validated.
 //
@@ -661,25 +678,28 @@ TEST_F(UT_NameOfCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 // P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility, Configuration, Diagnosis, Security
 //===================================================================================================
 //
-//   ⚪ [@AC-8,US-3] TC-1: verifyPerformance_byHighLoad_expectAcceptableLatency
+//   [@AC-8,US-3] TC-1: verifyPerformance_byHighLoad_expectAcceptableLatency
 //        - Description: Benchmark latency under 1000 req/sec load.
 //        - Category: Performance
 //        - Depends on: P1 complete
 //        - Target: < 100ms p99 latency
 //        - Estimated effort: 2 hours
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (budget is measured on the real runtime)
 //
-//   ⚪ [@AC-9,US-3] TC-1: verifyDiagnosis_byDependencyTimeout_expectActionableEvidence
+//   [@AC-9,US-3] TC-1: verifyDiagnosis_byDependencyTimeout_expectActionableEvidence
 //        - Description: Validate logs, traces, stderr, or health evidence.
 //        - Category: Diagnosis
 //        - Depends on: diagnostic surface defined
 //        - Estimated effort: 1 hour
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 //
-//   ⚪ [@AC-10,US-3] TC-1: verifySecurity_byCrossTenantAccess_expectDeniedWithoutLeakage
+//   [@AC-10,US-3] TC-1: verifySecurity_byCrossTenantAccess_expectDeniedWithoutLeakage
 //        - Description: Validate a defined protection property under policy.
 //        - Category: Security
 //        - Constitutional rule: K-SEC-03 (CWE-862 / Tenant Isolation)
 //        - Depends on: SecurityDesign or threat model
 //        - Estimated effort: 2 hours
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 //
 // 🚪 GATE P2: Quality attributes validated, production ready.
 //
@@ -687,19 +707,21 @@ TEST_F(UT_NameOfCategoryFixture, verifyBehaviorX_byDoA_expectSomething) {
 // P3 🎯 OTHER-ADDONS TESTING – Demo, Examples (Optional)
 //===================================================================================================
 //
-//   ⚪ [@AC-11,US-5] TC-1: verifyDemo_byEndToEndWorkflow_expectComplete
+//   [@AC-11,US-5] TC-1: verifyDemo_byEndToEndWorkflow_expectComplete
 //        - Description: Full feature demonstration for documentation.
 //        - Category: Demo
 //        - Depends on: P3 complete
 //        - Estimated effort: 2 hours
+//        @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 //
 //===================================================================================================
 // ✅ COMPLETED TESTS (for reference, can be removed after stable)
 //===================================================================================================
 //
-//   🟢 [@AC-0,US-1] TC-1: verifyInitialization_byValidConfig_expectSuccess
+//   [@AC-0,US-1] TC-1: verifyInitialization_byValidConfig_expectSuccess
 //        - Completed: 2024-11-15
 //        - Notes: Basic initialization test, all passing
+//        @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (pure configuration parsing)
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

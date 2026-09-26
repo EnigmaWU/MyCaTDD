@@ -16,6 +16,7 @@ It defines portable command intent and flow order for automated or semi-automate
 - A shared command template that keeps portable prompts consistent.
 - SpecCoding flow contracts that move from project context to completed stories.
 - Harness Engineering tool-point commands that maintain CaTDD source, adapters, execution, diagnostics, and patch-back safety.
+- Read-only status reporting kits that report the UT, SPEC, or HARNESS viewpoint and name the owning next command.
 - Functional, design, and quality test flows aligned with CaTDD priority classes.
 
 `slashCommands` is code-agent agnostic. The same portable command files can be wrapped for Copilot, Cline, Continue, `utCodeAgentCLI`, or any assistant that can consume prompt text.
@@ -63,7 +64,7 @@ Slash command flow priority uses the same Pn numbering as the CaTDD class priori
 - **P1 = DesignTestsFlow**: design-oriented flow for State, Capability, and Concurrency skeletons. It is CaTDD `P1 Design`.
 - **P2 = QualityTestsFlow**: quality-oriented flow for Performance, Robust, Compatibility, and Configuration skeletons. It is CaTDD `P2 Quality`.
 
-`Px` flows and kits, such as `Px-SpecFlow` and `Px-HarnessKits`, are cross-priority orchestration or operational layers. They do not define CaTDD category priority.
+`Px` flows and kits, such as `Px-SpecFlow`, `Px-HarnessKits`, and `Px-StatusKits`, are cross-priority orchestration, operational, or reporting layers. They do not define CaTDD category priority.
 
 Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPrompts`.
 

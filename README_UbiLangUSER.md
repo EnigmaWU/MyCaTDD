@@ -1,25 +1,20 @@
-# CaTDD Ubiquitous Language
+# CaTDD Ubiquitous Language - USER View
 
-This file defines the project-root vocabulary that CaTDD installers distribute to target projects.
-It is the canonical meaning contract for terms that must stay consistent across method prompts, slash commands, code agents, and generated adapters.
+Companion: [README_UbiLangDEV.md](README_UbiLangDEV.md) holds the vocabulary for creating and evolving CaTDD itself. This file is the canonical meaning contract for the terms you need **to use CaTDD on your own project**: write tests, run the flow, read a status report, and interpret a gate verdict.
 
 ## Who
 
-- Method maintainers evolving `methodPrompts/`.
-- Flow maintainers evolving `slashCommands/`.
-- Code-agent maintainers evolving `codeAgents/` and `agentSkills/`.
 - Project teams installing CaTDD into their repositories.
+- Developers writing US/AC/TC skeletons and running the `UT_*`, `SPEC_*`, and `HARNESS_*` commands.
 
 ## What
-
-This is the shared glossary for CaTDD execution environments.
 
 ### Core Concepts
 
 | Term | Meaning |
 | --- | --- |
 | CaTDD | Comment-alive Test-Driven Development. |
-| Comment-alive | Verification intent is explicitly encoded in structured comments before code generation. |
+| Comment-alive | Verification intent is encoded in the source file itself, in that language's documentation form (comments, doc comments, or docstrings), adjacent to the code and kept true as the code changes. |
 | US / AC / TC | User Story / Acceptance Criteria / Test Case traceability chain. |
 | Skeleton | Comment-only test design artifact containing traceability markers and planned test intent. |
 | RED | Executable failing test state before product-code changes. |
@@ -27,8 +22,7 @@ This is the shared glossary for CaTDD execution environments.
 | SpecCoding | CaTDD workflow that treats verification design artifacts as the executable spec lifecycle. |
 | VibeCoding | Fast ideation/prototyping mode; results should still be reconciled back into CaTDD traceability. Inside an open story it is entered deliberately through `SPEC_whatsWrong`, is available only in `manualMode`, keeps `ONE-MORE-THING` binding, and leaves exploratory edits `unadopted` until a `SPEC_*` step re-adopts them. |
 | SPEC_whatsWrong | The third rung of the Px-SpecFlow escalation ladder and the bridge from SpecCoding into VibeCoding. It classifies the trigger, verifies `manualMode`, freezes the Flow without moving lanes or writing team artifacts, records the excursion in `.catdd/spec/WorkingProcessLog.md` with `adoption_status = unadopted`, routes each finding to its owning command, reports `learning_command = /HARNESS_evolveHarness` with `evolution_mode=auto`, and resumes the Flow with any `SPEC_doXYZ` such as `SPEC_whatsNextTask`. |
-| agent instruction surface | The repository file that tells a code agent how to work in the project: `AGENTS.md`, plus `AGENTS.override.md` where a directory overrides it. `SPEC_initProjectContext` records each file with its path, scope, provenance, ownership by region, and a one-line summary; `SPEC_updateProjectContext` reconciles them. Provenance comes from the file itself: managed region only = `catdd-created`, hand-written text only = `pre-existing`, both = `mixed`, empty = `present-empty`. Ownership follows the region: the CaTDD-managed markers are regenerable and CaTDD-owned, everything else is project-owned. Authority is capped at operating conventions, so `AGENTS.md` never overrides method semantics, category meaning, gate rules, traceability, or project facts. The installer-generated adapters (`.github/instructions/*.md`, `.clinerules/*.md`, `.continue/rules/*.md`, `.antigravityrules/*.md`) and generated trees are rewritten wholesale and stay out of this model. |
-| review_verdict | The single gate outcome every review command reports per pass: exactly one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`. It is accompanied by `severity` (`blocking | advisory`, default `blocking`) and by `rework_route`, which is required whenever the verdict is not `PASS` and names the owning command. Sub-gates such as `cardinality_gate`, `discovery_status`, and `ready_for_implementation` feed the verdict; they are not separate verdict vocabularies. The older per-command dialogs (`GAPS`, `WARN`, `FAIL`, `RISKY`, and the action verdicts) map onto this set in the Px-SpecFlow Review Gate Contract table. |
+| review_verdict | The single gate outcome every review command reports per pass: exactly one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`. It is accompanied by `severity` (`blocking \| advisory`, default `blocking`) and by `rework_route`, which is required whenever the verdict is not `PASS` and names the owning command. Sub-gates such as `cardinality_gate`, `discovery_status`, and `ready_for_implementation` feed the verdict; they are not separate verdict vocabularies. The older per-command dialogs (`GAPS`, `WARN`, `FAIL`, `RISKY`, and the action verdicts) map onto this set in the Px-SpecFlow Review Gate Contract table. |
 | PASS | A `review_verdict`: the gate accepts the artifact as it stands. No blocking change is required and the downstream step may consume it. Advisory findings may still be attached with `severity = advisory`; they record risk without stopping work. PASS does not mean perfect, it means safe to proceed, and it requires every sub-gate to be `PASS` for the declared scope. |
 | REVISE | A `review_verdict`: the gate judged the artifact and requires a change before anything downstream consumes it. A REVISE always carries at least one blocking finding that names what must change and which command owns it (`rework_route`), and the gate re-runs on the changed evidence. Key difference from PASS: PASS = proceed with the artifact as-is; REVISE = change the artifact first, then re-run the gate. REVISE is therefore a directed action, not merely a severity level. |
 | BLOCKED | A `review_verdict` for a missing input: a required source artifact, piece of evidence, or dependency is absent, so the gate cannot judge the artifact at all. It is resolved by whoever can supply that input — usually an owner command named in `rework_route` — and only degenerates into `ASK` when the human is the only possible supplier. A BLOCKED report always names the missing input. Distinct from the TC status marker `🚫 BLOCKED`, which marks a test case that cannot proceed; the verdict describes a gate outcome, the marker describes a test state. |
@@ -40,7 +34,6 @@ This is the shared glossary for CaTDD execution environments.
 | UnitTesting | A `TestLevel`: one unit is the SUT, verified inside its own boundary under the project's `sut_unit_convention` (submodule, class, header file, function, or component). When the project has no subdivision, `UnitTesting` and `SysTesting` name the same SUT and are equivalent. CaTDD categories and the Discovery Gate apply; strategy is designed in `README_DetailVerifyDesign.md`. |
 | SysTesting | A `TestLevel`: the composition of units is the SUT — the module in a multi-submodule project, or the whole project when it has no subdivision. CaTDD categories and the Discovery Gate apply; the composition boundary and its `TestScope` strategy are designed in `README_ArchVerifyDesign.md`, and the TP row stays in the detail ledger and is promoted by ID. |
 | UserTesting | A `TestLevel` inside `SysTesting`: the same system SUT, oriented to usage scenarios — documented end-to-end, demo, and example flows. It is not CaTDD category testing: it consumes US/AC expectations and category-covered behavior instead of defining category skeletons. |
-| ModuleTesting | Retired level name, never used. Module-level scope is `SysTesting` when the module is the declared SUT, so it is never a fourth value beside the three `TestLevel` values. |
 | `TestScope` | The declared runtime scope of a verification: `mockSysRtm` (the SUT's system runtime — peers, dependencies, runtime environment — is replaced by doubles) or `realSysRtm` (the SUT runs against its real system runtime). Declared with `@[TestScope]` and independent of `TestLevel`, so any level runs at either scope. `mockSysRtm` is the first scope and earns `CLOSED`; `realSysRtm` is the second scope and adds evidence. |
 | UT | Unit Testing: Verification focused on a single declared SUT adhering to the project's agreed `sut_unit_convention` (e.g. `module-interface`, `submodule-interface`, `class`, `header-file`, `function`, or `component`). Verifies public contracts, internal design models, and quality properties via CaTDD before implementation. |
 | TP | Test Point: A discovered verification obligation or condition (the target). Represents WHAT must be verified from the DEVELOPER / DEFENSIVE perspective (partitions, boundaries, failure phases, interleavings), extracted from sources during Stage-0/Stage-1 discovery and tracked in `discovery_ledger`. Described via concrete `GIVEN technical state/partition, WHEN action/interleaving, THEN observable oracle`. |
@@ -59,8 +52,6 @@ This is the shared glossary for CaTDD execution environments.
 | SPEC_commitWorks | General, story-agnostic commit command: it resolves scope from staged files first and most recently modified files second, then generates a repository-style commit log message. It never advances SpecFlow lifecycle state and never closes a commit span. |
 | Semantic Falsification Gate | The verification gate distinguishing valid `🔴 RED` from `⚠️ BROKEN_TEST`. A test is validly RED only if it compiles/loads cleanly, executes through SETUP and BEHAVIOR, and fails strictly on an expected domain assertion in VERIFY (`AssertionError`, `Expected X but got Y`). If execution fails due to syntax errors, missing imports, fixture crashes, or unhandled exceptions in test setup, it is `⚠️ BROKEN_TEST`, not valid RED; production code generation is blocked until the test harness is repaired. |
 | Anti-Test-Theater | The engineering discipline preventing LLMs from generating hollow, superficial, or self-fulfilling tests. Forbids "mock-testing-mock" (asserting mock return values directly without SUT transformation), forbids vacuous truthiness assertions (`assert != null` or `assert True`), and requires that assertions verify real SUT state mutations, return calculations, or domain invariants. |
-| Ambiguity Smell Classifier | The systematic Stage-0 diagnostic instrument scanning requirements for unstated, underspecified, or subjective constructs before test design begins. Based on the Ambiguity Smell Taxonomy (AST), it flags six smell classes: `SMELL-ACTOR` (passive voice without actor), `SMELL-BOUND` (unbounded adjectives), `SMELL-BRANCH` (missing negative/exception paths), `SMELL-STATE` (unstated lifecycle bounds), `SMELL-VAGUE` (vague verbs and loopholes), and `SMELL-RACE` (unstated concurrency rules). Detecting any smell mandates recording a `QUESTION` in `discovery_ledger` and triggers the universal `ONE-MORE-THING` stop rule to prevent AI hallucination. |
-| Closed-Loop Regeneration Budget (B) | The formal SGRM safety bound (Algorithm 1 in arXiv:2607.16680) limiting stochastic generation retry cycles to a finite budget (default $B \le 3$). When an agent fails to achieve passing verification ($V(S, I) = \top$) within $B$ attempts, it is strictly forbidden from infinite looping or silently weakening assertions; it must roll back unverified mutations, emit a structured failure diagnostic report, mark the TC as `🚫 BLOCKED`, and escalate to human governance (L4). |
 
 ### Category Vocabulary
 
@@ -70,15 +61,6 @@ This is the shared glossary for CaTDD execution environments.
 | P1 Design | State, Capability, Interaction, Concurrency |
 | P2 Quality | Performance, Robust, Compatibility, Configuration, Diagnosis, Security |
 | P3 Addons | Demo/Example |
-
-### Ownership Vocabulary
-
-| Layer | Responsibility |
-| --- | --- |
-| `methodPrompts/` | Source of truth for category semantics and CaTDD method constraints. |
-| `slashCommands/` | Portable command/flow wrappers over method semantics. |
-| `codeAgents/` | Goal-driven orchestration and execution policy. |
-| `agentSkills/` | Packaged skills for non-native code agents. |
 
 ### Verification Design Vocabulary
 
@@ -197,36 +179,13 @@ flowchart LR
 
 Use this glossary when:
 
-- defining new terms in READMEs, prompts, rules, or architecture docs,
-- naming new UT_*/SPEC_* commands,
-- reviewing wording drift across EN/ZH or across adapters,
-- installing CaTDD into a new project.
-
-## Where
-
-- Source of truth in this repository: `README_UbiLang.md` (project root).
-- Installed destination in target projects: `<target>/README_UbiLang.md`.
-- Referenced by installed rules/instructions (`.github/instructions`, `.continue/rules`, `.clinerules`, `.antigravityrules`, and custom adapter rules).
+- writing or reviewing US/AC/TC skeletons,
+- reading a `UT_showMeStatus`, `SPEC_showMeStatus`, or `HARNESS_showMeStatus` report,
+- interpreting a gate verdict,
+- reconciling wording drift between your project and the installed method.
 
 ## Why
 
 CaTDD is method-driven. If key words drift, behavior drifts.
 
 A shared ubiquitous language keeps generated prompts, command flows, review output, and implementation decisions aligned across different code-agent runtimes.
-
-## How
-
-1. Add new domain terms here before spreading them to other docs.
-2. Keep wording stable for status/category names used by tools.
-3. Reject synonyms that change semantics (for example, do not rename categories casually).
-4. During installer updates, ensure this file is copied to target project root.
-
-## Usage Example
-
-Check vocabulary consistency before release:
-
-```bash
-rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|TestLevel|TestScope|UnitTesting|SysTesting|UserTesting|mockSysRtm|realSysRtm|ArchVerifyDesign|DetailVerifyDesign|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING|status_signal|completeness_level|maturity_level|integrity_level|level_evidence|level_gap|testPassOnMock|discovery_ledger|Spec-First|Spec-Anchored|Spec-as-Source" README*.md methodPrompts slashCommands codeAgents agentSkills
-```
-
-Expected result: terms are used with the same meanings as defined in this file.

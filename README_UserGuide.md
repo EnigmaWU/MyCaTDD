@@ -726,7 +726,15 @@ stateDiagram-v2
 🚫 BLOCKED          - Cannot proceed due to dependency
 ```
 
-`RED/IMPLEMENTED` is a superseded alias: a test that exists but has not executed is not RED. The canonical status table lives in `methodPrompts/README_UserGuide.md`.
+`RED/IMPLEMENTED` is a superseded alias: a test that exists but has not executed is not RED. The canonical status table lives in `methodPrompts/README_UserGuide.md`, and the canonical definitions of `CLOSED`, `testPassOnMock`, `TestScope`, `TestLevel`, and the ledger dispositions live in `README_UbiLang.md`.
+
+**Markers are not coverage.** A `🟢 GREEN` mark records that a test passed; it does not by itself close a test case, and it never counts as coverage. Coverage counts `DESIGNED` ledger rows only — `QUESTION`, `EXCLUDED`, `REFERRED`, and `GAP` are reported separately as the reasons an obligation is not covered.
+
+Two independent declarations describe a test. **`@[TestLevel]`** says how much of what you developed is *inside* the SUT: `UnitTesting` when one unit is the SUT, `SysTesting` when the composition is, and `UserTesting` when that system is exercised through usage scenarios. If your project has no subdivision, `UnitTesting` and `SysTesting` name the same SUT and are equivalent. **`@[TestScope]`** says what the SUT's system runtime is made of: `mockSysRtm` replaces the peers, dependencies, and runtime environment with doubles, and `realSysRtm` runs against the real thing. Any level runs at either scope.
+
+A test case is **CLOSED** when it is designed, US/AC-linked, and passing at `mockSysRtm` at its declared `TestLevel`, with the Anti-Test-Theater Rule satisfied; the evidence token is `testPassOnMock`. `mockSysRtm` is the first scope, always attempted first, so closure never waits for a runtime environment - push each dependency behind a seam and the oracle becomes reachable on a double. `realSysRtm` is the second scope: it adds evidence and never replaces a closure, and where a verification is meaningful only against the real runtime, leaving it unrun is a recorded unknown rather than a silent pass.
+
+To read these levels from your repository, use the Px-StatusKits reporting commands: `UT_showMeStatus` for the test viewpoint, `SPEC_showMeStatus` for the SpecCoding lifecycle, and `HARNESS_showMeStatus` for the surrounding installation. See [slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md).
 
 ### When to Use Each Status
 

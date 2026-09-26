@@ -31,9 +31,10 @@ OVERVIEW:
   [WHERE] in the [module name/subsystem] module
   [WHY] to ensure [key quality attributes: correctness/reliability/performance/etc.]
 
-SUT & TEST LEVEL:
+SUT, TEST LEVEL & SCOPE:
   - @[SUT]: [Declared component/class under test, e.g., ModelRouter or TaskExecutor]
   - @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
+  - @[TestScope]: mockSysRtm (or realSysRtm)
 
 SCOPE:
   - [In scope]: What IS tested in this file
@@ -80,6 +81,7 @@ DESIGN SKELETON CONTRACT:
     # =============================================================================================
     # @[SUT]: ModelRouter
     # @[TestLevel]: UnitTesting
+    # @[TestScope]: mockSysRtm
     # @[Class]: P0 Functional / ValidFunc
     # @[Category]: Typical
     # @[Intent]: Prove the core happy-path workflow.
@@ -315,6 +317,7 @@ DETAILED FORMAT WITH STATUS:
 ═════════════════════════════════════════════════════════════════════════════════════════════════
  @[SUT]: ModelRouter
  @[TestLevel]: UnitTesting
+ @[TestScope]: mockSysRtm
  @[Class]: P0 Functional / ValidFunc
  @[Category]: Typical
  @[Intent]: Prove the core happy-path routing under valid ordinary use.
@@ -326,18 +329,19 @@ DETAILED FORMAT WITH STATUS:
  @[TC]: TC-1
 
 [@AC-1,US-1] Primary provider dispatch
- 🟢 TC-1: verifyRouting_byHealthyPrimary_expectPrimarySelected
+ TC-1: verifyRouting_byHealthyPrimary_expectPrimarySelected
      @[TP]: TP-01 (Source: RouterSpec#2.1, Rule R-ROUTE-01)
      @[Purpose]: Validate fundamental happy-path routing to healthy primary provider
      @[Brief]: Provide valid model request, verify primary provider instance returned
      @[Expect]: router.route() returns PrimaryProvider, status is ACTIVE
-     @[Status]: PASSED/GREEN ✅
+     @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior)
 
 ═════════════════════════════════════════════════════════════════════════════════════════════════
 📋 [CLASS: P0 Functional / InvalidFunc] [CATEGORY: Misuse] Incorrect API Usage
 ═════════════════════════════════════════════════════════════════════════════════════════════════
  @[SUT]: ModelRouter
  @[TestLevel]: UnitTesting
+ @[TestScope]: mockSysRtm
  @[Class]: P0 Functional / InvalidFunc
  @[Category]: Misuse
  @[Intent]: Prove fast-fail validation when caller provides invalid model configuration.
@@ -349,18 +353,19 @@ DETAILED FORMAT WITH STATUS:
  @[TC]: TC-1
 
 [@AC-3,US-1] Invalid model identifier
- ⚪ TC-1: verifyRouting_byUnknownModel_expectValueError
+ TC-1: verifyRouting_byUnknownModel_expectValueError
      @[TP]: TP-03 (Source: RouterSpec#3.1, Rule R-ROUTE-03)
      @[Purpose]: Validate that unrecognized models are rejected immediately
      @[Brief]: Call route() with model_name="nonexistent-model", verify ValueError raised
      @[Expect]: pytest.raises(ValueError, match="Unknown model")
-     @[Status]: PLANNED/TODO
+     @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure argument validation)
 
 ═════════════════════════════════════════════════════════════════════════════════════════════════
 📋 [CLASS: P0 Functional / InvalidFunc] [CATEGORY: Fault] Provider Outage & Fallback
 ═════════════════════════════════════════════════════════════════════════════════════════════════
  @[SUT]: ModelRouter
  @[TestLevel]: UnitTesting
+ @[TestScope]: mockSysRtm
  @[Class]: P0 Functional / InvalidFunc
  @[Category]: Fault
  @[Intent]: Prove graceful fallback when primary provider suffers external outage.
@@ -372,12 +377,12 @@ DETAILED FORMAT WITH STATUS:
  @[TC]: TC-1
 
 [@AC-1,US-2] Provider failover
- ⚪ TC-1: verifyRouting_byPrimaryUnavailable_expectSecondaryFallback
+ TC-1: verifyRouting_byPrimaryUnavailable_expectSecondaryFallback
      @[TP]: TP-04 (Source: RouterSpec#2.4, Rule R-ROUTE-02)
      @[Purpose]: Validate automatic degrade to secondary provider on primary failure
      @[Brief]: Primary provider raises 503, verify route() returns SecondaryProvider
      @[Expect]: router.route() returns SecondaryProvider, failover logged
-     @[Status]: PLANNED/TODO
+     @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (failover needs the real provider path)
 """
 # ======>END OF TEST CASES DESIGN==================================================================
 # ======>END OF UNIT TESTING DESIGN================================================================
@@ -463,34 +468,40 @@ STATUS LEGEND:
   ⚠️ BROKEN_TEST:      Test failing for wrong reason (syntax error, missing import, fixture crash).
   ⚠️ ISSUES:           Known problem needing attention.
   🚫 BLOCKED:          Cannot proceed due to external dependency.
+  ➖ N/A:               realSysRtm only: the case has no runtime-meaningful behavior, and the reason is recorded.
+
+TEST SCOPE:
+  Every TC closes its block with one @[Status] line naming both scopes explicitly:
+    @[Status]: mockSysRtm <marker> | realSysRtm <marker>
+  mockSysRtm is the first scope and earns CLOSED; realSysRtm is the second scope and only adds evidence.
 
 ===================================================================================================
 P0 🥇 FUNCTIONAL TESTING – ValidFunc (Typical + Edge)
 ===================================================================================================
 
-  🟢 [@AC-1,US-1] TC-1: verifyRouting_byHealthyPrimary_expectPrimarySelected
+  [@AC-1,US-1] TC-1: verifyRouting_byHealthyPrimary_expectPrimarySelected
        - Description: Validate happy-path routing to healthy primary.
        - Category: Typical (ValidFunc)
-       - Status: GREEN
+       @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior)
 
-  ⚪ [@AC-2,US-1] TC-1: verifyRouting_byEmptyPayload_expectDefaultConfig
+  [@AC-2,US-1] TC-1: verifyRouting_byEmptyPayload_expectDefaultConfig
        - Description: Validate defaults on empty request payload.
        - Category: Edge (ValidFunc)
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure request parsing)
 
 ===================================================================================================
 P0 🥇 FUNCTIONAL TESTING – InvalidFunc (Misuse + Fault)
 ===================================================================================================
 
-  ⚪ [@AC-3,US-1] TC-1: verifyRouting_byUnknownModel_expectValueError
+  [@AC-3,US-1] TC-1: verifyRouting_byUnknownModel_expectValueError
        - Description: Fast-fail invalid model name with ValueError.
        - Category: Misuse (InvalidFunc)
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (pure argument validation)
 
-  ⚪ [@AC-1,US-2] TC-1: verifyRouting_byPrimaryUnavailable_expectSecondaryFallback
+  [@AC-1,US-2] TC-1: verifyRouting_byPrimaryUnavailable_expectSecondaryFallback
        - Description: Fallback to secondary provider on primary 503.
        - Category: Fault (InvalidFunc)
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED (failover needs the real provider path)
 
 🚪 GATE P0: All P0 tests must be GREEN before proceeding to P1.
 
@@ -498,15 +509,15 @@ P0 🥇 FUNCTIONAL TESTING – InvalidFunc (Misuse + Fault)
 P1 🥈 DESIGN-ORIENTED TESTING – State, Capability, Interaction, Concurrency
 ===================================================================================================
 
-  ⚪ [@AC-4,US-2] TC-1: verifyState_byRouterDraining_expectNewRequestsRejected
+  [@AC-4,US-2] TC-1: verifyState_byRouterDraining_expectNewRequestsRejected
        - Description: State machine validation during shutdown.
        - Category: State
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ➖ N/A (driven by an injected clock)
 
-  ⚪ [@AC-5,US-2] TC-1: verifyInteraction_byDispatchSequence_expectAuthBeforeRoute
+  [@AC-5,US-2] TC-1: verifyInteraction_byDispatchSequence_expectAuthBeforeRoute
        - Description: Validate collaborator sequence contracts.
        - Category: Interaction
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 
 🚪 GATE P1: All P1 tests GREEN, architecture validated.
 
@@ -514,16 +525,16 @@ P1 🥈 DESIGN-ORIENTED TESTING – State, Capability, Interaction, Concurrency
 P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility, Configuration, Diagnosis, Security
 ===================================================================================================
 
-  ⚪ [@AC-6,US-2] TC-1: verifySecurity_byProviderError_expectApiKeyRedacted
+  [@AC-6,US-2] TC-1: verifySecurity_byProviderError_expectApiKeyRedacted
        - Description: Ensure ApiKEY is masked in all logs and errors.
        - Category: Security
        - Constitutional rule: K-SEC-02 (CWE-200 / Token Masking)
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 
-  ⚪ [@AC-7,US-2] TC-1: verifyDiagnosis_byRoutingFailure_expectTraceIdInLog
+  [@AC-7,US-2] TC-1: verifyDiagnosis_byRoutingFailure_expectTraceIdInLog
        - Description: Ensure correlation IDs propagate on errors.
        - Category: Diagnosis
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 
 🚪 GATE P2: Quality attributes validated, production ready.
 
@@ -531,15 +542,16 @@ P2 🥉 QUALITY-ORIENTED TESTING – Performance, Robust, Compatibility, Configu
 P3 🎯 OTHER-ADDONS TESTING – Demo, Examples (Optional)
 ===================================================================================================
 
-  ⚪ [@AC-8,US-3] TC-1: verifyDemo_byFullWorkflow_expectWorkingExample
+  [@AC-8,US-3] TC-1: verifyDemo_byFullWorkflow_expectWorkingExample
        - Description: Golden path tutorial demonstration.
        - Category: Demo
-       - Status: TODO
+       @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 
 ===================================================================================================
 ✅ COMPLETED TESTS
 ===================================================================================================
 
-  🟢 [@AC-1,US-1] TC-1: verifyRouting_byHealthyPrimary_expectPrimarySelected
+  [@AC-1,US-1] TC-1: verifyRouting_byHealthyPrimary_expectPrimarySelected
+       @[Status]: mockSysRtm 🟢 GREEN/PASSED | realSysRtm ➖ N/A (double-covered behavior)
 """
 # ======>END OF TODO/IMPLEMENTATION TRACKING SECTION===============================================

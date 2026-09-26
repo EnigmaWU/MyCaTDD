@@ -16,6 +16,7 @@
 - 保持可移植提示词一致的共享命令模板。
 - 从项目上下文推进到故事完成的 SpecCoding 流程契约。
 - 维护 CaTDD 源、适配器、执行、诊断和 patch-back 安全性的 Harness Engineering 工具点命令。
+- 只读状态报告工具包：报告 UT、SPEC 或 HARNESS 视角，并给出对应的下一条命令。
 - 与 CaTDD 优先级类对齐的功能、设计和质量测试流程。
 
 `slashCommands` 与具体 code-agent 无关。同一套可移植命令文件可以被包装给 Copilot、Cline、Continue、`utCodeAgentCLI`，或任何能消费提示词文本的助手。
@@ -63,7 +64,7 @@
 - **P1 = DesignTestsFlow**：设计测试流程，用于 State、Capability、Concurrency 骨架。它就是 CaTDD `P1 Design`。
 - **P2 = QualityTestsFlow**：质量测试流程，用于 Performance、Robust、Compatibility、Configuration 骨架。它就是 CaTDD `P2 Quality`。
 
-`Px` 流程与工具包（例如 `Px-SpecFlow` 和 `Px-HarnessKits`）是跨优先级的编排层或操作层。它们不定义 CaTDD 分类优先级。
+`Px` 流程与工具包（例如 `Px-SpecFlow`、`Px-HarnessKits` 和 `Px-StatusKits`）是跨优先级的编排层、操作层或报告层。它们不定义 CaTDD 分类优先级。
 
 未来的 Addons/Demo 命令应使用 `P3 Addons`，以保持与 `methodPrompts` 一致。
 

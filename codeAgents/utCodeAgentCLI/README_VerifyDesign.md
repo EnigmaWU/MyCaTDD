@@ -43,7 +43,7 @@ This document captures module-scoped verification strategy and US/AC/TC traceabi
 - Active unit slice: asset resolution, invocation-local sessions, generic run-plan translation, delegation evidence, prepared-step runtime handoff, and safe trace projection.
 - Regression unit slice: CLI argument validation through `SrcTS/cli/main.ts` and `SrcTS/cli/invocationValidator.ts`.
 - UnitTesting verifies command-contract behavior and test-file trace structure at repository file scope.
-- ModuleTesting verifies `utCodeAgentCLI` preserves CaTDD method delegation and CLI validation behavior.
+- SysTesting verifies `utCodeAgentCLI` preserves CaTDD method delegation and CLI validation behavior.
 - UserTesting remains outside this story unless the CLI execution surface is changed.
 
 ## Test Strategy

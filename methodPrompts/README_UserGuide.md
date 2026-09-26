@@ -261,7 +261,9 @@ Marker rules:
 - `RED/IMPLEMENTED` is a superseded alias. A test that exists but has not executed is not RED; use `🔴 RED/FAILING` only with Semantic Falsification Gate evidence.
 - `✅` is not a status of its own. It may appear only as a confirmation suffix for `🟢 GREEN/PASSED`.
 - Category legend icons must not reuse status glyphs. A `⚠️` or `🚫` in a category list contradicts this table.
-- Discovery dispositions (`PASS | GAPS | BLOCKED`) are gate results, not test markers, and never replace a TC marker.
+- Discovery gate results (`PASS | GAPS | BLOCKED`) are not the ledger dispositions (`DESIGNED | QUESTION | EXCLUDED | REFERRED | GAP`); neither replaces a TC marker.
+- Markers are not coverage. Coverage counts `DESIGNED` ledger rows only; `QUESTION`, `EXCLUDED`, `REFERRED`, and `GAP` are reported separately as the reasons an obligation is not covered.
+- `CLOSED` is the closure predicate for one test case: designed, US/AC-linked, and passing at `@[TestScope]: mockSysRtm` at its declared `@[TestLevel]`, with the Anti-Test-Theater Rule satisfied. Its evidence token is `testPassOnMock`, and a `mockSysRtm` result is never reported as system-verified. Canonical definitions live in [README_UbiLang.md](../README_UbiLang.md).
 
 ## Quality Checklist
 
