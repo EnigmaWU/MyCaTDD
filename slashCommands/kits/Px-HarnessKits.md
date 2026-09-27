@@ -40,7 +40,7 @@ Harness loops follow the same bounded loop policy as `Px-SpecFlow`'s [Loop Guard
 | Session handoff | Capture and preserve important session context — lifecycle state, key files, decisions, environment facts — when finishing a task and starting a new session. | [HARNESS_newTaskSession](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | Run diagnosis | Future commands for collecting run artifacts and diagnosing non-installation harness/test failures. | Future `HARNESS_collectRunArtifacts`, `HARNESS_diagnoseFailure` |
 | Guard and policy | Future commands for checking execution isolation, policy compliance, and destructive-operation guards. | Future `HARNESS_checkPolicy` |
-| Learning and evolution | Route verified lessons to canonical owners; use `refine` for bounded improvements and `restructure` for trace-driven structural evolution. | [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
+| Learning and evolution | Route verified lessons to canonical owners; use `refine` for bounded improvements and `restructure` for trace-driven structural evolution. Slash-command lessons become `<Name>Evolved.md` overlays that supersede the canonical command locally and are promoted upstream through `HARNESS_patchCaTDDSource`. | [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
 | Harness repair | Future commands for proposing and validating harness patches with regression gates. | Future `HARNESS_proposePatch`, `HARNESS_validatePatch` |
 
 ## Seed Flow

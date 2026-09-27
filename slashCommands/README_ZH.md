@@ -56,6 +56,18 @@
 
 当命令与 `methodPrompts` 冲突时，先更新 `methodPrompts`，再修订或重新生成命令层。
 
+## Evolved command overlay
+
+`HARNESS_evolveHarness` 永不直接改写规范命令文件。当一条已验证的经验要细化或新增某个斜杠命令、流程或工具集时，结果会写为同一目录下的同级 `<Name>Evolved.md` 文件，而规范 `<Name>.md` 保持与从 `MyCaTDD` 安装时完全一致。
+
+- **覆盖（Overlay）**：细化 `SPEC_implUnitTests` 会生成 `SPEC_implUnitTestsEvolved.md`，并与保持不变的 `SPEC_implUnitTests.md` 并列存放。
+- **新命令**：由演进产生的新命令同样保留该后缀，例如 `SPEC_doNewXyzEvolved.md`。
+- **一个基命令一个覆盖**：对同一基命令的重复细化会更新同一个 `<Name>Evolved.md`，不会产生 `Evolved2` 或并列的覆盖链。
+- **解析**：演进文件是自包含的；当它存在时，本地执行以它为准，取代同名但无后缀的命令。代理应读取 `<Name>Evolved.md` 而不是 `<Name>.md`。
+- **仅本地**：`*Evolved.md` 文件不进入安装清单。刷新永不覆盖它们，`--force-overwrite` 会保留它们；验证与诊断将其视为有意为之，而非漂移。
+- **回灌（Promotion）**：通过 `HARNESS_patchCaTDDSource` 将覆盖文件回灌上游，该命令会去掉后缀（`<Name>Evolved.md` -> 规范 `<Name>.md`）。
+- **陈旧检测**：每个演进文件以 `> Evolved overlay of <Name>.md · based_on: <已安装版本>` 开头（新命令使用 `> New evolved command · based_on: <已安装版本>`），从而在规范基命令变更后检测出陈旧的覆盖文件。
+
 ## Priority contract
 
 斜杠命令流程优先级与 `methodPrompts` 中定义的 CaTDD Class 优先级使用同一套 Pn 编号，并从 `P0` 开始。

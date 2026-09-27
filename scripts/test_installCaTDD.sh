@@ -213,6 +213,28 @@ local_only_output="$("$INSTALLER" --targetDir "$S3" --targetCodeAgent Copilot --
 grep -Fq 'local-only (kept)' <<< "$local_only_output" || fail "target-only file not reported as local-only"
 assert_file "$LOCAL_CMD"
 
+echo "[installCaTDD-test] Test: evolved overlays survive refresh and --force-overwrite"
+S5="$WORK/sync-evolved-overlay"
+"$INSTALLER" --targetDir "$S5" --targetCodeAgent Copilot --init --yes >/dev/null 2>&1
+OV="$S5/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTestsEvolved.md"
+NEW_OV="$S5/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_doNewXyzEvolved.md"
+printf '# SPEC_implUnitTestsEvolved\n> supersedes the canonical command locally\n' > "$OV"
+printf '# SPEC_doNewXyzEvolved\n' > "$NEW_OV"
+overlay_output="$("$INSTALLER" --targetDir "$S5" --targetCodeAgent Copilot --yes 2>&1)"
+grep -Fq 'evolved overlay (local-only, kept)' <<< "$overlay_output" || fail "evolved overlay not reported as kept"
+assert_file "$OV"
+assert_file "$NEW_OV"
+assert_contains "$S5/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTests.md" '# SPEC_implUnitTests'
+assert_file "$S5/.github/prompts/SPEC_implUnitTestsEvolved.prompt.md"
+assert_file "$S5/.github/prompts/SPEC_doNewXyzEvolved.prompt.md"
+assert_contains "$S5/.github/prompts/SPEC_implUnitTestsEvolved.prompt.md" '.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTestsEvolved.md'
+assert_contains "$S5/.github/instructions/catdd.instructions.md" '<Name>Evolved.md'
+force_output="$("$INSTALLER" --targetDir "$S5" --targetCodeAgent Copilot --yes --force-overwrite 2>&1)"
+grep -Fq 'preserve evolved overlay (force-overwrite)' <<< "$force_output" || fail "force-overwrite did not report preserving evolved overlay"
+assert_file "$OV"
+assert_file "$NEW_OV"
+assert_contains "$OV" 'supersedes the canonical command locally'
+
 echo "[installCaTDD-test] Test: legacy target without baseline is conservatively kept"
 S4="$WORK/legacy"
 "$INSTALLER" --targetDir "$S4" --targetCodeAgent Copilot --init --yes >/dev/null 2>&1

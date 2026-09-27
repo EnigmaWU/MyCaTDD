@@ -26,6 +26,11 @@ target-evolved lines are kept while upstream changes still arrive. Files whose
 changes overlap are kept as-is and reported as conflicts; use --force-overwrite
 to restore canonical source for all managed files.
 
+HARNESS_evolveHarness keeps its slash-command learning in local <Name>Evolved.md
+overlays instead of editing canonical commands. These overlays are local-only:
+refresh keeps them, and --force-overwrite preserves them rather than deleting
+them.
+
 Options:
   --targetDir DIR           Target project directory (alias: --target DIR).
   --targetCodeAgent AGENT   Code agent to install for.
@@ -326,6 +331,7 @@ This block is the CaTDD-owned region and projects the rules recorded in `.catdd/
 ### Codex Behavior
 
 - Treat each Codex skill under `.agents/skills/` as a thin adapter over `.catdd/slashCommands/commands/`; read the portable command before acting.
+- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Codex skill names are lowercase and hyphenated: `ut-convert-demo-to-typical` adapts `UT_convertDemoToTypical`.
 - When deprecated Codex custom prompts are installed, they invoke as `/prompts:<Command>` and require a Codex restart after each refresh.
@@ -520,7 +526,11 @@ sync_managed_tree() {
   while IFS= read -r rel; do
     [[ -n "$rel" ]] || continue
     if [[ ! -e "$src_tree/$rel" ]]; then
-      echo "[${LOG_TAG}] sync: local-only (kept): ${label}/${rel}"
+      if [[ "$rel" == *Evolved.md ]]; then
+        echo "[${LOG_TAG}] sync: evolved overlay (local-only, kept): ${label}/${rel}"
+      else
+        echo "[${LOG_TAG}] sync: local-only (kept): ${label}/${rel}"
+      fi
       count_local_only=$((count_local_only + 1))
       manifest_drop "$rel"
       rm -f "$BASELINE_ROOT/$label/$rel"
@@ -540,9 +550,24 @@ sync_managed_tree() {
 }
 
 # Canonical reset: replace every managed file with source and rebuild baseline.
+# Local `<Name>Evolved.md` overlays are local-only learning created by
+# HARNESS_evolveHarness, not canonical source, so they are preserved across the
+# reset instead of being deleted.
 force_reset_tree() {
   local src_tree="$1" dst_tree="$2" label="$3"
-  local rel
+  local rel preserve_tmp
+  preserve_tmp="$(mktemp -d)"
+
+  if [[ -d "$dst_tree" ]]; then
+    while IFS= read -r rel; do
+      [[ -n "$rel" ]] || continue
+      [[ "$rel" == *Evolved.md ]] || continue
+      mkdir -p "$(dirname "$preserve_tmp/$rel")"
+      cp "$dst_tree/$rel" "$preserve_tmp/$rel"
+      echo "[${LOG_TAG}] sync: preserve evolved overlay (force-overwrite): ${label}/${rel}"
+    done < <(list_tree "$dst_tree")
+  fi
+
   log_replace_or_new "$dst_tree"
   rm -rf "$dst_tree"
   mkdir -p "$dst_tree"
@@ -552,6 +577,14 @@ force_reset_tree() {
     cp "$src_tree/$rel" "$dst_tree/$rel"
     record_canonical "$label" "$rel" "$src_tree/$rel"
   done < <(list_tree "$src_tree")
+
+  while IFS= read -r rel; do
+    [[ -n "$rel" ]] || continue
+    mkdir -p "$(dirname "$dst_tree/$rel")"
+    cp "$preserve_tmp/$rel" "$dst_tree/$rel"
+  done < <(list_tree "$preserve_tmp")
+  rm -rf "$preserve_tmp"
+
   echo "[${LOG_TAG}] sync ${label}: force-overwrite canonical source"
 }
 
@@ -582,6 +615,8 @@ This directory is managed by `scripts/installCaTDD.sh` from MyCaTDD.
 - `.install-baseline/` stores canonical baseline content used for three-way merge.
 - Refresh keeps target files evolved after install (for example by `HARNESS_evolveHarness`).
   Disjoint upstream and target edits are merged; overlapping edits keep the target and are reported.
+- `HARNESS_evolveHarness` writes slash-command learning to local `<Name>Evolved.md` overlays, which supersede the canonical `<Name>.md` locally.
+  Overlays are local-only: refresh and `--force-overwrite` preserve them instead of overwriting or deleting them.
 - `--force-overwrite` restores canonical source for all managed files.
 - Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
@@ -608,6 +643,7 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Portable slash command source: `.catdd/slashCommands/`
 - Copilot prompt wrappers: `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, and `.github/prompts/HARNESS_*.prompt.md`
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
+- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
 - Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
@@ -660,6 +696,7 @@ This is a Continue project rule installed by MyCaTDD. Use it when working with C
 - Use `.continue/prompts/` for triggerable UT_*, SPEC_*, and HARNESS_* prompt wrappers.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Use `.catdd/slashCommands/commands/` for UT_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
+- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
 - Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
 - Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
@@ -716,6 +753,7 @@ This is a Cline project rule installed by MyCaTDD. Use it when working with CaTD
 - Treat this file as a thin Cline adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Use `.catdd/slashCommands/commands/` for UT_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
+- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
 - Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
 - Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
@@ -771,6 +809,7 @@ This is an Antigravity project rule installed by MyCaTDD. Use it when working wi
 - Treat this file as a thin Antigravity adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Use `.catdd/slashCommands/commands/` for UT_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
+- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
 - Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
 - Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.

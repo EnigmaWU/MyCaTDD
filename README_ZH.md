@@ -138,7 +138,9 @@ scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex --c
 
 如果需要在重新生成前删除旧的 prompt 包装，可增加 `--clean-prompts`。
 
-刷新是补丁感知的：安装后目标中被演进的文件（例如由 `HARNESS_evolveHarness` 修改）会被保留，绝不静默覆盖。互不重叠的上游与目标修改会进行三方合并，重叠修改保留目标并报告冲突，`--force-overwrite` 可将所有受管文件恢复为规范源。
+刷新是补丁感知的：安装后目标中被演进的文件会被保留，绝不静默覆盖。互不重叠的上游与目标修改会进行三方合并，重叠修改保留目标并报告冲突，`--force-overwrite` 可将所有受管文件恢复为规范源。
+
+`HARNESS_evolveHarness` 不会把斜杠命令的经验写回规范命令本身，而是写为同级的 `<Name>Evolved.md` 覆盖文件，例如在保持不变的 `SPEC_implUnitTests.md` 旁生成 `SPEC_implUnitTestsEvolved.md`。该覆盖文件是自包含的，在本地取代同名规范命令；也可以是全新命令，例如 `SPEC_doNewXyzEvolved.md`；并通过 `HARNESS_patchCaTDDSource` 回灌上游。覆盖文件仅属于本地：刷新与 `--force-overwrite` 都会保留它们，而不会覆盖或删除。
 
 安装器会在目标项目中创建或刷新这些资产：
 
@@ -154,7 +156,7 @@ scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex --c
 - `AGENTS.md`：Codex 指令，以受管的 `CaTDD Codex instructions` 块写入，因此既有项目指引会被保留。
 - `.agents/skills/`：从 `slashCommands` 生成的 Codex 技能适配，可通过 `$ut-*`、`$spec-*`、`$harness-*` 或 `/skills` 触发。
 - `<codex-prompts-dir>/`：可选的已废弃 Codex custom prompt，通过 `/prompts:<Command>` 触发；传 `default` 表示 `$CODEX_HOME/prompts`，即 `~/.codex/prompts`。Codex 只从本地 Codex home 读取 custom prompt，因此该适配面属于单用户，不随仓库共享。
-- `.catdd/CaTDD_INSTALL.manifest` 与 `.catdd/.install-baseline/`：用于检测并合并目标演进文件的补丁感知刷新状态。
+- `.catdd/CaTDD_INSTALL.manifest` 与 `.catdd/.install-baseline/`：用于检测并合并目标演进文件的补丁感知刷新状态。本地 `<Name>Evolved.md` 覆盖文件刻意不记录在此，因此可跨刷新存活。
 
 在本源仓库中，生成的 `.github/prompts/UT_*.prompt.md`、`.github/prompts/SPEC_*.prompt.md`、`.continue/rules/catdd.md`、`.continue/prompts/UT_*.prompt`、`.continue/prompts/SPEC_*.prompt`、`.clinerules/catdd.md`、`.antigravityrules/catdd.md`、`.agents/skills/` 与 `.codex/prompts/` 文件只是临时适配输出，并被刻意忽略。应提交 `methodPrompts`、`slashCommands`、脚本与文档；需要时再为目标项目重新生成原生适配。
 

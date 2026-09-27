@@ -199,7 +199,7 @@ You are running a Codex Skill wrapper around a portable CaTDD slash command.
 
 ## Execution Rules
 
-1. Read and follow the portable source command located at \`$rel_source\` before acting.
+1. Read and follow the portable source command located at \`$rel_source\` before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
 2. Treat this file as a thin Codex Skill adapter; do not redefine CaTDD method semantics here.
 3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
 4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.
@@ -244,7 +244,7 @@ You are running a Codex custom-prompt wrapper around a portable CaTDD slash comm
 
 ## Execution Rules
 
-1. Read and follow the portable source command located at \`$rel_source\` before acting.
+1. Read and follow the portable source command located at \`$rel_source\` before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
 2. Treat this file as a thin Codex custom-prompt adapter; do not redefine CaTDD method semantics here.
 3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
 4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.

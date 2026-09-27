@@ -4,6 +4,8 @@
 
 Patch effective CaTDD meta-file improvements from an installed project back to the original CaTDD source repository.
 
+This is the promotion path for evolved command overlays: an installed project keeps its local learning in `<Name>Evolved.md` files, and this command moves an approved overlay into the canonical `<Name>.md` upstream.
+
 ## Command Type
 
 HarnessKits tool-point command. This command maintains CaTDD source, installed command assets, and adapter-facing prompt files; it does not move a user story through SpecFlow lifecycle state.
@@ -35,7 +37,7 @@ patch_scope_allowlist: slashCommands/
 Expected result:
 
 - **Thought**: preflight prints source `~/work/acme-pay/.catdd/slashCommands` → target `~/VSCode/MyCaTDD/slashCommands`, direction installed → source → confirmed. Three local modifications found.
-- **Action**: an improved `UT_reviewImplTestCase.md` is portable → included.
+- **Action**: an evolved overlay `UT_reviewImplTestCaseEvolved.md` is portable → included, and mapped to canonical `UT_reviewImplTestCase.md`.
 - **Observation**: a second change hardcodes `acme-pay` paths → not portable → back to **Thought** → excluded. A third is a regenerated Copilot wrapper whose portable source is already included → excluded.
 - **Stop**: 1 included, 2 excluded with rationale; no secrets or business code present.
 
@@ -51,6 +53,7 @@ Expected result:
 - `patch_scope_allowlist`: optional allowed paths, such as `methodPrompts/`, `slashCommands/`, `scripts/`, or docs, to prevent accidental unrelated sync.
 - `target_branch`: non-default source-repository branch used for patch submission.
 - `base_branch`: source-repository comparison branch, usually `main`.
+- `evolved_command_suffix`: optional suffix that marks a locally evolved command overlay. Default: `Evolved`.
 - `evidence_of_effectiveness`: optional tests, usage evidence, or review notes proving the downstream changes are useful.
 - `dry_run`: optional flag to produce patch preview only before applying.
 
@@ -65,6 +68,17 @@ Before any copy or patch action, print and confirm both sides:
 
 If path mapping is unclear, stop and ask the developer.
 
+## Evolved Overlay Promotion
+
+`HARNESS_evolveHarness` writes slash-command lessons to `<Name><evolved_command_suffix>.md` (for example `SPEC_implUnitTestsEvolved.md`) and never edits the canonical command in place. Promotion therefore has one extra mapping step:
+
+1. Read the overlay `<Name><evolved_command_suffix>.md`, not the untouched canonical `<Name>.md`.
+2. Confirm the overlay is portable and method-consistent; keep the `based_on` provenance note for the reviewer.
+3. Strip the suffix and target the canonical path: `<Name><evolved_command_suffix>.md` -> `<Name>.md` in `catdd_source_repo`.
+4. Report the mapping in the changed-file inventory so the reviewer sees which canonical command each overlay becomes.
+
+Do not delete the overlay in the installed project as part of patch-back; local overlays are the project's own learning until the canonical source absorbs them.
+
 ## Method References
 
 - [Px-HarnessKits](../../kits/Px-HarnessKits.md)
@@ -75,6 +89,7 @@ If path mapping is unclear, stop and ask the developer.
 
 - Direction-confirmed patch summary: installed project -> CaTDD source repository.
 - Allowlisted changed-file inventory with rationale for each included path.
+- Evolved overlay mapping: each promoted `<Name>Evolved.md` paired with the canonical `<Name>.md` it becomes.
 - Patch artifact or equivalent commit-ready diff for `target_branch`.
 - Risk notes for conflicts, generated wrappers, portability gaps, and local-only traces.
 - Recommended next action: review and commit the diff in `catdd_source_repo`, or return to the active SPEC command if this tool was invoked inside a story workflow.
@@ -84,6 +99,8 @@ If path mapping is unclear, stop and ask the developer.
 Do not run this command as CaTDD source -> installed project sync; this command is only for installed project -> CaTDD source patch-back.
 Do not patch directly to the source repository default branch.
 Do not include unrelated project business code, secrets, or local-only traces.
+Do not promote an evolved overlay by copying it verbatim onto the canonical `<Name>.md` path; strip the `<evolved_command_suffix>` suffix and review the merge into the canonical command.
+Do not delete local `<Name>Evolved.md` overlays from the installed project during patch-back.
 Do not treat generated adapter wrappers as source-of-truth when their portable source files are available.
 Do not apply destructive overwrite when source-repository conflicts are unresolved.
 Do not assume the source target path is `.catdd`; default target is the CaTDD source repository `PROJECT_ROOT` (`methodPrompts/` and `slashCommands/`) unless developer explicitly selects `source_dot_catdd`.

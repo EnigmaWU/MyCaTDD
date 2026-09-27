@@ -17,7 +17,7 @@ HarnessKits tool-point command. This command validates an installed CaTDD harnes
 Run these steps once, in order. Verification is read-only unless the developer explicitly asks for repair.
 
 1. Complete the Preflight Mapping Checklist. Stop and ask if the target path or adapter surface is unclear.
-2. Walk the Verification Checklist top to bottom: Core CaTDD Assets, Command Inventory, Adapter Surfaces, Wrapper Fidelity. Record every result, including passes.
+2. Walk the Verification Checklist top to bottom: Core CaTDD Assets, Command Inventory, Evolved Overlays, Adapter Surfaces, Wrapper Fidelity. Record every result, including passes.
 3. Apply `strict_mode` when set: missing optional docs, stale wrappers, and unexpected wrapper files become failures rather than warnings.
 4. Emit one verdict — `PASS`, `WARN`, or `FAIL` — with the exact failing paths.
 5. On `WARN` or `FAIL`, report `next_command = HARNESS_diagnoseInstallation`. Do not diagnose or repair here.
@@ -48,6 +48,7 @@ Expected result:
 - `codex_prompts_dir`: optional deprecated Codex custom-prompt directory to verify when `code_agent=codex`. When omitted, verify only the `.agents/skills/` surface, because Codex custom prompts live outside the target project.
 - `custom_adapter_dir`: optional custom adapter directory when `code_agent=custom`. Default: `.customCodeAgent`.
 - `expected_command_families`: optional command family list. Default: `UT_*`, `SPEC_*`, and `HARNESS_*`.
+- `expected_evolved_overlays`: optional expected `<Name>Evolved.md` overlay list. When omitted, overlays are discovered and reported as advisory rather than counted or failed.
 - `expected_source_repo`: optional CaTDD source repository used as the reference command inventory.
 - `strict_mode`: optional flag. When true, fail on missing optional docs, stale generated wrappers, or unexpected wrapper files.
 - `report_only`: optional flag. Default: true; produce findings without modifying files.
@@ -71,6 +72,7 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 - `.catdd/methodPrompts/README.md` exists.
 - `.catdd/slashCommands/README_UserGuide.md` exists.
 - `.catdd/slashCommands/commands/` contains portable `UT_*`, `SPEC_*`, and `HARNESS_*` command files.
+- `.catdd/slashCommands/commands/` may contain local `<Name>Evolved.md` overlays; these are expected and counted as portable commands.
 - `.catdd/slashCommands/kits/Px-HarnessKits.md` exists when any `HARNESS_*` command exists.
 - `.catdd/spec/analyzedNews`, `.catdd/spec/suspendUS`, and `.catdd/spec/abortUS` exist.
 - `.catdd/CaTDD_INSTALL.md` exists and records the installed version when available.
@@ -80,6 +82,14 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 - Count portable command files for `UT_*`, `SPEC_*`, and `HARNESS_*`.
 - For wrapper-based adapters, count generated native wrappers and compare with the portable command count.
 - Verify `HARNESS_patchCaTDDSource` and `HARNESS_verifyInstallation` are present in both portable command source and native wrapper surfaces when the adapter supports wrappers.
+
+### Evolved Overlays
+
+- List `<Name>Evolved.md` files under `.catdd/slashCommands/`. These are local `HARNESS_evolveHarness` artifacts and are expected, not drift.
+- Count `*Evolved.md` files under `commands/` as portable commands, and expect a generated wrapper or skill for each on wrapper-based adapters, the same as any other command file.
+- Treat `*Evolved.md` files under `flows/` or `kits/` as local evolution documents; no native wrapper is expected for them.
+- Read each overlay's provenance header (`> Evolved overlay of <Name>.md · based_on: <version>` or `> New evolved command · based_on: <version>`). Report the overlay as `advisory` when the base command's current version differs from the recorded `based_on`, so the developer can re-review or promote it.
+- Treat a missing canonical base as expected when the header says `New evolved command`, such as `SPEC_doNewXyzEvolved.md`.
 
 ### Adapter Surfaces
 
@@ -108,7 +118,8 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 
 - Installation `review_verdict`: `PASS`, `REVISE`, `BLOCKED`, or `ASK`, with optional `severity: blocking | advisory`. A previously reported `WARN` is `PASS` with `severity = advisory`; a previously reported `FAIL` is `REVISE` with `rework_route = HARNESS_diagnoseInstallation`. Use `ASK` when the developer must decide whether an optional surface is in scope, and `BLOCKED` when the target project or the reference command inventory cannot be read.
 - Verified target path, adapter surfaces, and command inventory counts.
-- Checklist results grouped by core assets, command inventory, adapter surfaces, and wrapper fidelity.
+- Evolved overlay inventory: each `<Name>Evolved.md` overlay, its canonical base, and any `based_on` staleness note.
+- Checklist results grouped by core assets, command inventory, evolved overlays, adapter surfaces, and wrapper fidelity.
 - Failure inventory with exact missing, stale, or inconsistent paths.
 - Recommended next action:
   - `PASS`: use the installed CaTDD commands. When `severity = advisory`, review the optional or strict-mode findings before daily use.
@@ -133,6 +144,7 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 
 Do not modify files unless the developer explicitly asks for repair.
 Do not treat generated adapter wrappers as source-of-truth when portable command files are available.
+Do not report `<Name>Evolved.md` local overlays as unexpected wrapper files or drift; they are intentional local evolution and follow the same portable-command and wrapper rules as canonical commands.
 Do not fail Antigravity installations for missing prompt wrappers unless Antigravity wrapper generation is explicitly added later.
 Do not fail Codex installations for a missing custom-prompt directory unless `codex_prompts_dir` was explicitly provided.
 Do not move SpecFlow lifecycle state or create `.catdd/spec/doingUS/` entries.

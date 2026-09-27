@@ -70,6 +70,7 @@ If the target path, symptom, or adapter surface is unclear, stop and ask the dev
 2. Group failed checks by installation surface:
    - Core `.catdd` assets.
    - Portable command inventory.
+   - Evolved command overlays (`<Name>Evolved.md`) and their canonical base.
    - Native adapter rule files.
    - Native prompt wrappers or Cline skills.
    - Wrapper source-of-truth links.
@@ -88,6 +89,9 @@ If the target path, symptom, or adapter surface is unclear, stop and ask the dev
 | Missing `HARNESS_*` portable command | Source repo is older than expected, stale installed `.catdd`, partial copy | Update CaTDD source, rerun installer, then verify installation. |
 | Wrapper count does not match portable command count | Generated wrappers are stale, `--clean-prompts` was skipped, wrong output directory | Regenerate wrappers or rerun installer with `--clean-prompts`. |
 | Wrapper points to source repo instead of installed `.catdd` | Wrapper generated from source layout but installed incorrectly | Rerun adapter installer so native wrappers point at `.catdd/slashCommands`. |
+| Evolved overlay ignored at runtime | Agent followed canonical `<Name>.md` instead of the superseding `<Name>Evolved.md` | Confirm the adapter rule resolves overlays; read the evolved file; regenerate adapters if the rule text is stale. |
+| Evolved overlay looks stale after a base update | Canonical base changed after the overlay's `based_on` header | Re-review the overlay, refresh it with `HARNESS_evolveHarness`, or promote it with `HARNESS_patchCaTDDSource`. |
+| Evolved overlay missing after a refresh | An older installer reset the managed tree before preserving overlays | Restore from project git or local backup, rerun refresh, and confirm overlays survive `--force-overwrite`. |
 | Cline skill slug missing or malformed | Slug conversion regression, old generated skill directory, skipped clean | Regenerate Cline skills and check expected slug, such as `harness-diagnose-installation`. |
 | Codex skill slug missing or malformed | Codex skill naming rules violated (uppercase, underscores, consecutive hyphens, over 64 characters), old generated skill directory, skipped clean | Regenerate Codex skills and check expected slug, such as `harness-diagnose-installation`; every directory name must match its `SKILL.md` `name`. |
 | Codex `/prompts:` command missing | Custom-prompt directory not passed to the installer, prompts written outside the active `CODEX_HOME`, or Codex not restarted after refresh | Rerun the installer with `--codex-prompts-dir default`, then restart Codex; remember custom prompts are per-user and never come from the target repository. |
@@ -107,6 +111,7 @@ If the target path, symptom, or adapter surface is unclear, stop and ask the dev
 - Diagnosis verdict: `CONFIRMED_INSTALLATION_FAILURE`, `LIKELY_INSTALLATION_FAILURE`, `NOT_INSTALLATION_FAILURE`, or `INSUFFICIENT_EVIDENCE`.
 - Symptom summary and verified target path.
 - Failed installation surfaces grouped by category.
+- Evolved overlay findings: each `<Name>Evolved.md`, its canonical base, and any staleness or resolution issue.
 - Ranked root-cause table with evidence and confidence.
 - Safe repair plan with exact commands or file paths when available.
 - Re-verification plan: run `HARNESS_verifyInstallation` after the proposed repair.
@@ -120,6 +125,7 @@ If the target path, symptom, or adapter surface is unclear, stop and ask the dev
 Do not modify files unless the developer explicitly sets `allow_repair=true` or asks for a repair step.
 Do not skip `HARNESS_verifyInstallation` evidence when the symptom is ambiguous.
 Do not treat generated adapter wrappers as source-of-truth when portable command files are available.
+Do not classify `<Name>Evolved.md` local overlays as installation failures; they are intentional local evolution, and a matching canonical base is optional for a new evolved command.
 Do not classify product-code, test-design, or SpecFlow lifecycle failures as installation failures unless installed CaTDD assets or adapter surfaces are inconsistent.
 Do not fail Antigravity installations for missing prompt wrappers unless Antigravity wrapper generation is explicitly added later.
 Do not fail Codex installations for a missing custom-prompt directory unless the developer asked for that deprecated surface.

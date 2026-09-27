@@ -7,6 +7,7 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Portable slash command source: `.catdd/slashCommands/`
 - Copilot prompt wrappers: `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, and `.github/prompts/HARNESS_*.prompt.md`
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
+- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
 - Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.

@@ -56,6 +56,18 @@ In CaTDD terminology, using `methodPrompts` directly in CodeAgent chat is **Vibe
 
 When a command conflicts with `methodPrompts`, update `methodPrompts` first, then revise or regenerate the command layer.
 
+## Evolved command overlay
+
+`HARNESS_evolveHarness` never rewrites a canonical command file in place. When a verified lesson refines or creates a slash command, flow, or kit, the result is written as a sibling `<Name>Evolved.md` file in the same directory. The canonical `<Name>.md` stays exactly as installed from `MyCaTDD`.
+
+- **Overlay**: refining `SPEC_implUnitTests` produces `SPEC_implUnitTestsEvolved.md` beside an untouched `SPEC_implUnitTests.md`.
+- **New command**: a command born from evolution keeps the suffix too, such as `SPEC_doNewXyzEvolved.md`.
+- **One overlay per base**: repeated refines update the single existing `<Name>Evolved.md`; there is no `Evolved2` or parallel overlay chain.
+- **Resolution**: the evolved file is self-contained and, when present, supersedes its non-suffixed sibling for local execution. The agent follows `<Name>Evolved.md` instead of `<Name>.md`.
+- **Local-only**: `*Evolved.md` files are not part of the install manifest. Refresh never overwrites them and `--force-overwrite` preserves them; verification and diagnosis treat them as intentional, not drift.
+- **Promotion**: move an overlay upstream with `HARNESS_patchCaTDDSource`, which strips the suffix (`<Name>Evolved.md` -> canonical `<Name>.md`).
+- **Staleness**: each evolved file starts with `> Evolved overlay of <Name>.md · based_on: <installed_version>` (new commands use `> New evolved command · based_on: <installed_version>`), so a stale overlay is detectable after the canonical base changes.
+
 ## Priority contract
 
 Slash command flow priority uses the same Pn numbering as the CaTDD class priority defined in `methodPrompts`, starting from `P0`.
