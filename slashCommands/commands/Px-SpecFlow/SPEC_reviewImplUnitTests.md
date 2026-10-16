@@ -8,7 +8,7 @@ Use this command when one or more TC bodies have been implemented and the develo
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect implemented TC slices, reason about story-level completeness and per-TC alignment along the **TestEvidenceChain**, act by applying `UT_reviewImplTestCase` mechanics to each implemented TC that lacks current review evidence, observe drift, status, and verification gaps, then decide the next lifecycle command.
+**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect implemented TC slices, reason about story-level completeness and per-TC alignment along the **TestEvidenceChain**, act by applying `TEST_reviewImplTestCase` mechanics to each implemented TC that lacks current review evidence, observe drift, status, and verification gaps, then decide the next lifecycle command.
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
@@ -16,8 +16,8 @@ Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
 Repeat until every implemented TC has current review evidence and the verdict is stable.
 
-1. **Thought** — List the implemented TCs that lack current `UT_reviewImplTestCase` evidence, and note their claimed status markers.
-2. **Action** — Run the Flow Coupling steps below over that set: apply `UT_reviewImplTestCase` mechanics per TC, apply `test-case-with-readme` or the Builtin README Gates per test file, and check story-level P0-first ordering.
+1. **Thought** — List the implemented TCs that lack current `TEST_reviewImplTestCase` evidence, and note their claimed status markers.
+2. **Action** — Run the Flow Coupling steps below over that set: apply `TEST_reviewImplTestCase` mechanics per TC, apply `test-case-with-readme` or the Builtin README Gates per test file, and check story-level P0-first ordering.
 3. **Observation** — Compare each claimed status marker against `verification_output`. Unexplained `GREEN`, `ISSUES`, or `BLOCKED` returns to **Thought**. Separate implementation drift (fix the test body) from skeleton drift (fix the design) — never report them as one finding.
 4. **Stop** — Exit when every implemented TC is reviewed and each finding names its TC, its cause, and its route. Report the next lifecycle command.
 
@@ -36,10 +36,10 @@ verification_output: 0 passing, 2 failing (module not found)
 Expected result:
 
 - **Thought**: TC-001 and TC-002 are both P0 Functional, both claim `RED`, neither has review evidence yet.
-- **Action**: `UT_reviewImplTestCase` mechanics applied to both bodies; companion README gates run on the test file.
+- **Action**: `TEST_reviewImplTestCase` mechanics applied to both bodies; companion README gates run on the test file.
 - **Observation**: TC-001 matches its AC with strict `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phases. TC-002 has a raw assertion outside `VERIFY`. `RED` is meaningful for both — it fails on the missing product module, which is expected before implementation, so the status is explained.
-- **Observation**: TC-002's defect is in the test body, not the skeleton → classified as implementation drift, routed to `UT_implTestCase`, **not** back to `SPEC_designUnitTests`.
-- **Stop**: reported — fix TC-002 first via `UT_implTestCase`; product-code work does not start until it is aligned.
+- **Observation**: TC-002's defect is in the test body, not the skeleton → classified as implementation drift, routed to `TEST_implTestCase`, **not** back to `SPEC_designUnitTests`.
+- **Stop**: reported — fix TC-002 first via `TEST_implTestCase`; product-code work does not start until it is aligned.
 
 ## Inputs
 
@@ -47,7 +47,7 @@ Expected result:
 - `target_test_files`: implemented unit test files to review.
 - `tc_slices`: selected or implemented test-case slices, including US/AC/TC, category, priority, dependency, target file, and validation checkpoint.
 - `implementation_status`: current TC markers such as `TODO`, `RED`, `GREEN`, `ISSUES`, or `BLOCKED`.
-- `review_status`: latest `UT_reviewImplTestCase` result for each implemented TC when available.
+- `review_status`: latest `TEST_reviewImplTestCase` result for each implemented TC when available.
 - `verification_output`: focused test, compile, lint, or manual verification output for the implemented tests.
 - `product_review_status`: latest `SPEC_reviewProductCodes` result when this command runs after product-code implementation.
 - `test_readme_files`: optional companion test README files, normally `<test_filename_without_extension>_readme.md` beside each target test file.
@@ -59,7 +59,7 @@ Expected result:
 - [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
 - [P1-DesignTestsFlow](../../flows/P1-DesignTestsFlow.md)
 - [P2-QualityTestsFlow](../../flows/P2-QualityTestsFlow.md)
-- [UT_reviewImplTestCase](../../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md)
+- [TEST_reviewImplTestCase](../../commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md)
 - [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 
 ## Skill Integration Policy
@@ -82,7 +82,7 @@ Expected result:
 
 ## Output Contract
 
-- `review_verdict`: `PASS` when the implemented tests are aligned and the next step is implementation, review, or commit; `REVISE` with the owning `rework_route` for implementation drift (`SPEC_implUnitTests`, `UT_implTestCase`, `UT_reviewImplTestCase`), skeleton or design drift (`SPEC_designUnitTests`), or cleanup (`SPEC_refactUnitTests`); `ASK` when the developer must settle a conflict; `BLOCKED` when the test result or design evidence needed for the review is unavailable.
+- `review_verdict`: `PASS` when the implemented tests are aligned and the next step is implementation, review, or commit; `REVISE` with the owning `rework_route` for implementation drift (`SPEC_implUnitTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`), skeleton or design drift (`SPEC_designUnitTests`), or cleanup (`SPEC_refactUnitTests`); `ASK` when the developer must settle a conflict; `BLOCKED` when the test result or design evidence needed for the review is unavailable.
 - `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Per-TC alignment summary against US/AC/TC design comments.
 - Anti-Test-Theater audit: verifies assertions test real SUT state mutations or domain invariants without vacuous checks or mock echoing.
@@ -92,7 +92,7 @@ Expected result:
 - Product-code review correlation when this command runs after `SPEC_reviewProductCodes`.
 - Test README evidence: `test-case-with-readme` applied, unavailable with builtin fallback, missing companion README, updated companion README, or ask the developer.
 - Drift findings that distinguish implementation drift from skeleton/design drift.
-- Next recommended command: `SPEC_implUnitTests`, `UT_implTestCase`, `UT_reviewImplTestCase`, `SPEC_designUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_reviewProductCodes`, `SPEC_commitStoryWorks`, or ask the developer.
+- Next recommended command: `SPEC_implUnitTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`, `SPEC_designUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_reviewProductCodes`, `SPEC_commitStoryWorks`, or ask the developer.
 
 ## Review Gate Contract
 
@@ -110,12 +110,12 @@ Expected result:
 
 ## Flow Coupling
 
-`SPEC_reviewImplUnitTests` owns story-level implementation review across selected unit-test slices. `UT_reviewImplTestCase` owns TC-level alignment mechanics.
+`SPEC_reviewImplUnitTests` owns story-level implementation review across selected unit-test slices. `TEST_reviewImplTestCase` owns TC-level alignment mechanics.
 
 1. Confirm the active story, implemented TC slices, and target test files.
 2. Check that every implemented TC preserves US/AC/TC comments and required CaTDD metadata.
 3. Check that each implemented TC has strict `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phase markers and key checks written with `VERIFY_KEYPOINT_xyz` macros when available.
-4. Apply `UT_reviewImplTestCase` mechanics to each implemented TC that lacks current review evidence.
+4. Apply `TEST_reviewImplTestCase` mechanics to each implemented TC that lacks current review evidence.
 5. Apply the latest `test-case-with-readme` skill when available, or the builtin README gates when the skill is unavailable, to review companion test README evidence for each target test file.
 6. Review story-level ordering: P0 Functional before P1 Design, P1 before P2 Quality, unless blocked or explicitly overridden.
 7. Review status markers against verification output: meaningful RED is acceptable before product-code implementation; after product-code review, GREEN must be traceable to expected product behavior; unexplained GREEN, ISSUES, or BLOCKED states require evidence.
@@ -124,7 +124,7 @@ Expected result:
    - If implemented tests are aligned and product code has not been reviewed, route to `SPEC_reviewProductCodes`.
    - If implemented tests are aligned and GREEN but need cleanup, route to `SPEC_refactUnitTests`.
    - If implemented tests, product code, and product-code review are aligned and no cleanup is needed, route to `SPEC_commitStoryWorks`.
-   - If implementation drift exists, route to `SPEC_implUnitTests`, `UT_implTestCase`, or `UT_reviewImplTestCase`.
+   - If implementation drift exists, route to `SPEC_implUnitTests`, `TEST_implTestCase`, or `TEST_reviewImplTestCase`.
    - If skeleton/design intent is wrong or incomplete, route to `SPEC_designUnitTests` or ask the developer.
 
 ## Review Rules
@@ -140,7 +140,7 @@ Expected result:
 
 ## Loop Guard
 
-Rework routes from this review to `SPEC_implUnitTests`, `UT_implTestCase`, `UT_reviewImplTestCase`, or `SPEC_designUnitTests` must record structured findings. Each `impl -> review` rework cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim unit-test review progress without changed evidence between passes.
+Rework routes from this review to `SPEC_implUnitTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`, or `SPEC_designUnitTests` must record structured findings. Each `impl -> review` rework cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim unit-test review progress without changed evidence between passes.
 
 ## Conflict Guard
 

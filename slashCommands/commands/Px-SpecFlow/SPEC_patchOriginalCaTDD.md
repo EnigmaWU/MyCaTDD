@@ -33,8 +33,8 @@ dry_run: true
 Expected result:
 
 - **Thought**: `target_branch` is non-default and matches the required `patchOriginalCaTDD-YYYYMMDD` pattern → gate passes. Preflight prints source `~/work/acme-pay/.catdd/slashCommands` → target `~/VSCode/MyCaTDD/slashCommands`, direction installed → original → confirmed.
-- **Action**: three candidates — an improved `UT_implTestCase.md`, a new project-specific `SPEC_deployToAcme.md`, and a regenerated Copilot wrapper.
-- **Observation**: `UT_implTestCase.md` is portable → included. `SPEC_deployToAcme.md` is acme-specific → excluded. The Copilot wrapper is generated and its portable source is already in the patch → excluded.
+- **Action**: three candidates — an improved `TEST_implTestCase.md`, a new project-specific `SPEC_deployToAcme.md`, and a regenerated Copilot wrapper.
+- **Observation**: `TEST_implTestCase.md` is portable → included. `SPEC_deployToAcme.md` is acme-specific → excluded. The Copilot wrapper is generated and its portable source is already in the patch → excluded.
 - **Observation**: no secrets or business code present; allowlist held.
 - **Stop**: `dry_run` → preview only, 1 file included, 2 excluded with rationale. Reported `next_command = SPEC_commitWorks` after developer review.
 

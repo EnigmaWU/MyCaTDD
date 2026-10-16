@@ -97,3 +97,5 @@ book*
 # BEGIN CaTDD SpecCoding local state
 /.catdd/spec/WorkingProcessLog.md
 # END CaTDD SpecCoding local state
+
+/refDocs/*

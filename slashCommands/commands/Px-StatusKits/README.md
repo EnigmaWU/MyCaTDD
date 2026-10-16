@@ -8,7 +8,7 @@ This directory contains `*_showMeStatus` command templates for CaTDD status repo
 
 | Command | Viewpoint | Purpose |
 | --- | --- | --- |
-| [UT_showMeStatus.md](UT_showMeStatus.md) | UT | Report TC markers, CaTDD class distribution, design-gate currency, and the next UT command. |
+| [TEST_showMeStatus.md](TEST_showMeStatus.md) | UT | Report TC markers, CaTDD class distribution, design-gate currency, and the next UT command. |
 | [SPEC_showMeStatus.md](SPEC_showMeStatus.md) | SPEC | Report `.catdd/spec/` lane counts, the active story and its gate, AC totals, and lane drift. |
 | [HARNESS_showMeStatus.md](HARNESS_showMeStatus.md) | HARNESS | Report installation identity, generated adapters, instruction surfaces, source drift, and prior harness evidence. |
 
@@ -36,7 +36,7 @@ Each viewpoint reports exactly one graded level from `Level-0` to `Level-5`, und
 
 | Command | Level field | Question it answers | Level-0 means | Level-5 means |
 | --- | --- | --- | --- | --- |
-| [UT_showMeStatus.md](UT_showMeStatus.md) | `completeness_level` | How much of the designed test obligation is designed, implemented, and `CLOSED`? | Nothing is designed. | Obligation coverage is counted over P0-P3, with every uncovered obligation explained. |
+| [TEST_showMeStatus.md](TEST_showMeStatus.md) | `completeness_level` | How much of the designed test obligation is designed, implemented, and `CLOSED`? | Nothing is designed. | Obligation coverage is counted over P0-P3, with every uncovered obligation explained. |
 | [SPEC_showMeStatus.md](SPEC_showMeStatus.md) | `maturity_level` | How far has the spec become the source of truth, and how disciplined is the pipeline that keeps it true? | SpecCoding has not started. | The Spec-as-Source pipeline improves itself on a measured effect. |
 | [HARNESS_showMeStatus.md](HARNESS_showMeStatus.md) | `integrity_level` | How present, consistent, current, proven, and spotless is the harness around this project? | CaTDD is not installed. | Nothing is stale, unknown, or half-finished. |
 

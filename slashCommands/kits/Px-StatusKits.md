@@ -31,28 +31,28 @@ The three commands deliberately share one outer report shape — `viewpoint`, `s
 
 | Family | Viewpoint | Purpose | Command |
 | --- | --- | --- | --- |
-| Unit-test status | UT | Report TC markers, per-class closure, ledger dispositions, obligation coverage, and the next UT command. | [UT_showMeStatus](../commands/Px-StatusKits/UT_showMeStatus.md) |
+| Unit-test status | UT | Report TC markers, per-class closure, ledger dispositions, obligation coverage, and the next UT command. | [TEST_showMeStatus](../commands/Px-StatusKits/TEST_showMeStatus.md) |
 | SpecCoding status | SPEC | Report lane counts, the active story and its gate, the maturity level, AC totals, the governed metrics, and lane drift. | [SPEC_showMeStatus](../commands/Px-StatusKits/SPEC_showMeStatus.md) |
 | Harness status | HARNESS | Report installation identity, adapters, instruction surfaces, source drift, reconciliation, verification freshness, and prior harness evidence. | [HARNESS_showMeStatus](../commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 
-Reasoning patterns differ by evidence shape rather than by convention: `UT_showMeStatus` is `Linear` because a marker scan is exhaustive and deterministic, while `SPEC_showMeStatus` and `HARNESS_showMeStatus` are `ReACT` because lanes and harness surfaces can contradict each other and may need one more read before a finding is provable.
+Reasoning patterns differ by evidence shape rather than by convention: `TEST_showMeStatus` is `Linear` because a marker scan is exhaustive and deterministic, while `SPEC_showMeStatus` and `HARNESS_showMeStatus` are `ReACT` because lanes and harness surfaces can contradict each other and may need one more read before a finding is provable.
 
 ## Seed Flow
 
 ```mermaid
 flowchart LR
     Ask["Developer asks for status"] --> Choose{"Which viewpoint?"}
-    Choose -->|UT| UT["UT_showMeStatus"]
+    Choose -->|UT| UT["TEST_showMeStatus"]
     Choose -->|SPEC| SPEC["SPEC_showMeStatus"]
     Choose -->|HARNESS| HARNESS["HARNESS_showMeStatus"]
-    UT --> UTNext["UT_tellMeNextImplTest or UT_implTestCase"]
+    UT --> UTNext["TEST_tellMeNextImplTest or TEST_implTestCase"]
     SPEC --> SPECNext["SPEC_whatsNextTask or owning SPEC_* command"]
     HARNESS --> HarnessNext["HARNESS_verifyInstallation or HARNESS_diagnoseInstallation"]
 ```
 
 ## Command Sequence
 
-1. Use [../commands/Px-StatusKits/UT_showMeStatus.md](../commands/Px-StatusKits/UT_showMeStatus.md) before selecting or implementing the next test case, and after a batch of implementation runs.
+1. Use [../commands/Px-StatusKits/TEST_showMeStatus.md](../commands/Px-StatusKits/TEST_showMeStatus.md) before selecting or implementing the next test case, and after a batch of implementation runs.
 2. Use [../commands/Px-StatusKits/SPEC_showMeStatus.md](../commands/Px-StatusKits/SPEC_showMeStatus.md) when resuming SpecCoding, before `SPEC_whatsNextTask`, or when lane state looks inconsistent.
 3. Use [../commands/Px-StatusKits/HARNESS_showMeStatus.md](../commands/Px-StatusKits/HARNESS_showMeStatus.md) after an install or refresh, and before `HARNESS_verifyInstallation` or `HARNESS_diagnoseInstallation`.
 4. Chain the viewpoints when a full picture is needed: HARNESS for the surrounding installation, SPEC for lifecycle state, UT for test-level state.
@@ -111,7 +111,7 @@ Canonical definitions of `status_signal`, `completeness_level`, `maturity_level`
 ## Conflict Guard
 
 - StatusKits commands are read-only. They never repair, regenerate, move, stage, or commit anything.
-- `UT_showMeStatus` reports markers; it never promotes one and never certifies execution evidence.
+- `TEST_showMeStatus` reports markers; it never promotes one and never certifies execution evidence.
 - `SPEC_showMeStatus` reports lane placement; it never moves lifecycle state.
 - `HARNESS_showMeStatus` inventories harness surfaces; it never returns a verification verdict and never patches source.
 - Portable source files remain the source of truth; generated native wrappers are adapters.

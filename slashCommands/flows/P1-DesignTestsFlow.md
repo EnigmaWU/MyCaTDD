@@ -47,27 +47,27 @@ Each route consumes that inventory and links its source-backed US/AC/TC design b
 ```mermaid
 flowchart LR
     Functional["P0 functional skeletons"] --> Inventory["Source-first P1 inventory / discovery_ledger"]
-    Inventory --> State["UT_designStateSkeleton"]
-    Inventory --> Capability["UT_designCapabilitySkeleton"]
+    Inventory --> State["TEST_designStateSkeleton"]
+    Inventory --> Capability["TEST_designCapabilitySkeleton"]
     Inventory --> Interaction["Direct Interaction method prompt"]
-    Inventory --> Concurrency["UT_designConcurrencySkeleton"]
-    State --> Review["UT_reviewDesignTestsSkeleton"]
+    Inventory --> Concurrency["TEST_designConcurrencySkeleton"]
+    State --> Review["TEST_reviewDesignTestsSkeleton"]
     Capability --> Review
     Interaction --> Review
     Concurrency --> Review
     Review --> Gate{"Cardinality and Discovery Gate pass?"}
-    Gate -->|yes for declared scope| NextTC["UT_tellMeNextImplTest"]
+    Gate -->|yes for declared scope| NextTC["TEST_tellMeNextImplTest"]
     Gate -->|yes| Quality["P2 QualityTestsFlow"]
     Gate -->|no| Clarify["Clarify sources or repair design"]
 ```
 
 ## Command Sequence
 
-1. Use [UT_designStateSkeleton](../commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) when project-root `README_StateDesign.md` exists, or project-root `README_ArchDesign.md` contains a `State Design` chapter, and lifecycle, transition, ownership, persistence, or recovery behavior matters. If neither source exists, the command asks the developer where the state design lives or stops before drafting the State skeleton.
-2. Use [UT_designCapabilitySkeleton](../commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) when project-root `README_DetailDesign.md` exists and supported, limited, conditional, or unsupported capability boundaries matter. If `README_DetailDesign.md` is missing, the command warns and stops before drafting the Capability skeleton.
+1. Use [TEST_designStateSkeleton](../commands/P1-DesignTestsFlow/TEST_designStateSkeleton.md) when project-root `README_StateDesign.md` exists, or project-root `README_ArchDesign.md` contains a `State Design` chapter, and lifecycle, transition, ownership, persistence, or recovery behavior matters. If neither source exists, the command asks the developer where the state design lives or stops before drafting the State skeleton.
+2. Use [TEST_designCapabilitySkeleton](../commands/P1-DesignTestsFlow/TEST_designCapabilitySkeleton.md) when project-root `README_DetailDesign.md` exists and supported, limited, conditional, or unsupported capability boundaries matter. If `README_DetailDesign.md` is missing, the command warns and stops before drafting the Capability skeleton.
 3. For Interaction, use [CaTDD_methodPrompt4Cat-Interaction](../../methodPrompts/CaTDD_methodPrompt4Cat-Interaction.md) directly with the confirmed sequence/collaboration source. There is no dedicated Interaction slash command in this flow. Apply the discovery handoff, draft source-linked US/AC/TC in the canonical `designInteraction` category file, and link it to the ledger. If the source is missing, ask where the design lives or stop before drafting; do not invent collaborator order or rollback.
-4. Use [UT_designConcurrencySkeleton](../commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) when project-root `README_ResourceDesign.md` exists and ordering, interleaving, reentrancy, cancellation, or shared ownership matters. If `README_ResourceDesign.md` is missing, the command warns and stops before drafting the Concurrency skeleton.
-5. Use [UT_reviewDesignTestsSkeleton](../commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) for the independent source-first P1 Discovery Gate. Require confirmed sources, reconciled ledger evidence, both gates passing, and `ready_for_implementation: yes` for the declared scope before selecting a TC for implementation. Non-PASS returns clarification/design-repair findings, not implementation approval.
+4. Use [TEST_designConcurrencySkeleton](../commands/P1-DesignTestsFlow/TEST_designConcurrencySkeleton.md) when project-root `README_ResourceDesign.md` exists and ordering, interleaving, reentrancy, cancellation, or shared ownership matters. If `README_ResourceDesign.md` is missing, the command warns and stops before drafting the Concurrency skeleton.
+5. Use [TEST_reviewDesignTestsSkeleton](../commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md) for the independent source-first P1 Discovery Gate. Require confirmed sources, reconciled ledger evidence, both gates passing, and `ready_for_implementation: yes` for the declared scope before selecting a TC for implementation. Non-PASS returns clarification/design-repair findings, not implementation approval.
 
 ## Conflict Guard
 

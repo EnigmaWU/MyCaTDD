@@ -8,7 +8,7 @@ Commands should follow their group contract so Copilot, Cline, Continue, `utCode
 
 - [Px-SpecFlow](Px-SpecFlow): SpecCoding lifecycle for project context, work items, user stories, design, tests, product code, review, CI, and closure.
 - [Px-HarnessKits](Px-HarnessKits): Harness Engineering tool-point commands for CaTDD source, adapter, execution, diagnostic, and patch-back maintenance.
-- [Px-StatusKits](Px-StatusKits): read-only status reporting commands for the UT, SPEC, and HARNESS viewpoints.
+- [Px-StatusKits](Px-StatusKits): read-only status reporting commands for the TEST, SPEC, and HARNESS viewpoints.
 - [P0-FuncTestsFlow](P0-FuncTestsFlow): first imported flow for functional test skeleton and TC implementation.
 - [P1-DesignTestsFlow](P1-DesignTestsFlow): design test skeleton flow for State, Capability, and Concurrency.
 - [P2-QualityTestsFlow](P2-QualityTestsFlow): quality test skeleton flow for Performance, Robust, Compatibility, Configuration, and Security.
@@ -18,7 +18,7 @@ Commands should follow their group contract so Copilot, Cline, Continue, `utCode
 Commands may orchestrate work, request inputs, and define output shape. They must not redefine CaTDD category meaning. Use `methodPrompts` as the source of truth.
 
 - `SPEC_*` commands are SpecCoding lifecycle commands.
-- `UT_*` commands are unit-test design and implementation commands.
+- `TEST_*` commands are test design and implementation commands.
 - `HARNESS_*` commands are operational Harness Engineering tool-point commands.
 - `*_showMeStatus` commands are read-only viewpoint reports. They may read any lane, manifest, or adapter, but they must not repair, move lifecycle state, promote a TC marker, or return a verification verdict.
 

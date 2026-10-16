@@ -41,7 +41,7 @@ slashCommands/
   README_ZH.md
   README_UserGuide.md
   README_UserGuide_ZH.md
-  UT_slashCommandTemplate.md
+  TEST_slashCommandTemplate.md
   flows/
   kits/
   commands/
@@ -59,11 +59,11 @@ slashCommands/
 原生适配输出位于各工具自己的位置：
 
 ```text
-.github/prompts/UT_*.prompt.md
+.github/prompts/TEST_*.prompt.md
 .github/prompts/SPEC_*.prompt.md
 .github/prompts/HARNESS_*.prompt.md
 .continue/rules/catdd.md
-.continue/prompts/UT_*.prompt
+.continue/prompts/TEST_*.prompt
 .continue/prompts/SPEC_*.prompt
 .continue/prompts/HARNESS_*.prompt
 .clinerules/catdd.md
@@ -107,7 +107,7 @@ slashCommands/
 TARGET_DIR="$(mktemp -d)"
 scripts/installCaTDD.sh --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts
 test -f "$TARGET_DIR/.catdd/slashCommands/README_UserGuide.md"
-test -f "$TARGET_DIR/.github/prompts/UT_convertDemoToTypical.prompt.md"
+test -f "$TARGET_DIR/.github/prompts/TEST_convertDemoToTypical.prompt.md"
 echo "$TARGET_DIR"
 ```
 
@@ -120,7 +120,7 @@ echo "$TARGET_DIR"
 
 ## 原生适配生成
 
-从可移植 `SPEC_*`、`UT_*` 与 `HARNESS_*` 命令文件生成 Copilot 原生包装：
+从可移植 `SPEC_*`、`TEST_*` 与 `HARNESS_*` 命令文件生成 Copilot 原生包装：
 
 ```bash
 scripts/makeSlashCmd4Copilot.sh --clean
@@ -218,7 +218,7 @@ bash scripts/test_makeSlashCmd4Codex.sh
 | Developer need | Command template |
 | --- | --- |
 | 创建或修订可移植的 SPEC 斜杠命令 | [SPEC_slashCommandTemplate.md](SPEC_slashCommandTemplate.md) |
-| 创建或修订可移植的 UT 斜杠命令 | [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md) |
+| 创建或修订可移植的 UT 斜杠命令 | [TEST_slashCommandTemplate.md](TEST_slashCommandTemplate.md) |
 | 驱动完整 SpecCoding 生命周期 | [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md) |
 | 将已安装项目中的 CaTDD 改进 patch 回源仓库 | [commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md](commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | 在信任目标项目命令前验证 CaTDD 安装 | [commands/Px-HarnessKits/HARNESS_verifyInstallation.md](commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
@@ -227,33 +227,33 @@ bash scripts/test_makeSlashCmd4Codex.sh
 | 在有意义的成功或重复 Harness 证据后学习并演进 | 使用 `evolution_mode=auto` 的 [commands/Px-HarnessKits/HARNESS_evolveHarness.md](commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
 | 告诉我当前 SpecCoding 下一步该做什么 | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | 告诉我当前 SpecCoding 在全部 `.catdd/spec/` 泳道的状态，并给出 Level-0…Level-5 maturity 评级 | [commands/Px-StatusKits/SPEC_showMeStatus.md](commands/Px-StatusKits/SPEC_showMeStatus.md) |
-| 告诉我当前 unit test 状态和下一条 UT 命令，并给出 Level-0…Level-5 completeness 评级 | [commands/Px-StatusKits/UT_showMeStatus.md](commands/Px-StatusKits/UT_showMeStatus.md) |
+| 告诉我当前 unit test 状态和下一条 UT 命令，并给出 Level-0…Level-5 completeness 评级 | [commands/Px-StatusKits/TEST_showMeStatus.md](commands/Px-StatusKits/TEST_showMeStatus.md) |
 | 告诉我当前 harness 与安装状态，并给出 Level-0…Level-5 integrity 评级 | [commands/Px-StatusKits/HARNESS_showMeStatus.md](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 | 问"哪里不对"并切换到 VibeCoding 探索 | [commands/Px-SpecFlow/SPEC_whatsWrong.md](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
 | 为已打开的 user story 规划下一条 SPEC 步骤 | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | 导入已有结构化 User Story 或 AC 切片 | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
-| 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
-| 设计完整 P0 Functional 骨架集 | [commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) |
-| 设计 Typical 骨架 | [commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |
-| 设计 Edge 骨架 | [commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md](commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md) |
-| 设计 Misuse 骨架 | [commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md](commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md) |
-| 设计 Fault 骨架 | [commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md](commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) |
-| 审查 P0 Functional 骨架集 | [commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
-| 基于 `README_StateDesign.md` 或 `README_ArchDesign.md` 设计 State 骨架 | [commands/P1-DesignTestsFlow/UT_designStateSkeleton.md](commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) |
-| 基于 `README_DetailDesign.md` 设计 Capability 骨架 | [commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md](commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) |
-| 基于 `README_ResourceDesign.md` 设计 Concurrency 骨架 | [commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md](commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) |
-| 审查 P1 Design 骨架 | [commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md](commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) |
-| 基于 `README_PerfDesign.md` 设计 Performance 骨架 | [commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md](commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md) |
-| 基于 `README_ErrorDesign.md` 设计 Robust 骨架 | [commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
-| 基于 `README_CompatDesign.md` 设计 Compatibility 骨架 | [commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
-| 基于 `README_DetailDesign.md` 设计 Configuration 骨架 | [commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
-| 基于 `README_SecurityDesign.md` 设计 Security 骨架 | [commands/P2-QualityTestsFlow/UT_designSecuritySkeleton.md](commands/P2-QualityTestsFlow/UT_designSecuritySkeleton.md) |
-| 审查 P2 Quality 骨架 | [commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
-| 从已有骨架中选择下一个测试用例 | [commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
-| 实现已选择的测试用例 | [commands/P0-FuncTestsFlow/UT_implTestCase.md](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
-| 审查已实现的测试用例 | [commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
+| 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md](commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md) |
+| 设计完整 P0 Functional 骨架集 | [commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md) |
+| 设计 Typical 骨架 | [commands/P0-FuncTestsFlow/TEST_designTypicalSkeleton.md](commands/P0-FuncTestsFlow/TEST_designTypicalSkeleton.md) |
+| 设计 Edge 骨架 | [commands/P0-FuncTestsFlow/TEST_designEdgeSkeleton.md](commands/P0-FuncTestsFlow/TEST_designEdgeSkeleton.md) |
+| 设计 Misuse 骨架 | [commands/P0-FuncTestsFlow/TEST_designMisuseSkeleton.md](commands/P0-FuncTestsFlow/TEST_designMisuseSkeleton.md) |
+| 设计 Fault 骨架 | [commands/P0-FuncTestsFlow/TEST_designFaultSkeleton.md](commands/P0-FuncTestsFlow/TEST_designFaultSkeleton.md) |
+| 审查 P0 Functional 骨架集 | [commands/P0-FuncTestsFlow/TEST_reviewFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/TEST_reviewFuncTestsSkeleton.md) |
+| 基于 `README_StateDesign.md` 或 `README_ArchDesign.md` 设计 State 骨架 | [commands/P1-DesignTestsFlow/TEST_designStateSkeleton.md](commands/P1-DesignTestsFlow/TEST_designStateSkeleton.md) |
+| 基于 `README_DetailDesign.md` 设计 Capability 骨架 | [commands/P1-DesignTestsFlow/TEST_designCapabilitySkeleton.md](commands/P1-DesignTestsFlow/TEST_designCapabilitySkeleton.md) |
+| 基于 `README_ResourceDesign.md` 设计 Concurrency 骨架 | [commands/P1-DesignTestsFlow/TEST_designConcurrencySkeleton.md](commands/P1-DesignTestsFlow/TEST_designConcurrencySkeleton.md) |
+| 审查 P1 Design 骨架 | [commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md](commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md) |
+| 基于 `README_PerfDesign.md` 设计 Performance 骨架 | [commands/P2-QualityTestsFlow/TEST_designPerformanceSkeleton.md](commands/P2-QualityTestsFlow/TEST_designPerformanceSkeleton.md) |
+| 基于 `README_ErrorDesign.md` 设计 Robust 骨架 | [commands/P2-QualityTestsFlow/TEST_designRobustSkeleton.md](commands/P2-QualityTestsFlow/TEST_designRobustSkeleton.md) |
+| 基于 `README_CompatDesign.md` 设计 Compatibility 骨架 | [commands/P2-QualityTestsFlow/TEST_designCompatibilitySkeleton.md](commands/P2-QualityTestsFlow/TEST_designCompatibilitySkeleton.md) |
+| 基于 `README_DetailDesign.md` 设计 Configuration 骨架 | [commands/P2-QualityTestsFlow/TEST_designConfigurationSkeleton.md](commands/P2-QualityTestsFlow/TEST_designConfigurationSkeleton.md) |
+| 基于 `README_SecurityDesign.md` 设计 Security 骨架 | [commands/P2-QualityTestsFlow/TEST_designSecuritySkeleton.md](commands/P2-QualityTestsFlow/TEST_designSecuritySkeleton.md) |
+| 审查 P2 Quality 骨架 | [commands/P2-QualityTestsFlow/TEST_reviewQualityTestsSkeleton.md](commands/P2-QualityTestsFlow/TEST_reviewQualityTestsSkeleton.md) |
+| 从已有骨架中选择下一个测试用例 | [commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md](commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md) |
+| 实现已选择的测试用例 | [commands/P0-FuncTestsFlow/TEST_implTestCase.md](commands/P0-FuncTestsFlow/TEST_implTestCase.md) |
+| 审查已实现的测试用例 | [commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md](commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md) |
 | 审查当前 story 范围内已实现的 unit tests | [commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md](commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md) |
-| 在不改变行为的前提下重构一个 GREEN 测试用例 | [commands/P0-FuncTestsFlow/UT_refactTestCase.md](commands/P0-FuncTestsFlow/UT_refactTestCase.md) |
+| 在不改变行为的前提下重构一个 GREEN 测试用例 | [commands/P0-FuncTestsFlow/TEST_refactTestCase.md](commands/P0-FuncTestsFlow/TEST_refactTestCase.md) |
 | 编排当前 story 范围内的 unit-test 重构 | [commands/Px-SpecFlow/SPEC_refactUnitTests.md](commands/Px-SpecFlow/SPEC_refactUnitTests.md) |
 | 在开启故事前提交导入/分析区间 | [commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md](commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) |
 | 提交故事区间内单个已验证的生命周期步骤 | [commands/Px-SpecFlow/SPEC_commitStepWorks.md](commands/Px-SpecFlow/SPEC_commitStepWorks.md) |

@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Orchestrate no-behavior-change refactoring for implemented CaTDD unit tests in the active user story, using `UT_refactTestCase` as the TC-level mechanic.
+Orchestrate no-behavior-change refactoring for implemented CaTDD unit tests in the active user story, using `TEST_refactTestCase` as the TC-level mechanic.
 
 Use this command after selected unit tests and product code are GREEN, and before final product-code review or commit, when the test suite needs cleanup without changing story behavior or coverage intent.
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect implemented TC status, verification evidence, and active-story scope, reason about safe refactor batches, act by applying `UT_refactTestCase` mechanics to one TC or a small independent batch, observe verification and review results, then decide whether to continue, route back to design/implementation, or hand off to final review.
+**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect implemented TC status, verification evidence, and active-story scope, reason about safe refactor batches, act by applying `TEST_refactTestCase` mechanics to one TC or a small independent batch, observe verification and review results, then decide whether to continue, route back to design/implementation, or hand off to final review.
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
@@ -17,8 +17,8 @@ Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 Repeat once per TC or per small independent batch. Behavior and coverage intent must not change.
 
 1. **Thought** — From implemented TC status and verification evidence, choose one TC or a small independent batch that is GREEN, reviewed, and safe to clean.
-2. **Action** — Apply `UT_refactTestCase` mechanics to that batch only.
-3. **Observation** — Re-run the focused validation and apply `UT_reviewImplTestCase`. The TC must stay GREEN and its US/AC/TC comments must be unchanged. Any behavior change, coverage change, or skeleton drift returns to **Action** and is reverted.
+2. **Action** — Apply `TEST_refactTestCase` mechanics to that batch only.
+3. **Observation** — Re-run the focused validation and apply `TEST_reviewImplTestCase`. The TC must stay GREEN and its US/AC/TC comments must be unchanged. Any behavior change, coverage change, or skeleton drift returns to **Action** and is reverted.
 4. **Stop** — Exit when no safe batch remains. Report another pass, a route back to design/implementation, or `SPEC_reviewImplUnitTests` when cleanup is complete.
 
 ### Worked Example
@@ -34,9 +34,9 @@ tc_slices: TC-003 (GREEN, reviewed)
 Expected result:
 
 - **Thought**: TC-003 is GREEN, reviewed, and has setup duplicated from TC-002 — cosmetic, no behavior involved → safe batch.
-- **Action**: `UT_refactTestCase` mechanics applied to shared setup and assertion naming.
+- **Action**: `TEST_refactTestCase` mechanics applied to shared setup and assertion naming.
 - **Observation**: TC-003 stays GREEN, but the extracted helper also swallowed an assertion that TC-003 owned → coverage changed → back to **Action** → assertion restored inside `VERIFY`.
-- **Observation**: rerun GREEN, US/AC/TC comments byte-identical, `UT_reviewImplTestCase` finds no drift.
+- **Observation**: rerun GREEN, US/AC/TC comments byte-identical, `TEST_reviewImplTestCase` finds no drift.
 - **Stop**: no further safe batch → reported `next_command = SPEC_reviewImplUnitTests`.
 
 ## Inputs
@@ -46,15 +46,15 @@ Expected result:
 - `selected_tc`: optional TC identifier and name; if omitted, choose the safest GREEN refactor candidate.
 - `refactor_scope`: optional explicit list of TC slices, files, or cleanup goals.
 - `verification_output`: latest focused or regression test output proving current behavior is GREEN.
-- `review_status`: latest `UT_reviewImplTestCase`, `SPEC_reviewImplUnitTests`, or `SPEC_reviewProductCodes` result when available.
+- `review_status`: latest `TEST_reviewImplTestCase`, `SPEC_reviewImplUnitTests`, or `SPEC_reviewProductCodes` result when available.
 - `source_files`: optional production files related to the selected TC; product edits remain no-behavior-change only.
 
 ## Method References
 
 - [Px-SpecFlow](../../flows/Px-SpecFlow.md)
 - [P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [UT_refactTestCase.md](../../commands/P0-FuncTestsFlow/UT_refactTestCase.md)
-- [UT_reviewImplTestCase.md](../../commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md)
+- [TEST_refactTestCase.md](../../commands/P0-FuncTestsFlow/TEST_refactTestCase.md)
+- [TEST_reviewImplTestCase.md](../../commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md)
 - [SPEC_reviewImplUnitTests.md](SPEC_reviewImplUnitTests.md)
 - [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
 
@@ -64,20 +64,20 @@ Expected result:
 - Evidence that every refactored TC was GREEN before and after cleanup, or a clear blocker.
 - Preserved CaTDD metadata, including US/AC/TC, `@[Category]`, `@[Priority]`, `@[SourceSPEC]`, `@[SourceUT]`, `@[Template]`, and `@[SUT]` markers.
 - Evidence that each refactored TC still has strict `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phase markers and `VERIFY_KEYPOINT_xyz` key checks when available.
-- `UT_reviewImplTestCase` review result for each refactored TC or an explicit reason review could not run.
+- `TEST_reviewImplTestCase` review result for each refactored TC or an explicit reason review could not run.
 - Refactor boundary decision: continue refactoring, route to `SPEC_designUnitTests`, route to `SPEC_implUnitTests`, route to `SPEC_implProductCodes`, hand off to `SPEC_reviewImplUnitTests`, or hand off to `SPEC_reviewProductCodes`.
 - Next recommended command: another `SPEC_refactUnitTests` pass, `SPEC_reviewImplUnitTests`, `SPEC_reviewProductCodes`, `SPEC_designUnitTests`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, or ask the developer.
 
 ## Flow Coupling
 
-`SPEC_refactUnitTests` owns story-level ordering, batching, and safety gates. `UT_refactTestCase` owns TC-level cleanup mechanics.
+`SPEC_refactUnitTests` owns story-level ordering, batching, and safety gates. `TEST_refactTestCase` owns TC-level cleanup mechanics.
 
 1. Confirm the active story, target test files, and current verification evidence.
 2. Select only GREEN implemented TCs for refactor. If no TC is selected, choose the smallest safe candidate.
 3. Prefer one TC at a time. Batch only independent TCs that do not share fragile setup, production behavior, or unclear review state.
-4. Apply `UT_refactTestCase` mechanics to each selected TC.
+4. Apply `TEST_refactTestCase` mechanics to each selected TC.
 5. Run focused verification after each TC or safe batch.
-6. Run `UT_reviewImplTestCase` after each refactored TC to detect skeleton drift.
+6. Run `TEST_reviewImplTestCase` after each refactored TC to detect skeleton drift.
 7. Stop and route back to design or implementation if refactor reveals missing behavior, new coverage, wrong category, or acceptance ambiguity.
 8. Recommend `SPEC_reviewImplUnitTests` when refactored TCs remain GREEN and TC-level review passes; then route to `SPEC_reviewProductCodes` when story-level unit-test implementation review passes.
 
@@ -93,7 +93,7 @@ Expected result:
 ## Conflict Guard
 
 Do not use refactor as a shortcut for adding coverage, fixing RED tests, or implementing product behavior. If a TC is not GREEN before refactor, route to `SPEC_implUnitTests` or `SPEC_implProductCodes`.
-Do not proceed to `SPEC_reviewImplUnitTests` or `SPEC_reviewProductCodes` when any refactored TC lacks post-refactor verification or has unresolved `UT_reviewImplTestCase` drift.
+Do not proceed to `SPEC_reviewImplUnitTests` or `SPEC_reviewProductCodes` when any refactored TC lacks post-refactor verification or has unresolved `TEST_reviewImplTestCase` drift.
 Do not batch refactors when shared setup, fixture state, or production behavior makes the blast radius unclear.
 
 ONE-MORE-THING: ask developer if something not sure

@@ -37,7 +37,7 @@ patch_scope_allowlist: slashCommands/
 Expected result:
 
 - **Thought**: preflight prints source `~/work/acme-pay/.catdd/slashCommands` → target `~/VSCode/MyCaTDD/slashCommands`, direction installed → source → confirmed. Three local modifications found.
-- **Action**: an evolved overlay `UT_reviewImplTestCaseEvolved.md` is portable → included, and mapped to canonical `UT_reviewImplTestCase.md`.
+- **Action**: an evolved overlay `TEST_reviewImplTestCaseEvolved.md` is portable → included, and mapped to canonical `TEST_reviewImplTestCase.md`.
 - **Observation**: a second change hardcodes `acme-pay` paths → not portable → back to **Thought** → excluded. A third is a regenerated Copilot wrapper whose portable source is already included → excluded.
 - **Stop**: 1 included, 2 excluded with rationale; no secrets or business code present.
 

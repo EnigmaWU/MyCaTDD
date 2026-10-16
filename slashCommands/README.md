@@ -82,7 +82,7 @@ Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPr
 
 ## Traceability and SUT constraints
 
-- `SPEC_designUnitTests` and related `UT_design*Skeleton` commands should enforce minimum traceability cardinality: each US has at least 1 AC, and each AC has at least 1 TC.
+- `SPEC_designUnitTests` and related `TEST_design*Skeleton` commands should enforce minimum traceability cardinality: each US has at least 1 AC, and each AC has at least 1 TC.
 - Test design outputs must explicitly declare the SUT in the test-file overview (for example: `SUT: utCodeAgentCLI`).
 - Outputs with dangling traceability (US without AC or AC without TC) should be blocked from being marked complete.
 
@@ -91,7 +91,7 @@ Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPr
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
 - Flow documents under `flows/`
 - Kit documents under `kits/`
-- Shared command template [UT_slashCommandTemplate.md](UT_slashCommandTemplate.md)
+- Shared command template [TEST_slashCommandTemplate.md](TEST_slashCommandTemplate.md)
 - Command prompt templates under `commands/`
 - HarnessKits operational commands under `commands/Px-HarnessKits/`
 - Compatibility notes that prevent conflicts with `methodPrompts`

@@ -14,7 +14,7 @@ Px SpecFlow = 在该方法上的可重复 SpecCoding 生命周期
 P0/P1/P2 flows = 特定类别的测试设计和实现流程
 ```
 
-`SPEC_*` 命令拥有生命周期编排职责：故事状态、就绪关卡、跨类别覆盖选择、可追溯性、审查、提交和关闭。`UT_*` 命令拥有类别级测试机制：Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility 和 Configuration 骨架设计或实现步骤。当 `SPEC_*` 命令（如 `SPEC_designUnitTests`）需要类别骨架时，应优先使用匹配的 `UT_designXYZ` 命令契约，并记录该来源，而不是直接从内存中草拟类别形态。
+`SPEC_*` 命令拥有生命周期编排职责：故事状态、就绪关卡、跨类别覆盖选择、可追溯性、审查、提交和关闭。`TEST_*` 命令拥有类别级测试机制：Typical、Edge、Misuse、Fault、State、Capability、Concurrency、Performance、Robust、Compatibility 和 Configuration 骨架设计或实现步骤。当 `SPEC_*` 命令（如 `SPEC_designUnitTests`）需要类别骨架时，应优先使用匹配的 `TEST_designXYZ` 命令契约，并记录该来源，而不是直接从内存中草拟类别形态。
 
 治理规范是基于注释的验证设计：项目上下文、用户故事、验收标准、详细设计、US/AC/TC 骨架、测试状态、产品代码状态和审查决策。
 
@@ -135,7 +135,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 - 配对的 `*-UserStory-Tasks.md` 制品在撰写时由 `SPEC_makePlan` 负责，在关闭时由 `SPEC_closeUserStory` 校验（已勾选任务缺少门禁证据，或提交计划与实际提交不一致时报告 `plan_drift`），并由 `SPEC_whatsWrong` 诊断。
 - `.catdd/spec/projectContext.md` 由 `SPEC_updateProjectContext` 的无损压缩门禁在内部把关，并由 `HARNESS_diagnoseProject` 的一致性检查在外部把关。
 - 项目根 README SPEC 文档集整体由 `HARNESS_diagnoseProject` 的漂移检查覆盖，其专属文档则由架构或详细设计门禁覆盖。
-- `P3 Addons / Demo-Example` 按设计意图不设设计与评审门禁：它属于认知/学习表面。`UT_convertDemoToTypical` 把 demo 材料转换为 `P0 Functional / Typical` 工作，而 P3 骨架只作为显式学习制品撰写，绝不替代 P0/P1/P2 覆盖。
+- `P3 Addons / Demo-Example` 按设计意图不设设计与评审门禁：它属于认知/学习表面。`TEST_convertDemoToTypical` 把 demo 材料转换为 `P0 Functional / Typical` 工作，而 P3 骨架只作为显式学习制品撰写，绝不替代 P0/P1/P2 覆盖。
 
 旧词汇到门禁结论的映射：
 
@@ -148,7 +148,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 | `WATCHLIST` | `PASS` 且 `severity = advisory`；需要决策时用 `ASK` |
 | 动作型结论（`revise requirements`、`transfer to design`、`update design`、`add tests`、`abort story`、`fix implementation`、`revise skeleton`） | `REVISE` + 该归属命令作为 `rework_route` |
 | `pass` 且 `close requirement-only` | `PASS` + `next_command = SPEC_commitStoryWorks` |
-| `UT_reviewImplTestCase` 的建议 `keep` | `PASS`；其他建议为 `REVISE` + 对应归属命令 |
+| `TEST_reviewImplTestCase` 的建议 `keep` | `PASS`；其他建议为 `REVISE` + 对应归属命令 |
 | 诊断分类（如 `CONFIRMED_INSTALLATION_FAILURE`、`RISKY`） | 保留命令自身的诊断分类不变，并在旁补齐映射后的 `review_verdict`；分类解释原因，结论决定门禁。映射：`HEALTHY` -> `PASS`，`WATCHLIST` -> `PASS` 且 `severity = advisory`，`RISKY` -> `REVISE`，`BLOCKED` -> `BLOCKED`，`INSUFFICIENT_EVIDENCE` -> `ASK`（若某个归属方能提供缺失证据则改用 `BLOCKED`），安装失败分类按各自定义映射为 `REVISE` 或 `BLOCKED` |
 
 ## GitHub Spec Kit 的改进
@@ -409,8 +409,8 @@ flowchart TB
     ImplementationChoice -- "abort" --> Abort2b["SPEC_abortUserStory"]
     ImplementationChoice -- "story is test-ready" --> DesignTests["SPEC_designUnitTests"]
 
-    DesignTests --> UTDesign{"matching UT_designXYZ exists?"}
-    UTDesign -- "YES" --> CategoryDesign["use UT_designXYZ contract"]
+    DesignTests --> TESTDesign{"matching TEST_designXYZ exists?"}
+    TESTDesign -- "YES" --> CategoryDesign["use TEST_designXYZ contract"]
     UTDesign -- "NO, clear intent" --> MethodFallback["explicit methodPrompts fallback"]
     UTDesign -- "NO, unclear intent" --> DetailGap["return to Part 2.a SPEC_updateDetailDesign"]
     CategoryDesign --> ImplTests["SPEC_implUnitTests"]
@@ -485,7 +485,7 @@ flowchart TB
 
 - `maxStepRetry = 2`：相同失败生命周期步骤的最大重试次数。
 - `maxRunCorrectionLoop = 3`：单次运行的最大纠错循环迭代次数（$B \le 3$）。
-- `max_correction_attempts` 默认值 `3`：单命令局部限制输入（例如 `SPEC_implProductCodes`、`UT_implTestCase`）。
+- `max_correction_attempts` 默认值 `3`：单命令局部限制输入（例如 `SPEC_implProductCodes`、`TEST_implTestCase`）。
 - SGRM 算力预算协议（$B$）：拒绝采样重试循环必须是有界且有限的（$B \le 3$）。预算耗尽时，智能体严禁无限循环或暗中降低准入断言；必须回滚至干净工作区基线，输出结构化失败诊断报告，将 TC 标记为 `🚫 BLOCKED`，并升级转交人类治理层。
 - ASR-R1：重试与纠错循环在预算耗尽时应是有界且确定性的。
 
@@ -499,7 +499,7 @@ flowchart TB
 4. 范围膨胀超出已评审的设计或活跃故事。
 5. 证据冲突或责任主体不明确 —— 向开发者提问（`ASK`）。
 6. 中止 —— 问题改变了故事意图或使假设失效；使用 `SPEC_abortUserStory`。
-7. 到达所有权边界 —— 路由至规范的 `SPEC_*`/`UT_*`/`HARNESS_*` 责任命令。
+7. 到达所有权边界 —— 路由至规范的 `SPEC_*`/`TEST_*`/`HARNESS_*` 责任命令。
 
 无进展终止必须保留最新观测到的证据，将工作区回滚至上一个干净基线（防止半成品或脏代码污染），输出结构化失败诊断报告（`failure_type`、`attempt_count`、`sut_snapshot`、`assertion_diff`），将用例标记为 `🚫 BLOCKED`，并进行路由或提问；绝不能谎称成功。
 
@@ -516,7 +516,7 @@ flowchart TB
 ## 冲突守卫
 
 - `Px SpecFlow` 仅定义生命周期编排；CaTDD 方法语义保留在 `methodPrompts` 中。
-- `SPEC_*` 命令可以调用 `UT_*` 命令，但不得替换 P0/P1/P2 类别规则。
+- `SPEC_*` 命令可以调用 `TEST_*` 命令，但不得替换 P0/P1/P2 类别规则。
 - 不得在意图澄清型、需求导向型或设计导向型故事上执行 `autonomousMode`；仅实现导向型故事支持自主执行。若在非实现故事上触发了自主模式，必须暂停并强制回到交互式 `manualMode`。
 - 在需求导向型工作中，不得跳过 `SPEC_reviewUserStory` 在 `SPEC_updateUserStory` 之后。
 - 当 `README_UserStories.md` 的 TODO/DONE 或 AC 追溯状态过期时，不得将故事生命周期视为完成。

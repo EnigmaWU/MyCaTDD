@@ -41,7 +41,7 @@ slashCommands/
   README_ZH.md
   README_UserGuide.md
   README_UserGuide_ZH.md
-  UT_slashCommandTemplate.md
+  TEST_slashCommandTemplate.md
   flows/
   kits/
   commands/
@@ -59,11 +59,11 @@ In an installed target project, shared CaTDD assets live under `.catdd/`:
 Native adapter outputs live in tool-specific locations:
 
 ```text
-.github/prompts/UT_*.prompt.md
+.github/prompts/TEST_*.prompt.md
 .github/prompts/SPEC_*.prompt.md
 .github/prompts/HARNESS_*.prompt.md
 .continue/rules/catdd.md
-.continue/prompts/UT_*.prompt
+.continue/prompts/TEST_*.prompt
 .continue/prompts/SPEC_*.prompt
 .continue/prompts/HARNESS_*.prompt
 .clinerules/catdd.md
@@ -107,7 +107,7 @@ Run these commands from the MyCaTDD repository root to install slash-command ass
 TARGET_DIR="$(mktemp -d)"
 scripts/installCaTDD.sh --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts
 test -f "$TARGET_DIR/.catdd/slashCommands/README_UserGuide.md"
-test -f "$TARGET_DIR/.github/prompts/UT_convertDemoToTypical.prompt.md"
+test -f "$TARGET_DIR/.github/prompts/TEST_convertDemoToTypical.prompt.md"
 echo "$TARGET_DIR"
 ```
 
@@ -120,7 +120,7 @@ Expected result:
 
 ## Native Adapter Generation
 
-Generate Copilot-native wrappers from portable `SPEC_*`, `UT_*`, and `HARNESS_*` command files:
+Generate Copilot-native wrappers from portable `SPEC_*`, `TEST_*`, and `HARNESS_*` command files:
 
 ```bash
 scripts/makeSlashCmd4Copilot.sh --clean
@@ -218,7 +218,7 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Developer need | Command template |
 | --- | --- |
 | Create or revise a portable SPEC slash command | [SPEC_slashCommandTemplate](SPEC_slashCommandTemplate.md) |
-| Create or revise a portable UT slash command | [UT_slashCommandTemplate](UT_slashCommandTemplate.md) |
+| Create or revise a portable UT slash command | [TEST_slashCommandTemplate](TEST_slashCommandTemplate.md) |
 | Drive a full SpecCoding lifecycle | [Px-SpecFlow](commands/Px-SpecFlow/README.md) |
 | Patch installed CaTDD improvements back to the source repo | [HARNESS_patchCaTDDSource](commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | Verify a CaTDD installation before trusting target-project commands | [HARNESS_verifyInstallation](commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
@@ -228,33 +228,33 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Learn and evolve after a meaningful verified success or repeated harness evidence | [HARNESS_evolveHarness](commands/Px-HarnessKits/HARNESS_evolveHarness.md) with `evolution_mode=auto` |
 | Tell me what SpecCoding task to do next | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
 | Tell me the current SpecCoding status across every `.catdd/spec/` lane, with a Level-0…Level-5 maturity grade | [SPEC_showMeStatus](commands/Px-StatusKits/SPEC_showMeStatus.md) |
-| Tell me the current unit-test status and the next UT command, with a Level-0…Level-5 completeness grade | [UT_showMeStatus](commands/Px-StatusKits/UT_showMeStatus.md) |
+| Tell me the current unit-test status and the next UT command, with a Level-0…Level-5 completeness grade | [TEST_showMeStatus](commands/Px-StatusKits/TEST_showMeStatus.md) |
 | Tell me the current harness and installation status, with a Level-0…Level-5 integrity grade | [HARNESS_showMeStatus](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 | Ask what is wrong and switch into a VibeCoding investigation | [SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
 | Create checkbox TASKs and choose the next SPEC step for an opened user story | [SPEC_makePlan](commands/Px-SpecFlow/SPEC_makePlan.md) |
 | Import an existing structured User Story or AC slice | [SPEC_importUserStory](commands/Px-SpecFlow/SPEC_importUserStory.md) |
-| Convert demo tests into CaTDD Typical skeleton | [UT_convertDemoToTypical](commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md) |
-| Design a full P0 Functional skeleton set | [UT_designFuncTestsSkeleton](commands/P0-FuncTestsFlow/UT_designFuncTestsSkeleton.md) |
-| Design a Typical skeleton | [UT_designTypicalSkeleton](commands/P0-FuncTestsFlow/UT_designTypicalSkeleton.md) |
-| Design an Edge skeleton | [UT_designEdgeSkeleton](commands/P0-FuncTestsFlow/UT_designEdgeSkeleton.md) |
-| Design a Misuse skeleton | [UT_designMisuseSkeleton](commands/P0-FuncTestsFlow/UT_designMisuseSkeleton.md) |
-| Design a Fault skeleton | [UT_designFaultSkeleton](commands/P0-FuncTestsFlow/UT_designFaultSkeleton.md) |
-| Review a P0 Functional skeleton set | [UT_reviewFuncTestsSkeleton](commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md) |
-| Design a State skeleton from `README_StateDesign.md` or `README_ArchDesign.md` | [UT_designStateSkeleton](commands/P1-DesignTestsFlow/UT_designStateSkeleton.md) |
-| Design a Capability skeleton from `README_DetailDesign.md` | [UT_designCapabilitySkeleton](commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md) |
-| Design a Concurrency skeleton from `README_ResourceDesign.md` | [UT_designConcurrencySkeleton](commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md) |
-| Review P1 Design skeletons | [UT_reviewDesignTestsSkeleton](commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md) |
-| Design a Performance skeleton from `README_PerfDesign.md` | [UT_designPerformanceSkeleton](commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md) |
-| Design a Robust skeleton from `README_ErrorDesign.md` | [UT_designRobustSkeleton](commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md) |
-| Design a Compatibility skeleton from `README_CompatDesign.md` | [UT_designCompatibilitySkeleton](commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md) |
-| Design a Configuration skeleton from `README_DetailDesign.md` | [UT_designConfigurationSkeleton](commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md) |
-| Design a Security skeleton from `README_SecurityDesign.md` | [UT_designSecuritySkeleton](commands/P2-QualityTestsFlow/UT_designSecuritySkeleton.md) |
-| Review P2 Quality skeletons | [UT_reviewQualityTestsSkeleton](commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md) |
-| Select the next test case from existing skeletons | [UT_tellMeNextImplTest](commands/P0-FuncTestsFlow/UT_tellMeNextImplTest.md) |
-| Implement the selected test case | [UT_implTestCase](commands/P0-FuncTestsFlow/UT_implTestCase.md) |
-| Review the implemented test case | [UT_reviewImplTestCase](commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md) |
+| Convert demo tests into CaTDD Typical skeleton | [TEST_convertDemoToTypical](commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md) |
+| Design a full P0 Functional skeleton set | [TEST_designFuncTestsSkeleton](commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md) |
+| Design a Typical skeleton | [TEST_designTypicalSkeleton](commands/P0-FuncTestsFlow/TEST_designTypicalSkeleton.md) |
+| Design an Edge skeleton | [TEST_designEdgeSkeleton](commands/P0-FuncTestsFlow/TEST_designEdgeSkeleton.md) |
+| Design a Misuse skeleton | [TEST_designMisuseSkeleton](commands/P0-FuncTestsFlow/TEST_designMisuseSkeleton.md) |
+| Design a Fault skeleton | [TEST_designFaultSkeleton](commands/P0-FuncTestsFlow/TEST_designFaultSkeleton.md) |
+| Review a P0 Functional skeleton set | [TEST_reviewFuncTestsSkeleton](commands/P0-FuncTestsFlow/TEST_reviewFuncTestsSkeleton.md) |
+| Design a State skeleton from `README_StateDesign.md` or `README_ArchDesign.md` | [TEST_designStateSkeleton](commands/P1-DesignTestsFlow/TEST_designStateSkeleton.md) |
+| Design a Capability skeleton from `README_DetailDesign.md` | [TEST_designCapabilitySkeleton](commands/P1-DesignTestsFlow/TEST_designCapabilitySkeleton.md) |
+| Design a Concurrency skeleton from `README_ResourceDesign.md` | [TEST_designConcurrencySkeleton](commands/P1-DesignTestsFlow/TEST_designConcurrencySkeleton.md) |
+| Review P1 Design skeletons | [TEST_reviewDesignTestsSkeleton](commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md) |
+| Design a Performance skeleton from `README_PerfDesign.md` | [TEST_designPerformanceSkeleton](commands/P2-QualityTestsFlow/TEST_designPerformanceSkeleton.md) |
+| Design a Robust skeleton from `README_ErrorDesign.md` | [TEST_designRobustSkeleton](commands/P2-QualityTestsFlow/TEST_designRobustSkeleton.md) |
+| Design a Compatibility skeleton from `README_CompatDesign.md` | [TEST_designCompatibilitySkeleton](commands/P2-QualityTestsFlow/TEST_designCompatibilitySkeleton.md) |
+| Design a Configuration skeleton from `README_DetailDesign.md` | [TEST_designConfigurationSkeleton](commands/P2-QualityTestsFlow/TEST_designConfigurationSkeleton.md) |
+| Design a Security skeleton from `README_SecurityDesign.md` | [TEST_designSecuritySkeleton](commands/P2-QualityTestsFlow/TEST_designSecuritySkeleton.md) |
+| Review P2 Quality skeletons | [TEST_reviewQualityTestsSkeleton](commands/P2-QualityTestsFlow/TEST_reviewQualityTestsSkeleton.md) |
+| Select the next test case from existing skeletons | [TEST_tellMeNextImplTest](commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md) |
+| Implement the selected test case | [TEST_implTestCase](commands/P0-FuncTestsFlow/TEST_implTestCase.md) |
+| Review the implemented test case | [TEST_reviewImplTestCase](commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md) |
 | Review story-scoped implemented unit tests | [SPEC_reviewImplUnitTests](commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md) |
-| Refactor one GREEN test case without behavior change | [UT_refactTestCase](commands/P0-FuncTestsFlow/UT_refactTestCase.md) |
+| Refactor one GREEN test case without behavior change | [TEST_refactTestCase](commands/P0-FuncTestsFlow/TEST_refactTestCase.md) |
 | Orchestrate story-scoped unit-test refactor | [SPEC_refactUnitTests](commands/Px-SpecFlow/SPEC_refactUnitTests.md) |
 | Commit the intake/analysis span before opening a story | [SPEC_commitPreStoryWorks](commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) |
 | Commit one verified lifecycle step inside a story span | [SPEC_commitStepWorks](commands/Px-SpecFlow/SPEC_commitStepWorks.md) |

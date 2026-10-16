@@ -14,7 +14,7 @@ Px SpecFlow = repeatable SpecCoding lifecycle over that method
 P0/P1/P2 flows = category-specific test design and implementation flows
 ```
 
-`SPEC_*` commands own lifecycle orchestration: story state, readiness gates, cross-category coverage selection, traceability, review, commit, and closure. `UT_*` commands own category-level test mechanics: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration skeleton design or implementation steps. When a `SPEC_*` command such as `SPEC_designUnitTests` needs category skeletons, it should use matching `UT_designXYZ` command contracts when they exist and record that provenance instead of silently drafting category shapes from memory.
+`SPEC_*` commands own lifecycle orchestration: story state, readiness gates, cross-category coverage selection, traceability, review, commit, and closure. `TEST_*` commands own category-level test mechanics: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration skeleton design or implementation steps. When a `SPEC_*` command such as `SPEC_designUnitTests` needs category skeletons, it should use matching `TEST_designXYZ` command contracts when they exist and record that provenance instead of silently drafting category shapes from memory.
 
 The governing spec is comment-alive verification design: project context, user stories, acceptance criteria, detailed design, US/AC/TC skeletons, test status, product code status, and review decisions.
 
@@ -136,7 +136,7 @@ Not every artifact carries a dedicated gate, and the flow names the owner so the
 - The paired `*-UserStory-Tasks.md` artifact is owned by `SPEC_makePlan` at authoring time, verified at close by `SPEC_closeUserStory` (`plan_drift` when a checked task has no gate evidence or the commit plan disagrees with the commits taken), and diagnosed by `SPEC_whatsWrong`.
 - `.catdd/spec/projectContext.md` is gated internally by the Lossless Compaction Gate in `SPEC_updateProjectContext` and externally by `HARNESS_diagnoseProject`'s consistency bucket.
 - The project-root README SPEC doc set is covered by `HARNESS_diagnoseProject` drift for the whole set, and by the architecture or detail-design gate for the documents those gates own.
-- `P3 Addons / Demo-Example` has no design or review gate by intent: it is a learning surface. `UT_convertDemoToTypical` converts demo material into `P0 Functional / Typical` work, and a P3 skeleton is authored as an explicit learning artifact that never substitutes for P0/P1/P2 coverage.
+- `P3 Addons / Demo-Example` has no design or review gate by intent: it is a learning surface. `TEST_convertDemoToTypical` converts demo material into `P0 Functional / Typical` work, and a P3 skeleton is authored as an explicit learning artifact that never substitutes for P0/P1/P2 coverage.
 
 Mapping from the older vocabularies:
 
@@ -149,7 +149,7 @@ Mapping from the older vocabularies:
 | `WATCHLIST` | `PASS` with `severity = advisory`, or `ASK` when the observation needs a decision |
 | Action verdicts such as `revise requirements`, `transfer to design`, `update design`, `add tests`, `abort story`, `fix implementation`, `revise skeleton` | `REVISE` + that owner as `rework_route` |
 | `pass` with `close requirement-only` | `PASS` + `next_command = SPEC_commitStoryWorks` |
-| `UT_reviewImplTestCase` recommendation `keep` | `PASS`; any other recommendation is `REVISE` + the named owner |
+| `TEST_reviewImplTestCase` recommendation `keep` | `PASS`; any other recommendation is `REVISE` + the named owner |
 | Diagnosis taxonomies such as `CONFIRMED_INSTALLATION_FAILURE` or `RISKY` | Keep the command's own diagnosis taxonomy unchanged and report the mapped `review_verdict` alongside it; the taxonomy explains why, the verdict decides the gate. Mapping: `HEALTHY` -> `PASS`, `WATCHLIST` -> `PASS` with `severity = advisory`, `RISKY` -> `REVISE`, `BLOCKED` -> `BLOCKED`, `INSUFFICIENT_EVIDENCE` -> `ASK` (or `BLOCKED` when a named owner can supply the missing evidence), and the installation failure classes -> `REVISE` or `BLOCKED` per their own definitions |
 
 ## Refinements from GitHub Spec Kit
@@ -407,8 +407,8 @@ flowchart TB
     ImplementationChoice -- "abort" --> Abort2b["SPEC_abortUserStory"]
     ImplementationChoice -- "story is test-ready" --> DesignTests["SPEC_designUnitTests"]
 
-    DesignTests --> UTDesign{"matching UT_designXYZ exists?"}
-    UTDesign -- "YES" --> CategoryDesign["use UT_designXYZ contract"]
+    DesignTests --> TESTDesign{"matching TEST_designXYZ exists?"}
+    TESTDesign -- "YES" --> CategoryDesign["use TEST_designXYZ contract"]
     UTDesign -- "NO, clear intent" --> MethodFallback["explicit methodPrompts fallback"]
     UTDesign -- "NO, unclear intent" --> DetailGap["return to Part 2.a SPEC_updateDetailDesign"]
     CategoryDesign --> ImplTests["SPEC_implUnitTests"]
@@ -483,7 +483,7 @@ Loop bounds are set by the agentic reliability policy and contracts in `codeAgen
 
 - `maxStepRetry = 2`: maximum retries of the same failed lifecycle step.
 - `maxRunCorrectionLoop = 3`: maximum correction-loop iterations for one run ($B \le 3$).
-- `max_correction_attempts` default `3`: per-command local-bound input (for example `SPEC_implProductCodes`, `UT_implTestCase`).
+- `max_correction_attempts` default `3`: per-command local-bound input (for example `SPEC_implProductCodes`, `TEST_implTestCase`).
 - SGRM Budget Protocol ($B$): Rejection-sampling retry loops must be strictly bounded ($B \le 3$). Upon budget exhaustion, the agent must not loop indefinitely or silently lower acceptance criteria; it must restore the clean baseline, emit a structured failure diagnostic report, mark the TC as `🚫 BLOCKED`, and escalate to human governance.
 - ASR-R1: retry and correction loops shall be bounded and deterministic at budget exhaustion.
 
@@ -497,7 +497,7 @@ Every rework loop (`review -> update -> review`, `impl -> review -> impl`, and t
 4. Scope expansion beyond the reviewed design or active story.
 5. Conflicting evidence or unclear owner — `ASK` the developer.
 6. Abort — the problem changes story intent or invalidates assumptions; use `SPEC_abortUserStory`.
-7. Ownership boundary reached — route to the canonical `SPEC_*`/`UT_*`/`HARNESS_*` owner.
+7. Ownership boundary reached — route to the canonical `SPEC_*`/`TEST_*`/`HARNESS_*` owner.
 
 A no-progress stop must preserve the latest observed evidence, restore the working directory to the last clean state (preventing partial/dirty code contamination), emit a structured failure diagnostic report (`failure_type`, `attempt_count`, `sut_snapshot`, `assertion_diff`), mark the TC as `🚫 BLOCKED`, and route or ask; it must not claim success.
 
@@ -514,7 +514,7 @@ Failure classification follows ASR-R3: retry only transient failures; route perm
 ## Conflict Guard
 
 - `Px SpecFlow` defines lifecycle orchestration only; CaTDD method semantics remain in `methodPrompts`.
-- `SPEC_*` commands may call `UT_*` commands, but they must not replace P0/P1/P2 category rules.
+- `SPEC_*` commands may call `TEST_*` commands, but they must not replace P0/P1/P2 category rules.
 - Do not execute `autonomousMode` on `intent-clearing`, `requirement-oriented`, or `design-oriented` stories; only `implementation-oriented` stories support autonomous execution. If autonomous execution is triggered on non-implementation stories, halt and force interactive `manualMode`.
 - Do not skip `SPEC_reviewUserStory` after `SPEC_updateUserStory` in requirement-oriented work.
 - Do not treat story lifecycle as complete when `README_UserStories.md` TODO/DONE or AC trace status is stale.

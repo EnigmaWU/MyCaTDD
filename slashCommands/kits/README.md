@@ -15,4 +15,4 @@ Kit documents may describe command families, operational guards, and reusable to
 
 `HARNESS_*` commands may inspect and maintain operational harness assets, but they must not move SpecFlow lifecycle state unless explicitly invoked by a `SPEC_*` command.
 
-StatusKits commands are strictly read-only. `UT_showMeStatus`, `SPEC_showMeStatus`, and `HARNESS_showMeStatus` report the state of their own viewpoint and hand off to the command that owns any follow-up; they never repair, promote, move, or commit.
+StatusKits commands are strictly read-only. `TEST_showMeStatus`, `SPEC_showMeStatus`, and `HARNESS_showMeStatus` report the state of their own viewpoint and hand off to the command that owns any follow-up; they never repair, promote, move, or commit.
