@@ -50,7 +50,7 @@ assert_p1_design_source() {
 
 assert_p1_design_gate() {
   local flow_doc="slashCommands/flows/P1-DesignTestsFlow.md"
-  local review_command="slashCommands/commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md"
+  local review_command="slashCommands/commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md"
 
   assert_contains "$flow_doc" "P1 MUST have DESIGN before skeleton drafting starts"
   assert_contains "$flow_doc" "P1 is design-gated"
@@ -60,7 +60,7 @@ assert_p1_design_gate() {
 }
 
 assert_state_design_source() {
-  local command_path="slashCommands/commands/P1-DesignTestsFlow/UT_designStateSkeleton.md"
+  local command_path="slashCommands/commands/P1-DesignTestsFlow/TEST_designStateSkeleton.md"
   local flow_doc="slashCommands/flows/P1-DesignTestsFlow.md"
 
   assert_contains "$command_path" "README_StateDesign.md"
@@ -76,27 +76,27 @@ assert_state_design_source() {
 }
 
 p0_design_commands=(
-  UT_designTypicalSkeleton
-  UT_designEdgeSkeleton
-  UT_designMisuseSkeleton
-  UT_designFaultSkeleton
-  UT_designFuncTestsSkeleton
+  TEST_designTypicalSkeleton
+  TEST_designEdgeSkeleton
+  TEST_designMisuseSkeleton
+  TEST_designFaultSkeleton
+  TEST_designFuncTestsSkeleton
 )
 
 p1_commands=(
-  UT_designStateSkeleton
-  UT_designCapabilitySkeleton
-  UT_designConcurrencySkeleton
-  UT_reviewDesignTestsSkeleton
+  TEST_designStateSkeleton
+  TEST_designCapabilitySkeleton
+  TEST_designConcurrencySkeleton
+  TEST_reviewDesignTestsSkeleton
 )
 
 p2_commands=(
-  UT_designPerformanceSkeleton
-  UT_designRobustSkeleton
-  UT_designCompatibilitySkeleton
-  UT_designConfigurationSkeleton
-  UT_designSecuritySkeleton
-  UT_reviewQualityTestsSkeleton
+  TEST_designPerformanceSkeleton
+  TEST_designRobustSkeleton
+  TEST_designCompatibilitySkeleton
+  TEST_designConfigurationSkeleton
+  TEST_designSecuritySkeleton
+  TEST_reviewQualityTestsSkeleton
 )
 
 for command_name in "${p0_design_commands[@]}"; do
@@ -124,11 +124,11 @@ done
 assert_p1_design_gate
 assert_state_design_source
 assert_p1_design_source \
-  "slashCommands/commands/P1-DesignTestsFlow/UT_designCapabilitySkeleton.md" \
+  "slashCommands/commands/P1-DesignTestsFlow/TEST_designCapabilitySkeleton.md" \
   "README_DetailDesign.md" \
   "../../templates/README_DetailDesignTemplate.md"
 assert_p1_design_source \
-  "slashCommands/commands/P1-DesignTestsFlow/UT_designConcurrencySkeleton.md" \
+  "slashCommands/commands/P1-DesignTestsFlow/TEST_designConcurrencySkeleton.md" \
   "README_ResourceDesign.md" \
   "../../templates/README_ResourceDesignTemplate.md"
 
@@ -144,27 +144,27 @@ for command_name in "${p2_commands[@]}"; do
 done
 
 assert_design_source \
-  "slashCommands/commands/P2-QualityTestsFlow/UT_designPerformanceSkeleton.md" \
+  "slashCommands/commands/P2-QualityTestsFlow/TEST_designPerformanceSkeleton.md" \
   "README_PerfDesign.md" \
   "../../templates/README_PerfDesignTemplate.md" \
   "slashCommands/flows/P2-QualityTestsFlow.md"
 assert_design_source \
-  "slashCommands/commands/P2-QualityTestsFlow/UT_designRobustSkeleton.md" \
+  "slashCommands/commands/P2-QualityTestsFlow/TEST_designRobustSkeleton.md" \
   "README_ErrorDesign.md" \
   "../../templates/README_ErrorDesignTemplate.md" \
   "slashCommands/flows/P2-QualityTestsFlow.md"
 assert_design_source \
-  "slashCommands/commands/P2-QualityTestsFlow/UT_designCompatibilitySkeleton.md" \
+  "slashCommands/commands/P2-QualityTestsFlow/TEST_designCompatibilitySkeleton.md" \
   "README_CompatDesign.md" \
   "../../templates/README_CompatDesignTemplate.md" \
   "slashCommands/flows/P2-QualityTestsFlow.md"
 assert_design_source \
-  "slashCommands/commands/P2-QualityTestsFlow/UT_designConfigurationSkeleton.md" \
+  "slashCommands/commands/P2-QualityTestsFlow/TEST_designConfigurationSkeleton.md" \
   "README_DetailDesign.md" \
   "../../templates/README_DetailDesignTemplate.md" \
   "slashCommands/flows/P2-QualityTestsFlow.md"
 assert_design_source \
-  "slashCommands/commands/P2-QualityTestsFlow/UT_designSecuritySkeleton.md" \
+  "slashCommands/commands/P2-QualityTestsFlow/TEST_designSecuritySkeleton.md" \
   "README_SecurityDesign.md" \
   "../../templates/README_SecurityDesignTemplate.md" \
   "slashCommands/flows/P2-QualityTestsFlow.md"
@@ -207,13 +207,13 @@ assert_contains "$impl_product_codes_command" "focused validation"
 assert_contains "$impl_product_codes_command" "Correct or stop"
 assert_contains "$impl_product_codes_command" "no-progress"
 assert_contains "$impl_product_codes_command" "SPEC_updateDetailDesign"
-assert_contains "$impl_product_codes_command" "SPEC_implUnitTests"
-assert_contains "$impl_product_codes_command" "SPEC_designUnitTests"
+assert_contains "$impl_product_codes_command" "SPEC_implTests"
+assert_contains "$impl_product_codes_command" "SPEC_designTests"
 assert_contains "$impl_product_codes_command" "SPEC_updateUserStory"
 assert_contains "$impl_product_codes_command" "SPEC_reviewProductCodes"
 
 status_kit_dir="slashCommands/commands/Px-StatusKits"
-for command_name in UT_showMeStatus SPEC_showMeStatus HARNESS_showMeStatus; do
+for command_name in TEST_showMeStatus SPEC_showMeStatus HARNESS_showMeStatus; do
   command_path="$status_kit_dir/${command_name}.md"
   assert_file "$command_path"
   assert_contains "$command_path" "# ${command_name}"
@@ -229,10 +229,10 @@ for command_name in UT_showMeStatus SPEC_showMeStatus HARNESS_showMeStatus; do
   assert_contains "slashCommands/commands/Px-StatusKits/README.md" "${command_name}.md"
   assert_contains "slashCommands/kits/Px-StatusKits.md" "${command_name}.md"
 done
-assert_contains "$status_kit_dir/UT_showMeStatus.md" "completeness_level"
+assert_contains "$status_kit_dir/TEST_showMeStatus.md" "completeness_level"
 assert_contains "$status_kit_dir/SPEC_showMeStatus.md" "maturity_level"
 assert_contains "$status_kit_dir/HARNESS_showMeStatus.md" "integrity_level"
-assert_contains "$status_kit_dir/UT_showMeStatus.md" "Never inflate the completeness level"
+assert_contains "$status_kit_dir/TEST_showMeStatus.md" "Never inflate the completeness level"
 assert_contains "$status_kit_dir/SPEC_showMeStatus.md" "Never inflate the maturity level"
 assert_contains "$status_kit_dir/HARNESS_showMeStatus.md" "Never inflate the integrity level"
 assert_contains "slashCommands/kits/Px-StatusKits.md" "UT-5 is all evidence, SPEC-5 is all learning, HARNESS-5 is all tidiness"
@@ -240,7 +240,7 @@ assert_contains "slashCommands/README_UserGuide.md" "Px-StatusKits"
 assert_contains "slashCommands/kits/README.md" "Px-StatusKits.md"
 assert_contains "slashCommands/commands/README.md" "Px-StatusKits"
 assert_contains "slashCommands/kits/Px-StatusKits.md" "read-only"
-assert_contains "$status_kit_dir/UT_showMeStatus.md" "BROKEN_TEST"
+assert_contains "$status_kit_dir/TEST_showMeStatus.md" "BROKEN_TEST"
 assert_contains "$status_kit_dir/SPEC_showMeStatus.md" ".catdd/spec/"
 assert_contains "$status_kit_dir/HARNESS_showMeStatus.md" "not a PASS/WARN/FAIL verification verdict"
 

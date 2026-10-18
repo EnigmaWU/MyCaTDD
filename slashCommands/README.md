@@ -60,7 +60,7 @@ When a command conflicts with `methodPrompts`, update `methodPrompts` first, the
 
 `HARNESS_evolveHarness` never rewrites a canonical command file in place. When a verified lesson refines or creates a slash command, flow, or kit, the result is written as a sibling `<Name>Evolved.md` file in the same directory. The canonical `<Name>.md` stays exactly as installed from `MyCaTDD`.
 
-- **Overlay**: refining `SPEC_implUnitTests` produces `SPEC_implUnitTestsEvolved.md` beside an untouched `SPEC_implUnitTests.md`.
+- **Overlay**: refining `SPEC_implTests` produces `SPEC_implTestsEvolved.md` beside an untouched `SPEC_implTests.md`.
 - **New command**: a command born from evolution keeps the suffix too, such as `SPEC_doNewXyzEvolved.md`.
 - **One overlay per base**: repeated refines update the single existing `<Name>Evolved.md`; there is no `Evolved2` or parallel overlay chain.
 - **Resolution**: the evolved file is self-contained and, when present, supersedes its non-suffixed sibling for local execution. The agent follows `<Name>Evolved.md` instead of `<Name>.md`.
@@ -82,7 +82,7 @@ Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPr
 
 ## Traceability and SUT constraints
 
-- `SPEC_designUnitTests` and related `TEST_design*Skeleton` commands should enforce minimum traceability cardinality: each US has at least 1 AC, and each AC has at least 1 TC.
+- `SPEC_designTests` and related `TEST_design*Skeleton` commands should enforce minimum traceability cardinality: each US has at least 1 AC, and each AC has at least 1 TC.
 - Test design outputs must explicitly declare the SUT in the test-file overview (for example: `SUT: utCodeAgentCLI`).
 - Outputs with dangling traceability (US without AC or AC without TC) should be blocked from being marked complete.
 

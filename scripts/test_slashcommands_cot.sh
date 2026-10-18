@@ -65,4 +65,4 @@ if (( failures > 0 )); then
   exit 1
 fi
 
-echo "[slashcommands-cot-test] PASSED: every UT_*/SPEC_*/HARNESS_* command declares a CoT pattern with a matching execution loop and worked example"
+echo "[slashcommands-cot-test] PASSED: every TEST_*/SPEC_*/HARNESS_* command declares a CoT pattern with a matching execution loop and worked example"

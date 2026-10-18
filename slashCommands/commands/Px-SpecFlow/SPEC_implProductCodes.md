@@ -36,7 +36,7 @@ Expected result:
 - **Observation**: focused validation → TC-001 GREEN, TC-002 now fails → evaluate `CORRECT` (attempt 1), the failure is local and understood.
 - **Action**: minimal correction to the port's error branch.
 - **Observation**: focused validation → both GREEN, no regression → evaluate `GREEN`.
-- **Stop**: 1 correction attempt used of 3. Reported `next_command = SPEC_reviewProductCodes`, followed by the post-product-code `SPEC_reviewImplUnitTests` gate.
+- **Stop**: 1 correction attempt used of 3. Reported `next_command = SPEC_reviewProductCodes`, followed by the post-product-code `SPEC_reviewImplTests` gate.
 
 A `ROUTE` variant: if TC-002 had failed because the design never defined the error branch, the evaluation would be `ROUTE` → stop, do not invent behavior, hand to `SPEC_updateDetailDesign`.
 
@@ -65,7 +65,7 @@ Before editing product code, verify that the selected test satisfies the **Seman
 - satisfies the **Anti-Test-Theater Rule**: assertions verify real SUT state mutations or domain invariants, never mock returns directly without SUT transformation;
 - traces to the active story, acceptance criterion, test case, and reviewed detail design.
 
-If valid RED evidence is absent, do not mutate product code. Route a test implementation defect to `SPEC_implUnitTests`, a test-design or coverage defect to `SPEC_designUnitTests`, a requirement ambiguity to `SPEC_updateUserStory` or `ASK`, and a design gap to `SPEC_updateDetailDesign`.
+If valid RED evidence is absent, do not mutate product code. Route a test implementation defect to `SPEC_implTests`, a test-design or coverage defect to `SPEC_designTests`, a requirement ambiguity to `SPEC_updateUserStory` or `ASK`, and a design gap to `SPEC_updateDetailDesign`.
 
 ## Bounded Implementation Loop
 
@@ -92,14 +92,14 @@ A no-progress stop must preserve the latest observed evidence, report remaining 
 - Traceability from changed product files to the targeted story, acceptance criteria, test cases, and reviewed detail design.
 - Initial RED evidence, validation commands and results, correction-attempt count, evaluation state, and stop reason.
 - Remaining failures and exact owner route when the result is `ROUTE` or `ASK`.
-- Next recommended command: `SPEC_reviewProductCodes`; when product-code review passes, run `SPEC_reviewImplUnitTests` again before refactor, commit, or closure.
+- Next recommended command: `SPEC_reviewProductCodes`; when product-code review passes, run `SPEC_reviewImplTests` again before refactor, commit, or closure.
 
 ## Conflict Guard
 
 Do not begin without valid RED evidence.
 Do not broaden scope beyond the active story or reviewed design.
 Do not modify tests to manufacture GREEN.
-Route design gaps to `SPEC_updateDetailDesign`, test implementation defects to `SPEC_implUnitTests`, test-design or coverage defects to `SPEC_designUnitTests`, and requirement ambiguity to `SPEC_updateUserStory` or the developer.
+Route design gaps to `SPEC_updateDetailDesign`, test implementation defects to `SPEC_implTests`, test-design or coverage defects to `SPEC_designTests`, and requirement ambiguity to `SPEC_updateUserStory` or the developer.
 Do not continue after no-progress evidence, an ownership boundary, or exhausted `max_correction_attempts`.
 Do not route directly to commit after product code changes; product-code review and post-product-code unit-test implementation review must both pass first.
 

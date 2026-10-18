@@ -29,10 +29,10 @@ projectContext_file: .catdd/spec/projectContext.md
 
 Expected result — one ToT pass:
 
-- **Generate**: three branches — `SPEC_updateUserStory`, `SPEC_takeDetailDesign`, `SPEC_designUnitTests`.
-- **Evaluate**: `SPEC_designUnitTests` rejected (no detail design exists). `SPEC_takeDetailDesign` rejected (AC wording is still changing, so design would be built on a moving target). `SPEC_updateUserStory` survives (requirement surface `README_UserStories.md` is being changed).
+- **Generate**: three branches — `SPEC_updateUserStory`, `SPEC_takeDetailDesign`, `SPEC_designTests`.
+- **Evaluate**: `SPEC_designTests` rejected (no detail design exists). `SPEC_takeDetailDesign` rejected (AC wording is still changing, so design would be built on a moving target). `SPEC_updateUserStory` survives (requirement surface `README_UserStories.md` is being changed).
 - **Select**: `SPEC_updateUserStory` — rank 2, earliest surviving.
-- **Execute**: tasks file records all three branches, the two rejections with reasons, the selection, and the commit plan — `SPEC_commitStepWorks` planned after `SPEC_implUnitTests` and `SPEC_implProductCodes` (`commit_step = yes`), no commit after no-op gates, and `SPEC_commitStoryWorks` as the final just-done story commit.
+- **Execute**: tasks file records all three branches, the two rejections with reasons, the selection, and the commit plan — `SPEC_commitStepWorks` planned after `SPEC_implTests` and `SPEC_implProductCodes` (`commit_step = yes`), no commit after no-op gates, and `SPEC_commitStoryWorks` as the final just-done story commit.
 - **Verify**: prerequisites of `SPEC_updateUserStory` are `[x]` (story opened, intent clear) → selection stands.
 
 ## Inputs
@@ -81,7 +81,7 @@ Expected result — one ToT pass:
 - Decide commit granularity per story, not per project, and record the decision in `tasks_file` so later commands never re-decide it.
 - `manualMode` default: plan the story span commit through `SPEC_commitStoryWorks`, and record `SPEC_commitStepWorks` boundaries as available options (`commit_step = optional`) that the developer may take or decline.
 - `autonomousMode` default: plan `SPEC_commitStepWorks` at every deterministic step boundary whose gate is `PASS`/`GREEN`, then `SPEC_commitStoryWorks` as the final just-done story commit.
-- Mark `commit_step = yes` only for steps that produce file changes and have an explicit verification gate, such as `SPEC_designUnitTests`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_reviewProductCodes`, and `SPEC_reviewImplUnitTests` when it changed files.
+- Mark `commit_step = yes` only for steps that produce file changes and have an explicit verification gate, such as `SPEC_designTests`, `SPEC_implTests`, `SPEC_implProductCodes`, `SPEC_refactTests`, `SPEC_reviewProductCodes`, and `SPEC_reviewImplTests` when it changed files.
 - Mark `commit_step = no` for review, planning, or analysis gates that changed no file, and for any step whose gate is not deterministic.
 - Plan `single_story_commit = yes` when the story is small, low-risk, or repository policy requires one commit per story; step commits are still allowed, and `SPEC_commitStoryWorks` squashes them at the end with developer confirmation in `manualMode`.
 - Plan `SPEC_commitPreStoryWorks` for the intake and analysis span only when the story was queued through import or analysis in the same working session; record it as `pre_story_commit = yes|no`.
@@ -92,7 +92,7 @@ Expected result — one ToT pass:
  2. Requirement-oriented work: route to `SPEC_updateUserStory` when project-level `README_UserStories.md` ledger or paired `README_UserGuide.md` (and module requirement docs when used) must be updated.
  3. Requirement update already done but not reviewed: route to `SPEC_reviewUserStory`.
  4. Design-oriented work: route to the appropriate architecture/detail take-or-update command.
- 5. Implementation-oriented work with sufficient requirement and design readiness: route to `SPEC_designUnitTests`.
+ 5. Implementation-oriented work with sufficient requirement and design readiness: route to `SPEC_designTests`.
  6. Completed and verified work: route to `SPEC_commitStoryWorks` for the story span, then `SPEC_closeUserStory`, then the `post_close` checkpoint of `SPEC_commitStoryWorks` when close generated lifecycle/meta changes.
 - Distinguish initial design from follow-up design revision:
   - Initial architecture design routes to `SPEC_takeArchDesign`.
@@ -103,7 +103,7 @@ Expected result — one ToT pass:
   - Requirement-oriented work updates formal requirement surfaces: project-root `README_UserStories.md` (TODO/DONE + AC trace/status), paired `README_UserGuide.md`, module/submodule requirement docs when used, US/AC IDs, acceptance wording, usage-facing behavior, priority/dependency notes, and trace links. It routes to `SPEC_updateUserStory` before design commands.
   - Requirement-oriented work routes to `SPEC_reviewUserStory` after `SPEC_updateUserStory`. Passing review can close requirement-only work through `SPEC_commitStoryWorks` and `SPEC_closeUserStory`, or transfer to design-oriented next steps.
   - Design-oriented work routes to the appropriate architecture/detail take-or-update command before review.
-  - Implementation-oriented work routes to `SPEC_designUnitTests` only when requirement docs, architecture, and detail readiness are already sufficient. Do not add a `SPEC_reviewUserStory` gate after `SPEC_reviewDetailDesign`.
+  - Implementation-oriented work routes to `SPEC_designTests` only when requirement docs, architecture, and detail readiness are already sufficient. Do not add a `SPEC_reviewUserStory` gate after `SPEC_reviewDetailDesign`.
 - If developer and CodeAgent intent are not aligned, route to `SPEC_clearStoryIntent` before design or implementation-oriented work.
 - If the story changes both requirements and design, route to `SPEC_updateUserStory` first, then review the story, then transfer to design-oriented next steps.
 - If required requirement/design evidence is missing, mark the affected checklist item `[ ]`, reject downstream commands in the rationale, and ask the developer instead of guessing.

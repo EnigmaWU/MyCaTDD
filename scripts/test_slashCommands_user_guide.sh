@@ -30,7 +30,7 @@ grep -Fq 'scripts/installCaTDD.sh --targetDir "$TARGET_DIR" --targetCodeAgent Co
 grep -Fq '.catdd/slashCommands/README_UserGuide.md' "$GUIDE" || fail "slashCommands user guide missing installed slashCommands path check"
 grep -Fq 'scripts/makeSlashCmd4Continue.sh --clean' "$GUIDE" || fail "slashCommands user guide missing Continue generation command"
 grep -Fq 'flows/P0-FuncTestsFlow.md' "$GUIDE" || fail "slashCommands user guide missing flow map"
-grep -Fq 'commands/P0-FuncTestsFlow/UT_implTestCase.md' "$GUIDE" || fail "slashCommands user guide missing command map"
+grep -Fq 'commands/P0-FuncTestsFlow/TEST_implTestCase.md' "$GUIDE" || fail "slashCommands user guide missing command map"
 grep -Fq '.catdd/spec/doingUS/' "$GUIDE" || fail "slashCommands user guide missing local SpecCoding artifact policy"
 grep -Fq '.catdd/spec/suspendUS/' "$GUIDE" || fail "slashCommands user guide missing suspended SpecCoding artifact policy"
 grep -Fq '.catdd/spec/abortUS/' "$GUIDE" || fail "slashCommands user guide missing aborted SpecCoding artifact policy"

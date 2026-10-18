@@ -28,7 +28,7 @@ Run these steps once, in order. There is no retry loop; a trigger that belongs t
    - Contradictory evidence between artifacts and observed reality, such as reviews passing while the same behavior keeps failing.
    - Plan drift: a `*-UserStory-Tasks.md` artifact whose checked tasks have no gate evidence behind them, or whose commit plan disagrees with the commits actually taken.
    - A bounded rework loop that exhausted `maxStepRetry` or `maxRunCorrectionLoop` with no observable progress, in `manualMode`. A headless `autonomousMode` run cannot switch discipline; it halts and lets the developer choose `ASK`, abort, or the switch.
-   - A problem for which no owning `SPEC_*` or `UT_*` command can be named.
+   - A problem for which no owning `SPEC_*` or `TEST_*` command can be named.
    - Escalation after a `ONE-MORE-THING` halt that could not be answered immediately.
 
    If an owning command plainly exists, stop and route there. Do not switch to avoid a gate, a requirement, or an acceptance criterion.
@@ -47,7 +47,7 @@ An implementation-oriented story keeps failing the same intermittent test while 
 
 ```text
 /SPEC_whatsWrong
-trigger_reason: SPEC_reviewImplUnitTests passes, but the same TC fails intermittently after each GREEN run
+trigger_reason: SPEC_reviewImplTests passes, but the same TC fails intermittently after each GREEN run
 hypothesis: the fake clock advances real time somewhere in the fixture
 doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
 execution_mode: manualMode
@@ -57,10 +57,10 @@ Expected result:
 
 1. Trigger classified as contradictory evidence; no owning command can be named because both the review and the test report contradictory facts.
 2. `manualMode` confirmed, so the switch is allowed.
-3. Flow frozen at `SPEC_reviewImplUnitTests`; resume hint recorded; no lane moved.
+3. Flow frozen at `SPEC_reviewImplTests`; resume hint recorded; no lane moved.
 4. Excursion entry written to `.catdd/spec/WorkingProcessLog.md` with `adoption_status = unadopted`.
 5. VibeCoding session finds that the shared fixture seeds a real timer while the test assumes a fake clock.
-6. Reported: `discipline_mode = VibeCoding`, finding routed to `SPEC_reviewImplUnitTests` (test-side fixture drift) with a secondary note for `SPEC_updateDetailDesign` (the design never declared clock control), `learning_command = /HARNESS_evolveHarness` with `evolution_mode=auto`, and `resume_command = SPEC_whatsNextTask`.
+6. Reported: `discipline_mode = VibeCoding`, finding routed to `SPEC_reviewImplTests` (test-side fixture drift) with a secondary note for `SPEC_updateDetailDesign` (the design never declared clock control), `learning_command = /HARNESS_evolveHarness` with `evolution_mode=auto`, and `resume_command = SPEC_whatsNextTask`.
 
 ## Inputs
 
@@ -85,7 +85,7 @@ Expected result:
 - Declared `discipline_mode = VibeCoding` with the classified trigger, so the switch is explicit rather than an implicit drop out of the Flow.
 - Frozen-state assertion: which story, tasks file, and interrupted step were preserved, and confirmation that no lane moved and no lifecycle/team artifact was written.
 - Excursion record path and contents: trigger, hypotheses, investigation scope, resume hint, and `adoption_status = unadopted`.
-- Findings, each routed to its owning `SPEC_*` or `UT_*` command; `no_findings` is a valid outcome when the excursion disproves the suspicion.
+- Findings, each routed to its owning `SPEC_*` or `TEST_*` command; `no_findings` is a valid outcome when the excursion disproves the suspicion.
 - Frozen-state assertion that names the frozen classes: `.catdd/spec/**` except `WorkingProcessLog.md`, `README_UserStories.md`, `projectContext.md`, and the paired tasks file, with confirmation that no lane moved inside them.
 - Adoption rule: exploratory edits to product code, tests, or design docs stay unadopted until a `SPEC_*` step re-adopts them, and no story-span commit covers an excursion. Every unadopted edit must be reverted or re-adopted before SpecCoding resumes.
 - Non-blocking post-excursion learning hook:

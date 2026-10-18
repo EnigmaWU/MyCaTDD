@@ -28,10 +28,10 @@ projectContext_file: .catdd/spec/projectContext.md
 Expected result:
 
 - **Generate**: `pendingNews/` has 1 issue → `SPEC_analyzeIssue`. `doingUS/` has 1 story → `SPEC_whatsNextTask` on its tasks file. `suspendUS/` has 1 story → `SPEC_resumeUserStory`. Three candidates.
-- **Evaluate**: `SPEC_analyzeIssue` is runnable but starts *new* work. The `doingUS` story's tasks file shows detail design reviewed and TC-002 unimplemented → `SPEC_implUnitTests` runnable. The suspended story's `resume_ref` branch no longer exists → rejected, not deferred.
-- **Select**: `SPEC_implUnitTests` — it advances the furthest-along work rather than opening a new front.
+- **Evaluate**: `SPEC_analyzeIssue` is runnable but starts *new* work. The `doingUS` story's tasks file shows detail design reviewed and TC-002 unimplemented → `SPEC_implTests` runnable. The suspended story's `resume_ref` branch no longer exists → rejected, not deferred.
+- **Select**: `SPEC_implTests` — it advances the furthest-along work rather than opening a new front.
 - **Verify**: skeleton review passed and product code has not been written → no gate skipped → selection stands.
-- Reported: `SPEC_implUnitTests`, plus a note that the suspended story needs a new `resume_ref` before it can move.
+- Reported: `SPEC_implTests`, plus a note that the suspended story needs a new `resume_ref` before it can move.
 
 ## Inputs
 

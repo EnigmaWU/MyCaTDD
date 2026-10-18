@@ -60,7 +60,7 @@ Expected result — two passes:
 ## Output Contract
 
 - A `.catdd/spec/projectContext.md` team-shared persistent artifact with project facts, constraints, code conventions, test conventions, `sut_unit_convention`, constitution-level guardrails, `## Constitutional Invariants (K)`, `default_lang` (US_EN or ZH_CN), and open questions.
-- A clearly recorded `sut_unit_convention` with scope, rationale, and example SUT name so later `SPEC_designUnitTests` declarations stay consistent.
+- A clearly recorded `sut_unit_convention` with scope, rationale, and example SUT name so later `SPEC_designTests` declarations stay consistent.
 - Clearly codified `## Constitutional Invariants (K)` that govern all downstream generation and verification.
 - A `## Agent Instruction Surfaces` section listing every detected `AGENTS.md` family file with its path, scope, provenance (`pre-existing`, `mixed`, `catdd-created`, or `present-empty`), ownership by region, managed-region markers when present, and a one-line summary limited to the operating conventions it owns.
 - An explicit statement of the authority ceiling for that section: `AGENTS.md` owns operating conventions only, and never method semantics, category meaning, gate rules, traceability, or project facts.

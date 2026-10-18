@@ -46,7 +46,7 @@ This is the SpecCoding template for project-root `README_DiagnosisDesign.md`. Cr
 
 | Evidence Pattern | Likely Area | Next Command or Action | Owner |
 | --- | --- | --- | --- |
-| {{Pattern}} | {{Design/test/code/config/hardware/media path}} | {{SPEC_updateDetailDesign/SPEC_designUnitTests/SPEC_abortUserStory/SPEC_importIssue}} | {{Owner}} |
+| {{Pattern}} | {{Design/test/code/config/hardware/media path}} | {{SPEC_updateDetailDesign/SPEC_designTests/SPEC_abortUserStory/SPEC_importIssue}} | {{Owner}} |
 
 ## Diagnosis Decision Tree
 

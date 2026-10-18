@@ -22,7 +22,7 @@ Generate Codex-native adapters from portable slashCommands:
   point --prompts-output at $CODEX_HOME/prompts (default ~/.codex/prompts).
 
 Codex skill names accept lowercase letters, numbers, and hyphens only, so
-UT_convertDemoToTypical becomes ut-convert-demo-to-typical. The canonical command
+TEST_convertDemoToTypical becomes test-convert-demo-to-typical. The canonical command
 name stays in each wrapper description and body.
 
 Options:
@@ -128,12 +128,12 @@ fi
 
 if [[ "$CLEAN" -eq 1 ]]; then
   if [[ "$NO_SKILLS" -eq 0 ]]; then
-    for existing in "$OUTPUT_DIR"/ut-* "$OUTPUT_DIR"/spec-* "$OUTPUT_DIR"/harness-*; do
+    for existing in "$OUTPUT_DIR"/ut-* "$OUTPUT_DIR"/test-* "$OUTPUT_DIR"/spec-* "$OUTPUT_DIR"/harness-*; do
       [[ -d "$existing" ]] && rm -rf "$existing"
     done
   fi
   if [[ -n "$PROMPTS_OUTPUT_DIR" ]]; then
-    find "$PROMPTS_OUTPUT_DIR" -maxdepth 1 -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) -delete
+    find "$PROMPTS_OUTPUT_DIR" -maxdepth 1 -type f \( -name 'UT_*.md' -o -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) -delete
   fi
 fi
 
@@ -144,14 +144,14 @@ while IFS= read -r source_file; do
   command_file="$(basename "$source_file")"
   # Derive the Codex skill name from the command filename.
   # Codex accepts lowercase letters, numbers, and hyphens only, so convert:
-  # SPEC_importIssue -> spec-import-issue, UT_designTypicalSkeleton -> ut-design-typical-skeleton,
+  # SPEC_importIssue -> spec-import-issue, TEST_designTypicalSkeleton -> test-design-typical-skeleton,
   # HARNESS_patchCaTDDSource -> harness-patch-ca-tdd-source
   raw_name="${command_file%.md}"
   skill_name="$(printf '%s' "$raw_name" | sed -E 's/([A-Z]+)([A-Z][a-z])/\1-\2/g; s/([a-z0-9])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]' | tr '_' '-')"
   flow_name="$(basename "$(dirname "$source_file")")"
   rel_source="$(rel_to_workspace "$source_file")"
   rel_method_index="$(rel_to_workspace "$METHOD_ROOT/README.md")"
-  rel_slash_template="$(rel_to_workspace "$SLASH_ROOT/UT_slashCommandTemplate.md")"
+  rel_slash_template="$(rel_to_workspace "$SLASH_ROOT/TEST_slashCommandTemplate.md")"
   rel_flow_docs="$(rel_to_workspace "$SLASH_ROOT/flows")"
   rel_kit_docs="$(rel_to_workspace "$SLASH_ROOT/kits")"
 
@@ -256,7 +256,7 @@ PROMPT
 
     prompt_count=$((prompt_count + 1))
   fi
-done < <(find "$SOURCE_DIR" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
+done < <(find "$SOURCE_DIR" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
 
 if [[ "$NO_SKILLS" -eq 0 ]]; then
   echo "[makeSlashCmd4Codex] Generated $skill_count Codex skill wrappers in $(rel_to_workspace "$OUTPUT_DIR")"

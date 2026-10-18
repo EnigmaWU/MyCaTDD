@@ -70,7 +70,7 @@ grep -Fq 'DesignChoice -- "follow-up arch" --> UpdateArch["SPEC_updateArchDesign
 grep -Fq 'DesignChoice -- "initial detail" --> Detail["SPEC_takeDetailDesign"]' "$FLOW_DOC" || fail "Px-SpecFlow must route initial detail design to SPEC_takeDetailDesign"
 grep -Fq 'DesignChoice -- "follow-up detail" --> UpdateDetail["SPEC_updateDetailDesign"]' "$FLOW_DOC" || fail "Px-SpecFlow must route follow-up detail design to SPEC_updateDetailDesign"
 grep -Fq 'ImplementationChoice -- "design needs rework" --> ReviewStoryRef["return to Part 2.a SPEC_updateDetailDesign"]' "$FLOW_DOC" || fail "Px-SpecFlow must route design-rework implementation state back to detail design"
-grep -Fq 'ImplementationChoice -- "story is test-ready" --> DesignTests["SPEC_designUnitTests"]' "$FLOW_DOC" || fail "Px-SpecFlow must allow planning to route implementation-ready work to unit-test design"
+grep -Fq 'ImplementationChoice -- "story is test-ready" --> DesignTests["SPEC_designTests"]' "$FLOW_DOC" || fail "Px-SpecFlow must allow planning to route implementation-ready work to unit-test design"
 grep -Fq 'ImplementationChoice -- "abort" --> Abort2b["SPEC_abortUserStory"]' "$FLOW_DOC" || fail "Px-SpecFlow Part 2.b must support aborting an unsafe active story"
 grep -Fq 'QualityDetail -- "YES" --> TailChoice{"after design, what story type?"}' "$FLOW_DOC" || fail "Px-SpecFlow must decide at end of Part 2.a whether to implement or close"
 grep -Fq 'TailChoice -- "design-oriented only" --> CommitDesign["SPEC_commitStoryWorks"]' "$FLOW_DOC" || fail "Px-SpecFlow must allow design-only stories to commit without Part 2.b"

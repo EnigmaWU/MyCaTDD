@@ -5,7 +5,7 @@ Companion: [README_UbiLangDEV.md](README_UbiLangDEV.md) holds the vocabulary for
 ## Who
 
 - Project teams installing CaTDD into their repositories.
-- Developers writing US/AC/TC skeletons and running the `UT_*`, `SPEC_*`, and `HARNESS_*` commands.
+- Developers writing US/AC/TC skeletons and running the `TEST_*`, `SPEC_*`, and `HARNESS_*` commands.
 
 ## What
 
@@ -74,7 +74,7 @@ Rules:
 - One behavior inventory and one `discovery_ledger` exist for a feature, owned by the detail design; every row carries its `Category and test level`.
 - Test-point promotion moves an obligation from detail to architecture design when its `TestLevel` is `SysTesting` or `UserTesting`. The TP ID is preserved; the architecture design references the obligation and never restates category design.
 - `README_VerifyStatusTraces.md` remains the dynamic companion holding live status and evidence for both designs.
-- `SPEC_designUnitTests` inherits the strategy from `README_DetailVerifyDesign.md`; it does not redefine verification design.
+- `SPEC_designTests` inherits the strategy from `README_DetailVerifyDesign.md`; it does not redefine verification design.
 
 ### Status and Level Vocabulary
 
@@ -180,7 +180,7 @@ flowchart LR
 Use this glossary when:
 
 - writing or reviewing US/AC/TC skeletons,
-- reading a `UT_showMeStatus`, `SPEC_showMeStatus`, or `HARNESS_showMeStatus` report,
+- reading a `TEST_showMeStatus`, `SPEC_showMeStatus`, or `HARNESS_showMeStatus` report,
 - interpreting a gate verdict,
 - reconciling wording drift between your project and the installed method.
 

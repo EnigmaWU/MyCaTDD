@@ -6,7 +6,7 @@ Review one implemented CaTDD test case against its US/AC/TC skeleton.
 
 Use this command after `TEST_implTestCase` or when the developer suspects a test implementation drifted away from the design comments. It audits the terminal implementation link in the **TestEvidenceChain**: verifying that the executable test body (`SETUP` -> `BEHAVIOR` -> `VERIFY` -> `CLEANUP`) faithfully implements the observable oracle defined in `@[Expect]` and the acceptance criteria without implementation drift (confirming HOW the test is executed matches WHY it was designed).
 
-Scope boundary: this command owns one implemented TC. Story-scoped review across all selected unit-test slices belongs to [SPEC_reviewImplUnitTests](../Px-SpecFlow/SPEC_reviewImplUnitTests.md), which applies this command's per-TC mechanics across the story and consumes the TC-level findings reported here.
+Scope boundary: this command owns one implemented TC. Story-scoped review across all selected unit-test slices belongs to [SPEC_reviewImplTests](../Px-SpecFlow/SPEC_reviewImplTests.md), which applies this command's per-TC mechanics across the story and consumes the TC-level findings reported here.
 
 ## CoT Pattern
 

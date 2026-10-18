@@ -47,7 +47,7 @@ Expected result:
 - `code_agent`: target adapter surface to verify. Allowed values: `copilot`, `continue`, `cline`, `custom`, `antigravity`, `codex`, or `auto`.
 - `codex_prompts_dir`: optional deprecated Codex custom-prompt directory to verify when `code_agent=codex`. When omitted, verify only the `.agents/skills/` surface, because Codex custom prompts live outside the target project.
 - `custom_adapter_dir`: optional custom adapter directory when `code_agent=custom`. Default: `.customCodeAgent`.
-- `expected_command_families`: optional command family list. Default: `UT_*`, `SPEC_*`, and `HARNESS_*`.
+- `expected_command_families`: optional command family list. Default: `TEST_*`, `SPEC_*`, and `HARNESS_*`.
 - `expected_evolved_overlays`: optional expected `<Name>Evolved.md` overlay list. When omitted, overlays are discovered and reported as advisory rather than counted or failed.
 - `expected_source_repo`: optional CaTDD source repository used as the reference command inventory.
 - `strict_mode`: optional flag. When true, fail on missing optional docs, stale generated wrappers, or unexpected wrapper files.
@@ -71,7 +71,7 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 
 - `.catdd/methodPrompts/README.md` exists.
 - `.catdd/slashCommands/README_UserGuide.md` exists.
-- `.catdd/slashCommands/commands/` contains portable `UT_*`, `SPEC_*`, and `HARNESS_*` command files.
+- `.catdd/slashCommands/commands/` contains portable `TEST_*`, `SPEC_*`, and `HARNESS_*` command files.
 - `.catdd/slashCommands/commands/` may contain local `<Name>Evolved.md` overlays; these are expected and counted as portable commands.
 - `.catdd/slashCommands/kits/Px-HarnessKits.md` exists when any `HARNESS_*` command exists.
 - `.catdd/spec/analyzedNews`, `.catdd/spec/suspendUS`, and `.catdd/spec/abortUS` exist.
@@ -79,7 +79,7 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 
 ### Command Inventory
 
-- Count portable command files for `UT_*`, `SPEC_*`, and `HARNESS_*`.
+- Count portable command files for `TEST_*`, `SPEC_*`, and `HARNESS_*`.
 - For wrapper-based adapters, count generated native wrappers and compare with the portable command count.
 - Verify `HARNESS_patchCaTDDSource` and `HARNESS_verifyInstallation` are present in both portable command source and native wrapper surfaces when the adapter supports wrappers.
 

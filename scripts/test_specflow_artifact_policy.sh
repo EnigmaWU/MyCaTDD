@@ -48,7 +48,7 @@ grep -Fq 'team-shared active work file' "$REPO_ROOT/slashCommands/commands/Px-Sp
 grep -Fq 'team-shared aborted story artifact' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_abortUserStory.md" || fail "SPEC_abortUserStory must mark abortUS as team-shared aborted output"
 grep -Fq 'team-shared completed story artifact' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md" || fail "SPEC_closeUserStory must mark doneUS as team-shared completed output"
 grep -Fq 'Project-root README SPEC docs as needed' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeDetailDesign.md" || fail "SPEC_takeDetailDesign must create or update project-root README SPEC docs as needed"
-grep -Fq 'inherits the strategy from `README_DetailVerifyDesign.md`' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md" || fail "SPEC_designUnitTests must inherit the detail verification design instead of redefining it"
+grep -Fq 'inherits the strategy from `README_DetailVerifyDesign.md`' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_designTests.md" || fail "SPEC_designTests must inherit the detail verification design instead of redefining it"
 
 # Verification-design ownership contract: each half has exactly one owning command pair.
 TAKE_ARCH_DESIGN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeArchDesign.md"

@@ -315,7 +315,7 @@ update_codex_agents_md() {
 <!-- BEGIN CaTDD Codex instructions -->
 ## CaTDD Codex Instructions
 
-This managed block is installed by `scripts/installCaTDD.sh` from MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or UT_*, SPEC_*, and HARNESS_* commands.
+This managed block is installed by `scripts/installCaTDD.sh` from MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* commands.
 
 This block is the CaTDD-owned region and projects the rules recorded in `.catdd/spec/projectContext.md`; text outside these markers belongs to the project and is never rewritten by CaTDD.
 
@@ -323,7 +323,7 @@ This block is the CaTDD-owned region and projects the rules recorded in `.catdd/
 
 - CaTDD method source: `.catdd/methodPrompts/`
 - Portable slash command source: `.catdd/slashCommands/`
-- Codex skill wrappers: `.agents/skills/` (invoke with `$ut-*`, `$spec-*`, `$harness-*`, or from `/skills`)
+- Codex skill wrappers: `.agents/skills/` (invoke with `$test-*`, `$spec-*`, `$harness-*`, or from `/skills`)
 - SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
 - SpecCoding artifact workspace: `.catdd/spec/`
 - Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
@@ -333,7 +333,7 @@ This block is the CaTDD-owned region and projects the rules recorded in `.catdd/
 - Treat each Codex skill under `.agents/skills/` as a thin adapter over `.catdd/slashCommands/commands/`; read the portable command before acting.
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Codex skill names are lowercase and hyphenated: `ut-convert-demo-to-typical` adapts `UT_convertDemoToTypical`.
+- Codex skill names are lowercase and hyphenated: `test-convert-demo-to-typical` adapts `TEST_convertDemoToTypical`.
 - When deprecated Codex custom prompts are installed, they invoke as `/prompts:<Command>` and require a Codex restart after each refresh.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
 - Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
@@ -635,13 +635,13 @@ case "$AGENT_LABEL" in
     log_replace_or_new "$INSTRUCTIONS_DIR/catdd.instructions.md"
     cat > "$INSTRUCTIONS_DIR/catdd.instructions.md" <<'INSTRUCTIONS'
 ---
-description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeletons, or UT_*, SPEC_*, and HARNESS_* slash commands."
+description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* slash commands."
 ---
 # CaTDD Project Instructions
 
 - CaTDD method source: `.catdd/methodPrompts/`
 - Portable slash command source: `.catdd/slashCommands/`
-- Copilot prompt wrappers: `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, and `.github/prompts/HARNESS_*.prompt.md`
+- Copilot prompt wrappers: `.github/prompts/TEST_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, and `.github/prompts/HARNESS_*.prompt.md`
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
@@ -679,13 +679,13 @@ INSTRUCTIONS
     cat > "$CONTINUE_RULES_DIR/catdd.md" <<'RULES'
 # CaTDD Continue Project Rule
 
-This is a Continue project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or UT_*, SPEC_*, and HARNESS_* commands.
+This is a Continue project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* commands.
 
 ## Installed Sources
 
 - CaTDD method source: `.catdd/methodPrompts/`
 - Portable slash command source: `.catdd/slashCommands/`
-- Continue prompt wrappers: `.continue/prompts/UT_*.prompt`, `.continue/prompts/SPEC_*.prompt`, and `.continue/prompts/HARNESS_*.prompt`
+- Continue prompt wrappers: `.continue/prompts/TEST_*.prompt`, `.continue/prompts/SPEC_*.prompt`, and `.continue/prompts/HARNESS_*.prompt`
 - SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
 - SpecCoding artifact workspace: `.catdd/spec/`
 - Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
@@ -693,9 +693,9 @@ This is a Continue project rule installed by MyCaTDD. Use it when working with C
 ## Continue Behavior
 
 - Treat this file as a thin Continue adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
-- Use `.continue/prompts/` for triggerable UT_*, SPEC_*, and HARNESS_* prompt wrappers.
+- Use `.continue/prompts/` for triggerable TEST_*, SPEC_*, and HARNESS_* prompt wrappers.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Use `.catdd/slashCommands/commands/` for UT_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
+- Use `.catdd/slashCommands/commands/` for TEST_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
 - Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
@@ -738,7 +738,7 @@ RULES
     cat > "$CLINE_RULES_DIR/catdd.md" <<'RULES'
 # CaTDD Cline Project Rule
 
-This is a Cline project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or UT_*, SPEC_*, and HARNESS_* commands.
+This is a Cline project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* commands.
 
 ## Installed Sources
 
@@ -752,7 +752,7 @@ This is a Cline project rule installed by MyCaTDD. Use it when working with CaTD
 
 - Treat this file as a thin Cline adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Use `.catdd/slashCommands/commands/` for UT_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
+- Use `.catdd/slashCommands/commands/` for TEST_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
 - Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
@@ -794,7 +794,7 @@ RULES
     cat > "$ANTIGRAVITY_RULES_DIR/catdd.md" <<'RULES'
 # CaTDD Antigravity Project Rule
 
-This is an Antigravity project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or UT_*, SPEC_*, and HARNESS_* commands.
+This is an Antigravity project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* commands.
 
 ## Installed Sources
 
@@ -808,7 +808,7 @@ This is an Antigravity project rule installed by MyCaTDD. Use it when working wi
 
 - Treat this file as a thin Antigravity adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Use `.catdd/slashCommands/commands/` for UT_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
+- Use `.catdd/slashCommands/commands/` for TEST_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Keep SpecCoding lifecycle state under `.catdd/spec/`.
 - Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.

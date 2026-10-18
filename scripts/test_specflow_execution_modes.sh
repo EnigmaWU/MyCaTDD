@@ -74,8 +74,8 @@ assert_contains "$SPEC_TEMPLATE" 'ONLY `implementation-oriented` stories support
 assert_contains "$SPEC_TEMPLATE" 'The ONE-MORE-THING Universal Stop Rule'
 assert_contains "$SPEC_TEMPLATE" 'ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule: MUST halt and ask developer in both manualMode and autonomousMode)'
 
-UT_TEMPLATE="$REPO_ROOT/slashCommands/UT_slashCommandTemplate.md"
-assert_contains "$UT_TEMPLATE" 'ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule: MUST halt and ask developer in both manualMode and autonomousMode)'
+TEST_TEMPLATE="$REPO_ROOT/slashCommands/TEST_slashCommandTemplate.md"
+assert_contains "$TEST_TEMPLATE" 'ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule: MUST halt and ask developer in both manualMode and autonomousMode)'
 
 # 4. Command README
 assert_contains "$COMMAND_README" 'Px-SpecFlow runs in `manualMode` by default'

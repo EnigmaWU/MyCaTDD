@@ -69,7 +69,7 @@ install_fresh() {
   echo "[installCaTDD-test]   agent: $agent"
   "$INSTALLER" --targetDir "$dir" --targetCodeAgent "$agent" --init --clean-prompts --yes >/dev/null 2>&1
   assert_file "$dir/.catdd/methodPrompts/README.md"
-  assert_file "$dir/.catdd/slashCommands/UT_slashCommandTemplate.md"
+  assert_file "$dir/.catdd/slashCommands/TEST_slashCommandTemplate.md"
   assert_dir "$dir/.catdd/spec/pendingNews"
   assert_absent "$dir/README_UbiLang.md"
   assert_file "$dir/.catdd/CaTDD_INSTALL.manifest"
@@ -82,21 +82,21 @@ install_fresh() {
     Copilot)
       assert_file "$dir/.github/instructions/catdd.instructions.md"
       assert_contains "$dir/.github/instructions/catdd.instructions.md" '/HARNESS_evolveHarness'
-      assert_file "$dir/.github/prompts/UT_convertDemoToTypical.prompt.md"
+      assert_file "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md"
       assert_file "$dir/.github/prompts/SPEC_openUserStory.prompt.md"
       assert_file "$dir/.github/prompts/HARNESS_patchCaTDDSource.prompt.md"
       assert_file "$dir/.github/prompts/HARNESS_verifyInstallation.prompt.md"
       assert_file "$dir/.github/prompts/HARNESS_diagnoseInstallation.prompt.md"
-      assert_contains "$dir/.github/prompts/UT_convertDemoToTypical.prompt.md" 'thin Copilot adapter'
-      source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
-      prompt_count="$(find "$dir/.github/prompts" -type f \( -name 'UT_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) | wc -l | tr -d '[:space:]')"
+      assert_contains "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md" 'thin Copilot adapter'
+      source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+      prompt_count="$(find "$dir/.github/prompts" -type f \( -name 'TEST_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) | wc -l | tr -d '[:space:]')"
       [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count installed Copilot prompts, got $prompt_count"
       ;;
     Continue)
       assert_file "$dir/.continue/rules/catdd.md"
-      assert_contains "$dir/.continue/rules/catdd.md" '.continue/prompts/UT_*.prompt'
+      assert_contains "$dir/.continue/rules/catdd.md" '.continue/prompts/TEST_*.prompt'
       assert_contains "$dir/.continue/rules/catdd.md" '/HARNESS_evolveHarness'
-      assert_file "$dir/.continue/prompts/UT_convertDemoToTypical.prompt"
+      assert_file "$dir/.continue/prompts/TEST_convertDemoToTypical.prompt"
       assert_file "$dir/.continue/prompts/SPEC_openUserStory.prompt"
       ;;
     Cline)
@@ -113,12 +113,12 @@ install_fresh() {
       assert_contains "$dir/AGENTS.md" 'BEGIN CaTDD Codex instructions'
       assert_contains "$dir/AGENTS.md" '.agents/skills'
       assert_contains "$dir/AGENTS.md" '/HARNESS_evolveHarness'
-      assert_file "$dir/.agents/skills/ut-convert-demo-to-typical/SKILL.md"
+      assert_file "$dir/.agents/skills/test-convert-demo-to-typical/SKILL.md"
       assert_file "$dir/.agents/skills/spec-open-user-story/SKILL.md"
       assert_file "$dir/.agents/skills/harness-patch-ca-tdd-source/SKILL.md"
-      assert_contains "$dir/.agents/skills/ut-convert-demo-to-typical/SKILL.md" 'UT_convertDemoToTypical'
-      assert_contains "$dir/.agents/skills/ut-convert-demo-to-typical/SKILL.md" 'thin Codex Skill adapter'
-      codex_source_total="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+      assert_contains "$dir/.agents/skills/test-convert-demo-to-typical/SKILL.md" 'TEST_convertDemoToTypical'
+      assert_contains "$dir/.agents/skills/test-convert-demo-to-typical/SKILL.md" 'thin Codex Skill adapter'
+      codex_source_total="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
       skill_count="$(find "$dir/.agents/skills" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d '[:space:]')"
       [[ "$skill_count" == "$codex_source_total" ]] || fail "expected $codex_source_total installed Codex skills, got $skill_count"
       assert_absent "$dir/.codex/prompts"
@@ -140,21 +140,21 @@ CODEX_PROMPTS="$WORK/codex-home/prompts"
 CODEX_TARGET="$WORK/fresh-Codex-prompts"
 "$INSTALLER" --targetDir "$CODEX_TARGET" --targetCodeAgent Codex --init --clean-prompts \
   --codex-prompts-dir "$CODEX_PROMPTS" --yes >/dev/null 2>&1
-codex_source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
-codex_prompt_count="$(find "$CODEX_PROMPTS" -maxdepth 1 -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+codex_source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+codex_prompt_count="$(find "$CODEX_PROMPTS" -maxdepth 1 -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
 [[ "$codex_prompt_count" == "$codex_source_count" ]] || fail "expected $codex_source_count Codex custom prompts, got $codex_prompt_count"
-assert_file "$CODEX_PROMPTS/UT_convertDemoToTypical.md"
+assert_file "$CODEX_PROMPTS/TEST_convertDemoToTypical.md"
 assert_file "$CODEX_PROMPTS/HARNESS_patchCaTDDSource.md"
-assert_contains "$CODEX_PROMPTS/UT_convertDemoToTypical.md" 'argument-hint:'
-assert_contains "$CODEX_PROMPTS/UT_convertDemoToTypical.md" '$ARGUMENTS'
-assert_contains "$CODEX_PROMPTS/UT_convertDemoToTypical.md" '.catdd/slashCommands/commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md'
-assert_file "$CODEX_TARGET/.agents/skills/ut-convert-demo-to-typical/SKILL.md"
+assert_contains "$CODEX_PROMPTS/TEST_convertDemoToTypical.md" 'argument-hint:'
+assert_contains "$CODEX_PROMPTS/TEST_convertDemoToTypical.md" '$ARGUMENTS'
+assert_contains "$CODEX_PROMPTS/TEST_convertDemoToTypical.md" '.catdd/slashCommands/commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md'
+assert_file "$CODEX_TARGET/.agents/skills/test-convert-demo-to-typical/SKILL.md"
 
 echo "[installCaTDD-test] Test: Codex --codex-prompts-dir default resolves to the Codex home"
 CODEX_HOME_FAKE="$WORK/codex-home-default"
 CODEX_HOME="$CODEX_HOME_FAKE" "$INSTALLER" --targetDir "$WORK/fresh-Codex-home" --targetCodeAgent Codex --init \
   --codex-prompts-dir default --yes >/dev/null 2>&1
-assert_file "$CODEX_HOME_FAKE/prompts/UT_convertDemoToTypical.md"
+assert_file "$CODEX_HOME_FAKE/prompts/TEST_convertDemoToTypical.md"
 
 echo "[installCaTDD-test] Test: GitHub/Copilot alias works"
 TARGET2="$WORK/alias"
@@ -216,18 +216,18 @@ assert_file "$LOCAL_CMD"
 echo "[installCaTDD-test] Test: evolved overlays survive refresh and --force-overwrite"
 S5="$WORK/sync-evolved-overlay"
 "$INSTALLER" --targetDir "$S5" --targetCodeAgent Copilot --init --yes >/dev/null 2>&1
-OV="$S5/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTestsEvolved.md"
+OV="$S5/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implTestsEvolved.md"
 NEW_OV="$S5/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_doNewXyzEvolved.md"
-printf '# SPEC_implUnitTestsEvolved\n> supersedes the canonical command locally\n' > "$OV"
+printf '# SPEC_implTestsEvolved\n> supersedes the canonical command locally\n' > "$OV"
 printf '# SPEC_doNewXyzEvolved\n' > "$NEW_OV"
 overlay_output="$("$INSTALLER" --targetDir "$S5" --targetCodeAgent Copilot --yes 2>&1)"
 grep -Fq 'evolved overlay (local-only, kept)' <<< "$overlay_output" || fail "evolved overlay not reported as kept"
 assert_file "$OV"
 assert_file "$NEW_OV"
-assert_contains "$S5/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTests.md" '# SPEC_implUnitTests'
-assert_file "$S5/.github/prompts/SPEC_implUnitTestsEvolved.prompt.md"
+assert_contains "$S5/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implTests.md" '# SPEC_implTests'
+assert_file "$S5/.github/prompts/SPEC_implTestsEvolved.prompt.md"
 assert_file "$S5/.github/prompts/SPEC_doNewXyzEvolved.prompt.md"
-assert_contains "$S5/.github/prompts/SPEC_implUnitTestsEvolved.prompt.md" '.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTestsEvolved.md'
+assert_contains "$S5/.github/prompts/SPEC_implTestsEvolved.prompt.md" '.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implTestsEvolved.md'
 assert_contains "$S5/.github/instructions/catdd.instructions.md" '<Name>Evolved.md'
 force_output="$("$INSTALLER" --targetDir "$S5" --targetCodeAgent Copilot --yes --force-overwrite 2>&1)"
 grep -Fq 'preserve evolved overlay (force-overwrite)' <<< "$force_output" || fail "force-overwrite did not report preserving evolved overlay"

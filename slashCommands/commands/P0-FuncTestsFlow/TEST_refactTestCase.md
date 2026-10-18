@@ -60,12 +60,12 @@ Expected result:
 - Preserved `VERIFY_KEYPOINT_xyz` assertions for key checks, or a compatibility mapping when the project lacks those macros/helpers.
 - No behavior, API, contract, acceptance-criteria, or observable state change.
 - Before/after verification evidence, or a clear reason verification could not be run.
-- Recommendation: keep, run `TEST_reviewImplTestCase`, select next TC, route back to `SPEC_designUnitTests`, or ask the developer.
+- Recommendation: keep, run `TEST_reviewImplTestCase`, select next TC, route back to `SPEC_designTests`, or ask the developer.
 
 ## Conflict Guard
 
 Do not batch unrelated TCs. Do not change product behavior while refactoring a TC unless the developer explicitly authorizes a separate implementation step.
-Do not smuggle new behavior, new acceptance criteria, or new category coverage into refactor work; route those gaps to `SPEC_designUnitTests`, `TEST_implTestCase`, or the developer.
+Do not smuggle new behavior, new acceptance criteria, or new category coverage into refactor work; route those gaps to `SPEC_designTests`, `TEST_implTestCase`, or the developer.
 Do not mark refactor complete when the selected TC is not GREEN before and after the cleanup.
 
 ONE-MORE-THING: ask developer if something not sure

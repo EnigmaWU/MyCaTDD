@@ -1,8 +1,8 @@
-# SPEC_reviewImplUnitTests
+# SPEC_reviewImplTests
 
 ## Purpose
 
-Review implemented CaTDD unit tests for the active user story after `SPEC_implUnitTests`, and again after `SPEC_implProductCodes` plus `SPEC_reviewProductCodes` before refactor, commit, or closure.
+Review implemented CaTDD unit tests for the active user story after `SPEC_implTests`, and again after `SPEC_implProductCodes` plus `SPEC_reviewProductCodes` before refactor, commit, or closure.
 
 Use this command when one or more TC bodies have been implemented and the developer needs a story-level gate that confirms the implemented tests preserve the **TestEvidenceChain**: verifying that implemented test bodies match their US/AC/TC skeletons, category priority, status markers, product-code review findings, and verification evidence (ensuring HOW the tests are implemented matches WHY they were designed).
 
@@ -26,7 +26,7 @@ Repeat until every implemented TC has current review evidence and the verdict is
 Two TCs were just implemented and product code does not exist yet:
 
 ```text
-/SPEC_reviewImplUnitTests
+/SPEC_reviewImplTests
 doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
 target_test_files: services/payment/SysTests/test_payment_gateway_funcValidTypical.ts
 implementation_status: TC-001 RED, TC-002 RED
@@ -38,7 +38,7 @@ Expected result:
 - **Thought**: TC-001 and TC-002 are both P0 Functional, both claim `RED`, neither has review evidence yet.
 - **Action**: `TEST_reviewImplTestCase` mechanics applied to both bodies; companion README gates run on the test file.
 - **Observation**: TC-001 matches its AC with strict `SETUP`/`BEHAVIOR`/`VERIFY`/`CLEANUP` phases. TC-002 has a raw assertion outside `VERIFY`. `RED` is meaningful for both — it fails on the missing product module, which is expected before implementation, so the status is explained.
-- **Observation**: TC-002's defect is in the test body, not the skeleton → classified as implementation drift, routed to `TEST_implTestCase`, **not** back to `SPEC_designUnitTests`.
+- **Observation**: TC-002's defect is in the test body, not the skeleton → classified as implementation drift, routed to `TEST_implTestCase`, **not** back to `SPEC_designTests`.
 - **Stop**: reported — fix TC-002 first via `TEST_implTestCase`; product-code work does not start until it is aligned.
 
 ## Inputs
@@ -82,7 +82,7 @@ Expected result:
 
 ## Output Contract
 
-- `review_verdict`: `PASS` when the implemented tests are aligned and the next step is implementation, review, or commit; `REVISE` with the owning `rework_route` for implementation drift (`SPEC_implUnitTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`), skeleton or design drift (`SPEC_designUnitTests`), or cleanup (`SPEC_refactUnitTests`); `ASK` when the developer must settle a conflict; `BLOCKED` when the test result or design evidence needed for the review is unavailable.
+- `review_verdict`: `PASS` when the implemented tests are aligned and the next step is implementation, review, or commit; `REVISE` with the owning `rework_route` for implementation drift (`SPEC_implTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`), skeleton or design drift (`SPEC_designTests`), or cleanup (`SPEC_refactTests`); `ASK` when the developer must settle a conflict; `BLOCKED` when the test result or design evidence needed for the review is unavailable.
 - `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Per-TC alignment summary against US/AC/TC design comments.
 - Anti-Test-Theater audit: verifies assertions test real SUT state mutations or domain invariants without vacuous checks or mock echoing.
@@ -92,7 +92,7 @@ Expected result:
 - Product-code review correlation when this command runs after `SPEC_reviewProductCodes`.
 - Test README evidence: `test-case-with-readme` applied, unavailable with builtin fallback, missing companion README, updated companion README, or ask the developer.
 - Drift findings that distinguish implementation drift from skeleton/design drift.
-- Next recommended command: `SPEC_implUnitTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`, `SPEC_designUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_reviewProductCodes`, `SPEC_commitStoryWorks`, or ask the developer.
+- Next recommended command: `SPEC_implTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`, `SPEC_designTests`, `SPEC_implProductCodes`, `SPEC_refactTests`, `SPEC_reviewProductCodes`, `SPEC_commitStoryWorks`, or ask the developer.
 
 ## Review Gate Contract
 
@@ -110,7 +110,7 @@ Expected result:
 
 ## Flow Coupling
 
-`SPEC_reviewImplUnitTests` owns story-level implementation review across selected unit-test slices. `TEST_reviewImplTestCase` owns TC-level alignment mechanics.
+`SPEC_reviewImplTests` owns story-level implementation review across selected unit-test slices. `TEST_reviewImplTestCase` owns TC-level alignment mechanics.
 
 1. Confirm the active story, implemented TC slices, and target test files.
 2. Check that every implemented TC preserves US/AC/TC comments and required CaTDD metadata.
@@ -122,10 +122,10 @@ Expected result:
 8. Decide the next lifecycle step:
    - If implemented tests are aligned and product behavior is missing, route to `SPEC_implProductCodes`.
    - If implemented tests are aligned and product code has not been reviewed, route to `SPEC_reviewProductCodes`.
-   - If implemented tests are aligned and GREEN but need cleanup, route to `SPEC_refactUnitTests`.
+   - If implemented tests are aligned and GREEN but need cleanup, route to `SPEC_refactTests`.
    - If implemented tests, product code, and product-code review are aligned and no cleanup is needed, route to `SPEC_commitStoryWorks`.
-   - If implementation drift exists, route to `SPEC_implUnitTests`, `TEST_implTestCase`, or `TEST_reviewImplTestCase`.
-   - If skeleton/design intent is wrong or incomplete, route to `SPEC_designUnitTests` or ask the developer.
+   - If implementation drift exists, route to `SPEC_implTests`, `TEST_implTestCase`, or `TEST_reviewImplTestCase`.
+   - If skeleton/design intent is wrong or incomplete, route to `SPEC_designTests` or ask the developer.
 
 ## Review Rules
 
@@ -140,13 +140,13 @@ Expected result:
 
 ## Loop Guard
 
-Rework routes from this review to `SPEC_implUnitTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`, or `SPEC_designUnitTests` must record structured findings. Each `impl -> review` rework cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim unit-test review progress without changed evidence between passes.
+Rework routes from this review to `SPEC_implTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`, or `SPEC_designTests` must record structured findings. Each `impl -> review` rework cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim unit-test review progress without changed evidence between passes.
 
 ## Conflict Guard
 
 If implementation and skeleton disagree, do not choose automatically which one is truth. Report the conflict and ask whether method design or implementation should change.
-Do not skip story-level review evidence before `SPEC_implProductCodes`, `SPEC_refactUnitTests`, or `SPEC_reviewProductCodes` when implemented unit tests changed.
-Do not skip the post-product-code `SPEC_reviewImplUnitTests` pass before `SPEC_commitStoryWorks` when product code changed or product-code review findings touched test behavior.
+Do not skip story-level review evidence before `SPEC_implProductCodes`, `SPEC_refactTests`, or `SPEC_reviewProductCodes` when implemented unit tests changed.
+Do not skip the post-product-code `SPEC_reviewImplTests` pass before `SPEC_commitStoryWorks` when product code changed or product-code review findings touched test behavior.
 Do not claim the `test-case-with-readme` skill was applied when it is unavailable; report the fallback gates used instead.
 Do not claim review complete when implemented TCs are missing verification evidence, unless the missing evidence is explicitly reported as a blocker.
 

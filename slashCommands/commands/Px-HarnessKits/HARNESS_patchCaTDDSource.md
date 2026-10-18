@@ -70,7 +70,7 @@ If path mapping is unclear, stop and ask the developer.
 
 ## Evolved Overlay Promotion
 
-`HARNESS_evolveHarness` writes slash-command lessons to `<Name><evolved_command_suffix>.md` (for example `SPEC_implUnitTestsEvolved.md`) and never edits the canonical command in place. Promotion therefore has one extra mapping step:
+`HARNESS_evolveHarness` writes slash-command lessons to `<Name><evolved_command_suffix>.md` (for example `SPEC_implTestsEvolved.md`) and never edits the canonical command in place. Promotion therefore has one extra mapping step:
 
 1. Read the overlay `<Name><evolved_command_suffix>.md`, not the untouched canonical `<Name>.md`.
 2. Confirm the overlay is portable and method-consistent; keep the `based_on` provenance note for the reviewer.

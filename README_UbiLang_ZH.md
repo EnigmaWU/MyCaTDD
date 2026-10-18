@@ -92,7 +92,7 @@
 - 每个特性只存在一份行为清单与一份 `discovery_ledger`，归属详细层设计；每行都携带其 `Category and test level`。
 - 测试点上提（test-point promotion）在其 `TestLevel` 为 `SysTesting` 或 `UserTesting` 时，把义务从详细层设计移交到架构层设计。TP ID 保持不变；架构层设计只引用该义务，绝不重述分类设计。
 - `README_VerifyStatusTraces.md` 仍是承载两份设计实时状态与证据的动态伴随文档。
-- `SPEC_designUnitTests` 继承 `README_DetailVerifyDesign.md` 的策略，不重新定义验证设计。
+- `SPEC_designTests` 继承 `README_DetailVerifyDesign.md` 的策略，不重新定义验证设计。
 
 ### 状态与等级词汇（Status and Level Vocabulary）
 
@@ -198,7 +198,7 @@ flowchart LR
 在以下场景使用本术语表：
 
 - 在 README、prompt、rule、架构文档中定义新术语时；
-- 命名新的 UT_*/SPEC_* 命令时；
+- 命名新的 TEST_*/SPEC_* 命令时；
 - 审查 EN/ZH 或不同适配器之间术语漂移时；
 - 将 CaTDD 安装到新项目时。
 

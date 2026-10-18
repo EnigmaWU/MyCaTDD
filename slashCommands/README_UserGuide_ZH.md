@@ -252,9 +252,9 @@ bash scripts/test_makeSlashCmd4Codex.sh
 | 从已有骨架中选择下一个测试用例 | [commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md](commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md) |
 | 实现已选择的测试用例 | [commands/P0-FuncTestsFlow/TEST_implTestCase.md](commands/P0-FuncTestsFlow/TEST_implTestCase.md) |
 | 审查已实现的测试用例 | [commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md](commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md) |
-| 审查当前 story 范围内已实现的 unit tests | [commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md](commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md) |
+| 审查当前 story 范围内已实现的 unit tests | [commands/Px-SpecFlow/SPEC_reviewImplTests.md](commands/Px-SpecFlow/SPEC_reviewImplTests.md) |
 | 在不改变行为的前提下重构一个 GREEN 测试用例 | [commands/P0-FuncTestsFlow/TEST_refactTestCase.md](commands/P0-FuncTestsFlow/TEST_refactTestCase.md) |
-| 编排当前 story 范围内的 unit-test 重构 | [commands/Px-SpecFlow/SPEC_refactUnitTests.md](commands/Px-SpecFlow/SPEC_refactUnitTests.md) |
+| 编排当前 story 范围内的 unit-test 重构 | [commands/Px-SpecFlow/SPEC_refactTests.md](commands/Px-SpecFlow/SPEC_refactTests.md) |
 | 在开启故事前提交导入/分析区间 | [commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md](commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) |
 | 提交故事区间内单个已验证的生命周期步骤 | [commands/Px-SpecFlow/SPEC_commitStepWorks.md](commands/Px-SpecFlow/SPEC_commitStepWorks.md) |
 | 把整个 open-to-close 故事区间提交为 just-done 提交 | [commands/Px-SpecFlow/SPEC_commitStoryWorks.md](commands/Px-SpecFlow/SPEC_commitStoryWorks.md) |

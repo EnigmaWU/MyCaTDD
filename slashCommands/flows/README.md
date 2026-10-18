@@ -31,4 +31,4 @@ Flow priority uses the same Pn numbering as `methodPrompts`:
 
 Flow documents may describe command order and orchestration, but they must not redefine CaTDD category semantics, priority order, or skeleton design rules. Category meaning stays in `methodPrompts/CaTDD_methodPrompt4Cat-*.md`.
 
-`SPEC_*` commands may orchestrate across artifacts and lower-level `UT_*` commands, but they must still treat `methodPrompts` as source of truth.
+`SPEC_*` commands may orchestrate across artifacts and lower-level `TEST_*` commands, but they must still treat `methodPrompts` as source of truth.

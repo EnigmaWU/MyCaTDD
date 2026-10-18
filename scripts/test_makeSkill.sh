@@ -70,11 +70,11 @@ grep -Fq 'CaTDD 独立用户指南' "$PACKAGE_DIR/references/README_UserGuide_ZH
 grep -Fq 'Slash Commands User Guide' "$PACKAGE_DIR/slashCommands/README_UserGuide.md" || fail "packaged slashCommands user guide missing expected title"
 grep -Fq 'Slash Commands 用户指南' "$PACKAGE_DIR/slashCommands/README_UserGuide_ZH.md" || fail "packaged Chinese slashCommands user guide missing expected title"
 for command_name in \
-  UT_designTypicalSkeleton \
-  UT_designEdgeSkeleton \
-  UT_designMisuseSkeleton \
-  UT_designFaultSkeleton \
-  UT_designFuncTestsSkeleton; do
+  TEST_designTypicalSkeleton \
+  TEST_designEdgeSkeleton \
+  TEST_designMisuseSkeleton \
+  TEST_designFaultSkeleton \
+  TEST_designFuncTestsSkeleton; do
   [[ -f "$PACKAGE_DIR/slashCommands/commands/P0-FuncTestsFlow/${command_name}.md" ]] || fail "missing packaged P0 slash command: $command_name"
 done
 

@@ -94,7 +94,7 @@ OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
 
 # Clean mode: remove existing generated skill directories
 if [[ "$CLEAN" -eq 1 ]]; then
-  for existing in "$OUTPUT_DIR"/ut-* "$OUTPUT_DIR"/spec-* "$OUTPUT_DIR"/harness-*; do
+  for existing in "$OUTPUT_DIR"/ut-* "$OUTPUT_DIR"/test-* "$OUTPUT_DIR"/spec-* "$OUTPUT_DIR"/harness-*; do
     [[ -d "$existing" ]] && rm -rf "$existing"
   done
 fi
@@ -106,12 +106,12 @@ while IFS= read -r source_file; do
   # Derive the Cline skill name from the command filename
   raw_name="${command_file%.md}"
   # Cline enforces: "Skill name may only contain lowercase letters, numbers, and hyphens."
-  # So convert: SPEC_importIssue -> spec-import-issue, UT_designTypicalSkeleton -> ut-design-typical-skeleton, HARNESS_patchCaTDDSource -> harness-patch-ca-tdd-source
+  # So convert: SPEC_importIssue -> spec-import-issue, TEST_designTypicalSkeleton -> test-design-typical-skeleton, HARNESS_patchCaTDDSource -> harness-patch-ca-tdd-source
   command_name="$(printf '%s' "$raw_name" | sed -E 's/([A-Z]+)([A-Z][a-z])/\1-\2/g; s/([a-z0-9])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]' | tr '_' '-')"
   flow_name="$(basename "$(dirname "$source_file")")"
   rel_source="$(rel_to_workspace "$source_file")"
   rel_method_index="$(rel_to_workspace "$METHOD_ROOT/README.md")"
-  rel_slash_template="$(rel_to_workspace "$SLASH_ROOT/UT_slashCommandTemplate.md")"
+  rel_slash_template="$(rel_to_workspace "$SLASH_ROOT/TEST_slashCommandTemplate.md")"
   rel_flow_docs="$(rel_to_workspace "$SLASH_ROOT/flows")"
   rel_kit_docs="$(rel_to_workspace "$SLASH_ROOT/kits")"
 
@@ -170,6 +170,6 @@ ONE-MORE-THING: ask developer if something not sure
 SKILL
 
   generated_count=$((generated_count + 1))
-done < <(find "$SOURCE_DIR" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
+done < <(find "$SOURCE_DIR" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
 
 echo "[makeSlashCmd4Cline] Generated $generated_count Cline Skill wrappers in $(rel_to_workspace "$OUTPUT_DIR")"

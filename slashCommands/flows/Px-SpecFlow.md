@@ -14,7 +14,7 @@ Px SpecFlow = repeatable SpecCoding lifecycle over that method
 P0/P1/P2 flows = category-specific test design and implementation flows
 ```
 
-`SPEC_*` commands own lifecycle orchestration: story state, readiness gates, cross-category coverage selection, traceability, review, commit, and closure. `TEST_*` commands own category-level test mechanics: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration skeleton design or implementation steps. When a `SPEC_*` command such as `SPEC_designUnitTests` needs category skeletons, it should use matching `TEST_designXYZ` command contracts when they exist and record that provenance instead of silently drafting category shapes from memory.
+`SPEC_*` commands own lifecycle orchestration: story state, readiness gates, cross-category coverage selection, traceability, review, commit, and closure. `TEST_*` commands own category-level test mechanics: Typical, Edge, Misuse, Fault, State, Capability, Concurrency, Performance, Robust, Compatibility, and Configuration skeleton design or implementation steps. When a `SPEC_*` command such as `SPEC_designTests` needs category skeletons, it should use matching `TEST_designXYZ` command contracts when they exist and record that provenance instead of silently drafting category shapes from memory.
 
 The governing spec is comment-alive verification design: project context, user stories, acceptance criteria, detailed design, US/AC/TC skeletons, test status, product code status, and review decisions.
 
@@ -25,8 +25,8 @@ Use the smallest model tier that preserves decision quality for the current comm
 | Default tier | Use for | Px-SpecFlow commands |
 | --- | --- | --- |
 | SOTA reasoning, such as GPT-5.5-xHigh | Architecture work that decides or approves system boundaries, dependency direction, runtime placement, quality trade-offs, and cross-module constraints. | `SPEC_takeArchDesign`, `SPEC_reviewArchDesign` |
-| High Performance | Requirements analysis, intent alignment, planning, requirement updates, local design, review gates, test design, code review, correction routing, and controlled upstream patch-back where quality depends on reasoning across several artifacts. | `SPEC_initProjectContext`, `SPEC_updateProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_analyzeAbortedUserStory`, `SPEC_clearStoryIntent`, `SPEC_makePlan`, `SPEC_updateUserStory`, `SPEC_whatsNextTask`, `SPEC_whatsWrong`, `SPEC_takeArchDesign`, `SPEC_reviewArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_updateDetailDesign`, `SPEC_reviewUserStory`, `SPEC_designUnitTests`, `SPEC_reviewImplUnitTests`, `SPEC_reviewProductCodes`, `SPEC_patchOriginalCaTDD` |
-| Flash Speed | Deterministic import, move, suspend, resume, partial-close, abort, commit, close, or small test-driven implementation/refactor steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_suspendUserStory`, `SPEC_resumeUserStory`, `SPEC_partialCloseUserStory`, `SPEC_abortUserStory`, `SPEC_implUnitTests`, `SPEC_implProductCodes`, `SPEC_refactUnitTests`, `SPEC_commitPreStoryWorks`, `SPEC_commitStepWorks`, `SPEC_commitStoryWorks`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
+| High Performance | Requirements analysis, intent alignment, planning, requirement updates, local design, review gates, test design, code review, correction routing, and controlled upstream patch-back where quality depends on reasoning across several artifacts. | `SPEC_initProjectContext`, `SPEC_updateProjectContext`, `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, `SPEC_analyzeAbortedUserStory`, `SPEC_clearStoryIntent`, `SPEC_makePlan`, `SPEC_updateUserStory`, `SPEC_whatsNextTask`, `SPEC_whatsWrong`, `SPEC_takeArchDesign`, `SPEC_reviewArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_reviewDetailDesign`, `SPEC_updateDetailDesign`, `SPEC_reviewUserStory`, `SPEC_designTests`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`, `SPEC_patchOriginalCaTDD` |
+| Flash Speed | Deterministic import, move, suspend, resume, partial-close, abort, commit, close, or small test-driven implementation/refactor steps when the required input artifacts are already clear. | `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_openUserStory`, `SPEC_suspendUserStory`, `SPEC_resumeUserStory`, `SPEC_partialCloseUserStory`, `SPEC_abortUserStory`, `SPEC_implTests`, `SPEC_implProductCodes`, `SPEC_refactTests`, `SPEC_commitPreStoryWorks`, `SPEC_commitStepWorks`, `SPEC_commitStoryWorks`, `SPEC_commitWorks`, `SPEC_closeUserStory` |
 
 Escalate from High Performance or Flash Speed to SOTA when the command exposes architecture-significant uncertainty: competing non-functional requirements, safety/security risk, real-time or embedded constraints, concurrency boundaries, data migration, compatibility matrices, or irreversible module/API ownership decisions.
 
@@ -74,7 +74,7 @@ Both modes are SpecCoding: the difference is who issues the `SPEC_doXYZ` command
 - In `Px-SpecFlow`, `SPEC_makePlan` classifies the active story into one of four orientations: `intent-clearing`, `requirement-oriented`, `design-oriented`, or `implementation-oriented`.
 - **Safety Boundary**: Requirements analysis and system architecture require human intent, trade-offs, and verification; they **CANNOT** run autonomously.
   - If `execution_mode: autonomousMode` is triggered on an `intent-clearing`, `requirement-oriented`, or `design-oriented` story, the flow **MUST halt**, force `manualMode`, and require developer interactive review and confirmation.
-  - **ONLY `implementation-oriented` stories support `autonomousMode`**: Once requirements and architectural designs are locked and the story enters Part 2.b (`SPEC_designUnitTests` -> `SPEC_implUnitTests` -> `SPEC_implProductCodes` -> `SPEC_reviewProductCodes` & `SPEC_reviewImplUnitTests` -> `SPEC_commitStoryWorks` -> `SPEC_closeUserStory`), the execution is governed by deterministic rules and tests, and the agent auto-advances through these steps to completion, taking `SPEC_commitStepWorks` at the step boundaries `SPEC_makePlan` planned.
+  - **ONLY `implementation-oriented` stories support `autonomousMode`**: Once requirements and architectural designs are locked and the story enters Part 2.b (`SPEC_designTests` -> `SPEC_implTests` -> `SPEC_implProductCodes` -> `SPEC_reviewProductCodes` & `SPEC_reviewImplTests` -> `SPEC_commitStoryWorks` -> `SPEC_closeUserStory`), the execution is governed by deterministic rules and tests, and the agent auto-advances through these steps to completion, taking `SPEC_commitStepWorks` at the step boundaries `SPEC_makePlan` planned.
 
 ### Analysis Mode vs. Flow Execution Mode
 
@@ -127,7 +127,7 @@ Every review command in this flow reports the same gate vocabulary, so a verdict
 
 Invariants every review gate states: read-only by default, with repair only on explicit developer approval; source-first, reading the upstream artifact before judging the reviewed one; every finding cites a file, an ID, or a verification signal; one verdict per pass, stable across passes; a repeat pass with identical findings and no changed evidence is the last pass; rework bounded by `max_rework_attempts` (default `3`) and the Loop Guard; `next_command` reported whenever the verdict is not `PASS`.
 
-Every gate also states its own scope pair, `Reviews:` and `Does not:`, so two gates can share an artifact without sharing a lens: `SPEC_reviewUserStory` owns acceptance-criteria content and `SPEC_reviewDetailDesign` owns their testability; `SPEC_reviewImplUnitTests` owns test implementation and `SPEC_reviewProductCodes` owns code plus traceability. The gate names follow the same split: `*review*` commands gate an authored artifact, while `HARNESS_verifyInstallation` verifies an installed surface. Both report the same vocabulary.
+Every gate also states its own scope pair, `Reviews:` and `Does not:`, so two gates can share an artifact without sharing a lens: `SPEC_reviewUserStory` owns acceptance-criteria content and `SPEC_reviewDetailDesign` owns their testability; `SPEC_reviewImplTests` owns test implementation and `SPEC_reviewProductCodes` owns code plus traceability. The gate names follow the same split: `*review*` commands gate an authored artifact, while `HARNESS_verifyInstallation` verifies an installed surface. Both report the same vocabulary.
 
 Canonical definitions of `PASS`, `REVISE`, `BLOCKED`, and `ASK` live in [README_UbiLang.md](../../README_UbiLang.md); this table maps the older per-command wording onto them. In short: `PASS` proceeds with the artifact as-is, `REVISE` changes it first and re-runs the gate, `BLOCKED` waits for a missing input that an owner can supply, and `ASK` waits for a decision only the developer can make. When the flow cannot yet phrase the question, the escalation is `SPEC_whatsWrong`, not `ASK`.
 
@@ -163,7 +163,7 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 | Clear developer and CodeAgent story intent before design. | A story can look complete while the developer and CodeAgent still infer different scope, non-goals, or success evidence. Clearing both sides before design prevents expensive architecture and detail-design drift. | Use `SPEC_clearStoryIntent` after `SPEC_openUserStory` when the active story still needs scope alignment. Record a `Mutual Intent Contract` in the active story before planning starts. The contract states developer intent, CodeAgent intent, in-scope work, out-of-scope work, success signal, assumptions, and open questions. If intent is not aligned, ask or revise the active story before `SPEC_makePlan` begins. |
 | Separate `WHAT`/`WHY` from `HOW` with a lightweight plan step. | Spec Kit keeps product intent in `spec.md` and delays technical choices to `plan.md`, reducing premature design decisions. | Keep user-story intent in the story artifact, then use `SPEC_makePlan` to create a paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact that expresses next work as Markdown checkbox tasks and decides whether the active story is intent-clearing, design-oriented, or implementation-oriented. For design-oriented work, distinguish initial architecture/detail design (`SPEC_take*Design`) from follow-up design revision (`SPEC_update*Design`). Detailed technical choices still land in project-root `README*` SPEC docs when later commands require them. |
 | Run a clarify/analyze/checklist gate before implementation. | Spec Kit surfaces ambiguity, inconsistency, and missing coverage before coding so rework happens early. | Use `SPEC_reviewArchDesign` after architecture design and `SPEC_reviewDetailDesign` after detail design. Route failed architecture reviews to `SPEC_updateArchDesign`; route failed detail reviews to `SPEC_updateDetailDesign` instead of skipping ahead. |
-| Make execution slices explicit, ordered, and parallel-aware. | Spec Kit's tasks template turns plans into visible tasks with dependencies, parallel markers, and validation checkpoints. | Before `SPEC_implUnitTests` or `SPEC_implProductCodes`, break the active story into explicit US/AC/TC slices and validation checkpoints in the doing story, verification design, and test files. Preserve P0-first order, but mark independent work that can run in parallel. |
+| Make execution slices explicit, ordered, and parallel-aware. | Spec Kit's tasks template turns plans into visible tasks with dependencies, parallel markers, and validation checkpoints. | Before `SPEC_implTests` or `SPEC_implProductCodes`, break the active story into explicit US/AC/TC slices and validation checkpoints in the doing story, verification design, and test files. Preserve P0-first order, but mark independent work that can run in parallel. |
 
 ## Developer Stories
 
@@ -405,29 +405,29 @@ flowchart TB
     Part2b["from SPEC_makePlan or Part 2.a"] --> ImplementationChoice{"implementation readiness?"}
     ImplementationChoice -- "design needs rework" --> ReviewStoryRef["return to Part 2.a SPEC_updateDetailDesign"]
     ImplementationChoice -- "abort" --> Abort2b["SPEC_abortUserStory"]
-    ImplementationChoice -- "story is test-ready" --> DesignTests["SPEC_designUnitTests"]
+    ImplementationChoice -- "story is test-ready" --> DesignTests["SPEC_designTests"]
 
     DesignTests --> TESTDesign{"matching TEST_designXYZ exists?"}
     TESTDesign -- "YES" --> CategoryDesign["use TEST_designXYZ contract"]
-    UTDesign -- "NO, clear intent" --> MethodFallback["explicit methodPrompts fallback"]
-    UTDesign -- "NO, unclear intent" --> DetailGap["return to Part 2.a SPEC_updateDetailDesign"]
-    CategoryDesign --> ImplTests["SPEC_implUnitTests"]
+    TESTDesign -- "NO, clear intent" --> MethodFallback["explicit methodPrompts fallback"]
+    TESTDesign -- "NO, unclear intent" --> DetailGap["return to Part 2.a SPEC_updateDetailDesign"]
+    CategoryDesign --> ImplTests["SPEC_implTests"]
     MethodFallback --> ImplTests
-    ImplTests --> ReviewImplTests["SPEC_reviewImplUnitTests"]
+    ImplTests --> ReviewImplTests["SPEC_reviewImplTests"]
     ReviewImplTests --> ImplCode["SPEC_implProductCodes"]
     ImplCode --> RefactTests{"unit-test cleanup needed?"}
-    RefactTests -- "YES" --> RefactUnitTests["SPEC_refactUnitTests"]
-    RefactUnitTests --> ReviewImplTestsAfterRefactor["SPEC_reviewImplUnitTests"]
+    RefactTests -- "YES" --> RefactTestsCommand["SPEC_refactTests"]
+    RefactTestsCommand --> ReviewImplTestsAfterRefactor["SPEC_reviewImplTests"]
     ReviewImplTestsAfterRefactor --> ReviewCode["SPEC_reviewProductCodes"]
     RefactTests -- "NO" --> ReviewCode
     ReviewCode --> QualityCode{"product-code quality?"}
 
     QualityCode -- "NO, fix in current story" --> DesignRework["return to Part 2.a follow-up detail revision"]
     QualityCode -- "NO, abort current story" --> Abort2b
-    QualityCode -- "YES" --> ReviewImplTestsAfterProductCode["SPEC_reviewImplUnitTests"]
+    QualityCode -- "YES" --> ReviewImplTestsAfterProductCode["SPEC_reviewImplTests"]
     ReviewImplTestsAfterProductCode --> UnitTestQuality{"unit-test review?"}
-    UnitTestQuality -- "NO, fix tests/design" --> TestRework["return to SPEC_implUnitTests or SPEC_designUnitTests"]
-    UnitTestQuality -- "cleanup needed" --> RefactUnitTests
+    UnitTestQuality -- "NO, fix tests/design" --> TestRework["return to SPEC_implTests or SPEC_designTests"]
+    UnitTestQuality -- "cleanup needed" --> RefactTestsCommand
     UnitTestQuality -- "YES" --> Commit["SPEC_commitStoryWorks"]
     Commit --> Close["SPEC_closeUserStory"]
     ImplTests -. "step commit at planned boundaries" .-> StepCommit["SPEC_commitStepWorks"]
@@ -465,8 +465,8 @@ flowchart TB
 16. Use [SPEC_takeDetailDesign](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) to produce initial detailed design and acceptance criteria, including other project-root `README*` SPEC docs as needed (such as `README_DetailDesign.md`, `README_StateDesign.md`, `README_SecurityDesign.md`, applying `design-architecture-viewpoints`, `apply-architectural-tactics`, and `design-tool-use-sandboxing`).
 17. Use [SPEC_reviewDetailDesign](../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md) to gate detailed design quality before implementation-oriented steps.
 18. Use [SPEC_updateDetailDesign](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) for follow-up detail revision when detail review finds missing or weak design.
-19. Use [SPEC_designUnitTests](../commands/Px-SpecFlow/SPEC_designUnitTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows, when the plan says the story is test-ready.
-20. Use [SPEC_implUnitTests](../commands/Px-SpecFlow/SPEC_implUnitTests.md), [SPEC_reviewImplUnitTests](../commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md), [SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md), and [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review, then run `SPEC_reviewImplUnitTests` again after product-code review before the story-span commit. Use optional [SPEC_refactUnitTests](../commands/Px-SpecFlow/SPEC_refactUnitTests.md) for GREEN no-behavior-change unit-test cleanup; after refactor, run `SPEC_reviewImplUnitTests`, rerun `SPEC_reviewProductCodes` when review scope changed, and run `SPEC_reviewImplUnitTests` again before the story-span commit. At step boundaries the plan marked `commit_step = yes`, use [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md) once that step's gate passed.
+19. Use [SPEC_designTests](../commands/Px-SpecFlow/SPEC_designTests.md) to enter CaTDD test design, usually through P0/P1/P2 flows, when the plan says the story is test-ready.
+20. Use [SPEC_implTests](../commands/Px-SpecFlow/SPEC_implTests.md), [SPEC_reviewImplTests](../commands/Px-SpecFlow/SPEC_reviewImplTests.md), [SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md), and [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) for test-first execution and review, then run `SPEC_reviewImplTests` again after product-code review before the story-span commit. Use optional [SPEC_refactTests](../commands/Px-SpecFlow/SPEC_refactTests.md) for GREEN no-behavior-change unit-test cleanup; after refactor, run `SPEC_reviewImplTests`, rerun `SPEC_reviewProductCodes` when review scope changed, and run `SPEC_reviewImplTests` again before the story-span commit. At step boundaries the plan marked `commit_step = yes`, use [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md) once that step's gate passed.
 21. Use [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md) at any active post-open and pre-close point when work must pause without losing traceability and a durable resume reference, such as a git branch or worktree, already exists or can be created; then commit the `suspendUS/` lane move through `SPEC_commitStoryWorks` with `commit_checkpoint = span_end` or the equivalent resume-branch WIP commit.
 22. Use [SPEC_resumeUserStory](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) to move a suspended story back into active work and continue from the preserved reference.
 23. Use [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md) from Part 2.a or Part 2.b when the active story has a blocking scope, assumption, design, test, or product-quality problem that should be preserved rather than continued in place; then commit the `abortUS/` lane move through `SPEC_commitStoryWorks` with `commit_checkpoint = span_end`. After aborting, either use `SPEC_analyzeAbortedUserStory` to analyze the aborted story for a later story round or use `SPEC_importIssue` to create a new improvement/refinement input.
@@ -506,7 +506,7 @@ A no-progress stop must preserve the latest observed evidence, restore the worki
 - Failed architecture review -> `SPEC_updateArchDesign`, then re-gate via `SPEC_reviewArchDesign`, bounded.
 - Failed detail review -> `SPEC_updateDetailDesign`, then re-gate via `SPEC_reviewDetailDesign`, bounded.
 - Failed requirement review -> `SPEC_updateUserStory`, then re-gate via `SPEC_reviewUserStory`, bounded.
-- Test-implementation defect -> `SPEC_implUnitTests`; test-design/coverage defect -> `SPEC_designUnitTests`; product-code defect -> bounded local correction in `SPEC_implProductCodes` or design routing per its Conflict Guard.
+- Test-implementation defect -> `SPEC_implTests`; test-design/coverage defect -> `SPEC_designTests`; product-code defect -> bounded local correction in `SPEC_implProductCodes` or design routing per its Conflict Guard.
 - Exhausted no-progress bound -> `ASK` for a decision, [SPEC_whatsWrong](../commands/Px-SpecFlow/SPEC_whatsWrong.md) in `manualMode` when the problem is still unproven, or `SPEC_abortUserStory` when the problem changed the story intent or invalidated its assumptions.
 
 Failure classification follows ASR-R3: retry only transient failures; route permanent failures deterministically. If no-progress persists after the bound, do not continue patching in place: a `manualMode` session may escalate to `SPEC_whatsWrong` while the problem is still unproven, an `autonomousMode` run must halt and hand the choice to the developer because it cannot switch discipline, and `SPEC_abortUserStory` into `.catdd/spec/abortUS/` is required when the problem changed the story intent or invalidated its assumptions.
@@ -523,9 +523,9 @@ Failure classification follows ASR-R3: retry only transient failures; route perm
 - Do not suspend a story without preserving a durable resume reference, such as a git branch or worktree, when the active work has changes that must be resumed later.
 - After `SPEC_makePlan`, use `SPEC_take*Design` only for initial design work and `SPEC_update*Design` only for follow-up design revision against existing design evidence, review feedback, or story-level design gaps.
 - Every design-producing step (`SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, `SPEC_updateDetailDesign`) must be followed by its review gate before downstream lifecycle steps.
-- Every implemented-unit-test step (`SPEC_implUnitTests`, `SPEC_refactUnitTests`) must be followed by `SPEC_reviewImplUnitTests` before product-code implementation, product-code review handoff, or any commit checkpoint (`SPEC_commitStoryWorks` or a planned `SPEC_commitStepWorks` boundary).
-- Every product-code implementation/review pass (`SPEC_implProductCodes`, `SPEC_reviewProductCodes`) must be followed by `SPEC_reviewImplUnitTests` before the story-span commit (`SPEC_commitStoryWorks`) or any planned `SPEC_commitStepWorks` boundary that covers product code.
-- `SPEC_refactUnitTests` must only clean GREEN implemented tests; it must route missing behavior, new coverage, wrong category, or acceptance ambiguity back to the appropriate design or implementation command.
+- Every implemented-unit-test step (`SPEC_implTests`, `SPEC_refactTests`) must be followed by `SPEC_reviewImplTests` before product-code implementation, product-code review handoff, or any commit checkpoint (`SPEC_commitStoryWorks` or a planned `SPEC_commitStepWorks` boundary).
+- Every product-code implementation/review pass (`SPEC_implProductCodes`, `SPEC_reviewProductCodes`) must be followed by `SPEC_reviewImplTests` before the story-span commit (`SPEC_commitStoryWorks`) or any planned `SPEC_commitStepWorks` boundary that covers product code.
+- `SPEC_refactTests` must only clean GREEN implemented tests; it must route missing behavior, new coverage, wrong category, or acceptance ambiguity back to the appropriate design or implementation command.
 - Use `SPEC_abortUserStory` instead of continuing an active story when the discovered problem changes the story's intent, invalidates its assumptions, or needs a new analysis/improvement round.
 - Do not run `SPEC_closeUserStory` until required branch integration/merge work is complete.
 - The `pre_close` checkpoint of `SPEC_commitStoryWorks` covers implementation and design artifacts for the story span; close-generated lifecycle/meta changes require the immediate `post_close` checkpoint of `SPEC_commitStoryWorks` before closure is complete.

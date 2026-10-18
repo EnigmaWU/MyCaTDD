@@ -165,7 +165,7 @@ note: marker-based status only; not execution evidence unless include_execution_
 - Ledger dispositions and the `test_scope` split when a ledger or execution evidence is present, plus an explicit statement when either is absent.
 - An explicit statement that Level-5 coverage counts `DESIGNED` rows only, so `GAP`, `QUESTION`, `EXCLUDED`, and `REFERRED` are visible as reasons rather than as coverage.
 - Findings ordered by risk, each citing a marker, a TC or AC id, and a file path.
-- Exactly one recommended next command, chosen from `TEST_tellMeNextImplTest`, `TEST_implTestCase`, `TEST_refactTestCase`, `TEST_reviewImplTestCase`, `SPEC_reviewImplUnitTests`, or the owning design/review command.
+- Exactly one recommended next command, chosen from `TEST_tellMeNextImplTest`, `TEST_implTestCase`, `TEST_refactTestCase`, `TEST_reviewImplTestCase`, `SPEC_reviewImplTests`, or the owning design/review command.
 - An explicit statement when the scope has no markers, no design gate, or could not be fully read.
 
 ## Method References

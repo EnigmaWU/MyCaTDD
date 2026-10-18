@@ -15,7 +15,7 @@ Repeat until all four review criteria are explicitly addressed.
 1. **Thought** — Read `changed_files` against `doing_user_story` and `readme_spec_files`. Check four criteria in order: correctness, traceability to a README SPEC doc, minimality, and quality risk.
 2. **Action** — Write the verdict — `pass`, `update design`, `add tests`, `abort story`, or `ask developer` — with findings ordered by those criteria.
 3. **Observation** — Check that `verification_output` explains the result, and that each finding names a file and a route. Code changed but traced to no README SPEC doc, or an unexplained verification gap, returns to **Thought**.
-4. **Stop** — Exit on a stable verdict. On `pass`, report `next_command = SPEC_reviewImplUnitTests`; never route straight to `SPEC_commitStoryWorks`.
+4. **Stop** — Exit on a stable verdict. On `pass`, report `next_command = SPEC_reviewImplTests`; never route straight to `SPEC_commitStoryWorks`.
 
 ### Worked Example
 
@@ -49,15 +49,15 @@ Expected result:
 
 ## Output Contract
 
-- `review_verdict`: `PASS` when the product code matches its design and tests and the next step is `SPEC_reviewImplUnitTests`; `REVISE` with `rework_route = SPEC_updateDetailDesign` for a design gap, `SPEC_designUnitTests` for missing coverage, or `SPEC_abortUserStory` when the story must be abandoned; `ASK` when the developer must decide; `BLOCKED` when the design or verification evidence needed for the review is unavailable.
+- `review_verdict`: `PASS` when the product code matches its design and tests and the next step is `SPEC_reviewImplTests`; `REVISE` with `rework_route = SPEC_updateDetailDesign` for a design gap, `SPEC_designTests` for missing coverage, or `SPEC_abortUserStory` when the story must be abandoned; `ASK` when the developer must decide; `BLOCKED` when the design or verification evidence needed for the review is unavailable.
 - `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Findings prioritized by correctness, traceability to project-root README SPEC docs, and quality risk.
-- Next recommended command: `SPEC_reviewImplUnitTests` when product-code review passes, `SPEC_updateDetailDesign`, `SPEC_designUnitTests`, `SPEC_abortUserStory`, or `SPEC_importIssue`.
+- Next recommended command: `SPEC_reviewImplTests` when product-code review passes, `SPEC_updateDetailDesign`, `SPEC_designTests`, `SPEC_abortUserStory`, or `SPEC_importIssue`.
 
 ## Review Gate Contract
 
 - Reviews: product code and its traceability to the approved design and to the tests that prove it.
-- Does not: review the test implementation itself (that lens belongs to `SPEC_reviewImplUnitTests`), fix code, redesign, or commit.
+- Does not: review the test implementation itself (that lens belongs to `SPEC_reviewImplTests`), fix code, redesign, or commit.
 - `review_verdict`: exactly one of `PASS`, `REVISE`, `BLOCKED`, or `ASK` per pass. `ASK` brings the human developer into the loop and is the same outcome `ONE-MORE-THING` produces.
 - `severity`: optional `blocking | advisory` (default `blocking`); `advisory` marks findings that do not stop the gate.
 - `rework_route`: required whenever the verdict is not `PASS`; it names the owning command for each finding.
@@ -70,10 +70,10 @@ Expected result:
 
 ## Loop Guard
 
-Rework routes from this review to `SPEC_updateDetailDesign` or `SPEC_designUnitTests` must record structured findings. Each `impl -> review -> rework` cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim product-code review progress without changed evidence between passes.
+Rework routes from this review to `SPEC_updateDetailDesign` or `SPEC_designTests` must record structured findings. Each `impl -> review -> rework` cycle is bounded by `max_rework_attempts` (default `3`) and the `Px-SpecFlow` Loop Guard stop conditions: after repeated no-progress or exhausted attempts, route to `SPEC_abortUserStory` or `ASK`, never a third silent retry. Do not claim product-code review progress without changed evidence between passes.
 
 ## Conflict Guard
 
-Do not commit when quality is not met or when verification evidence is missing without explanation. Do not route directly to `SPEC_commitStoryWorks`; run `SPEC_reviewImplUnitTests` after product-code review when product code changed.
+Do not commit when quality is not met or when verification evidence is missing without explanation. Do not route directly to `SPEC_commitStoryWorks`; run `SPEC_reviewImplTests` after product-code review when product code changed.
 
 ONE-MORE-THING: ask developer if something not sure

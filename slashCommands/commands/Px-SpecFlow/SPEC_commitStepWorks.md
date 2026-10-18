@@ -68,7 +68,7 @@ Step: SPEC_implProductCodes
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `tasks_file`: paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact holding the commit plan.
 - `commit_plan`: the step-boundary commit decisions recorded by `SPEC_makePlan`.
-- `step_command`: the lifecycle step that just finished, for example `SPEC_implUnitTests` or `SPEC_implProductCodes`.
+- `step_command`: the lifecycle step that just finished, for example `SPEC_implTests` or `SPEC_implProductCodes`.
 - `step_files`: files produced or changed by that step.
 - `step_verification_summary`: gate evidence for that step, such as tests, lint, build, or review result.
 - `recent_commit_messages`: latest 5 commit log messages from `git log`, used as the style reference for the new commit message.

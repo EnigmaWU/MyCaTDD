@@ -42,7 +42,7 @@ assert_contains "$WHATS_WRONG" '`ONE-MORE-THING` stop rule, when the problem can
 assert_contains "$WHATS_WRONG" 'when the problem cannot yet be stated as a question'
 assert_contains "$WHATS_WRONG" 'Contradictory evidence between artifacts and observed reality'
 assert_contains "$WHATS_WRONG" 'exhausted `maxStepRetry` or `maxRunCorrectionLoop` with no observable progress'
-assert_contains "$WHATS_WRONG" 'no owning `SPEC_*` or `UT_*` command can be named'
+assert_contains "$WHATS_WRONG" 'no owning `SPEC_*` or `TEST_*` command can be named'
 assert_contains "$WHATS_WRONG" 'Escalation after a `ONE-MORE-THING` halt'
 assert_contains "$WHATS_WRONG" 'If an owning command plainly exists, stop and route there.'
 

@@ -182,20 +182,20 @@ done
 
 # [@AC-DISCOVERY-04,US-DISCOVERY-01] TC-DISCOVERY-04: command handoff and blind spots.
 P0_COMMANDS="$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow"
-for command in UT_designFuncTestsSkeleton UT_reviewFuncTestsSkeleton; do
+for command in TEST_designFuncTestsSkeleton TEST_reviewFuncTestsSkeleton; do
   assert_discovery_contract "$P0_COMMANDS/$command.md" 'CaTDD_methodPrompt-testPointDiscovery.md'
   assert_discovery_contract "$P0_COMMANDS/$command.md" 'discovery_ledger'
   assert_discovery_contract "$P0_COMMANDS/$command.md" 'ready_for_implementation'
 done
-assert_discovery_contract "$P0_COMMANDS/UT_reviewFuncTestsSkeleton.md" 'no existing US/AC/TC ID'
-assert_discovery_contract "$P0_COMMANDS/UT_tellMeNextImplTest.md" 'review_evidence'
-assert_discovery_contract "$P0_COMMANDS/UT_tellMeNextImplTest.md" 'ready_for_implementation'
+assert_discovery_contract "$P0_COMMANDS/TEST_reviewFuncTestsSkeleton.md" 'no existing US/AC/TC ID'
+assert_discovery_contract "$P0_COMMANDS/TEST_tellMeNextImplTest.md" 'review_evidence'
+assert_discovery_contract "$P0_COMMANDS/TEST_tellMeNextImplTest.md" 'ready_for_implementation'
 
-P1_REVIEW="$REPO_ROOT/slashCommands/commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md"
+P1_REVIEW="$REPO_ROOT/slashCommands/commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md"
 assert_discovery_contract "$P1_REVIEW" 'CaTDD_methodPrompt-testPointDiscovery.md'
 assert_discovery_contract "$P1_REVIEW" 'P1 Discovery Gate'
 
-P2_REVIEW="$REPO_ROOT/slashCommands/commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md"
+P2_REVIEW="$REPO_ROOT/slashCommands/commands/P2-QualityTestsFlow/TEST_reviewQualityTestsSkeleton.md"
 assert_discovery_contract "$P2_REVIEW" 'CaTDD_methodPrompt-testPointDiscovery.md'
 assert_discovery_contract "$P2_REVIEW" 'P2 Discovery Gate'
 

@@ -92,7 +92,7 @@ Rules:
 - One behavior inventory and one `discovery_ledger` exist for a feature, owned by the detail design; every row carries its `Category and test level`.
 - Test-point promotion moves an obligation from detail to architecture design when its `TestLevel` is `SysTesting` or `UserTesting`. The TP ID is preserved; the architecture design references the obligation and never restates category design.
 - `README_VerifyStatusTraces.md` remains the dynamic companion holding live status and evidence for both designs.
-- `SPEC_designUnitTests` inherits the strategy from `README_DetailVerifyDesign.md`; it does not redefine verification design.
+- `SPEC_designTests` inherits the strategy from `README_DetailVerifyDesign.md`; it does not redefine verification design.
 
 ### Status and Level Vocabulary
 
@@ -198,7 +198,7 @@ flowchart LR
 Use this glossary when:
 
 - defining new terms in READMEs, prompts, rules, or architecture docs,
-- naming new UT_*/SPEC_* commands,
+- naming new TEST_*/SPEC_* commands,
 - reviewing wording drift across EN/ZH or across adapters,
 - installing CaTDD into a new project.
 

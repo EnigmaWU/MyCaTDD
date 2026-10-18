@@ -125,7 +125,7 @@ The composed handoff note should follow this structure:
 - <tool/config/env note>
 
 ### Next Action
-- Command: <next SPEC_* or UT_* or HARNESS_* command>
+- Command: <next SPEC_* or TEST_* or HARNESS_* command>
 - Inputs: <command inputs>
 - Why: <one-line rationale>
 ```

@@ -34,7 +34,7 @@ Expected result — two passes:
 - **Action**: verdict `REVISE`, two evidence lines citing `README_DetailDesign.md` AC-04 and `README_StateDesign.md` the state table.
 - **Observation**: the first pass only spot-checked AC-01 and AC-04 → gate not applied to every AC → back to **Thought**.
 - **Observation (pass 2)**: all four ACs checked; AC-02 and AC-03 convert cleanly to Typical/Fault skeletons → verdict stable.
-- Reported: `REVISE` → `next_command = SPEC_updateDetailDesign`. `SPEC_designUnitTests` stays blocked.
+- Reported: `REVISE` → `next_command = SPEC_updateDetailDesign`. `SPEC_designTests` stays blocked.
 
 ## Inputs
 

@@ -6,14 +6,14 @@ FLOW_DOC="$REPO_ROOT/slashCommands/flows/Px-SpecFlow.md"
 FLOW_DOC_ZH="$REPO_ROOT/slashCommands/flows/Px-SpecFlow_ZH.md"
 
 REVIEW_COMMANDS=(
-  "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/UT_reviewFuncTestsSkeleton.md"
-  "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/UT_reviewImplTestCase.md"
-  "$REPO_ROOT/slashCommands/commands/P1-DesignTestsFlow/UT_reviewDesignTestsSkeleton.md"
-  "$REPO_ROOT/slashCommands/commands/P2-QualityTestsFlow/UT_reviewQualityTestsSkeleton.md"
+  "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/TEST_reviewFuncTestsSkeleton.md"
+  "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md"
+  "$REPO_ROOT/slashCommands/commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md"
+  "$REPO_ROOT/slashCommands/commands/P2-QualityTestsFlow/TEST_reviewQualityTestsSkeleton.md"
   "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewUserStory.md"
   "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewArchDesign.md"
   "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewDetailDesign.md"
-  "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md"
+  "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewImplTests.md"
   "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewProductCodes.md"
   "$REPO_ROOT/slashCommands/commands/Px-HarnessKits/HARNESS_verifyInstallation.md"
 )
@@ -59,7 +59,7 @@ done
 # 1b. Shared artifacts are split by lens, not by gate ownership.
 assert_contains "${REVIEW_COMMANDS[4]}" 'judge acceptance-criteria testability from the design side (that lens belongs to `SPEC_reviewDetailDesign`)'
 assert_contains "${REVIEW_COMMANDS[6]}" 'judge requirement content or measurability (that lens belongs to `SPEC_reviewUserStory`)'
-assert_contains "${REVIEW_COMMANDS[8]}" 'review the test implementation itself (that lens belongs to `SPEC_reviewImplUnitTests`)'
+assert_contains "${REVIEW_COMMANDS[8]}" 'review the test implementation itself (that lens belongs to `SPEC_reviewImplTests`)'
 assert_contains "${REVIEW_COMMANDS[7]}" 'review product code (that lens belongs to `SPEC_reviewProductCodes`)'
 
 # verifyInstallation reads the portable command source rather than an upstream artifact.
@@ -93,8 +93,8 @@ assert_contains "${REVIEW_COMMANDS[2]}" 'Any non-PASS sub-gate means no'
 assert_contains "${REVIEW_COMMANDS[3]}" 'Any non-PASS sub-gate means no'
 
 # 6. The scope pair cross-references both ways.
-assert_contains "${REVIEW_COMMANDS[1]}" 'Story-scoped review across all selected unit-test slices belongs to [SPEC_reviewImplUnitTests](../Px-SpecFlow/SPEC_reviewImplUnitTests.md)'
-assert_contains "${REVIEW_COMMANDS[7]}" '`UT_reviewImplTestCase` owns TC-level alignment mechanics.'
+assert_contains "${REVIEW_COMMANDS[1]}" 'Story-scoped review across all selected unit-test slices belongs to [SPEC_reviewImplTests](../Px-SpecFlow/SPEC_reviewImplTests.md)'
+assert_contains "${REVIEW_COMMANDS[7]}" '`TEST_reviewImplTestCase` owns TC-level alignment mechanics.'
 
 # 7. The flow documents the canonical contract and the migration mapping (EN + ZH).
 assert_contains "$FLOW_DOC" '`PASS`, `REVISE`, `BLOCKED`, `ASK`'
@@ -130,7 +130,7 @@ assert_contains "$FLOW_DOC" 'is gated internally by the Lossless Compaction Gate
 assert_contains "$FLOW_DOC" '`P3 Addons / Demo-Example` has no design or review gate by intent'
 assert_contains "$FLOW_DOC_ZH" '并非每个制品都有专属门禁，因此流程显式指明归属'
 assert_contains "$FLOW_DOC_ZH" '`P3 Addons / Demo-Example` 按设计意图不设设计与评审门禁'
-assert_contains "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md" 'no design or review gate of its own'
+assert_contains "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md" 'no design or review gate of its own'
 
 # 10. The canonical verdict definitions live in UbiLang, and the flow points at them.
 UBILANG="$REPO_ROOT/README_UbiLang.md"

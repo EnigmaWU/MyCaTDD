@@ -160,10 +160,10 @@ If the testing method is unclear, default UnitTesting to CaTDD and explicitly no
 
 ### Phase 5: Design and Implement Tests
 
-1. Use `SPEC_designUnitTests` intent to choose the testing method.
+1. Use `SPEC_designTests` intent to choose the testing method.
 2. Default UnitTesting to CaTDD by invoking the `comment-alive-test-driven-development` method or packaged references.
 3. Use typical TDD or another project-specific method when the project explicitly requests it.
-4. Use `SPEC_implUnitTests` intent to implement selected test cases.
+4. Use `SPEC_implTests` intent to implement selected test cases.
 5. Preserve traceability from story to acceptance criteria to tests.
 
 ### Phase 6: Implement, Review, and Route Quality

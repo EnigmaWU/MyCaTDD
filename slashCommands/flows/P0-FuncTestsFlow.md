@@ -14,7 +14,7 @@ InvalidFunc = Misuse + Fault
 
 The flow commands connect existing CodeAgent invocation surfaces to execution steps; category meaning remains in `methodPrompts`.
 
-When `SPEC_designUnitTests` identifies P0 Functional coverage for an active story, this flow provides the matching category-design contracts. `SPEC_designUnitTests` remains the story-level orchestration command, while `TEST_designFuncTestsSkeleton` owns the full Typical, Edge, Misuse, and Fault skeleton design contract and the category-specific `UT_design*Skeleton` commands own their individual skeleton contracts. These commands are design steps; executable test bodies still belong to later implementation flow.
+When `SPEC_designTests` identifies P0 Functional coverage for an active story, this flow provides the matching category-design contracts. `SPEC_designTests` remains the story-level orchestration command, while `TEST_designFuncTestsSkeleton` owns the full Typical, Edge, Misuse, and Fault skeleton design contract and the category-specific `TEST_design*Skeleton` commands own their individual skeleton contracts. These commands are design steps; executable test bodies still belong to later implementation flow.
 
 ## Developer Stories
 
@@ -65,5 +65,5 @@ flowchart LR
 - `TEST_convertDemoToTypical` extracts core behavior from demo tests into `P0 Functional / Typical` skeletons.
 - Category semantics must come from `methodPrompts/CaTDD_methodPrompt4Cat-*.md`.
 - Commands must stay language agnostic. Use canonical CaTDD file names such as `test_feature_x_funcValidTypical.cxx` only as examples (`UT_<Feature>-<Category>` names are deprecated; see `methodPrompts/CaTDD_methodPrompt-fileNaming.md`).
-- `TEST_designFuncTestsSkeleton` and the category-specific `UT_design*Skeleton` commands own skeleton design, not executable implementation bodies.
+- `TEST_designFuncTestsSkeleton` and the category-specific `TEST_design*Skeleton` commands own skeleton design, not executable implementation bodies.
 - `TEST_refactTestCase` is a no-behavior-change cleanup step for one GREEN TC. Missing behavior, missing coverage, or wrong category routing must go back to design or implementation commands instead of being added during refactor.

@@ -60,7 +60,7 @@
 
 `HARNESS_evolveHarness` 永不直接改写规范命令文件。当一条已验证的经验要细化或新增某个斜杠命令、流程或工具集时，结果会写为同一目录下的同级 `<Name>Evolved.md` 文件，而规范 `<Name>.md` 保持与从 `MyCaTDD` 安装时完全一致。
 
-- **覆盖（Overlay）**：细化 `SPEC_implUnitTests` 会生成 `SPEC_implUnitTestsEvolved.md`，并与保持不变的 `SPEC_implUnitTests.md` 并列存放。
+- **覆盖（Overlay）**：细化 `SPEC_implTests` 会生成 `SPEC_implTestsEvolved.md`，并与保持不变的 `SPEC_implTests.md` 并列存放。
 - **新命令**：由演进产生的新命令同样保留该后缀，例如 `SPEC_doNewXyzEvolved.md`。
 - **一个基命令一个覆盖**：对同一基命令的重复细化会更新同一个 `<Name>Evolved.md`，不会产生 `Evolved2` 或并列的覆盖链。
 - **解析**：演进文件是自包含的；当它存在时，本地执行以它为准，取代同名但无后缀的命令。代理应读取 `<Name>Evolved.md` 而不是 `<Name>.md`。
@@ -82,7 +82,7 @@
 
 ## 追溯与 SUT 约束
 
-- `SPEC_designUnitTests` 与相关 `TEST_design*Skeleton` 命令应强制满足最小追溯基数：每个 US 至少有 1 个 AC，每个 AC 至少有 1 个 TC。
+- `SPEC_designTests` 与相关 `TEST_design*Skeleton` 命令应强制满足最小追溯基数：每个 US 至少有 1 个 AC，每个 AC 至少有 1 个 TC。
 - 测试设计产出必须在测试文件 Overview 中显式声明 SUT（例如：`SUT: utCodeAgentCLI`）。
 - 若存在未闭合追溯（US 无 AC 或 AC 无 TC），命令应阻止该设计结果作为完成态。
 

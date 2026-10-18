@@ -144,27 +144,27 @@ Add `--clean-prompts` when you want to remove old generated prompt wrappers befo
 
 Refresh is patch-aware: files evolved in the target after install are kept and never silently overwritten. Disjoint upstream and target edits are three-way merged, overlapping edits keep the target and are reported, and `--force-overwrite` restores canonical source for all managed files.
 
-`HARNESS_evolveHarness` keeps slash-command learning out of the canonical commands: it writes a sibling `<Name>Evolved.md` overlay, such as `SPEC_implUnitTestsEvolved.md` beside an untouched `SPEC_implUnitTests.md`. The overlay is self-contained, supersedes its canonical sibling locally, may be a brand-new command such as `SPEC_doNewXyzEvolved.md`, and is promoted upstream with `HARNESS_patchCaTDDSource`. Overlays are local-only: refresh and `--force-overwrite` preserve them instead of overwriting or deleting them.
+`HARNESS_evolveHarness` keeps slash-command learning out of the canonical commands: it writes a sibling `<Name>Evolved.md` overlay, such as `SPEC_implTestsEvolved.md` beside an untouched `SPEC_implTests.md`. The overlay is self-contained, supersedes its canonical sibling locally, may be a brand-new command such as `SPEC_doNewXyzEvolved.md`, and is promoted upstream with `HARNESS_patchCaTDDSource`. Overlays are local-only: refresh and `--force-overwrite` preserve them instead of overwriting or deleting them.
 
 The installer creates or refreshes these target-project assets:
 
 - `.catdd/methodPrompts/`: installed CaTDD method source for manual reading and method truth.
 - `.catdd/slashCommands/`: installed portable flow-command source for automation.
-- `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md`: Copilot-native thin adapters generated from `slashCommands`.
+- `.github/prompts/TEST_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md`: Copilot-native thin adapters generated from `slashCommands`.
 - `.github/instructions/catdd.instructions.md`: Copilot instruction file that points agents back to `.catdd/`.
 - `.continue/rules/catdd.md`: Continue project rule that points agents back to `.catdd/`.
-- `.continue/prompts/UT_*.prompt` and `.continue/prompts/SPEC_*.prompt`: Continue-native thin prompt adapters generated from `slashCommands`.
+- `.continue/prompts/TEST_*.prompt` and `.continue/prompts/SPEC_*.prompt`: Continue-native thin prompt adapters generated from `slashCommands`.
 - `.clinerules/catdd.md`: Cline project rule that points agents back to `.catdd/`.
 - `.cline/skills/`: Cline slash-command skill adapters generated from `slashCommands`.
 - `.antigravityrules/catdd.md`: Antigravity project rule that points agents back to `.catdd/`.
 - `AGENTS.md`: Codex instructions, written as a managed `CaTDD Codex instructions` block so existing project guidance is preserved.
-- `.agents/skills/`: Codex skill adapters generated from `slashCommands`, invoked as `$ut-*`, `$spec-*`, and `$harness-*` or from `/skills`.
+- `.agents/skills/`: Codex skill adapters generated from `slashCommands`, invoked as `$test-*`, `$spec-*`, and `$harness-*` or from `/skills`.
 - `<codex-prompts-dir>/`: optional deprecated Codex custom prompts invoked as `/prompts:<Command>`; use `default` for `$CODEX_HOME/prompts`, that is `~/.codex/prompts`. Codex reads custom prompts from the local Codex home only, so this surface is per-user, not shared through the repository.
 - `.catdd/CaTDD_INSTALL.manifest` and `.catdd/.install-baseline/`: patch-aware refresh state used to detect and merge target-evolved files. Local `<Name>Evolved.md` overlays are deliberately not tracked here and survive refresh.
 
-In this source repository, generated `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, `.continue/rules/catdd.md`, `.continue/prompts/UT_*.prompt`, `.continue/prompts/SPEC_*.prompt`, `.clinerules/catdd.md`, `.antigravityrules/catdd.md`, `.agents/skills/`, and `.codex/prompts/` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
+In this source repository, generated `.github/prompts/TEST_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, `.continue/rules/catdd.md`, `.continue/prompts/TEST_*.prompt`, `.continue/prompts/SPEC_*.prompt`, `.clinerules/catdd.md`, `.antigravityrules/catdd.md`, `.agents/skills/`, and `.codex/prompts/` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
 
-Codex skill names accept lowercase letters, numbers, and hyphens only, so `UT_convertDemoToTypical` installs as `$ut-convert-demo-to-typical`; the canonical command name stays in each wrapper description and body.
+Codex skill names accept lowercase letters, numbers, and hyphens only, so `TEST_convertDemoToTypical` installs as `$test-convert-demo-to-typical`; the canonical command name stays in each wrapper description and body.
 
 ## Quick Start
 

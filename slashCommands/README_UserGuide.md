@@ -218,7 +218,7 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Developer need | Command template |
 | --- | --- |
 | Create or revise a portable SPEC slash command | [SPEC_slashCommandTemplate](SPEC_slashCommandTemplate.md) |
-| Create or revise a portable UT slash command | [TEST_slashCommandTemplate](TEST_slashCommandTemplate.md) |
+| Create or revise a portable TEST slash command | [TEST_slashCommandTemplate](TEST_slashCommandTemplate.md) |
 | Drive a full SpecCoding lifecycle | [Px-SpecFlow](commands/Px-SpecFlow/README.md) |
 | Patch installed CaTDD improvements back to the source repo | [HARNESS_patchCaTDDSource](commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | Verify a CaTDD installation before trusting target-project commands | [HARNESS_verifyInstallation](commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
@@ -253,9 +253,9 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Select the next test case from existing skeletons | [TEST_tellMeNextImplTest](commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md) |
 | Implement the selected test case | [TEST_implTestCase](commands/P0-FuncTestsFlow/TEST_implTestCase.md) |
 | Review the implemented test case | [TEST_reviewImplTestCase](commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md) |
-| Review story-scoped implemented unit tests | [SPEC_reviewImplUnitTests](commands/Px-SpecFlow/SPEC_reviewImplUnitTests.md) |
+| Review story-scoped implemented unit tests | [SPEC_reviewImplTests](commands/Px-SpecFlow/SPEC_reviewImplTests.md) |
 | Refactor one GREEN test case without behavior change | [TEST_refactTestCase](commands/P0-FuncTestsFlow/TEST_refactTestCase.md) |
-| Orchestrate story-scoped unit-test refactor | [SPEC_refactUnitTests](commands/Px-SpecFlow/SPEC_refactUnitTests.md) |
+| Orchestrate story-scoped unit-test refactor | [SPEC_refactTests](commands/Px-SpecFlow/SPEC_refactTests.md) |
 | Commit the intake/analysis span before opening a story | [SPEC_commitPreStoryWorks](commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) |
 | Commit one verified lifecycle step inside a story span | [SPEC_commitStepWorks](commands/Px-SpecFlow/SPEC_commitStepWorks.md) |
 | Commit the whole open-to-close story span as the just-done commit | [SPEC_commitStoryWorks](commands/Px-SpecFlow/SPEC_commitStoryWorks.md) |

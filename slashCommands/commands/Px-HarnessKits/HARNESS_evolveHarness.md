@@ -141,16 +141,16 @@ If a lesson fits multiple owners, choose the narrowest source of truth. Never du
 
 ## Evolved Command Overlay Rule
 
-Any slash command produced or refined by this command is written as `<Name>Evolved.md` beside the artifact it evolves, in the same directory. This applies to every command family (`SPEC_*`, `UT_*`, `HARNESS_*`), to flows and kits under `slashCommands/`, and to both overlay and new-command cases.
+Any slash command produced or refined by this command is written as `<Name>Evolved.md` beside the artifact it evolves, in the same directory. This applies to every command family (`SPEC_*`, `TEST_*`, `HARNESS_*`), to flows and kits under `slashCommands/`, and to both overlay and new-command cases.
 
-- **Overlay case**: refining `SPEC_implUnitTests` produces `SPEC_implUnitTestsEvolved.md` and leaves `SPEC_implUnitTests.md` untouched.
+- **Overlay case**: refining `SPEC_implTests` produces `SPEC_implTestsEvolved.md` and leaves `SPEC_implTests.md` untouched.
 - **New-command case**: a command born from evolution keeps the suffix, such as `SPEC_doNewXyzEvolved.md`.
 - **Self-contained**: the evolved file is a complete, effective command, not a delta, so it works even when no canonical base exists.
 - **Supersedes**: when both `<Name>.md` and `<Name>Evolved.md` exist, the evolved file is the effective local command and takes precedence.
 - **One overlay per base**: every refine of the same base updates the existing `<Name>Evolved.md` in place. Do not create `Evolved2`, `EvolvedNew`, or parallel overlays; merge the new lesson into the single overlay and refresh its provenance header.
 - **Local-only**: `*Evolved.md` files are not part of the install manifest. Refresh never overwrites them, `--force-overwrite` preserves them, and `HARNESS_verifyInstallation` / `HARNESS_diagnoseInstallation` treat them as intentional rather than as drift.
 - **Provenance**: start the overlay with one header line so staleness is machine-detectable:
-  - overlay: `> Evolved overlay of SPEC_implUnitTests.md · based_on: 20260919.08`
+  - overlay: `> Evolved overlay of SPEC_implTests.md · based_on: 20260919.08`
   - new command: `> New evolved command · based_on: 20260919.08`
   - Take `based_on` from `.catdd/CaTDD_INSTALL.manifest` (or the `- Installed version:` line in `.catdd/CaTDD_INSTALL.md`) at creation time. An overlay is stale when the base command's current manifest version differs from the recorded value.
 - **Promotion**: `<Name>Evolved.md` is promoted upstream with `HARNESS_patchCaTDDSource`, which strips the suffix to the canonical `<Name>.md`.

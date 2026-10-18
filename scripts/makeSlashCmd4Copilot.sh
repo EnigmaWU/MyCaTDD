@@ -17,7 +17,7 @@ Options:
   --source-dir DIR      Portable command source directory. Defaults to slashCommands/commands.
   --output DIR  Output directory for generated prompt files. Defaults to .github/prompts.
   --workspace-root DIR  Workspace root used for generated path references. Defaults to this repository root.
-  --clean       Remove existing generated UT_*.prompt.md, SPEC_*.prompt.md, and HARNESS_*.prompt.md files from the output directory first.
+  --clean       Remove existing generated TEST_*.prompt.md, SPEC_*.prompt.md, and HARNESS_*.prompt.md files from the output directory first.
   -h, --help    Show this help.
 USAGE
 }
@@ -92,7 +92,7 @@ mkdir -p "$OUTPUT_DIR"
 OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
 
 if [[ "$CLEAN" -eq 1 ]]; then
-  find "$OUTPUT_DIR" -maxdepth 1 -type f \( -name 'UT_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) -delete
+  find "$OUTPUT_DIR" -maxdepth 1 -type f \( -name 'UT_*.prompt.md' -o -name 'TEST_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) -delete
 fi
 
 generated_count=0
@@ -103,7 +103,7 @@ while IFS= read -r source_file; do
   flow_name="$(basename "$(dirname "$source_file")")"
   rel_source="$(rel_to_workspace "$source_file")"
   rel_method_index="$(rel_to_workspace "$METHOD_ROOT/README.md")"
-  rel_slash_template="$(rel_to_workspace "$SLASH_ROOT/UT_slashCommandTemplate.md")"
+  rel_slash_template="$(rel_to_workspace "$SLASH_ROOT/TEST_slashCommandTemplate.md")"
   rel_flow_docs="$(rel_to_workspace "$SLASH_ROOT/flows")"
   rel_kit_docs="$(rel_to_workspace "$SLASH_ROOT/kits")"
   output_file="$OUTPUT_DIR/$command_name.prompt.md"
@@ -144,6 +144,6 @@ ONE-MORE-THING: ask developer if something not sure
 PROMPT
 
   generated_count=$((generated_count + 1))
-done < <(find "$SOURCE_DIR" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
+done < <(find "$SOURCE_DIR" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
 
 echo "[makeSlashCmd4Copilot] Generated $generated_count Copilot prompt wrappers in $(rel_to_workspace "$OUTPUT_DIR")"

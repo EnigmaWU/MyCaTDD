@@ -22,23 +22,23 @@ fail() {
 
 [[ -x "$GENERATOR" ]] || fail "missing executable generator: scripts/makeSlashCmd4Codex.sh"
 
-git -C "$REPO_ROOT" check-ignore -q .agents/skills/ut-example/SKILL.md || fail "generated Codex skill wrappers must be ignored in this source repo"
+git -C "$REPO_ROOT" check-ignore -q .agents/skills/test-example/SKILL.md || fail "generated Codex skill wrappers must be ignored in this source repo"
 
 "$GENERATOR" --output "$OUT_DIR" --prompts-output "$PROMPTS_DIR" --clean
 
-source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
-skill_count="$(find "$OUT_DIR" -mindepth 1 -maxdepth 1 -type d \( -name 'ut-*' -o -name 'spec-*' -o -name 'harness-*' \) | wc -l | tr -d '[:space:]')"
-prompt_count="$(find "$PROMPTS_DIR" -maxdepth 1 -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+skill_count="$(find "$OUT_DIR" -mindepth 1 -maxdepth 1 -type d \( -name 'test-*' -o -name 'spec-*' -o -name 'harness-*' \) | wc -l | tr -d '[:space:]')"
+prompt_count="$(find "$PROMPTS_DIR" -maxdepth 1 -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
 
 [[ "$source_count" -gt 0 ]] || fail "expected at least one portable slash command source"
 [[ "$skill_count" == "$source_count" ]] || fail "expected $source_count generated Codex skills, got $skill_count"
 [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count generated Codex custom prompts, got $prompt_count"
 
-skill_sample="$OUT_DIR/ut-convert-demo-to-typical/SKILL.md"
-[[ -f "$skill_sample" ]] || fail "missing sample skill: ut-convert-demo-to-typical/SKILL.md"
-grep -Fq 'name: ut-convert-demo-to-typical' "$skill_sample" || fail "sample skill missing Codex-compatible name"
-grep -Fq 'Run CaTDD slash command UT_convertDemoToTypical' "$skill_sample" || fail "sample skill description missing canonical command name"
-grep -Fq 'slashCommands/commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md' "$skill_sample" || fail "sample skill missing source command reference"
+skill_sample="$OUT_DIR/test-convert-demo-to-typical/SKILL.md"
+[[ -f "$skill_sample" ]] || fail "missing sample skill: test-convert-demo-to-typical/SKILL.md"
+grep -Fq 'name: test-convert-demo-to-typical' "$skill_sample" || fail "sample skill missing Codex-compatible name"
+grep -Fq 'Run CaTDD slash command TEST_convertDemoToTypical' "$skill_sample" || fail "sample skill description missing canonical command name"
+grep -Fq 'slashCommands/commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md' "$skill_sample" || fail "sample skill missing source command reference"
 grep -Fq 'methodPrompts' "$skill_sample" || fail "sample skill missing methodPrompts source-of-truth reference"
 grep -Fq 'thin Codex Skill adapter' "$skill_sample" || fail "sample skill missing thin-adapter declaration"
 grep -Fq 'ONE-MORE-THING: ask developer if something not sure' "$skill_sample" || fail "sample skill missing uncertainty guard"
@@ -53,12 +53,12 @@ skill_harness_sample="$OUT_DIR/harness-patch-ca-tdd-source/SKILL.md"
 grep -Fq 'Run CaTDD slash command HARNESS_patchCaTDDSource' "$skill_harness_sample" || fail "HARNESS sample skill description missing canonical command name"
 grep -Fq 'slashCommands/commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md' "$skill_harness_sample" || fail "HARNESS sample skill missing source command reference"
 
-prompt_sample="$PROMPTS_DIR/UT_convertDemoToTypical.md"
-[[ -f "$prompt_sample" ]] || fail "missing sample custom prompt: UT_convertDemoToTypical.md"
-grep -Fq 'description: "Run CaTDD slash command UT_convertDemoToTypical' "$prompt_sample" || fail "sample custom prompt missing description front matter"
+prompt_sample="$PROMPTS_DIR/TEST_convertDemoToTypical.md"
+[[ -f "$prompt_sample" ]] || fail "missing sample custom prompt: TEST_convertDemoToTypical.md"
+grep -Fq 'description: "Run CaTDD slash command TEST_convertDemoToTypical' "$prompt_sample" || fail "sample custom prompt missing description front matter"
 grep -Fq 'argument-hint: "[INPUT=<task intent>] [SOURCE=<paths>] [TARGET=<paths>]"' "$prompt_sample" || fail "sample custom prompt missing argument-hint front matter"
 grep -Fq '$ARGUMENTS' "$prompt_sample" || fail "sample custom prompt missing \$ARGUMENTS expansion"
-grep -Fq 'slashCommands/commands/P0-FuncTestsFlow/UT_convertDemoToTypical.md' "$prompt_sample" || fail "sample custom prompt missing source command reference"
+grep -Fq 'slashCommands/commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md' "$prompt_sample" || fail "sample custom prompt missing source command reference"
 grep -Fq 'methodPrompts' "$prompt_sample" || fail "sample custom prompt missing methodPrompts source-of-truth reference"
 grep -Fq 'thin Codex custom-prompt adapter' "$prompt_sample" || fail "sample custom prompt missing thin-adapter declaration"
 grep -Fq 'ONE-MORE-THING: ask developer if something not sure' "$prompt_sample" || fail "sample custom prompt missing uncertainty guard"
@@ -80,10 +80,10 @@ done < <(find "$OUT_DIR" -mindepth 1 -maxdepth 1 -type d | sort)
 
 # --no-skills must emit only custom prompts and no skill wrappers.
 "$GENERATOR" --output "$SKILLS_SKIP_DIR" --prompts-output "$PROMPTS_ONLY_DIR" --no-skills --clean >/dev/null
-prompts_only_count="$(find "$PROMPTS_ONLY_DIR" -maxdepth 1 -type f \( -name 'UT_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+prompts_only_count="$(find "$PROMPTS_ONLY_DIR" -maxdepth 1 -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
 [[ "$prompts_only_count" == "$source_count" ]] || fail "--no-skills expected $source_count custom prompts, got $prompts_only_count"
 [[ -z "$(find "$SKILLS_SKIP_DIR" -mindepth 1 -maxdepth 1 | head -1)" ]] || fail "--no-skills must not generate Codex skill wrappers"
-[[ -f "$PROMPTS_ONLY_DIR/UT_showMeStatus.md" ]] || fail "--no-skills missing sample custom prompt: UT_showMeStatus.md"
+[[ -f "$PROMPTS_ONLY_DIR/TEST_showMeStatus.md" ]] || fail "--no-skills missing sample custom prompt: TEST_showMeStatus.md"
 
 if "$GENERATOR" --output "$SKILLS_SKIP_DIR" --no-skills >/dev/null 2>&1; then
   fail "--no-skills without --prompts-output must fail fast"
@@ -96,9 +96,9 @@ mkdir -p \
   "$CATDD_ROOT/.catdd/slashCommands/flows" \
   "$CATDD_ROOT/.catdd/slashCommands/kits" \
   "$CATDD_ROOT/.catdd/methodPrompts"
-cp "$REPO_ROOT/slashCommands/commands/Px-StatusKits/UT_showMeStatus.md" \
+cp "$REPO_ROOT/slashCommands/commands/Px-StatusKits/TEST_showMeStatus.md" \
   "$CATDD_ROOT/.catdd/slashCommands/commands/Px-StatusKits/"
-cp "$REPO_ROOT/slashCommands/UT_slashCommandTemplate.md" "$CATDD_ROOT/.catdd/slashCommands/"
+cp "$REPO_ROOT/slashCommands/TEST_slashCommandTemplate.md" "$CATDD_ROOT/.catdd/slashCommands/"
 cp "$REPO_ROOT/methodPrompts/README.md" "$CATDD_ROOT/.catdd/methodPrompts/"
 
 "$GENERATOR" \
@@ -106,9 +106,9 @@ cp "$REPO_ROOT/methodPrompts/README.md" "$CATDD_ROOT/.catdd/methodPrompts/"
   --workspace-root "$CATDD_ROOT" \
   --prompts-output "$CATDD_PROMPTS_DIR" \
   --no-skills --clean >/dev/null
-grep -Fq 'Portable command path: .catdd/slashCommands/commands/Px-StatusKits/UT_showMeStatus.md' "$CATDD_PROMPTS_DIR/UT_showMeStatus.md" \
+grep -Fq 'Portable command path: .catdd/slashCommands/commands/Px-StatusKits/TEST_showMeStatus.md' "$CATDD_PROMPTS_DIR/TEST_showMeStatus.md" \
   || fail "installed-project prompt must reference the project-root .catdd command source"
-grep -Fq 'CaTDD method index: .catdd/methodPrompts/README.md' "$CATDD_PROMPTS_DIR/UT_showMeStatus.md" \
+grep -Fq 'CaTDD method index: .catdd/methodPrompts/README.md' "$CATDD_PROMPTS_DIR/TEST_showMeStatus.md" \
   || fail "installed-project prompt must reference the project-root .catdd method source"
 
 echo "[makeSlashCmd4Codex-test] PASSED: generated $skill_count Codex skills and $prompt_count Codex custom prompts"
