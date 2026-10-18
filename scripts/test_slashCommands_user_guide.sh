@@ -28,7 +28,7 @@ done
 
 grep -Fq 'scripts/installCaTDD.sh --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts' "$GUIDE" || fail "slashCommands user guide missing copy-exec Copilot install example"
 grep -Fq '.catdd/slashCommands/README_UserGuide.md' "$GUIDE" || fail "slashCommands user guide missing installed slashCommands path check"
-grep -Fq 'scripts/makeSlashCmd4Continue.sh --clean' "$GUIDE" || fail "slashCommands user guide missing Continue generation command"
+! grep -Eq 'makeSlashCmd4(Copilot|Continue|Codex|Cline)' "$GUIDE" || fail "slashCommands user guide references a removed generator"
 grep -Fq 'flows/P0-FuncTestsFlow.md' "$GUIDE" || fail "slashCommands user guide missing flow map"
 grep -Fq 'commands/P0-FuncTestsFlow/TEST_implTestCase.md' "$GUIDE" || fail "slashCommands user guide missing command map"
 grep -Fq '.catdd/spec/doingUS/' "$GUIDE" || fail "slashCommands user guide missing local SpecCoding artifact policy"
@@ -39,7 +39,7 @@ grep -Fq '## 使用者' "$GUIDE_ZH" || fail "Chinese slashCommands user guide mi
 grep -Fq '## Usage Example' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing copy-exec Usage Example section"
 grep -Fq 'scripts/installCaTDD.sh --targetDir "$TARGET_DIR" --targetCodeAgent Copilot --clean-prompts' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing copy-exec Copilot install example"
 grep -Fq '.catdd/slashCommands/README_UserGuide.md' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing installed slashCommands path check"
-grep -Fq 'scripts/makeSlashCmd4Continue.sh --clean' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing Continue generation command"
+! grep -Eq 'makeSlashCmd4(Copilot|Continue|Codex|Cline)' "$GUIDE_ZH" || fail "Chinese slashCommands user guide references a removed generator"
 grep -Fq 'flows/P0-FuncTestsFlow.md' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing flow map"
 
 grep -Fq '[slashCommands/README_UserGuide.md](slashCommands/README_UserGuide.md)' "$MAIN_GUIDE" || fail "main user guide missing slashCommands sub-user-guide link"

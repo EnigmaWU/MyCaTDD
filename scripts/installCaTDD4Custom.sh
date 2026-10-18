@@ -150,6 +150,84 @@ log_replace_or_new() {
   fi
 }
 
+rel_to_workspace() {
+  local path="$1"
+  if [[ "$path" == "$TARGET_DIR" ]]; then
+    printf '%s\n' "."
+  elif [[ "$path" == "$TARGET_DIR/"* ]]; then
+    printf '%s\n' "${path#$TARGET_DIR/}"
+  else
+    printf '%s\n' "$path"
+  fi
+}
+
+generate_custom_prompts() {
+  local source_dir="$CATDD_DIR/slashCommands/commands"
+  local slash_root="$CATDD_DIR/slashCommands"
+  local method_root="$CATDD_DIR/methodPrompts"
+  local source_file command_file command_name flow_name
+  local rel_source rel_method_index rel_slash_template rel_flow_docs rel_kit_docs
+  local output_file
+  local generated_count=0
+
+  if [[ "$CLEAN_PROMPTS" -eq 1 ]]; then
+    find "$CUSTOM_PROMPTS_DIR" -maxdepth 1 -type f \( -name 'UT_*.prompt' -o -name 'TEST_*.prompt' -o -name 'SPEC_*.prompt' -o -name 'HARNESS_*.prompt' \) -delete
+  fi
+
+  while IFS= read -r source_file; do
+    command_file="$(basename "$source_file")"
+    command_name="${command_file%.md}"
+    flow_name="$(basename "$(dirname "$source_file")")"
+    rel_source="$(rel_to_workspace "$source_file")"
+    rel_method_index="$(rel_to_workspace "$method_root/README.md")"
+    rel_slash_template="$(rel_to_workspace "$slash_root/TEST_slashCommandTemplate.md")"
+    rel_flow_docs="$(rel_to_workspace "$slash_root/flows")"
+    rel_kit_docs="$(rel_to_workspace "$slash_root/kits")"
+    output_file="$CUSTOM_PROMPTS_DIR/$command_name.prompt"
+
+    cat > "$output_file" <<PROMPT
+---
+name: $command_name
+description: Run CaTDD slash command $command_name
+---
+# $command_name
+
+You are running a Continue-native prompt wrapper around a portable CaTDD slash command.
+
+## Developer Input
+
+{{{ input }}}
+
+## Source Command
+
+- Portable command path: $rel_source
+- Flow or kit: $flow_name
+
+## Method Source of Truth
+
+- CaTDD method index: $rel_method_index
+- Slash command contract: $rel_slash_template
+- Flow docs: $rel_flow_docs
+- Kit docs: $rel_kit_docs
+
+## Execution Rules
+
+1. Read and follow the portable source command before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
+2. Treat this file as a thin Continue adapter; do not redefine CaTDD method semantics here.
+3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
+4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.
+5. Ask for missing product intent instead of inventing requirements.
+6. Report the next recommended slash command when the step finishes.
+
+ONE-MORE-THING: ask developer if something not sure
+PROMPT
+
+    generated_count=$((generated_count + 1))
+  done < <(find "$source_dir" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
+
+  echo "[installCaTDD4Custom] Generated $generated_count custom prompt wrappers in $(rel_to_workspace "$CUSTOM_PROMPTS_DIR")"
+}
+
 if [[ -e "$CUSTOM_ROOT_DIR" && ! -d "$CUSTOM_ROOT_DIR" ]]; then
   echo "[installCaTDD4Custom] Cannot create $CUSTOM_DIR/rules/catdd.md because $CUSTOM_DIR exists and is not a directory." >&2
   exit 1
@@ -255,17 +333,7 @@ This is a custom project rule installed by MyCaTDD. Use it when working with CaT
 ONE-MORE-THING: ask developer if something not sure
 RULES
 
-generator_args=(
-  --source-dir "$CATDD_DIR/slashCommands/commands"
-  --workspace-root "$TARGET_DIR"
-  --output "$CUSTOM_PROMPTS_DIR"
-)
-
-if [[ "$CLEAN_PROMPTS" -eq 1 ]]; then
-  generator_args+=(--clean)
-fi
-
-bash "$REPO_ROOT/scripts/makeSlashCmd4Continue.sh" "${generator_args[@]}"
+generate_custom_prompts
 
 echo "[installCaTDD4Custom] Installed CaTDD for custom adapter into $TARGET_DIR"
 echo "[installCaTDD4Custom] Method source: .catdd/methodPrompts"

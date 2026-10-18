@@ -85,25 +85,20 @@ err_out="$("$INSTALLER" --targetDir "$WORK" 2>&1)" || true
 grep -Fq 'Missing required --targetCodeAgent' <<< "$err_out" || fail "missing --targetCodeAgent not detected"
 
 echo "[installCaTDD-test] Test: unknown agent exits error"
-err_out="$("$INSTALLER" --targetDir "$WORK" --targetCodeAgent Foo 2>&1)" || true
-grep -Fq 'Unknown --targetCodeAgent' <<< "$err_out" || fail "unknown agent not detected"
+for unsupported_agent in Continue Cline Antigravity Codex; do
+  err_out="$("$INSTALLER" --targetDir "$WORK" --targetCodeAgent "$unsupported_agent" 2>&1)" || true
+  grep -Fq 'Unknown --targetCodeAgent' <<< "$err_out" || fail "unsupported agent not rejected: $unsupported_agent"
+done
 
-echo "[installCaTDD-test] Test: dryRunner"
-dry_output="$("$INSTALLER" --targetDir "$WORK/dry" --targetCodeAgent dryRunner 2>&1)"
-grep -Fq 'dryRunner' <<< "$dry_output" || fail "dryRunner missing dryRunner label"
-grep -Fq 'Copilot | Continue | Cline | Antigravity | Codex' <<< "$dry_output" || fail "dryRunner missing supported agents"
-
-echo "[installCaTDD-test] Test: --codex-prompts-dir requires the Codex agent"
+echo "[installCaTDD-test] Test: removed Codex-only option is rejected"
 err_out="$("$INSTALLER" --targetDir "$WORK" --targetCodeAgent Copilot --codex-prompts-dir "$WORK/prompts" 2>&1)" || true
-grep -Fq -e '--codex-prompts-dir requires --targetCodeAgent Codex' <<< "$err_out" || fail "--codex-prompts-dir without Codex not detected"
+grep -Fq 'Unknown argument: --codex-prompts-dir' <<< "$err_out" || fail "removed Codex option not rejected"
 
-echo "[installCaTDD-test] Test: per-agent fresh installs"
+echo "[installCaTDD-test] Test: Copilot fresh install"
 install_fresh() {
-  local agent="$1"
-  local dir="$WORK/fresh-$agent"
+  local dir="$WORK/fresh-Copilot"
   local marker
-  echo "[installCaTDD-test]   agent: $agent"
-  "$INSTALLER" --targetDir "$dir" --targetCodeAgent "$agent" --init --clean-prompts --yes >/dev/null 2>&1
+  "$INSTALLER" --targetDir "$dir" --targetCodeAgent Copilot --init --clean-prompts --yes >/dev/null 2>&1
   assert_file "$dir/.catdd/methodPrompts/README.md"
   assert_file "$dir/.catdd/slashCommands/TEST_slashCommandTemplate.md"
   assert_dir "$dir/.catdd/spec/pendingNews"
@@ -114,83 +109,28 @@ install_fresh() {
   marker="$dir/.catdd/CaTDD_INSTALL.md"
   grep -Eq '^- Installed version: ([0-9]{8}\.[0-9]{2}|unknown)$' "$marker" || fail "install marker missing version line"
 
-  case "$agent" in
-    Copilot)
-      assert_file "$dir/.github/instructions/catdd.instructions.md"
-      assert_contains "$dir/.github/instructions/catdd.instructions.md" '/HARNESS_evolveHarness'
-      assert_file "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md"
-      assert_file "$dir/.github/prompts/SPEC_openUserStory.prompt.md"
-      assert_file "$dir/.github/prompts/HARNESS_patchCaTDDSource.prompt.md"
-      assert_file "$dir/.github/prompts/HARNESS_verifyInstallation.prompt.md"
-      assert_file "$dir/.github/prompts/HARNESS_diagnoseInstallation.prompt.md"
-      assert_contains "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md" 'thin Copilot adapter'
-      source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
-      prompt_count="$(find "$dir/.github/prompts" -type f \( -name 'TEST_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) | wc -l | tr -d '[:space:]')"
-      [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count installed Copilot prompts, got $prompt_count"
-      ;;
-    Continue)
-      assert_file "$dir/.continue/rules/catdd.md"
-      assert_contains "$dir/.continue/rules/catdd.md" '.continue/prompts/TEST_*.prompt'
-      assert_contains "$dir/.continue/rules/catdd.md" '/HARNESS_evolveHarness'
-      assert_file "$dir/.continue/prompts/TEST_convertDemoToTypical.prompt"
-      assert_file "$dir/.continue/prompts/SPEC_openUserStory.prompt"
-      ;;
-    Cline)
-      assert_file "$dir/.clinerules/catdd.md"
-      assert_contains "$dir/.clinerules/catdd.md" '/HARNESS_evolveHarness'
-      assert_dir "$dir/.cline/skills"
-      ;;
-    Antigravity)
-      assert_file "$dir/.antigravityrules/catdd.md"
-      assert_contains "$dir/.antigravityrules/catdd.md" '/HARNESS_evolveHarness'
-      ;;
-    Codex)
-      assert_file "$dir/AGENTS.md"
-      assert_contains "$dir/AGENTS.md" 'BEGIN CaTDD Codex instructions'
-      assert_contains "$dir/AGENTS.md" '.agents/skills'
-      assert_contains "$dir/AGENTS.md" '/HARNESS_evolveHarness'
-      assert_file "$dir/.agents/skills/test-convert-demo-to-typical/SKILL.md"
-      assert_file "$dir/.agents/skills/spec-open-user-story/SKILL.md"
-      assert_file "$dir/.agents/skills/harness-patch-ca-tdd-source/SKILL.md"
-      assert_contains "$dir/.agents/skills/test-convert-demo-to-typical/SKILL.md" 'TEST_convertDemoToTypical'
-      assert_contains "$dir/.agents/skills/test-convert-demo-to-typical/SKILL.md" 'thin Codex Skill adapter'
-      codex_source_total="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
-      skill_count="$(find "$dir/.agents/skills" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d '[:space:]')"
-      [[ "$skill_count" == "$codex_source_total" ]] || fail "expected $codex_source_total installed Codex skills, got $skill_count"
-      assert_absent "$dir/.codex/prompts"
-      ;;
-  esac
+  assert_file "$dir/.github/instructions/catdd.instructions.md"
+  assert_contains "$dir/.github/instructions/catdd.instructions.md" '/HARNESS_evolveHarness'
+  assert_file "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md"
+  assert_file "$dir/.github/prompts/SPEC_openUserStory.prompt.md"
+  assert_file "$dir/.github/prompts/HARNESS_patchCaTDDSource.prompt.md"
+  assert_file "$dir/.github/prompts/HARNESS_verifyInstallation.prompt.md"
+  assert_file "$dir/.github/prompts/HARNESS_diagnoseInstallation.prompt.md"
+  assert_contains "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md" 'thin Copilot adapter'
+  assert_contains "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md" 'agent: "agent"'
+  assert_contains "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md" 'slashCommands/commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md'
+  assert_contains "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md" 'methodPrompts/README.md'
+  source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+  prompt_count="$(find "$dir/.github/prompts" -type f \( -name 'TEST_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) | wc -l | tr -d '[:space:]')"
+  [[ "$prompt_count" == "$source_count" ]] || fail "expected $source_count installed Copilot prompts, got $prompt_count"
 
-  replacement_output="$("$INSTALLER" --targetDir "$dir" --targetCodeAgent "$agent" --clean-prompts --yes 2>&1)"
+  replacement_output="$("$INSTALLER" --targetDir "$dir" --targetCodeAgent Copilot --clean-prompts --yes 2>&1)"
   grep -Fq '] version:' <<< "$replacement_output" || fail "installer missing version action output on reinstall"
   grep -Fq '(same version, replacement)' <<< "$replacement_output" || fail "reinstall should report same-version replacement"
   rm -rf "$dir"
 }
 
-for agent in Copilot Continue Cline Antigravity Codex; do
-  install_fresh "$agent"
-done
-
-echo "[installCaTDD-test] Test: Codex legacy custom prompts mode"
-CODEX_PROMPTS="$WORK/codex-home/prompts"
-CODEX_TARGET="$WORK/fresh-Codex-prompts"
-"$INSTALLER" --targetDir "$CODEX_TARGET" --targetCodeAgent Codex --init --clean-prompts \
-  --codex-prompts-dir "$CODEX_PROMPTS" --yes >/dev/null 2>&1
-codex_source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
-codex_prompt_count="$(find "$CODEX_PROMPTS" -maxdepth 1 -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
-[[ "$codex_prompt_count" == "$codex_source_count" ]] || fail "expected $codex_source_count Codex custom prompts, got $codex_prompt_count"
-assert_file "$CODEX_PROMPTS/TEST_convertDemoToTypical.md"
-assert_file "$CODEX_PROMPTS/HARNESS_patchCaTDDSource.md"
-assert_contains "$CODEX_PROMPTS/TEST_convertDemoToTypical.md" 'argument-hint:'
-assert_contains "$CODEX_PROMPTS/TEST_convertDemoToTypical.md" '$ARGUMENTS'
-assert_contains "$CODEX_PROMPTS/TEST_convertDemoToTypical.md" '.catdd/slashCommands/commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md'
-assert_file "$CODEX_TARGET/.agents/skills/test-convert-demo-to-typical/SKILL.md"
-
-echo "[installCaTDD-test] Test: Codex --codex-prompts-dir default resolves to the Codex home"
-CODEX_HOME_FAKE="$WORK/codex-home-default"
-CODEX_HOME="$CODEX_HOME_FAKE" "$INSTALLER" --targetDir "$WORK/fresh-Codex-home" --targetCodeAgent Codex --init \
-  --codex-prompts-dir default --yes >/dev/null 2>&1
-assert_file "$CODEX_HOME_FAKE/prompts/TEST_convertDemoToTypical.md"
+install_fresh
 
 echo "[installCaTDD-test] Test: GitHub/Copilot alias works"
 TARGET2="$WORK/alias"
@@ -283,4 +223,4 @@ assert_contains "$EV4" 'LEGACY-EVOLVED-TEST'
 "$INSTALLER" --targetDir "$S4" --targetCodeAgent Copilot --yes --force-overwrite >/dev/null 2>&1
 assert_not_contains "$EV4" 'LEGACY-EVOLVED-TEST'
 
-echo "[installCaTDD-test] PASSED: unified installer, per-agent assets, and patch-aware sync verified"
+echo "[installCaTDD-test] PASSED: Copilot installer and patch-aware sync verified"

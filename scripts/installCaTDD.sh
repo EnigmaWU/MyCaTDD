@@ -5,7 +5,6 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 TARGET_DIR=""
 TARGET_AGENT=""
-CODEX_PROMPTS_DIR=""
 CLEAN_PROMPTS=0
 INIT=0
 VERBOSE=0
@@ -16,7 +15,7 @@ usage() {
   cat <<'USAGE'
 Usage: scripts/installCaTDD.sh --targetDir DIR --targetCodeAgent AGENT [options]
 
-Install or refresh CaTDD methodPrompts, slashCommands, and CodeAgent-native
+Install or refresh CaTDD methodPrompts, slashCommands, and Copilot-native
 prompt wrappers into a target project.
 
 Refresh is patch-aware: target files updated after the previous install (for
@@ -33,13 +32,7 @@ them.
 
 Options:
   --targetDir DIR           Target project directory (alias: --target DIR).
-  --targetCodeAgent AGENT   Code agent to install for.
-                            Supported: Copilot | Continue | Cline | Antigravity | Codex | dryRunner
-  --codex-prompts-dir DIR   Codex only: also emit deprecated Codex custom prompts
-                            (/prompts:<Command>) into DIR. Use "default" to target
-                            $CODEX_HOME/prompts, that is ~/.codex/prompts.
-                            Codex reads custom prompts from the local Codex home only,
-                            so they are per-user, not shared through the repository.
+  --targetCodeAgent AGENT   Code agent to install for. Supported: Copilot.
   --clean-prompts           Remove and regenerate generated prompt wrappers.
   --init                    Create the target directory if it does not exist.
   --force-overwrite         Overwrite target-evolved files with canonical source.
@@ -59,11 +52,6 @@ while [[ $# -gt 0 ]]; do
     --targetCodeAgent)
       [[ $# -ge 2 ]] || { echo "[installCaTDD] --targetCodeAgent requires an agent name" >&2; exit 2; }
       TARGET_AGENT="$2"
-      shift 2
-      ;;
-    --codex-prompts-dir)
-      [[ $# -ge 2 ]] || { echo "[installCaTDD] --codex-prompts-dir requires a directory" >&2; exit 2; }
-      CODEX_PROMPTS_DIR="$2"
       shift 2
       ;;
     --clean-prompts)
@@ -108,46 +96,14 @@ if [[ -z "$TARGET_AGENT" ]]; then
   usage >&2
   exit 2
 fi
-if [[ -n "$CODEX_PROMPTS_DIR" && "$TARGET_AGENT" != "Codex" ]]; then
-  echo "[installCaTDD] --codex-prompts-dir requires --targetCodeAgent Codex" >&2
-  exit 2
-fi
-
-# Resolve the Codex custom prompt directory ("default" means the local Codex home).
-case "$CODEX_PROMPTS_DIR" in
-  "") ;;
-  default) CODEX_PROMPTS_DIR="${CODEX_HOME:-$HOME/.codex}/prompts" ;;
-  '~/'*) CODEX_PROMPTS_DIR="$HOME/${CODEX_PROMPTS_DIR#'~/'}" ;;
-esac
-
 # Map agent name to its install profile
 AGENT_LABEL=""
 case "$TARGET_AGENT" in
   Copilot|GitHub/Copilot)
     AGENT_LABEL="Copilot"
     ;;
-  Continue)
-    AGENT_LABEL="Continue"
-    ;;
-  Cline)
-    AGENT_LABEL="Cline"
-    ;;
-  Antigravity)
-    AGENT_LABEL="Antigravity"
-    ;;
-  Codex)
-    AGENT_LABEL="Codex"
-    ;;
-  dryRunner)
-    echo "[installCaTDD] dryRunner: requested agent = ${TARGET_AGENT}"
-    echo "[installCaTDD] dryRunner: targetDir        = ${TARGET_DIR}"
-    echo "[installCaTDD] dryRunner: would call        = scripts/installCaTDD.sh --targetDir <DIR> --targetCodeAgent <AGENT> [--clean-prompts] [--force-overwrite]"
-    echo "[installCaTDD] dryRunner: supported agents  = Copilot | Continue | Cline | Antigravity | Codex"
-    echo "[installCaTDD] dryRunner: custom agents     = scripts/installCaTDD4Custom.sh (separate entry point)"
-    exit 0
-    ;;
   *)
-    echo "[installCaTDD] Unknown --targetCodeAgent: $TARGET_AGENT. Supported: Copilot | Continue | Cline | Antigravity | Codex | dryRunner" >&2
+    echo "[installCaTDD] Unknown --targetCodeAgent: $TARGET_AGENT. Supported: Copilot" >&2
     exit 2
     ;;
 esac
@@ -273,79 +229,6 @@ update_spec_gitignore() {
 # END CaTDD SpecCoding local state
 GITIGNORE
   } > "$gitignore_file"
-
-  rm -f "$temp_file"
-}
-
-# Codex reads AGENTS.md as project guidance, so CaTDD guidance is written as a
-# managed block instead of overwriting a file the target project probably owns.
-update_codex_agents_md() {
-  local agents_file="$TARGET_DIR/AGENTS.md"
-  local temp_file
-  local agents_exists=0
-  temp_file="$(mktemp)"
-
-  if [[ -f "$agents_file" ]]; then
-    agents_exists=1
-    awk '
-      $0 == "<!-- BEGIN CaTDD Codex instructions -->" { skip = 1; next }
-      $0 == "<!-- END CaTDD Codex instructions -->" { skip = 0; next }
-      !skip { print }
-    ' "$agents_file" > "$temp_file"
-  else
-    : > "$temp_file"
-  fi
-
-  if [[ -s "$temp_file" ]]; then
-    perl -0pi -e 's/[ \t\r]*\n+\z/\n/' "$temp_file"
-  fi
-
-  if [[ "$agents_exists" -eq 1 ]]; then
-    log_install_operation patch "$agents_file"
-  else
-    log_install_operation new "$agents_file"
-  fi
-
-  {
-    if [[ -s "$temp_file" ]]; then
-      cat "$temp_file"
-      printf '\n'
-    fi
-    cat <<'AGENTSMD'
-<!-- BEGIN CaTDD Codex instructions -->
-## CaTDD Codex Instructions
-
-This managed block is installed by `scripts/installCaTDD.sh` from MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* commands.
-
-This block is the CaTDD-owned region and projects the rules recorded in `.catdd/spec/projectContext.md`; text outside these markers belongs to the project and is never rewritten by CaTDD.
-
-### Installed Sources
-
-- CaTDD method source: `.catdd/methodPrompts/`
-- Portable slash command source: `.catdd/slashCommands/`
-- Codex skill wrappers: `.agents/skills/` (invoke with `$test-*`, `$spec-*`, `$harness-*`, or from `/skills`)
-- SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
-- SpecCoding artifact workspace: `.catdd/spec/`
-- Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
-
-### Codex Behavior
-
-- Treat each Codex skill under `.agents/skills/` as a thin adapter over `.catdd/slashCommands/commands/`; read the portable command before acting.
-- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
-- Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Codex skill names are lowercase and hyphenated: `test-convert-demo-to-typical` adapts `TEST_convertDemoToTypical`.
-- When deprecated Codex custom prompts are installed, they invoke as `/prompts:<Command>` and require a Codex restart after each refresh.
-- Keep SpecCoding lifecycle state under `.catdd/spec/`.
-- Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
-- Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
-- Prefer explicit SpecFlow intake commands: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_analyzeIssue`, and `SPEC_analyzeFeature`.
-- After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_evolveHarness` with `evolution_mode=auto`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running `HARNESS_evolveHarness`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
-- Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
-
-ONE-MORE-THING: ask developer if something not sure
-<!-- END CaTDD Codex instructions -->
-AGENTSMD
-  } > "$agents_file"
 
   rm -f "$temp_file"
 }
@@ -704,15 +587,72 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
 INSTRUCTIONS
 
-    generator_args=(
-      --source-dir "$CATDD_DIR/slashCommands/commands"
-      --workspace-root "$TARGET_DIR"
-      --output "$PROMPTS_DIR"
-    )
     if [[ "$CLEAN_PROMPTS" -eq 1 ]]; then
-      generator_args+=(--clean)
+      find "$PROMPTS_DIR" -maxdepth 1 -type f \( -name 'UT_*.prompt.md' -o -name 'TEST_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) -delete
     fi
-    bash "$REPO_ROOT/scripts/makeSlashCmd4Copilot.sh" "${generator_args[@]}"
+
+    rel_to_workspace() {
+      local path="$1"
+      if [[ "$path" == "$TARGET_DIR" ]]; then
+        printf '%s\n' "."
+      elif [[ "$path" == "$TARGET_DIR/"* ]]; then
+        printf '%s\n' "${path#$TARGET_DIR/}"
+      else
+        printf '%s\n' "$path"
+      fi
+    }
+
+    generated_count=0
+    while IFS= read -r source_file; do
+      command_file="$(basename "$source_file")"
+      command_name="${command_file%.md}"
+      flow_name="$(basename "$(dirname "$source_file")")"
+      rel_source="$(rel_to_workspace "$source_file")"
+      rel_method_index="$(rel_to_workspace "$CATDD_DIR/methodPrompts/README.md")"
+      rel_slash_template="$(rel_to_workspace "$CATDD_DIR/slashCommands/TEST_slashCommandTemplate.md")"
+      rel_flow_docs="$(rel_to_workspace "$CATDD_DIR/slashCommands/flows")"
+      rel_kit_docs="$(rel_to_workspace "$CATDD_DIR/slashCommands/kits")"
+      output_file="$PROMPTS_DIR/$command_name.prompt.md"
+
+      cat > "$output_file" <<PROMPT
+---
+description: "Run CaTDD slash command $command_name"
+agent: "agent"
+argument-hint: "Fill required command inputs, source files, target files, language, and test framework"
+---
+# $command_name
+
+You are running a Copilot-native wrapper around a portable CaTDD slash command.
+
+## Source Command
+
+- Portable command path: $rel_source
+- Default workspace link: [$rel_source](../../$rel_source)
+- Flow or kit: $flow_name
+
+## Method Source of Truth
+
+- CaTDD method index: [$rel_method_index](../../$rel_method_index)
+- Slash command contract: [$rel_slash_template](../../$rel_slash_template)
+- Flow docs: [$rel_flow_docs](../../$rel_flow_docs)
+- Kit docs: [$rel_kit_docs](../../$rel_kit_docs)
+
+## Execution Rules
+
+1. Read and follow the portable source command before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
+2. Treat this file as a thin Copilot adapter; do not redefine CaTDD method semantics here.
+3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
+4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.
+5. Ask for missing product intent instead of inventing requirements.
+6. Report the next recommended slash command when the step finishes.
+
+ONE-MORE-THING: ask developer if something not sure
+PROMPT
+
+      generated_count=$((generated_count + 1))
+    done < <(find "$CATDD_DIR/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
+
+    echo "[${LOG_TAG}] Generated $generated_count Copilot prompt wrappers in .github/prompts"
 
     echo "[${LOG_TAG}] Installed CaTDD for Copilot into $TARGET_DIR"
     echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
@@ -721,196 +661,4 @@ INSTRUCTIONS
     echo "[${LOG_TAG}] Copilot prompts: .github/prompts"
     ;;
 
-  Continue)
-    CONTINUE_RULES_DIR="$TARGET_DIR/.continue/rules"
-    CONTINUE_PROMPTS_DIR="$TARGET_DIR/.continue/prompts"
-    mkdir -p "$CONTINUE_RULES_DIR" "$CONTINUE_PROMPTS_DIR"
-
-    log_replace_or_new "$CONTINUE_RULES_DIR/catdd.md"
-    cat > "$CONTINUE_RULES_DIR/catdd.md" <<'RULES'
-# CaTDD Continue Project Rule
-
-This is a Continue project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* commands.
-
-## Installed Sources
-
-- CaTDD method source: `.catdd/methodPrompts/`
-- Portable slash command source: `.catdd/slashCommands/`
-- Continue prompt wrappers: `.continue/prompts/TEST_*.prompt`, `.continue/prompts/SPEC_*.prompt`, and `.continue/prompts/HARNESS_*.prompt`
-- SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
-- SpecCoding artifact workspace: `.catdd/spec/`
-- Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
-
-## Continue Behavior
-
-- Treat this file as a thin Continue adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
-- Use `.continue/prompts/` for triggerable TEST_*, SPEC_*, and HARNESS_* prompt wrappers.
-- Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Use `.catdd/slashCommands/commands/` for TEST_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
-- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
-- Keep SpecCoding lifecycle state under `.catdd/spec/`.
-- Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
-- Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
-- Prefer explicit SpecFlow intake commands: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_analyzeIssue`, and `SPEC_analyzeFeature`.
-- After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_evolveHarness` with `evolution_mode=auto`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running `HARNESS_evolveHarness`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
-- Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
-
-ONE-MORE-THING: ask developer if something not sure
-RULES
-
-    generator_args=(
-      --source-dir "$CATDD_DIR/slashCommands/commands"
-      --workspace-root "$TARGET_DIR"
-      --output "$CONTINUE_PROMPTS_DIR"
-    )
-    if [[ "$CLEAN_PROMPTS" -eq 1 ]]; then
-      generator_args+=(--clean)
-    fi
-    bash "$REPO_ROOT/scripts/makeSlashCmd4Continue.sh" "${generator_args[@]}"
-
-    echo "[${LOG_TAG}] Installed CaTDD for Continue into $TARGET_DIR"
-    echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
-    echo "[${LOG_TAG}] Slash command source: .catdd/slashCommands"
-    echo "[${LOG_TAG}] SpecCoding artifacts: .catdd/spec"
-    echo "[${LOG_TAG}] Continue rule: .continue/rules/catdd.md"
-    echo "[${LOG_TAG}] Continue prompts: .continue/prompts"
-    ;;
-
-  Cline)
-    CLINE_RULES_DIR="$TARGET_DIR/.clinerules"
-    CLINE_SKILLS_DIR="$TARGET_DIR/.cline/skills"
-    if [[ -e "$CLINE_RULES_DIR" && ! -d "$CLINE_RULES_DIR" ]]; then
-      echo "[${LOG_TAG}] Cannot create .clinerules/catdd.md because .clinerules exists and is not a directory." >&2
-      exit 1
-    fi
-    mkdir -p "$CLINE_RULES_DIR" "$CLINE_SKILLS_DIR"
-
-    log_replace_or_new "$CLINE_RULES_DIR/catdd.md"
-    cat > "$CLINE_RULES_DIR/catdd.md" <<'RULES'
-# CaTDD Cline Project Rule
-
-This is a Cline project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* commands.
-
-## Installed Sources
-
-- CaTDD method source: `.catdd/methodPrompts/`
-- Portable slash command source: `.catdd/slashCommands/`
-- SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
-- SpecCoding artifact workspace: `.catdd/spec/`
-- Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
-
-## Cline Behavior
-
-- Treat this file as a thin Cline adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
-- Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Use `.catdd/slashCommands/commands/` for TEST_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
-- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
-- Keep SpecCoding lifecycle state under `.catdd/spec/`.
-- Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
-- Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
-- Prefer explicit SpecFlow intake commands: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_analyzeIssue`, and `SPEC_analyzeFeature`.
-- After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_evolveHarness` with `evolution_mode=auto`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running `HARNESS_evolveHarness`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
-- Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
-
-ONE-MORE-THING: ask developer if something not sure
-RULES
-
-    generator_args=(
-      --source-dir "$CATDD_DIR/slashCommands/commands"
-      --workspace-root "$TARGET_DIR"
-      --output "$CLINE_SKILLS_DIR"
-    )
-    if [[ "$CLEAN_PROMPTS" -eq 1 ]]; then
-      generator_args+=(--clean)
-    fi
-    bash "$REPO_ROOT/scripts/makeSlashCmd4Cline.sh" "${generator_args[@]}"
-
-    echo "[${LOG_TAG}] Installed CaTDD for Cline into $TARGET_DIR"
-    echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
-    echo "[${LOG_TAG}] Slash command source: .catdd/slashCommands"
-    echo "[${LOG_TAG}] SpecCoding artifacts: .catdd/spec"
-    echo "[${LOG_TAG}] Cline rule: .clinerules/catdd.md"
-    echo "[${LOG_TAG}] Cline skills: .cline/skills"
-    ;;
-
-  Antigravity)
-    ANTIGRAVITY_RULES_DIR="$TARGET_DIR/.antigravityrules"
-    if [[ -e "$ANTIGRAVITY_RULES_DIR" && ! -d "$ANTIGRAVITY_RULES_DIR" ]]; then
-      echo "[${LOG_TAG}] Cannot create .antigravityrules/catdd.md because .antigravityrules exists and is not a directory." >&2
-      exit 1
-    fi
-    mkdir -p "$ANTIGRAVITY_RULES_DIR"
-
-    log_replace_or_new "$ANTIGRAVITY_RULES_DIR/catdd.md"
-    cat > "$ANTIGRAVITY_RULES_DIR/catdd.md" <<'RULES'
-# CaTDD Antigravity Project Rule
-
-This is an Antigravity project rule installed by MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* commands.
-
-## Installed Sources
-
-- CaTDD method source: `.catdd/methodPrompts/`
-- Portable slash command source: `.catdd/slashCommands/`
-- SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
-- SpecCoding artifact workspace: `.catdd/spec/`
-- Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
-
-## Antigravity Behavior
-
-- Treat this file as a thin Antigravity adapter over `.catdd/methodPrompts/` and `.catdd/slashCommands/`.
-- Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
-- Use `.catdd/slashCommands/commands/` for TEST_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
-- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
-- Keep SpecCoding lifecycle state under `.catdd/spec/`.
-- Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
-- Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
-- Prefer explicit SpecFlow intake commands: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_analyzeIssue`, and `SPEC_analyzeFeature`.
-- After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_evolveHarness` with `evolution_mode=auto`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running `HARNESS_evolveHarness`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
-- Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
-
-ONE-MORE-THING: ask developer if something not sure
-RULES
-
-    echo "[${LOG_TAG}] Installed CaTDD for Antigravity into $TARGET_DIR"
-    echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
-    echo "[${LOG_TAG}] Slash command source: .catdd/slashCommands"
-    echo "[${LOG_TAG}] SpecCoding artifacts: .catdd/spec"
-    echo "[${LOG_TAG}] Antigravity rule: .antigravityrules/catdd.md"
-    ;;
-
-  Codex)
-    CODEX_SKILLS_DIR="$TARGET_DIR/.agents/skills"
-    if [[ -e "$CODEX_SKILLS_DIR" && ! -d "$CODEX_SKILLS_DIR" ]]; then
-      echo "[${LOG_TAG}] Cannot create .agents/skills because .agents/skills exists and is not a directory." >&2
-      exit 1
-    fi
-    log_replace_or_new "$CODEX_SKILLS_DIR"
-    mkdir -p "$CODEX_SKILLS_DIR"
-
-    update_codex_agents_md
-
-    generator_args=(
-      --source-dir "$CATDD_DIR/slashCommands/commands"
-      --workspace-root "$TARGET_DIR"
-      --output "$CODEX_SKILLS_DIR"
-    )
-    if [[ "$CLEAN_PROMPTS" -eq 1 ]]; then
-      generator_args+=(--clean)
-    fi
-    if [[ -n "$CODEX_PROMPTS_DIR" ]]; then
-      generator_args+=(--prompts-output "$CODEX_PROMPTS_DIR")
-    fi
-    bash "$REPO_ROOT/scripts/makeSlashCmd4Codex.sh" "${generator_args[@]}"
-
-    echo "[${LOG_TAG}] Installed CaTDD for Codex into $TARGET_DIR"
-    echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
-    echo "[${LOG_TAG}] Slash command source: .catdd/slashCommands"
-    echo "[${LOG_TAG}] SpecCoding artifacts: .catdd/spec"
-    echo "[${LOG_TAG}] Codex instructions: AGENTS.md (managed CaTDD block)"
-    echo "[${LOG_TAG}] Codex skills: .agents/skills"
-    if [[ -n "$CODEX_PROMPTS_DIR" ]]; then
-      echo "[${LOG_TAG}] Codex custom prompts (deprecated): $CODEX_PROMPTS_DIR"
-      echo "[${LOG_TAG}] Restart Codex to load /prompts:<Command> entries."
-    fi
-    ;;
 esac

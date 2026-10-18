@@ -30,7 +30,7 @@ After self-install with `scripts/installCaTDD.sh --targetDir "$PWD" --targetCode
 - `.catdd/methodPrompts/` contains installed CaTDD method source for target-project usage.
 - `.catdd/slashCommands/` contains installed portable flow-command source.
 - `.catdd/spec/` contains SpecCoding lifecycle artifacts.
-- `.github/prompts/UT_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` are generated Copilot adapters and are gitignored in this source repo.
+- `.github/prompts/TEST_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, and `.github/prompts/HARNESS_*.prompt.md` are generated Copilot adapters and are gitignored in this source repo.
 - `.github/instructions/catdd.instructions.md` is a tracked team-shared instruction that points Copilot agents at the installed `.catdd/` assets.
 
 ## Stable Conventions
@@ -87,7 +87,6 @@ Use these commands as the default validation surface for documentation and comma
 bash scripts/check_readme_mirror.sh
 bash scripts/test_documentation_contract.sh
 bash scripts/test_slashcommands_complete.sh
-bash scripts/test_makeSlashCmd4Copilot.sh
 bash scripts/test_installCaTDD.sh
 ```
 

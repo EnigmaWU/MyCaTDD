@@ -125,21 +125,6 @@ For a new target directory, add `--init`:
 scripts/installCaTDD.sh --targetDir /path/to/new-project --targetCodeAgent Copilot --init --clean-prompts
 ```
 
-Install or refresh CaTDD into Continue, Cline, Antigravity, or Codex projects by selecting the agent:
-
-```bash
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex
-```
-
-Codex skills are the supported, repository-shareable surface. Add the deprecated Codex custom-prompt surface when you want exact `/prompts:<Command>` names:
-
-```bash
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex --codex-prompts-dir default
-```
-
 Add `--clean-prompts` when you want to remove old generated prompt wrappers before regenerating them.
 
 Refresh is patch-aware: files evolved in the target after install are kept and never silently overwritten. Disjoint upstream and target edits are three-way merged, overlapping edits keep the target and are reported, and `--force-overwrite` restores canonical source for all managed files.
@@ -152,19 +137,11 @@ The installer creates or refreshes these target-project assets:
 - `.catdd/slashCommands/`: installed portable flow-command source for automation.
 - `.github/prompts/TEST_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md`: Copilot-native thin adapters generated from `slashCommands`.
 - `.github/instructions/catdd.instructions.md`: Copilot instruction file that points agents back to `.catdd/`.
-- `.continue/rules/catdd.md`: Continue project rule that points agents back to `.catdd/`.
-- `.continue/prompts/TEST_*.prompt` and `.continue/prompts/SPEC_*.prompt`: Continue-native thin prompt adapters generated from `slashCommands`.
-- `.clinerules/catdd.md`: Cline project rule that points agents back to `.catdd/`.
-- `.cline/skills/`: Cline slash-command skill adapters generated from `slashCommands`.
-- `.antigravityrules/catdd.md`: Antigravity project rule that points agents back to `.catdd/`.
-- `AGENTS.md`: Codex instructions, written as a managed `CaTDD Codex instructions` block so existing project guidance is preserved.
-- `.agents/skills/`: Codex skill adapters generated from `slashCommands`, invoked as `$test-*`, `$spec-*`, and `$harness-*` or from `/skills`.
-- `<codex-prompts-dir>/`: optional deprecated Codex custom prompts invoked as `/prompts:<Command>`; use `default` for `$CODEX_HOME/prompts`, that is `~/.codex/prompts`. Codex reads custom prompts from the local Codex home only, so this surface is per-user, not shared through the repository.
 - `.catdd/CaTDD_INSTALL.manifest` and `.catdd/.install-baseline/`: patch-aware refresh state used to detect and merge target-evolved files. Local `<Name>Evolved.md` overlays are deliberately not tracked here and survive refresh.
 
-In this source repository, generated `.github/prompts/TEST_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, `.continue/rules/catdd.md`, `.continue/prompts/TEST_*.prompt`, `.continue/prompts/SPEC_*.prompt`, `.clinerules/catdd.md`, `.antigravityrules/catdd.md`, `.agents/skills/`, and `.codex/prompts/` files are temporary adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
+The standard installer supports Copilot. Use `scripts/installCaTDD4Custom.sh` when you need its separate custom adapter workflow.
 
-Codex skill names accept lowercase letters, numbers, and hyphens only, so `TEST_convertDemoToTypical` installs as `$test-convert-demo-to-typical`; the canonical command name stays in each wrapper description and body.
+In this source repository, generated `.github/prompts/TEST_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` files are temporary Copilot adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
 
 ## Quick Start
 

@@ -10,7 +10,7 @@
 
 - 想通过可触发 prompt command 运行 CaTDD，而不是反复编写长聊天提示词的开发者。
 - 需要可移植命令文件和清晰下一步流程顺序的 CodeAgent。
-- 将 CaTDD 安装到 Copilot、Continue、Cline、Antigravity 或 Codex 目标项目的维护者。
+- 将 CaTDD 安装到 Copilot 目标项目，或使用独立自定义适配器安装器的维护者。
 - 为其他 assistant 或 CLI 包装可移植 CaTDD 命令的工具作者。
 
 ## 内容
@@ -25,7 +25,7 @@
 
 - 想使用结构化 SpecCoding，而不是自由对话式 VibeCoding。
 - 某个 CaTDD 方法步骤已经足够稳定，可以成为可重复命令。
-- 想让 Copilot、Continue、Cline、Codex 或其他助手暴露同一份可移植命令意图。
+- 想让 Copilot 或使用可移植命令文件的其他助手暴露同一份命令意图。
 - 正在转换 demo tests、设计骨架、审查骨架、选择下一个 TC、实现 TC 或审查实现。
 - 正在运行 Px SpecFlow 生命周期，从项目上下文和 work item 推进到完成审查的 story。
 
@@ -62,11 +62,6 @@ slashCommands/
 .github/prompts/TEST_*.prompt.md
 .github/prompts/SPEC_*.prompt.md
 .github/prompts/HARNESS_*.prompt.md
-.continue/rules/catdd.md
-.continue/prompts/TEST_*.prompt
-.continue/prompts/SPEC_*.prompt
-.continue/prompts/HARNESS_*.prompt
-.clinerules/catdd.md
 ```
 
 ## 原因
@@ -82,7 +77,7 @@ slashCommands/
 1. 阅读 [README.md](README.md)，理解 WHAT/WHY 层契约。
 2. 从下面的流程与工具包地图中选择一个流程或工具包。
 3. 阅读流程或工具包文档，理解命令顺序、命令族和预期交接。
-4. 如果在目标项目使用，先用对应 CodeAgent 的安装脚本安装 CaTDD。
+4. 如果在目标项目使用，先用 Copilot 安装器或独立自定义适配器安装器安装 CaTDD。
 5. 触发生成的原生 prompt 包装，或把可移植命令文件粘贴给助手。
 6. 让每条命令只更新它在当前步骤负责的产物。
 7. 保留 US/AC/TC 注释、分类标签、优先级关卡和 TC 状态标记。
@@ -120,72 +115,17 @@ echo "$TARGET_DIR"
 
 ## 原生适配生成
 
-从可移植 `SPEC_*`、`TEST_*` 与 `HARNESS_*` 命令文件生成 Copilot 原生包装：
-
-```bash
-scripts/makeSlashCmd4Copilot.sh --clean
-```
-
-验证 Copilot 生成器：
-
-```bash
-bash scripts/test_makeSlashCmd4Copilot.sh
-```
-
-安装或刷新 CaTDD 到另一个已启用 Copilot 的项目：
+标准安装器仅支持 Copilot，并从可移植的 `SPEC_*`、`TEST_*` 与 `HARNESS_*` 命令文件生成原生包装：
 
 ```bash
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot --clean-prompts
 ```
 
-生成 Continue 原生包装：
+需要 Continue 格式的 prompt 包装时，请使用独立的自定义适配器安装器：
 
 ```bash
-scripts/makeSlashCmd4Continue.sh --clean
-```
-
-生成 Codex 原生包装：
-
-```bash
-scripts/makeSlashCmd4Codex.sh --clean
-```
-
-为项目安装 Codex custom prompts（`/prompts:<Command>`），同时保持每条 prompt 只是项目自身 `.catdd` 源的轻量适配器：
-
-```bash
-scripts/installCaTDD.sh --targetDir "$PWD" --targetCodeAgent Codex \
-  --codex-prompts-dir default --clean-prompts --yes
-```
-
-`default` 表示 `$CODEX_HOME/prompts`，即 `~/.codex/prompts`。生成的 prompt 文件不包含 CaTDD 方法正文：每条只声明规范命令名，并指向项目根目录的 `.catdd/slashCommands/commands/<group>/<Command>.md`，因此项目的 `.catdd` 始终是唯一真理源。Codex custom prompts 属于本机用户级资产，不通过仓库共享，生成后需要重启 Codex。
-
-只刷新已安装项目的 prompts、不改写目标项目时：
-
-```bash
-scripts/makeSlashCmd4Codex.sh \
-  --source-dir "$PWD/.catdd/slashCommands/commands" \
-  --workspace-root "$PWD" \
-  --prompts-output "$HOME/.codex/prompts" \
-  --no-skills --clean
-```
-
-第二种方式要求项目的 `.catdd/slashCommands/commands/` 已包含可移植源；当上游新增命令时，请先刷新安装。
-
-安装或刷新 CaTDD 到 Continue、Cline、Antigravity 或 Codex 项目：
-
-```bash
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex
-```
-
-验证安装器和生成器行为：
-
-```bash
-bash scripts/test_installCaTDD.sh
-bash scripts/test_makeSlashCmd4Continue.sh
-bash scripts/test_makeSlashCmd4Codex.sh
+scripts/installCaTDD4Custom.sh --target /path/to/project --clean-prompts --yes
+bash scripts/test_installCaTDD4Custom.sh
 ```
 
 ## SpecCoding 产物策略
@@ -197,7 +137,7 @@ bash scripts/test_makeSlashCmd4Codex.sh
 - 团队共享生命周期状态位于 `.catdd/spec/` 并应提交：`.catdd/spec/doingUS/`、`.catdd/spec/suspendUS/`、`.catdd/spec/abortUS/` 及其他生命周期目录。
 - 团队共享的 `README*` SPEC 文档位于项目根目录并应提交。
 - 本地过程追踪保持 gitignore：`.catdd/spec/WorkingProcessLog.md`。
-- `AGENTS.md` 及其目录级 override 由 `SPEC_initProjectContext` 记录、由 `SPEC_updateProjectContext` 对齐。归属按区域划分：CaTDD 受管标记之间归 CaTDD 所有且可重新生成，其余归项目所有，绝不重写。早于 CaTDD 存在的文件被遵循；由 CaTDD 创建的被掌管。`AGENTS.md` 只拥有操作约定，绝不拥有方法语义、门禁或项目事实。`.clinerules/catdd.md` 等安装器生成的适配文件会被整体重写，不在该模型范围内。
+- `AGENTS.md` 及其目录级 override 由 `SPEC_initProjectContext` 记录、由 `SPEC_updateProjectContext` 对齐。归属按区域划分：CaTDD 受管标记之间归 CaTDD 所有且可重新生成，其余归项目所有，绝不重写。早于 CaTDD 存在的文件被遵循；由 CaTDD 创建的被掌管。`AGENTS.md` 只拥有操作约定，绝不拥有方法语义、门禁或项目事实。`.github/instructions/catdd.instructions.md` 等安装器生成的适配文件会被整体重写，不在该模型范围内。
 - 若本指南与细节策略出现差异，以 [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) 的详细生命周期规则为准。
 
 ## 流程与工具包地图

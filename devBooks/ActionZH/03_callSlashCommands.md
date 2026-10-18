@@ -876,7 +876,7 @@ Slash 命令根据不同的 CodeAgent 以不同方式调用：
 /UT_designTypicalSkeleton
 ```
 
-Copilot 提示词包装器（由 `scripts/makeSlashCmd4Copilot.sh` 生成）将可移植的 Markdown 命令适配为 Copilot 的提示词格式。开发者输入 slash 命令，Copilot 读取适配后的提示词，并执行契约。
+Copilot 安装器会从可移植 Markdown 命令生成提示词包装，并放入 `.github/prompts/`。开发者输入 slash 命令，Copilot 读取适配后的提示词，并执行契约。
 
 ### 在 Cline/Continue 中
 

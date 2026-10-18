@@ -10,7 +10,7 @@ Use this guide if you are one of these readers:
 
 - A developer who wants to run CaTDD through triggerable prompt commands instead of long manual chat prompts.
 - A CodeAgent that needs portable command files and clear next-step flow order.
-- A maintainer installing CaTDD into a Copilot, Continue, Cline, Antigravity, or Codex target project.
+- A maintainer installing CaTDD into a Copilot target project or using the separate custom adapter installer.
 - A tooling author wrapping portable CaTDD commands for another assistant or CLI.
 
 ## What
@@ -25,7 +25,7 @@ Use `slashCommands/` when:
 
 - You want structured SpecCoding instead of free-form VibeCoding.
 - A CaTDD method step is stable enough to become a repeatable command.
-- You want Copilot, Continue, Cline, Codex, or another assistant to expose the same portable command intent.
+- You want Copilot or another assistant using the portable command files to expose the same command intent.
 - You are converting demo tests, designing skeletons, reviewing skeletons, selecting the next TC, implementing a TC, or reviewing an implementation.
 - You are running the Px SpecFlow lifecycle from project context and work item to reviewed story completion.
 
@@ -62,11 +62,6 @@ Native adapter outputs live in tool-specific locations:
 .github/prompts/TEST_*.prompt.md
 .github/prompts/SPEC_*.prompt.md
 .github/prompts/HARNESS_*.prompt.md
-.continue/rules/catdd.md
-.continue/prompts/TEST_*.prompt
-.continue/prompts/SPEC_*.prompt
-.continue/prompts/HARNESS_*.prompt
-.clinerules/catdd.md
 ```
 
 ## Why
@@ -82,7 +77,7 @@ Follow this workflow when using `slashCommands/`.
 1. Read [README](README.md) for the WHAT/WHY layer contract.
 2. Choose a flow or kit from the Flow and Kit Map below.
 3. Read the flow or kit document to understand the command order, command families, and expected handoff.
-4. If using a target project, install CaTDD with the adapter script for your CodeAgent.
+4. If using a target project, install CaTDD with the Copilot installer or the separate custom adapter installer.
 5. Trigger the generated native prompt wrapper, or paste the portable command file into your assistant.
 6. Let the command update only the artifact it owns for that step.
 7. Preserve US/AC/TC comments, category labels, priority gates, and TC status markers.
@@ -120,72 +115,17 @@ Expected result:
 
 ## Native Adapter Generation
 
-Generate Copilot-native wrappers from portable `SPEC_*`, `TEST_*`, and `HARNESS_*` command files:
-
-```bash
-scripts/makeSlashCmd4Copilot.sh --clean
-```
-
-Validate the Copilot generator:
-
-```bash
-bash scripts/test_makeSlashCmd4Copilot.sh
-```
-
-Install or refresh CaTDD into another Copilot-enabled project:
+The standard installer supports Copilot and generates native wrappers from portable `SPEC_*`, `TEST_*`, and `HARNESS_*` command files:
 
 ```bash
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot --clean-prompts
 ```
 
-Generate Continue-native wrappers:
+Use the separate custom adapter installer when you need its Continue-format prompt wrappers:
 
 ```bash
-scripts/makeSlashCmd4Continue.sh --clean
-```
-
-Generate Codex-native wrappers:
-
-```bash
-scripts/makeSlashCmd4Codex.sh --clean
-```
-
-Install Codex custom prompts (`/prompts:<Command>`) for a project, keeping every prompt a thin adapter over that project's own `.catdd` source:
-
-```bash
-scripts/installCaTDD.sh --targetDir "$PWD" --targetCodeAgent Codex \
-  --codex-prompts-dir default --clean-prompts --yes
-```
-
-`default` means `$CODEX_HOME/prompts`, that is `~/.codex/prompts`. The generated prompt files carry no CaTDD method text: each one names the canonical command and points at `.catdd/slashCommands/commands/<group>/<Command>.md` in the project root, so the project's `.catdd` stays the single source of truth. Codex custom prompts are per-user and are not shared through the repository, so restart Codex after generating them.
-
-To refresh only the prompts for an already-installed project, without rewriting the target project:
-
-```bash
-scripts/makeSlashCmd4Codex.sh \
-  --source-dir "$PWD/.catdd/slashCommands/commands" \
-  --workspace-root "$PWD" \
-  --prompts-output "$HOME/.codex/prompts" \
-  --no-skills --clean
-```
-
-This second form requires the project's `.catdd/slashCommands/commands/` to already contain the portable source, so refresh the install first when new commands were added upstream.
-
-Install or refresh CaTDD into Continue, Cline, Antigravity, or Codex projects:
-
-```bash
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Continue
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Cline
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Antigravity
-scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex
-```
-
-Validate installer and generator behavior:
-
-```bash
-bash scripts/test_installCaTDD.sh
-bash scripts/test_makeSlashCmd4Continue.sh
-bash scripts/test_makeSlashCmd4Codex.sh
+scripts/installCaTDD4Custom.sh --target /path/to/project --clean-prompts --yes
+bash scripts/test_installCaTDD4Custom.sh
 ```
 
 ## SpecCoding Artifact Policy
@@ -197,7 +137,7 @@ Quick rules:
 - Team-shared lifecycle state lives under `.catdd/spec/` and should be committed: `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, and other lifecycle directories.
 - Team-shared `README*` SPEC docs live in the project root and should be committed.
 - Local process trace stays gitignored: `.catdd/spec/WorkingProcessLog.md`.
-- `AGENTS.md` and its directory overrides are recorded by `SPEC_initProjectContext` and reconciled by `SPEC_updateProjectContext`. Ownership follows the region: the CaTDD-managed markers belong to CaTDD and are regenerable, everything else belongs to the project and is never rewritten. A file that existed before CaTDD is followed; one CaTDD created is mastered. `AGENTS.md` owns operating conventions only, never method semantics, gates, or project facts. The installer-generated adapters such as `.clinerules/catdd.md` are rewritten wholesale and stay out of this model.
+- `AGENTS.md` and its directory overrides are recorded by `SPEC_initProjectContext` and reconciled by `SPEC_updateProjectContext`. Ownership follows the region: the CaTDD-managed markers belong to CaTDD and are regenerable, everything else belongs to the project and is never rewritten. A file that existed before CaTDD is followed; one CaTDD created is mastered. `AGENTS.md` owns operating conventions only, never method semantics, gates, or project facts. Installer-generated adapters such as `.github/instructions/catdd.instructions.md` are rewritten wholesale and stay out of this model.
 - If policy details and this guide ever diverge, follow [Px-SpecFlow](flows/Px-SpecFlow.md) as the source of detailed lifecycle rules.
 
 ## Flow and Kit Map
