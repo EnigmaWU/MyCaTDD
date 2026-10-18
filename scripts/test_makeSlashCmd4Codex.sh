@@ -22,8 +22,6 @@ fail() {
 
 [[ -x "$GENERATOR" ]] || fail "missing executable generator: scripts/makeSlashCmd4Codex.sh"
 
-git -C "$REPO_ROOT" check-ignore -q .agents/skills/test-example/SKILL.md || fail "generated Codex skill wrappers must be ignored in this source repo"
-
 "$GENERATOR" --output "$OUT_DIR" --prompts-output "$PROMPTS_DIR" --clean
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"

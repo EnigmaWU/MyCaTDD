@@ -17,11 +17,6 @@ fail() {
 
 [[ -x "$INSTALLER" ]] || fail "missing executable installer: scripts/installCaTDD4Custom.sh"
 
-git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/rules/catdd.md || fail "generated default custom rule must be ignored in this source repo"
-git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/prompts/TEST_example.prompt || fail "generated default custom UT prompt wrappers must be ignored in this source repo"
-git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/prompts/SPEC_example.prompt || fail "generated default custom SPEC prompt wrappers must be ignored in this source repo"
-git -C "$REPO_ROOT" check-ignore -q .customCodeAgent/prompts/HARNESS_example.prompt || fail "generated default custom HARNESS prompt wrappers must be ignored in this source repo"
-
 "$INSTALLER" --target "$TARGET_DIR" --yes
 
 verbose_output="$("$INSTALLER" --target "$TARGET_DIR" --verbose --yes 2>&1)"

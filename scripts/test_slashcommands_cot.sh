@@ -19,7 +19,7 @@ fail() {
 }
 
 for dir in "${COMMAND_DIRS[@]}"; do
-  for file in "$REPO_ROOT/$dir"/{SPEC,HARNESS,UT}_*.md; do
+  for file in "$REPO_ROOT/$dir"/{SPEC,HARNESS,TEST}_*.md; do
     [[ -f "$file" ]] || continue
     rel="${file#"$REPO_ROOT"/}"
 

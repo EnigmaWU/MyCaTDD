@@ -37,6 +37,42 @@ assert_not_contains() {
 
 [[ -x "$INSTALLER" ]] || fail "missing executable installer: scripts/installCaTDD.sh"
 
+echo "[installCaTDD-test] Test: renamed commands migrate local edits and overlays"
+OLD_SOURCE="$WORK/old-source"
+mkdir -p "$OLD_SOURCE"
+cp -R "$REPO_ROOT/methodPrompts" "$OLD_SOURCE/"
+cp -R "$REPO_ROOT/slashCommands" "$OLD_SOURCE/"
+rm -f \
+  "$OLD_SOURCE/slashCommands/commands/Px-SpecFlow/SPEC_designUnitTests.md" \
+  "$OLD_SOURCE/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTests.md"
+for name in design impl refact reviewImpl; do
+  mv "$OLD_SOURCE/slashCommands/commands/Px-SpecFlow/SPEC_${name}Tests.md" \
+    "$OLD_SOURCE/slashCommands/commands/Px-SpecFlow/SPEC_${name}UnitTests.md"
+done
+mv "$OLD_SOURCE/slashCommands/commands/P0-FuncTestsFlow/TEST_implTestCase.md" \
+  "$OLD_SOURCE/slashCommands/commands/P0-FuncTestsFlow/UT_implTestCase.md"
+mv "$OLD_SOURCE/slashCommands/TEST_slashCommandTemplate.md" \
+  "$OLD_SOURCE/slashCommands/UT_slashCommandTemplate.md"
+MIG="$WORK/rename-migration"
+CATDD_SOURCE_ROOT="$OLD_SOURCE" "$INSTALLER" --targetDir "$MIG" --targetCodeAgent Copilot --init --yes >/dev/null
+printf '\n<!-- LOCAL-RENAME-EDIT: UT_Gateway.ts -->\n' >> "$MIG/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTests.md"
+printf '# SPEC_implUnitTestsEvolved\n<!-- LOCAL-OVERLAY -->\n' > "$MIG/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTestsEvolved.md"
+"$INSTALLER" --targetDir "$MIG" --targetCodeAgent Copilot --clean-prompts --yes >/dev/null
+for name in design impl refact reviewImpl; do
+  assert_absent "$MIG/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_${name}UnitTests.md"
+  assert_absent "$MIG/.github/prompts/SPEC_${name}UnitTests.prompt.md"
+  assert_file "$MIG/.github/prompts/SPEC_${name}Tests.prompt.md"
+done
+assert_contains "$MIG/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implTests.md" 'LOCAL-RENAME-EDIT'
+assert_contains "$MIG/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implTests.md" 'UT_Gateway.ts'
+assert_absent "$MIG/.catdd/slashCommands/commands/P0-FuncTestsFlow/UT_implTestCase.md"
+assert_absent "$MIG/.github/prompts/UT_implTestCase.prompt.md"
+assert_file "$MIG/.github/prompts/TEST_implTestCase.prompt.md"
+assert_absent "$MIG/.catdd/slashCommands/UT_slashCommandTemplate.md"
+assert_absent "$MIG/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implUnitTestsEvolved.md"
+assert_contains "$MIG/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implTestsEvolved.md" 'LOCAL-OVERLAY'
+assert_contains "$MIG/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_implTestsEvolved.md" '# SPEC_implTestsEvolved'
+
 echo "[installCaTDD-test] Test: --help"
 "$INSTALLER" --help 2>&1 | head -1 | grep -Fq 'installCaTDD.sh' || fail "--help missing script name"
 

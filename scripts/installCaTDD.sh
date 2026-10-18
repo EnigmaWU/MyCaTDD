@@ -588,8 +588,59 @@ force_reset_tree() {
   echo "[${LOG_TAG}] sync ${label}: force-overwrite canonical source"
 }
 
+# Move known retired names before sync so local changes retain their merge base.
+migrate_command_names() {
+  local rel old_rel new_rel suffix path base old_hash old_name new_name
+  local target="$CATDD_DIR/slashCommands"
+  local baseline="$BASELINE_ROOT/slashCommands"
+  [[ -d "$target" ]] || return 0
+  while IFS= read -r rel; do
+    old_rel=""
+    case "$rel" in
+      commands/*/TEST_*.md) old_rel="${rel%/*}/UT_${rel##*/TEST_}" ;;
+      TEST_slashCommandTemplate.md) old_rel="UT_slashCommandTemplate.md" ;;
+      commands/Px-SpecFlow/SPEC_designTests.md) old_rel="${rel%Tests.md}UnitTests.md" ;;
+      commands/Px-SpecFlow/SPEC_implTests.md) old_rel="${rel%Tests.md}UnitTests.md" ;;
+      commands/Px-SpecFlow/SPEC_refactTests.md) old_rel="${rel%Tests.md}UnitTests.md" ;;
+      commands/Px-SpecFlow/SPEC_reviewImplTests.md) old_rel="${rel%Tests.md}UnitTests.md" ;;
+    esac
+    [[ -n "$old_rel" ]] || continue
+    for suffix in "" Evolved; do
+      new_rel="${rel%.md}${suffix}.md"
+      path="${old_rel%.md}${suffix}.md"
+      [[ -f "$target/$path" ]] || continue
+      if [[ -e "$target/$new_rel" ]]; then
+        echo "[${LOG_TAG}] rename conflict: both $path and $new_rel exist; reconcile them before refresh" >&2
+        return 1
+      fi
+      mkdir -p "$(dirname "$target/$new_rel")"
+      mv "$target/$path" "$target/$new_rel"
+      # Rewrite command identifiers only in the migrated artifact and its base.
+      base="$baseline/$path"
+      old_hash="$(manifest_hash_of "$path")" || old_hash=""
+      old_name="${old_rel##*/}"
+      old_name="${old_name%.md}"
+      new_name="${rel##*/}"
+      new_name="${new_name%.md}"
+      for path in "$target/$new_rel" "$base"; do
+        [[ -f "$path" ]] || continue
+        sed "s/$old_name/$new_name/g" "$path" > "$path.rename-tmp"
+        mv "$path.rename-tmp" "$path"
+      done
+      if [[ -f "$base" && -n "$old_hash" ]]; then
+        record_canonical slashCommands "$new_rel" "$base"
+        rm -f "$base"
+      fi
+      manifest_drop "${old_rel%.md}${suffix}.md"
+      CLEAN_PROMPTS=1
+      echo "[${LOG_TAG}] sync: renamed ${old_rel%.md}${suffix}.md -> $new_rel"
+    done
+  done < <(list_tree "$SLASH_SRC")
+}
+
 update_spec_gitignore
 manifest_load
+migrate_command_names
 
 log_replace_or_new "$CATDD_DIR/methodPrompts"
 log_replace_or_new "$CATDD_DIR/slashCommands"

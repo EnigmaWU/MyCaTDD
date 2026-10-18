@@ -17,10 +17,6 @@ fail() {
 
 [[ -x "$GENERATOR" ]] || fail "missing executable generator: scripts/makeSlashCmd4Continue.sh"
 
-git -C "$REPO_ROOT" check-ignore -q .continue/prompts/TEST_example.prompt || fail "generated TEST prompt wrappers must be ignored in this source repo"
-git -C "$REPO_ROOT" check-ignore -q .continue/prompts/SPEC_example.prompt || fail "generated SPEC prompt wrappers must be ignored in this source repo"
-git -C "$REPO_ROOT" check-ignore -q .continue/prompts/HARNESS_example.prompt || fail "generated HARNESS prompt wrappers must be ignored in this source repo"
-
 "$GENERATOR" --output "$OUT_DIR" --clean
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"

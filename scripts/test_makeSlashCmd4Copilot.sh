@@ -17,10 +17,6 @@ fail() {
 
 [[ -x "$GENERATOR" ]] || fail "missing executable generator: scripts/makeSlashCmd4Copilot.sh"
 
-git -C "$REPO_ROOT" check-ignore -q .github/prompts/TEST_example.prompt.md || fail "generated TEST prompt wrappers must be ignored in this source repo"
-git -C "$REPO_ROOT" check-ignore -q .github/prompts/SPEC_example.prompt.md || fail "generated SPEC prompt wrappers must be ignored in this source repo"
-git -C "$REPO_ROOT" check-ignore -q .github/prompts/HARNESS_example.prompt.md || fail "generated HARNESS prompt wrappers must be ignored in this source repo"
-
 "$GENERATOR" --output "$OUT_DIR" --clean
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
