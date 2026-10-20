@@ -35,7 +35,7 @@ Do not invoke `SPEC_showMeStatus` when:
 Repeat until every `.catdd/spec/` lane and every active story is accounted for.
 
 1. **Thought** — From the lanes and files already read, name what is still unexplained: an empty lane that should hold content, a story that appears in two lanes, an active story whose AC totals do not match its dashboard, or a referenced artifact that does not exist.
-2. **Action** — Run the next read-only inspection: list lane contents, read the active story's status markers and task checklist, read `.catdd/spec/projectContext.md` for declared conventions, and read any story-level AC dashboard that exists.
+2. **Action** — Run the next read-only inspection: list lane contents, read the active story's status markers, `## Trajectory` table, and `## Task Checklist` in `*-UserStory-Tasks.md`, read `.catdd/spec/projectContext.md` for declared conventions, and read any story-level AC dashboard that exists.
 3. **Observation** — Classify each lane and each finding as `current`, `empty`, `stale`, `drifting`, or `unknown`. Then read the Maturity Level ladder top-down and stop at the last level whose entry question is answered `YES` by cited evidence; Levels 4 and 5 additionally need the regeneration evidence and the published metrics, so they are never decided from lane state alone. A finding that cannot cite a file, lane, or artifact is unproven → return to **Thought** for one more read-only signal, or drop it.
 4. **Stop** — Exit when every lane is classified, the maturity level plus `level_evidence` and `level_gap` are recorded, drift findings are ordered by risk, and exactly one next command is recommended for the active work.
 

@@ -92,7 +92,8 @@ Expected result:
 - Product-code review correlation when this command runs after `SPEC_reviewProductCodes`.
 - Test README evidence: `test-case-with-readme` applied, unavailable with builtin fallback, missing companion README, updated companion README, or ask the developer.
 - Drift findings that distinguish implementation drift from skeleton/design drift.
-- Next recommended command: `SPEC_implTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`, `SPEC_designTests`, `SPEC_implProductCodes`, `SPEC_refactTests`, `SPEC_reviewProductCodes`, `SPEC_commitStoryWorks`, or ask the developer.
+- Plan & `## Trajectory` handoff: when the story has a paired `*-UserStory-Tasks.md` artifact, route through `SPEC_updateMadePlan` after both pre-code and post-code `SPEC_reviewImplTests` passes (`PASS` or `REVISE`) to append the RED/GREEN test-review verdict to `## Trajectory`, check `[x]` on verified TC slices, or record bounded rework tasks (`IMPL-REV-*`, attempt $k/3$).
+- Next recommended command: `SPEC_updateMadePlan`, `SPEC_implTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`, `SPEC_designTests`, `SPEC_implProductCodes`, `SPEC_refactTests`, `SPEC_reviewProductCodes`, `SPEC_commitStoryWorks`, or ask the developer.
 
 ## Review Gate Contract
 

@@ -171,6 +171,7 @@ bash scripts/test_installCaTDD4Custom.sh
 | 告诉我当前 harness 与安装状态，并给出 Level-0…Level-5 integrity 评级 | [commands/Px-StatusKits/HARNESS_showMeStatus.md](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 | 问"哪里不对"并切换到 VibeCoding 探索 | [commands/Px-SpecFlow/SPEC_whatsWrong.md](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
 | 为已打开的 user story 规划下一条 SPEC 步骤 | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
+| 在阶段转换或漂移检查点同步 `[ ]`/`[x]` 状态并逐步细化故事 TASKs 计划 | [commands/Px-SpecFlow/SPEC_updateMadePlan.md](commands/Px-SpecFlow/SPEC_updateMadePlan.md) |
 | 导入已有结构化 User Story 或 AC 切片 | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md](commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md) |
 | 设计完整 P0 Functional 骨架集 | [commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md) |

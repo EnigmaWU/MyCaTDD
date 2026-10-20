@@ -79,8 +79,9 @@ Expected result — two passes:
 - Evidence for each finding, grounded in the architecture-changing story, project context, architecture document, and mirror document when present.
 - Checks for module boundaries, dependency direction, AgentSDK/CaTDD separation, runtime adaptation strategy, trace/audit/control coverage, Mermaid-renderable architecture views, and Px-SpecFlow architecture-oriented surface coverage.
 - Checks that architecture remains module-context centered and explicitly documents systems consuming the module and their integration boundaries.
-- If `PASS`: next recommended command is `SPEC_takeDetailDesign`.
-- If `REVISE`: next recommended command is `SPEC_updateArchDesign` to revise the architecture design before detailed design begins.
+- Plan & `## Trajectory` handoff: when the story has a paired `*-UserStory-Tasks.md` artifact, route through `SPEC_updateMadePlan` after this review (`PASS` or `REVISE`) to append the architecture review verdict to `## Trajectory`, mark architecture tasks `[x]` (or record `ARCH-REV-*` rework attempt $k/3$), and refine detail-design tasks.
+- If `PASS`: next recommended command is `SPEC_takeDetailDesign` (via `SPEC_updateMadePlan` when `*-UserStory-Tasks.md` is active).
+- If `REVISE`: next recommended command is `SPEC_updateArchDesign` to revise the architecture design before detailed design begins (recording the rework attempt via `SPEC_updateMadePlan`).
 - If `ASK`: stop and ask the developer for the missing product, architecture, or review decision.
 - If `BLOCKED`: the architecture source or the story needed for the review is unavailable; report the missing artifact and `rework_route`.
 

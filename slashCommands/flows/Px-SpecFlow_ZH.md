@@ -25,7 +25,7 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 | 默认层级 | 使用场景 | Px-SpecFlow 命令 |
 | --- | --- | --- |
 | SOTA reasoning，如 GPT-5.5-xHigh | 涉及决定或审批系统边界、依赖方向、运行时放置、质量权衡以及跨模块约束的架构工作。 | `SPEC_takeArchDesign`、`SPEC_reviewArchDesign` |
-| High Performance | 需求分析、意图对齐、规划、需求更新、局部设计、审查关卡、测试设计、代码审查、修正路由，以及依赖跨制品推理的受控上游回补。 | `SPEC_initProjectContext`、`SPEC_updateProjectContext`、`SPEC_analyzeIssue`、`SPEC_analyzeFeature`、`SPEC_analyzeAbortedUserStory`、`SPEC_clearStoryIntent`、`SPEC_makePlan`、`SPEC_updateUserStory`、`SPEC_whatsNextTask`、`SPEC_whatsWrong`、`SPEC_takeArchDesign`、`SPEC_reviewArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_reviewDetailDesign`、`SPEC_updateDetailDesign`、`SPEC_reviewUserStory`、`SPEC_designTests`、`SPEC_reviewImplTests`、`SPEC_reviewProductCodes`、`SPEC_patchOriginalCaTDD` |
+| High Performance | 需求分析、意图对齐、规划、需求更新、局部设计、审查关卡、测试设计、代码审查、修正路由，以及依赖跨制品推理的受控上游回补。 | `SPEC_initProjectContext`、`SPEC_updateProjectContext`、`SPEC_analyzeIssue`、`SPEC_analyzeFeature`、`SPEC_analyzeAbortedUserStory`、`SPEC_clearStoryIntent`、`SPEC_makePlan`、`SPEC_updateMadePlan`、`SPEC_updateUserStory`、`SPEC_whatsNextTask`、`SPEC_whatsWrong`、`SPEC_takeArchDesign`、`SPEC_reviewArchDesign`、`SPEC_updateArchDesign`、`SPEC_takeDetailDesign`、`SPEC_reviewDetailDesign`、`SPEC_updateDetailDesign`、`SPEC_reviewUserStory`、`SPEC_designTests`、`SPEC_reviewImplTests`、`SPEC_reviewProductCodes`、`SPEC_patchOriginalCaTDD` |
 | Flash Speed | 确定性的导入、移动、挂起、恢复、中止、提交、关闭，或当所需输入制品已明确时的小型测试驱动实现/重构步骤。 | `SPEC_importIssue`、`SPEC_importFeature`、`SPEC_importUserStory`、`SPEC_openUserStory`、`SPEC_suspendUserStory`、`SPEC_resumeUserStory`、`SPEC_partialCloseUserStory`、`SPEC_abortUserStory`、`SPEC_implTests`、`SPEC_implProductCodes`、`SPEC_refactTests`、`SPEC_commitPreStoryWorks`、`SPEC_commitStepWorks`、`SPEC_commitStoryWorks`、`SPEC_commitWorks`、`SPEC_closeUserStory` |
 
 当命令暴露出架构级别的不确定性时，从 High Performance 或 Flash Speed 升级到 SOTA 级别：竞争性的非功能需求、安全/安保风险、实时或嵌入式约束、并发边界、数据迁移、兼容性矩阵或不可逆的模块/API 所有权决策。
@@ -132,7 +132,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 
 并非每个制品都有专属门禁，因此流程显式指明归属，让"没有门禁"成为决策而非缺口：
 
-- 配对的 `*-UserStory-Tasks.md` 制品在撰写时由 `SPEC_makePlan` 负责，在关闭时由 `SPEC_closeUserStory` 校验（已勾选任务缺少门禁证据，或提交计划与实际提交不一致时报告 `plan_drift`），并由 `SPEC_whatsWrong` 诊断。
+- 配对的 `*-UserStory-Tasks.md` 制品在撰写时由 `SPEC_makePlan` 负责，在阶段转换、返工循环或漂移检查点由 `SPEC_updateMadePlan` 同步并细化，在关闭时由 `SPEC_closeUserStory` 校验（已勾选任务缺少门禁证据，或提交计划与实际提交不一致时报告 `plan_drift`），并由 `SPEC_whatsWrong` 诊断。
 - `.catdd/spec/projectContext.md` 由 `SPEC_updateProjectContext` 的无损压缩门禁在内部把关，并由 `HARNESS_diagnoseProject` 的一致性检查在外部把关。
 - 项目根 README SPEC 文档集整体由 `HARNESS_diagnoseProject` 的漂移检查覆盖，其专属文档则由架构或详细设计门禁覆盖。
 - `P3 Addons / Demo-Example` 按设计意图不设设计与评审门禁：它属于认知/学习表面。`TEST_convertDemoToTypical` 把 demo 材料转换为 `P0 Functional / Typical` 工作，而 P3 骨架只作为显式学习制品撰写，绝不替代 P0/P1/P2 覆盖。
@@ -160,9 +160,9 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 | 以宪法级别的项目上下文治理工作 | Spec Kit 以项目原则开始，使后续的规范、计划和任务决策不会漂移。 | 将 `.catdd/spec/projectContext.md` 视为类似宪法的防护栏。`SPEC_initProjectContext` 和 `SPEC_updateProjectContext` 应在故事工作继续之前记录稳定的原则、约束、质量关卡和团队惯例。 |
 | 将工作分析为独立可测试的故事切片 | Spec Kit 的规范模板要求优先级的用户故事及独立测试，使 MVP 范围和用户价值显式化。 | `SPEC_analyzeIssue` 和 `SPEC_analyzeFeature` 应生成包含参与者、价值、优先级、独立测试意图、验收场景、边界情况、风险和开放问题的 `.catdd/spec/todoUS/` 故事，而不仅仅是一个松散的摘要。`SPEC_importUserStory` 是已结构化 US/AC 输入的直接队列，将其写入 `.catdd/spec/todoUS/` 而无需分析。分析应将议题/特性的原始输入从 `.catdd/spec/pendingNews/` 移动到 `.catdd/spec/analyzedNews/`，以保持可追溯性而不将已分析的工作留在待处理收件箱中。 |
 | 在设计前明确开发者和 CodeAgent 故事意图 | 一个故事可能看起来完整，而开发者和 CodeAgent 仍然推断出不同的范围、非目标或成功证据。在设计前明确双方意图可防止昂贵的架构和详细设计漂移。 | 当活跃故事仍需要范围对齐时，在 `SPEC_openUserStory` 后使用 `SPEC_clearStoryIntent`。在规划开始前，在活跃故事中记录一份`相互意图契约 (Mutual Intent Contract)`。该契约声明开发者意图、CodeAgent 意图、范围内工作、范围外工作、成功信号、假设和开放问题。如果意图未对齐，在 `SPEC_makePlan` 开始前询问或修改活跃故事。 |
-| 通过轻量级计划步骤分离 `WHAT`/`WHY` 与 `HOW` | Spec Kit 将产品意图保留在 `spec.md` 中，将技术选择推迟到 `plan.md`，减少过早的设计决策。 | 将用户故事意图保留在故事制品中，然后使用 `SPEC_makePlan` 创建一个配对的 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品，以 Markdown 复选框任务形式表达下一步工作，并确定活跃故事是意图澄清型、设计导向型还是实现导向型。对于设计导向型工作，区分初始架构/详细设计 (`SPEC_take*Design`) 和后续设计修订 (`SPEC_update*Design`)。详细技术选择在后续命令需要时仍存放到项目根目录的 `README*` SPEC 文档中。 |
+| 通过轻量级计划步骤分离 `WHAT`/`WHY` 与 `HOW` | Spec Kit 将产品意图保留在 `spec.md` 中，将技术选择推迟到 `plan.md`，减少过早的设计决策。 | 将用户故事意图保留在故事制品中，然后使用 `SPEC_makePlan` 创建一个配对的 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品，以 Markdown 复选框任务形式表达下一步工作，并确定活跃故事是意图澄清型、设计导向型还是实现导向型；在后续阶段转换或漂移检查点使用 `SPEC_updateMadePlan` 同步 `[ ]`/`[x]` 状态并将粗粒度任务细化为详细设计或 US/AC/TC 执行切片。对于设计导向型工作，区分初始架构/详细设计 (`SPEC_take*Design`) 和后续设计修订 (`SPEC_update*Design`)。详细技术选择在后续命令需要时仍存放到项目根目录的 `README*` SPEC 文档中。 |
 | 在实现前执行 clarify/analyze/checklist 关卡 | Spec Kit 在编码前暴露歧义、不一致和缺失的覆盖，使返工尽早发生。 | 在架构设计后使用 `SPEC_reviewArchDesign`，在详细设计后使用 `SPEC_reviewDetailDesign`。将未通过的架构审查路由到 `SPEC_updateArchDesign`；将未通过的详细审查路由到 `SPEC_updateDetailDesign`，而不是跳过。 |
-| 使执行切片显式化、有序化并具有并行意识 | Spec Kit 的任务模板将计划转化为显式任务，包含依赖、并行标记和验证检查点。 | 在 `SPEC_implTests` 或 `SPEC_implProductCodes` 之前，在 doings 故事、验证设计和测试文件中将活跃故事分解为显式的 US/AC/TC 切片和验证检查点。保持 P0 优先顺序，但标记可以并行运行的独立工作。 |
+| 使执行切片显式化、有序化并具有并行意识 | Spec Kit 的任务模板将计划转化为显式任务，包含依赖、并行标记和验证检查点。 | 在 `SPEC_implTests` 或 `SPEC_implProductCodes` 之前，在 doings 故事、验证设计、配对的 `*-UserStory-Tasks.md`（通过 `SPEC_updateMadePlan`）和测试文件中将活跃故事分解为显式的 US/AC/TC 切片和验证检查点。保持 P0 优先顺序，但标记可以并行运行的独立工作。 |
 
 ## 开发者故事
 
@@ -183,7 +183,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 - `.catdd/spec/analyzedNews/YYYYMMDD-*.md`：已分析并作为源追溯保留的原始议题或特性输入。
 - `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`：等待被开启的已分析用户故事和直接导入的结构化用户故事。
 - `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`：处于设计、测试、实现或审查阶段的活跃用户故事。
-- `.catdd/spec/doingUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：团队共享的任务制品，与活跃故事配对，以 Markdown 复选框任务的形式记录下一步所需的 `SPEC_*` 步骤和理由。
+- `.catdd/spec/doingUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：团队共享的任务制品（基于 `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md` 创建），与活跃故事配对，同时记录只追加的按时间顺序 `## Trajectory` 轨迹表（`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`）以及面向后续执行的 `[ ]`/`[x]` `## Task Checklist` 与理由。
 - `.catdd/spec/suspendUS/YYYYMMDD-UserStory.md`：已挂起的活跃用户故事，保留可恢复的持久工作引用（例如 git 分支或 worktree）。
 - `.catdd/spec/suspendUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：当故事通过 `SPEC_makePlan` 制定了计划时，与挂起故事并排保留的挂起任务制品。
 - `相互意图契约 (Mutual Intent Contract)`：活跃 doing 故事中的一个部分，在设计开始前记录开发者意图、CodeAgent 意图、范围、非目标、成功信号、假设和开放问题。
@@ -270,6 +270,7 @@ SpecFlow 生命周期状态位于 `.catdd/spec/` 下。共享的 `README*` SPEC 
 | `README_UserStories.md` | 团队共享 | 作为项目级用户故事状态与 AC 追溯状态的唯一共享台账提交。 |
 | `README*.md` | 团队共享 | 按需提交项目根 SPEC 文档，如 README、架构设计、用户故事、用户指南、详细设计、错误设计、资源设计、状态设计、性能设计、兼容性设计、诊断设计和验证设计。 |
 | `slashCommands/templates/SpecTodoUserStoryTemplate.md` | 团队共享 | 提交用于 `.catdd/spec/todoUS/*-UserStory.md` 的可重用每故事模板。 |
+| `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md` | 团队共享 | 提交用于 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 的可重用任务与 `## Trajectory` 轨迹模板。 |
 | `.catdd/spec/WorkingProcessLog.md` | 本地工作状态 | 通过 gitignore 忽略个人命令跟踪、临时决策和未解决的本地笔记。 |
 | `AGENTS.md` / `AGENTS.override.md`（根目录与嵌套） | 团队共享 | 提交该文件。它是安装器唯一就地修补的智能体文件：`CaTDD Codex instructions` 标记之间的区域可重新生成并归 CaTDD 所有，其余每一行归项目所有且绝不重写。`.clinerules/catdd.md` 等安装器生成的适配文件会被整体重写，不在此登记。 |
 
@@ -360,6 +361,8 @@ flowchart TB
     CommitReq --> CloseReq["SPEC_closeUserStory"]
     CloseReq --> DoneReq[".catdd/spec/doneUS/*-UserStory.md"]
     ReqTail -- "design-oriented next" --> DesignChoice
+    ReqTail -. "sync [x] & expand design tasks" .-> UpdatePlan["SPEC_updateMadePlan"]
+    UpdatePlan --> Tasks
     Doing -. "may suspend from any active step" .-> Suspend["SPEC_suspendUserStory"]
     Suspend --> SuspendUS[".catdd/spec/suspendUS/*-UserStory.md"]
     SuspendUS -. "resume later with durable work reference" .-> Resume["SPEC_resumeUserStory"]
@@ -387,6 +390,7 @@ flowchart TB
     CommitDesign --> CloseDesign["SPEC_closeUserStory"]
     CloseDesign --> DoneDesign[".catdd/spec/doneUS/*-UserStory.md"]
     TailChoice -- "implementation follows" --> DesignReady["handoff to Part 2.b"]
+    DesignReady -. "sync [x] & expand US/AC/TC slices" .-> UpdatePlan
     Abort2a --> AbortUS2a[".catdd/spec/abortUS/*-UserStory.md"]
     AbortUS2a -. "later re-analysis" .-> AnalyzeAbort2a["SPEC_analyzeAbortedUserStory"]
     AbortUS2a -. "new improvement input" .-> ImportIssue2a["SPEC_importIssue"]
@@ -432,6 +436,9 @@ flowchart TB
     UnitTestQuality -- "cleanup needed" --> RefactTestsCommand
     UnitTestQuality -- "YES" --> Commit["SPEC_commitStoryWorks"]
     Commit --> Close["SPEC_closeUserStory"]
+    ReviewImplTests -. "sync [x]/REVISE & append Trajectory" .-> UpdatePlan2b["SPEC_updateMadePlan"]
+    ReviewCode -. "sync [x]/REVISE & append Trajectory" .-> UpdatePlan2b
+    ReviewImplTestsAfterProductCode -. "sync [x]/REVISE & append Trajectory" .-> UpdatePlan2b
     ImplTests -. "step commit at planned boundaries" .-> StepCommit["SPEC_commitStepWorks"]
     ImplCode -. "step commit at planned boundaries" .-> StepCommit
     Close --> Done[".catdd/spec/doneUS/*-UserStory.md"]
@@ -456,7 +463,7 @@ flowchart TB
    - 分析将故事排入队列后，使用 [SPEC_commitPreStoryWorks](../commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) 在开启故事前提交故事前导入/分析区间；当导入阶段以 `analysis_mode: AUTONOMOUS` 无值守运行时，该检查点为默认行为，否则故事前区间始终处于 `manualMode`。
 6. 使用 [SPEC_openUserStory](../commands/Px-SpecFlow/SPEC_openUserStory.md) 将选定的用户故事移入 `.catdd/spec/doingUS/`。
 7. 可选使用 [SPEC_clearStoryIntent](../commands/Px-SpecFlow/SPEC_clearStoryIntent.md)，当开发者意图与 CodeAgent 意图在规划前仍需对齐时。
-8. 使用 [SPEC_makePlan](../commands/Px-SpecFlow/SPEC_makePlan.md) 创建配对的 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品，将工作以 Markdown 复选框任务的形式表达，区分意图澄清型、需求导向型、设计导向型和实现导向型工作，区分初始设计与后续设计修订，并为已开启的故事选择下一步所需的 `SPEC_*` 步骤。
+8. 使用 [SPEC_makePlan](../commands/Px-SpecFlow/SPEC_makePlan.md) 创建配对的 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品（基于 `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md`），初始化只追加的 `## Trajectory` 轨迹表，将工作以 Markdown 复选框任务的形式表达，区分意图澄清型、需求导向型、设计导向型和实现导向型工作，区分初始设计与后续设计修订，并为已开启的故事选择下一步所需的 `SPEC_*` 步骤。在全部五个 `SPEC_review*` 审查关卡（`SPEC_reviewUserStory`、`SPEC_reviewArchDesign`、`SPEC_reviewDetailDesign`、`SPEC_reviewImplTests`、`SPEC_reviewProductCodes`）、返工循环、故事恢复或 `plan_drift` 检查点之后，使用 [SPEC_updateMadePlan](../commands/Px-SpecFlow/SPEC_updateMadePlan.md) 向 `## Trajectory` 追加时间顺序行、同步 `[ ]`/`[x]` 任务状态，并将粗粒度任务逐步细化为详细设计或 US/AC/TC 执行切片与步骤提交边界。
 9. 使用 [SPEC_updateUserStory](../commands/Px-SpecFlow/SPEC_updateUserStory.md)，当计划为需求导向型且项目级 `README_UserStories.md` 与配对 `README_UserGuide.md`（以及采用模块文档时的模块需求文档）必须在下游工作前更新时。
 10. 使用 [SPEC_reviewUserStory](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) 在需求更新之后，并验证 `README_UserStories.md` 的 TODO/DOING/DONE 与 AC 追溯状态是否与生命周期制品一致；然后或者关闭纯需求导向型工作（`SPEC_commitStoryWorks` 然后 `SPEC_closeUserStory`，若关闭生成了文件变更则紧接 `SPEC_commitStoryWorks` 的 `post_close` 检查点），或者转移到设计导向型的下一步。
 11. 使用 [SPEC_whatsNextTask](../commands/Px-SpecFlow/SPEC_whatsNextTask.md)，当你需要从当前状态获得单个下一步推荐时。
@@ -468,7 +475,7 @@ flowchart TB
 17. 使用 [SPEC_reviewDetailDesign](../commands/Px-SpecFlow/SPEC_reviewDetailDesign.md) 在实现导向型步骤之前把关详细设计质量。
 18. 使用 [SPEC_updateDetailDesign](../commands/Px-SpecFlow/SPEC_updateDetailDesign.md) 进行后续详细设计修订，当详细审查发现缺失或薄弱的设计时。
 19. 使用 [SPEC_designTests](../commands/Px-SpecFlow/SPEC_designTests.md) 进入 CaTDD 测试设计，通常通过 P0/P1/P2 流程，当计划表明故事已为测试准备好时。
-20. 使用 [SPEC_implTests](../commands/Px-SpecFlow/SPEC_implTests.md)、[SPEC_reviewImplTests](../commands/Px-SpecFlow/SPEC_reviewImplTests.md)、[SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md) 和 [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) 进行测试优先的执行和审查，然后在故事区间提交前再次运行 `SPEC_reviewImplTests`。可选使用 [SPEC_refactTests](../commands/Px-SpecFlow/SPEC_refactTests.md) 进行 GREEN 状态下不改变行为的 unit-test cleanup；重构后运行 `SPEC_reviewImplTests`，当审查范围变化时重跑 `SPEC_reviewProductCodes`，并在故事区间提交前再次运行 `SPEC_reviewImplTests`。在计划标记为 `commit_step = yes` 的步骤边界上，该步骤门禁通过后使用 [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md)。
+20. 使用 [SPEC_implTests](../commands/Px-SpecFlow/SPEC_implTests.md)、[SPEC_reviewImplTests](../commands/Px-SpecFlow/SPEC_reviewImplTests.md)、[SPEC_implProductCodes](../commands/Px-SpecFlow/SPEC_implProductCodes.md) 和 [SPEC_reviewProductCodes](../commands/Px-SpecFlow/SPEC_reviewProductCodes.md) 进行测试优先的执行和审查，然后在故事区间提交前再次运行 `SPEC_reviewImplTests`。每次 `SPEC_reviewImplTests` 和 `SPEC_reviewProductCodes` 执行后（无论 `PASS` 还是 `REVISE`），使用 [SPEC_updateMadePlan](../commands/Px-SpecFlow/SPEC_updateMadePlan.md) 将审查结论追加到 `## Trajectory` 并更新 `*-UserStory-Tasks.md` 中的 `[x]`/`[ ]` 切片或返工状态。可选使用 [SPEC_refactTests](../commands/Px-SpecFlow/SPEC_refactTests.md) 进行 GREEN 状态下不改变行为的 unit-test cleanup；重构后运行 `SPEC_reviewImplTests`，当审查范围变化时重跑 `SPEC_reviewProductCodes`，并在故事区间提交前再次运行 `SPEC_reviewImplTests`。在计划标记为 `commit_step = yes` 的步骤边界上，该步骤门禁通过后使用 [SPEC_commitStepWorks](../commands/Px-SpecFlow/SPEC_commitStepWorks.md)。
 21. 使用 [SPEC_suspendUserStory](../commands/Px-SpecFlow/SPEC_suspendUserStory.md)，当活跃工作需要暂停且必须保留可恢复的持久引用（例如 git 分支或 worktree）时；随后通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 或等价的恢复分支 WIP 提交记录 `suspendUS/` 泳道移动。
 22. 使用 [SPEC_resumeUserStory](../commands/Px-SpecFlow/SPEC_resumeUserStory.md) 将挂起故事恢复到活跃工作态并继续执行。
 23. 使用 [SPEC_abortUserStory](../commands/Px-SpecFlow/SPEC_abortUserStory.md)，从第二部分 a 或第二部分 b，当活跃故事存在阻塞性的范围、假设、设计、测试或产品质量问题，应被保留而非继续就地修补时；随后通过 `SPEC_commitStoryWorks` 以 `commit_checkpoint = span_end` 提交 `abortUS/` 泳道移动。中止后，或者使用 `SPEC_analyzeAbortedUserStory` 分析已中止的故事以供后续故事轮次，或者使用 `SPEC_importIssue` 创建新的改进/细化输入。

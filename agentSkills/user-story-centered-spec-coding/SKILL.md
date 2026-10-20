@@ -152,11 +152,11 @@ If the testing method is unclear, default UnitTesting to CaTDD and explicitly no
 
 ### Phase 4: Open and Design the Story
 
-1. Use `SPEC_openUserStory` intent to move selected work into `.catdd/spec/doingUS/`.
+1. Use `SPEC_openUserStory` intent to move selected work into `.catdd/spec/doingUS/`, and use `SPEC_makePlan` to create the initial paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` checklist.
 2. Use `SPEC_takeDetailDesign` intent to produce detail design and acceptance criteria.
 3. Create or update project-root README SPEC docs only when the project needs those shared surfaces; use `slashCommands/templates/README_*Template.md` when creating one for the first time.
 4. Use `SPEC_reviewUserStory` to gate story and design readiness.
-5. Use `SPEC_updateDetailDesign` when review finds missing or weak design.
+5. Use `SPEC_updateDetailDesign` when review finds missing or weak design, and use `SPEC_updateMadePlan` at phase transitions or drift checkpoints to synchronize `[ ]`/`[x]` task status and expand coarse phases into detailed design or US/AC/TC execution slices.
 
 ### Phase 5: Design and Implement Tests
 

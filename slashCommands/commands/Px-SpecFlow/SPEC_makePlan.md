@@ -2,7 +2,9 @@
 
 ## Purpose
 
-Create or update the task artifact paired with the active user story, decide which `SPEC_*` command should run next, and decide the story's commit plan.
+Create the initial task artifact paired with the active user story after `SPEC_openUserStory` or `SPEC_clearStoryIntent`, decide which `SPEC_*` command should run next, and decide the story's commit plan.
+
+Once the paired `*-UserStory-Tasks.md` artifact exists, use [SPEC_updateMadePlan](SPEC_updateMadePlan.md) at later lifecycle phase transitions, after review gates, after resume/excursion reconciliation, or when `[ ]`/`[x]` task status drifts or needs finer US/AC/TC slice breakdown.
 
 ## CoT Pattern
 
@@ -13,7 +15,7 @@ Create or update the task artifact paired with the active user story, decide whi
 1. **Generate** — From the story's current readiness, list every next command that is *not yet excluded* by the Planning Decision Rules. Produce at least two branches; one branch per candidate command.
 2. **Evaluate** — For each branch, state the evidence that would make it correct and whether that evidence exists today. A branch whose prerequisite artifact is missing is rejected, not deferred.
 3. **Select** — Take the surviving branch that is earliest in the Planning Decision Rules order. If two branches survive at the same rank, stop and ask the developer.
-4. **Execute** — Write the branches, the rejections with reasons, and the selection into the paired `*-UserStory-Tasks.md` as `[ ]`/`[x]` checkbox tasks. Record the commit plan in the same artifact: which step boundaries SHOULD call `SPEC_commitStepWorks`, which steps are no-op boundaries to skip, and whether the span ends with `SPEC_commitStoryWorks`.
+4. **Execute** — Seed the paired `*-UserStory-Tasks.md` from [SpecDoingUserStoryTasksTemplate.md](../../templates/SpecDoingUserStoryTasksTemplate.md): write the initial row `1` into the append-only `## Trajectory` table (`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`), and write the branches, the rejections with reasons, and the selection into `## Task Checklist` as `[ ]`/`[x]` checkbox tasks. Record the commit plan in the same artifact: which step boundaries SHOULD call `SPEC_commitStepWorks`, which steps are no-op boundaries to skip, and whether the span ends with `SPEC_commitStoryWorks`.
 5. **Verify** — Print the checklist. Confirm the selected command's own prerequisites are all `[x]`. If any is `[ ]`, the selection is wrong; return to **Select**.
 
 ### Worked Example
@@ -57,8 +59,8 @@ Expected result — one ToT pass:
 
 ## Output Contract
 
-- A team-shared `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact coupled with the opened user story.
-- The task artifact records the active story, current readiness, work orientation, skipped or satisfied prerequisites, candidate next steps, rejected next steps, selected next step, and rationale.
+- A team-shared `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact coupled with the opened user story, structured from [SpecDoingUserStoryTasksTemplate.md](../../templates/SpecDoingUserStoryTasksTemplate.md).
+- The task artifact records the active story, current readiness, work orientation, an append-only `## Trajectory` table (`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`) initialized with row `1`, skipped or satisfied prerequisites, candidate next steps, rejected next steps, selected next step, and rationale.
 - The task artifact uses Markdown checkbox tasks: `[ ]` for pending work, `[x]` for satisfied or completed work.
 - After creating or updating the artifact, print the current TASKs checklist in the command response so developers can see `[ ]` and `[x]` status immediately.
 - The selected next command should be chosen by lifecycle position and work orientation, depending on what the opened story actually needs next.
@@ -101,8 +103,8 @@ Expected result — one ToT pass:
   - follow-up detail revision routes to `SPEC_updateDetailDesign` when prior detail design exists and the story is closing a known detail-design gap, review finding, or story-level detail feedback.
 - Distinguish requirement-oriented, design-oriented, and implementation-oriented work:
   - Requirement-oriented work updates formal requirement surfaces: project-root `README_UserStories.md` (TODO/DONE + AC trace/status), paired `README_UserGuide.md`, module/submodule requirement docs when used, US/AC IDs, acceptance wording, usage-facing behavior, priority/dependency notes, and trace links. It routes to `SPEC_updateUserStory` before design commands.
-  - Requirement-oriented work routes to `SPEC_reviewUserStory` after `SPEC_updateUserStory`. Passing review can close requirement-only work through `SPEC_commitStoryWorks` and `SPEC_closeUserStory`, or transfer to design-oriented next steps.
-  - Design-oriented work routes to the appropriate architecture/detail take-or-update command before review.
+  - Requirement-oriented work routes to `SPEC_reviewUserStory` after `SPEC_updateUserStory`. Passing review can close requirement-only work through `SPEC_commitStoryWorks` and `SPEC_closeUserStory`, or transfer to design-oriented next steps (updating the task artifact via [SPEC_updateMadePlan](SPEC_updateMadePlan.md)).
+  - Design-oriented work routes to the appropriate architecture/detail take-or-update command before review. When detail-design review passes and implementation follows, use [SPEC_updateMadePlan](SPEC_updateMadePlan.md) to synchronize `[x]` design gates, transition orientation to `implementation-oriented`, and expand coarse tasks into US/AC/TC execution slices.
   - Implementation-oriented work routes to `SPEC_designTests` only when requirement docs, architecture, and detail readiness are already sufficient. Do not add a `SPEC_reviewUserStory` gate after `SPEC_reviewDetailDesign`.
 - If developer and CodeAgent intent are not aligned, route to `SPEC_clearStoryIntent` before design or implementation-oriented work.
 - If the story changes both requirements and design, route to `SPEC_updateUserStory` first, then review the story, then transfer to design-oriented next steps.

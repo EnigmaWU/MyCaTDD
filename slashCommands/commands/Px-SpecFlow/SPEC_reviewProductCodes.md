@@ -52,7 +52,8 @@ Expected result:
 - `review_verdict`: `PASS` when the product code matches its design and tests and the next step is `SPEC_reviewImplTests`; `REVISE` with `rework_route = SPEC_updateDetailDesign` for a design gap, `SPEC_designTests` for missing coverage, or `SPEC_abortUserStory` when the story must be abandoned; `ASK` when the developer must decide; `BLOCKED` when the design or verification evidence needed for the review is unavailable.
 - `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Findings prioritized by correctness, traceability to project-root README SPEC docs, and quality risk.
-- Next recommended command: `SPEC_reviewImplTests` when product-code review passes, `SPEC_updateDetailDesign`, `SPEC_designTests`, `SPEC_abortUserStory`, or `SPEC_importIssue`.
+- Plan & `## Trajectory` handoff: when the story has a paired `*-UserStory-Tasks.md` artifact, route through `SPEC_updateMadePlan` after `SPEC_reviewProductCodes` (`PASS` or `REVISE`) to append the product-review verdict to `## Trajectory`, check `[x]` on the verified product-code slice, or record bounded rework tasks (`PROD-REV-*`, attempt $k/3$).
+- Next recommended command: `SPEC_reviewImplTests` when product-code review passes (updating `*-UserStory-Tasks.md` and `## Trajectory` via `SPEC_updateMadePlan`), `SPEC_updateDetailDesign`, `SPEC_designTests`, `SPEC_abortUserStory`, or `SPEC_importIssue`.
 
 ## Review Gate Contract
 

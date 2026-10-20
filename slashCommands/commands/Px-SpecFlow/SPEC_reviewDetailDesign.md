@@ -76,8 +76,9 @@ Expected result — two passes:
 - `review_verdict`: one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`, with optional `severity: blocking | advisory` and a required `rework_route` whenever the verdict is not `PASS`.
 - Evidence for each finding, grounded in the active story, architecture design, detail design, project context, and mirror documents when present.
 - Checks for API signatures, class/module responsibilities, local state model, error/resource/performance/compatibility/diagnosis impacts, acceptance-criteria testability, test-point discovery evidence (`discovery_ledger` + Discovery Gate), `TestLevel` routing and `SysTesting`/`UserTesting` promotion, and readiness for CaTDD US/AC/TC skeleton design.
-- If `PASS`: next recommended command is `SPEC_reviewUserStory` for final story/design readiness.
-- If `REVISE`: next recommended command is `SPEC_updateDetailDesign`.
+- Plan & `## Trajectory` handoff: when the story has a paired `*-UserStory-Tasks.md` artifact, route through `SPEC_updateMadePlan` after this review (`PASS` or `REVISE`) to append the detail-design review verdict to `## Trajectory`, mark detail-design tasks `[x]` (or record `DD-REV-*` rework attempt $k/3$), transition `Work Orientation` to `implementation-oriented`, and expand US/AC/TC execution slices.
+- If `PASS`: next recommended command is `SPEC_reviewUserStory` for final story/design readiness, or `SPEC_updateMadePlan` when transitioning into `implementation-oriented` work to synchronize `[x]` design gates, append to `## Trajectory`, and expand US/AC/TC execution slices before `SPEC_designTests`.
+- If `REVISE`: next recommended command is `SPEC_updateDetailDesign` (recording the rework attempt via `SPEC_updateMadePlan`).
 - If `ASK`: stop and ask the developer for the missing product, design, or review decision.
 - If `BLOCKED`: the story, architecture, or detail-design artifact needed for the review is unavailable; report the missing artifact and `rework_route`.
 

@@ -172,6 +172,7 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Tell me the current harness and installation status, with a Level-0…Level-5 integrity grade | [HARNESS_showMeStatus](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 | Ask what is wrong and switch into a VibeCoding investigation | [SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
 | Create checkbox TASKs and choose the next SPEC step for an opened user story | [SPEC_makePlan](commands/Px-SpecFlow/SPEC_makePlan.md) |
+| Synchronize `[ ]`/`[x]` status and progressively refine the story TASKs plan across phase transitions or drift checkpoints | [SPEC_updateMadePlan](commands/Px-SpecFlow/SPEC_updateMadePlan.md) |
 | Import an existing structured User Story or AC slice | [SPEC_importUserStory](commands/Px-SpecFlow/SPEC_importUserStory.md) |
 | Convert demo tests into CaTDD Typical skeleton | [TEST_convertDemoToTypical](commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md) |
 | Design a full P0 Functional skeleton set | [TEST_designFuncTestsSkeleton](commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md) |

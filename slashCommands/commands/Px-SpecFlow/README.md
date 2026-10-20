@@ -22,6 +22,7 @@ Persist team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/s
 | [SPEC_whatsWrong.md](SPEC_whatsWrong.md) | Switch a `manualMode` session from SpecCoding into VibeCoding when the Flow cannot name what is wrong, then reconcile findings back into the Flow. |
 | [SPEC_openUserStory.md](SPEC_openUserStory.md) | Move a selected user story into active work. |
 | [SPEC_makePlan.md](SPEC_makePlan.md) | Create the active story TASKs artifact and choose the next SPEC step. |
+| [SPEC_updateMadePlan.md](SPEC_updateMadePlan.md) | Synchronize `[ ]`/`[x]` status and progressively refine the active story TASKs artifact across phase transitions, rework, or drift checkpoints. |
 | [SPEC_updateUserStory.md](SPEC_updateUserStory.md) | Update requirement-oriented README_UserStory and README_UserGuide for the active story. |
 | [SPEC_clearStoryIntent.md](SPEC_clearStoryIntent.md) | Clear mutual developer and CodeAgent intent before design starts. |
 | [SPEC_takeArchDesign.md](SPEC_takeArchDesign.md) | Produce high-level architecture design and module boundaries. |

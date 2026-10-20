@@ -10,9 +10,9 @@ Recommend the next SpecCoding task when a developer is new to the flow or resumi
 
 ### ToT Execution
 
-1. **Generate** — Inventory every `.catdd/spec/` lane that is non-empty and list the command each lane could justify. Produce at least two candidates whenever more than one lane has content.
+1. **Generate** — Inventory every `.catdd/spec/` lane that is non-empty and list the command each lane could justify (including `SPEC_updateMadePlan` when an active `*-UserStory-Tasks.md` has stale `[ ]`/`[x]` status or coarse tasks after a phase transition). Produce at least two candidates whenever more than one lane has content.
 2. **Evaluate** — For each candidate, name the artifact that proves it is runnable now. A candidate whose required input is missing or inconsistent is rejected, not deferred.
-3. **Select** — Choose the candidate that advances the furthest-along work without skipping a gate. Never select a closing or destructive step on inconsistent state — stop and ask instead.
+3. **Select** — Choose the candidate that advances the furthest-along work without skipping a gate (routing to `SPEC_updateMadePlan` first if the active story's task plan is out of date with completed gates or needs slice breakdown before implementation). Never select a closing or destructive step on inconsistent state — stop and ask instead.
 4. **Execute** — Report exactly one command, its rationale, and the inputs to prepare.
 5. **Verify** — Confirm no earlier required gate was skipped. If one was, return to **Select**.
 

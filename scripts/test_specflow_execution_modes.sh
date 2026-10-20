@@ -14,6 +14,7 @@ SPEC_CODE_AGENT_CLI="$REPO_ROOT/codeAgents/specCodeAgentCLI/README.md"
 
 NEXT_TASK="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_whatsNextTask.md"
 MAKE_PLAN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_makePlan.md"
+UPDATE_PLAN="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_updateMadePlan.md"
 IMPORT_ISSUE="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_importIssue.md"
 IMPORT_FEATURE="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_importFeature.md"
 IMPORT_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_importUserStory.md"
@@ -93,7 +94,7 @@ assert_contains "$USER_GUIDE_ZH" '严格仅支持实现导向（implementation-o
 assert_contains "$USER_GUIDE_ZH" '通用暂停规则（ONE-MORE-THING）'
 
 # 6. Entry, planning, analysis, and terminal commands
-for cmd_file in "$IMPORT_ISSUE" "$IMPORT_FEATURE" "$IMPORT_STORY" "$OPEN_STORY" "$MAKE_PLAN" "$NEXT_TASK" "$CLOSE_STORY" "$ABORT_STORY" "$SUSPEND_STORY"; do
+for cmd_file in "$IMPORT_ISSUE" "$IMPORT_FEATURE" "$IMPORT_STORY" "$OPEN_STORY" "$MAKE_PLAN" "$UPDATE_PLAN" "$NEXT_TASK" "$CLOSE_STORY" "$ABORT_STORY" "$SUSPEND_STORY"; do
   assert_contains "$cmd_file" '`execution_mode`: optional `manualMode | autonomousMode`'
 done
 
@@ -106,6 +107,8 @@ assert_contains "$ANALYZE_FEATURE" 'ONE-MORE-THING: ask developer if something n
 
 assert_contains "$MAKE_PLAN" 'Orientation Boundary for Autonomous Mode'
 assert_contains "$MAKE_PLAN" 'Do not execute `autonomousMode` on `intent-clearing`, `requirement-oriented`, or `design-oriented` stories'
+assert_contains "$UPDATE_PLAN" 'Orientation Boundary for Autonomous Mode'
+assert_contains "$UPDATE_PLAN" 'Do not unlock `autonomousMode` while `Work Orientation` is still `intent-clearing`, `requirement-oriented`, or `design-oriented`.'
 
 # 7. Driver defaults: manualMode for a human session, autonomousMode for a flow driver
 assert_contains "$FLOW_DOC" 'Both modes are SpecCoding: the difference is who issues the `SPEC_doXYZ` command.'

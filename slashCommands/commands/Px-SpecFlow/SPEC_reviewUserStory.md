@@ -58,7 +58,8 @@ Expected result — one ReACT pass:
 - `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Explicit consistency check that `README_UserStories.md` TODO/DONE story state and AC trace/status match lifecycle artifacts and active story content.
 - Missing acceptance criteria, ambiguity, README SPEC doc gaps, edge cases, measurable outcomes, and risk list from a clarify/analyze/checklist-style review gate.
-- Next recommended command: `SPEC_updateUserStory`, `SPEC_commitStoryWorks`, `SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, or `SPEC_updateDetailDesign`.
+- Plan & `## Trajectory` handoff: when the story has a paired `*-UserStory-Tasks.md` artifact, route through `SPEC_updateMadePlan` after this review (`PASS` or `REVISE`) to append the review verdict to `## Trajectory`, mark requirement tasks `[x]` (or record `REQ-REV-*` rework attempt $k/3$), and expand design tasks when transferring to design.
+- Next recommended command: `SPEC_updateMadePlan`, `SPEC_updateUserStory`, `SPEC_commitStoryWorks`, `SPEC_takeArchDesign`, `SPEC_updateArchDesign`, `SPEC_takeDetailDesign`, or `SPEC_updateDetailDesign`.
 
 ## Review Gate Contract
 

@@ -17,7 +17,7 @@ Run these steps once, in order. There is no retry loop; any failed check stops a
 3. Move the story and its paired tasks artifact from `suspendUS` to `doingUS`, preserving prior task state and suspended history.
 4. Write the resume note confirming `resume_ref` and any handoff caveats.
 5. Verify the ID no longer appears under `suspendUS`.
-6. Report the restored paths and the next step: `SPEC_whatsNextTask`, or the first unchecked task in the restored `*-UserStory-Tasks.md`.
+6. Report the restored paths and the next step: `SPEC_whatsNextTask`, `SPEC_updateMadePlan` (when the restored `*-UserStory-Tasks.md` needs status synchronization or slice refinement), or the first unchecked task in the restored `*-UserStory-Tasks.md`.
 
 ### Worked Example
 
@@ -57,7 +57,7 @@ Expected result:
 - A paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact restored when present.
 - Resume note confirming `resume_ref` and any handoff caveats.
 - Local `.catdd/spec/suspendUS/` suspended work state removed after active artifact restoration.
-- Next recommended command: usually `SPEC_whatsNextTask` or the first unchecked task from `*-UserStory-Tasks.md`.
+- Next recommended command: usually `SPEC_whatsNextTask`, `SPEC_updateMadePlan` (if the restored task checklist is stale or needs refinement), or the first unchecked task from `*-UserStory-Tasks.md`.
 
 ## Conflict Guard
 
