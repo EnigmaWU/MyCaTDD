@@ -1,11 +1,11 @@
 ---
-description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeletons, or UT_*, SPEC_*, and HARNESS_* slash commands."
+description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* slash commands."
 ---
 # CaTDD Project Instructions
 
 - CaTDD method source: `.catdd/methodPrompts/`
 - Portable slash command source: `.catdd/slashCommands/`
-- Copilot prompt wrappers: `.github/prompts/UT_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, and `.github/prompts/HARNESS_*.prompt.md`
+- Copilot prompt wrappers: `.github/prompts/TEST_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, and `.github/prompts/HARNESS_*.prompt.md`
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
