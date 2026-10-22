@@ -79,7 +79,7 @@ analysis_mode: BRAINSTORM
 - **Select**: Candidate A, confirmed by the developer in Stage 0.1.
 - **Execute**: Analysis Pipeline Steps 0-11 run against Candidate A.
 - **Verify**: Step 3 finds the story still spans 3 functional areas → return to **Select** → Candidate B adopted as a split, with A kept as the first slice.
-- Result: `.catdd/spec/todoUS/20260904-user-guide-api-integration-UserStory.md`, raw issue archived to `analyzedNews/` with `status: analyzed`.
+- Result: `.catdd/spec/todoUS/20260904-user-guide-api-integration-UserStory.md`, raw issue archived to `analyzedNews/` with `status: analyzed` and a `## Chat History` section recording the Stage 0.1 Q&A and Stage 0.2 candidate-split dialogue.
 
 ## Inputs
 
@@ -106,6 +106,10 @@ analysis_mode: BRAINSTORM
   - `status: analyzed`
   - `analyzed_by: SPEC_analyzeIssue`
   - `analyzed_on: YYYY-MM-DD`
+  - `analysis_mode: BRAINSTORM | AUTONOMOUS`
+- A mandatory `## Chat History` (`chatHistory`) section appended to the archived `.catdd/spec/analyzedNews/*-Issue.md` file to preserve how the issue was analyzed:
+  - In `BRAINSTORM` mode: chronological turn-by-turn or Q&A record of the developer and CodeAgent dialogue (clarification questions asked, developer answers/quotes, candidate interpretations and repair slices compared, rejected alternatives, scope-split choices, and final `BRAINSTORM` decisions).
+  - In `AUTONOMOUS` mode: chronological autonomous reasoning/prompt trace, candidate evaluations, recorded assumptions, and open `ONE-MORE-THING` / Initial Acceptance Questions surfaced.
 - An issue-focused, independently testable user story slice with observed behavior, expected behavior, priority, acceptance scenarios, edge cases, scope, non-goals, risks, assumptions, and acceptance questions.
 - Source trace from the user story back to the archived raw issue artifact.
 - Forward trace from the archived raw issue to generated artifacts:
@@ -198,18 +202,23 @@ Score Business Value, User Value, Cost/Effort, and Risk/Complexity each 1-9. Com
 
 Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. Move the raw issue from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/`. Update trace links both ways. **Gate:** if any Initial Acceptance Questions remain open, mark the story NOT ready — it may not proceed to `SPEC_openUserStory`.
 
-After moving the raw issue, normalize analyzed metadata and trace in the archived issue file:
+After moving the raw issue, normalize analyzed metadata, append `## Chat History`, and update trace links in the archived `.catdd/spec/analyzedNews/*-Issue.md` file:
 
 - set `status: analyzed`
 - add/update `analyzed_by: SPEC_analyzeIssue`
 - add/update `analyzed_on: YYYY-MM-DD`
+- add/update `analysis_mode: BRAINSTORM | AUTONOMOUS`
 - add `generated_todo_story` and `project_story_ledger` trace links
 - update related story reference from stale doing links to the correct active/closed path
+- append `## Chat History` (`chatHistory`) recording how the issue was analyzed:
+  - In `BRAINSTORM` mode, capture each clarification round (`Turn # | Speaker / Prompt | Question or Proposal | Developer Answer / Decision | Impact on Story / Scope`), candidate slice comparisons, and confirmed `BRAINSTORM` decisions so the interactive analysis rationale is never lost in ephemeral chat.
+  - In `AUTONOMOUS` mode, capture the autonomous analysis prompt trace, candidate evaluation table, assumptions, and open questions.
 
 ## Conflict Guard
 
 If the issue lacks reproducible intent or expected behavior, create questions and keep the story draft incomplete instead of inventing requirements.
 
+- Do not archive a raw issue into `.catdd/spec/analyzedNews/` without appending a `## Chat History` section (`chatHistory`) that records how the issue was analyzed (especially the developer/CodeAgent dialogue and decisions in `BRAINSTORM` mode).
 - Do not run `AUTONOMOUS` mode unless the developer explicitly requested it.
 - In `BRAINSTORM` mode, do not generate `todoUS` before the good-enough gate passes unless the output is explicitly marked incomplete/not-ready.
 - In `AUTONOMOUS` mode, do not hide missing intent behind assumptions. Record every material unknown as an Initial Acceptance Question, Ambiguity Warning, or Risk/Assumption entry.

@@ -42,7 +42,7 @@ Expected result:
 - **Step 5**: implied rule — "cap must not exceed the system-wide max" — but the max is never stated. Flagged as a question. **Not** guessed.
 - **Step 7**: source says retries should stop "quickly" → flagged: "Is 'quickly' a time bound or an attempt bound?" No threshold substituted.
 - **Step 8**: BV 7, UV 8, Cost 3, Risk 2 → score 3.0.
-- **Step 9**: written to `.catdd/spec/todoUS/`, raw feature archived to `analyzedNews/`. Two questions remain open → story marked **NOT ready**; it cannot proceed to `SPEC_openUserStory` until they are answered.
+- **Step 9**: written to `.catdd/spec/todoUS/`, raw feature archived to `analyzedNews/` with `status: analyzed` and a `## Chat History` section recording the feature-tree split and ambiguity Q&A. Two questions remain open → story marked **NOT ready**; it cannot proceed to `SPEC_openUserStory` until they are answered.
 
 ## Inputs
 
@@ -63,8 +63,16 @@ Expected result:
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
 - The source feature or imported user-story input moved from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` as a team-shared raw input archive.
+- The archived raw feature metadata is normalized to analyzed state:
+  - `status: analyzed`
+  - `analyzed_by: SPEC_analyzeFeature`
+  - `analyzed_on: YYYY-MM-DD`
+  - `analysis_mode: BRAINSTORM | AUTONOMOUS`
+- A mandatory `## Chat History` (`chatHistory`) section appended to the archived `.catdd/spec/analyzedNews/*-Feature.md` file to preserve how the feature was analyzed:
+  - In `BRAINSTORM` mode: chronological turn-by-turn or Q&A record of the developer and CodeAgent dialogue (clarification questions asked, developer answers/quotes, feature-tree split proposals and selections, business-rule/ambiguity resolutions, and final `BRAINSTORM` decisions).
+  - In `AUTONOMOUS` mode: chronological autonomous reasoning/prompt trace across Steps 1-9, recorded assumptions, and open `ONE-MORE-THING` / Initial Acceptance Questions surfaced.
 - A value-focused, independently testable user story slice with user value, priority, acceptance scenarios, edge cases, scope, non-goals, risks, assumptions, and initial acceptance questions.
-- Source trace from the user story back to the archived raw input artifact.
+- Source trace from the user story back to the archived raw input artifact, and forward trace (`generated_todo_story`, `project_story_ledger`) in the archived raw feature.
 - The story follows `SpecTodoUserStoryTemplate.md` structure, with each section tracing to its source analysis technique.
 
 ## Analysis Pipeline
@@ -105,10 +113,22 @@ Score Business Value, User Value, Cost/Effort, and Risk/Complexity each 1-9. Com
 ### Step 9 — Write artifact & archive
 Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. Move the raw feature from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/`. Update trace links both ways. **Gate:** if any Initial Acceptance Questions remain open, mark the story NOT ready — it may not proceed to `SPEC_openUserStory`.
 
+After moving the raw feature, normalize analyzed metadata, append `## Chat History`, and update trace links in the archived `.catdd/spec/analyzedNews/*-Feature.md` file:
+
+- set `status: analyzed`
+- add/update `analyzed_by: SPEC_analyzeFeature`
+- add/update `analyzed_on: YYYY-MM-DD`
+- add/update `analysis_mode: BRAINSTORM | AUTONOMOUS`
+- add `generated_todo_story` and `project_story_ledger` trace links
+- append `## Chat History` (`chatHistory`) recording how the feature was analyzed:
+  - In `BRAINSTORM` mode, capture each clarification round (`Turn # | Speaker / Prompt | Question or Proposal | Developer Answer / Decision | Impact on Story / Scope`), feature-tree split choices, and confirmed `BRAINSTORM` decisions so the interactive analysis rationale is never lost in ephemeral chat.
+  - In `AUTONOMOUS` mode, capture the autonomous analysis prompt trace across Steps 1-9, assumptions, and open questions.
+
 ## Conflict Guard
 
 If the feature or imported user-story source lacks user value, actor, or outcome, create questions and keep the story draft incomplete instead of inventing requirements.
 
+- Do not archive a raw feature into `.catdd/spec/analyzedNews/` without appending a `## Chat History` section (`chatHistory`) that records how the feature was analyzed (especially the developer/CodeAgent dialogue and decisions in `BRAINSTORM` mode).
 - Do not run `AUTONOMOUS` mode unless the developer explicitly requested it.
 - In `BRAINSTORM` mode, do not generate `todoUS` before key intent is clarified with the developer.
 - In `AUTONOMOUS` mode, do not hide missing intent behind assumptions; record every material unknown as an Initial Acceptance Question.

@@ -265,7 +265,7 @@
 
 | From → To | Link |
 | --- | --- |
-| This story → Raw input | `.catdd/spec/analyzedNews/{{file}}` |
+| This story → Raw input & `## Chat History` | `.catdd/spec/analyzedNews/{{file}}` |
 | Project story index | `README_UserStories.md` |
 | Parent story | `.catdd/spec/todoUS/{{parent-story-file}}` |
 | Sub-UserStory candidates | `.catdd/spec/todoUS/{{sub-story-file-or-candidate}}` |
@@ -291,3 +291,9 @@
 | **What Was Kept** | {{valid parts of original story preserved unchanged}} |
 | **What Was Rejected** | {{invalid assumptions explicitly discarded}} |
 | **Summary of Changes** | {{what this corrected version changes and why}} |
+
+### Re-Analysis Chat History
+
+| Turn # | Speaker / Prompt | Question or Proposal | Developer Answer / Decision | Impact on Corrected Story |
+| --- | --- | --- | --- | --- |
+| 1 | {{CodeAgent / Developer}} | {{abort diagnosis or replacement intent question}} | {{developer decision or autonomous evidence}} | {{kept / rejected / revised AC or scope}} |

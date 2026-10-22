@@ -38,7 +38,7 @@ Expected result:
 - **Action (Step 3)**: rejected — "gateway is idempotent", disproved by `TC-RETRY-009`.
 - **Observation**: a first draft also rejected AC-02, but nothing in the abort evidence touches AC-02 → over-correction → back to **Thought** → AC-02 restored to the preserved list.
 - **Action (Step 5)**: only `extract-business-rules` and `validate-requirements-criteria` re-applied, scoped to the idempotency rule. The feature tree and prioritization are **not** redone.
-- **Stop**: corrected story written to `.catdd/spec/todoUS/` with an **Abort Evidence** section; `abortUS/` copy untouched.
+- **Stop**: corrected story written to `.catdd/spec/todoUS/` with an **Abort Evidence** section and `### Re-Analysis Chat History` (plus an appended re-analysis round under `## Chat History` in the linked `analyzedNews/` file when present); `abortUS/` copy untouched.
 
 ## Inputs
 
@@ -60,7 +60,7 @@ Expected result:
 - Source trace from the new todo story to the aborted story and its paired tasks.
 - A corrected, independently testable user-story slice with preserved valid intent, rejected invalid assumptions, acceptance scenarios, risks, non-goals, and open questions.
 - The aborted story remains preserved in `.catdd/spec/abortUS/` as historical evidence — it is never mutated.
-- The story follows `SpecTodoUserStoryTemplate.md` structure and includes the optional **Abort Evidence** section documenting the abort diagnosis.
+- The story follows `SpecTodoUserStoryTemplate.md` structure and includes the **Abort Evidence** section documenting the abort diagnosis plus `### Re-Analysis Chat History` (`chatHistory`) capturing the developer/CodeAgent re-analysis dialogue, preserved/rejected decisions, and resolved questions (and appends a re-analysis round to `## Chat History` in the linked `.catdd/spec/analyzedNews/` artifact when one exists).
 - Explicit documentation of what was kept (valid) and what was rejected (invalid) from the original story.
 
 ## Analysis Pipeline
@@ -138,11 +138,12 @@ Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. The foll
 **Gate:** if any Initial Acceptance Questions remain open, mark the story NOT ready — it may not proceed to `SPEC_openUserStory`.
 
 ### Step 7 — Write & trace
-Write the corrected story. Do NOT mutate or delete the original `abortUS/` files — they are permanent historical evidence. Source trace the new story to both the archived raw input (if any) and the aborted story + tasks.
+Write the corrected story (including `### Re-Analysis Chat History` under `## Abort Evidence`, and appending the re-analysis round to `## Chat History` in the linked `.catdd/spec/analyzedNews/` file when one exists). Do NOT mutate or delete the original `abortUS/` files — they are permanent historical evidence. Source trace the new story to both the archived raw input (if any) and the aborted story + tasks.
 
 ## Conflict Guard
 
 Do not mutate the aborted story into active work. Create a new todo story when the corrected intent is clear enough.
+Do not omit `### Re-Analysis Chat History` (`chatHistory`) when re-analyzing an aborted story; preserve the developer/CodeAgent dialogue and rationale that decided what was kept vs. rejected.
 Do not invent replacement requirements. If the abort reason changes product intent or acceptance criteria, ask the developer before writing the corrected todo story.
 If the problem is better represented as a new defect or improvement input, recommend `SPEC_importIssue` instead of forcing user-story re-analysis.
 Do not re-apply all analysis SKILLs — only apply what the abort diagnosis proves needs correction.

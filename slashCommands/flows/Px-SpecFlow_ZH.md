@@ -79,8 +79,8 @@ P0/P1/P2 flows = 特定类别的测试设计和实现流程
 
 - 流程级 `execution_mode`（`manualMode | autonomousMode`）管控跨故事生命周期流转的全局 SpecCoding 流程。
 - 命令级 `analysis_mode`（`BRAINSTORM | AUTONOMOUS`）在 `manualMode` 下局部作用于 `SPEC_analyzeIssue` 与 `SPEC_analyzeFeature`。
-  - 在 `BRAINSTORM` 模式（默认）下，助手与开发者就需求进行逐步交互式探讨。
-  - 在 `AUTONOMOUS` 模式下，助手一次性执行组合式多技能分析流水线草拟 `todoUS`，而不按单步逐一打断，但显式记录假设与疑问，且在存在阻塞性问题时将故事标记为未就绪（NOT ready）。
+  - 在 `BRAINSTORM` 模式（默认）下，助手与开发者就需求进行逐步交互式探讨，并且**必须**在归档的 `.catdd/spec/analyzedNews/` 文件中追加结构化的 `## Chat History`（`chatHistory`）章节，记录澄清回合、候选切片对比、开发者回答及 `BRAINSTORM` 决策。
+  - 在 `AUTONOMOUS` 模式下，助手一次性执行组合式多技能分析流水线草拟 `todoUS`，而不按单步逐一打断，在 `.catdd/spec/analyzedNews/` 的 `## Chat History` 下记录自主推理/提示轨迹，显式记录假设与疑问，且在存在阻塞性问题时将故事标记为未就绪（NOT ready）。
   - 在分析命令内部使用 `analysis_mode: AUTONOMOUS` 并不会将流程切换为 `autonomousMode`；故事生命周期流程仍然保持在交互式 `manualMode`。
 
 ### ONE-MORE-THING 通用暂停规则
@@ -158,7 +158,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 | 改进 | 原因 | 在 `Px SpecFlow` 中的做法 |
 | --- | --- | --- |
 | 以宪法级别的项目上下文治理工作 | Spec Kit 以项目原则开始，使后续的规范、计划和任务决策不会漂移。 | 将 `.catdd/spec/projectContext.md` 视为类似宪法的防护栏。`SPEC_initProjectContext` 和 `SPEC_updateProjectContext` 应在故事工作继续之前记录稳定的原则、约束、质量关卡和团队惯例。 |
-| 将工作分析为独立可测试的故事切片 | Spec Kit 的规范模板要求优先级的用户故事及独立测试，使 MVP 范围和用户价值显式化。 | `SPEC_analyzeIssue` 和 `SPEC_analyzeFeature` 应生成包含参与者、价值、优先级、独立测试意图、验收场景、边界情况、风险和开放问题的 `.catdd/spec/todoUS/` 故事，而不仅仅是一个松散的摘要。`SPEC_importUserStory` 是已结构化 US/AC 输入的直接队列，将其写入 `.catdd/spec/todoUS/` 而无需分析。分析应将议题/特性的原始输入从 `.catdd/spec/pendingNews/` 移动到 `.catdd/spec/analyzedNews/`，以保持可追溯性而不将已分析的工作留在待处理收件箱中。 |
+| 将工作分析为独立可测试的故事切片 | Spec Kit 的规范模板要求优先级的用户故事及独立测试，使 MVP 范围和用户价值显式化。 | `SPEC_analyzeIssue` 和 `SPEC_analyzeFeature` 应生成包含参与者、价值、优先级、独立测试意图、验收场景、边界情况、风险和开放问题的 `.catdd/spec/todoUS/` 故事，而不仅仅是一个松散的摘要。`SPEC_importUserStory` 是已结构化 US/AC 输入的直接队列，将其写入 `.catdd/spec/todoUS/` 而无需分析。分析应将议题/特性的原始输入从 `.catdd/spec/pendingNews/` 移动到 `.catdd/spec/analyzedNews/`，并强制追加 `## Chat History`（`chatHistory`）章节记录 `BRAINSTORM` 对话或 `AUTONOMOUS` 推理轨迹，以保持可追溯性与分析推演依据，而不将已分析的工作留在待处理收件箱中。 |
 | 在设计前明确开发者和 CodeAgent 故事意图 | 一个故事可能看起来完整，而开发者和 CodeAgent 仍然推断出不同的范围、非目标或成功证据。在设计前明确双方意图可防止昂贵的架构和详细设计漂移。 | 当活跃故事仍需要范围对齐时，在 `SPEC_openUserStory` 后使用 `SPEC_clearStoryIntent`。在规划开始前，在活跃故事中记录一份`相互意图契约 (Mutual Intent Contract)`。该契约声明开发者意图、CodeAgent 意图、范围内工作、范围外工作、成功信号、假设和开放问题。如果意图未对齐，在 `SPEC_makePlan` 开始前询问或修改活跃故事。 |
 | 通过轻量级计划步骤分离 `WHAT`/`WHY` 与 `HOW` | Spec Kit 将产品意图保留在 `spec.md` 中，将技术选择推迟到 `plan.md`，减少过早的设计决策。 | 将用户故事意图保留在故事制品中，然后使用 `SPEC_makePlan` 创建一个配对的 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品，以 Markdown 复选框任务形式表达下一步工作，并确定活跃故事是意图澄清型、设计导向型还是实现导向型；在后续阶段转换或漂移检查点使用 `SPEC_updateMadePlan` 同步 `[ ]`/`[x]` 状态并将粗粒度任务细化为详细设计或 US/AC/TC 执行切片。对于设计导向型工作，区分初始架构/详细设计 (`SPEC_take*Design`) 和后续设计修订 (`SPEC_update*Design`)。详细技术选择在后续命令需要时仍存放到项目根目录的 `README*` SPEC 文档中。 |
 | 在实现前执行 clarify/analyze/checklist 关卡 | Spec Kit 在编码前暴露歧义、不一致和缺失的覆盖，使返工尽早发生。 | 在架构设计后使用 `SPEC_reviewArchDesign`，在详细设计后使用 `SPEC_reviewDetailDesign`。将未通过的架构审查路由到 `SPEC_updateArchDesign`；将未通过的详细审查路由到 `SPEC_updateDetailDesign`，而不是跳过。 |
@@ -180,7 +180,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 
 - `.catdd/spec/projectContext.md`：项目事实、约束、惯例和当前操作的上下文。
 - `.catdd/spec/pendingNews/YYYYMMDD-*.md`：待分析的已导入议题或特性请求。
-- `.catdd/spec/analyzedNews/YYYYMMDD-*.md`：已分析并作为源追溯保留的原始议题或特性输入。
+- `.catdd/spec/analyzedNews/YYYYMMDD-*.md`：已分析并作为源追溯保留的原始议题或特性输入，包含规范化分析元数据以及记录 `BRAINSTORM` 对话或 `AUTONOMOUS` 分析轨迹的必选 `## Chat History`（`chatHistory`）章节。
 - `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`：等待被开启的已分析用户故事和直接导入的结构化用户故事。
 - `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`：处于设计、测试、实现或审查阶段的活跃用户故事。
 - `.catdd/spec/doingUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：团队共享的任务制品（基于 `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md` 创建），与活跃故事配对，同时记录只追加的按时间顺序 `## Trajectory` 轨迹表（`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`）以及面向后续执行的 `[ ]`/`[x]` `## Task Checklist` 与理由。
@@ -456,10 +456,10 @@ flowchart TB
 2. 使用 [SPEC_updateProjectContext](../commands/Px-SpecFlow/SPEC_updateProjectContext.md) 当项目事实、约束或惯例发生变化时。
 3. 使用 [SPEC_importIssue](../commands/Px-SpecFlow/SPEC_importIssue.md) 或 [SPEC_importFeature](../commands/Px-SpecFlow/SPEC_importFeature.md) 将议题或特性输入导入到 `.catdd/spec/pendingNews/`。
 4. 使用 [SPEC_importUserStory](../commands/Px-SpecFlow/SPEC_importUserStory.md) 将已存在的结构化用户故事输入直接排入 `.catdd/spec/todoUS/` 队列；优先使用每个模块或子模块的 `README_UserStory.md` 和 `README_UserGuide.md` 作为来源。
-5. 使用 [SPEC_analyzeIssue](../commands/Px-SpecFlow/SPEC_analyzeIssue.md) 或 [SPEC_analyzeFeature](../commands/Px-SpecFlow/SPEC_analyzeFeature.md) 将待处理的议题/特性输入转换为 `.catdd/spec/todoUS/` 中的用户故事，并将原始输入移动到 `.catdd/spec/analyzedNews/`。
+5. 使用 [SPEC_analyzeIssue](../commands/Px-SpecFlow/SPEC_analyzeIssue.md) 或 [SPEC_analyzeFeature](../commands/Px-SpecFlow/SPEC_analyzeFeature.md) 将待处理的议题/特性输入转换为 `.catdd/spec/todoUS/` 中的用户故事，并将原始输入移动到 `.catdd/spec/analyzedNews/`，同时强制追加 `## Chat History`（`chatHistory`）章节记录如何分析该议题或特性（尤其是 `BRAINSTORM` 模式下的开发者/CodeAgent 对话与决策）。
    - 这些分析命令使用由 `.github/skills/` 中的需求分析 SKILLs 组合而成的流水线：`write-user-story`、`build-feature-tree`、`elicit-requirements-models`、`extract-business-rules`、`facilitate-example-mapping`、`validate-requirements-criteria`、`prioritize-requirements`。
    - 输出遵循 `SpecTodoUserStoryTemplate.md`。
-   - 对于需要对已中止故事进行选择性纠正而非全范围重新分析的中止故事，使用 `SPEC_analyzeAbortedUserStory.md`。
+   - 对于需要对已中止故事进行选择性纠正而非全范围重新分析的中止故事，使用 `SPEC_analyzeAbortedUserStory.md`（在 `## Abort Evidence` 下记录 `### Re-Analysis Chat History`，并在存在关联 `analyzedNews/` 文件时追加至其 `## Chat History`）。
    - 分析将故事排入队列后，使用 [SPEC_commitPreStoryWorks](../commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) 在开启故事前提交故事前导入/分析区间；当导入阶段以 `analysis_mode: AUTONOMOUS` 无值守运行时，该检查点为默认行为，否则故事前区间始终处于 `manualMode`。
 6. 使用 [SPEC_openUserStory](../commands/Px-SpecFlow/SPEC_openUserStory.md) 将选定的用户故事移入 `.catdd/spec/doingUS/`。
 7. 可选使用 [SPEC_clearStoryIntent](../commands/Px-SpecFlow/SPEC_clearStoryIntent.md)，当开发者意图与 CodeAgent 意图在规划前仍需对齐时。

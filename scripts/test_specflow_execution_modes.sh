@@ -100,10 +100,23 @@ done
 
 ANALYZE_ISSUE="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_analyzeIssue.md"
 ANALYZE_FEATURE="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_analyzeFeature.md"
+ANALYZE_ABORT="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_analyzeAbortedUserStory.md"
+TODO_STORY_TEMPLATE="$REPO_ROOT/slashCommands/templates/SpecTodoUserStoryTemplate.md"
 assert_contains "$ANALYZE_ISSUE" '`analysis_mode`: optional `BRAINSTORM | AUTONOMOUS`'
 assert_contains "$ANALYZE_FEATURE" '`analysis_mode`: optional `BRAINSTORM | AUTONOMOUS`'
 assert_contains "$ANALYZE_ISSUE" 'ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule'
 assert_contains "$ANALYZE_FEATURE" 'ONE-MORE-THING: ask developer if something not sure (Universal Stop Rule'
+assert_contains "$ANALYZE_ISSUE" '## Chat History'
+assert_contains "$ANALYZE_ISSUE" 'chatHistory'
+assert_contains "$ANALYZE_ISSUE" 'Do not archive a raw issue into `.catdd/spec/analyzedNews/` without appending a `## Chat History` section'
+assert_contains "$ANALYZE_FEATURE" '## Chat History'
+assert_contains "$ANALYZE_FEATURE" 'chatHistory'
+assert_contains "$ANALYZE_FEATURE" 'Do not archive a raw feature into `.catdd/spec/analyzedNews/` without appending a `## Chat History` section'
+assert_contains "$ANALYZE_ABORT" '### Re-Analysis Chat History'
+assert_contains "$ANALYZE_ABORT" 'chatHistory'
+assert_contains "$TODO_STORY_TEMPLATE" '### Re-Analysis Chat History'
+assert_contains "$FLOW_DOC" '## Chat History'
+assert_contains "$FLOW_DOC_ZH" '## Chat History'
 
 assert_contains "$MAKE_PLAN" 'Orientation Boundary for Autonomous Mode'
 assert_contains "$MAKE_PLAN" 'Do not execute `autonomousMode` on `intent-clearing`, `requirement-oriented`, or `design-oriented` stories'
