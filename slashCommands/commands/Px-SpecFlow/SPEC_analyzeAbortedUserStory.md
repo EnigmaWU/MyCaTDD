@@ -123,6 +123,7 @@ Apply SKILLs **only** where the abort diagnosis indicates a need for correction.
 Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. The following sections must be present and correct:
 
 - **Story Statement** — updated if intent changed; otherwise preserved from original
+- **Story Readiness Snapshot** — Stage 1 EPIC story sufficiency lenses (`E1 Unambiguous`, `E2 Singular`, `E3 Verifiable`, `P1 Dependency Control`, `P2 Complete`, `I1 Conforming`, `C1 Scope Discipline`) re-evaluated after abort correction
 - **Priority** — always re-scored (Step 5 mandate)
 - **Visual Model** — updated if design flaw or quality dead-end was diagnosed; otherwise preserved or marked as not changed
 - **Acceptance Criteria** — scenarios modified, added, or removed per the re-analysis; unchanged scenarios preserved verbatim

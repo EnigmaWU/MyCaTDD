@@ -23,18 +23,23 @@
 
 ## Story Readiness Snapshot
 
-<!-- How: Decide whether the story can enter SPEC_openUserStory before generating design or tests.
+<!-- How: Stage 1 pre-open EPIC story sufficiency check (arXiv:2610.07534).
+     Decide whether the story can enter SPEC_openUserStory before generating design or tests.
      A thoughtful story is not just formatted; it proves why now, what outcome matters, which
-     examples are concrete, and which unknowns still block acceptance. -->
+     examples are concrete, and which unknowns still block acceptance. The full 10-dimension
+     artifact-set ledger (## EPIC Specification Sufficiency) is seeded later in *-UserStory-Tasks.md
+     by SPEC_makePlan and maintained by SPEC_updateMadePlan. -->
 
-| Lens | Answer | Evidence |
-| --- | --- | --- |
-| User value is explicit | {{yes/no}} | {{role + business value source}} |
-| Observable outcome exists | {{yes/no}} | {{output, state change, file, response, or behavior}} |
-| Concrete examples exist | {{yes/no}} | {{Example Mapping rows or source notes}} |
-| Blocking questions remain | {{yes/no}} | {{Initial Acceptance Questions references}} |
-| Story size is acceptable | {{yes/no}} | {{Sub-UserStory Candidates / split rationale}} |
-| Ready decision | {{Ready / Blocked / Too Large / Needs Split}} | {{why this decision is correct}} |
+| Lens | EPIC Dimension | Answer | Evidence |
+| --- | --- | --- | --- |
+| User value & behavioral scope are explicit | `C1 Scope Discipline` | {{yes/no}} | {{role + business value + in-scope/non-goals source}} |
+| Observable & measurable outcome exists | `E1 Unambiguous` + `E3 Verifiable` | {{yes/no}} | {{output, state change, threshold, file, response, or behavior}} |
+| Concrete examples & exceptional paths exist | `E2 Singular` + `P2 Complete` | {{yes/no}} | {{Example Mapping rows, atomic scenarios, Edge/Misuse/Fault seeds}} |
+| Dependencies, assumptions & risks are declared | `P1 Dependency Control` | {{yes/no}} | {{Risks & Assumptions rows, upstream/downstream constraints}} |
+| Template structure & stable IDs are preserved | `I1 Conforming` | {{yes/no}} | {{US-n, RULE-n, EX-n, E/M/F seeds}} |
+| Blocking questions remain | `E1.1 Clarification-Seeking` | {{yes/no}} | {{Initial Acceptance Questions + Ambiguity Warnings references}} |
+| Story size is acceptable | `E2 Singular` + `C1 Scope Discipline` | {{yes/no}} | {{Sub-UserStory Candidates / split rationale}} |
+| Ready decision | Stage 1 Sufficiency Gate | {{Ready / Blocked / Too Large / Needs Split}} | {{why this decision is correct}} |
 
 ---
 

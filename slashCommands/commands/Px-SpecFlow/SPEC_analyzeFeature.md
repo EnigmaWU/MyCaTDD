@@ -111,7 +111,7 @@ For each smell, generate a precise clarifying question under `## Ambiguity Warni
 Score Business Value, User Value, Cost/Effort, and Risk/Complexity each 1-9. Compute Priority Score = (BV + UV) / (Cost + Risk). Record the rationale for each score. If fewer than 3 items exist in total, skip formal scoring and use pairwise comparison instead. `(→ SKILL: prioritize-requirements)`
 
 ### Step 9 — Write artifact & archive
-Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. Move the raw feature from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/`. Update trace links both ways. **Gate:** if any Initial Acceptance Questions remain open, mark the story NOT ready — it may not proceed to `SPEC_openUserStory`.
+Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`, including the Stage 1 EPIC-mapped `## Story Readiness Snapshot` (`E1 Unambiguous`, `E2 Singular`, `E3 Verifiable`, `P1 Dependency Control`, `P2 Complete`, `I1 Conforming`, `C1 Scope Discipline`). Move the raw feature from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/`. Update trace links both ways. **Gate:** if any Initial Acceptance Questions remain open or any required Stage 1 EPIC lens in `## Story Readiness Snapshot` is `no`, mark the story NOT ready — it may not proceed to `SPEC_openUserStory` until resolved (the full 10-dimension `## EPIC Specification Sufficiency` ledger will be seeded in `*-UserStory-Tasks.md` by `SPEC_makePlan`).
 
 After moving the raw feature, normalize analyzed metadata, append `## Chat History`, and update trace links in the archived `.catdd/spec/analyzedNews/*-Feature.md` file:
 

@@ -40,6 +40,32 @@ Paired with [{{YYYYMMDD-StorySlug-UserStory.md}}]({{YYYYMMDD-StorySlug-UserStory
 
 ---
 
+## EPIC Specification Sufficiency
+
+<!-- Stage 2 artifact-set sufficiency ledger (arXiv:2610.07534 EPIC framework).
+     Judges the active story, guide, architecture/detail design, verification design, and task plan
+     as one semantic artifact set rather than isolated documents.
+     Seeded by SPEC_makePlan (inheriting Stage 1 story readiness from todoUS/*-UserStory.md or evaluating
+     imported stories directly), progressively updated by SPEC_updateMadePlan after each SPEC_review* gate
+     (SPEC_reviewUserStory, SPEC_reviewArchDesign, SPEC_reviewDetailDesign, SPEC_reviewImplTests,
+     SPEC_reviewProductCodes), and verified at SPEC_closeUserStory so no unresolved blocking gap or
+     question remains. Do not collapse into a single numeric score; record disposition, evidence, and owner. -->
+
+| EPIC Category | Dimension | Disposition (`satisfied / partial / gap / question / N/A`) | Evidence / Affected IDs | Owner / Next Action |
+| --- | --- | --- | --- | --- |
+| **Expressive (E)** | `E1 Unambiguous` | `{{satisfied / partial / gap / question}}` | {{quantified bounds, AST smell scan, Mutual Intent Contract, or open Q IDs}} | `{{SPEC_clearStoryIntent / SPEC_updateUserStory / none}}` |
+| **Expressive (E)** | `E2 Singular` | `{{satisfied / partial / gap / question}}` | {{atomic scenarios, singular arch/detail facts, isolated risk/edge entries}} | `{{SPEC_updateUserStory / SPEC_updateDetailDesign / none}}` |
+| **Expressive (E)** | `E3 Verifiable` | `{{satisfied / partial / gap / question}}` | {{observable ACs, `discovery_ledger` TPs, `TestEvidenceChain`, completion criteria}} | `{{SPEC_reviewDetailDesign / SPEC_designTests / none}}` |
+| **Precise (P)** | `P1 Dependency Control` | `{{satisfied / partial / gap / question / N/A}}` | {{declared assumptions, boundary constraints, dependency failure modes (`Fault`)}} | `{{SPEC_takeArchDesign / SPEC_takeDetailDesign / none}}` |
+| **Precise (P)** | `P2 Complete` | `{{satisfied / partial / gap / question}}` | {{Typical + Edge + Misuse + Fault coverage, quality/resource/security constraints}} | `{{SPEC_reviewUserStory / SPEC_reviewDetailDesign / none}}` |
+| **Interpretable (I)** | `I1 Conforming` | `{{satisfied / partial / gap}}` | {{standard templates, stable `US/AC/TP/TC` IDs}} | `{{SPEC_updateUserStory / SPEC_designTests / none}}` |
+| **Interpretable (I)** | `I2 Consistent` | `{{satisfied / partial / gap / question}}` | {{ubiquitous language, `README_UserStories.md` ledger sync, cross-artifact alignment}} | `{{SPEC_reviewUserStory / SPEC_reviewDetailDesign / SPEC_reviewProductCodes}}` |
+| **Interpretable (I)** | `I3 Comprehensible` | `{{satisfied / partial / gap / N/A}}` | {{structured sections, cross-doc links, worked/usage examples, companion test READMEs}} | `{{SPEC_reviewDetailDesign / SPEC_reviewImplTests / none}}` |
+| **Compartmentalized (C)** | `C1 Scope Discipline` | `{{satisfied / partial / gap / question}}` | {{explicit `In scope` / `Non-goals`, product `WHAT/WHY` separated from design `HOW`}} | `{{SPEC_clearStoryIntent / SPEC_reviewUserStory / none}}` |
+| **Compartmentalized (C)** | `C2 Implementation Planning` | `{{satisfied / partial / gap}}` | {{work orientation, ordered `US/AC/TC` slices, `[P]` parallel markers, commit plan}} | `{{SPEC_makePlan / SPEC_updateMadePlan}}` |
+
+---
+
 ## Trajectory
 
 <!-- Append-only chronological execution trace of the story across the SpecFlow lifecycle.

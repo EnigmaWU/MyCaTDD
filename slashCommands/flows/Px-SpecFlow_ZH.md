@@ -181,9 +181,9 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 - `.catdd/spec/projectContext.md`：项目事实、约束、惯例和当前操作的上下文。
 - `.catdd/spec/pendingNews/YYYYMMDD-*.md`：待分析的已导入议题或特性请求。
 - `.catdd/spec/analyzedNews/YYYYMMDD-*.md`：已分析并作为源追溯保留的原始议题或特性输入，包含规范化分析元数据以及记录 `BRAINSTORM` 对话或 `AUTONOMOUS` 分析轨迹的必选 `## Chat History`（`chatHistory`）章节。
-- `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`：等待被开启的已分析用户故事和直接导入的结构化用户故事。
+- `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`：等待被开启的已分析用户故事和直接导入的结构化用户故事（包含来自 `SpecTodoUserStoryTemplate.md` 的第一阶段 EPIC 映射 `## Story Readiness Snapshot`）。
 - `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`：处于设计、测试、实现或审查阶段的活跃用户故事。
-- `.catdd/spec/doingUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：团队共享的任务制品（基于 `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md` 创建），与活跃故事配对，同时记录只追加的按时间顺序 `## Trajectory` 轨迹表（`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`）以及面向后续执行的 `[ ]`/`[x]` `## Task Checklist` 与理由。
+- `.catdd/spec/doingUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：团队共享的任务制品（基于 `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md` 创建），与活跃故事配对，同时记录第二阶段 10 维 `## EPIC Specification Sufficiency` 规范充分性台账（`E1..E3`、`P1..P2`、`I1..I3`、`C1..C2`）、只追加的按时间顺序 `## Trajectory` 轨迹表（`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`）以及面向后续执行的 `[ ]`/`[x]` `## Task Checklist` 与理由。
 - `.catdd/spec/suspendUS/YYYYMMDD-UserStory.md`：已挂起的活跃用户故事，保留可恢复的持久工作引用（例如 git 分支或 worktree）。
 - `.catdd/spec/suspendUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`：当故事通过 `SPEC_makePlan` 制定了计划时，与挂起故事并排保留的挂起任务制品。
 - `相互意图契约 (Mutual Intent Contract)`：活跃 doing 故事中的一个部分，在设计开始前记录开发者意图、CodeAgent 意图、范围、非目标、成功信号、假设和开放问题。
