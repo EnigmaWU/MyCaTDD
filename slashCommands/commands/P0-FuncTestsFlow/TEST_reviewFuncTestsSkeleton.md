@@ -65,6 +65,7 @@ Expected result:
 
 - Coverage summary for Typical, Edge, Misuse, and Fault.
 - Source-first inventory/reconciliation evidence and `discovery_ledger` findings, auditing the **TestEvidenceChain** and capturing wholly missing behaviors with rule/TP IDs rather than requiring pre-existing TCs.
+- Cross-Artifact Semantic-Delta Matrix (`EPIC I2.3 / Transformation Preservation`: `Story AC / UsageDesign / DetailDesign -> VerifyDesign (discovery_ledger TP) -> P0 US/AC/TC Skeleton (@[Expect])`) classifying each functional obligation transformation as `KEPT`, `DETAILED` (with rationale), `REASSIGNED` (with owner), `EXCLUDED` (with approval), `VIOLATED`, or `UNKNOWN`. Any `VIOLATED` skeleton triggers `REVISE` (`rework_route = SPEC_designTests`); any `UNKNOWN` source expectation triggers `ASK` or `BLOCKED`.
 - Conflicts, duplicated scenarios, missing AC/TC links, and unclear assumptions.
 - Separate `cardinality_gate`, `discovery_status`, `ready_for_implementation`, reviewed scope/sources, exclusions, referrals, and residual risk as defined by the method.
 - `review_verdict`: one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`, derived from the cardinality and discovery sub-gates. `ready_for_implementation: yes` requires `PASS` with no blocking sub-gate.

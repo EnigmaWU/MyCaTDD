@@ -84,6 +84,7 @@ Expected result:
 
 - `review_verdict`: `PASS` when the implemented tests are aligned and the next step is implementation, review, or commit; `REVISE` with the owning `rework_route` for implementation drift (`SPEC_implTests`, `TEST_implTestCase`, `TEST_reviewImplTestCase`), skeleton or design drift (`SPEC_designTests`), or cleanup (`SPEC_refactTests`); `ASK` when the developer must settle a conflict; `BLOCKED` when the test result or design evidence needed for the review is unavailable.
 - `severity`: optional `blocking | advisory`, defaulting to `blocking`.
+- Cross-Artifact Semantic-Delta Matrix (`EPIC I2.3 / Transformation Preservation`: `DetailDesign / VerifyDesign (TP) -> US/AC/TC Skeleton (@[Expect]) -> Implemented Test Body (SETUP / BEHAVIOR / VERIFY) & Companion README`) classifying each implemented TC's semantic alignment as `KEPT`, `DETAILED` (with rationale), `REASSIGNED`, `EXCLUDED`, `VIOLATED`, or `UNKNOWN`. Any `VIOLATED` test body or weakened `VERIFY` assertion triggers `REVISE` (`rework_route = SPEC_implTests` or `TEST_implTestCase` for implementation drift, or `SPEC_designTests` for skeleton drift).
 - Per-TC alignment summary against US/AC/TC design comments.
 - Anti-Test-Theater audit: verifies assertions test real SUT state mutations or domain invariants without vacuous checks or mock echoing.
 - Missing assertions, excessive assertions, setup/cleanup gaps, phase-layout issues, `VERIFY_KEYPOINT_xyz` issues, and status-marker inconsistencies.

@@ -47,6 +47,7 @@ grep -Fq '## EPIC Specification Sufficiency' "$UPDATE_PLAN" || fail "SPEC_update
 grep -Fq 'Progressive Detail Refinement' "$UPDATE_PLAN" || fail "SPEC_updateMadePlan must define progressive detail refinement"
 grep -Fq 'Status Synchronization' "$UPDATE_PLAN" || fail "SPEC_updateMadePlan must define status synchronization"
 grep -Fq '## EPIC Specification Sufficiency' "$TASKS_TEMPLATE" || fail "SpecDoingUserStoryTasksTemplate.md must define ## EPIC Specification Sufficiency section"
+grep -Fq '### Cross-Artifact Semantic-Delta Matrix' "$TASKS_TEMPLATE" || fail "SpecDoingUserStoryTasksTemplate.md must define ### Cross-Artifact Semantic-Delta Matrix"
 grep -Fq '## Trajectory' "$TASKS_TEMPLATE" || fail "SpecDoingUserStoryTasksTemplate.md must define ## Trajectory section"
 grep -Fq '## Task Checklist' "$TASKS_TEMPLATE" || fail "SpecDoingUserStoryTasksTemplate.md must define ## Task Checklist section"
 grep -Fq '## EPIC Specification Sufficiency' "$CLOSE_STORY" || fail "SPEC_closeUserStory must verify ## EPIC Specification Sufficiency at close"
@@ -55,6 +56,17 @@ for review_cmd in SPEC_reviewUserStory SPEC_reviewArchDesign SPEC_reviewDetailDe
   review_file="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/${review_cmd}.md"
   grep -Fq 'SPEC_updateMadePlan' "$review_file" || fail "${review_cmd} must wire into SPEC_updateMadePlan"
   grep -Fq '## Trajectory' "$review_file" || fail "${review_cmd} must reference ## Trajectory handoff"
+done
+for delta_cmd in \
+  "slashCommands/commands/Px-SpecFlow/SPEC_reviewArchDesign.md" \
+  "slashCommands/commands/Px-SpecFlow/SPEC_reviewDetailDesign.md" \
+  "slashCommands/commands/Px-SpecFlow/SPEC_designTests.md" \
+  "slashCommands/commands/Px-SpecFlow/SPEC_reviewImplTests.md" \
+  "slashCommands/commands/P0-FuncTestsFlow/TEST_reviewFuncTestsSkeleton.md" \
+  "slashCommands/commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md" \
+  "slashCommands/commands/P2-QualityTestsFlow/TEST_reviewQualityTestsSkeleton.md"; do
+  grep -Fq 'Cross-Artifact Semantic-Delta Matrix' "$REPO_ROOT/$delta_cmd" || fail "$delta_cmd must require Cross-Artifact Semantic-Delta Matrix"
+  grep -Fq 'VIOLATED' "$REPO_ROOT/$delta_cmd" || fail "$delta_cmd must classify VIOLATED transformations"
 done
 grep -Fq '# SPEC_mergeWorks' "$MERGE_WORKS" || fail "SPEC_mergeWorks command must declare its heading"
 grep -E -q '\.catdd/spec/doingUS/\*-(TASKs|UserStory-Tasks)\.md' "$TAKE_PLAN" || fail "SPEC_makePlan must create a paired TASKs artifact in doingUS"

@@ -64,6 +64,20 @@ Paired with [{{YYYYMMDD-StorySlug-UserStory.md}}]({{YYYYMMDD-StorySlug-UserStory
 | **Compartmentalized (C)** | `C1 Scope Discipline` | `{{satisfied / partial / gap / question}}` | {{explicit `In scope` / `Non-goals`, product `WHAT/WHY` separated from design `HOW`}} | `{{SPEC_clearStoryIntent / SPEC_reviewUserStory / none}}` |
 | **Compartmentalized (C)** | `C2 Implementation Planning` | `{{satisfied / partial / gap}}` | {{work orientation, ordered `US/AC/TC` slices, `[P]` parallel markers, commit plan}} | `{{SPEC_makePlan / SPEC_updateMadePlan}}` |
 
+### Cross-Artifact Semantic-Delta Matrix (`EPIC I2.3 / Transformation Preservation`)
+
+<!-- Tracks each material obligation across the 4 review stages:
+     1. SPEC_reviewArchDesign: Story / Guide -> ArchDesign / UbiLang / ArchVerifyDesign
+     2. SPEC_reviewDetailDesign: ArchDesign -> DetailDesign / StateDesign -> DetailVerifyDesign (discovery_ledger)
+     3. SPEC_designTests + TEST_review*TestsSkeleton: DetailVerifyDesign (TP) -> US/AC/TC Skeleton (@[Expect])
+     4. SPEC_reviewImplTests: US/AC/TC Skeleton (@[Expect]) -> Implemented Test Body (SETUP/BEHAVIOR/VERIFY) & Companion README
+     Classify each transition as KEPT, DETAILED (with rationale), REASSIGNED (with owner), EXCLUDED (with approval), VIOLATED (blocks gate -> REVISE), or UNKNOWN (blocks gate -> ASK / BLOCKED). -->
+
+| Source Obligation (`US/AC/ASR`) | Story / Guide | ArchDesign / UbiLang | DetailDesign / VerifyDesign (`TP`) | Test Design Skeleton (`US/AC/TC`) | ImplTest Body (`SETUP/BEHAVIOR/VERIFY`) | Gate Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| `{{AC-01 / ASR-01}}` | Defined (`MUST`) | `{{KEPT / DETAILED / N/A}}` | `{{KEPT / DETAILED (TP-01..n)}}` | `{{KEPT (TC-001)}}` | `{{KEPT (RED / GREEN)}}` | `{{PASS / REVISE / ASK}}` |
+| `{{AC-02}}` | Defined (`MUST`) | `{{KEPT / REASSIGNED / EXCLUDED}}` | `{{DETAILED / VIOLATED / UNKNOWN}}` | `{{pending / TC-002}}` | `{{pending}}` | `{{PASS / REVISE / ASK}}` |
+
 ---
 
 ## Trajectory

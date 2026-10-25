@@ -68,6 +68,7 @@ Expected result:
 
 - SUT, declared scope across State/Capability/Interaction/Concurrency, source references, domain/test-level/environment, and verification methods.
 - `discovery_ledger`: location or explicit missing-evidence finding; disposition counts reconciled to actual rows, auditing the **TestEvidenceChain** with exclusions, routing, and sampling limits separate from coverage.
+- Cross-Artifact Semantic-Delta Matrix (`EPIC I2.3 / Transformation Preservation`: `ArchDesign / StateDesign / DetailDesign / ResourceDesign -> VerifyDesign (discovery_ledger TP) -> P1 US/AC/TC Skeleton (@[Expect])`) classifying each design-model obligation transformation as `KEPT`, `DETAILED` (with rationale), `REASSIGNED` (with owner), `EXCLUDED` (with approval), `VIOLATED`, or `UNKNOWN`. Any `VIOLATED` skeleton triggers `REVISE` (`rework_route = SPEC_updateDetailDesign` or `SPEC_designTests`); any `UNKNOWN` design expectation triggers `ASK` or `BLOCKED`.
 - `review_evidence`: independent source-derived checklist, reviewer/process (or labeled self-review), sources examined, reconciliation, and residual risk.
 - Findings keyed by source/rule or TP ID, with US/AC/TC IDs only when they exist; identify gaps, unknowns, category conflicts, weak oracles, or unsupported assumptions and the required correction/decision.
 - `cardinality_gate`: `PASS | FAIL`; `discovery_status`: `PASS | GAPS | BLOCKED`; `ready_for_implementation`: `yes | no`. Any non-PASS sub-gate means no; `PASS` applies only to the reviewed scope, not execution or release readiness.

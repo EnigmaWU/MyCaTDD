@@ -75,11 +75,13 @@ Expected result — two passes:
 - Tradeoff gate: REVISE if decisions lack explicit sensitivity/tradeoff analysis.
 - Decision gate: REVISE if architecture-significant decisions lack alternatives, rationale, implications, or trace links.
 - Normative & ubiquitous-language gate (`EPIC E1.4 & I2.1`): REVISE if architectural invariants ($K$) or boundary obligations omit controlled modal vocabulary (`MUST` / `MUST NOT` / conditional `SHOULD` / `MAY`) or introduce synonym drift against `README_UbiLang.md`.
+- Cross-artifact semantic-delta gate (`EPIC I2.3 / Transformation Preservation`): build a **Cross-Artifact Semantic-Delta Matrix** (`Source Obligation (US/AC/ASR) -> Story / Guide -> ArchDesign / UbiLang / ArchVerifyDesign`) classifying each obligation transformation as `KEPT`, `DETAILED` (with rationale), `REASSIGNED` (with owner), `EXCLUDED` (with approval), `VIOLATED`, or `UNKNOWN`. Any `VIOLATED` transformation triggers `REVISE` (`rework_route = SPEC_updateArchDesign`); any `UNKNOWN` transformation triggers `ASK` or `BLOCKED`.
 
 ## Output Contract
 
 - `review_verdict`: one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`, with optional `severity: blocking | advisory` and a required `rework_route` whenever the verdict is not `PASS`.
 - Evidence for each finding, grounded in the architecture-changing story, project context, architecture document, and mirror document when present.
+- Cross-Artifact Semantic-Delta Matrix (`Story / Guide -> ArchDesign / UbiLang / ArchVerifyDesign`) classifying every in-scope obligation transformation as `KEPT`, `DETAILED`, `REASSIGNED`, `EXCLUDED`, `VIOLATED`, or `UNKNOWN`.
 - Checks for module boundaries, dependency direction, AgentSDK/CaTDD separation, runtime adaptation strategy, trace/audit/control coverage, Mermaid-renderable architecture views, and Px-SpecFlow architecture-oriented surface coverage.
 - Checks that architecture remains module-context centered and explicitly documents systems consuming the module and their integration boundaries.
 - EPIC sufficiency dispositions for the architecture scope (`E2 Singular` architecture facts, `P1 Dependency Control`, `P2 Complete` quality/security constraints, `I2 Consistent` cross-view alignment, `C1 Scope Discipline`) to feed `## EPIC Specification Sufficiency` in `*-UserStory-Tasks.md`.

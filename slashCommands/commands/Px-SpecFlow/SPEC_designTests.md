@@ -76,7 +76,7 @@ Expected result:
 - Source-command provenance for each generated or redesigned category skeleton, including the orchestrating `SPEC_designTests` command and the matching `TEST_designXYZ` command when one exists.
 - Language-template provenance when a matching `methodPrompts/CaTDD_designAndImplTemplate.<language>` file exists for the target test file language or extension.
 - A parallel-ready implementation checklist that groups the next execution slices by US/AC/TC, notes dependencies, and highlights validation checkpoints before product-code work starts.
-- A flow-coupling decision record that states the chosen P0 route, any P1/P2 promotion reason, the exact `TEST_*` command contracts inspected, and the review command to run before implementation.
+- A flow-coupling decision record that states the chosen P0 route, any P1/P2 promotion reason, the exact `TEST_*` command contracts inspected, and the review command to run before implementation (`TEST_reviewFuncTestsSkeleton`, `TEST_reviewDesignTestsSkeleton`, or `TEST_reviewQualityTestsSkeleton`, which audit the Cross-Artifact Semantic-Delta Matrix for `KEPT / DETAILED / REASSIGNED / EXCLUDED / VIOLATED / UNKNOWN` transformations before `SPEC_implTests`).
 - Category labels, priority gates, and initial TC status markers.
 - Next recommended command: `SPEC_implTests` or a specific `TEST_*` command.
 
