@@ -16,7 +16,7 @@ Run these steps once, in order. There is no retry loop; a failed split validatio
 
 1. Validate there is exactly one active target story in `.catdd/spec/doingUS/` for the selected story ID.
 2. Capture `accepted_scope` and `rejected_scope` in explicit structured form. If `accepted_scope` is empty or not materially valid, stop and fall back to `SPEC_abortUserStory`.
-3. Confirm the accepted slice is verified and reviewable. Never close a rejected slice as accepted.
+3. Confirm the accepted slice is verified, reviewable, and satisfies the `## Story Completion Conditions` (`EPIC E3.4`) applicable to the accepted ACs. Never close a rejected slice as accepted.
 4. Move the accepted slice into the close lane and record its close evidence.
 5. Move the rejected slice into the abort lane with its `rejection_reason` and `evidence_refs` preserved.
 6. Synchronize `README_UserStories.md` so accepted ACs show DONE and rejected ACs show the abort state.

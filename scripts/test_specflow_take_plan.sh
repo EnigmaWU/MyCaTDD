@@ -51,7 +51,9 @@ grep -Fq '### Cross-Artifact Semantic-Delta Matrix' "$TASKS_TEMPLATE" || fail "S
 grep -Fq '## Trajectory' "$TASKS_TEMPLATE" || fail "SpecDoingUserStoryTasksTemplate.md must define ## Trajectory section"
 grep -Fq '## Task Checklist' "$TASKS_TEMPLATE" || fail "SpecDoingUserStoryTasksTemplate.md must define ## Task Checklist section"
 grep -Fq '## EPIC Specification Sufficiency' "$CLOSE_STORY" || fail "SPEC_closeUserStory must verify ## EPIC Specification Sufficiency at close"
+grep -Fq 'Story Completion Conditions' "$CLOSE_STORY" || fail "SPEC_closeUserStory must verify Story Completion Conditions at close"
 grep -Fq 'EPIC Dimension' "$REPO_ROOT/slashCommands/templates/SpecTodoUserStoryTemplate.md" || fail "SpecTodoUserStoryTemplate.md must include Stage 1 EPIC Dimension column in Story Readiness Snapshot"
+grep -Fq '## Story Completion Conditions' "$REPO_ROOT/slashCommands/templates/SpecTodoUserStoryTemplate.md" || fail "SpecTodoUserStoryTemplate.md must define ## Story Completion Conditions"
 for review_cmd in SPEC_reviewUserStory SPEC_reviewArchDesign SPEC_reviewDetailDesign SPEC_reviewImplTests SPEC_reviewProductCodes; do
   review_file="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/${review_cmd}.md"
   grep -Fq 'SPEC_updateMadePlan' "$review_file" || fail "${review_cmd} must wire into SPEC_updateMadePlan"

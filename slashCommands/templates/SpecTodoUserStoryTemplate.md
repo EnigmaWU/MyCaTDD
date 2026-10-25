@@ -36,6 +36,7 @@
 | Observable & measurable outcome exists | `E1 Unambiguous` + `E3 Verifiable` | {{yes/no}} | {{output, state change, threshold, file, response, or behavior}} |
 | Concrete examples & exceptional paths exist | `E2 Singular` + `P2 Complete` | {{yes/no}} | {{Example Mapping rows, atomic scenarios, Edge/Misuse/Fault seeds}} |
 | Dependencies, assumptions & risks are declared | `P1 Dependency Control` | {{yes/no}} | {{Risks & Assumptions rows, upstream/downstream constraints}} |
+| Story-specific completion conditions are stated | `E3.4 Completion & Readiness` | {{yes/no}} | {{Story Completion Conditions: TestLevel, TestScope, CaTDD categories, Not-Done rules}} |
 | Template structure & stable IDs are preserved | `I1 Conforming` | {{yes/no}} | {{US-n, RULE-n, EX-n, E/M/F seeds}} |
 | Blocking questions remain | `E1.1 Clarification-Seeking` | {{yes/no}} | {{Initial Acceptance Questions + Ambiguity Warnings references}} |
 | Story size is acceptable | `E2 Singular` + `C1 Scope Discipline` | {{yes/no}} | {{Sub-UserStory Candidates / split rationale}} |
@@ -225,6 +226,24 @@
 
 - {{explicitly excluded item 1}}
 - {{explicitly excluded item 2}}
+
+---
+
+## Story Completion Conditions (`EPIC E3.4`)
+
+<!-- How: State story-specific completion and readiness conditions inside the story specification
+     itself rather than relying only on generic workflow checklists (arXiv:2610.07534 E3.4).
+     Verified by SPEC_reviewUserStory (for specification completeness) and enforced by
+     SPEC_closeUserStory / SPEC_partialCloseUserStory before moving doingUS -> doneUS. -->
+
+| Completion Dimension | Requirement (`MUST` hold before `SPEC_closeUserStory`) |
+| --- | --- |
+| **Required `TestLevel`** | {{`UnitTesting` only / `UnitTesting + SysTesting` / `UnitTesting + SysTesting + UserTesting`}} |
+| **Required `TestScope` & Environment** | {{`mockSysRtm` (`testPassOnMock`) sufficient / `MUST` also pass `realSysRtm` on target runtime/OS/hardware}} |
+| **Required CaTDD Categories** | {{`P0 Functional (Typical, Edge, Misuse, Fault)` / `+ P1 (State, Capability, Interaction, Concurrency)` / `+ P2 (...)`}} |
+| **Required SPEC & Doc Surfaces** | {{`README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, companion `*_readme.md`}} |
+| **Not-Done Conditions (`MUST NOT close if`)** | {{explicit story-specific conditions that forbid premature closure, e.g., only mock passes when realSysRtm is required, or any AC lacks GREEN TC}} |
+| **Approved Deferrals** | {{items explicitly deferred to Sub-UserStories or follow-up issues without invalidating this story's acceptance claim; if an in-scope AC fails at close, `MUST` use `SPEC_partialCloseUserStory`}} |
 
 ---
 
