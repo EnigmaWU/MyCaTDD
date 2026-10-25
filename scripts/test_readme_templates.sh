@@ -12,6 +12,7 @@ fail() {
 
 required_pairs=(
   "README.md|slashCommands/templates/README_Template.md"
+  "README_UbiLang.md|slashCommands/templates/README_UbiLangTemplate.md"
   "README_ArchDesign.md|slashCommands/templates/README_ArchDesignTemplate.md"
   "README_UserStories.md|slashCommands/templates/README_UserStoriesTemplate.md"
   "README_UserGuide.md|slashCommands/templates/README_UserGuideTemplate.md"
@@ -102,5 +103,11 @@ for template in "${domain_templates[@]}"; do
 done
 
 [[ "$missing" -eq 0 ]] || fail "missing SpecCoding README template files"
+
+grep -Fq '## 2. Core System Concept Model' "$REPO_ROOT/slashCommands/templates/README_UbiLangTemplate.md" || fail "README_UbiLangTemplate.md must include Core System Concept Model"
+grep -Fq '## Core System Concepts & Bounded Contexts' "$REPO_ROOT/slashCommands/templates/README_ArchDesignTemplate.md" || fail "README_ArchDesignTemplate.md must include Core System Concepts & Bounded Contexts"
+grep -Fq 'define-ubiquitous-language' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeArchDesign.md" || fail "SPEC_takeArchDesign must wire define-ubiquitous-language skill"
+grep -Fq 'define-bounded-contexts' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeArchDesign.md" || fail "SPEC_takeArchDesign must wire define-bounded-contexts skill"
+grep -Fq 'define-ubiquitous-language' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewArchDesign.md" || fail "SPEC_reviewArchDesign must wire define-ubiquitous-language skill"
 
 echo "[readme-template-test] PASSED: every SpecCoding README SPEC doc has a portable template"

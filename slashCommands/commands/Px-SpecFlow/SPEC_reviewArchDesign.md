@@ -44,6 +44,7 @@ Expected result — two passes:
 - `projectContext_file`: current project context.
 - `readme_arch_design`: project-root or module-scoped `README_ArchDesign.md`.
 - `readme_arch_design_zh`: optional matching `README_ArchDesign_ZH.md` mirror.
+- `readme_ubilang`: optional project-root `README_UbiLang.md` (architecture-owned ubiquitous language and normative vocabulary surface) to check against architecture boundaries and views.
 - `arch_verify_design`: optional project-root or module-scoped `README_ArchVerifyDesign.md` carrying the `SysTesting`/`UserTesting` strategy.
 - `reference_docs`: optional user stories, usage design, user guide, external architecture references, or framework notes relevant to the story.
 
@@ -56,6 +57,7 @@ Expected result — two passes:
 
 - Skill-first rule: if relevant architecture skills exist in the workspace, use them for this review.
 - Preferred skills and usage:
+	- `define-bounded-contexts` and `define-ubiquitous-language` to audit that every Bounded Context has a coherent Core System Concept Model and that `README_ArchDesign.md` and `README_UbiLang.md` agree on canonical concept names with zero synonym drift (`EPIC I2.1`).
 	- `design-architecture-viewpoints` to strengthen viewpoint completeness, inter-view consistency findings, and Security Perspective coverage (trust boundaries, STRIDE).
 	- `apply-architectural-tactics` to evaluate measurable quality scenarios, tactic adequacy (including security tactics: detect, resist, react, recover), and architecture tradeoff points.
 	- `document-architectural-decisions` to validate ADR completeness (alternatives, argument, implications, decision state, trace links).
@@ -72,6 +74,7 @@ Expected result — two passes:
 - Security & constitutional gate: REVISE if protected assets, trust boundaries, or constitutional invariants ($K$) are omitted when security design is in scope.
 - Tradeoff gate: REVISE if decisions lack explicit sensitivity/tradeoff analysis.
 - Decision gate: REVISE if architecture-significant decisions lack alternatives, rationale, implications, or trace links.
+- Normative & ubiquitous-language gate (`EPIC E1.4 & I2.1`): REVISE if architectural invariants ($K$) or boundary obligations omit controlled modal vocabulary (`MUST` / `MUST NOT` / conditional `SHOULD` / `MAY`) or introduce synonym drift against `README_UbiLang.md`.
 
 ## Output Contract
 

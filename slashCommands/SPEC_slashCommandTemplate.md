@@ -2,13 +2,23 @@
 
 Use this template before creating any concrete `SPEC_*` slash command.
 
-The template is intentionally plain Markdown so it can be used by Copilot, Cline, Continue, `utCodeAgentCLI`, or any assistant that can consume prompt text. It must not depend on one editor, one model provider, one programming language, or one tool runtime.
+The template is intentionally plain Markdown so it can be used by Copilot, Cline, Continue, `utCodeAgentCLI`, or any assistant that can consume prompt text. It **MUST NOT** depend on one editor, one model provider, one programming language, or one tool runtime.
 
-A `SPEC_*` command drives one SpecCoding lifecycle step. It uses CaTDD methods defined in `methodPrompts` and lifecycle rules defined in `flows/Px-SpecFlow.md`; it must not redefine CaTDD category semantics or SpecFlow lifecycle rules.
+A `SPEC_*` command drives one SpecCoding lifecycle step. It uses CaTDD methods defined in `methodPrompts` and lifecycle rules defined in `flows/Px-SpecFlow.md`; it **MUST NOT** redefine CaTDD category semantics or SpecFlow lifecycle rules.
 
 Compared with `methodPrompts`, a `SPEC_*` command should be more flow-first and automation-friendly: it tells a CodeAgent what lifecycle step to run now, what to read, what artifact to produce, what gate to apply, and what command should come next.
 
 A `SPEC_*` command operates on lifecycle artifacts — project context, pending news, user stories, design docs, tests, product code, and commit/CI state — not on test categories or category skeletons directly.
+
+## Normative Language Rule (`EPIC E1.4 & I2.1`)
+
+All `SPEC_*` commands and the artifacts they produce **MUST** use controlled normative keywords and project ubiquitous language (`README_UbiLang.md`):
+
+- **`MUST`** (`SHALL`): hard mandatory obligation that blocks the gate (`REVISE` / `BLOCKED`) if unsatisfied.
+- **`MUST NOT`** (`SHALL NOT`): hard prohibition or safety/security boundary.
+- **`SHOULD` / `SHOULD NOT`**: conditional preference that may be bypassed only with a recorded tradeoff, ADR, or explicit exception condition.
+- **`MAY`**: explicitly optional behavior.
+- **No Synonym Drift (`I2.1`)**: domain terms **MUST** match `README_UbiLang.md` (referenced from `.catdd/spec/projectContext.md`); unapproved aliases or weak modals (`"should"` / `"might"` in an AC) are flagged as `SMELL-MODAL`.
 
 ## Command Header
 
@@ -28,7 +38,7 @@ Choose one based on the command's decision complexity:
 - **ToT** — Tree of Thoughts: Use when the command must generate multiple candidate artifacts or approaches, evaluate each against quality criteria, and select the best. Suitable for commands that compare design alternatives, story quality options, or competing next-step paths.
 - **Linear** — Direct execution: Use when the command's action is deterministic given complete and valid inputs and no branching is expected. Suitable for simple artifact movement, context initialization, or atomic commit and CI steps.
 
-State the chosen pattern here and explain why it fits this command's decision structure, then write the matching `### <Pattern> Execution` subsection below. A pattern may not be declared without its executable loop.
+State the chosen pattern here and explain why it fits this command's decision structure, then write the matching `### <Pattern> Execution` subsection below. A pattern **MUST NOT** be declared without its executable loop.
 
 ### ReACT Execution (when CoT Pattern = ReACT)
 

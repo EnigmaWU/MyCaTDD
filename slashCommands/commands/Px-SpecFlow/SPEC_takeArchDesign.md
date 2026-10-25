@@ -8,7 +8,7 @@ Model guidance: use a SOTA reasoning-capable LLM for this command (for example, 
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting. This command must inspect the architecture-changing active user story, requirements (e.g. `README_UserStory.md` / `doingUS/`), and project context, reason about the structural decomposition and adapter boundaries, draft or update the project-root `README_ArchDesign.md`, and verify that component structures are traceable to requirements and fit the project guidelines before finalizing. Include Mermaid-renderable C4-style architecture views (system context, container, component, runtime execution, and deployment) or explicitly mark a view as not applicable. Also declare how Px-SpecFlow architecture-oriented surfaces (`README_UsageDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and relevant state design sources) are covered, delegated, deferred, or not applicable. When the architecture document already contains earlier architectural work, update its traceability to distinguish baseline architecture stories from the current architecture-changing update story instead of replacing everything with the newest opened story. For embedded software or digital video/audio domain work, add hardware boundaries, RTOS task structures, media pipelines, and synchronization boundaries to the architecture design.
+**ReACT** — Reasoning + Acting. This command must inspect the architecture-changing active user story, requirements (e.g. `README_UserStory.md` / `doingUS/`), and project context, reason about the structural decomposition and adapter boundaries, draft or update the project-root `README_ArchDesign.md`, and verify that component structures are traceable to requirements and fit the project guidelines before finalizing. Include Mermaid-renderable C4-style architecture views (system context, container, component, runtime execution, and deployment) or explicitly mark a view as not applicable. Also declare how Px-SpecFlow architecture-oriented surfaces (`README_UbiLang.md`, `README_UsageDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and relevant state design sources) are covered, delegated, deferred, or not applicable. When the architecture document already contains earlier architectural work, update its traceability to distinguish baseline architecture stories from the current architecture-changing update story instead of replacing everything with the newest opened story. For embedded software or digital video/audio domain work, add hardware boundaries, RTOS task structures, media pipelines, and synchronization boundaries to the architecture design.
 
 ### ReACT Execution
 
@@ -51,6 +51,7 @@ Expected result — two passes:
 - `projectContext_file`: current project context.
 - `readme_arch_design`: project-root `README_ArchDesign.md` to create or update.
 - `readme_arch_template`: matching template under `slashCommands/templates/README_ArchDesignTemplate.md`.
+- `readme_ubilang`: optional project-root `README_UbiLang.md` (seeded from `slashCommands/templates/README_UbiLangTemplate.md`) to create or update when the architecture defines or changes bounded-context ubiquitous language (`EPIC I2.1`) or normative domain terms (`EPIC E1.4`).
 - `arch_verify_design`: optional project-root `README_ArchVerifyDesign.md` to create or update when the story changes verification topology, the level-and-boundary map, target runtime environments, peer/dependency doubles, or evidence/equipment ownership.
 - `arch_verify_template`: matching template under `slashCommands/templates/README_ArchVerifyDesignTemplate.md`.
 - `detail_verify_design`: optional project-root `README_DetailVerifyDesign.md` that supplies promoted `SysTesting`/`UserTesting` TP IDs.
@@ -64,16 +65,18 @@ Expected result — two passes:
 
 - Skill-first rule: if relevant architecture skills exist in the workspace, use them for this command execution.
 - Preferred skills and usage:
+	- `define-bounded-contexts` and `define-ubiquitous-language` to partition problem subdomains into Bounded Contexts, identify the system's Core Concepts (Entities, Values, Invariants, Events, Boundaries), and codify canonical terms and rejected synonyms in `README_UbiLang.md` before component/API design begins.
 	- `design-architecture-viewpoints` for stakeholder-to-viewpoint mapping, view coverage depth, inter-view consistency checks, and the Security Perspective (trust boundaries, STRIDE threat models, principals vs. assets).
 	- `apply-architectural-tactics` for ASR extraction, measurable quality-attribute scenarios, tactic selection (including security tactics: detect, resist, react, recover), and tradeoff clarity.
 	- `document-architectural-decisions` for ADR-quality alternatives/argument/implication structure when architecture-significant choices are made.
 	- `design-tool-use-sandboxing` when the architecture involves CodeAgents, LLM tool execution, or runtime sandboxes (partitioning safe read-only tools vs. dangerous mutative actions with human approval gates).
 	- `analyze-with-tactics-questionnaires` for evaluating security, availability, and modifiability tactics against architectural questionnaires.
-- Builtin fallback rule: if one or more relevant skills are unavailable, apply the learned builtin-skill checklist in this command covering: stakeholders and concerns, C4-style views, at least three measurable quality scenarios, explicit tradeoffs/risks, security/sandbox boundaries, and decision traceability.
+- Builtin fallback rule: if one or more relevant skills are unavailable, apply the learned builtin-skill checklist in this command covering: core system concepts and bounded-context ubiquitous language (`README_UbiLang.md`), stakeholders and concerns, C4-style views, at least three measurable quality scenarios, explicit tradeoffs/risks, security/sandbox boundaries, and decision traceability.
 - Completion rule: command completion must not depend on skill availability. Skills are preferred when present; builtin-skill behavior is mandatory fallback.
 
 ### Builtin Skill Checklist (when skills are unavailable)
 
+- Concept & ubiquitous-language builtin: identify the system's key domain concepts and Bounded Context boundaries in `README_ArchDesign.md`, and synchronize their canonical names, exact definitions, and forbidden synonyms in `README_UbiLang.md`.
 - Viewpoint builtin: identify at least three stakeholder groups, map each to concerns, and cover them in Context/Container/Component/Deployment views.
 - Consistency builtin: explicitly check Context vs Functional boundaries, Functional vs Development ownership, and Concurrency vs Deployment placement.
 - Tactics builtin: define at least three measurable quality scenarios using `Source, Stimulus, Environment, Response, Response Measure`.

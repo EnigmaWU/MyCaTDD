@@ -70,6 +70,7 @@ Expected result — two passes:
 - Security & sandbox gate: REVISE if sensitive credentials may leak in APIs/logs or if mutative agent tools lack approval/sandbox boundaries.
 - Quality continuity gate: REVISE if architecture quality scenarios are not reflected in detail design decisions.
 - Testability gate: FAIL if acceptance criteria cannot be translated into CaTDD US/AC/TC skeleton design.
+- Normative & ubiquitous-language gate (`EPIC E1.4 & I2.1`): REVISE if API preconditions/postconditions, state invariants, or ACs use weak modals instead of `MUST` / `MUST NOT` (or conditional `SHOULD` / `MAY`) or introduce synonym drift against `README_UbiLang.md`.
 
 ## Output Contract
 

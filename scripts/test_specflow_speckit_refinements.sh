@@ -50,6 +50,9 @@ grep -Fq 'Mutual Intent Contract' "$CLEAR_STORY_INTENT" || fail "SPEC_clearStory
 grep -Fq 'SPEC_clearStoryIntent' "$FLOW_DOC" || fail "Px-SpecFlow must include SPEC_clearStoryIntent in the lifecycle"
 grep -Fq 'lightweight implementation plan' "$TAKE_DETAIL_DESIGN" || fail "SPEC_takeDetailDesign must mention lightweight implementation plan output"
 grep -Fq 'clarify/analyze/checklist-style review gate' "$REVIEW_STORY" || fail "SPEC_reviewUserStory must mention clarify/analyze/checklist gate"
+grep -Fq 'Normative & Ubiquitous Language Gate' "$REVIEW_STORY" || fail "SPEC_reviewUserStory must enforce Normative & Ubiquitous Language Gate"
+grep -Fq 'SMELL-MODAL' "$ANALYZE_ISSUE" || fail "SPEC_analyzeIssue must hunt SMELL-MODAL"
+grep -Fq 'SMELL-MODAL' "$ANALYZE_FEATURE" || fail "SPEC_analyzeFeature must hunt SMELL-MODAL"
 grep -Fq 'parallel-ready implementation checklist' "$DESIGN_TESTS" || fail "SPEC_designTests must mention parallel-ready implementation checklist"
 
 echo "[specflow-speckit-refinements-test] PASSED: SpecFlow documents Spec Kit-inspired refinements"

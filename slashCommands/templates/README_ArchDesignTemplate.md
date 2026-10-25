@@ -6,7 +6,20 @@ This is the SpecCoding template for project-root `README_ArchDesign.md`. Create 
 
 - Story link: {{.catdd/spec/doingUS/YYYYMMDD-UserStory.md or todo/done link}}
 - Related overview: [README.md](README.md)
+- Related ubiquitous language & concept model: [README_UbiLang.md](README_UbiLang.md)
 - Related detail design: [README_DetailDesign.md](README_DetailDesign.md)
+
+## Core System Concepts & Bounded Contexts
+
+<!-- How: System concepts are the KEY to both system architecture and Ubiquitous Language.
+  Partition the system into Bounded Contexts and name the canonical concepts each module owns;
+  keep exact term definitions and forbidden synonyms in README_UbiLang.md.
+  (→ SKILL: define-bounded-contexts + define-ubiquitous-language) -->
+
+| Bounded Context / Module | Subdomain Type (`Core / Supporting / Generic`) | Key Owned Concepts (`README_UbiLang.md`) | Upstream / Downstream Context Map (`ACL / OHS / PL / Conformist`) |
+| --- | --- | --- | --- |
+| `{{ContextOrModule1}}` | `{{Core}}` | `{{CanonicalConcept1}}`, `{{CanonicalConcept2}}` | {{Upstream/Downstream integration pattern}} |
+| `{{ContextOrModule2}}` | `{{Supporting / Generic}}` | `{{CanonicalConcept3}}` | {{Upstream/Downstream integration pattern}} |
 
 ## Module Context
 
@@ -64,6 +77,7 @@ Declare how this architecture design handles the architecture-oriented SPEC surf
 
 | Surface | Handling | Follow-up Trigger |
 | --- | --- | --- |
+| `README_UbiLang.md` | {{covered/delegated/deferred/not applicable}} | {{When new core system concepts, bounded contexts, or normative terms are introduced}} |
 | `README_UsageDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
 | `README_ErrorDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |
 | `README_ResourceDesign.md` | {{covered/delegated/deferred/not applicable}} | {{When to create or update}} |

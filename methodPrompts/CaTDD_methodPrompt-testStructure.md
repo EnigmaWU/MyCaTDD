@@ -4,7 +4,7 @@ This subtopic defines the comment skeleton, US/AC/TC structure, coverage matrix,
 
 ## Comment Skeleton
 
-Every class/category skeleton should preserve this minimum shape.
+Every class/category skeleton **MUST** preserve this minimum shape.
 
 ```text
 //=================================================================================================
@@ -24,7 +24,7 @@ Every class/category skeleton should preserve this minimum shape.
 //=================================================================================================
 ```
 
-Each tracked test case carries one `@[Status]` line that names both scopes explicitly, so a case can be green on doubles while the real runtime is still outstanding:
+Each tracked test case **MUST** carry one `@[Status]` line that names both scopes explicitly, so a case can be green on doubles while the real runtime is still outstanding:
 
 ```
 // @[Status]: mockSysRtm <marker> | realSysRtm <marker>
@@ -132,7 +132,7 @@ US-n: As a [specific role/persona],
 ```text
 AC-n: GIVEN [initial context and preconditions],
       WHEN [specific trigger, action, or event],
-      THEN [expected observable outcome or behavior].
+      THEN [expected observable outcome stated with MUST / MUST NOT (or conditional SHOULD / optional MAY)].
 ```
 
 ### Test Case
@@ -143,7 +143,7 @@ TC-n:
   @[Name]: verifyBehavior_byCondition_expectResult
   @[Purpose]: Why this test matters
   @[Brief]: Setup, behavior, verify, cleanup in one sentence
-  @[Expect]: Observable expected result
+  @[Expect]: Observable expected result (MUST / MUST NOT obligation using canonical README_UbiLang.md terms)
   @[Notes]: Optional dependencies, gotchas, or assumptions
 ```
 

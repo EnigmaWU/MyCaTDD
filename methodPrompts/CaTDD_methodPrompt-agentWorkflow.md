@@ -102,18 +102,18 @@ Next step: [recommendation]
 
 ## Agent DO Rules
 
-- Design before code.
-- Ask when source intent is missing.
-- Keep category identity stable even when risk changes execution order.
-- Keep comments synchronized with behavior.
-- Use small RED/GREEN slices.
-- Preserve existing user edits and unrelated work.
+- **MUST** design living comments before writing executable test or production code.
+- **MUST** ask via `ONE-MORE-THING` when source intent, expected outcome, or modal obligation (`MUST` vs `SHOULD` vs `MAY`) is missing.
+- **MUST** keep category identity stable even when risk changes execution order.
+- **MUST** use canonical terminology from `README_UbiLang.md` and keep comments synchronized with behavior.
+- **MUST** use small RED/GREEN slices verified through the Semantic Falsification Gate (`🔴 RED` on domain assertion, never `⚠️ BROKEN_TEST`).
+- **MUST** preserve existing user edits and unrelated work.
 
 ## Agent DON'T Rules
 
-- Do not invent acceptance criteria.
-- Do not write production code before a failing test exists.
-- Do not move tests into a category because implementation code is nearby.
-- Do not silently omit a category file.
-- Do not expand a TC beyond its AC meaning during refactor.
-- Do not treat P1/P2 as lower value; they are different confidence lenses.
+- **MUST NOT** invent acceptance criteria, thresholds, or fallback branches.
+- **MUST NOT** write production code before a valid `🔴 RED` failing test exists.
+- **MUST NOT** move tests into a category because implementation code is nearby.
+- **MUST NOT** silently omit a category file or introduce synonym drift against `README_UbiLang.md`.
+- **MUST NOT** expand a TC beyond its AC meaning during refactor.
+- **MUST NOT** treat P1/P2 as lower value; they are different confidence lenses.

@@ -93,7 +93,7 @@ Before editing, classify every candidate item into exactly one class:
 | Class | Meaning | Write action |
 | --- | --- | --- |
 | `CORE` | Stable project-wide identity, constraint, constitution-level guardrail, convention, or active decision needed by most future `SPEC_*` commands. | Add or update one concise entry in `projectContext.md`. |
-| `REFERENCE` | Durable detail owned by a canonical requirement, architecture, detail-design, verification, usage, compatibility, or method artifact. | Keep the detail in its owning artifact; add or update only a short purpose-bearing link in `projectContext.md`. |
+| `REFERENCE` | Durable detail owned by a canonical requirement, ubiquitous-language (`README_UbiLang.md`), architecture, detail-design, verification, usage, compatibility, or method artifact. | Keep the detail in its owning artifact (for example keep domain glossary tables in `README_UbiLang.md`); add or update only a short purpose-bearing link in `projectContext.md`. |
 | `OPERATIONAL` | Reproducible current state such as lifecycle contents, branch status, generated files, latest test output, or next task. | Do not persist the snapshot; record the command or artifact location used to retrieve it. |
 | `EPISODIC` | Historical event, completed story, superseded decision, review result, failure lesson, or commit evidence. | Keep it in an ADR, `analyzedNews/`, `doneUS/`, `abortUS/`, review artifact, or Git history; retain a context link only when it explains an active guardrail. |
 | `TRANSIENT` | Temporary chat detail, exploration note, intermediate plan, or fact with no expected future use. | Do not write it to durable project context. |

@@ -210,6 +210,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 | 文件 | 用途 |
 | --- | --- |
 | `README_ArchDesign.md` | 模块上下文架构、消费该模块的系统上下文、模块分解、依赖、数据流和关键权衡。 |
+| `README_UbiLang.md` | 项目级与限界上下文（Bounded Context）统一语言词典（`EPIC I2.1`）及受控规范语气词汇（`MUST`、`MUST NOT`、`SHOULD`、`MAY`，`EPIC E1.4`）；由 `.catdd/spec/projectContext.md` 以 `REFERENCE` 记忆单行引用，不重复复制词表。 |
 | `README_UsageDesign.md` | 公共边界、CLI/API 契约、参数解析规则和运行示例。 |
 | `README_ErrorDesign.md` | 容错架构、故障安全状态、看门狗和全局错误分类。 |
 | `README_ResourceDesign.md` | 有限资源分配、内存/CPU/功耗预算、DMA 和看门狗。 |
@@ -468,7 +469,7 @@ flowchart TB
 10. 使用 [SPEC_reviewUserStory](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) 在需求更新之后，并验证 `README_UserStories.md` 的 TODO/DOING/DONE 与 AC 追溯状态是否与生命周期制品一致；然后或者关闭纯需求导向型工作（`SPEC_commitStoryWorks` 然后 `SPEC_closeUserStory`，若关闭生成了文件变更则紧接 `SPEC_commitStoryWorks` 的 `post_close` 检查点），或者转移到设计导向型的下一步。
 11. 使用 [SPEC_whatsNextTask](../commands/Px-SpecFlow/SPEC_whatsNextTask.md)，当你需要从当前状态获得单个下一步推荐时。
 12. 当"确实有问题、但没有任何门禁或归属命令能说清问题是什么"时，使用 [SPEC_whatsWrong](../commands/Px-SpecFlow/SPEC_whatsWrong.md)：它会冻结流程、在 `manualMode` 下把会话从 SpecCoding 切换到 VibeCoding、把这次探索记录到本地工作状态，随后把发现按归属命令逐一回收，并通过 `HARNESS_evolveHarness`（`evolution_mode=auto`）与任意 `SPEC_doXYZ` 恢复命令回到流程。
-13. 使用 [SPEC_takeArchDesign](../commands/Px-SpecFlow/SPEC_takeArchDesign.md)，当计划表明需要初始架构工作，在 `README_ArchDesign.md` 中产出初始高层架构设计和模块边界时（应用架构与安全技能 `design-architecture-viewpoints`、`apply-architectural-tactics`、`document-architectural-decisions` 与 `design-tool-use-sandboxing`）。
+13. 使用 [SPEC_takeArchDesign](../commands/Px-SpecFlow/SPEC_takeArchDesign.md)，当计划表明需要初始架构工作，在 `README_ArchDesign.md` 与 `README_UbiLang.md` 中产出初始高层架构设计、核心系统概念和模块边界时（应用战略 DDD、架构与安全技能 `define-bounded-contexts`、`define-ubiquitous-language`、`design-architecture-viewpoints`、`apply-architectural-tactics`、`document-architectural-decisions` 与 `design-tool-use-sandboxing`）。
 14. 使用 [SPEC_reviewArchDesign](../commands/Px-SpecFlow/SPEC_reviewArchDesign.md) 在详细设计开始前把关架构质量。
 15. 使用 [SPEC_updateArchDesign](../commands/Px-SpecFlow/SPEC_updateArchDesign.md) 进行后续架构修订，当架构审查、故事级反馈或已开启的更新故事识别出缺失或薄弱的架构设计时。
 16. 使用 [SPEC_takeDetailDesign](../commands/Px-SpecFlow/SPEC_takeDetailDesign.md) 产出初始详细设计和验收标准，包括按需创建其他项目根 `README*` SPEC 文档（如 `README_DetailDesign.md`、`README_StateDesign.md`、`README_SecurityDesign.md`，应用 `design-architecture-viewpoints`、`apply-architectural-tactics` 与 `design-tool-use-sandboxing`）。

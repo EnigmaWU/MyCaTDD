@@ -191,6 +191,7 @@ Scan the entire story draft and reproduction steps for Ambiguity Smells using th
 - `SMELL-BRANCH`: Missing negative/regression branches (silent on what happens if the fix encounters timeout, error, or bad input).
 - `SMELL-STATE`: Unstated lifecycle bounds (state machine prerequisites for the repair).
 - `SMELL-VAGUE`: Vague verbs & loophole words ("handle", "manage", "support", "etc.", "generally").
+- `SMELL-MODAL`: Weak/ambiguous modal verbs in ACs or rules ("should", "might", "could", "is expected to" without an explicit `SHOULD` exception condition) or synonym drift against `README_UbiLang.md` (`EPIC E1.4 & I2.1`). Mandatory AC outcomes **MUST** use `MUST` / `MUST NOT`.
 - `SMELL-RACE`: Unstated concurrency bounds or race conditions causing the issue.
 Generate clarifying questions under `## Ambiguity Warnings` and `## Initial Acceptance Questions` — do not silently substitute precise thresholds or fabricate missing paths. `(→ SKILL: validate-requirements-criteria)`
 

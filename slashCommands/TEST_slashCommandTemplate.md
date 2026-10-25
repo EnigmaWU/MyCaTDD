@@ -2,11 +2,15 @@
 
 Use this template before creating any concrete `TEST_*` slash command.
 
-The template is intentionally plain Markdown so it can be used by Copilot, Cline, Continue, `utCodeAgentCLI`, or any assistant that can consume prompt text. It must not depend on one editor, one model provider, one programming language, or one tool runtime.
+The template is intentionally plain Markdown so it can be used by Copilot, Cline, Continue, `utCodeAgentCLI`, or any assistant that can consume prompt text. It **MUST NOT** depend on one editor, one model provider, one programming language, or one tool runtime.
 
-A slash command is a connector to an existing CodeAgent invocation surface. It uses CaTDD methods defined in `methodPrompts`; it must not redefine CaTDD category semantics, priority order, or design skeleton rules.
+A slash command is a connector to an existing CodeAgent invocation surface. It uses CaTDD methods defined in `methodPrompts`; it **MUST NOT** redefine CaTDD category semantics, priority order, or design skeleton rules.
 
 Compared with `methodPrompts`, a slash command should be more flow-first and automation-friendly: it tells a CodeAgent what step to run now, what to read, what to produce, and what command should come next.
+
+## Normative Language Rule (`EPIC E1.4 & I2.1`)
+
+All `TEST_*` commands and the CaTDD test skeletons/cases they produce **MUST** use controlled normative keywords (`MUST`, `MUST NOT`, conditional `SHOULD`, optional `MAY`) and canonical domain terms from `README_UbiLang.md` without synonym drift.
 
 ## Command Header
 
@@ -19,7 +23,7 @@ Compared with `methodPrompts`, a slash command should be more flow-first and aut
 
 ## CoT Pattern
 
-State which Chain-of-Thought reasoning pattern this command uses and why, then write the matching `### <Pattern> Execution` subsection. A pattern may not be declared without its executable loop.
+State which Chain-of-Thought reasoning pattern this command uses and why, then write the matching `### <Pattern> Execution` subsection. A pattern **MUST NOT** be declared without its executable loop.
 
 - **ReACT** — Reasoning + Acting: use when the command must inspect current skeleton or test state, act, check the result against a CaTDD gate, and iterate. Suitable for skeleton design, implementation, refactor, and review commands.
 - **ToT** — Tree of Thoughts: use when the command must compare several candidates and commit to one. Suitable for selection commands.

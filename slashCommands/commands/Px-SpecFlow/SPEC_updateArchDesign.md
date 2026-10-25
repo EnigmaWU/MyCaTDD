@@ -41,6 +41,7 @@ Expected result:
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `arch_design`: project-root `README_ArchDesign.md` (and optional mirror) to update.
+- `readme_ubilang`: optional project-root `README_UbiLang.md` to revise when architecture review feedback resolves synonym drift (`EPIC I2.1`) or refines bounded-context terminology (`EPIC E1.3 / E1.4`).
 - `arch_verify_design`: optional project-root `README_ArchVerifyDesign.md` to revise when the finding changes verification topology, the level-and-boundary map, target runtime environments, doubles, or evidence/equipment ownership.
 - `projectContext_file`: current project context.
 - `review_feedback`: findings from architecture review or upstream story-quality feedback.

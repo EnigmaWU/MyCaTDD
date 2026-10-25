@@ -104,6 +104,7 @@ Scan the entire story draft for Ambiguity Smells using the Ambiguity Smell Taxon
 - `SMELL-BRANCH`: Missing negative branches (silent on timeout, network drop, retry exhaustion, cancellation).
 - `SMELL-STATE`: Unstated lifecycle bounds (calling APIs before init, during drain, or after close).
 - `SMELL-VAGUE`: Vague verbs & loophole words ("handle", "manage", "support", "etc.", "generally", "if possible").
+- `SMELL-MODAL`: Weak/ambiguous modal verbs in ACs or rules ("should", "might", "could", "is expected to" without an explicit `SHOULD` exception condition) or synonym drift against `README_UbiLang.md` (`EPIC E1.4 & I2.1`). Mandatory AC outcomes **MUST** use `MUST` / `MUST NOT`.
 - `SMELL-RACE`: Unstated concurrency bounds (simultaneous calls without synchronization rules).
 For each smell, generate a precise clarifying question under `## Ambiguity Warnings` and `## Initial Acceptance Questions` (e.g., "Is 'fast' 500ms or 5s?"). Do not silently substitute your own threshold or fabricate missing branches. Also verify each scenario tests exactly one behavior. `(→ SKILL: validate-requirements-criteria)`
 

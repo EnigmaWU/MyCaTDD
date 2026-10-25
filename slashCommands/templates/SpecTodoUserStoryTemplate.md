@@ -124,9 +124,9 @@
 
 **Example Trace:** EX-{{n}}
 **Rule:** {{business rule or constraint that governs this scenario}}
-**Given** {{precondition}}
+**Given** {{precondition using canonical `README_UbiLang.md` terms}}
 **When** {{action or event}}
-**Then** {{observable outcome}}
+**Then** {{observable outcome stated with `MUST` / `MUST NOT` (or conditional `SHOULD` / optional `MAY`)}}
 
 | Concrete Examples | Counter-Examples |
 | --- | --- |
@@ -138,9 +138,9 @@
 
 **Example Trace:** EX-{{n}}
 **Rule:** {{business rule or constraint}}
-**Given** {{precondition}}
+**Given** {{precondition using canonical `README_UbiLang.md` terms}}
 **When** {{action or event}}
-**Then** {{observable outcome}}
+**Then** {{observable outcome stated with `MUST` / `MUST NOT` (or conditional `SHOULD` / optional `MAY`)}}
 
 | Concrete Examples | Counter-Examples |
 | --- | --- |
@@ -256,7 +256,9 @@
 <!-- How: Scan the entire story for Ambiguity Smells using the Ambiguity Smell Taxonomy (AST):
      SMELL-ACTOR (passive without actor), SMELL-BOUND (unbounded adjectives: "fast", "robust", "seamless"),
      SMELL-BRANCH (missing negative branches), SMELL-STATE (unstated lifecycle bounds),
-     SMELL-VAGUE (vague verbs/loopholes: "handle", "manage", "etc."), SMELL-RACE (unstated concurrency).
+     SMELL-VAGUE (vague verbs/loopholes: "handle", "manage", "etc."),
+     SMELL-MODAL (weak modals "should"/"might" without exception rules, or synonym drift against README_UbiLang.md),
+     SMELL-RACE (unstated concurrency).
      For each, ask a clarifying question. Do not silently substitute thresholds or fabricate branches.
      (→ SKILL: validate-requirements-criteria) -->
 
@@ -272,6 +274,7 @@
 | --- | --- |
 | This story → Raw input & `## Chat History` | `.catdd/spec/analyzedNews/{{file}}` |
 | Project story index | `README_UserStories.md` |
+| Project ubiquitous language | `README_UbiLang.md` |
 | Parent story | `.catdd/spec/todoUS/{{parent-story-file}}` |
 | Sub-UserStory candidates | `.catdd/spec/todoUS/{{sub-story-file-or-candidate}}` |
 | This story ID | US-{{n}} |

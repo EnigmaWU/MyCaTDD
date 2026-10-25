@@ -39,6 +39,7 @@ Expected result:
 
 - `doing_user_story`: active story under `.catdd/spec/doingUS/`.
 - `project_user_stories_doc`: project-root `README_UserStories.md` to update as the authoritative TODO/DONE and AC ledger.
+- `project_ubilang_doc`: optional project-root `README_UbiLang.md` (seeded from `slashCommands/templates/README_UbiLangTemplate.md`) to synchronize newly introduced or revised domain terms (`EPIC I2.1`) and verify controlled modal wording (`MUST`, `MUST NOT`, `SHOULD`, `MAY`, `EPIC E1.4`).
 - `module_user_story_doc`: optional module or submodule `README_UserStory.md` to update when module-local requirement docs are used.
 - `module_user_guide_doc`: paired module or submodule `README_UserGuide.md` to align with the updated user story.
 - `update_scope`: optional scope hint such as specific `US-*` or `AC-*` IDs.
@@ -52,6 +53,7 @@ Expected result:
 
 ## Output Contract
 
+- Updated project-root `README_UbiLang.md` when the story introduces or revises domain terminology, and AC outcomes normalized to controlled modal vocabulary (`MUST` / `MUST NOT` for mandatory acceptance outcomes, `SHOULD` with exception rules, `MAY` for optional behavior).
 - Updated project-root `README_UserStories.md` with requirement-level revisions, TODO/DONE state synchronization, and stable US/AC trace IDs.
 - Updated module or submodule `README_UserStory.md` when module-local requirement docs are used.
 - Updated paired `README_UserGuide.md` aligned to the revised requirement intent and usage behavior.

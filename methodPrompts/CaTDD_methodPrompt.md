@@ -85,13 +85,14 @@ For full category guidance, read `CaTDD_methodPrompt-categorySemantics.md`.
 
 ## Mandatory Traceability Constraints
 
-- P0 Functional design must include the full category set in order: `Typical -> Edge -> Misuse -> Fault` unless the developer explicitly limits scope.
-- Each US must map to at least one AC.
-- Each AC must map to at least one TC.
-- Design output must declare the SUT (System Under Test) explicitly in the test-file overview section, for example `SUT: utCodeAgentCLI`. The declared SUT boundary establishes the contract dividing line: caller violations of the SUT's public interface are `P0 Misuse`, while failures of external dependencies or runtime environment outside the SUT are `P0 Fault`.
-- Unit Testing (UT) scope must adhere to the project's agreed `sut_unit_convention` (e.g. `module-interface`, `submodule-interface`, `class`, `header-file`, `function`, or `component`).
-- Every non-empty category file must trace to a source-of-truth artifact.
-- If the source is missing, ask the developer or mark the category file with `@[NoTestPoints]: <reason>`; do not invent test points.
+- P0 Functional design **MUST** include the full category set in order: `Typical -> Edge -> Misuse -> Fault` unless the developer explicitly limits scope.
+- Each US **MUST** map to at least one AC.
+- Each AC **MUST** map to at least one TC.
+- Design output **MUST** declare the SUT (System Under Test) explicitly in the test-file overview section, for example `SUT: utCodeAgentCLI`. The declared SUT boundary establishes the contract dividing line: caller violations of the SUT's public interface are `P0 Misuse`, while failures of external dependencies or runtime environment outside the SUT are `P0 Fault`.
+- Unit Testing (UT) scope **MUST** adhere to the project's agreed `sut_unit_convention` (e.g. `module-interface`, `submodule-interface`, `class`, `header-file`, `function`, or `component`).
+- Every non-empty category file **MUST** trace to a source-of-truth artifact.
+- If the source is missing, the agent **MUST** ask the developer or mark the category file with `@[NoTestPoints]: <reason>`; it **MUST NOT** invent test points.
+- Normative & Ubiquitous Language Rule (`EPIC E1.4 & I2.1`): mandatory requirements, acceptance outcomes (`THEN`), design invariants ($K$), and `@[Expect]` oracles **MUST** use controlled modal keywords (`MUST` for mandatory obligations, `MUST NOT` for prohibitions, `SHOULD` only when paired with a recorded exception condition, `MAY` for optional behavior) and **MUST** use canonical terms from `README_UbiLang.md` without synonym drift.
 
 ## Test-Point Discovery Contract
 
