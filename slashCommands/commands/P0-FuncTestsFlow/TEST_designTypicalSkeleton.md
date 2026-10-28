@@ -15,7 +15,7 @@ Use this command when a developer has a defined behavior source and wants to spe
 Repeat until the Typical skeleton holds only primary valid behavior.
 
 1. **Thought** — Read `interface_or_protocol_file` as the behavior source and the Typical method prompt as the category source of truth. Identify the main valid behavior, its normal preconditions, and expected outcomes.
-2. **Action** — Draft only the Typical skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TC]`. Preserve unrelated categories untouched.
+2. **Action** — Draft only the Typical skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, `@[TC]`. Preserve unrelated categories untouched.
 3. **Observation** — Check category fit: anything relying on a boundary value, an invalid caller input, or a dependency failure does not belong here → back to **Thought** and hand it to Edge, Misuse, or Fault. Check every `@[US]` has ≥1 `@[AC]` and every `@[AC]` has ≥1 `@[TC]`.
 4. **Stop** — Exit when the skeleton holds only the success path and passes the cardinality check. Recommend `TEST_designEdgeSkeleton` or `TEST_reviewFuncTestsSkeleton`.
 
@@ -53,7 +53,7 @@ Expected result:
 
 ## Output Contract
 
-- A Typical functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Typical functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries that capture the primary valid behavior and expected success path.
 - Explicit separation from Edge, Misuse, Fault, and later-category coverage.
 

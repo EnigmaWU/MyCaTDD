@@ -226,7 +226,9 @@ This is a usage-priority guide, not a historical lineage or a source of product 
 
 ## Test-Point Ledger
 
-Keep one `discovery_ledger` in living comments, alongside the inventory and coverage matrix. Use stable local TP IDs distinct from US/AC/TC IDs. Each row represents a specific condition and observable obligation, not just a category name.
+Keep one `discovery_ledger` in living comments, alongside the inventory and coverage matrix. Use a stable story-qualified TP ID distinct from US/AC/TC IDs under the [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract. Link each row to its source Story and AC IDs when applicable; if ownership is unknown, record a QUESTION rather than inventing a story. Each row represents a specific condition and observable obligation, not just a category name.
+
+Abbreviated IDs such as `TP-01`, `US-1`, `AC-1`, and `TC-1` in the examples below are illustrative only; real artifacts use registered Story IDs and qualified child IDs.
 
 ### Acceptance Criteria (AC) vs. Test Point (TP)
 

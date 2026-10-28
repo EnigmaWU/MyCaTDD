@@ -20,13 +20,14 @@ Every class/category skeleton **MUST** preserve this minimum shape.
 // @[AvoidWhen]: When to move the scenario to another category
 // @[US]: User Story IDs covered by this category
 // @[AC]: Acceptance Criteria IDs covered by this category
+// @[TP]: Test Point IDs covered by this category
 // @[TC]: Test Cases, status, and expected TDD next action
 //=================================================================================================
 ```
 
 Each tracked test case **MUST** carry one `@[Status]` line that names both scopes explicitly, so a case can be green on doubles while the real runtime is still outstanding:
 
-```
+```text
 // @[Status]: mockSysRtm <marker> | realSysRtm <marker>
 ```
 
@@ -122,30 +123,79 @@ verifyStateTransition_byInvalidSequence_expectError
 ### User Story
 
 ```text
-US-n: As a [specific role/persona],
-      I want [specific capability or feature],
-      So that [concrete business value or benefit].
+US-<story>: As a [specific role/persona],
+            I want [specific capability or feature],
+            So that [concrete business value or benefit].
 ```
 
 ### Acceptance Criteria
 
 ```text
-AC-n: GIVEN [initial context and preconditions],
-      WHEN [specific trigger, action, or event],
-      THEN [expected observable outcome stated with MUST / MUST NOT (or conditional SHOULD / optional MAY)].
+US-<story>-AC-<n>: GIVEN [initial context and preconditions],
+                   WHEN [specific trigger, action, or event],
+                   THEN [expected observable outcome stated with MUST / MUST NOT (or conditional SHOULD / optional MAY)].
 ```
 
 ### Test Case
 
 ```text
-[@AC-n,US-n]
-TC-n:
+US-<story>-TC-<n>:
+  @[US]: US-<story>
+  @[AC]: US-<story>-AC-<n>
+  @[TP]: US-<story>-TP-<n>
+  @[TC]: US-<story>-TC-<n>
   @[Name]: verifyBehavior_byCondition_expectResult
   @[Purpose]: Why this test matters
   @[Brief]: Setup, behavior, verify, cleanup in one sentence
   @[Expect]: Observable expected result (MUST / MUST NOT obligation using canonical README_UbiLang.md terms)
   @[Notes]: Optional dependencies, gotchas, or assumptions
 ```
+
+## Project-Wide Traceability IDs
+
+This contract applies to each project using CaTDD, whether invoked through SpecFlow or independently. A project's registered Story ID is the stable identity for its requirements and verification evidence; a filename, test-local `US-1`, or role label is not a project-wide identity by itself.
+
+- Maintain one committed project-wide story registry. In SpecFlow, use the Story Ledger in `README_UserStories.md`; standalone CaTDD projects use their agreed committed requirements ledger. The registry identifies each Story ID and its current authoritative story/AC source. Story text and acceptance outcomes remain authoritative in that source, not in duplicated registry summaries.
+- Preserve an existing unambiguous project-wide Story ID, including imported IDs. When no project policy supplies a collision-safe ID, allocate `US-<UUIDv4>` using a UUIDv4 generator. Check the registry and story declarations across all lifecycle lanes and module requirement sources before registering it, and check the integrated project again when concurrent branches are merged. References and declared historical copies are not new independent stories. Stop on a collision; do not silently reuse or renumber an accepted ID.
+- Under each Story ID, use unique, stable qualified identifiers: `US-<story>-AC-<n>`, `US-<story>-TP-<n>`, and `US-<story>-TC-<n>`. Here `US-<story>` is the complete registered Story ID and `<n>` is the project's stable child token, not a local ID shared across unrelated stories. Allocate child tokens without reuse; when no atomic project allocator exists, use a UUIDv4 as the child token. Check for collisions again during integration.
+- Preserve the same ID when a story or test point moves between files, lifecycle states, categories, or test levels. Copies, revisions, and declared partial-closure slices are references to the same identity, not automatically duplicate stories. A materially different AC or test obligation receives a new ID with an explicit supersession or lineage link; do not silently reuse an old ID for a different meaning.
+- Keep legacy or external local IDs as labeled aliases, with their source and revision when needed. On ambiguous ownership, conflicting imports, or reused historical AC meanings, stop and request reconciliation rather than guessing or rewriting history. A new independent split or follow-up story gets its own Story ID and traces to its parent and original ACs.
+- Place the full qualified IDs on each AC, discovery-ledger TP, and TC declaration. Carry the corresponding Story IDs and AC/TP/TC references into relevant design, verification, test, and product-code boundaries using language-appropriate comments or an explicit source-to-symbol trace when comments are unsuitable. A literal search for the Story ID must find its declared ACs, TPs, TCs, and trace references.
+- The relationships are not necessarily one-to-one: an AC may have several TPs; a TP may map to zero, one, or multiple TCs; and a TC may cover multiple TPs or ACs. Shared evidence retains one owning ID and explicitly lists every related Story ID and qualified AC/TP reference. Do not duplicate IDs or invent coverage merely to make a link.
+- Each TC's metadata must identify its relevant `@[US]`, `@[AC]`, and `@[TP]` values as well as its qualified `@[TC]` ID. When an AC, TP, or TC is shared or inherited, put the referencing Story ID and the original qualified ID together on the same trace line; for test evidence use `@[Trace]: <StoryID> | <AC ID> | <TP ID> | <TC ID>`. Record each actual relationship separately and retain the original owning ID rather than inventing copies. Unresolved or missing sources remain questions or gaps under the Discovery Gate; an ID or a grep hit is not proof of implementation or verification.
+
+## Usage Example
+
+If the project has no ID allocation policy and Python 3 is available, generate a new Story ID before registering it:
+
+```bash
+python3 -c 'import uuid; print("US-" + str(uuid.uuid4()))'
+```
+
+For a project with an existing registered `US-USER-01`, a trace can be written as follows; the descriptions are illustrative, not inferred project requirements:
+
+```text
+US-USER-01-AC-01: User-visible acceptance outcome
+US-USER-01-TP-01: Source-backed verification obligation
+@[US]: US-USER-01
+@[AC]: US-USER-01-AC-01
+@[TP]: US-USER-01-TP-01
+@[TC]: US-USER-01-TC-01
+```
+
+For a successor that reuses an existing AC, record both IDs together without reassigning the original AC:
+
+```text
+US-FOLLOWUP-01 -> US-USER-01-AC-01 (inherited acceptance criterion)
+```
+
+From that project's root, search both visible files and hidden SpecFlow artifacts:
+
+```bash
+grep -R -nF --exclude-dir=.git -- 'US-USER-01' .
+```
+
+The output lists declared references containing the ID, including qualified child IDs. Review the referenced artifacts and their evidence; grep cannot prove that unmarked code is unrelated or that a test passed.
 
 ## Four-Phase Test Body
 

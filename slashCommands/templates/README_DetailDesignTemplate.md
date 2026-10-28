@@ -4,7 +4,7 @@ This is the SpecCoding template for project-root `README_DetailDesign.md`. Creat
 
 ## Story Context
 
-- Story: {{US identifier and title}}
+- Story: {{StoryID}} and {{title}}
 - Source artifact: {{.catdd/spec/doingUS path or issue link}}
 - Related overview: [README.md](README.md)
 - Related user stories: [README_UserStories.md](README_UserStories.md)
@@ -33,7 +33,7 @@ This is the SpecCoding template for project-root `README_DetailDesign.md`. Creat
 
 | AC ID | Given | When | Then | Design Impact |
 | --- | --- | --- | --- | --- |
-| AC-{{n}} | {{context}} | {{action}} | {{observable result}} | {{module/API/state change}} |
+| {{StoryID}}-AC-{{n}} | {{context}} | {{action}} | {{observable result}} | {{module/API/state change}} |
 
 ## Interface Design
 

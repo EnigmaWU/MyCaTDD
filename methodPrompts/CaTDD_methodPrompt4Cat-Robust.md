@@ -49,6 +49,8 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P2 Quality
 // @[Category]: Robust
@@ -57,7 +59,10 @@ When this category applies, consider test points such as:
 // @[AvoidWhen]: The scenario is a single fault, capacity limit, or benchmark target.
 // @[DurationOrCount]: [time window or repeat count]
 // @[Invariant]: [what must remain true]
-// @[TC]: verify[Operation]_by[StressCondition]_expect[StableInvariant]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Operation]_by[StressCondition]_expect[StableInvariant]
 ```
 
 ## US/AC/TC Pattern

@@ -60,7 +60,7 @@ Expected result:
 
 ## Output Contract
 
-- A Capability design skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Capability design skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries that distinguish supported, limited, conditional, and unsupported capabilities.
 - Traceability to functional scenarios that prove capability boundaries are visible and intentional.
 

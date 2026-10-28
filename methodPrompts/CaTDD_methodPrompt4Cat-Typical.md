@@ -52,15 +52,18 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: Prove the core happy-path workflow under ordinary valid use.
 // @[UseWhen]: Inputs, state, dependencies, environment, and caller behavior are valid.
 // @[AvoidWhen]: The scenario is mainly Edge, Misuse, Fault, State, Capability, Interaction, or Concurrency.
-// @[US]: [US IDs]
-// @[AC]: [AC IDs]
-// @[TC]: verify[CoreBehavior]_by[ValidCondition]_expect[SuccessResult]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[CoreBehavior]_by[ValidCondition]_expect[SuccessResult]
 ```
 
 ## US/AC/TC Pattern

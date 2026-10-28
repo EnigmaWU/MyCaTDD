@@ -18,6 +18,10 @@ USAGE:
 TDD WORKFLOW:
   Design -> Draft -> Structure -> Test (RED) -> Code (GREEN) -> Refactor -> Repeat
 
+PROJECT-WIDE TRACE: The abbreviated sample IDs below are illustrative only.
+  Replace them with registered Story IDs and qualified AC/TP/TC IDs from
+  CaTDD_methodPrompt-testStructure.md; retain US/AC/TP/TC metadata per TC.
+
 REFERENCE: methodPrompts/CaTDD_methodPrompt.md for full methodology
 """
 
@@ -87,10 +91,10 @@ DESIGN SKELETON CONTRACT:
     # @[Intent]: Prove the core happy-path workflow.
     # @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
     # @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
-    # @[US]: US-1
-    # @[AC]: AC-1
-    # @[TP]: TP-1
-    # @[TC]: TC-1 verifyCore_byValidInput_expectSuccess
+    # @[US]: US-PROJECT-01
+    # @[AC]: US-PROJECT-01-AC-01
+    # @[TP]: US-PROJECT-01-TP-01
+    # @[TC]: US-PROJECT-01-TC-01 verifyCore_byValidInput_expectSuccess
     # =============================================================================================
 
   Developers fill this skeleton to make verification intent clear.

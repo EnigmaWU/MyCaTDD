@@ -52,12 +52,14 @@ Expected result:
 
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
 - [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 - Composed from requirements-analysis skills in `.github/skills/`: `write-user-story`, `build-feature-tree`, `elicit-requirements-models`, `extract-business-rules`, `facilitate-example-mapping`, `validate-requirements-criteria`, `prioritize-requirements`. See their `SKILL.md` for full technique details.
 
 ## Output Contract
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact for the corrected next round.
 - Source trace from the new todo story to the aborted story and its paired tasks.
+- A newly registered Story ID for the corrected story, with explicit links to the original Story and AC identities.
 - A corrected, independently testable user-story slice with preserved valid intent, rejected invalid assumptions, acceptance scenarios, risks, non-goals, and open questions.
 - The aborted story remains preserved in `.catdd/spec/abortUS/` as historical evidence — it is never mutated.
 - The story follows `SpecTodoUserStoryTemplate.md` structure and includes the **Abort Evidence** section documenting the abort diagnosis plus `### Re-Analysis Chat History` (`chatHistory`) capturing the developer/CodeAgent re-analysis dialogue, preserved/rejected decisions, and resolved questions (and appends a re-analysis round to `## Chat History` in the linked `.catdd/spec/analyzedNews/` artifact when one exists).
@@ -120,6 +122,8 @@ Apply SKILLs **only** where the abort diagnosis indicates a need for correction.
 | **Always (regardless)** | `(→ SKILL: validate-requirements-criteria)` — hunt ambiguity in the corrected story. `(→ SKILL: prioritize-requirements)` — re-score all four dimensions (BV, UV, Cost, Risk). |
 
 ### Step 6 — Correct: Write the corrected story
+Register a new project-wide Story ID for the corrected story in `README_UserStories.md`, creating the ledger from `README_UserStoriesTemplate.md` if needed. Follow [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids): retain source links to unchanged original AC IDs, give new or materially revised ACs distinct IDs under the corrected story, and record supersession or lineage without changing the historical abort artifact. Stop on unresolved identity conflicts.
+
 Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. The following sections must be present and correct:
 
 - **Story Statement** — updated if intent changed; otherwise preserved from original

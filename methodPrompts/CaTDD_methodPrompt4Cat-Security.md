@@ -57,6 +57,8 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[SUT]: [Declared SUT matching file overview]
 // @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
@@ -68,7 +70,10 @@ When this category applies, consider test points such as:
 // @[ProtectedAsset]: [asset or boundary]
 // @[ThreatOrPolicy]: [threat actor, policy, or security rule]
 // @[ConstitutionalRule]: [K-rule-id or policy invariant, e.g., K-SEC-02 / CWE-200]
-// @[TC]: verify[Protection]_by[ThreatScenario]_expect[SafeDenialOrContainment]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Protection]_by[ThreatScenario]_expect[SafeDenialOrContainment]
 ```
 
 ## US/AC/TC Pattern

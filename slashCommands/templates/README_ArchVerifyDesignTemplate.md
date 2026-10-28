@@ -6,7 +6,7 @@ This is the SpecCoding template for project-root `README_ArchVerifyDesign.md`. C
 
 ## Story and Design Inputs
 
-- Story: {{US identifier and title}}
+- Story: {{StoryID}} and {{title}}
 - Active story artifact: {{.catdd/spec/doingUS path}}
 - Architecture design: [README_ArchDesign.md](README_ArchDesign.md)
 - Detail-level verification design: [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md)
@@ -78,7 +78,7 @@ Rules:
 
 | TP ID | Obligation (from detail ledger) | Promoted level | Environment | Evidence owner | Detail design reference |
 | --- | --- | --- | --- | --- | --- |
-| {{TP-xx}} | {{obligation text}} | {{SysTesting/UserTesting}} | {{ENV id}} | {{owner}} | [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md) |
+| {{StoryID}}-TP-{{n}} | {{obligation text}} | {{SysTesting/UserTesting}} | {{ENV id}} | {{owner}} | [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md) |
 
 ## Evidence, Gates, and Equipment Ownership
 

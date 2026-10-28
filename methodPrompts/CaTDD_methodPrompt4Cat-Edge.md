@@ -55,15 +55,18 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Edge
 // @[Intent]: Prove valid edge values, limits, and mode variations.
 // @[UseWhen]: The caller is valid, but the condition is empty, zero, min, max, full, first, last, or mode-specific.
 // @[AvoidWhen]: The scenario is caller misuse, external fault, capacity, performance, state, or concurrency.
-// @[US]: [US IDs]
-// @[AC]: [AC IDs]
-// @[TC]: verify[Behavior]_by[EdgeCondition]_expect[DocumentedResult]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Behavior]_by[EdgeCondition]_expect[DocumentedResult]
 ```
 
 ## US/AC/TC Pattern

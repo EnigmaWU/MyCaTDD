@@ -52,6 +52,8 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P1 Design
 // @[Category]: Capability
@@ -59,8 +61,10 @@ When this category applies, consider test points such as:
 // @[UseWhen]: The design promises a default, maximum, minimum, or configurable capacity.
 // @[AvoidWhen]: The scenario is about speed, repeated stability, or thread interleaving.
 // @[CapacitySource]: [constant/config/API/product claim/discovered limit]
-// @[US]/@[AC]: [traceability IDs]
-// @[TC]: verify[Capability]_by[CapacityCondition]_expect[LimitBehavior]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Capability]_by[CapacityCondition]_expect[LimitBehavior]
 ```
 
 ## US/AC/TC Pattern

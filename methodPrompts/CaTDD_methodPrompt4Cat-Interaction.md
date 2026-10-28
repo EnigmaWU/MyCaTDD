@@ -51,6 +51,8 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P1 Design
 // @[Category]: Interaction
@@ -59,7 +61,10 @@ When this category applies, consider test points such as:
 // @[AvoidWhen]: The scenario is mainly state, capacity, concurrency, or external contract behavior.
 // @[Collaborators]: [orchestrator, adapters, services, plugins, callbacks]
 // @[SequenceRule]: [required order or handoff contract]
-// @[TC]: verify[Flow]_by[InteractionScenario]_expect[CollaboratorsCoordinate]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Flow]_by[InteractionScenario]_expect[CollaboratorsCoordinate]
 ```
 
 ## US/AC/TC Pattern

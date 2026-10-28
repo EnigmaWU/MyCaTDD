@@ -18,9 +18,9 @@ Run these steps once, in order. There is no retry loop; a missing slice or ambig
 
 1. Locate `slice_id` in `user_story_source`. Stop and ask if it cannot be found.
 2. Resolve `granularity` per the Import Granularity rules. Stop and ask when the choice changes the artifact boundary.
-3. Copy the slice verbatim, preserving `US-*`/`AC-*` IDs, priority, dependency hints, and status markers exactly as written.
+3. Copy the slice verbatim, preserving source `US-*`/`AC-*` IDs, priority, dependency hints, and status markers exactly as written. Add canonical project IDs as trace metadata without rewriting the source wording.
 4. Record the source trace, including the paired `README_UserGuide.md` when the source is a module `README_UserStory.md`.
-5. Write one `.catdd/spec/todoUS/*-UserStory.md` per selected slice. Never merge unrelated requirements into one artifact.
+5. Apply [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids), register each story in `README_UserStories.md`, and write one `.catdd/spec/todoUS/*-UserStory.md` per selected slice. Never merge unrelated requirements into one artifact.
 6. Report the output paths and `next_command = SPEC_openUserStory`.
 
 ### Worked Example
@@ -57,17 +57,20 @@ Expected result:
 
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
 - [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 
 ## Import Granularity
 
 - `US-by-US` is the default. Create one todo user-story artifact for one selected `US-*` requirement and preserve its related ACs, priority, dependency notes, status notes, and source links.
 - `AC-by-AC` is allowed when one acceptance criterion is independently valuable, risky, or small enough to analyze and implement alone. Create one todo user-story artifact for one selected `AC-*` slice and preserve its parent `US-*` trace.
+- An AC slice retains its original Story and qualified AC identity. If it becomes a new independent story, register a new Story ID and trace it to the original Story/AC; do not present a copied slice as a second independent owner of the source ID.
 - If the developer explicitly requests batch import, create one todo artifact per selected US or AC. Do not merge unrelated requirements into one todo artifact unless the source explicitly treats them as one deliverable.
 
 ## Output Contract
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user-story artifact ready for `SPEC_openUserStory`.
 - Preserved source text, exact requirement IDs, acceptance-criterion IDs, priority, dependency hints, and status/checklist markers when present.
+- A registered project-wide Story ID and full Story-qualified AC references, with original local/external IDs retained as source-qualified aliases.
 - Clear labels for structured user story, requirement slice, AC slice, backlog item, refactor requirement, research requirement, or documentation requirement input.
 - Source trace to the original document path, URL, or copied source text.
 - When the source is module/submodule `README_UserStory.md`, include explicit trace to the paired `README_UserGuide.md` and keep IDs stable for downstream `README_ArchDesign.md` and `README_DetailDesign.md` derivation.
@@ -90,5 +93,7 @@ This command is for already structured/formalized user-story input. If the sourc
 If module/submodule source conventions are unclear (for example missing `README_UserStory.md` or unclear pairing with `README_UserGuide.md`), ask the developer before writing.
 
 If the requested `slice_id` cannot be found, or if `US-by-US` versus `AC-by-AC` is ambiguous and changes the artifact boundary, stop and ask the developer before writing.
+
+Preserve an unambiguous existing project-wide ID. If an imported local ID collides with a different story or its ownership is ambiguous, stop and reconcile with the developer; record any approved canonical-ID mapping and source-qualified alias without mutating the source or historical evidence. Create the project ledger from `README_UserStoriesTemplate.md` when absent; do not report the story ready before registration succeeds.
 
 ONE-MORE-THING: ask developer if something not sure

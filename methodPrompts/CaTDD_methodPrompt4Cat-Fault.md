@@ -53,15 +53,18 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P0 Functional / InvalidFunc
 // @[Category]: Fault
 // @[Intent]: Prove graceful behavior when dependencies, resources, processes, or environment fail.
 // @[UseWhen]: The caller is valid but an external/runtime fault is injected or simulated.
 // @[AvoidWhen]: The scenario is caller misuse, simple valid edge behavior, or long-running robustness.
-// @[US]: [US IDs]
-// @[AC]: [AC IDs]
-// @[TC]: verify[Operation]_by[InjectedFault]_expect[GracefulFailure]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Operation]_by[InjectedFault]_expect[GracefulFailure]
 ```
 
 ## US/AC/TC Pattern

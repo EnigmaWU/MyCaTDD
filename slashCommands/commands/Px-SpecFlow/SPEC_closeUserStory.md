@@ -15,7 +15,7 @@ Close an active user story after implementation, review, commit, and CI are comp
 Run these steps once, in order. The branches below are deterministic gates, not a retry loop; any unresolved gate stops and asks the developer.
 
 1. Verify the close gates: review passed, `commit_ref` present, `ci_summary` acceptable, the story is not listed under `.catdd/spec/suspendUS/`, the story's own `## Story Completion Conditions` (`EPIC E3.4` in `doing_user_story`: `Required TestLevel`, `Required TestScope & Environment`, `Required CaTDD Categories`, `Required SPEC & Doc Surfaces`, and no violated `Not-Done Conditions`) are satisfied by the verification evidence, and — when the story was planned through `SPEC_makePlan` — the paired `*-UserStory-Tasks.md` is truthful: every checked task has gate evidence behind it in `## Trajectory`, `## EPIC Specification Sufficiency` has no unresolved blocking `gap` or `question` disposition across the completed artifact set, and the recorded commit plan matches the commits actually taken. A story without a tasks artifact skips only this clause. Stop on any failure; if only a subset of the story's `## Story Completion Conditions` or ACs is satisfied, route to `SPEC_partialCloseUserStory` (or the missing verification command) rather than closing the full story; a plan that claims work the gates never ran or leaves unresolved blocking EPIC sufficiency gaps is a close-gate failure, reported as `plan_drift` and routed to `SPEC_updateMadePlan` (when gate evidence exists and the tasks file needs synchronization), `SPEC_whatsWrong`, or asked, not closed over.
-2. Move the story and its paired tasks artifact from `.catdd/spec/doingUS/` to `.catdd/spec/doneUS/`. Remove the doingUS copy so the ID exists in exactly one lane.
+2. Move the story and its paired tasks artifact from `.catdd/spec/doingUS/` to `.catdd/spec/doneUS/`. Remove the active doingUS copy while preserving declared historical or partial-closure slices.
 3. Rewrite story-specific references that still point at `.catdd/spec/doingUS/` to `.catdd/spec/doneUS/`.
 4. Synchronize `README_UserStories.md`: story TODO/DOING → DONE, and AC status aligned with closure evidence.
 5. Classify project-context impact: **minor** (file movement or link normalization only) → remind the developer to run `SPEC_updateProjectContext`; **major** (next-command recommendation, lifecycle summary, or project rules changed) → run `SPEC_updateProjectContext` in-flow before declaring closure complete.
@@ -61,6 +61,7 @@ Expected result:
 ## Method References
 
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 
 ## Output Contract
 
@@ -69,6 +70,7 @@ Expected result:
 - Local `.catdd/spec/doingUS/` work state is removed after the completed artifact is created; do not keep a duplicate closed copy in doingUS.
 - Story-specific references that still point to `.catdd/spec/doingUS/` are updated to `.catdd/spec/doneUS/` after closure so trace paths remain valid.
 - Project-level `README_UserStories.md` is synchronized so the story moves from TODO/DOING to DONE and acceptance-criteria status is aligned with closure evidence.
+- The registered Story ID and qualified AC/TP/TC links remain stable and resolve to the completed story, evidence, and any declared historical slices.
 - Project-context sync policy is applied after closure:
   - Minor lifecycle impact (for example only story file movement or link normalization): remind the developer to run `SPEC_updateProjectContext`.
   - Major lifecycle impact (for example next-command recommendation changes, pending/todo/doing/done summary changes, or project rules/constraints changed by this story): run `SPEC_updateProjectContext` in the same progress flow before declaring closure complete.
@@ -92,6 +94,7 @@ Expected result:
 Do not close if product intent, acceptance criteria, story-specific `## Story Completion Conditions` (`EPIC E3.4`), tests, review, commit, or CI status remains unresolved.
 Do not close over a tasks artifact that claims completed work without gate evidence or records a commit plan that disagrees with the commits actually taken; report `plan_drift` and route to `SPEC_updateMadePlan` or `SPEC_whatsWrong` instead. When the story was never planned through `SPEC_makePlan`, this clause does not apply.
 Do not close if `README_UserStories.md` TODO/DONE or AC status is not synchronized with closure evidence.
+Do not close with unresolved Story ID collisions, ambiguous AC revisions, or dangling required identity traces.
 Do not close a story whose README_UserStories.md ledger state is SUSPENDED; require `SPEC_resumeUserStory` first to resume before closing.
 Do not leave stale story-specific trace links pointing to `.catdd/spec/doingUS/` after closure.
 Do not leave the same story ID under both `.catdd/spec/doingUS/` and `.catdd/spec/doneUS/`.

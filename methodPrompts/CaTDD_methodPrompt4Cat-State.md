@@ -51,6 +51,8 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P1 Design
 // @[Category]: State
@@ -58,8 +60,10 @@ When this category applies, consider test points such as:
 // @[UseWhen]: Operations depend on current state or lifecycle phase.
 // @[AvoidWhen]: The scenario is only stateless happy path, simple edge value, or caller misuse.
 // @[StateModel]: [states and allowed transitions]
-// @[US]/@[AC]: [traceability IDs]
-// @[TC]: verify[Lifecycle]_by[TransitionSequence]_expect[TargetState]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Lifecycle]_by[TransitionSequence]_expect[TargetState]
 ```
 
 ## US/AC/TC Pattern

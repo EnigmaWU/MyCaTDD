@@ -21,7 +21,7 @@ Before the category loop:
 Then repeat per category in order — Typical, then Edge, Misuse, Fault.
 
 1. **Thought** — Read the matching category prompt and source-backed ledger candidates. Decide ownership by verification lens, not risk priority or implementation convenience.
-2. **Action** — Draft or update that category skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TC]`. Link each designed TP to actual file/US/AC/TC IDs and observable expectations.
+2. **Action** — Draft or update that category skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, `@[TC]`. Link each designed TP to actual file/US/AC/TC IDs and observable expectations.
 3. **Observation** — Check cardinality (every US has ≥1 AC, every AC has ≥1 TC) and reconcile source obligations to TCs. A missing behavior is GAP even when the written graph passes. Move misplaced scenarios rather than duplicating them; retain concrete P1/P2 or test-level referrals without designing those categories here.
 4. **Stop** — After all four categories, apply the method's Discovery Gate and cross-category reconciliation within its bounded review budget. Stop on unresolved intent/no progress and report gaps rather than claiming completeness. An empty category needs a reasoned `@[NoTestPoints]`; missing source is BLOCKED, not a pass. Recommend `TEST_reviewFuncTestsSkeleton` with sources and ledger for independent review; keep `ready_for_implementation: no` until that review passes.
 
@@ -66,6 +66,7 @@ Expected result:
 - [../../flows/P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
 - [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
 - [../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 - [../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md)
 - [../../../methodPrompts/CaTDD_methodPrompt4Cat-Edge.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Edge.md)
 - [../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md)
@@ -74,7 +75,7 @@ Expected result:
 ## Output Contract
 
 - A P0 Functional skeleton set with Typical, Edge, Misuse, and Fault sections/files, with explicit gaps or source-backed no-test-point decisions rather than a false completeness claim.
-- Category-specific `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]` entries.
+- Category-specific `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]` entries with registered Story IDs and story-qualified AC/TP/TC IDs.
 - Traceability cardinality gate: each `@[US]` has >=1 linked `@[AC]`, and each `@[AC]` has >=1 linked `@[TC]`.
 - Explicit SUT declaration in the test-file overview (for example: `SUT: utCodeAgentCLI`).
 - Behavior inventory, discovery dimensions/selection limits, and a linked `discovery_ledger` with source references and disposition evidence.

@@ -54,6 +54,7 @@ A `ROUTE` variant: if TC-002 had failed because the design never defined the err
 
 - [Px-SpecFlow](../../flows/Px-SpecFlow.md)
 - [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 
 ## Valid RED Gate
 
@@ -90,6 +91,7 @@ A no-progress stop must preserve the latest observed evidence, report remaining 
 
 - Product code changes scoped to the active story and intended for commit when review passes.
 - Traceability from changed product files to the targeted story, acceptance criteria, test cases, and reviewed detail design.
+- Searchable registered Story ID and qualified AC/TP/TC references at relevant product-code boundaries, or an explicit source-to-symbol trace when comments are unsuitable. Preserve shared-code relationships without claiming unverified coverage.
 - Initial RED evidence, validation commands and results, correction-attempt count, evaluation state, and stop reason.
 - Remaining failures and exact owner route when the result is `ROUTE` or `ASK`.
 - Next recommended command: `SPEC_reviewProductCodes`; when product-code review passes, run `SPEC_reviewImplTests` again before refactor, commit, or closure.

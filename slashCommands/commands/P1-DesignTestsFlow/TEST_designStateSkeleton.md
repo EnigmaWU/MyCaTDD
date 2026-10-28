@@ -60,7 +60,7 @@ Expected result:
 
 ## Output Contract
 
-- A State design skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A State design skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries that focus on state transitions, lifecycle boundaries, ownership, persistence, or recovery.
 - Explicit links back to the functional scenarios that make the state behavior observable.
 

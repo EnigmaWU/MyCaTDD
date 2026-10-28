@@ -49,6 +49,8 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P2 Quality
 // @[Category]: Performance
@@ -57,7 +59,10 @@ When this category applies, consider test points such as:
 // @[AvoidWhen]: The scenario is about capacity, robustness, or concurrency correctness.
 // @[Metric]: [latency/throughput/memory/cpu]
 // @[Target]: [threshold and unit]
-// @[TC]: verify[Operation]_by[MeasuredCondition]_expect[PerformanceTarget]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Operation]_by[MeasuredCondition]_expect[PerformanceTarget]
 ```
 
 ## US/AC/TC Pattern

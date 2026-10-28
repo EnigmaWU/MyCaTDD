@@ -51,6 +51,8 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P3 Addons
 // @[Category]: DemoExample
@@ -59,7 +61,10 @@ When this category applies, consider test points such as:
 // @[AvoidWhen]: The scenario is required functional, design, or quality verification.
 // @[GuidePath]: [README/UserGuide section]
 // @[VisibleOutput]: [files, logs, UI, command output]
-// @[TC]: verifyDemo_by[Workflow]_expect[DocumentedOutput]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verifyDemo_by[Workflow]_expect[DocumentedOutput]
 ```
 
 ## US/AC/TC Pattern

@@ -49,6 +49,8 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P2 Quality
 // @[Category]: Compatibility
@@ -57,7 +59,10 @@ When this category applies, consider test points such as:
 // @[AvoidWhen]: The scenario is only configuration or only failure handling.
 // @[Matrix]: [environment/version combinations]
 // @[Contract]: [behavior that must stay consistent]
-// @[TC]: verify[Contract]_by[CompatibilityMatrix]_expect[ConsistentBehavior]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Contract]_by[CompatibilityMatrix]_expect[ConsistentBehavior]
 ```
 
 ## US/AC/TC Pattern

@@ -13,8 +13,8 @@ Update requirement-oriented story artifacts for an active story by revising proj
 Repeat within `max_rework_attempts`; each pass must show changed evidence.
 
 1. **Thought** — Compare the active story against `README_UserStories.md` and the paired `README_UserGuide.md`. List only the requirement-level deltas. Classify anything that is really an architecture or design decision and exclude it here.
-2. **Action** — Apply the minimum edits: ledger TODO/DONE state, AC trace/status, usage guidance, and module `README_UserStory.md` when module-local docs are used. Keep US/AC IDs stable.
-3. **Observation** — Verify every changed AC keeps its ID, the ledger matches the story file, and the user guide describes the same behavior the ACs assert. A renamed ID, a ledger/story mismatch, or new product scope beyond story intent returns to **Thought**.
+2. **Action** — Apply the minimum edits: ledger TODO/DONE state, AC trace/status, usage guidance, and module `README_UserStory.md` when module-local docs are used. Preserve IDs when meaning is unchanged; an approved materially different AC gets a new qualified ID and explicit supersession trace.
+3. **Observation** — Verify stable and superseded IDs follow [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids), the ledger matches the story file, and the user guide describes the same behavior the ACs assert. Silent ID reuse, a ledger/story mismatch, or new product scope beyond story intent returns to **Thought**.
 4. **Stop** — Exit when requirement docs are consistent. Report the requirement-update checklist and `next_command = SPEC_reviewUserStory`; this gate is never skipped.
 
 ### Worked Example
@@ -30,9 +30,9 @@ update_scope: AC-04
 
 Expected result:
 
-- **Thought**: two deltas — AC-04's wording is unmeasurable, and the ledger marks AC-04 `DONE` while the story still lists it open. A third candidate change ("switch to a token-bucket retry") is a design decision → excluded.
-- **Action**: AC-04 reworded to "p95 retry completion under 500ms"; ledger AC-04 reset to `TODO`; user guide retry section updated to match.
-- **Observation**: AC-04 kept its ID, ledger now matches the story, and the guide asserts the same bound → consistent.
+- **Thought**: two deltas — `US-07-AC-04` is unmeasurable, and the ledger marks it `DONE` while the story still lists it open. A third candidate change ("switch to a token-bucket retry") is a design decision → excluded.
+- **Action**: the developer confirms a new p95 bound; the materially changed criterion becomes `US-07-AC-05`, the original is marked superseded with its history preserved, and the ledger and user guide are updated to match.
+- **Observation**: the new criterion has a distinct ID and a link to `US-07-AC-04`; the ledger and guide agree with the confirmed bound → consistent.
 - **Stop**: checklist reports 1 AC reworded, 1 ledger fix, 1 guide alignment; `next_command = SPEC_reviewUserStory`.
 
 ## Inputs
@@ -55,6 +55,7 @@ Expected result:
 
 - Updated project-root `README_UbiLang.md` when the story introduces or revises domain terminology, and AC outcomes normalized to controlled modal vocabulary (`MUST` / `MUST NOT` for mandatory acceptance outcomes, `SHOULD` with exception rules, `MAY` for optional behavior).
 - Updated project-root `README_UserStories.md` with requirement-level revisions, TODO/DONE state synchronization, and stable US/AC trace IDs.
+- Preserved historical AC identities and explicit lineage for any approved materially changed AC; propagate the resulting qualified IDs into downstream trace references.
 - Updated module or submodule `README_UserStory.md` when module-local requirement docs are used.
 - Updated paired `README_UserGuide.md` aligned to the revised requirement intent and usage behavior.
 - Explicit trace links from the active doing story to updated requirement docs.

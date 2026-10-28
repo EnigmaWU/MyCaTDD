@@ -8,7 +8,7 @@ This is the SpecCoding template for project-root `README_DetailVerifyDesign.md`.
 
 ## Story and Design Inputs
 
-- Story: {{US identifier and title}}
+- Story: {{StoryID}} and {{title}}
 - Active story artifact: {{.catdd/spec/doingUS path}}
 - Detail design: [README_DetailDesign.md](README_DetailDesign.md)
 - State design: [README_StateDesign.md](README_StateDesign.md)
@@ -40,7 +40,7 @@ Build this from sources before consulting existing skeletons. Existing tests are
 
 | TP ID | Category | `TestLevel` | Peer reality | Owning design | Promotion reference |
 | --- | --- | --- | --- | --- | --- |
-| {{TP-xx}} | {{Typical/Edge/Misuse/Fault/State/Capability/Interaction/Concurrency/Performance/Robust/Compatibility/Configuration/Diagnosis/Security/DemoExample}} | {{UnitTesting/SysTesting/UserTesting}} | {{real peer, target runtime, fake, stub, recorded}} | {{this document / README_ArchVerifyDesign.md}} | {{promoted TP row in the architecture design or n/a}} |
+| {{StoryID}}-TP-{{n}} | {{Typical/Edge/Misuse/Fault/State/Capability/Interaction/Concurrency/Performance/Robust/Compatibility/Configuration/Diagnosis/Security/DemoExample}} | {{UnitTesting/SysTesting/UserTesting}} | {{real peer, target runtime, fake, stub, recorded}} | {{this document / README_ArchVerifyDesign.md}} | {{promoted TP row in the architecture design or n/a}} |
 
 Rules:
 
@@ -75,9 +75,9 @@ Row-level category coverage lives here. Quadrant balance across levels, environm
 Keep one feature-level inventory and `discovery_ledger` in living comments, alongside this design. `CaTDD_methodPrompt-testPointDiscovery.md` owns the row fields, dispositions (`DESIGNED / QUESTION / EXCLUDED / REFERRED / GAP`), and readiness semantics.
 
 ```text
-TP ID | Source/rule | Setup/action | Observable oracle | Category/TestLevel | Disposition/evidence
-TP-01 | [source/R1] | [condition]  | [expected result]  | Typical/UnitTesting | DESIGNED: [file, US/AC/TC IDs]
-TP-02 | [source/R2] | [condition]  | unknown            | provisional         | QUESTION: [question, decision owner]
+TP ID | Source/AC/rule | Setup/action | Observable oracle | Category/TestLevel | Disposition/evidence
+{{StoryID}}-TP-{{n}} | {{StoryID}}-AC-{{n}} / [source/R1] | [condition] | [expected result] | Typical/UnitTesting | DESIGNED: [file, qualified TC IDs]
+{{StoryID}}-TP-{{n}} | [source/R2] | [condition] | unknown | provisional | QUESTION: [question, decision owner]
 ```
 
 Discovery Gate report:
@@ -94,7 +94,7 @@ Residual risk and next action: ...
 
 | Submodule / unit | SUT boundary | Seams, fakes, fixtures | Oracle | Owned TP IDs |
 | --- | --- | --- | --- | --- |
-| {{submodule or class}} | {{declared boundary}} | {{seam and data design}} | {{observable result}} | {{TP-xx}} |
+| {{submodule or class}} | {{declared boundary}} | {{seam and data design}} | {{observable result}} | {{StoryID}}-TP-{{n}} |
 
 ## Test Approach Design
 

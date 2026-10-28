@@ -8,7 +8,7 @@ Paired with [{{YYYYMMDD-StorySlug-UserStory.md}}]({{YYYYMMDD-StorySlug-UserStory
 
 ## Active Story
 
-- **ID:** US-{{n}}
+- **ID:** {{StoryID}}
 - **State:** {{doing / OPEN | suspended | aborted | done}}
 - **Priority:** {{P0 Functional | P1 Design | P2 Quality | P3 Addons}} / {{Category}}
 - **Branch:** `{{branch_name}}`
@@ -75,8 +75,8 @@ Paired with [{{YYYYMMDD-StorySlug-UserStory.md}}]({{YYYYMMDD-StorySlug-UserStory
 
 | Source Obligation (`US/AC/ASR`) | Story / Guide | ArchDesign / UbiLang | DetailDesign / VerifyDesign (`TP`) | Test Design Skeleton (`US/AC/TC`) | ImplTest Body (`SETUP/BEHAVIOR/VERIFY`) | Gate Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| `{{AC-01 / ASR-01}}` | Defined (`MUST`) | `{{KEPT / DETAILED / N/A}}` | `{{KEPT / DETAILED (TP-01..n)}}` | `{{KEPT (TC-001)}}` | `{{KEPT (RED / GREEN)}}` | `{{PASS / REVISE / ASK}}` |
-| `{{AC-02}}` | Defined (`MUST`) | `{{KEPT / REASSIGNED / EXCLUDED}}` | `{{DETAILED / VIOLATED / UNKNOWN}}` | `{{pending / TC-002}}` | `{{pending}}` | `{{PASS / REVISE / ASK}}` |
+| `{{StoryID}}-AC-{{n}}` | Defined (`MUST`) | `{{KEPT / DETAILED / N/A}}` | `{{KEPT / DETAILED}}: {{StoryID}}-TP-{{n}}` | `{{KEPT}}: {{StoryID}}-TC-{{n}}` | `{{KEPT (RED / GREEN)}}` | `{{PASS / REVISE / ASK}}` |
+| `{{StoryID}}-AC-{{n}}` | Defined (`MUST`) | `{{KEPT / REASSIGNED / EXCLUDED}}` | `{{DETAILED / VIOLATED / UNKNOWN}}` | `{{pending / qualified TC ID}}` | `{{pending}}` | `{{PASS / REVISE / ASK}}` |
 
 ---
 

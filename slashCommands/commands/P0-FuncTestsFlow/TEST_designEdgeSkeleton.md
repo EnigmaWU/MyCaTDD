@@ -53,7 +53,7 @@ Expected result:
 
 ## Output Contract
 
-- An Edge functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- An Edge functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries that capture valid boundary behavior and unusual-but-supported inputs.
 - Explicit separation between Edge coverage and invalid Misuse or Fault coverage.
 

@@ -53,7 +53,7 @@ Expected result:
 
 ## Output Contract
 
-- A Fault functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Fault functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries that capture dependency failures, unavailable resources, timeouts, corrupted responses, or other reportable faults.
 - Explicit separation between Fault behavior and caller Misuse behavior.
 

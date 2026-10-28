@@ -54,6 +54,7 @@ Minimum skeleton shape:
 // @[AvoidWhen]: When to move the scenario to another category
 // @[US]: User Story IDs covered by this category
 // @[AC]: Acceptance Criteria IDs covered by this category
+// @[TP]: Test Point IDs covered by this category
 // @[TC]: Test Cases, status, and expected TDD next action
 //=================================================================================================
 ```
@@ -85,6 +86,7 @@ For full category guidance, read `CaTDD_methodPrompt-categorySemantics.md`.
 
 ## Mandatory Traceability Constraints
 
+- Use the [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract: register a stable Story ID and carry full story-qualified AC/TP/TC IDs through design, test, and product-code trace references.
 - P0 Functional design **MUST** include the full category set in order: `Typical -> Edge -> Misuse -> Fault` unless the developer explicitly limits scope.
 - Each US **MUST** map to at least one AC.
 - Each AC **MUST** map to at least one TC.

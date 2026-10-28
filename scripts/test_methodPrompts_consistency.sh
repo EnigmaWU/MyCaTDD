@@ -6,6 +6,27 @@ METHOD_DIR="$REPO_ROOT/methodPrompts"
 FILE_NAMING="$METHOD_DIR/CaTDD_methodPrompt-fileNaming.md"
 MASTER="$METHOD_DIR/CaTDD_methodPrompt.md"
 TEST_STRUCTURE="$METHOD_DIR/CaTDD_methodPrompt-testStructure.md"
+TEST_DISCOVERY="$METHOD_DIR/CaTDD_methodPrompt-testPointDiscovery.md"
+TODO_STORY_TEMPLATE="$REPO_ROOT/slashCommands/templates/SpecTodoUserStoryTemplate.md"
+STORY_LEDGER_TEMPLATE="$REPO_ROOT/slashCommands/templates/README_UserStoriesTemplate.md"
+TASKS_TEMPLATE="$REPO_ROOT/slashCommands/templates/SpecDoingUserStoryTasksTemplate.md"
+DETAIL_TEMPLATE="$REPO_ROOT/slashCommands/templates/README_DetailDesignTemplate.md"
+DETAIL_VERIFY_TEMPLATE="$REPO_ROOT/slashCommands/templates/README_DetailVerifyDesignTemplate.md"
+ARCH_VERIFY_TEMPLATE="$REPO_ROOT/slashCommands/templates/README_ArchVerifyDesignTemplate.md"
+ANALYZE_ISSUE="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_analyzeIssue.md"
+ANALYZE_FEATURE="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_analyzeFeature.md"
+IMPORT_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_importUserStory.md"
+ANALYZE_ABORT="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_analyzeAbortedUserStory.md"
+OPEN_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_openUserStory.md"
+DESIGN_TESTS="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_designTests.md"
+IMPL_PRODUCT="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_implProductCodes.md"
+DESIGN_FUNCTIONAL="$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md"
+UPDATE_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_updateUserStory.md"
+REVIEW_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewUserStory.md"
+REVIEW_TESTS="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewImplTests.md"
+CLOSE_STORY="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_closeUserStory.md"
+PARTIAL_CLOSE="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_partialCloseUserStory.md"
+MERGE_WORKS="$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_mergeWorks.md"
 README="$METHOD_DIR/README.md"
 README_ZH="$METHOD_DIR/README_ZH.md"
 GUIDE="$METHOD_DIR/README_UserGuide.md"
@@ -52,6 +73,10 @@ Use When"
 category_count=0
 for category_file in "$METHOD_DIR"/CaTDD_methodPrompt4Cat-*.md; do
   category_count=$((category_count + 1))
+  assert_contains "$category_file" 'project-wide-traceability-ids'
+  for trace_field in US AC TP TC; do
+    assert_contains "$category_file" "// @[$trace_field]:"
+  done
   actual_sections="$(grep '^## ' "$category_file" | sed 's/^## //' | LC_ALL=C sort)"
   if [[ "$actual_sections" != "$expected_sections" ]]; then
     actual_sections_file="$(mktemp)"
@@ -65,6 +90,10 @@ for category_file in "$METHOD_DIR"/CaTDD_methodPrompt4Cat-*.md; do
   fi
 done
 [[ "$category_count" -eq 15 ]] || fail "expected 15 category prompts, found $category_count"
+
+for design_command in "$REPO_ROOT"/slashCommands/commands/{P0-FuncTestsFlow,P1-DesignTestsFlow,P2-QualityTestsFlow}/TEST_design*Skeleton.md; do
+  assert_contains "$design_command" '@[TP]'
+done
 
 # 2. The canonical naming authority covers every category token.
 declare -a category_names=(Typical Edge Misuse Fault State Capability Interaction Concurrency Performance Robust Compatibility Configuration Diagnosis Security DemoExample)
@@ -85,6 +114,41 @@ assert_contains "$FILE_NAMING" 'deprecated'
 assert_contains "$FILE_NAMING" '@[TestLevel]'
 assert_contains "$TEST_STRUCTURE" '@[TestScope]'
 assert_contains "$TEST_STRUCTURE" 'mockSysRtm <marker> | realSysRtm <marker>'
+assert_contains "$TEST_STRUCTURE" '## Project-Wide Traceability IDs'
+assert_contains "$TEST_STRUCTURE" '`US-<story>-AC-<n>`'
+assert_contains "$TEST_STRUCTURE" '`US-<story>-TP-<n>`'
+assert_contains "$TEST_STRUCTURE" '`US-<story>-TC-<n>`'
+assert_contains "$TEST_STRUCTURE" 'UUIDv4'
+assert_contains "$TEST_STRUCTURE" '@[TP]'
+assert_contains "$TODO_STORY_TEMPLATE" '**Story ID:** {{StoryID}}'
+assert_contains "$TODO_STORY_TEMPLATE" '### {{StoryID}}-AC-{{n}}:'
+assert_contains "$ANALYZE_ISSUE" 'register the Story ID'
+assert_contains "$ANALYZE_ISSUE" 'project-wide-traceability-ids'
+assert_contains "$STORY_LEDGER_TEMPLATE" '## Story Identity Registry'
+assert_contains "$STORY_LEDGER_TEMPLATE" '{{StoryID}}-AC-{{n}}'
+for intake_command in "$ANALYZE_FEATURE" "$IMPORT_STORY" "$ANALYZE_ABORT" "$OPEN_STORY"; do
+  assert_contains "$intake_command" 'project-wide-traceability-ids'
+done
+assert_contains "$MASTER" 'project-wide-traceability-ids'
+assert_contains "$TEST_DISCOVERY" 'story-qualified TP ID'
+for trace_command in "$DESIGN_TESTS" "$IMPL_PRODUCT" "$DESIGN_FUNCTIONAL"; do
+  assert_contains "$trace_command" 'project-wide-traceability-ids'
+done
+for template in "${TEMPLATES[@]}"; do
+  assert_contains "$template" 'US-PROJECT-01-AC-01'
+  assert_contains "$template" 'US-PROJECT-01-TP-01'
+  assert_contains "$template" 'US-PROJECT-01-TC-01'
+  assert_contains "$template" 'abbreviated sample IDs'
+done
+assert_contains "$TASKS_TEMPLATE" '**ID:** {{StoryID}}'
+assert_contains "$DETAIL_TEMPLATE" '{{StoryID}}-AC-{{n}}'
+assert_contains "$DETAIL_VERIFY_TEMPLATE" '{{StoryID}}-TP-{{n}}'
+assert_contains "$ARCH_VERIFY_TEMPLATE" '{{StoryID}}-TP-{{n}}'
+for lifecycle_command in "$UPDATE_STORY" "$REVIEW_STORY" "$REVIEW_TESTS" "$CLOSE_STORY" "$PARTIAL_CLOSE" "$MERGE_WORKS"; do
+  assert_contains "$lifecycle_command" 'project-wide-traceability-ids'
+done
+assert_contains "$MERGE_WORKS" 'integrated project'
+assert_not_contains "$TEST_STRUCTURE" 'AC-n: GIVEN'
 assert_contains "$MASTER" 'test_{feature}_{category}.<ext>'
 assert_contains "$TEST_STRUCTURE" 'test_{feature}_{category}.<ext>'
 

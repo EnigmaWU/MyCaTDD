@@ -52,6 +52,8 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P1 Design
 // @[Category]: Concurrency
@@ -60,7 +62,10 @@ When this category applies, consider test points such as:
 // @[AvoidWhen]: The scenario is only capacity, performance load, or single-threaded lifecycle.
 // @[ActorsAndResource]: [actors, shared resource, synchronization strategy]
 // @[Invariant]: [what must remain true]
-// @[TC]: verify[Operation]_by[ConcurrentPattern]_expect[CorrectInvariant]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Operation]_by[ConcurrentPattern]_expect[CorrectInvariant]
 ```
 
 ## US/AC/TC Pattern

@@ -60,7 +60,7 @@ Expected result:
 
 ## Output Contract
 
-- A Performance quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Performance quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries that make performance expectations measurable and bounded.
 - Traceability to functional or design scenarios that must remain correct under performance constraints.
 

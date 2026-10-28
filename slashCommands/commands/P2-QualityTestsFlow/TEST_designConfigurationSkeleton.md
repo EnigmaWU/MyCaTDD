@@ -60,7 +60,7 @@ Expected result:
 
 ## Output Contract
 
-- A Configuration quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Configuration quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries for default, explicit, unsupported, conflicting, or environment-specific configuration behavior.
 - Traceability to functional or design scenarios that vary by configuration.
 

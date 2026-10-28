@@ -53,15 +53,18 @@ When this category applies, consider test points such as:
 
 ## Design Skeleton
 
+Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
+
 ```text
 // @[Class]: P0 Functional / InvalidFunc
 // @[Category]: Misuse
 // @[Intent]: Prove invalid caller behavior is rejected safely and clearly.
 // @[UseWhen]: The caller violates a named API precondition or call sequence.
 // @[AvoidWhen]: The caller is valid and the failure comes from environment, resource, dependency, or runtime fault.
-// @[US]: [US IDs]
-// @[AC]: [AC IDs]
-// @[TC]: verify[Operation]_by[MisuseCondition]_expect[ErrorResult]
+// @[US]: [registered Story IDs]
+// @[AC]: [qualified AC IDs]
+// @[TP]: [qualified TP IDs]
+// @[TC]: [qualified TC ID] verify[Operation]_by[MisuseCondition]_expect[ErrorResult]
 ```
 
 ## US/AC/TC Pattern

@@ -53,7 +53,7 @@ Expected result:
 
 ## Output Contract
 
-- A Misuse functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Misuse functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries that capture invalid inputs, unsupported operation order, missing preconditions, or caller contract violations.
 - Explicit separation between caller misuse and environmental or dependency Fault behavior.
 

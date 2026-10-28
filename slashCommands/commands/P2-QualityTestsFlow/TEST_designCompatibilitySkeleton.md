@@ -60,7 +60,7 @@ Expected result:
 
 ## Output Contract
 
-- A Compatibility quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Compatibility quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries for supported versions, platforms, protocols, formats, or integration boundaries.
 - Traceability to functional or design scenarios that must remain compatible.
 

@@ -63,10 +63,12 @@ Expected result:
 - [../../flows/P2-QualityTestsFlow.md](../../flows/P2-QualityTestsFlow.md)
 - [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
 - [../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 
 ## Output Contract
 
-- CaTDD US/AC/TC skeletons in committed test files, linked back to local gitignored active story context and project-root README SPEC docs.
+- CaTDD US/AC/TC skeletons in committed test files, linked back to team-shared active story artifacts and project-root README SPEC docs.
+- The registered Story ID and full story-qualified AC, TP, and TC IDs at each relevant ledger and test declaration; preserve shared relationships and existing IDs across categories and test levels.
 - Enforced minimum traceability cardinality: each US has >=1 AC, and each AC has >=1 TC.
 - Explicit SUT declaration in each designed test-file overview section.
 - This command inherits the strategy from `README_DetailVerifyDesign.md`; it never creates or redefines verification design.

@@ -60,7 +60,7 @@ Expected result:
 
 ## Output Contract
 
-- A Robust quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Robust quality skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries for resilience, recovery, degradation, bounded retry, timeout, or stable failure behavior.
 - Traceability to functional or design scenarios that must survive robustness pressure.
 

@@ -1,12 +1,16 @@
 # {{UserStoryTitle}}
 
-> **Story ID:** US-{{n}} | **State:** todo | **Priority:** <!-- filled from Priority section below -->
+> **Story ID:** {{StoryID}} | **State:** todo | **Priority:** <!-- filled from Priority section below -->
 > **Source:** `.catdd/spec/analyzedNews/{{YYYYMMDD-original}}.md`
 > **Correction of:** <!-- present only for SPEC_analyzeAbortedUserStory: abortUS/YYYYMMDD-UserStory.md -->
-> **Parent Story:** <!-- present only for sub-UserStory: `.catdd/spec/todoUS/{{parent}}.md` -->
+> **Parent Story:** <!-- present only for sub-UserStory: parent Story ID and `.catdd/spec/todoUS/{{parent}}.md` -->
 > **CaTDD Class:** {{P0 Functional / P1 Design / P2 Quality / P3 Addons}}
 > **Primary Category:** {{Typical / Edge / Misuse / Fault / State / Capability / Concurrency / Performance / Robust / Compatibility / Configuration / DemoExample}}
 > **Created:** {{YYYY-MM-DD}}
+
+<!-- How: {{StoryID}} is the complete, registered project-wide US ID. Allocate or preserve it
+     using .catdd/methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids.
+     Each AC heading uses that ID and a unique stable child token. -->
 
 ---
 
@@ -37,7 +41,7 @@
 | Concrete examples & exceptional paths exist | `E2 Singular` + `P2 Complete` | {{yes/no}} | {{Example Mapping rows, atomic scenarios, Edge/Misuse/Fault seeds}} |
 | Dependencies, assumptions & risks are declared | `P1 Dependency Control` | {{yes/no}} | {{Risks & Assumptions rows, upstream/downstream constraints}} |
 | Story-specific completion conditions are stated | `E3.4 Completion & Readiness` | {{yes/no}} | {{Story Completion Conditions: TestLevel, TestScope, CaTDD categories, Not-Done rules}} |
-| Template structure & stable IDs are preserved | `I1 Conforming` | {{yes/no}} | {{US-n, RULE-n, EX-n, E/M/F seeds}} |
+| Template structure & stable IDs are preserved | `I1 Conforming` | {{yes/no}} | {{StoryID, qualified AC IDs, RULE-n, EX-n, E/M/F seeds}} |
 | Blocking questions remain | `E1.1 Clarification-Seeking` | {{yes/no}} | {{Initial Acceptance Questions + Ambiguity Warnings references}} |
 | Story size is acceptable | `E2 Singular` + `C1 Scope Discipline` | {{yes/no}} | {{Sub-UserStory Candidates / split rationale}} |
 | Ready decision | Stage 1 Sufficiency Gate | {{Ready / Blocked / Too Large / Needs Split}} | {{why this decision is correct}} |
@@ -69,7 +73,7 @@
 
 | Card | ID | Content | Trace / Decision |
 | --- | --- | --- | --- |
-| Yellow Story | US-{{n}} | {{one-line story title}} | {{source note}} |
+| Yellow Story | {{StoryID}} | {{one-line story title}} | {{source note}} |
 | Blue Rule | RULE-{{n}} | {{business rule or acceptance rule}} | {{AC/BR reference}} |
 | Green Example | EX-{{n}} | {{specific values, actor, context, and expected result}} | {{Scenario reference}} |
 | Green Counter-Example | CEX-{{n}} | {{specific invalid, alternate, or failure example}} | {{Edge/Misuse/Fault reference}} |
@@ -121,7 +125,7 @@
      sub-UserStory from this story when it is needed now, or raise an Initial Acceptance Question
      when the team must decide whether to split it. (→ SKILL: write-user-story + facilitate-example-mapping) -->
 
-### Scenario 1: {{Happy Path Title}}
+### {{StoryID}}-AC-{{n}}: {{Happy Path Title}}
 
 **Example Trace:** EX-{{n}}
 **Rule:** {{business rule or constraint that governs this scenario}}
@@ -135,7 +139,7 @@
 
 **Open Questions:** {{or "None"}}
 
-### Scenario 2: {{Alternate Typical Path Title}}
+### {{StoryID}}-AC-{{n}}: {{Alternate Typical Path Title}}
 
 **Example Trace:** EX-{{n}}
 **Rule:** {{business rule or constraint}}
@@ -149,7 +153,7 @@
 
 **Open Questions:** {{or "None"}}
 
-### Scenario N
+### {{StoryID}}-AC-{{n}}: {{Additional Scenario Title}}
 
 ---
 
@@ -184,19 +188,19 @@
 
 | # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
 | --- | --- | --- | --- | --- | --- |
-| E{{n}} | {{valid boundary, option, limit, or lifecycle variation}} | {{how the system should respond}} | {{Scenario / AS reference}} | {{verifyOperation_byCondition_expectOutcome}} | {{draft / needs clarification}} |
+| E{{n}} | {{valid boundary, option, limit, or lifecycle variation}} | {{how the system should respond}} | {{StoryID}}-AC-{{n}} | {{qualified TC ID or pending}} | {{draft / needs clarification}} |
 
 ### Misuse (InvalidFunc)
 
 | # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
 | --- | --- | --- | --- | --- | --- |
-| M{{n}} | {{caller violates API contract or uses invalid input/state}} | {{how the system should reject or protect}} | {{Scenario / AS reference}} | {{verifyOperation_byMisuse_expectRejection}} | {{draft / needs clarification}} |
+| M{{n}} | {{caller violates API contract or uses invalid input/state}} | {{how the system should reject or protect}} | {{StoryID}}-AC-{{n}} | {{qualified TC ID or pending}} | {{draft / needs clarification}} |
 
 ### Fault (InvalidFunc)
 
 | # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
 | --- | --- | --- | --- | --- | --- |
-| F{{n}} | {{dependency, resource, or runtime failure under valid caller behavior}} | {{cleanup, diagnostic, or deterministic failure behavior}} | {{Scenario / AS reference}} | {{verifyOperation_byFault_expectGracefulFailure}} | {{draft / needs clarification}} |
+| F{{n}} | {{dependency, resource, or runtime failure under valid caller behavior}} | {{cleanup, diagnostic, or deterministic failure behavior}} | {{StoryID}}-AC-{{n}} | {{qualified TC ID or pending}} | {{draft / needs clarification}} |
 
 ---
 
@@ -296,7 +300,7 @@
 | Project ubiquitous language | `README_UbiLang.md` |
 | Parent story | `.catdd/spec/todoUS/{{parent-story-file}}` |
 | Sub-UserStory candidates | `.catdd/spec/todoUS/{{sub-story-file-or-candidate}}` |
-| This story ID | US-{{n}} |
+| This story ID | {{StoryID}} |
 
 ---
 
@@ -310,7 +314,7 @@
 
 | Field | Value |
 | --- | --- |
-| **Original Story** | US-{{n}} in `abortUS/{{YYYYMMDD-UserStory.md}}` |
+| **Original Story** | {{OriginalStoryID}} in `abortUS/{{YYYYMMDD-UserStory.md}}` |
 | **Abort Date** | {{YYYY-MM-DD}} |
 | **Abort Reason** | {{why the story was aborted}} |
 | **Phase at Abort** | {{Phase 1 / 2 / 3}} |

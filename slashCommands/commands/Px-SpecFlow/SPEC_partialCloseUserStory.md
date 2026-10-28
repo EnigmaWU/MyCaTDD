@@ -20,7 +20,7 @@ Run these steps once, in order. There is no retry loop; a failed split validatio
 4. Move the accepted slice into the close lane and record its close evidence.
 5. Move the rejected slice into the abort lane with its `rejection_reason` and `evidence_refs` preserved.
 6. Synchronize `README_UserStories.md` so accepted ACs show DONE and rejected ACs show the abort state.
-7. Verify no duplicate same-ID story remains across the doing, done, and abort lanes.
+7. Verify the active doing copy is gone and the done/abort records are explicitly identified as accepted and rejected slices of the same Story ID; reject undeclared independent collisions.
 8. Evaluate the terminal commit checkpoint: if steps 4–6 changed files, report `commit_checkpoint = span_end` with `next_command = /SPEC_commitStoryWorks`, and do not treat the split as fully recorded until those lifecycle/meta moves are committed.
 9. Record `followup_intent` for the rejected side and report the next command per lane.
 
@@ -74,6 +74,7 @@ Expected result:
 ## Method References
 
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 
 ## Output Contract
 
@@ -85,6 +86,7 @@ Expected result:
   - the accepted slice must not remain in `.catdd/spec/doingUS/` after the close.
   - the rejected slice must not remain active in `.catdd/spec/doingUS/` after the abort.
   - the original story must not be duplicated across active, done, and abort lanes without a clear split.
+  - accepted and rejected slices retain the original registered Story ID and qualified AC IDs, with explicit slice and lineage records rather than silently minted replacement identities.
 - A partial-closure summary showing:
   - accepted scope
   - rejected scope
@@ -104,7 +106,7 @@ Expected result:
 Do not use `SPEC_partialCloseUserStory` as a silent alias for `SPEC_abortUserStory`.
 Do not treat the entire story as accepted when only part of it is valid.
 Do not discard rejected reasoning; preserve the evidence in the abort lane.
-Do not leave duplicate story IDs across `.catdd/spec/doingUS/`, `.catdd/spec/doneUS/`, and `.catdd/spec/abortUS/`.
+Do not leave the active story in `.catdd/spec/doingUS/` after a split, or leave undeclared same-ID records that could be mistaken for independent stories.
 Do not close the accepted slice without its review or verification evidence.
 If `accepted_scope` is empty or not materially valid, require a clearer split or fall back to `SPEC_abortUserStory`.
 

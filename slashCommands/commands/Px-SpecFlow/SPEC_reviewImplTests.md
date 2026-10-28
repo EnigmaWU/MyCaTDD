@@ -61,6 +61,7 @@ Expected result:
 - [P2-QualityTestsFlow](../../flows/P2-QualityTestsFlow.md)
 - [TEST_reviewImplTestCase](../../commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md)
 - [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 
 ## Skill Integration Policy
 
@@ -86,6 +87,7 @@ Expected result:
 - `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Cross-Artifact Semantic-Delta Matrix (`EPIC I2.3 / Transformation Preservation`: `DetailDesign / VerifyDesign (TP) -> US/AC/TC Skeleton (@[Expect]) -> Implemented Test Body (SETUP / BEHAVIOR / VERIFY) & Companion README`) classifying each implemented TC's semantic alignment as `KEPT`, `DETAILED` (with rationale), `REASSIGNED`, `EXCLUDED`, `VIOLATED`, or `UNKNOWN`. Any `VIOLATED` test body or weakened `VERIFY` assertion triggers `REVISE` (`rework_route = SPEC_implTests` or `TEST_implTestCase` for implementation drift, or `SPEC_designTests` for skeleton drift).
 - Per-TC alignment summary against US/AC/TC design comments.
+- Per-TC identity audit: check the registered Story ID and qualified AC/TP/TC references against their authoritative sources, including explicit shared relationships. Missing, ambiguous, or conflicting links are findings, not proof of coverage.
 - Anti-Test-Theater audit: verifies assertions test real SUT state mutations or domain invariants without vacuous checks or mock echoing.
 - Missing assertions, excessive assertions, setup/cleanup gaps, phase-layout issues, `VERIFY_KEYPOINT_xyz` issues, and status-marker inconsistencies.
 - Evidence that P0-first priority was preserved, or an explicit developer override/blocker for skipped P0 TCs.

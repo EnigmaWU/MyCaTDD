@@ -15,7 +15,7 @@ Use this command after P0 functional coverage exists and the component enforces 
 Repeat until every AC is verifiable, tied to a threat model or constitutional rule ($K$), and sourced.
 
 1. **Thought** — Design-source gate first: check project-root `README_SecurityDesign.md` exists. If project-root `README_SecurityDesign.md` is missing, stop before drafting the Security skeleton and warn the developer with a **WARNING**. Then read it as the security and threat-model source, along with constitutional invariants ($K$) in `projectContext.md`.
-2. **Action** — Draft only the Security skeleton with the full `@[...]` metadata set (`@[SUT]`, `@[Class]`, `@[Category]`, `@[ProtectedAsset]`, `@[ThreatOrPolicy]`, `@[ConstitutionalRule]`, `@[US]`, `@[AC]`, `@[TC]`). Cover allowed/denied contrasts, credential redaction, sandbox containment, and CWE exclusion. Preserve unrelated categories.
+2. **Action** — Draft only the Security skeleton with the full `@[...]` metadata set (`@[SUT]`, `@[Class]`, `@[Category]`, `@[ProtectedAsset]`, `@[ThreatOrPolicy]`, `@[ConstitutionalRule]`, `@[US]`, `@[AC]`, `@[TP]`, `@[TC]`). Cover allowed/denied contrasts, credential redaction, sandbox containment, and CWE exclusion. Preserve unrelated categories.
 3. **Observation** — Check the Misuse boundary: an AC describing ordinary invalid input without a security protection property belongs to P0 Misuse → back to **Thought**. Check that every test assertion verifies real SUT protection (status 401/403, sanitized output, redaction) rather than mock-asserting-mock (Anti-Test-Theater). Check that no secrets are exposed in test assertions or expectations.
 4. **Stop** — Exit when every AC is grounded in a threat model or constitutional rule ($K$). Recommend another P2 category or `TEST_reviewQualityTestsSkeleton`.
 
@@ -77,7 +77,7 @@ Expected result:
 
 ## Output Contract
 
-- A Security quality skeleton with `@[SUT]`, `@[Class]`, `@[Category]`, `@[ProtectedAsset]`, `@[ThreatOrPolicy]`, `@[ConstitutionalRule]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Security quality skeleton with `@[SUT]`, `@[Class]`, `@[Category]`, `@[ProtectedAsset]`, `@[ThreatOrPolicy]`, `@[ConstitutionalRule]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries for authorization, token redaction, injection exclusion, sandboxing, and trust-boundary defenses.
 - Traceability to functional or design scenarios that must preserve protection properties under attack or policy constraints.
 

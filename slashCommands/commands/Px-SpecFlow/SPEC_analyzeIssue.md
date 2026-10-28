@@ -96,11 +96,13 @@ analysis_mode: BRAINSTORM
 
 - [Px-SpecFlow](../../flows/Px-SpecFlow.md)
 - [methodPrompts/README](../../../methodPrompts/README.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 - Composed from requirements-analysis skills in `.github/skills/`: `write-user-story`, `build-feature-tree`, `elicit-requirements-models`, `extract-business-rules`, `facilitate-example-mapping`, `validate-requirements-criteria`, `prioritize-requirements`. See their `SKILL.md` for full technique details.
 
 ## Output Contract
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
+- One project-wide Story ID registered in `README_UserStories.md`, with each AC declared under its full Story-qualified AC ID.
 - The source issue moved from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` as a team-shared raw input archive.
 - The archived raw issue metadata is normalized to analyzed state:
   - `status: analyzed`
@@ -200,6 +202,8 @@ Generate clarifying questions under `## Ambiguity Warnings` and `## Initial Acce
 Score Business Value, User Value, Cost/Effort, and Risk/Complexity each 1-9. Compute Priority Score = (BV + UV) / (Cost + Risk). Record the rationale. `(→ SKILL: prioritize-requirements)`
 
 ### Step 11 — Write artifact & archive
+
+Before writing the todo artifact, register the Story ID in the project story ledger, creating `README_UserStories.md` from `README_UserStoriesTemplate.md` if needed. Follow the [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract: preserve an existing unambiguous ID or allocate a collision-safe ID, check the project registry and known story sources, and assign each AC a distinct qualified ID. Register blocked drafts too; do not archive the input if story/ledger registration cannot be reconciled. Preserve external or legacy IDs as source-qualified aliases, and stop for conflicting or ambiguous identities.
 
 Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`, including the Stage 1 EPIC-mapped `## Story Readiness Snapshot` (`E1 Unambiguous`, `E2 Singular`, `E3 Verifiable`, `E3.4 Completion & Readiness`, `P1 Dependency Control`, `P2 Complete`, `I1 Conforming`, `C1 Scope Discipline`) and story-specific `## Story Completion Conditions (`EPIC E3.4`)` (`Required TestLevel`, `Required TestScope & Environment`, `Required CaTDD Categories`, `Required SPEC & Doc Surfaces`, `Not-Done Conditions`, and `Approved Deferrals`). Move the raw issue from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/`. Update trace links both ways. **Gate:** if any Initial Acceptance Questions remain open or any required Stage 1 EPIC lens in `## Story Readiness Snapshot` is `no`, mark the story NOT ready — it may not proceed to `SPEC_openUserStory` until resolved (the full 10-dimension `## EPIC Specification Sufficiency` ledger will be seeded in `*-UserStory-Tasks.md` by `SPEC_makePlan`).
 

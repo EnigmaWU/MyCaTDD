@@ -14,10 +14,12 @@ Run these steps once, in order. There is no retry loop; missing prerequisites or
 
 1. Verify `SPEC_closeUserStory` completed and `close_commit_ref` is present. Stop if not.
 2. Verify both `story_branch` and `target_branch` are named explicitly. Do not infer either.
-3. Check whether the story branch is already integrated. If so, report `merge_skipped_reason` and stop.
-4. Merge using the repository-approved `merge_strategy`.
-5. On conflicts, stop and report them; do not resolve without developer confirmation.
-6. Report `merge_commit_ref` and the next command: `SPEC_updateProjectContext` when lifecycle or project-context facts changed, otherwise `SPEC_whatsNextTask`.
+3. Check whether the story branch is already integrated. If so, check the integrated project for identity collisions before reporting `merge_skipped_reason`.
+4. Compare registered Story and qualified child IDs across both branches using [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Distinguish shared history and declared slices from independent definitions; stop and ask on conflicting identities.
+5. Merge using the repository-approved `merge_strategy`.
+6. On conflicts, stop and report them; do not resolve without developer confirmation.
+7. Recheck the integrated project registry and story/AC/TP/TC declarations. If identities conflict or cannot be reconciled, report the merge as blocked for traceability and ask the developer; never silently renumber accepted IDs.
+8. Report `merge_commit_ref` and the next command: `SPEC_updateProjectContext` when lifecycle or project-context facts changed, otherwise `SPEC_whatsNextTask`.
 
 ### Worked Example
 
@@ -37,9 +39,11 @@ Expected result:
 1. Close complete, `close_commit_ref` present → check passes.
 2. Both branches named explicitly → check passes.
 3. `feat/payment-retry` is not yet an ancestor of `main` → merge is required, not skipped.
-4. Merged with `--no-ff` per repository policy.
-5. No conflicts.
-6. Reported: `merge_commit_ref = 4c3b2a1`; the story changed no project-wide rule, so `next_command = SPEC_whatsNextTask`.
+4. Branch registries and story declarations have no conflicting independent identities.
+5. Merged with `--no-ff` per repository policy.
+6. No Git conflicts.
+7. Integrated registry and qualified child IDs reconcile without collisions.
+8. Reported: `merge_commit_ref = 4c3b2a1`; the story changed no project-wide rule, so `next_command = SPEC_whatsNextTask`.
 
 ## Inputs
 
@@ -52,12 +56,14 @@ Expected result:
 ## Method References
 
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
+- [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 
 ## Output Contract
 
 - Merge readiness summary covering story/target branches and close evidence.
 - Merge result with `merge_commit_ref` (or explicit `merge_skipped_reason` when already integrated).
 - Conflict summary and resolution status when conflicts are encountered.
+- Identity reconciliation evidence for the integrated project, including any unresolved collisions and their owning sources.
 - Next recommended command: `SPEC_updateProjectContext` when lifecycle/project-context facts changed; otherwise `SPEC_whatsNextTask`.
 
 ## Conflict Guard
@@ -65,6 +71,7 @@ Expected result:
 Do not merge when `SPEC_closeUserStory` is not complete.
 Do not merge without explicit source (`story_branch`) and destination (`target_branch`) branches.
 Do not mark merge complete without verifiable merge evidence.
+Do not report identity reconciliation as complete while independent Story or qualified child IDs collide or their ownership is ambiguous.
 Do not continue on unresolved merge conflicts without developer confirmation.
 
 ONE-MORE-THING: ask developer if something not sure

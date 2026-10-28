@@ -60,7 +60,7 @@ Expected result:
 
 ## Output Contract
 
-- A Concurrency design skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, and `@[TC]`.
+- A Concurrency design skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
 - US/AC/TC entries for ordering, interleaving, reentrancy, cancellation, shared ownership, or synchronization behavior.
 - Traceability to functional and design scenarios that make concurrency risk observable.
 
