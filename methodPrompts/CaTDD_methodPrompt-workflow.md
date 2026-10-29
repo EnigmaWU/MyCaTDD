@@ -9,7 +9,7 @@ CaTDD uses two design stages before implementation.
 | Stage | Purpose | Output |
 | --- | --- | --- |
 | Stage-0: Freely Drafting | Inventory source-backed obligations; use Example Mapping and applicable domain/class sweeps to discover examples and questions breadth-first. Use OOPSI/business-rule aids only for suitable functional sources. | FreelyDrafts, source/rule inventory, discovery dimensions, candidate ledger |
-| Stage-1: Classifying Design | Classify mature drafts into P0, P1, P2, P3 category skeletons, reconcile every candidate in the living ledger, and pass the Discovery Gate before approving US/AC/TC. | Category skeletons, discovery ledger, independent review evidence, TODO tracking |
+| Stage-1: Classifying Design | Classify mature drafts into P0, P1, P2, P3 category skeletons, reconcile every candidate in the living ledger, and pass the Discovery Gate before approving US/AC/TP/TC. | Category skeletons, discovery ledger, independent review evidence, TODO tracking |
 
 ## Phase 1: Design and Planning
 
@@ -34,7 +34,9 @@ CaTDD uses two design stages before implementation.
 
 - P0 Functional design should include `Typical -> Edge -> Misuse -> Fault` unless scope is explicitly limited.
 - Each US must map to at least one AC.
-- Each AC must map to at least one TC.
+- Each AC must map to at least one TP in a complete design.
+- In a complete design, each TP must map to exactly one TC, and each TC must cover at least one TP.
+- Draft TPs without a TC are open coverage gaps and block design completion; split obligations that need independent test cases into separate TPs.
 - Each non-empty category file must trace to a source-of-truth artifact.
 - Missing source evidence should stop design or become `@[NoTestPoints]: <reason>`.
 - A missing-source `@[NoTestPoints]` is BLOCKED, not evidence that coverage is unnecessary. Report discovery dispositions and residual risk separately from linkage counts.

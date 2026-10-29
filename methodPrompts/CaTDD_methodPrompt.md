@@ -13,7 +13,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 - Design details live in the test or source file itself, in that language's documentation form (comments, doc comments, or docstrings).
 - Comments evolve with code instead of drifting in separate documents.
 - Comments are first-class artifacts that humans and LLMs can parse.
-- US/AC/TC structure bridges human intent and machine-executable tests.
+- US/AC/TP/TC structure bridges human intent and machine-executable tests.
 
 ## Subtopic Map
 
@@ -22,7 +22,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 | Category semantics, category identity, source-of-truth gate | `CaTDD_methodPrompt-categorySemantics.md` |
 | Source-first behavior inventory, multi-class sweeps (P0–P3), domain archetypes, test-point ledger, Discovery Gate, and escaped-bug feedback | `CaTDD_methodPrompt-testPointDiscovery.md` |
 | Stage model, RED/GREEN cycle, risk-based ordering, quality gates | `CaTDD_methodPrompt-workflow.md` |
-| Comment skeleton, coverage matrix, US/AC/TC, test structure | `CaTDD_methodPrompt-testStructure.md` |
+| Comment skeleton, coverage matrix, US/AC/TP/TC, test structure | `CaTDD_methodPrompt-testStructure.md` |
 | Canonical `test_{feature}_{category}.<ext>` file naming | `CaTDD_methodPrompt-fileNaming.md` |
 | Agent checkpoints and operating discipline | `CaTDD_methodPrompt-agentWorkflow.md` |
 | Troubleshooting and recovery paths | `CaTDD_methodPrompt-troubleshooting.md` |
@@ -89,7 +89,9 @@ For full category guidance, read `CaTDD_methodPrompt-categorySemantics.md`.
 - Use the [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract: register a stable Story ID and carry full story-qualified AC/TP/TC IDs through design, test, and product-code trace references.
 - P0 Functional design **MUST** include the full category set in order: `Typical -> Edge -> Misuse -> Fault` unless the developer explicitly limits scope.
 - Each US **MUST** map to at least one AC.
-- Each AC **MUST** map to at least one TC.
+- Each AC **MUST** map to at least one TP in a complete verification design.
+- Each TP **MUST** map to exactly one TC in a complete verification design; each TC **MUST** cover at least one TP and **MAY** cover multiple TPs.
+- Unassigned draft TPs are open coverage gaps and **MUST** block design completion. If one obligation needs independent test cases, split it into distinct TPs so each TP maps to exactly one TC.
 - Design output **MUST** declare the SUT (System Under Test) explicitly in the test-file overview section, for example `SUT: utCodeAgentCLI`. The declared SUT boundary establishes the contract dividing line: caller violations of the SUT's public interface are `P0 Misuse`, while failures of external dependencies or runtime environment outside the SUT are `P0 Fault`.
 - Unit Testing (UT) scope **MUST** adhere to the project's agreed `sut_unit_convention` (e.g. `module-interface`, `submodule-interface`, `class`, `header-file`, `function`, or `component`).
 - Every non-empty category file **MUST** trace to a source-of-truth artifact.
@@ -98,14 +100,14 @@ For full category guidance, read `CaTDD_methodPrompt-categorySemantics.md`.
 
 ## Test-Point Discovery Contract
 
-US/AC/TC cardinality proves linkage, not completeness: an entirely missing behavior cannot fail a link check.
+US/AC/TP/TC cardinality proves linkage, not completeness: an entirely missing behavior cannot fail a link check.
 
 - In **Stage-0: Freely Drafting**, inventory source-backed obligations and use Example Mapping to discover examples and questions breadth-first. OOPSI and business-rule extraction are optional aids for functional workflows, not prerequisites for every class.
 - CaTDD serves primarily Embedded Linux, secondarily Microservices, and thirdly LLM Agents. Select applicable domain profiles for the declared SUT; these are usage priorities, not a historical lineage, mandatory technology stack, or category order.
 - Before approving skeletons in **Stage-1: Classifying Design**, reconcile the applicable P0 Functional, P1 Design, P2 Quality, and P3 Addons sweeps in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Classify by verification lens, not rule type or domain.
-- Maintain an unbroken **TestEvidenceChain**: every test must establish an unbroken chain answering **WHY** we need the test point (source artifact -> rule/invariant -> Test Point (TP) -> observable oracle -> CaTDD category) and **HOW** we execute the test correctly (US/AC/TC -> Test Case (TC) -> RED/GREEN test).
+- Maintain an unbroken **TestEvidenceChain**: every test must establish an unbroken chain answering **WHY** we need the test point (source artifact -> rule/invariant -> Test Point (TP) -> observable oracle -> CaTDD category) and **HOW** we execute the test correctly (US/AC/TP/TC -> Test Case (TC) -> RED/GREEN test).
 - Distinguish Acceptance Criteria (AC) from Test Point (TP): AC is formulated from the **User/Caller perspective** (`GIVEN context, WHEN action, THEN outcome`) defining what external rule must hold for acceptance. TP is formulated from the **Developer/Defensive perspective** (`GIVEN technical state/partition, WHEN action/interleaving, THEN observable oracle`) defining the concrete technical probe (nominal path, boundary offset, caller misuse, dependency fault, race condition) required to verify whether that AC holds. One AC typically unpacks into multiple TPs ($1:N$); equating $TP == AC$ causes boundary and failure omissions.
-- Distinguish Test Point (TP) from Test Case (TC): A TP is a source-backed verification obligation (the target) discovered in Stage-0/Stage-1; a TC is an executable specification artifact (the arrow) implementing that obligation under US/AC. They are not strictly 1:1 ($1:0$ exposes a GAP; $1:N$ and $N:1$ are valid when justified). Equating $TC == TP$ obscures missing test points.
+- Distinguish Test Point (TP) from Test Case (TC): A TP is a source-backed verification obligation (the target) discovered in Stage-0/Stage-1; a TC is an executable specification artifact (the arrow) implementing obligations under US/AC. Each TP MUST be covered by exactly one TC in a complete design. Each TC MUST cover at least one TP and MAY cover multiple TPs when its setup and assertions distinguish every obligation. An unassigned draft TP is a gap, not completed coverage; split an obligation into distinct TPs when independent test cases are needed.
 - Discovery to Categorization: In Stage-0 (Freely Drafting), discover TPs breadth-first across sources and sweeps without premature category lock-in; in Stage-1 (Classifying Design), route each discovered TP to its proper CaTDD category based on its verification lens (Contract -> P0, Model -> P1, Envelope -> P2, Learning Surface -> P3).
 - Enforce **Source-First** review: inspect authoritative source artifacts and independently derive expected obligations before consulting existing test files or skeletons.
 - Keep a `discovery_ledger` in living design comments: each candidate has a source/rule, scenario, observable oracle, verification method/environment, category/test level, scope/routing metadata, and one disposition (DESIGNED, QUESTION, EXCLUDED, REFERRED, or GAP). A handoff does not close an unresolved in-scope obligation.
@@ -129,7 +131,7 @@ Use the category's source artifact to decide whether a test point is valid.
 
 1. Inventory behavior from source artifacts and capture Stage-0 drafts using the discovery sweep.
 2. Classify source-backed drafts by verification lens; retain unknowns and referrals in the test-point ledger.
-3. Write US/AC/TC comments, reconcile the ledger, and pass both the cardinality and Discovery Gate before implementation.
+3. Write US/AC/TP/TC comments, reconcile the ledger, and pass both the cardinality and Discovery Gate before implementation.
 4. Pick one TC and write the test first.
 5. Run the test and confirm RED for the intended reason.
 6. Implement the minimum production code to make the TC GREEN.
@@ -212,9 +214,25 @@ Use category-specific prompts when designing a category skeleton.
 - Do not write production code before a failing test exists for the selected TC.
 - Do not guess missing product intent, acceptance criteria, source-of-truth design, or quality thresholds.
 - Do not silently omit a category file.
-- Do not declare design complete from category presence or US/AC/TC counts alone; pass the Discovery Gate for the declared scope.
+- Do not declare design complete from category presence or US/AC/TP/TC counts alone; pass the Discovery Gate for the declared scope.
 - Do not reclassify a test because risk changed execution order.
 - Do not expand a TC during refactor beyond its original AC meaning.
+
+## Usage Example
+
+Copy this self-contained request into a CodeAgent with the method available, or review it manually. The short IDs describe independent illustrative designs, not project artifact declarations:
+
+```text
+Review these TP/TC assignments using the CaTDD cardinality gate.
+Assume the US, AC, and source links are valid. Do not implement code.
+A: TP-01 -> TC-01; TP-02 -> TC-01.
+B: TP-01 -> TC-01 and TC-02.
+C: TP-01 -> no TC yet.
+D: TC-01 -> no TP.
+For each design, report whether its TP/TC cardinality is complete and why.
+```
+
+Expected result: A passes because one TC may cover multiple TPs. B fails because one TP has two TCs. C is an open draft gap that blocks completion. D fails because every TC must cover at least one TP.
 
 ## Maintenance Rule
 

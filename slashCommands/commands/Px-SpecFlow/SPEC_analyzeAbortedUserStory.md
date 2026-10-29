@@ -20,7 +20,7 @@ Drive the Analysis Pipeline below with this loop. The point of the loop is selec
    - Replacement intent still unclear → record a question rather than inventing a requirement.
 4. **Stop** — Exit after Step 7. The aborted story in `.catdd/spec/abortUS/` must be byte-identical to how it started.
 
-### Worked Example
+## Usage Example
 
 The payment-retry story was aborted on a bad idempotency assumption:
 
@@ -59,7 +59,7 @@ Expected result:
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact for the corrected next round.
 - Source trace from the new todo story to the aborted story and its paired tasks.
-- A newly registered Story ID for the corrected story, with explicit links to the original Story and AC identities.
+- The original registered Story ID when the corrected artifact is a revision of the same story; otherwise, a new human-readable `US-<whoName>-<doWhat>` ID with lowerCamelCase segments for a materially different independent successor, with explicit links to the original Story and AC identities.
 - A corrected, independently testable user-story slice with preserved valid intent, rejected invalid assumptions, acceptance scenarios, risks, non-goals, and open questions.
 - The aborted story remains preserved in `.catdd/spec/abortUS/` as historical evidence — it is never mutated.
 - The story follows `SpecTodoUserStoryTemplate.md` structure and includes the **Abort Evidence** section documenting the abort diagnosis plus `### Re-Analysis Chat History` (`chatHistory`) capturing the developer/CodeAgent re-analysis dialogue, preserved/rejected decisions, and resolved questions (and appends a re-analysis round to `## Chat History` in the linked `.catdd/spec/analyzedNews/` artifact when one exists).
@@ -122,7 +122,7 @@ Apply SKILLs **only** where the abort diagnosis indicates a need for correction.
 | **Always (regardless)** | `(→ SKILL: validate-requirements-criteria)` — hunt ambiguity in the corrected story. `(→ SKILL: prioritize-requirements)` — re-score all four dimensions (BV, UV, Cost, Risk). |
 
 ### Step 6 — Correct: Write the corrected story
-Register a new project-wide Story ID for the corrected story in `README_UserStories.md`, creating the ledger from `README_UserStoriesTemplate.md` if needed. Follow [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids): retain source links to unchanged original AC IDs, give new or materially revised ACs distinct IDs under the corrected story, and record supersession or lineage without changing the historical abort artifact. Stop on unresolved identity conflicts.
+Register the corrected story in `README_UserStories.md`, creating the ledger from `README_UserStoriesTemplate.md` if needed. Preserve the original registered Story ID when the corrected artifact is a revision of the same story. Assign a new descriptive human-readable `US-<whoName>-<doWhat>` ID with lowerCamelCase segments only when re-analysis establishes a materially different independent successor; retain source links to unchanged original AC IDs and record supersession or lineage without changing the historical abort artifact. Give new or materially revised ACs distinct qualified IDs under the corrected story. Stop on unresolved identity conflicts.
 
 Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. The following sections must be present and correct:
 

@@ -39,7 +39,7 @@ This prevents every tool integration from inventing its own CaTDD workflow while
 
 - The governing spec is comment-alive verification design from `methodPrompts`.
 - Flow commands move a developer and CodeAgent through repeatable phases: convert or design skeletons, review skeletons, select the next TC, implement one TC, and review the implementation.
-- Living artifacts are US/AC/TC comments, category labels, priority gates, TC status markers, test files, and SpecFlow state under `.catdd/spec/`.
+- Living artifacts are US/AC/TP/TC comments, category labels, priority gates, TC status markers, test files, and SpecFlow state under `.catdd/spec/`.
 - Command files describe what to do now, what to read, what to produce, what to preserve, and what command should come next.
 
 In CaTDD terminology, using `methodPrompts` directly in CodeAgent chat is **VibeCoding**: flexible, method-guided conversation. Using `slashCommands` is **SpecCoding**: structured Spec-Driven Development flow based on the same method definitions. When a story is already open and the Flow cannot name what is wrong, `SPEC_whatsWrong` is the sanctioned bridge between the two: it freezes SpecCoding, opens a `manualMode`-only VibeCoding excursion recorded in local work state, reconciles each finding back through its owning command, and resumes the Flow with any `SPEC_doXYZ` after `HARNESS_evolveHarness` captures reusable tactics.
@@ -82,9 +82,9 @@ Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPr
 
 ## Traceability and SUT constraints
 
-- `SPEC_designTests` and related `TEST_design*Skeleton` commands should enforce minimum traceability cardinality: each US has at least 1 AC, and each AC has at least 1 TC.
+- `SPEC_designTests` and related `TEST_design*Skeleton` commands should enforce minimum traceability cardinality: each US has at least 1 AC, each AC has at least 1 TP, each TP maps to exactly 1 TC, and each TC covers at least 1 TP.
 - Test design outputs must explicitly declare the SUT in the test-file overview (for example: `SUT: utCodeAgentCLI`).
-- Outputs with dangling traceability (US without AC or AC without TC) should be blocked from being marked complete.
+- Outputs with dangling traceability (US without AC, AC without TP, TP without exactly 1 TC, or TC without TP) should be blocked from being marked complete.
 
 ## Typical contents
 

@@ -8,8 +8,9 @@
 > **Primary Category:** {{Typical / Edge / Misuse / Fault / State / Capability / Concurrency / Performance / Robust / Compatibility / Configuration / DemoExample}}
 > **Created:** {{YYYY-MM-DD}}
 
-<!-- How: {{StoryID}} is the complete, registered project-wide US ID. Allocate or preserve it
-     using .catdd/methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids.
+<!-- How: {{StoryID}} is the complete, registered project-wide US ID. Preserve an existing ID;
+     use US-<whoName>-<doWhat> with lowerCamelCase segments for new stories and check for
+     collisions as specified in .catdd/methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids.
      Each AC heading uses that ID and a unique stable child token. -->
 
 ---

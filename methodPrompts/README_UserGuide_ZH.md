@@ -96,7 +96,7 @@ methodPrompts/
 
 - 理解 CaTDD 的方法意图。
 - 选择正确的分类提示词。
-- 编写 US/AC/TC 验证设计。
+- 编写 US/AC/TP/TC 验证设计。
 - 让 LLM 根据注释生成测试。
 - 在测试与生产代码演进时保持注释鲜活。
 
@@ -113,8 +113,8 @@ methodPrompts/
 5. 声明 SUT、范围内的类别族、适用领域、测试层级与执行环境。先从来源列出验证义务，再把已有测试当作覆盖证据。通过 Example Mapping 捕获 Stage-0 示例与开放问题。
 6. 使用 [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) 进行适用的 P0/P1/P2/P3 扫描。OOPSI 与业务规则提取只是功能工作流的可选辅助；设计模型和质量约束使用各自的来源。在活注释中的 `discovery_ledger` 记录候选点与来源。
 7. 按验证视角归类草稿，不按规则类型、领域或优先级归类。下面的优先级用于执行排序，并可按风险调整。
-8. 在实现代码之前，把 US/AC/TC 注释写进测试文件。
-9. 独立审查 source -> ledger -> US/AC/TC 及反向链接。只有 cardinality 和 Discovery Gate 都通过、声明范围内 `ready_for_implementation: yes` 时，才为下一个 TC 编写失败测试。
+8. 在实现代码之前，把 US/AC/TP/TC 注释写进测试文件。
+9. 独立审查 source -> ledger -> US/AC/TP/TC 及反向链接。完整设计要求每个 US 至少有一个 AC，每个 AC 至少有一个 TP，每个 TP 恰好映射到一个 TC，每个 TC 覆盖一个或多个 TP。尚未分配 TC 的草稿 TP 阻断设计完成。只有 cardinality 和 Discovery Gate 都通过、声明范围内 `ready_for_implementation: yes` 时，才为下一个 TC 编写失败测试。
 10. 只实现让该 TC 通过所需的最小生产代码。
 11. 更新 TC 状态标记，并保持注释与行为同步。
 12. 每次只推进一个 TC，持续重复。

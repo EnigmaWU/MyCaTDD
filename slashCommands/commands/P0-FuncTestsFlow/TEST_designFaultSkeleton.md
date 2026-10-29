@@ -16,12 +16,12 @@ Repeat until every case is an externally caused, functionally specified fault.
 
 1. **Thought** — Read `interface_or_protocol_file` and the existing functional skeletons for normal and invalid caller behavior. Using the Fault method prompt as the category source of truth, identify missing fault sources, recovery expectations, error reporting, retry limits, and containment rules.
 2. **Action** — Draft only the Fault skeleton with the full `@[...]` metadata set. Preserve unrelated categories untouched.
-3. **Observation** — Check both boundaries: a failure the caller caused belongs to Misuse → back to **Thought**; a case that is really about sustained degradation, stress, or resource exhaustion is P2 Robust, not P0 Fault → back to **Thought** and defer it. Check the US/AC/TC cardinality.
-4. **Stop** — Exit when every case is externally caused and functionally specified. Recommend `TEST_reviewFuncTestsSkeleton`.
+3. **Observation** — Check both boundaries: a failure the caller caused belongs to Misuse → back to **Thought**; a case that is really about sustained degradation, stress, or resource exhaustion is P2 Robust, not P0 Fault → back to **Thought** and defer it. Check the [US/AC/TP/TC cardinality](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the declared scope; unassigned TPs block completion.
+4. **Stop** — Exit when every case is externally caused, functionally specified, and the cardinality check passes. Recommend `TEST_reviewFuncTestsSkeleton`.
 
-### Worked Example
+## Usage Example
 
-Specifying failure behavior for the authorize call:
+Specifying failure behavior for the authorize call. IDs below are abbreviated; generated artifacts use registered Story IDs and qualified AC/TP/TC IDs.
 
 ```text
 /TEST_designFaultSkeleton
@@ -33,9 +33,9 @@ existing_skeletons: Typical (US-01), Edge (US-02), Misuse (US-03)
 Expected result:
 
 - **Thought**: external fault sources — gateway timeout, gateway 503, malformed response body. Each needs a stated reporting and containment expectation.
-- **Action**: US-04 drafted with AC-09 (timeout surfaces `GatewayTimeout`, no silent retry), AC-10 (503 surfaces `GatewayUnavailable`), AC-11 (malformed JSON is contained, not propagated), each with one TC.
+- **Action**: US-04 drafted with AC-09 (timeout surfaces `GatewayTimeout`, no silent retry), AC-10 (503 surfaces `GatewayUnavailable`), AC-11 (malformed JSON is contained, not propagated), each with one TP mapped to exactly one TC.
 - **Observation**: a fourth case "gateway stays down for 10 minutes and the service keeps degrading gracefully" was drafted — that is sustained degradation, which is P2 Robust, not P0 Fault → back to **Thought** → deferred to `TEST_designRobustSkeleton`.
-- **Observation**: remaining three are single external failures with functional expectations; none is caller-caused; cardinality passes.
+- **Observation**: remaining three are single external failures with functional expectations; none is caller-caused. Each AC has a TP, every TP maps to exactly one TC, and every TC covers a TP; cardinality passes.
 - **Stop**: Fault holds external failures only. Recommended `TEST_reviewFuncTestsSkeleton`.
 
 ## Inputs
@@ -54,7 +54,7 @@ Expected result:
 ## Output Contract
 
 - A Fault functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
-- US/AC/TC entries that capture dependency failures, unavailable resources, timeouts, corrupted responses, or other reportable faults.
+- US/AC/TP/TC entries that capture dependency failures, unavailable resources, timeouts, corrupted responses, or other reportable faults.
 - Explicit separation between Fault behavior and caller Misuse behavior.
 
 ## Conflict Guard

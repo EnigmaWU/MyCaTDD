@@ -18,12 +18,12 @@ Run these steps once, in order. There is no retry loop; a missing slice or ambig
 
 1. Locate `slice_id` in `user_story_source`. Stop and ask if it cannot be found.
 2. Resolve `granularity` per the Import Granularity rules. Stop and ask when the choice changes the artifact boundary.
-3. Copy the slice verbatim, preserving source `US-*`/`AC-*` IDs, priority, dependency hints, and status markers exactly as written. Add canonical project IDs as trace metadata without rewriting the source wording.
+3. Copy the slice verbatim, preserving source `US-*`/`AC-*` IDs, priority, dependency hints, and status markers exactly as written. If the source Story ID is already registered as the project-wide identity, preserve it. Otherwise assign a human-readable project Story ID in `US-<whoName>-<doWhat>` form, with both segments in lowerCamelCase, per [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Record the source ID as a source-qualified alias and trace metadata without rewriting source wording.
 4. Record the source trace, including the paired `README_UserGuide.md` when the source is a module `README_UserStory.md`.
 5. Apply [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids), register each story in `README_UserStories.md`, and write one `.catdd/spec/todoUS/*-UserStory.md` per selected slice. Never merge unrelated requirements into one artifact.
 6. Report the output paths and `next_command = SPEC_openUserStory`.
 
-### Worked Example
+## Usage Example
 
 One story is pulled out of a large existing requirements doc:
 
@@ -94,6 +94,6 @@ If module/submodule source conventions are unclear (for example missing `README_
 
 If the requested `slice_id` cannot be found, or if `US-by-US` versus `AC-by-AC` is ambiguous and changes the artifact boundary, stop and ask the developer before writing.
 
-Preserve an unambiguous existing project-wide ID. If an imported local ID collides with a different story or its ownership is ambiguous, stop and reconcile with the developer; record any approved canonical-ID mapping and source-qualified alias without mutating the source or historical evidence. Create the project ledger from `README_UserStoriesTemplate.md` when absent; do not report the story ready before registration succeeds.
+Preserve an unambiguous existing project-wide ID. For an imported ID that is not already registered, assign a descriptive human-readable `US-<whoName>-<doWhat>` project ID with lowerCamelCase segments and retain the imported ID as a source-qualified alias. If an imported ID collides with a different story or its ownership is ambiguous, stop and reconcile with the developer; record any approved canonical-ID mapping and source-qualified alias without mutating the source or historical evidence. Create the project ledger from `README_UserStoriesTemplate.md` when absent; do not report the story ready before registration succeeds.
 
 ONE-MORE-THING: ask developer if something not sure

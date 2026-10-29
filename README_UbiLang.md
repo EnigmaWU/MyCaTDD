@@ -20,7 +20,7 @@ This is the shared glossary for CaTDD execution environments.
 | --- | --- |
 | CaTDD | Comment-alive Test-Driven Development. |
 | Comment-alive | Verification intent is explicitly encoded in structured comments before code generation. |
-| US / AC / TC | User Story / Acceptance Criteria / Test Case traceability chain. |
+| US / AC / TP / TC | User Story / Acceptance Criteria / Test Point / Test Case traceability chain. |
 | Skeleton | Comment-only test design artifact containing traceability markers and planned test intent. |
 | RED | Executable failing test state before product-code changes. |
 | GREEN | Passing test state after product-code changes. |
@@ -34,7 +34,7 @@ This is the shared glossary for CaTDD execution environments.
 | BLOCKED | A `review_verdict` for a missing input: a required source artifact, piece of evidence, or dependency is absent, so the gate cannot judge the artifact at all. It is resolved by whoever can supply that input — usually an owner command named in `rework_route` — and only degenerates into `ASK` when the human is the only possible supplier. A BLOCKED report always names the missing input. Distinct from the TC status marker `🚫 BLOCKED`, which marks a test case that cannot proceed; the verdict describes a gate outcome, the marker describes a test state. |
 | ASK | A `review_verdict` for a missing decision: the answer exists only in the human developer's judgment — intent, trade-off, acceptance, or scope. It is the human-in-the-loop token and the same outcome `ONE-MORE-THING` produces, so no rework route exists yet and the gate stops. A well-formed ASK presents options (A/B, yes/no, keep/adopt) so the developer can choose. When the flow cannot yet phrase the question at all, the escalation is `SPEC_whatsWrong` rather than ASK. |
 | Source-First | Review and discovery discipline that inspects authoritative source artifacts (contracts, design models, quality policies) and independently derives expected obligations before reading existing skeletons or test code, preventing author blind spots. |
-| TestEvidenceChain | The unbroken evidentiary chain answering WHY we need a test and HOW to test correctly: from source artifact -> rule/invariant -> Test Point (TP) -> observable oracle -> CaTDD category (WHY) -> US/AC/TC -> Test Case (TC) -> RED/GREEN implementation (HOW). |
+| TestEvidenceChain | The unbroken evidentiary chain answering WHY we need a test and HOW to test correctly: from source artifact -> rule/invariant -> Test Point (TP) -> observable oracle -> CaTDD category (WHY) -> US/AC/TP/TC trace links -> Test Case (TC) -> RED/GREEN implementation (HOW). |
 | SUT | System Under Test: The explicitly declared software boundary under verification (e.g. `SUT: utCodeAgentCLI`, `SUT: PaymentGatewayInterface`). It establishes the strict dividing line between caller behavior (`P0 Misuse` on caller contract violation) and external dependencies/runtime (`P0 Fault` on dependency failure). |
 | TestLevel | The declared SUT scope of a verification: exactly one of `UnitTesting`, `SysTesting`, or `UserTesting`. Declared inside the test file with `@[TestLevel]` and never encoded in the filename. It answers how much of the developed system is *inside* the SUT, not what that system's runtime is made of — that is `TestScope` — and not which design document owns the strategy. |
 | UnitTesting | A `TestLevel`: one unit is the SUT, verified inside its own boundary under the project's `sut_unit_convention` (submodule, class, header file, function, or component). When the project has no subdivision, `UnitTesting` and `SysTesting` name the same SUT and are equivalent. CaTDD categories and the Discovery Gate apply; strategy is designed in `README_DetailVerifyDesign.md`. |
@@ -44,10 +44,11 @@ This is the shared glossary for CaTDD execution environments.
 | `TestScope` | The declared runtime scope of a verification: `mockSysRtm` (the SUT's system runtime — peers, dependencies, runtime environment — is replaced by doubles) or `realSysRtm` (the SUT runs against its real system runtime). Declared with `@[TestScope]` and independent of `TestLevel`, so any level runs at either scope. `mockSysRtm` is the first scope and earns `CLOSED`; `realSysRtm` is the second scope and adds evidence. |
 | UT | Unit Testing: Verification focused on a single declared SUT adhering to the project's agreed `sut_unit_convention` (e.g. `module-interface`, `submodule-interface`, `class`, `header-file`, `function`, or `component`). Verifies public contracts, internal design models, and quality properties via CaTDD before implementation. |
 | TP | Test Point: A discovered verification obligation or condition (the target). Represents WHAT must be verified from the DEVELOPER / DEFENSIVE perspective (partitions, boundaries, failure phases, interleavings), extracted from sources during Stage-0/Stage-1 discovery and tracked in `discovery_ledger`. Described via concrete `GIVEN technical state/partition, WHEN action/interleaving, THEN observable oracle`. |
-| TC | Test Case: An executable verification specification artifact (the arrow). Represents HOW to verify an obligation, structured with `@[Name]`, `@[Expect]`, and four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`) linked to `[@AC-n, US-n]`. |
-| AC vs TP | AC is from the USER / CALLER perspective (defining external business rules for acceptance: `GIVEN context, WHEN action, THEN outcome`); TP is from the DEVELOPER / DEFENSIVE perspective (defining technical probes across boundaries, error paths, and concurrency to verify whether the AC holds). One AC typically unpacks into multiple TPs ($1:N$). Equating $TP == AC$ causes boundary and failure-mode omissions. |
-| TP vs TC | Cardinality between TP and TC is not strictly 1:1. A TP can exist without a TC (`1:0` -> GAP, exposing missing test points); a complex TP may require multiple TCs (`1:N`); and one TC may genuinely verify multiple TPs (`N:1`) when assertions distinguish each obligation. Equating `TC == TP` prematurely hides missing test points. |
-| Discovery to Categorization | Two-stage design bridge: In Stage-0 (Freely Drafting), discover TPs breadth-first across sources and sweeps without premature category lock-in. In Stage-1 (Classifying Design), route each discovered TP to its proper CaTDD category based on its verification lens (Contract -> P0, Model -> P1, Envelope -> P2, Learning Surface -> P3), then codify into US/AC/TC skeletons. |
+| TC | Test Case: An executable verification specification artifact (the arrow). Represents HOW to verify one or more obligations, structured with `@[Name]`, `@[Expect]`, four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`), and explicit `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]` links. |
+| US / AC / TP / TC Cardinality | In a complete verification design, each US MUST have one or more ACs, each AC MUST have one or more TPs, each TP MUST map to exactly one TC, and each TC MUST cover one or more TPs. A TC MAY cover multiple TPs. An unassigned TP is allowed during drafting/discovery but is a gap that blocks design completion. If distinct test cases are needed, split the obligation into distinct TPs rather than assigning one TP to multiple TCs. |
+| AC vs TP | AC is from the USER / CALLER perspective (defining external business rules for acceptance: `GIVEN context, WHEN action, THEN outcome`); TP is from the DEVELOPER / DEFENSIVE perspective (defining source-backed technical probes across boundaries, error paths, and concurrency). Each AC decomposes into one or more TPs in a complete design ($1:N$). Equating $TP == AC$ causes boundary and failure-mode omissions. |
+| TP vs TC | The complete-design mapping is many TPs to one TC: every TP maps to exactly one TC, while one TC may verify one or more TPs (`N:1`). A draft TP without a TC is an explicit gap, not completed coverage. If an obligation requires independent test cases, split it into separate TPs so each TP still has exactly one TC. |
+| Discovery to Categorization | Two-stage design bridge: In Stage-0 (Freely Drafting), discover TPs breadth-first across sources and sweeps without premature category lock-in. In Stage-1 (Classifying Design), route each discovered TP to its proper CaTDD category based on its verification lens (Contract -> P0, Model -> P1, Envelope -> P2, Learning Surface -> P3), then codify into US/AC/TP/TC skeletons. |
 | manualMode | The human-driven form of SpecCoding: the developer types each `SPEC_doXYZ`, the assistant advances step by step, asks focused questions when intent, criteria, or safety is unclear, and pauses for developer confirmation before proceeding. It is the default for a human chat session and the fallback whenever an `autonomousMode` run must halt at the orientation boundary. |
 | autonomousMode | The flow-driven form of SpecCoding: the Flow calls the next `SPEC_doXYZ` itself. It is the default for a code agent or CLI runner that drives Px-SpecFlow, such as `specCodeAgentCLI`, and an opt-in for a human session via `execution_mode: autonomousMode` on entry commands. Strictly supported ONLY for `implementation-oriented` stories: requirements and architecture need human intent, so the run halts back to `manualMode` at that boundary. The driver declares the mode explicitly rather than having it inferred, advances through Part 2.b implementation and review steps until terminal state (`closeUserStory`, `abortUserStory`, or `suspendUserStory`), and can never enter VibeCoding because there is no human intent source. |
 | analysis_mode | Command-level execution mode within analysis commands (`SPEC_analyzeIssue`, `SPEC_analyzeFeature`) operating under `manualMode`. `BRAINSTORM` (default) engages in interactive step-by-step dialogue with the developer and MUST record the dialogue and decisions under `## Chat History` (`chatHistory`) inside the archived `.catdd/spec/analyzedNews/` file. `AUTONOMOUS` runs the composed SKILL analysis pipeline in one shot to draft `todoUS` without interrupting for each step, appends the autonomous prompt/reasoning trace under `## Chat History` in `.catdd/spec/analyzedNews/`, and records assumptions/questions while marking the story NOT ready if blocking questions remain. |
@@ -55,10 +56,10 @@ This is the shared glossary for CaTDD execution environments.
 | commit span | The lifecycle interval a commit closes, and the unit Px-SpecFlow splits commits by instead of by file set. `pre-story` span = intake/analysis artifacts before `SPEC_openUserStory`; `story` span = `SPEC_openUserStory -> SPEC_closeUserStory`; `step` span = one verified lifecycle step inside the story span. |
 | SPEC_commitPreStoryWorks | Story-span command that commits the pre-story interval: import/analysis artifacts, `pendingNews/` to `analyzedNews/` moves, `todoUS/` stories, and the `README_UserStories.md` ledger produced before `SPEC_openUserStory`. Available as an option in `manualMode`; the default pre-story checkpoint when the intake ran headless with `analysis_mode: AUTONOMOUS`. The pre-story span never runs in `autonomousMode`, because autonomous execution is restricted to `implementation-oriented` story work. |
 | SPEC_commitStepWorks | Story-span command that commits exactly one verified lifecycle step inside the `SPEC_openUserStory -> SPEC_closeUserStory` interval, only at step boundaries `SPEC_makePlan` recorded as `commit_step = yes` and only after that step's gate reached `PASS`/`GREEN`. Available as an option in `manualMode`; the default at every planned step boundary in `autonomousMode`. |
-| SPEC_updateMadePlan | SpecFlow planning-maintenance command that appends a chronological row to the `## Trajectory` table, synchronizes `[ ]`/`[x]` task status, gate/commit evidence, and work orientation in an existing `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact, and progressively expands coarse tasks into detailed design or US/AC/TC execution slices and step-commit boundaries after any of the five `SPEC_review*` gates (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`), rework loops, story resumption, or `plan_drift` checkpoints. |
+| SPEC_updateMadePlan | SpecFlow planning-maintenance command that appends a chronological row to the `## Trajectory` table, synchronizes `[ ]`/`[x]` task status, gate/commit evidence, and work orientation in an existing `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact, and progressively expands coarse tasks into detailed design or US/AC/TP/TC execution slices and step-commit boundaries after any of the five `SPEC_review*` gates (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`), rework loops, story resumption, or `plan_drift` checkpoints. |
 | Trajectory | The append-only chronological execution table (`## Trajectory` with columns `#`, `Date`, `Command / Gate`, `Verdict / Evidence / Commit`, `Plan Delta -> Next Command`) inside `.catdd/spec/doingUS/*-UserStory-Tasks.md` (seeded from `SpecDoingUserStoryTasksTemplate.md` by `SPEC_makePlan` and appended by `SPEC_updateMadePlan`). It separates the historical path of gate verdicts, bounded rework attempts ($1..B$), and step commits from the forward-looking `[ ]`/`[x]` `## Task Checklist` so every `[x]` task is backed by auditable evidence. |
 | EPIC Specification Sufficiency | Two-stage progressive specification-sufficiency gate based on the EPIC framework (arXiv:2610.07534): Stage 1 evaluates story-level EPIC lenses inside `todoUS/*-UserStory.md` (`## Story Readiness Snapshot`) during `SPEC_analyzeIssue` / `SPEC_analyzeFeature` / `SPEC_analyzeAbortedUserStory`; Stage 2 maintains the 10-dimension artifact-set ledger (`E1..E3`, `P1..P2`, `I1..I3`, `C1..C2` with dispositions `satisfied / partial / gap / question / N/A`) plus the `### Cross-Artifact Semantic-Delta Matrix` under `## EPIC Specification Sufficiency` in `doingUS/*-UserStory-Tasks.md`, seeded by `SPEC_makePlan`, updated by `SPEC_updateMadePlan` after each `SPEC_review*` gate, and verified at `SPEC_closeUserStory`. |
-| Cross-Artifact Semantic-Delta Matrix | The four-stage transformation-preservation matrix (`EPIC I2.3`) audited across `SPEC_reviewArchDesign` (`Story/Guide -> ArchDesign/UbiLang`), `SPEC_reviewDetailDesign` (`ArchDesign -> DetailDesign -> DetailVerifyDesign`), `SPEC_designTests` + `TEST_review{Func,Design,Quality}TestsSkeleton` (`DetailVerifyDesign TP -> US/AC/TC Skeleton`), and `SPEC_reviewImplTests` (`US/AC/TC Skeleton -> Implemented Test Body & Companion README`). Classifies every obligation transition as `KEPT` (meaning unchanged), `DETAILED` (concretized or decomposed with rationale), `REASSIGNED` (handed off to another owner; maps to `REFERRED` in `discovery_ledger`), `EXCLUDED` (out of scope with approval), `VIOLATED` (conflict or silent weakening; blocks gate with `REVISE`), or `UNKNOWN` (missing evidence; blocks gate with `ASK` / `BLOCKED`). |
+| Cross-Artifact Semantic-Delta Matrix | The four-stage transformation-preservation matrix (`EPIC I2.3`) audited across `SPEC_reviewArchDesign` (`Story/Guide -> ArchDesign/UbiLang`), `SPEC_reviewDetailDesign` (`ArchDesign -> DetailDesign -> DetailVerifyDesign`), `SPEC_designTests` + `TEST_review{Func,Design,Quality}TestsSkeleton` (`DetailVerifyDesign TP -> US/AC/TP/TC Skeleton`), and `SPEC_reviewImplTests` (`US/AC/TP/TC Skeleton -> Implemented Test Body & Companion README`). Classifies every obligation transition as `KEPT` (meaning unchanged), `DETAILED` (concretized or decomposed with rationale), `REASSIGNED` (handed off to another owner; maps to `REFERRED` in `discovery_ledger`), `EXCLUDED` (out of scope with approval), `VIOLATED` (conflict or silent weakening; blocks gate with `REVISE`), or `UNKNOWN` (missing evidence; blocks gate with `ASK` / `BLOCKED`). |
 | Story Completion Conditions | Story-specific Definition of Done (`EPIC E3.4`) declared inside `*-UserStory.md` (`SpecTodoUserStoryTemplate.md`) under `## Story Completion Conditions (EPIC E3.4)`. States the required `TestLevel`s (`UnitTesting`, `SysTesting`, `UserTesting`), required `TestScope` & runtime environment (`mockSysRtm` vs. `realSysRtm`), required CaTDD category tiers (`P0/P1/P2/P3`), required `README*` SPEC/doc surfaces, explicit `Not-Done Conditions (MUST NOT close if)`, and `Approved Deferrals`. Audited by `SPEC_reviewUserStory` and enforced at closure by `SPEC_closeUserStory` and `SPEC_partialCloseUserStory`. |
 | SPEC_commitStoryWorks | Story-span command that commits the whole `SPEC_openUserStory -> SPEC_closeUserStory` interval as the just-done UserStory commit, including terminal lifecycle/meta changes. It serves the `pre_close` checkpoint (providing `commit_ref` for `SPEC_closeUserStory`), the `post_close` checkpoint (satisfying `close_commit_required`), and the `span_end` checkpoint after a partial close, abort, or suspend. Available as an option in `manualMode`; the default at story completion in `autonomousMode`. |
 | SPEC_commitWorks | General, story-agnostic commit command: it resolves scope from staged files first and most recently modified files second, then generates a repository-style commit log message. It never advances SpecFlow lifecycle state and never closes a commit span. |
@@ -148,7 +149,7 @@ flowchart TD
     end
 
     subgraph HOW["Tier 2: HOW (Specification & Test Execution)"]
-        Cat --> Spec["US / AC / TC Living Skeleton Design"]
+        Cat --> Spec["US / AC / TP / TC Living Skeleton Design"]
         Spec --> TC["Test Case (TC) — HOW to verify (Arrow)"]
         TC --> RedGreen["Four-phase Test Body (SETUP -> BEHAVIOR -> VERIFY -> CLEANUP) -> RED -> GREEN"]
     end
@@ -156,30 +157,44 @@ flowchart TD
     WHY --> HOW
 ```
 
-#### 3. AC vs. TP vs. TC ($1 \text{ AC} : N \text{ TPs} : M \text{ TCs}$)
+#### 3. US / AC / TP / TC Cardinality
+
+The completed coverage chain is:
+
+```text
+US 1 ──► 1..* ACs
+AC 1 ──► 1..* TPs
+Each TP ──► exactly 1 TC
+Each TC ──► 1..* TPs
+```
+
+During drafting and discovery, TPs may not yet have TCs. That is an open coverage gap; the design MUST NOT be considered complete until every TP maps to exactly one TC.
 
 - **Acceptance Criteria (AC)**: User perspective — "What business rule must hold?"
 - **Test Point (TP)**: Developer perspective — "What technical boundary or failure probe must be verified?" (Target)
-- **Test Case (TC)**: Execution perspective — "How do we execute the test in code?" (Arrow)
+- **Test Case (TC)**: Execution perspective — "How do we execute the test in code?" (Arrow). One TC may cover multiple TPs; one TP must not be assigned to multiple TCs.
 
 Worked Example:
 
 ```text
-AC-01 (User Rule):
+US-batchExporter-writeRecords: As a batch exporter, I want to write records,
+                              So that accepted records are persisted.
+
+US-batchExporter-writeRecords-AC-01 (User Rule):
   "GIVEN 1 to 100 valid records, WHEN write is called, THEN persist all records and return OK."
 
 Unpacks into Developer Test Points (TPs):
-  ├── TP-01 (Typical): Write 2 records (nominal valid partition) -> OK and persisted (P0 Typical)
-  ├── TP-02 (Edge):    Write 1 record (minimum valid boundary)   -> OK and persisted (P0 Edge)
-  ├── TP-03 (Edge):    Write 100 records (maximum valid boundary)-> OK and persisted (P0 Edge)
-  ├── TP-04 (Misuse):  Write 0 records (below valid range)       -> INVALID_COUNT (P0 Misuse)
-  └── TP-05 (Misuse):  Write 101 records (above valid range)     -> INVALID_COUNT (P0 Misuse)
+  ├── US-batchExporter-writeRecords-TP-01 (Typical): Write 2 records -> OK and persisted (P0 Typical)
+  ├── US-batchExporter-writeRecords-TP-02 (Edge):    Write 1 record -> OK and persisted (P0 Edge)
+  ├── US-batchExporter-writeRecords-TP-03 (Edge):    Write 100 records -> OK and persisted (P0 Edge)
+  ├── US-batchExporter-writeRecords-TP-04 (Misuse):  Write 0 records -> INVALID_COUNT (P0 Misuse)
+  └── US-batchExporter-writeRecords-TP-05 (Misuse):  Write 101 records -> INVALID_COUNT (P0 Misuse)
 
 Implements into Executable Test Cases (TCs):
-  ├── TC-01: verifyWrite_byNominalBatch_expectSuccess      (implements TP-01)
-  ├── TC-02: verifyWrite_byBoundaryBatch_expectSuccess     (implements TP-02 & TP-03)
-  ├── TC-03: verifyWrite_byZeroBatch_expectInvalidCount    (implements TP-04)
-  └── TC-04: verifyWrite_byOversizedBatch_expectInvalidCount(implements TP-05)
+  ├── US-batchExporter-writeRecords-TC-01: verifyWrite_byNominalBatch_expectSuccess (implements TP-01)
+  ├── US-batchExporter-writeRecords-TC-02: verifyWrite_byBoundaryBatch_expectSuccess (implements TP-02 & TP-03)
+  ├── US-batchExporter-writeRecords-TC-03: verifyWrite_byZeroBatch_expectInvalidCount (implements TP-04)
+  └── US-batchExporter-writeRecords-TC-04: verifyWrite_byOversizedBatch_expectInvalidCount (implements TP-05)
 ```
 
 #### 4. Discovery to Categorization (Stage-0 to Stage-1 Bridge)
@@ -193,7 +208,7 @@ flowchart LR
     Route --> P1["P1 Model Lens<br/>(State, Capability, Interaction, Concurrency)"]
     Route --> P2["P2 Envelope Lens<br/>(Perf, Robust, Compat, Config, Diag, Sec)"]
     Route --> P3["P3 Learning Lens<br/>(Demo/Example)"]
-    P0 --> Stage1["Stage-1: Classifying Design<br/>(Codify into US/AC/TC living skeletons)"]
+    P0 --> Stage1["Stage-1: Classifying Design<br/>(Codify into US/AC/TP/TC living skeletons)"]
     P1 --> Stage1
     P2 --> Stage1
     P3 --> Stage1
@@ -232,7 +247,7 @@ A shared ubiquitous language keeps generated prompts, command flows, review outp
 Check vocabulary consistency before release:
 
 ```bash
-rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|TestLevel|TestScope|UnitTesting|SysTesting|UserTesting|mockSysRtm|realSysRtm|ArchVerifyDesign|DetailVerifyDesign|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING|status_signal|completeness_level|maturity_level|integrity_level|level_evidence|level_gap|testPassOnMock|discovery_ledger|Spec-First|Spec-Anchored|Spec-as-Source" README*.md methodPrompts slashCommands codeAgents agentSkills
+rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TP/TC|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|TestLevel|TestScope|UnitTesting|SysTesting|UserTesting|mockSysRtm|realSysRtm|ArchVerifyDesign|DetailVerifyDesign|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING|status_signal|completeness_level|maturity_level|integrity_level|level_evidence|level_gap|testPassOnMock|discovery_ledger|Spec-First|Spec-Anchored|Spec-as-Source" README*.md methodPrompts slashCommands codeAgents agentSkills
 ```
 
 Expected result: terms are used with the same meanings as defined in this file.

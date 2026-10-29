@@ -31,7 +31,7 @@ Source artifact -> Rule/Invariant -> Test Point (TP) -> Observable Oracle -> CaT
        │
        ▼
 [HOW: Specification & Execution]
-CaTDD category -> US/AC/TC -> Test Case (TC) -> RED/GREEN test
+CaTDD category -> US/AC/TP/TC -> Test Case (TC) -> RED/GREEN test
 ```
 
 Reviewers and CodeAgents must follow **Source-First** review: examine authoritative source artifacts and independently derive expected obligations before consulting existing skeletons or test code.
@@ -129,7 +129,7 @@ Workflow:
 3. For each rule, find concrete examples for its distinct outcomes and relevant conditions, plus counter-examples when useful. One example is a starting point, not proof of completeness.
 4. Capture questions instead of guessing.
 5. Route each example to the CaTDD category that matches its verification lens.
-6. Convert only source-backed examples into US/AC/TC.
+6. Convert only source-backed examples into US/AC/TP/TC.
 
 For every applicable P0/P1/P2/P3 sweep below, record source/rule references, dimensions and outcomes, TP IDs, or an explicit exclusion rationale. Keep verification methods, execution environments, feasible combinations, and sampling limits visible. A category heading or a checklist tick alone is not discovery evidence. A narrower declared scope does not require unrelated classes or domain profiles, but unresolved applicability within that scope is a QUESTION.
 
@@ -246,13 +246,15 @@ Cardinality between AC and TP is typically **$1 : N$**:
 In CaTDD, TP and TC represent distinct concepts across the TestEvidenceChain:
 
 - **Test Point (TP)**: A discovered verification obligation or condition (the target). Represents WHAT must be verified, extracted from source artifacts during Stage-0/Stage-1 discovery. A TP exists in `discovery_ledger` even before any test code or skeleton is drafted.
-- **Test Case (TC)**: An executable specification artifact (the arrow). Represents HOW to verify an obligation, structured with `@[Name]`, `@[Expect]`, and four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`) linked to `[@AC-n, US-n]`.
+- **Test Case (TC)**: An executable specification artifact (the arrow). Represents HOW to verify one or more obligations, structured with `@[Name]`, `@[Expect]`, four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`), and explicit `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]` links.
 
-Cardinality between TP and TC is not strictly 1:1:
-- `1 : 0` (GAP): An identified obligation has no adequate test case. This is how the Discovery Gate exposes missing test points before implementation. Equating TC == TP hides this gap.
+In a complete design for the declared scope, the coverage relationship is many TPs to one TC. Each TP MUST be covered by exactly one TC. Each TC MUST cover at least one TP and MAY cover multiple TPs.
+
+- `1 : 0` (Draft gap): An identified in-scope obligation has no adequate test case. It blocks design completion; it is not covered merely because other TPs have TCs.
 - `1 : 1` (Standard): A single distinct obligation maps directly to one focused test case.
-- `1 : N` (Decomposed): A single complex obligation (e.g. multi-step reconnection under retry limits) requires multiple test cases to verify distinct phases or outcomes.
 - `N : 1` (Distinguished): A single test case covers multiple related test points only when its setup and assertions genuinely distinguish each obligation without masking failures.
+
+If an obligation needs independent test cases for distinct phases or outcomes, split it into distinct TPs rather than assigning one TP to multiple TCs. Preserve qualified IDs and lineage under the traceability contract.
 
 | Field | Required content |
 | --- | --- |
@@ -266,7 +268,7 @@ Cardinality between TP and TC is not strictly 1:1:
 
 | Disposition | Meaning and required evidence |
 | --- | --- |
-| DESIGNED | Linked category file plus US/AC/TC IDs actually specify this scenario and oracle. TODO TCs count as designed, not implemented or GREEN. |
+| DESIGNED | Linked category file plus US/AC/TP/TC IDs actually specify this scenario and oracle, with exactly one covering TC for this TP. TODO TCs count as designed, not implemented or GREEN. |
 | QUESTION | Missing/conflicting source, expected behavior, or scope decision. Record the question and decision owner, or ask who owns it. Do not invent a TC expectation. |
 | EXCLUDED | Source-backed not-applicable condition or explicit developer-approved scope exclusion, with rationale and approval reference. Difficulty or low execution priority is not an exclusion. |
 | REFERRED | An accepted out-of-scope handoff with its scope boundary, reason, concrete destination artifact/work item, and responsible owner. A pending ownership decision is QUESTION. Referral is not designed or verified coverage in this scope. |
@@ -291,7 +293,7 @@ Every source rule and every applicable sweep dimension must link to ledger rows;
 
 ## Discovery Gate
 
-Run this gate in addition to the US -> AC -> TC cardinality gate:
+Run this gate in addition to the [US -> AC -> TP -> TC cardinality gate](CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the same declared scope:
 
 1. **Source -> design**: every in-scope operation, model rule, quality predicate, and guide outcome is inventoried; every applicable P0/P1/P2/P3 sweep dimension has ledger evidence. Look for omitted behaviors even when existing TCs all have valid links.
 2. **Design -> source**: each DESIGNED row resolves to a real TC with source-backed setup, oracle, and verification procedure. Detect wrong categories, duplicates, missing observations/assertions, and invented expectations. Manual evidence and exact symbolic predicates are valid when specified.
@@ -355,11 +357,11 @@ R4: storage failure at open or during write returns IO_ERROR and preserves
 the previous destination content.
 No timeout behavior is specified; ask the developer if it is needed.
 
-Existing skeleton (every AC has one linked TODO TC):
-US-1 / AC-1 / TC-1 Typical: write 2 records -> OK and exact persisted content.
-US-1 / AC-2 / TC-2 Edge: write 100 records -> OK and exact persisted content.
-US-1 / AC-3 / TC-3 Misuse: write 0 records -> INVALID_COUNT and unchanged files.
-US-1 / AC-4 / TC-4 Fault: storage open failure -> IO_ERROR and old content intact.
+Existing skeleton (every AC has one TP, each linked to one TODO TC):
+US-1 / AC-1 / TP-01 / TC-1 Typical: write 2 records -> OK and exact persisted content.
+US-1 / AC-2 / TP-02 / TC-2 Edge: write 100 records -> OK and exact persisted content.
+US-1 / AC-3 / TP-03 / TC-3 Misuse: write 0 records -> INVALID_COUNT and unchanged files.
+US-1 / AC-4 / TP-04 / TC-4 Fault: storage open failure -> IO_ERROR and old content intact.
 
 Build the source inventory independently, perform the P0 sweep, and reconcile
 the discovery_ledger. Identify omissions using TP/rule IDs even if no TC exists.
@@ -377,7 +379,7 @@ Expected review includes these rows (not an exhaustive ledger):
 | TP-08 | R4 | Failure during partial write -> IO_ERROR and old content intact | GAP: open failure alone does not prove this outcome |
 | TP-09 | Missing timeout contract | Delayed storage response -> expected result unknown | QUESTION: ask developer; do not invent a timeout or retry count |
 
-The existing cardinality gate passes, but discovery finds GAPS; with the timeout question unresolved for this scope, report `discovery_status: BLOCKED` and `ready_for_implementation: no`. Resolve its applicability explicitly; even if excluded, the known gaps still prevent readiness. Also examine preview boundaries/rejections rather than blindly reusing write coverage. Keeping four category files or increasing TC count alone would not catch these omissions.
+The original four links satisfy cardinality on their own, but the expanded in-scope ledger contains unassigned TPs: report `cardinality_gate: FAIL`. Discovery also finds known gaps; with the timeout question unresolved for this scope, report `discovery_status: BLOCKED` and `ready_for_implementation: no`. Resolve its applicability explicitly; even if excluded, the known gaps still prevent readiness. Also examine preview boundaries/rejections rather than blindly reusing write coverage. Keeping four category files or checking only the original links would not catch these omissions.
 
 ## Category-by-Category Example Mapping Prompts
 
@@ -435,7 +437,7 @@ Rules:
 
 ## Discovery Review Checklist
 
-Before converting discovered examples into US/AC/TC, verify:
+Before converting discovered examples into US/AC/TP/TC, verify:
 
 - The Behavior Inventory, applicable P0/P1/P2/P3 discovery sweeps, and Test-Point Ledger are available in living comments.
 - Every example has a source-backed rule.

@@ -16,12 +16,12 @@ Repeat until every case is attributable to the caller.
 
 1. **Thought** — Read `interface_or_protocol_file` and the existing valid functional skeletons to know exactly where supported behavior ends. Using the Misuse method prompt as the category source of truth, identify invalid inputs, unsupported state-independent requests, missing required data, and contract violations.
 2. **Action** — Draft only the Misuse skeleton with the full `@[...]` metadata set. Preserve unrelated categories untouched.
-3. **Observation** — Check attribution: ask who caused the failure. Caused by the caller → Misuse. Caused by a dependency, resource, or environment → Fault → back to **Thought** and hand it over; never convert an environmental failure into a Misuse case. Check the US/AC/TC cardinality.
+3. **Observation** — Check attribution: ask who caused the failure. Caused by the caller → Misuse. Caused by a dependency, resource, or environment → Fault → back to **Thought** and hand it over; never convert an environmental failure into a Misuse case. Check the [US/AC/TP/TC cardinality](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the declared scope; unassigned TPs block completion.
 4. **Stop** — Exit when every case is caller-attributable and the cardinality check passes. Recommend `TEST_designFaultSkeleton` or `TEST_reviewFuncTestsSkeleton`.
 
-### Worked Example
+## Usage Example
 
-Specifying rejection behavior for the authorize call:
+Specifying rejection behavior for the authorize call. IDs below are abbreviated; generated artifacts use registered Story IDs and qualified AC/TP/TC IDs.
 
 ```text
 /TEST_designMisuseSkeleton
@@ -33,9 +33,9 @@ existing_skeletons: Typical (US-01), Edge (US-02)
 Expected result:
 
 - **Thought**: supported range is `[1, 999999]`, so `amount = 0` and a negative amount are caller violations. Calling `capture` before `authorize` is an unsupported request order. A missing card token is missing required data.
-- **Action**: US-03 drafted with AC-06 (zero/negative amount rejected), AC-07 (capture-before-authorize rejected), AC-08 (missing token rejected), each with one TC.
+- **Action**: US-03 drafted with AC-06 (zero/negative amount rejected), AC-07 (capture-before-authorize rejected), and AC-08 (missing token rejected). AC-06 has separate zero and negative TPs covered by one TC with distinct assertions; AC-07 and AC-08 each have one TP mapped to one TC.
 - **Observation**: a fourth case "gateway returns HTTP 503" was drafted — the *gateway* caused that, not the caller → wrong attribution → back to **Thought** → handed to `TEST_designFaultSkeleton`.
-- **Observation**: remaining three are all caller-caused; cardinality passes.
+- **Observation**: remaining cases are caller-caused, each AC has TPs, every TP maps to exactly one TC, and every TC covers at least one TP; cardinality passes.
 - **Stop**: Misuse holds caller violations only. Recommended `TEST_designFaultSkeleton`.
 
 ## Inputs
@@ -54,7 +54,7 @@ Expected result:
 ## Output Contract
 
 - A Misuse functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
-- US/AC/TC entries that capture invalid inputs, unsupported operation order, missing preconditions, or caller contract violations.
+- US/AC/TP/TC entries that capture invalid inputs, unsupported operation order, missing preconditions, or caller contract violations.
 - Explicit separation between caller misuse and environmental or dependency Fault behavior.
 
 ## Conflict Guard

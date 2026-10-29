@@ -136,6 +136,8 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 
 ### 3. Write Your First User Story
 
+> **ID note:** `US-1`, `AC-1`, and `TC-1` in this guide are illustrative shorthand, not project-wide IDs to copy into project artifacts. New project Story IDs use `US-<whoName>-<doWhat>` with lowerCamelCase segments, such as `US-eventProducer-postEventsWithoutBlocking`.
+
 ```cpp
 /**
  * US-1: As an event producer,
@@ -194,6 +196,16 @@ TEST(EventPosting, verifyNonBlockPost_byFullQueue_expectImmediateReturn) {
 **💡 LLM Era Advantage**: With structured verification design in comments, LLMs can generate both test and production code. You focus on WHAT to verify, LLM handles HOW to implement.
 
 ---
+
+## Usage Example
+
+For a SpecFlow project with its Story Ledger initialized, run from the project root to check a proposed ID before registration:
+
+```bash
+rg -n --hidden --fixed-strings 'US-eventProducer-postEventsWithoutBlocking' README_UserStories.md .catdd/spec
+```
+
+Expected result: matching declarations, aliases, and references are shown for review. Refine the candidate if another story owns it; references and examples alone do not claim the ID.
 
 ## The 3-Phase Workflow
 

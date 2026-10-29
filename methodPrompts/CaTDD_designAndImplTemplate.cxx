@@ -107,7 +107,7 @@
  *     WHY Tier (Obligation & Target):
  *       Source Artifact -> Rule/Invariant -> Test Point (TP) -> Observable Oracle -> CaTDD Category
  *     HOW Tier (Execution & Verification):
- *       CaTDD Category -> US/AC/TC -> Four-Phase Test Body (SETUP->BEHAVIOR->VERIFY->CLEANUP) -> RED/GREEN
+ *       CaTDD Category -> US/AC/TP/TC -> Four-Phase Test Body (SETUP->BEHAVIOR->VERIFY->CLEANUP) -> RED/GREEN
  *
  * SUT BOUNDARY INVARIANT:
  *   The declared SUT establishes the contract dividing line:
@@ -118,8 +118,10 @@
  *   - 1 AC : N TPs: AC is from User/Caller perspective (GIVEN context, WHEN action, THEN outcome).
  *                   TP is from Developer/Defensive perspective (GIVEN state, WHEN action, THEN oracle).
  *   - TP : TC: Target obligation (WHAT) vs. executable arrow (HOW).
- *              Cardinality can be 1:1, 1:N (multiple checks), N:1 (parameterized test), or 1:0 (GAP).
- *              Equating TC == TP hides untested requirements.
+ *              Each TP MUST be covered by exactly one TC in a complete design.
+ *              Each TC MUST cover at least one TP and MAY cover multiple TPs when each is explicitly verified.
+ *              An unassigned draft TP is a gap that blocks design completion.
+ *              Split obligations needing independent test cases into distinct TPs.
  *
  * PRIORITY FRAMEWORK:
  *   P0 🥇 FUNCTIONAL:     Must complete before P1 (ValidFunc + InvalidFunc)

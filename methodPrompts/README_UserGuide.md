@@ -96,7 +96,7 @@ A developer who only receives this directory should still be able to:
 
 - Understand CaTDD's method intent.
 - Pick the right category prompt.
-- Draft US/AC/TC verification design.
+- Draft US/AC/TP/TC verification design.
 - Ask an LLM to generate tests from comments.
 - Keep comments alive as tests and production code evolve.
 
@@ -113,8 +113,8 @@ Follow this workflow when starting a CaTDD test file.
 5. Declare SUT, in-scope classes, domain profile(s), test level, and execution environment. Inventory source obligations before treating existing tests as coverage. Capture Stage-0 examples and questions through Example Mapping.
 6. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) for the applicable P0/P1/P2/P3 sweeps. OOPSI and business-rule extraction are optional aids for functional workflows; design models and quality constraints use their own sources. Record candidates and source references in a `discovery_ledger` in living comments.
 7. Classify drafts by verification lens, not rule type, domain, or priority. Use the priority order below for execution, adjusted by risk.
-8. Write US/AC/TC comments inside the test file before implementing code.
-9. Independently review source -> ledger -> US/AC/TC and back. Require both cardinality and the Discovery Gate to pass with `ready_for_implementation: yes` for the declared scope; then write one failing test for the next TC.
+8. Write US/AC/TP/TC comments inside the test file before implementing code.
+9. Independently review source -> ledger -> US/AC/TP/TC and back. In a complete design, require each US to have at least one AC, each AC to have at least one TP, each TP to map to exactly one TC, and each TC to cover one or more TPs. Unassigned draft TPs block completion. Require both cardinality and the Discovery Gate to pass with `ready_for_implementation: yes` for the declared scope; then write one failing test for the next TC.
 10. Implement only enough production code to pass that TC.
 11. Update TC status markers and keep the comments synchronized with behavior.
 12. Repeat one TC at a time.

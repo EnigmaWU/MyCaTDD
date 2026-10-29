@@ -4,7 +4,7 @@ This is the SpecCoding template for project-root `README_UserStories.md`. This f
 
 ## Story Identity Registry
 
-Register each project-wide Story ID when its first todo artifact is created, including blocked drafts. Follow the Project-Wide Traceability IDs section in `.catdd/methodPrompts/CaTDD_methodPrompt-testStructure.md`: preserve an unambiguous existing ID or allocate a collision-safe one, check the project registry and known story sources, and recheck when branches are integrated. The registry identifies the current authoritative story/AC source; it does not replace that source's requirements.
+Register each project-wide Story ID when its first todo artifact is created, including blocked drafts. Follow the Project-Wide Traceability IDs section in `.catdd/methodPrompts/CaTDD_methodPrompt-testStructure.md`: preserve an unambiguous existing ID; derive a new human-readable `US-<whoName>-<doWhat>` ID in lowerCamelCase from the story actor and observable behavior, such as `US-eventProducer-postEventsWithoutBlocking`. Check the project registry and known story sources before registration, refine collisions with meaningful context, and recheck when branches are integrated. Do not use arbitrary numeric suffixes or UUIDs merely to force uniqueness. The registry identifies the current authoritative story/AC source; it does not replace that source's requirements.
 
 | Story ID | Authoritative Story / AC Source | Source IDs / Revision | Parent / Supersession |
 | --- | --- | --- | --- |

@@ -3,6 +3,8 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 METHOD_DIR="$REPO_ROOT/methodPrompts"
+UBILANG="$REPO_ROOT/README_UbiLang.md"
+UBILANG_ZH="$REPO_ROOT/README_UbiLang_ZH.md"
 FILE_NAMING="$METHOD_DIR/CaTDD_methodPrompt-fileNaming.md"
 MASTER="$METHOD_DIR/CaTDD_methodPrompt.md"
 TEST_STRUCTURE="$METHOD_DIR/CaTDD_methodPrompt-testStructure.md"
@@ -32,11 +34,19 @@ README_ZH="$METHOD_DIR/README_ZH.md"
 GUIDE="$METHOD_DIR/README_UserGuide.md"
 GUIDE_ZH="$METHOD_DIR/README_UserGuide_ZH.md"
 ROOT_GUIDE="$REPO_ROOT/README_UserGuide.md"
+ACTION_CONCEPTS="$REPO_ROOT/devBooks/Action/01_defineConcepts.md"
 TEMPLATES=(
   "$METHOD_DIR/CaTDD_designAndImplTemplate.cxx"
   "$METHOD_DIR/CaTDD_designAndImplTemplate.ts"
   "$METHOD_DIR/CaTDD_designAndImplTemplate.py"
   "$METHOD_DIR/CaTDD_designAndImplTemplate.go"
+)
+P0_DESIGN_COMMANDS=(
+  "$DESIGN_FUNCTIONAL"
+  "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/TEST_designTypicalSkeleton.md"
+  "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/TEST_designEdgeSkeleton.md"
+  "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/TEST_designMisuseSkeleton.md"
+  "$REPO_ROOT/slashCommands/commands/P0-FuncTestsFlow/TEST_designFaultSkeleton.md"
 )
 
 fail() {
@@ -118,18 +128,34 @@ assert_contains "$TEST_STRUCTURE" '## Project-Wide Traceability IDs'
 assert_contains "$TEST_STRUCTURE" '`US-<story>-AC-<n>`'
 assert_contains "$TEST_STRUCTURE" '`US-<story>-TP-<n>`'
 assert_contains "$TEST_STRUCTURE" '`US-<story>-TC-<n>`'
-assert_contains "$TEST_STRUCTURE" 'UUIDv4'
+assert_contains "$TEST_STRUCTURE" 'each TP MUST map to exactly one TC'
+assert_contains "$TEST_STRUCTURE" 'human-readable form'
+assert_contains "$TEST_STRUCTURE" 'US-<whoName>-<doWhat>'
+assert_contains "$TEST_STRUCTURE" 'US-eventProducer-postEventsWithoutBlocking'
+assert_not_contains "$TEST_STRUCTURE" 'UUIDv4'
 assert_contains "$TEST_STRUCTURE" '@[TP]'
 assert_contains "$TODO_STORY_TEMPLATE" '**Story ID:** {{StoryID}}'
 assert_contains "$TODO_STORY_TEMPLATE" '### {{StoryID}}-AC-{{n}}:'
+assert_contains "$TODO_STORY_TEMPLATE" 'US-<whoName>-<doWhat> with lowerCamelCase segments'
 assert_contains "$ANALYZE_ISSUE" 'register the Story ID'
 assert_contains "$ANALYZE_ISSUE" 'project-wide-traceability-ids'
+assert_contains "$ANALYZE_ISSUE" 'US-<whoName>-<doWhat>'
+assert_contains "$ANALYZE_FEATURE" 'US-<whoName>-<doWhat>'
+assert_contains "$IMPORT_STORY" 'US-<whoName>-<doWhat>'
+assert_contains "$ANALYZE_ABORT" 'US-<whoName>-<doWhat>'
+assert_contains "$IMPORT_STORY" 'assign a human-readable project Story ID in'
+assert_contains "$ANALYZE_ABORT" 'revision of the same story'
 assert_contains "$STORY_LEDGER_TEMPLATE" '## Story Identity Registry'
+assert_contains "$STORY_LEDGER_TEMPLATE" 'US-<whoName>-<doWhat>'
 assert_contains "$STORY_LEDGER_TEMPLATE" '{{StoryID}}-AC-{{n}}'
 for intake_command in "$ANALYZE_FEATURE" "$IMPORT_STORY" "$ANALYZE_ABORT" "$OPEN_STORY"; do
   assert_contains "$intake_command" 'project-wide-traceability-ids'
 done
 assert_contains "$MASTER" 'project-wide-traceability-ids'
+assert_contains "$MASTER" 'Each TP **MUST** map to exactly one TC'
+assert_contains "$UBILANG" 'US / AC / TP / TC Cardinality'
+assert_contains "$UBILANG" 'each TP MUST map to exactly one TC'
+assert_contains "$UBILANG_ZH" '每个 TP MUST 恰好映射到一个 TC'
 assert_contains "$TEST_DISCOVERY" 'story-qualified TP ID'
 for trace_command in "$DESIGN_TESTS" "$IMPL_PRODUCT" "$DESIGN_FUNCTIONAL"; do
   assert_contains "$trace_command" 'project-wide-traceability-ids'
@@ -151,6 +177,69 @@ assert_contains "$MERGE_WORKS" 'integrated project'
 assert_not_contains "$TEST_STRUCTURE" 'AC-n: GIVEN'
 assert_contains "$MASTER" 'test_{feature}_{category}.<ext>'
 assert_contains "$TEST_STRUCTURE" 'test_{feature}_{category}.<ext>'
+
+# A new mandatory rule must not coexist with the old permissive rule.
+for contract_file in "$MASTER" "$TEST_DISCOVERY" "${TEMPLATES[@]}"; do
+  assert_not_contains "$contract_file" '$1:N$ and $N:1$ are valid when justified'
+  assert_not_contains "$contract_file" '`1 : N` (Decomposed)'
+  assert_not_contains "$contract_file" '1:N (multiple checks)'
+  assert_contains "$contract_file" 'Each TP MUST be covered by exactly one TC'
+  assert_contains "$contract_file" 'Each TC MUST cover at least one TP and MAY cover multiple TPs'
+done
+assert_contains "$TEST_DISCOVERY" 'US -> AC -> TP -> TC cardinality'
+assert_contains "$TEST_DISCOVERY" 'cardinality_gate: FAIL'
+assert_contains "$GUIDE" 'each TP to map to exactly one TC'
+assert_contains "$GUIDE_ZH" '每个 TP 恰好映射到一个 TC'
+
+for design_command in "${P0_DESIGN_COMMANDS[@]}"; do
+  assert_contains "$design_command" 'CaTDD_methodPrompt-testStructure.md#usactptc-contract'
+  assert_not_contains "$design_command" 'US/AC/TC cardinality'
+  assert_not_contains "$design_command" 'every AC has ≥1 TC'
+  assert_not_contains "$design_command" 'every `@[AC]` has ≥1 `@[TC]`'
+done
+assert_contains "$DESIGN_FUNCTIONAL" 'every AC has at least one TP'
+assert_contains "$DESIGN_FUNCTIONAL" 'every TP maps to exactly one TC'
+assert_contains "$DESIGN_FUNCTIONAL" 'every TC covers at least one TP'
+assert_contains "$DESIGN_FUNCTIONAL" 'a TP maps to zero or multiple TCs'
+
+story_id='US-eventProducer-postEventsWithoutBlocking'
+case_names=(
+  'verifyEventPost_byFullQueue_expectNonBlockReturn'
+  'verifyEventPost_byFullQueue_expectErrorCode'
+  'verifyEventPost_byFullQueue_expectNotQueued'
+)
+for index in "${!case_names[@]}"; do
+  printf -v child_token '%02d' "$((index + 1))"
+  case_id="$story_id-TC-$child_token"
+  name_count="$(grep -Ec "$case_id[[:space:]]+${case_names[$index]}" "$ACTION_CONCEPTS")" || [[ $? -eq 1 ]]
+  case_count="$(grep -Ec "$case_id[[:space:]]+verify" "$ACTION_CONCEPTS")" || [[ $? -eq 1 ]]
+  [[ "$name_count" -eq 2 && "$case_count" -eq 2 ]] || fail "$case_id must keep the same behavior in the full chain and tracking example"
+  assert_contains "$ACTION_CONCEPTS" "@[Trace]: $story_id | $story_id-AC-01 | $story_id-TP-$child_token | $case_id"
+done
+awk '
+  /^## The Implementation Tracking Template$/ { tracking = 1; next }
+  tracking && /^## / { tracking = 0 }
+  tracking && /@\[Trace\]:/ { statuses = 0; trace_case = $NF }
+  tracking && /@\[Status\]: mockSysRtm .* \| realSysRtm [^[:space:]]/ { statuses++ }
+  tracking && /@\[TC\]:/ {
+    cases++
+    if ($3 != trace_case) {
+      print "TC differs from its trace at line " NR > "/dev/stderr"
+      failed = 1
+    }
+    if (statuses != 1) {
+      print "Missing or duplicate two-scope status at line " NR > "/dev/stderr"
+      failed = 1
+    }
+  }
+  END {
+    if (cases != 3) {
+      print "Expected three tracked full-queue test cases, found " cases > "/dev/stderr"
+      failed = 1
+    }
+    exit failed
+  }
+' "$ACTION_CONCEPTS" || fail "Action tracking example must give every TC one two-scope status"
 
 # 3. No deprecated level-prefixed test file names outside the vendored/refDoc material.
 deprecated_name_pattern='(UT|ST|UAT)_[A-Za-z0-9_]+-(Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security)\.[A-Za-z]+'
@@ -226,5 +315,5 @@ for template in "${TEMPLATES[@]}"; do
 done
 assert_not_contains "${TEMPLATES[0]}" 'UT_NameofCategory'
 
-echo "[methodPrompts-consistency-test] notice: vendored copies under .github/skills/*/references/ and the devBooks drafts are out of scope for this pass"
-echo "[methodPrompts-consistency-test] PASSED: naming, category sections, status markers, and README claims agree"
+echo "[methodPrompts-consistency-test] notice: vendored copies under .github/skills/*/references/ and other devBooks examples are out of scope for this pass"
+echo "[methodPrompts-consistency-test] PASSED: naming, cardinality, category sections, status markers, and checked examples agree"

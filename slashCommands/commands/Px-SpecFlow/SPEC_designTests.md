@@ -6,7 +6,7 @@ Design CaTDD unit test skeletons for the active user story after story and detai
 
 ## CoT Pattern
 
-**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect the active story and design artifacts, summarize the category-routing decision, act by drafting or updating CaTDD US/AC/TC skeletons, observe traceability and design-source gaps, then decide the next flow step. The loop is priority locked: complete the P0 Functional skeleton decision before any P1/P2 promotion, and promote P1/P2 only with explicit design-source evidence.
+**ReACT** — Reasoning + Acting with observable checkpoints. This command must inspect the active story and design artifacts, summarize the category-routing decision, act by drafting or updating CaTDD US/AC/TP/TC skeletons, observe traceability and design-source gaps, then decide the next flow step. The loop is priority locked: complete the P0 Functional skeleton decision before any P1/P2 promotion, and promote P1/P2 only with explicit design-source evidence.
 
 Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 
@@ -15,8 +15,8 @@ Use concise public reasoning summaries, not hidden chain-of-thought transcripts.
 Repeat per category until the P0 Functional set is complete; the loop is priority locked.
 
 1. **Thought** — Read the active story and reviewed design. Decide the category routing: which ACs are normal success, valid boundary, invalid caller usage, and external/environment fault.
-2. **Action** — Draft or update the CaTDD US/AC/TC skeletons for that routing, including SUT, category labels, `@[SourceSPEC]`, `@[SourceUT]`, and template provenance per the Language Template Selection.
-3. **Observation** — Check the coverage invariants: every US has at least one AC, every AC has at least one TC, and every skeleton names its design source. Every designed skeleton traces to a `discovery_ledger` row in `README_DetailVerifyDesign.md` or records a QUESTION; a missing link returns to **Action**. A P1/P2 skeleton drafted without the design-source evidence required by the P1/P2 Promotion Gate returns to **Thought** and is dropped.
+2. **Action** — Draft or update the CaTDD US/AC/TP/TC skeletons for that routing, including SUT, category labels, `@[SourceSPEC]`, `@[SourceUT]`, and template provenance per the Language Template Selection.
+3. **Observation** — Before reporting design complete, check the coverage invariants: every US has at least one AC, every AC has at least one TP, every TP maps to exactly one TC, every TC covers at least one TP, and every skeleton names its design source. A draft TP without a TC is an open gap, not completed coverage. Every designed skeleton traces to a `discovery_ledger` row in `README_DetailVerifyDesign.md` or records a QUESTION; a missing link returns to **Action**. A P1/P2 skeleton drafted without the design-source evidence required by the P1/P2 Promotion Gate returns to **Thought** and is dropped.
 4. **Stop** — Exit when the P0 Functional set `Typical + Edge + Misuse + Fault` is decided. Report `next_command = TEST_reviewFuncTestsSkeleton`, then hand ready P0 slices to `SPEC_implTests`.
 
 ### Worked Example
@@ -32,7 +32,7 @@ detail_design: README_DetailDesign.md
 Expected result:
 
 - **Thought**: the story has functional CLI behavior, so P0 Functional applies and must be represented as `ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`.
-- **Action**: inspected `P0-FuncTestsFlow.md`, `TEST_designFuncTestsSkeleton.md`, and the four category prompts; created the four P0 skeletons with full US/AC/TC provenance.
+- **Action**: inspected `P0-FuncTestsFlow.md`, `TEST_designFuncTestsSkeleton.md`, and the four category prompts; created the four P0 skeletons with full US/AC/TP/TC provenance.
 - **Observation**: AC-04 (gateway timeout) had a Fault TC but no matching `@[SourceSPEC]` link → invariant broken → back to **Action** → link added to `README_ErrorDesign.md`.
 - **Observation**: a `Performance` skeleton was also drafted, but `README_PerfDesign.md` contains no measurable target → P1/P2 Promotion Gate fails → back to **Thought** → skeleton dropped and recorded as deferred.
 - **Stop**: four P0 skeletons complete; reported `next_command = TEST_reviewFuncTestsSkeleton`.
@@ -67,9 +67,9 @@ Expected result:
 
 ## Output Contract
 
-- CaTDD US/AC/TC skeletons in committed test files, linked back to team-shared active story artifacts and project-root README SPEC docs.
+- CaTDD US/AC/TP/TC skeletons in committed test files, linked back to team-shared active story artifacts and project-root README SPEC docs.
 - The registered Story ID and full story-qualified AC, TP, and TC IDs at each relevant ledger and test declaration; preserve shared relationships and existing IDs across categories and test levels.
-- Enforced minimum traceability cardinality: each US has >=1 AC, and each AC has >=1 TC.
+- Enforced minimum traceability cardinality: each US has >=1 AC, each AC has >=1 TP, each TP maps to exactly one TC, and each TC covers >=1 TP.
 - Explicit SUT declaration in each designed test-file overview section.
 - This command inherits the strategy from `README_DetailVerifyDesign.md`; it never creates or redefines verification design.
 - Error, resource, state, performance, compatibility, and diagnostic coverage linked to `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when those design surfaces exist.
@@ -77,7 +77,7 @@ Expected result:
 - Evidence that existing `TEST_design*Skeleton` command contracts were inspected before drafting category skeletons.
 - Source-command provenance for each generated or redesigned category skeleton, including the orchestrating `SPEC_designTests` command and the matching `TEST_designXYZ` command when one exists.
 - Language-template provenance when a matching `methodPrompts/CaTDD_designAndImplTemplate.<language>` file exists for the target test file language or extension.
-- A parallel-ready implementation checklist that groups the next execution slices by US/AC/TC, notes dependencies, and highlights validation checkpoints before product-code work starts.
+- A parallel-ready implementation checklist that groups the next execution slices by US/AC/TP/TC, notes dependencies, and highlights validation checkpoints before product-code work starts.
 - A flow-coupling decision record that states the chosen P0 route, any P1/P2 promotion reason, the exact `TEST_*` command contracts inspected, and the review command to run before implementation (`TEST_reviewFuncTestsSkeleton`, `TEST_reviewDesignTestsSkeleton`, or `TEST_reviewQualityTestsSkeleton`, which audit the Cross-Artifact Semantic-Delta Matrix for `KEPT / DETAILED / REASSIGNED / EXCLUDED / VIOLATED / UNKNOWN` transformations before `SPEC_implTests`).
 - Category labels, priority gates, and initial TC status markers.
 - Next recommended command: `SPEC_implTests` or a specific `TEST_*` command.
@@ -123,7 +123,7 @@ Before drafting or updating any P1/P2 skeleton, complete this P0 gate:
 2. Map every functional AC to `Typical`, `Edge`, `Misuse`, `Fault`, or `P0 not applicable`.
 3. Inspect `TEST_designFuncTestsSkeleton` before drafting the default full P0 set. Inspect a category-specific command only for explicit partial P0 scope.
 4. Draft or update skeleton comments for `Typical`, `Edge`, `Misuse`, and `Fault` in CaTDD order unless an omitted category has a recorded reason.
-5. Preserve or create US/AC/TC traceability with `@[Class]`, `@[Category]`, `@[Priority]`, `@[Status]`, `@[SUT]`, `@[SourceSPEC]`, `@[SourceUT]`, and template provenance.
+5. Preserve or create US/AC/TP/TC traceability with `@[Class]`, `@[Category]`, `@[Priority]`, `@[Status]`, `@[SUT]`, `@[SourceSPEC]`, `@[SourceUT]`, and template provenance.
 6. Recommend `TEST_reviewFuncTestsSkeleton` before implementation if P0 skeletons were created or materially changed.
 
 P0 is complete enough to promote only when core valid behavior and invalid caller/fault behavior are either covered or intentionally excluded with a design-backed reason.
@@ -143,7 +143,7 @@ P1 and P2 skeletons are optional extensions, not substitutes for P0.
 The design output must leave `SPEC_implTests` with a deterministic set of `tc_slices`:
 
 - List candidate `tc_slices` by priority: P0 TCs first, then P1 TCs, then P2 TCs.
-- For each slice, include US, AC, TC id, category, target file, dependency notes, and expected validation command.
+- For each slice, include US, AC, TP, TC IDs, category, target file, dependency notes, and expected validation command.
 - Mark independent slices that can be implemented in parallel without touching the same production behavior.
 - State whether `TEST_reviewFuncTestsSkeleton`, `TEST_reviewDesignTestsSkeleton`, or `TEST_reviewQualityTestsSkeleton` must run before implementation.
 - Recommend `SPEC_implTests` only when at least one TC is ready to implement and skeleton traceability is not dangling.
@@ -161,7 +161,7 @@ Skeleton-design rework routed through `SPEC_designTests` is bounded by `max_rewo
 Do not skip P0 Functional routing before promoting design or quality categories. Do not use P1/P2 skeletons to compensate for missing P0 coverage. Do not handcraft a category skeleton directly when a matching `TEST_designXYZ` command contract exists.
 Do not treat P0 design as only a Typical skeleton. P0 Functional means the four CaTDD design skeleton categories `Typical`, `Edge`, `Misuse`, and `Fault` unless explicit scope limits say otherwise.
 Do not implement executable test bodies during `SPEC_designTests`; this command designs skeletons and handoff slices only.
-Do not finish with dangling traceability: reject outputs where any US has no AC or any AC has no TC.
+Do not finish with dangling traceability: reject outputs where a US has no AC, an AC has no TP, a TP maps to zero or multiple TCs, or a TC covers no TP.
 Do not omit SUT declaration in designed test-file overview comments.
 Do not recommend implementation until the required skeleton review command is either passed, explicitly not needed, or recorded as the next blocking step.
 

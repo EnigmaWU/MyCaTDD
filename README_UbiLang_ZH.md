@@ -20,7 +20,7 @@
 | --- | --- |
 | CaTDD | Comment-alive Test-Driven Development（注释存活测试驱动开发）。 |
 | Comment-alive | 在代码生成前，以结构化注释显式表达验证意图。 |
-| US / AC / TC | User Story / Acceptance Criteria / Test Case 的可追溯链路。 |
+| US / AC / TP / TC | User Story / Acceptance Criteria / Test Point / Test Case 的可追溯链路。 |
 | Skeleton | 仅注释的测试设计骨架，包含追溯标记和计划测试意图。 |
 | RED | 产品代码修改前，处于可执行且预期失败的测试状态。 |
 | GREEN | 产品代码修改后，测试通过状态。 |
@@ -34,7 +34,7 @@
 | BLOCKED（受阻） | `review_verdict` 中表示"缺少输入"的结论：必需的来源制品、证据或依赖缺失，门禁根本无法评判该制品。它由能提供该输入的一方解除——通常是 `rework_route` 指明的归属命令；只有当人类是唯一可能的提供者时，才退化为 `ASK`。BLOCKED 报告必须指明缺失的输入。注意与 TC 状态标记 `🚫 BLOCKED` 区分：后者标记无法继续的测试用例，前者描述的是门禁结论。 |
 | ASK（提问） | `review_verdict` 中表示"缺少决定"的结论：答案只存在于人类开发者的判断中——意图、取舍、验收或范围。它是"把人类拉入回路"的结论，与 `ONE-MORE-THING` 的产出相同；此时还不存在返工路由，门禁停下。规范的 ASK 会给出选项（A/B、是/否、保留/采纳）让人选择。当流程连问题本身都还无法表述时，应升级为 `SPEC_whatsWrong` 而非 ASK。 |
 | Source-First | 源头在先：先审视权威来源工件（契约、架构模型、质量策略）并独立推导预期验证义务，再查阅已有骨架或测试代码，消除作者自身盲区。 |
-| TestEvidenceChain | 测试证据链：回答“为什么需要这个测试（WHY）”与“如何正确进行测试（HOW）”的完整无断裂证据链：从来源工件 -> 规则/不变量 -> 测试点（TP） -> 可观测预期（Oracle） -> CaTDD 分类（WHY 层面） -> US/AC/TC -> 测试用例（TC） -> RED/GREEN 实现（HOW 层面）。 |
+| TestEvidenceChain | 测试证据链：回答“为什么需要这个测试（WHY）”与“如何正确进行测试（HOW）”的完整无断裂证据链：从来源工件 -> 规则/不变量 -> 测试点（TP） -> 可观测预期（Oracle） -> CaTDD 分类（WHY 层面） -> US/AC/TP/TC 追溯链 -> 测试用例（TC） -> RED/GREEN 实现（HOW 层面）。 |
 | SUT | 被测系统 / 被测目标（System Under Test）：在测试中显式声明的被测软件边界（如 `SUT: utCodeAgentCLI`）。它确立了调用方（调用者违反契约属于 `P0 Misuse`）与外部依赖/环境（依赖故障属于 `P0 Fault`）之间的严格分界线。 |
 | TestLevel（测试层级） | 测试点被执行时声明的 SUT 范围，取且仅取 `UnitTesting`、`SysTesting`、`UserTesting` 三者之一。在测试文件内以 `@[TestLevel]` 声明，绝不写入文件名。它回答"所开发的系统有多少在 SUT 之内"，而不是"该系统的运行时由什么构成"（那属于 `TestScope`），也不是"哪份设计文档拥有该策略"。 |
 | UnitTesting（单元级） | `TestLevel` 之一：以单个单元为 SUT，在其自身边界内、遵循项目 `sut_unit_convention`（子模块、类、头文件、函数或组件）进行的验证。当项目没有再做细分时，`UnitTesting` 与 `SysTesting` 指向同一个 SUT，二者等价。CaTDD 分类与发现门禁适用，其策略设计归属 `README_DetailVerifyDesign.md`。 |
@@ -44,10 +44,11 @@
 | `TestScope`（测试范围） | 测试点被执行时声明的运行时范围：`mockSysRtm`（把 SUT 的系统运行时——同级组件、依赖、运行时环境——替换为替身）或 `realSysRtm`（SUT 运行在真实系统运行时之上）。以 `@[TestScope]` 声明，独立于 `TestLevel`，因此任何层级都可在任一范围下运行。`mockSysRtm` 是第一范围并获得 `CLOSED`；`realSysRtm` 是第二范围，提供附加证据。 |
 | UT | 单元测试（Unit Testing）：聚焦于单个显式声明的 SUT 的验证活动，遵循项目约定的 `sut_unit_convention`（如模块接口、子模块接口、类、头文件接口、函数或组件）。在编码前通过 CaTDD 验证其公开契约、内部模型与质量属性。 |
 | TP | 测试点（Test Point）：从来源规则、模型、边界或故障模式中发掘出的具体验证义务或条件，记录在 `discovery_ledger` 中。从开发者/防御性视角表达“必须验证什么”（目标靶心），通常采用具体的 `GIVEN 技术状态/分区, WHEN 动作/交织时序, THEN 可观测预期` 描述。 |
-| TC | 测试用例（Test Case）：具有结构化元数据（`@[Name]`、`@[Expect]`、`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`）并链接到 `[@AC-n, US-n]` 的可执行规格工件。从执行视角表达“如何具体验证”（射向靶心的箭）。 |
-| AC vs TP | AC 出自用户/调用方视角（定义外部业务验收规则：`GIVEN 业务上下文, WHEN 触发操作, THEN 业务结果`）；TP 出自开发者/防御性视角（定义深入边界、异常路径、并发交织的技术探针，用于验证 AC 是否坚挺成立）。一条 AC 通常分解为多个具体 TP（$1:N$ 关系）。将 $TP == AC$ 画等号会导致边界和故障模式遗漏。 |
-| TP vs TC | 概念与基数并非绝对 1:1。TP 可以独立存在而尚未编写 TC（`1:0` -> GAP，从而暴露遗漏测试点）；复杂义务可能需要多个用例（`1:N`）；一个用例也可以在断言明确区分时覆盖多个测试点（`N:1`）。过早假设 `TC == TP` 会掩盖测试点遗漏。 |
-| Discovery to Categorization | 发现到归类的两阶段桥梁：在 Stage-0（自由草拟）阶段，基于来源和全面扫描广度优先发掘 TP，避免过早陷入分类偏见；在 Stage-1（分类设计）阶段，依据验证视角将各 TP 路由到正确的 CaTDD 类别（契约 -> P0，模型 -> P1，包络 -> P2，认知表面 -> P3），随后形式化为 US/AC/TC 骨架。 |
+| TC | 测试用例（Test Case）：具有结构化元数据（`@[Name]`、`@[Expect]`、`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`）并显式链接 `@[US]`、`@[AC]`、`@[TP]`、`@[TC]` 的可执行规格工件。从执行视角表达“如何具体验证”（射向靶心的箭）。 |
+| US / AC / TP / TC Cardinality | 完整验证设计中，每个 US MUST 有一个或多个 AC，每个 AC MUST 有一个或多个 TP，每个 TP MUST 恰好映射到一个 TC，每个 TC MUST 覆盖一个或多个 TP。一个 TC MAY 覆盖多个 TP。草拟/发现阶段允许 TP 暂无 TC，但这是阻断设计完成的覆盖缺口。若需要不同的测试用例，应将义务拆分为不同 TP，而不是让一个 TP 映射多个 TC。 |
+| AC vs TP | AC 出自用户/调用方视角（定义外部业务验收规则：`GIVEN 业务上下文, WHEN 触发操作, THEN 业务结果`）；TP 出自开发者/防御性视角（定义有来源支撑的边界、异常路径和并发技术探针）。完整设计中，每条 AC 分解为一个或多个 TP（$1:N$）。将 $TP == AC$ 画等号会导致边界和故障模式遗漏。 |
+| TP vs TC | 完整设计中的映射是多个 TP 对应一个 TC：每个 TP 恰好映射到一个 TC，一个 TC 可验证一个或多个 TP（$N:1$）。草稿中尚未分配 TC 的 TP 是显式缺口，不是已完成覆盖。若某项义务需要彼此独立的测试用例，应拆分为多个 TP，使每个 TP 仍恰好对应一个 TC。 |
+| Discovery to Categorization | 发现到归类的两阶段桥梁：在 Stage-0（自由草拟）阶段，基于来源和全面扫描广度优先发掘 TP，避免过早陷入分类偏见；在 Stage-1（分类设计）阶段，依据验证视角将各 TP 路由到正确的 CaTDD 类别（契约 -> P0，模型 -> P1，包络 -> P2，认知表面 -> P3），随后形式化为 US/AC/TP/TC 骨架。 |
 | manualMode | SpecCoding 的人类驱动形态：由开发者逐条输入 `SPEC_doXYZ`，助手逐步推进，在意图、验收标准或安全性模糊时暂停并提出针对性问题，等待开发者明确确认。它是人类聊天会话的默认值，也是 `autonomousMode` 运行在导向边界处必须暂停时的回退模式。 |
 | autonomousMode | SpecCoding 的流程驱动形态：由流程自身调用下一条 `SPEC_doXYZ`。对于驱动 Px-SpecFlow 的 code agent 或 CLI 运行器（如 `specCodeAgentCLI`）它是默认值；对人类会话则需在入口命令上显式传入 `execution_mode: autonomousMode`。**严格仅支持实现导向（implementation-oriented）的用户故事**：需求与架构需要人类意图，运行会在该边界暂停并退回 `manualMode`。模式由驱动方显式声明而非推断，自动推进 Part 2.b 的实现与评审步骤直至最终状态（`closeUserStory`、`abortUserStory` 或 `suspendUserStory`），并且因为缺少人类意图来源而永远无法进入 VibeCoding。 |
 | analysis_mode | 分析命令内部（`SPEC_analyzeIssue`、`SPEC_analyzeFeature`）在 `manualMode` 流程下的命令级执行模式。`BRAINSTORM`（头脑风暴，默认）与开发者进行交互式逐步对话探讨，并必须在归档的 `.catdd/spec/analyzedNews/` 文件中以 `## Chat History`（`chatHistory`）章节记录对话与决策；`AUTONOMOUS`（自主分析）单次执行多技能分析流水线草拟 `todoUS` 而不逐步打断，在 `.catdd/spec/analyzedNews/` 的 `## Chat History` 下记录自主推理/提示轨迹，显式记录假设与疑问并在存在阻塞性问题时将故事标记为未就绪（NOT ready）。 |
@@ -55,10 +56,10 @@
 | commit span（提交区间） | 一次提交所关闭的生命周期区间，也是 Px-SpecFlow 的提交切分单位（按区间而非按文件集合切分）。`pre-story` 区间 = `SPEC_openUserStory` 之前的导入/分析制品；`story` 区间 = `SPEC_openUserStory -> SPEC_closeUserStory`；`step` 区间 = 故事区间内单个已验证的生命周期步骤。 |
 | SPEC_commitPreStoryWorks | 故事前区间提交命令：提交 `SPEC_openUserStory` 之前产生的导入/分析制品，包括 `pendingNews/` 到 `analyzedNews/` 的移动、`todoUS/` 故事以及 `README_UserStories.md` 台账。在 `manualMode` 下是可选命令；当导入阶段以 `analysis_mode: AUTONOMOUS` 无值守运行时作为默认的故事前检查点。故事前区间绝不运行于 `autonomousMode`，因为自主执行严格限于实现导向的故事工作。 |
 | SPEC_commitStepWorks | 故事区间内的步骤提交命令：仅提交 `SPEC_openUserStory -> SPEC_closeUserStory` 区间里单个已验证的生命周期步骤，且仅在 `SPEC_makePlan` 记录为 `commit_step = yes` 的步骤边界上，并且该步骤门禁达到 `PASS`/`GREEN` 之后才提交。在 `manualMode` 下是可选命令；在 `autonomousMode` 下是每个已规划步骤边界的默认行为。 |
-| SPEC_updateMadePlan | SpecFlow 计划维护命令：在全部五个 `SPEC_review*` 审查关卡（`SPEC_reviewUserStory`、`SPEC_reviewArchDesign`、`SPEC_reviewDetailDesign`、`SPEC_reviewImplTests`、`SPEC_reviewProductCodes`）、返工循环、故事恢复或 `plan_drift` 检查点之后，向已有 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品的 `## Trajectory` 轨迹表追加时间顺序行，同步 `[ ]`/`[x]` 任务状态、门禁/提交证据与工作导向，并将粗粒度任务逐步细化为详细设计或 US/AC/TC 执行切片与步骤提交边界。 |
+| SPEC_updateMadePlan | SpecFlow 计划维护命令：在全部五个 `SPEC_review*` 审查关卡（`SPEC_reviewUserStory`、`SPEC_reviewArchDesign`、`SPEC_reviewDetailDesign`、`SPEC_reviewImplTests`、`SPEC_reviewProductCodes`）、返工循环、故事恢复或 `plan_drift` 检查点之后，向已有 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品的 `## Trajectory` 轨迹表追加时间顺序行，同步 `[ ]`/`[x]` 任务状态、门禁/提交证据与工作导向，并将粗粒度任务逐步细化为详细设计或 US/AC/TP/TC 执行切片与步骤提交边界。 |
 | Trajectory（执行轨迹） | `.catdd/spec/doingUS/*-UserStory-Tasks.md` 中的只追加时间顺序执行表（`## Trajectory`，含 `#`、`Date`、`Command / Gate`、`Verdict / Evidence / Commit`、`Plan Delta -> Next Command` 五列，由 `SPEC_makePlan` 基于 `SpecDoingUserStoryTasksTemplate.md` 初始化，并由 `SPEC_updateMadePlan` 追加）。它将历史门禁结论、有界返工计数（$1..B$）与步骤提交记录从面向后续执行的 `[ ]`/`[x]` `## Task Checklist` 中分离出来，确保每个 `[x]` 任务都有可审计的门禁或提交证据支撑。 |
 | EPIC Specification Sufficiency（EPIC 规范充分性） | 基于 EPIC 框架（arXiv:2610.07534）的两阶段渐进式规范充分性门禁：第一阶段在 `SPEC_analyzeIssue` / `SPEC_analyzeFeature` / `SPEC_analyzeAbortedUserStory` 生成 `todoUS/*-UserStory.md` 时通过 `## Story Readiness Snapshot` 检查故事级 EPIC 维度；第二阶段在 `doingUS/*-UserStory-Tasks.md` 的 `## EPIC Specification Sufficiency` 下维护覆盖全制品集合的 10 维台账（`E1..E3`、`P1..P2`、`I1..I3`、`C1..C2`，状态取 `satisfied / partial / gap / question / N/A`）及 `### Cross-Artifact Semantic-Delta Matrix`，由 `SPEC_makePlan` 初始化，在每次 `SPEC_review*` 门禁后由 `SPEC_updateMadePlan` 刷新，并在 `SPEC_closeUserStory` 关闭前校验。 |
-| Cross-Artifact Semantic-Delta Matrix（跨制品语义差异矩阵） | 贯穿四个关键审查阶段（`SPEC_reviewArchDesign`：`Story/Guide -> ArchDesign/UbiLang`；`SPEC_reviewDetailDesign`：`ArchDesign -> DetailDesign -> DetailVerifyDesign`；`SPEC_designTests` + `TEST_review{Func,Design,Quality}TestsSkeleton`：`DetailVerifyDesign TP -> US/AC/TC Skeleton`；`SPEC_reviewImplTests`：`US/AC/TC Skeleton -> 已实现测试体与伴随 README`）的转换保真矩阵（`EPIC I2.3`）。将每项义务的跨文档转换分类为 `KEPT`（原义保持 / 语义保真）、`DETAILED`（显式细化 / 具体分解，附理由）、`REASSIGNED`（改派转交 / 委派他方，附责任方；对应 `discovery_ledger` 的 `REFERRED`）、`EXCLUDED`（批准排除 / 明确出界，附批准）、`VIOLATED`（违背冲突 / 暗中弱化，以 `REVISE` 阻断门禁）或 `UNKNOWN`（证据缺失 / 未知待问，以 `ASK` / `BLOCKED` 阻断门禁）。 |
+| Cross-Artifact Semantic-Delta Matrix（跨制品语义差异矩阵） | 贯穿四个关键审查阶段（`SPEC_reviewArchDesign`：`Story/Guide -> ArchDesign/UbiLang`；`SPEC_reviewDetailDesign`：`ArchDesign -> DetailDesign -> DetailVerifyDesign`；`SPEC_designTests` + `TEST_review{Func,Design,Quality}TestsSkeleton`：`DetailVerifyDesign TP -> US/AC/TP/TC Skeleton`；`SPEC_reviewImplTests`：`US/AC/TP/TC Skeleton -> 已实现测试体与伴随 README`）的转换保真矩阵（`EPIC I2.3`）。将每项义务的跨文档转换分类为 `KEPT`（原义保持 / 语义保真）、`DETAILED`（显式细化 / 具体分解，附理由）、`REASSIGNED`（改派转交 / 委派他方，附责任方；对应 `discovery_ledger` 的 `REFERRED`）、`EXCLUDED`（批准排除 / 明确出界，附批准）、`VIOLATED`（违背冲突 / 暗中弱化，以 `REVISE` 阻断门禁）或 `UNKNOWN`（证据缺失 / 未知待问，以 `ASK` / `BLOCKED` 阻断门禁）。 |
 | Story Completion Conditions（故事完成条件） | 声明在 `*-UserStory.md`（`SpecTodoUserStoryTemplate.md`）内部 `## Story Completion Conditions (EPIC E3.4)` 下的故事专属完成定义（`EPIC E3.4`）。显式规定关闭该故事必须满足的 `TestLevel`（`UnitTesting`、`SysTesting`、`UserTesting`）、`TestScope` 与目标运行环境（`mockSysRtm` 是否足够或必须通过 `realSysRtm`）、CaTDD 分类层级（`P0/P1/P2/P3`）、`README*` 规格/文档更新面、显式“未完成禁止关闭条件”（`Not-Done Conditions`）以及经批准的延后项（`Approved Deferrals`）。由 `SPEC_reviewUserStory` 审查完整性，并在 `SPEC_closeUserStory` 与 `SPEC_partialCloseUserStory` 关闭时强制校验。 |
 | SPEC_commitStoryWorks | 故事区间提交命令：把整个 `SPEC_openUserStory -> SPEC_closeUserStory` 区间提交为 just-done UserStory 提交，并包含终态生命周期/元文件变更。它承担 `pre_close` 检查点（为 `SPEC_closeUserStory` 提供 `commit_ref`）、`post_close` 检查点（满足 `close_commit_required`），以及部分关闭、中止或挂起之后的 `span_end` 检查点。在 `manualMode` 下是可选命令；在 `autonomousMode` 下是故事完成时的默认提交。 |
 | SPEC_commitWorks | 通用、与故事无关的提交命令：先从暂存文件解析范围，其次取最近修改的文件，然后生成符合仓库风格的提交信息。它绝不推进 SpecFlow 生命周期状态，也绝不关闭任何提交区间。 |
@@ -148,7 +149,7 @@ flowchart TD
     end
 
     subgraph HOW["第二层：HOW（如何正确进行测试：规格定义与执行验证）"]
-        Cat --> Spec["US / AC / TC 活注释骨架设计"]
+        Cat --> Spec["US / AC / TP / TC 活注释骨架设计"]
         Spec --> TC["测试用例 (TC) — 如何验证 (射向靶心的箭)"]
         TC --> RedGreen["四阶段测试代码 (SETUP -> BEHAVIOR -> VERIFY -> CLEANUP) -> RED -> GREEN"]
     end
@@ -156,30 +157,44 @@ flowchart TD
     WHY --> HOW
 ```
 
-#### 3. AC vs. TP vs. TC（$1 \text{ AC} : N \text{ TPs} : M \text{ TCs}$ 视角与基数）
+#### 3. US / AC / TP / TC 关系与基数
+
+完整覆盖链为：
+
+```text
+US 1 ──► 1..* AC
+AC 1 ──► 1..* TP
+每个 TP ──► 恰好 1 个 TC
+每个 TC ──► 1..* TP
+```
+
+草拟与发现阶段允许 TP 尚未分配 TC；这是未关闭的覆盖缺口，在每个 TP 都恰好映射到一个 TC 之前，设计 MUST NOT 标记为完成。
 
 - **验收准则 (AC)**：用户视角 —— “外部业务期望达成什么规则？”
 - **测试点 (TP)**：开发者视角 —— “内部需要探测哪些边界、异常与并发条件？”（目标靶心）
-- **测试用例 (TC)**：执行视角 —— “在代码中如何编写确定性的步骤与断言？”（射向靶心的箭）
+- **测试用例 (TC)**：执行视角 —— “在代码中如何编写确定性的步骤与断言？”（射向靶心的箭）。一个 TC 可覆盖多个 TP；一个 TP 不得分配给多个 TC。
 
 实例拆解（以批量导出器为例）：
 
 ```text
-AC-01 (用户业务规则):
+US-batchExporter-writeRecords: As a batch exporter, I want to write records,
+                              So that accepted records are persisted.
+
+US-batchExporter-writeRecords-AC-01 (用户业务规则):
   "GIVEN 1 到 100 条有效记录, WHEN 调用 write 时, THEN 持久化所有记录并返回 OK。"
 
 分解为开发者技术探针测试点 (TPs):
-  ├── TP-01 (Typical): 写入 2 条记录 (正常代表分区) -> 返回 OK 且数据持久化 (P0 Typical)
-  ├── TP-02 (Edge):    写入 1 条记录 (最小合法边界) -> 返回 OK 且数据持久化 (P0 Edge)
-  ├── TP-03 (Edge):    写入 100 条记录 (最大合法边界) -> 返回 OK 且数据持久化 (P0 Edge)
-  ├── TP-04 (Misuse):  写入 0 条记录 (低于合法范围) -> 返回 INVALID_COUNT 且文件未修改 (P0 Misuse)
-  └── TP-05 (Misuse):  写入 101 条记录 (高于合法范围) -> 返回 INVALID_COUNT 且文件未修改 (P0 Misuse)
+  ├── US-batchExporter-writeRecords-TP-01 (Typical): 写入 2 条记录 -> 返回 OK 且数据持久化 (P0 Typical)
+  ├── US-batchExporter-writeRecords-TP-02 (Edge):    写入 1 条记录 -> 返回 OK 且数据持久化 (P0 Edge)
+  ├── US-batchExporter-writeRecords-TP-03 (Edge):    写入 100 条记录 -> 返回 OK 且数据持久化 (P0 Edge)
+  ├── US-batchExporter-writeRecords-TP-04 (Misuse):  写入 0 条记录 -> 返回 INVALID_COUNT 且文件未修改 (P0 Misuse)
+  └── US-batchExporter-writeRecords-TP-05 (Misuse):  写入 101 条记录 -> 返回 INVALID_COUNT 且文件未修改 (P0 Misuse)
 
 映射并实现为可执行测试用例 (TCs):
-  ├── TC-01: verifyWrite_byNominalBatch_expectSuccess      (覆盖 TP-01)
-  ├── TC-02: verifyWrite_byBoundaryBatch_expectSuccess     (覆盖 TP-02 与 TP-03)
-  ├── TC-03: verifyWrite_byZeroBatch_expectInvalidCount    (覆盖 TP-04)
-  └── TC-04: verifyWrite_byOversizedBatch_expectInvalidCount(覆盖 TP-05)
+  ├── US-batchExporter-writeRecords-TC-01: verifyWrite_byNominalBatch_expectSuccess (覆盖 TP-01)
+  ├── US-batchExporter-writeRecords-TC-02: verifyWrite_byBoundaryBatch_expectSuccess (覆盖 TP-02 与 TP-03)
+  ├── US-batchExporter-writeRecords-TC-03: verifyWrite_byZeroBatch_expectInvalidCount (覆盖 TP-04)
+  └── US-batchExporter-writeRecords-TC-04: verifyWrite_byOversizedBatch_expectInvalidCount (覆盖 TP-05)
 ```
 
 #### 4. 发现到分类（Stage-0 到 Stage-1 的两阶段桥梁）
@@ -193,7 +208,7 @@ flowchart LR
     Route --> P1["P1 模型视角<br/>(State, Capability, Interaction, Concurrency)"]
     Route --> P2["P2 包络视角<br/>(Perf, Robust, Compat, Config, Diag, Sec)"]
     Route --> P3["P3 认知视角<br/>(Demo/Example)"]
-    P0 --> Stage1["Stage-1: 分类设计 (Classifying Design)<br/>(固化为结构化 US/AC/TC 活注释骨架)"]
+    P0 --> Stage1["Stage-1: 分类设计 (Classifying Design)<br/>(固化为结构化 US/AC/TP/TC 活注释骨架)"]
     P1 --> Stage1
     P2 --> Stage1
     P3 --> Stage1
@@ -232,7 +247,7 @@ CaTDD 是方法驱动的体系。关键词漂移会直接导致行为漂移。
 发布前进行术语一致性检查：
 
 ```bash
-rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|TestLevel|TestScope|UnitTesting|SysTesting|UserTesting|mockSysRtm|realSysRtm|ArchVerifyDesign|DetailVerifyDesign|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING|status_signal|completeness_level|maturity_level|integrity_level|level_evidence|level_gap|testPassOnMock|discovery_ledger|Spec-First|Spec-Anchored|Spec-as-Source" README*.md methodPrompts slashCommands codeAgents agentSkills
+rg -n "Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security|Demo/Example|US/AC/TP/TC|US/AC/TC|SpecCoding|VibeCoding|Source-First|TestEvidenceChain|SUT|TestLevel|TestScope|UnitTesting|SysTesting|UserTesting|mockSysRtm|realSysRtm|ArchVerifyDesign|DetailVerifyDesign|UT|TP|TC|manualMode|autonomousMode|analysis_mode|ONE-MORE-THING|status_signal|completeness_level|maturity_level|integrity_level|level_evidence|level_gap|testPassOnMock|discovery_ledger|Spec-First|Spec-Anchored|Spec-as-Source" README*.md methodPrompts slashCommands codeAgents agentSkills
 ```
 
 预期结果：这些术语的含义与本文件定义保持一致。

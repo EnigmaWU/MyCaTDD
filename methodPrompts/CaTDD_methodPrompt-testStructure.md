@@ -1,6 +1,6 @@
 # CaTDD Method Prompt - Test Structure
 
-This subtopic defines the comment skeleton, US/AC/TC structure, coverage matrix, naming conventions, and tracking shape used by CaTDD test files.
+This subtopic defines the comment skeleton, US/AC/TP/TC structure, coverage matrix, naming conventions, and tracking shape used by CaTDD test files.
 
 ## Comment Skeleton
 
@@ -62,7 +62,7 @@ Build dimensions from source rules, not from tests already written. Link each ap
 
 ### Discovery Evidence in Living Comments
 
-Keep one feature-level inventory and `discovery_ledger` in FreelyDrafts or the OVERVIEW / UNIT TESTING DESIGN comments; category files link to it. These comments supplement, not replace, US/AC/TC or TODO status. The discovery subtopic owns the disposition/readiness semantics.
+Keep one feature-level inventory and `discovery_ledger` in FreelyDrafts or the OVERVIEW / UNIT TESTING DESIGN comments; category files link to it. These comments supplement, not replace, US/AC/TP/TC or TODO status. The discovery subtopic owns the disposition/readiness semantics.
 
 ```text
 // DISCOVERY SCOPE: [SUT, feature, in-scope classes, test level, approved limits]
@@ -72,7 +72,7 @@ Keep one feature-level inventory and `discovery_ledger` in FreelyDrafts or the O
 // SAMPLING: [feasible dimensions/constraints, selection method, omissions/rationale, risk-significant additions; or not applicable]
 // REVIEW: [reviewer/process or labeled self-review, sources, independently derived operation/outcome checklist, residual risk]
 // TP ID | Source/rule | Setup/action | Observable oracle | Category/level | Disposition/evidence
-// TP-01 | [source/R1] | [condition]  | [expected result]  | Typical/unit   | DESIGNED: [file, US/AC/TC IDs]
+// TP-01 | [source/R1] | [condition]  | [expected result]  | Typical/unit   | DESIGNED: [file, US/AC/TP/TC IDs]
 // TP-02 | [source/R2] | [condition]  | unknown            | provisional    | QUESTION: [question, decision owner]
 // VERIFICATION METHOD by TP ID: [automated/manual/hybrid procedure, environment, evidence capture]
 // SCOPE / ROUTING by TP ID: [in/out of scope, destination and owner if applicable; independent of disposition]
@@ -118,7 +118,7 @@ verifyCommandExec_byMultipleClients_expectIsolatedExecution
 verifyStateTransition_byInvalidSequence_expectError
 ```
 
-## US/AC/TC Contract
+## US/AC/TP/TC Contract
 
 ### User Story
 
@@ -135,6 +135,14 @@ US-<story>-AC-<n>: GIVEN [initial context and preconditions],
                    WHEN [specific trigger, action, or event],
                    THEN [expected observable outcome stated with MUST / MUST NOT (or conditional SHOULD / optional MAY)].
 ```
+
+### Test Point
+
+```text
+US-<story>-TP-<n>: [source-backed verification obligation and observable oracle]
+```
+
+In a complete design, each US MUST have at least one AC, each AC MUST link to at least one TP, each TP MUST map to exactly one TC, and each TC MUST cover at least one TP. A TC MAY cover multiple TPs. Unassigned TPs may remain during discovery or drafting, but they are open coverage gaps and MUST block design completion. If one obligation requires independent test cases, split it into distinct TPs so each TP still maps to exactly one TC.
 
 ### Test Case
 
@@ -156,46 +164,42 @@ US-<story>-TC-<n>:
 This contract applies to each project using CaTDD, whether invoked through SpecFlow or independently. A project's registered Story ID is the stable identity for its requirements and verification evidence; a filename, test-local `US-1`, or role label is not a project-wide identity by itself.
 
 - Maintain one committed project-wide story registry. In SpecFlow, use the Story Ledger in `README_UserStories.md`; standalone CaTDD projects use their agreed committed requirements ledger. The registry identifies each Story ID and its current authoritative story/AC source. Story text and acceptance outcomes remain authoritative in that source, not in duplicated registry summaries.
-- Preserve an existing unambiguous project-wide Story ID, including imported IDs. When no project policy supplies a collision-safe ID, allocate `US-<UUIDv4>` using a UUIDv4 generator. Check the registry and story declarations across all lifecycle lanes and module requirement sources before registering it, and check the integrated project again when concurrent branches are merged. References and declared historical copies are not new independent stories. Stop on a collision; do not silently reuse or renumber an accepted ID.
-- Under each Story ID, use unique, stable qualified identifiers: `US-<story>-AC-<n>`, `US-<story>-TP-<n>`, and `US-<story>-TC-<n>`. Here `US-<story>` is the complete registered Story ID and `<n>` is the project's stable child token, not a local ID shared across unrelated stories. Allocate child tokens without reuse; when no atomic project allocator exists, use a UUIDv4 as the child token. Check for collisions again during integration.
+- Preserve an existing unambiguous project-wide Story ID, including IDs already registered from an import. For a new project Story ID, use the human-readable form `US-<whoName>-<doWhat>`. Write `<whoName>` and `<doWhat>` in lowerCamelCase, with hyphens only separating the `US`, actor, and behavior segments. Derive `<whoName>` from the actor or role in the story's "As a ..." statement and `<doWhat>` from its observable "I want ..." behavior (for example, `US-eventProducer-postEventsWithoutBlocking`). If the actor or behavior is unclear, ask rather than inventing either. The registered Story ID is the stable project-wide identity; keep it when titles, filenames, lifecycle state, or implementation details change.
+- Before registering a new Story ID, check the project registry and story declarations across all lifecycle lanes and module requirement sources, then check the integrated project again when concurrent branches are merged. If the candidate collides, refine it with meaningful domain, component, actor, or behavior context; do not append an opaque UUID or arbitrary number solely to force uniqueness. Stop and ask when the distinction cannot be named unambiguously. References and declared historical copies are not new independent stories.
+- Preserve external or local source IDs as labeled aliases. If a source ID is already registered as the project-wide identity, preserve it; otherwise assign the new human-readable project ID and retain the source ID as an alias without rewriting source text or historical evidence.
+- Under each Story ID, use unique, stable qualified identifiers: `US-<story>-AC-<n>`, `US-<story>-TP-<n>`, and `US-<story>-TC-<n>`. Here `US-<story>` is the complete registered Story ID and `<n>` is a stable child token scoped to that story. Short tokens such as `01`, `02` are readable and sufficient because the full qualified ID includes the project-wide Story ID. Allocate child tokens without reuse and check for collisions again during integration; do not silently renumber accepted IDs.
 - Preserve the same ID when a story or test point moves between files, lifecycle states, categories, or test levels. Copies, revisions, and declared partial-closure slices are references to the same identity, not automatically duplicate stories. A materially different AC or test obligation receives a new ID with an explicit supersession or lineage link; do not silently reuse an old ID for a different meaning.
 - Keep legacy or external local IDs as labeled aliases, with their source and revision when needed. On ambiguous ownership, conflicting imports, or reused historical AC meanings, stop and request reconciliation rather than guessing or rewriting history. A new independent split or follow-up story gets its own Story ID and traces to its parent and original ACs.
 - Place the full qualified IDs on each AC, discovery-ledger TP, and TC declaration. Carry the corresponding Story IDs and AC/TP/TC references into relevant design, verification, test, and product-code boundaries using language-appropriate comments or an explicit source-to-symbol trace when comments are unsuitable. A literal search for the Story ID must find its declared ACs, TPs, TCs, and trace references.
-- The relationships are not necessarily one-to-one: an AC may have several TPs; a TP may map to zero, one, or multiple TCs; and a TC may cover multiple TPs or ACs. Shared evidence retains one owning ID and explicitly lists every related Story ID and qualified AC/TP reference. Do not duplicate IDs or invent coverage merely to make a link.
+- In a complete design, each US MUST have at least one AC, each AC MUST link to at least one TP, each TP MUST map to exactly one TC, and each TC MUST cover at least one TP. A TC MAY cover multiple TPs, including TPs linked to different ACs when every relationship is explicit. Unassigned draft TPs are coverage gaps and MUST block design completion; if an obligation needs independent test cases, split it into separate TPs. Shared evidence retains one owning ID and explicitly lists every related Story ID and qualified AC/TP reference. Do not duplicate IDs or invent coverage merely to make a link.
 - Each TC's metadata must identify its relevant `@[US]`, `@[AC]`, and `@[TP]` values as well as its qualified `@[TC]` ID. When an AC, TP, or TC is shared or inherited, put the referencing Story ID and the original qualified ID together on the same trace line; for test evidence use `@[Trace]: <StoryID> | <AC ID> | <TP ID> | <TC ID>`. Record each actual relationship separately and retain the original owning ID rather than inventing copies. Unresolved or missing sources remain questions or gaps under the Discovery Gate; an ID or a grep hit is not proof of implementation or verification.
 
 ## Usage Example
 
-If the project has no ID allocation policy and Python 3 is available, generate a new Story ID before registering it:
+For the story "As an event producer, I want to post events without blocking," propose `US-eventProducer-postEventsWithoutBlocking`. In a SpecFlow project, run this from the project root before registration:
 
 ```bash
-python3 -c 'import uuid; print("US-" + str(uuid.uuid4()))'
+rg -n --hidden --fixed-strings 'US-eventProducer-postEventsWithoutBlocking' README_UserStories.md .catdd/spec
 ```
 
-For a project with an existing registered `US-USER-01`, a trace can be written as follows; the descriptions are illustrative, not inferred project requirements:
+Review matches to distinguish a registered story declaration from references or examples. Also check known module story sources before registration. Then use that same ID in qualified child identifiers; the following descriptions are illustrative, not inferred project requirements:
 
 ```text
-US-USER-01-AC-01: User-visible acceptance outcome
-US-USER-01-TP-01: Source-backed verification obligation
-@[US]: US-USER-01
-@[AC]: US-USER-01-AC-01
-@[TP]: US-USER-01-TP-01
-@[TC]: US-USER-01-TC-01
+US-eventProducer-postEventsWithoutBlocking-AC-01: User-visible acceptance outcome
+US-eventProducer-postEventsWithoutBlocking-TP-01: Source-backed verification obligation
+@[US]: US-eventProducer-postEventsWithoutBlocking
+@[AC]: US-eventProducer-postEventsWithoutBlocking-AC-01
+@[TP]: US-eventProducer-postEventsWithoutBlocking-TP-01
+@[TC]: US-eventProducer-postEventsWithoutBlocking-TC-01
 ```
 
 For a successor that reuses an existing AC, record both IDs together without reassigning the original AC:
 
 ```text
-US-FOLLOWUP-01 -> US-USER-01-AC-01 (inherited acceptance criterion)
+US-eventProducer-confirmIdempotency -> US-eventProducer-postEventsWithoutBlocking-AC-01 (inherited acceptance criterion)
 ```
 
-From that project's root, search both visible files and hidden SpecFlow artifacts:
-
-```bash
-grep -R -nF --exclude-dir=.git -- 'US-USER-01' .
-```
-
-The output lists declared references containing the ID, including qualified child IDs. Review the referenced artifacts and their evidence; grep cannot prove that unmarked code is unrelated or that a test passed.
+The command lists occurrences containing the candidate ID, including qualified child IDs. Review the referenced artifacts and their evidence; a search cannot prove that an unmarked declaration is unrelated or that a test passed.
 
 ## Four-Phase Test Body
 

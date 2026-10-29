@@ -16,12 +16,12 @@ Repeat until the Edge skeleton holds only valid boundary behavior.
 
 1. **Thought** — Read `interface_or_protocol_file` and the existing Typical skeleton. Using the Edge method prompt as the category source of truth, identify missing boundaries, limits, empty cases, ordering edges, and valid exceptional shapes.
 2. **Action** — Draft only the Edge skeleton with the full `@[...]` metadata set. Preserve unrelated categories untouched.
-3. **Observation** — Check validity: every Edge case must be input the contract *accepts*. A case the contract rejects belongs to Misuse; a case caused by a dependency belongs to Fault → back to **Thought** and hand it over. Check the US/AC/TC cardinality.
+3. **Observation** — Check validity: every Edge case must be input the contract *accepts*. A case the contract rejects belongs to Misuse; a case caused by a dependency belongs to Fault → back to **Thought** and hand it over. Check the [US/AC/TP/TC cardinality](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the declared scope; unassigned TPs block completion.
 4. **Stop** — Exit when all cases are valid boundaries and the cardinality check passes. Recommend `TEST_designMisuseSkeleton` or `TEST_reviewFuncTestsSkeleton`.
 
-### Worked Example
+## Usage Example
 
-Adding boundary coverage on top of Typical:
+Adding boundary coverage on top of Typical. IDs below are abbreviated; generated artifacts use registered Story IDs and qualified AC/TP/TC IDs.
 
 ```text
 /TEST_designEdgeSkeleton
@@ -33,9 +33,9 @@ existing_skeletons: Typical (US-01, AC-01, AC-02)
 Expected result:
 
 - **Thought**: contract accepts amounts in `[1, 999999]` → boundaries at 1 and 999999. Also an empty optional metadata map, which the contract accepts.
-- **Action**: US-02 drafted with AC-03 (minimum amount), AC-04 (maximum amount), AC-05 (empty metadata), each with one TC.
+- **Action**: US-02 drafted with AC-03 (minimum amount), AC-04 (maximum amount), AC-05 (empty metadata), each with one TP mapped to exactly one TC.
 - **Observation**: a fourth case "amount = 0" was drafted — but the contract *rejects* 0, so it is invalid input → not Edge → back to **Thought** → handed to `TEST_designMisuseSkeleton`.
-- **Observation**: remaining three ACs are all accepted inputs; cardinality passes.
+- **Observation**: remaining three ACs cover accepted inputs, each has a TP, every TP maps to exactly one TC, and every TC covers a TP; cardinality passes.
 - **Stop**: Edge holds valid boundaries only. Recommended `TEST_designMisuseSkeleton`.
 
 ## Inputs
@@ -54,7 +54,7 @@ Expected result:
 ## Output Contract
 
 - An Edge functional skeleton with `@[Class]`, `@[Category]`, `@[Intent]`, `@[UseWhen]`, `@[AvoidWhen]`, `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]`.
-- US/AC/TC entries that capture valid boundary behavior and unusual-but-supported inputs.
+- US/AC/TP/TC entries that capture valid boundary behavior and unusual-but-supported inputs.
 - Explicit separation between Edge coverage and invalid Misuse or Fault coverage.
 
 ## Conflict Guard
