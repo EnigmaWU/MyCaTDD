@@ -8,12 +8,23 @@ It is fast and it feels natural. It also has a well-known failure mode: the conv
 
 CaTDD keeps the speed and removes the failure. It treats conversation as the **first mode** of LLM work — the exploratory mode — and gives it a structure that survives the chat.
 
+## 5W1H at a Glance
+
+| Question | Answer |
+|---|---|
+| **Who** | Developers exploring a problem with an LLM |
+| **What** | Method-guided conversation that can mature into durable CaTDD artifacts |
+| **When** | Use for discovery and clarification; switch to SpecCoding when lifecycle tracking or repeatability is needed |
+| **Where** | In chat first, then in source-linked verification design, tests, and SpecFlow artifacts |
+| **Why** | To keep exploration fast without losing the evidence or decisions it produces |
+| **How** | Start with source-first Stage-0 discovery, then classify, link IDs, review the Discovery Gate, and implement |
+
 ```
    plain vibe coding                  CaTDD VibeCoding
    ─────────────────                  ────────────────
    "write me a test"                  "read the method prompt,
    → code appears                      then design the skeleton"
-   → you run it                      → US/AC/TC comments appear
+   → you run it                      → source-linked US/AC/TP/TC design appears
    → it passes                       → you review the design
    → nobody knows why                → then implement, RED → GREEN
                                      → the design is now in the file
@@ -39,7 +50,7 @@ CaTDD has exactly two ways to work with an LLM, and they use different layers of
     ──────────                                             ──────────
     methodPrompts                                          slashCommands
     you drive the conversation                             the flow drives
-    traceability is optional                               traceability enforced
+    Stage-0 drafts may be unclassified                      registered traceability is explicit
     artifacts: comments, drafts                            artifacts: lifecycle
     best for: thinking                                     best for: finishing
         │                                                       │
@@ -52,9 +63,9 @@ CaTDD has exactly two ways to work with an LLM, and they use different layers of
 | **Method source** | methodPrompts directly | slashCommands (which wrap methodPrompts) |
 | **Control** | The developer drives the conversation | The flow commands drive the lifecycle |
 | **Artifacts** | Comments, test files, code — whatever you make | SpecFlow artifacts: `pendingNews`, `todoUS`, `doingUS`, `abortUS`, `doneUS` |
-| **Traceability** | Optional, depends on the developer | Mandatory, enforced by the flow |
+| **Traceability** | Stage-0 drafts may be unclassified; once turned into CaTDD design, registered US/AC/TP/TC links are required | Story lifecycle and project-wide traceability are maintained across shared artifacts |
 | **Best for** | Exploration, drafting, brainstorming, quick fixes | Structured delivery, teamwork, reproducible workflows |
-| **How you invoke it** | You type a free-form prompt | You invoke `/UT_*` or `/SPEC_*` commands |
+| **How you invoke it** | You type a free-form prompt and cite the method prompt | You invoke `/TEST_*`, `/SPEC_*`, or `/HARNESS_*` commands |
 
 > **The key idea** — these are not competing tools. They are two stages of the same workflow, and CaTDD tells you when to move between them.
 
@@ -78,7 +89,7 @@ VibeCoding is the right choice in five situations.
 
 2. **You are freely drafting test ideas.** CaTDD calls this Stage-0 (Freely Drafting). You capture raw scenarios, risks, examples, and open questions without forcing a category decision too early. This is pure VibeCoding.
 
-3. **You are clarifying requirements.** You paste a module README, ask the LLM to find the ambiguous acceptance criteria, and discuss what the behavior should be. This is the informal version of the `SPEC_clearStoryIntent` step.
+3. **You are clarifying requirements.** You paste the authoritative story and project context, ask the LLM to find ambiguity, and discuss what the behavior should be. This is exploration, not a substitute for recording and reviewing the resulting SpecFlow artifact.
 
 4. **You are troubleshooting.** A test is failing. You paste the error and the test code, and the LLM helps you decide whether it is a setup problem, an assertion problem, or a real bug.
 
@@ -87,16 +98,19 @@ VibeCoding is the right choice in five situations.
 **Example — a good first VibeCoding prompt.** Notice that it sets the method, the component, and the question, and nothing else.
 
 ```
-Using CaTDD (methodPrompts/CaTDD_methodPrompt.md), help me design
-the P0 Functional skeleton for an event queue component.
+Using CaTDD (methodPrompts/CaTDD_methodPrompt.md), help me discover
+source-backed verification obligations for an event queue component.
 
 Context:
   - producers post events asynchronously
   - consumers pull events, optionally blocking
   - the queue has a fixed capacity
 
-Start with coverage dimensions, then propose US/AC/TC.
-Do not write implementation code yet.
+Read the authoritative API, requirements, and design sources first.
+Begin with a Stage-0 source/rule inventory, dimensions, and questions.
+Then propose P0 US/AC/TP/TC links with registered, project-wide IDs.
+Do not invent expected outcomes or write implementation code.
+Report Discovery Gate gaps before recommending implementation.
 ```
 
 The last line is the important one. It forces the design step to happen before the code step.
@@ -141,11 +155,11 @@ VibeCoding works because the method travels with the conversation. You paste the
    2  DESCRIBE   "Using CaTDD, design tests for [component]"
    3  SUPPLY     API headers, spec docs, existing test files
    4  ITERATE    review, refine, ask for alternatives
-   5  PRODUCE    US/AC/TC design, test code, production code
+   5  PRODUCE    source-linked US/AC/TP/TC design, test code, production code
    6  PRESERVE   copy the output into your own files
 ```
 
-Step 1 is the one people skip, and it is the one that changes the answer. Without the method prompt you get generic TDD: a test appears, it passes, and nobody can say which requirement it defends. With the method prompt you get a US/AC/TC chain you can review *before* any code exists.
+Step 1 is the one people skip, and it is the one that changes the answer. Without the method prompt you get generic TDD: a test appears, it passes, and nobody can say which requirement it defends. With the method prompt you get source-linked US/AC/TP/TC design you can review *before* any code exists.
 
 > **Common mistake** — Treating step 6 as optional. The LLM's answer lives in a chat window; your design has to live in your repository. Copy the skeleton into the test file in the same session, or you will be retyping it from memory tomorrow.
 
@@ -210,8 +224,8 @@ CaTDD VibeCoding follows the same phases the method already defines. The differe
    PHASE 1          PHASE 2           PHASE 3           PHASE 4
    Understanding →  Design        →   Implementation →  Iteration
    ─────────────    ─────────────     ──────────────    ─────────────
-   read files       write comments    RED → GREEN       next TC,
-   ask questions    US / AC / TC      one TC at a time  gate review
+   read sources     write comments    meaningful RED → GREEN       next TC,
+   ask questions    US / AC / TP / TC one TC at a time              gate review
    no output yet    no code yet       code appears      status updated
 ```
 
@@ -239,38 +253,41 @@ Using CaTDD, what should I test and how should I prioritize?"
 **What you say**:
 
 ```
-"Good. Now design the coverage matrix and User Stories."
+"Good. Now inventory the source-backed obligations, draft the discovery ledger,
+and classify the resolved items into CaTDD categories. Keep open questions visible."
 ```
 
 **What the LLM does**:
 
 - Fills the OVERVIEW section (WHAT/WHERE/WHY/SCOPE)
-- Defines Coverage Matrix dimensions
-- Writes User Stories (2–5, in As a / I want / So that format)
-- Writes Acceptance Criteria (GIVEN/WHEN/THEN)
-- Details Test Cases with structured metadata
+- Inventories authoritative sources, rules, dimensions, oracles, and questions
+- Creates or preserves registered project-wide Story IDs and qualified child IDs
+- Writes Acceptance Criteria with canonical terms and normative outcomes
+- Links source-backed Test Points to categorized Test Cases
+- Reconciles the discovery ledger and reports the Discovery Gate
 - Populates the TODO tracking section
 
-**CaTDD contract**: design before code. The LLM writes the US/AC/TC chain as comments before generating any test implementation. This is the Comment-alive part: the design lives in comments that stay with the code.
+**CaTDD contract**: discovery before classification, and design before code. US/AC/TP/TC links do not prove completeness when source obligations or oracles remain undiscovered.
 
 ### Phase 3: Implementation (TDD Red→Green)
 
 **What you say**:
 
 ```
-"Implement the first Typical test case. Follow RED→GREEN."
+"Implement the selected Typical test case. Follow the meaningful RED→GREEN
+cycle at mockSysRtm; do not treat setup or compilation failures as RED."
 ```
 
 **What the LLM does**:
 
 - Writes the test implementation (4-phase structure)
-- Marks it 🔴 RED in the TODO section
-- Confirms it fails (it should fail: the code does not exist yet)
+- Confirms a meaningful 🔴 RED on the intended domain assertion
+- Repairs `BROKEN_TEST` failures before implementing product behavior
 - Implements minimal production code
 - Confirms it passes
-- Marks it 🟢 GREEN
+- Records status separately for `mockSysRtm` and `realSysRtm`
 
-**CaTDD contract**: strict TDD discipline. The LLM never implements production code before a failing test exists, and it updates the status markers immediately after each action.
+**CaTDD contract**: `CLOSED` is earned only by a meaningful GREEN at `mockSysRtm`. `realSysRtm` is additional evidence, and completion conditions may require it. A mock pass is never reported as real-runtime verification.
 
 ### Phase 4: Iteration and Refinement
 
@@ -321,7 +338,7 @@ The choice is a spectrum, not a switch. Most work starts in VibeCoding and finis
    │  teammates are involved                                      │
    │  work must pause and resume across days                      │
    │  scope is large:  5+ User Stories,  20+ test cases           │
-   │  you want reproducible /UT_* and /SPEC_* sequences           │
+   │  you want reproducible /TEST_* and /SPEC_* sequences           │
    │  stakeholders need progress visibility                       │
    └──────────────────────────────────────────────────────────────┘
 ```
@@ -352,7 +369,7 @@ In VibeCoding the method prompt *is* your shared context. Share it once and the 
 ```
    ┌────────────────────────────────────────────────────────────────┐
    │  1  master method prompt   CaTDD_methodPrompt.md               │
-   │     priority framework, categories, US/AC/TC format,           │
+   │     priority framework, categories, US/AC/TP/TC format,       │
    │     status tracking, quality gates                             │
    ├────────────────────────────────────────────────────────────────┤
    │  2  category prompt        CaTDD_methodPrompt4Cat-*.md         │
@@ -398,7 +415,7 @@ VibeCoding puts you in direct conversation with a model, so the tier you pick se
 | Tier | Use it for | Why |
 |---|---|---|
 | **SOTA reasoning** (GPT-5.5-xHigh) | Architecture decisions, system boundaries, quality trade-offs, cross-module constraints | The conversation contains irreversible choices |
-| **High performance** | Requirements analysis, US/AC/TC design, test design, code review | Reasoning must span several artifacts: specs, tests, production code |
+| **High performance** | Requirements analysis, US/AC/TP/TC design, test design, code review | Reasoning must span several artifacts: sources, tests, production code |
 | **Flash speed** | Single test implementation, TODO status updates, simple refactoring | Inputs are clear and the action is narrow |
 
 ```
@@ -429,7 +446,7 @@ Four conversations cover most of what developers actually do.
 
 ```
 Developer: "Design the Typical skeleton for this API."
-CodeAgent: [produces US/AC/TC design]
+CodeAgent: [produces source-linked US/AC/TP/TC design]
 Developer: "US-2 doesn't capture the non-blocking requirement. Revise."
 CodeAgent: [revises US-2 and updates the ACs and TCs that depend on it]
 Developer: "Good. Now add coverage for the timeout mode."
@@ -443,7 +460,7 @@ This is the most natural pattern: you review the design, the LLM keeps traceabil
 
 ```
 Developer: "Here are my current test files. What coverage gaps do you see?"
-CodeAgent: [checks existing US/AC/TC chains against the priority framework]
+CodeAgent: [checks source-linked US/AC/TP/TC evidence against category semantics]
 CodeAgent: "Missing: P0 Edge for queue full behavior, P0 Misuse for double-close,
            P1 State for lifecycle transitions after cleanup."
 Developer: "Design the Edge skeleton first. Then we'll do Misuse."
@@ -487,7 +504,7 @@ The method prompt supports two design stages, and VibeCoding is where they feel 
 ```
    STAGE-0  freely drafting          STAGE-1  classifying design
    ────────────────────────          ────────────────────────────
-   raw ideas, risks, questions  →    US / AC / TC per category
+   raw ideas, risks, questions  →    source-backed TP → US / AC / TC per category
    breadth over structure            structure over breadth
    "what could go wrong?"            "which category, which gate?"
    output: messy notes               output: reviewable skeleton
@@ -620,7 +637,7 @@ Some developers stay in VibeCoding mode indefinitely and treat every conversatio
 
 VibeCoding's speed tempts you to jump straight to implementation: "write me a test for the event queue." The LLM produces test code, you run it, it passes. It feels productive. But:
 
-- No US/AC/TC traceability — which business value does this test defend?
+- No source-linked US/AC/TP/TC traceability — which obligation does this test verify?
 - No priority classification — is this Typical, Edge, or an accident?
 - No coverage reasoning — what *should* be tested and is not?
 
@@ -656,21 +673,38 @@ The LLM produces a design. You read it. It looks reasonable. You say "implement 
 The bridge between VibeCoding (this chapter) and SpecCoding (chapter 03) is the slash command system. Five steps carry your conversation into a structured flow:
 
 ```
-   1  preserve    copy US/AC/TC design into the test file as a comment skeleton
+   1  preserve    link the discovery ledger and qualified US/AC/TP/TC design
    2  initialize  /SPEC_initProjectContext      shared project context
    3  import      /SPEC_importFeature           traceable story artifacts
                   /SPEC_importIssue
    4  open        /SPEC_openUserStory           move the story into active work
-   5  execute     /UT_designTypicalSkeleton     reproducible, traceable steps
-                  /UT_implTestCase
+   5  execute     /TEST_designTypicalSkeleton     reproducible, traceable steps
+                  /TEST_implTestCase
 ```
 
 The handoff is the whole point of having two modes. VibeCoding *finds* the design; SpecCoding *delivers* it. Nothing you discovered in the conversation is thrown away — it becomes the skeleton the commands operate on.
+
+Short labels such as `US-2` and `TC-3` in conversational examples are explanatory shorthand, not project-wide identifiers to copy into design artifacts. Once a scenario becomes CaTDD design, use the registered Story ID and qualified AC/TP/TC IDs.
 
 ```
    chapter 02                                 chapter 03
    ──────────                                 ──────────
    conversation                               lifecycle
-   US/AC/TC drafted by hand in chat    ──►    US/AC/TC carried by commands
-   traceability optional                      traceability enforced
+   Stage-0 exploration                ──►    reviewed IDs, evidence, and lifecycle state
 ```
+
+## Usage Example
+
+Copy this prompt into an assistant chat in a project where the CaTDD method prompt and authoritative requirements/design sources are available:
+
+```text
+Use CaTDD from methodPrompts/CaTDD_methodPrompt.md.
+First read the authoritative sources for the feature and identify the SUT,
+scope, source-backed rules, dimensions, observable oracles, and open questions.
+Do not invent policy or expected outcomes.
+Draft a discovery ledger, then classify resolved obligations into P0/P1/P2/P3.
+Use registered project-wide US IDs and qualified AC/TP/TC IDs.
+Stop before implementation if the Discovery Gate has unresolved gaps.
+```
+
+Expected result: a source-linked discovery inventory and explicit questions or gate status—not unreviewed test code.

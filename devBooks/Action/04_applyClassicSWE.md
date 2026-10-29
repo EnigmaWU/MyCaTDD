@@ -1,8 +1,23 @@
-# 05 applyClassicSWE
+# 04 applyClassicSWE
 
 ## The Knowledge Book of Software Engineering
 
 Software engineering is not a pile of frameworks. It is a body of knowledge that survived decades because it keeps being true about the way humans build complex systems. Three disciplines in that body matter most here:
+
+## 5W1H at a Glance
+
+| Question | Answer |
+|---|---|
+| **Who** | Developers and teams applying established engineering practices with or without LLMs |
+| **What** | A synthesis of TDD verification, BDD behavior specification, and DDD domain modeling |
+| **When** | When a feature needs explicit behavior, domain boundaries, and executable evidence |
+| **Where** | In authoritative requirements/design artifacts and source-linked test comments |
+| **Why** | To ground generated code in domain intent and observable verification |
+| **How** | Discover obligations, model the domain, link US/AC/TP/TC, run meaningful RED/GREEN, and review |
+
+Short identifiers such as `US-1`, `AC-1`, and `TC-1` below are illustrative aliases for readability, not IDs to copy into project artifacts. Real CaTDD design preserves the registered project-wide Story ID and uses qualified AC/TP/TC IDs.
+
+For current CaTDD semantics, use [CaTDD_methodPrompt.md](../../methodPrompts/CaTDD_methodPrompt.md), [CaTDD_methodPrompt-testPointDiscovery.md](../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md), [CaTDD_methodPrompt-testStructure.md](../../methodPrompts/CaTDD_methodPrompt-testStructure.md), and [Px-SpecFlow.md](../../slashCommands/flows/Px-SpecFlow.md). This chapter explains the established engineering disciplines; those sources define the current CaTDD implementation contracts.
 
 | Discipline | Core Question | Signature Practice |
 |---|---|---|
@@ -77,35 +92,35 @@ CaTDD closes both gaps by embedding **design intent** and **LLM-readability** in
 
 | Classical TDD | CaTDD Enhancement |
 |---|---|
-| Test is the design | Comment skeleton IS the design — US/AC/TC structure makes business intent explicit |
-| What to test is implicit | Priority framework (P0→P3) makes coverage strategy explicit |
-| RED→GREEN→REFACTOR | ⚪TODO→🔴RED→🟢GREEN, with quality gates between priority levels |
+| Test is the design | Comment-alive verification design links source requirements to US/AC/TP/TC and test code |
+| What to test is implicit | Source-first discovery and P0→P3 category lenses expose obligations and gaps |
+| RED→GREEN→REFACTOR | Meaningful RED→GREEN is recorded separately for `mockSysRtm` and `realSysRtm` |
 | One test at a time, manually | LLM reads the design skeleton, generates test code, implements minimal production code |
 | Refactoring is ad hoc | TC-by-TC review, refactoring triggered by review gate failures |
 | Tests are code artifacts | Tests are living design documents — comments evolve with the code |
 
-The LLM does not just write tests faster. It writes tests that are **traceable to design intent**, because the design intent lives in the same file the LLM reads.
+The LLM does not just write tests faster. It writes tests that are **traceable to design intent**. Test comments keep verification design beside the tests, while authoritative stories and project-level architecture, detail, and verification-design documents remain separate sources that the comments link to.
 
 ### The CaTDD TDD Cycle (with LLM)
 
 ```
-1. DESIGN:       write the comment skeleton (US/AC/TC) — this IS the design
-2. TC SELECTION: LLM reads the skeleton, selects the next TC by priority
-3. RED:          LLM generates test code for the TC → ⚪→🔴 → test fails
-4. GREEN:        LLM generates minimal production code → 🔴→🟢 → test passes
-5. REVIEW:       LLM reviews the implementation against the design contract
-6. REPEAT:       advance to the next TC
-7. GATE:         stop at P0/P1/P2 gates, verify criteria, ask the developer
+1. DISCOVERY:    inventory source-backed rules, test points, oracles, and questions
+2. DESIGN:       link registered US/AC/TP/TC IDs; classify and pass the Discovery Gate
+3. TC SELECTION: select a ready test case in risk-adjusted priority order
+4. RED:          run the test; only an intended domain-assertion failure is meaningful RED
+5. GREEN:        make the minimum production change and verify the focused test
+6. EVIDENCE:     record mockSysRtm and realSysRtm separately; review and reconcile
+7. GATE:         stop on a gap, blocked source, or required human decision
 ```
 
-Steps 3–5 happen in a tight LLM loop. Steps 1, 2, 6, and 7 are where human judgment operates. The LLM handles the mechanical TDD work; the developer handles the design judgment.
+Implementation loops are bounded by source evidence, test scope, and review gates. A compile, setup, fixture, or environment failure is `BROKEN_TEST`, not RED. `CLOSED` is earned at `mockSysRtm`; it does not claim that the real runtime was tested.
 
 ### Why TDD Matters More in the LLM Era
 
 You might think: if an LLM can generate code, why bother with TDD at all? Three reasons:
 
 - **LLMs generate plausible code faster than correct code.** Without a failing test, the LLM has no feedback. Without a passing test, you have no confidence.
-- **LLMs lose context between conversations.** The test file *is* the context. The comment skeleton is the durable record of what the code should do, readable by the next session — and the next developer.
+- **LLMs lose context between conversations.** Team-shared story, domain, design, and verification artifacts preserve the authoritative context. Source-linked test comments keep the relevant verification intent close to code and readable by the next session.
 - **LLMs are optimistic generators.** They assume their code works. TDD forces verification: every GREEN test is a checkpoint the model cannot hallucinate past.
 
 ```
@@ -151,7 +166,7 @@ CaTDD puts BDD directly into the test file as structured comments, which removes
 ```
 Classical BDD:                         CaTDD BDD:
 
-Feature: CashWithdrawal.feature        UT_Account.cxx:
+Feature: CashWithdrawal.feature        test_account_funcValidTypical.cxx:
                                        // US-1: As a customer,
   Scenario: Withdraw from account      //       I want to withdraw cash
     Given the account has $100         //       So that I can buy things.
@@ -167,7 +182,7 @@ Test runner: Cucumber/JBehave          TEST(Account, verifyWithdraw_
                                               expectReducedBalance) { ... }
 ```
 
-The US/AC/TC chain *is* the BDD specification, living in the test file instead of a separate `.feature` file. Step definitions and test implementations become one artifact: the TEST function. The gap between specification and verification disappears.
+CaTDD's registered US and acceptance criteria remain authoritative story artifacts; qualified AC/TP/TC links bring their source-backed obligations into test design. When test comments and code share a file, they keep verification intent adjacent to execution without replacing the story or design sources.
 
 ### BDD as the CaTDD Acceptance Criteria Contract
 
@@ -244,7 +259,7 @@ Every CaTDD test file starts with an OVERVIEW that declares its bounded context:
  *
  * SCOPE:
  *   - In scope: Event posting, queue capacity, consumer callback
- *   - Out of scope: Event persistence (see UT_EventPersistence.cxx)
+ * - Out of scope: Event persistence (see test_eventPersistence_funcValidTypical.cxx)
  *
  * KEY CONCEPTS:
  *   - Conet vs Conles: Connection-oriented vs connection-less event modes
@@ -255,30 +270,30 @@ Every CaTDD test file starts with an OVERVIEW that declares its bounded context:
 
 That OVERVIEW is DDD's bounded context expressed as an LLM-readable comment. It tells the LLM: inside this file these are the concepts, and these other concepts belong to other files.
 
-#### 2. US/AC/TC as Executable Domain Specifications
+#### 2. DDD Context and CaTDD Verification Links
 
-Each User Story maps onto DDD's strategic design:
+DDD classifies domain importance; CaTDD independently classifies verification concerns. The relationship is contextual, not a one-to-one mapping:
 
 ```
-DDD Strategic Classification        CaTDD Priority Mapping
+DDD Domain Classification           CaTDD Verification Classification
 
-Core Domain                    →    P0 Functional
-(your competitive advantage)        Typical, Edge, Misuse, Fault
-invest most effort here             business-critical workflows
+Core Domain                    →    choose category by verification lens
+(your competitive advantage)        P0/P1/P2/P3 can all apply
+business importance informs risk     not a category assignment
 
-Supporting Subdomain           →    P1 Design
-(necessary, not unique)             State, Capability, Interaction,
-invest enough to keep it running    Concurrency — architecture validation
+Supporting Subdomain           →    choose category by verification lens
+(necessary, not unique)             State, Capability, Interaction, etc.
+domain role does not assign priority
 
-Generic Subdomain              →    P2 Quality
-(buy, don't build)                  Performance, Robust, Compatibility,
-minimal custom investment           Configuration, Diagnosis, Security
+Generic Subdomain              →    choose category by verification lens
+(buy, don't build)                  Performance, Robust, Security, etc.
+quality concern remains P2 regardless of domain tier
 
 Documentation / Education      →    P3 Addons
 (demos, examples, tutorials)        Demo/Example
 ```
 
-The priority framework is not only a test order — it is a **domain classification**. P0 tests verify your core domain, P1 tests validate architecture, P2 tests check quality attributes. The framework tells the LLM where to focus first, instead of treating every test as equally important.
+The priority framework classifies what confidence a test provides: P0 contract, P1 design model, P2 operating envelope, or P3 learning surface. Domain importance can influence risk-based execution order, but it does not rename the category.
 
 #### 3. Design Skeletons as Ubiquitous Language
 
@@ -287,13 +302,17 @@ The skeleton establishes Ubiquitous Language inside the test file:
 ```cpp
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
+// @[SUT]: Event Queue API
+// @[TestLevel]: UnitTesting
+// @[TestScope]: mockSysRtm (realSysRtm when required)
 // @[Intent]: Prove the core event posting and delivery workflow
 // @[UseWhen]: Producer and consumer are valid, queue has capacity
 // @[AvoidWhen]: Queue is full, consumer is blocking, or producer is invalid
-// @[US]: US-1 (event posting), US-2 (event delivery)
-// @[AC]: AC-1 through AC-4
-// @[TC]: TC-1 verifyEventPost_byAvailableCapacity_expectEventQueued
-//        TC-2 verifyEventDelivery_byCallbackConsumer_expectEventProcessed
+// @[US]: US-<registered-story-id> (event posting and delivery)
+// @[AC]: qualified story-specific AC IDs from README_UserStories.md
+// @[TP]: qualified, source-backed TP IDs from README_DetailVerifyDesign.md
+// @[TC]: qualified, story-specific TC IDs
+// @[Status]: mockSysRtm <marker> | realSysRtm <marker>
 ```
 
 "Producer," "consumer," "queue," "capacity," "blocking" — these are not generic test words. They are the domain's Ubiquitous Language, and the LLM reads them before generating any code.
@@ -306,7 +325,10 @@ Px-SpecFlow's lifecycle artifacts preserve domain knowledge in version-controlle
 .catdd/spec/projectContext.md   →  domain vision, bounded contexts, conventions
 README_ArchDesign.md            →  strategic design, context mapping
 README_DetailDesign.md          →  tactical design, aggregate boundaries
-README_VerifyDesign.md          →  domain verification topology
+README_UbiLang.md               →  canonical domain vocabulary
+README_ArchVerifyDesign.md      →  system-composition verification strategy
+README_DetailVerifyDesign.md    →  behavior inventory, discovery_ledger, category strategy
+README_VerifyDesign.md          →  verification-design routing index
 ```
 
 These are DDD's knowledge-crunching output in Markdown form: readable by LLMs, reviewable by humans, and durable across code changes.
@@ -316,9 +338,9 @@ These are DDD's knowledge-crunching output in Markdown form: readable by LLMs, r
 Use these checkpoints to verify DDD alignment:
 
 - Scan test files for domain term consistency — is the same concept named the same way everywhere?
-- Verify bounded context boundaries — does `UT_EventQueue.cxx` reference only EventQueue concepts, or does it leak `CommandExecutor` concepts?
+- Verify bounded context boundaries — does `test_eventQueue_funcValidTypical.cxx` reference only EventQueue concepts, or does it leak `CommandExecutor` concepts?
 - Check that the OVERVIEW declares its bounded context clearly enough for an LLM to understand
-- For each aggregate root, verify a corresponding test file with US/AC/TC coverage exists
+- For each in-scope aggregate behavior, verify a source-linked discovery and test record exists; do not infer completeness from a file or link count
 
 ### Why DDD Matters More in the LLM Era
 
@@ -326,44 +348,46 @@ LLMs are domain-agnostic. They know syntax, not semantics. They can generate cod
 
 - **Ubiquitous Language gives the LLM consistent terminology** — it reads "event producer," "event consumer," "EvtDescQueue" and learns the domain vocabulary from the comments
 - **Bounded Contexts stop the LLM from mixing models** — a `Billing.Account` test file uses billing terms, a `CRM.Account` file uses CRM terms, and the OVERVIEW says which one you are in
-- **Strategic Design tells the LLM what to prioritize** — P0 core domain, P1 supporting, P2 generic, which is exactly how it should spend a limited context window
+- **Strategic Design tells the LLM which domain model applies** — category identity is still chosen by the CaTDD verification lens, not by whether a subdomain is core, supporting, or generic
 
-Without DDD, the LLM treats every test file as a flat, interchangeable artifact. With DDD embedded in CaTDD comments, it understands the domain architecture.
+Without DDD, the LLM can treat every test file as a flat, interchangeable artifact. With canonical `README_UbiLang.md`, bounded-context design, and consistent CaTDD comments, domain meaning is explicit without making comments the sole source of truth.
 
 ---
 
 ## CaTDD: The Synthesis of TDD + BDD + DDD
 
-CaTDD is not a fourth methodology stacked on top of three others. It is the **synthesis** — the way all three work together in one LLM-readable artifact: the test file.
+CaTDD is not a fourth methodology stacked on top of three others. It connects TDD, BDD, and DDD through authoritative sources, living verification design, and executable test evidence. No single test file replaces the project's story, domain, and design artifacts.
 
 ```
    ┌───────────────────────────────────────────────────────────────┐
-   │                     THE CaTDD TEST FILE                       │
+   │              THE CaTDD VERIFICATION EVIDENCE                   │
    │                                                               │
-   │  OVERVIEW: Domain Context Declaration (DDD)                   │
-   │  WHAT, WHERE, WHY, SCOPE, KEY CONCEPTS                        │
-   │                          │                                    │
-   │  US: User Stories — Business Intent (BDD)                     │
+   │  AUTHORITATIVE SOURCES: domain, story, design                  │
+   │                          │ source-backed                       │
+   │  TP: obligation + observable oracle in verification design    │
+   │                          │ routed into                         │
+   │  US: registered User Story — business intent (BDD)            │
    │  As a [role], I want [capability], So that [value]            │
    │                          │ traces to                          │
-   │  AC: Acceptance Criteria — Executable Specs (BDD)             │
-   │  GIVEN [context], WHEN [action], THEN [outcome]               │
-   │                          │ traces to                          │
+   │  AC: qualified Acceptance Criteria (BDD)                      │
+   │  GIVEN/WHEN/THEN with canonical terms and normative outcomes  │
+   │                          │                                    │
    │  TC: Test Cases — Verification Design (TDD + BDD)             │
-   │  @[Name], @[Purpose], @[Brief], @[Steps], @[Expect]           │
+   │  qualified IDs + scope-specific status + @[Expect]            │
    │                          │ implements                         │
    │  TEST CODE: Implementation (TDD)                              │
    │  SETUP → BEHAVIOR → VERIFY → CLEANUP                          │
-   │  Status: ⚪ TODO → 🔴 RED → 🟢 GREEN                          │
+   │  Status: mockSysRtm | realSysRtm                              │
    └───────────────────────────────────────────────────────────────┘
 ```
 
-One file, four kinds of knowledge:
+The test file keeps relevant verification design beside executable evidence; it links to, but does not replace, authoritative story, domain, and verification-design artifacts.
 
 - **DDD's bounded context** — the OVERVIEW section
-- **BDD's executable specifications** — the US/AC chain with GIVEN/WHEN/THEN
-- **TDD's verification cycle** — TC implementation with RED→GREEN markers
-- **DDD's strategic prioritization** — the P0→P3 framework mapping to core/supporting/generic
+- **BDD's behavior contract** — registered US/AC identities and canonical GIVEN/WHEN/THEN outcomes
+- **Source-backed discovery** — qualified TPs and the verification-design ledger
+- **TDD's verification cycle** — TC implementation with scope-specific RED/GREEN evidence
+- **DDD's domain model** — bounded context and canonical terms from project design sources
 
 ---
 
@@ -449,10 +473,10 @@ CaTDD converts it into a comment chain inside the test file:
 TEST(AccountWithdraw, verifyWithdraw_bySufficientBalance_expectReducedBalance) {
     //===SETUP===
     Account acc(100);
-    
+
     //===BEHAVIOR===
     auto result = acc.withdraw(20);
-    
+
     //===VERIFY===
     ASSERT_TRUE(result.success);
     ASSERT_EQ(80, acc.balance());
@@ -478,7 +502,7 @@ DDD artifacts:
   - Ubiquitous Language: balance, withdraw, deposit, transfer, overdraft
 ```
 
-CaTDD embeds that model in the test file's OVERVIEW and design skeletons:
+CaTDD declares the SUT and bounded-context terms in the test overview, and links them to the canonical domain and design sources:
 
 ```cpp
 //=========================================================================================
@@ -490,8 +514,8 @@ CaTDD embeds that model in the test file's OVERVIEW and design skeletons:
  *
  * SCOPE:
  *   - In scope: Account withdrawal, deposit, transfer logic
- *   - Out of scope: User authentication (see UT_Authentication.cxx)
- *   - Out of scope: Notification delivery (see UT_Notification.cxx)
+ *   - Out of scope: User authentication (see test_authentication_funcValidTypical.cxx)
+ *   - Out of scope: Notification delivery (see test_notification_funcValidTypical.cxx)
  *
  * KEY CONCEPTS:
  *   - Account (Aggregate Root): Manages balance and transaction history
@@ -506,45 +530,24 @@ From this OVERVIEW the LLM learns: this file covers one bounded context; the agg
 
 ---
 
-## The P0→P3 Framework as Strategic DDD
+## The P0→P3 Framework and DDD
 
-The priority framework maps directly onto DDD's strategic classification:
+Do not equate CaTDD priority classes with DDD subdomains. CaTDD categories are verification lenses; DDD classifies the domain model. A core-domain behavior can require P0 contract tests and P1/P2 evidence, while a generic component can still have important P0 behavior.
 
 ```
-  DDD Strategic Classification        CaTDD Priority Mapping
-  
-  Core Domain                    →    P0 Functional
-  (your competitive advantage)        Typical, Edge, Misuse, Fault
-  │                                   │
-  ├── what makes money                ├── business-critical workflows
-  ├── unique to your business         ├── domain-specific behavior
-  └── invest most effort here         └── complete before any other testing
-  
-  Supporting Subdomain           →    P1 Design
-  (necessary but not unique)          State, Capability, Interaction, Concurrency
-  │                                   │
-  ├── supports the core domain        ├── architectural validation
-  ├── could be outsourced             ├── lifecycle and FSM
-  └── invest enough to keep running   └── complete after P0
-  
-  Generic Subdomain              →    P2 Quality
-  (buy, don't build)                  Performance, Robust, Compatibility,
-  │                                   Configuration, Diagnosis, Security
-  ├── common to all businesses        ├── non-functional quality
-  ├── use existing solutions          ├── platform compatibility
-  └── minimal custom investment       └── complete after P1
-  
-  Documentation / Education      →    P3 Addons
-  (demos, examples, tutorials)        Demo/Example
+  DDD domain role                  CaTDD verification lens
+  ───────────────                  ────────────────────────
+  Core Domain       ─┐
+  Supporting        ─┼─ each may need any category, based on the
+  Generic           ─┘  source-backed behavior and risk surface
+                                │
+  Example: core workflow ──────► P0 Functional
+  Example: core concurrency ───► P1 Concurrency
+  Example: generic API contract ► P0 Functional
+  Example: documented demo ────► P3 Addons
 ```
 
-A CaTDD CodeAgent reading this mapping learns three things:
-
-- "P0 tests are what make this domain valuable — invest heavily"
-- "P1 tests support the core — test the architecture thoroughly"
-- "P2 tests are infrastructure — verify quality, don't over-test"
-
-That prevents the most common LLM anti-pattern in testing: treating every test as equally important and optimizing for a coverage number instead of for the domain.
+DDD domain significance can inform risk and execution ordering, but it does not reclassify a test point. P0 is addressed first under the flow gates; a P1/P2 promotion still needs the applicable source evidence and review.
 
 ---
 
@@ -558,10 +561,10 @@ CaTDD test files establish a Ubiquitous Language through consistent domain termi
 
 - Scan only the files inside the target bounded context
 - Filter out test utilities, framework configuration, and boilerplate
-- Map test file names to domain terms — `UT_Account.cxx` means the Account aggregate
+- Map canonical test file names to domain terms — `test_account_funcValidTypical.cxx` concerns the Account aggregate's Typical contract
 - Let AC comments define term behavior — "GIVEN account has balance $100" is where "balance" gets defined
 
-The LLM builds its glossary from the OVERVIEW section and the AC comments. No separate glossary file required.
+The LLM reads the project-root `README_UbiLang.md` as the canonical glossary, then follows consistent terms in OVERVIEW and AC comments. Comments must not introduce competing synonyms.
 
 ### Living Diagrams
 
@@ -570,28 +573,31 @@ SpecFlow's architecture-oriented SPEC docs act as living diagrams:
 ```
    README_ArchDesign.md     →  bounded context map
    README_DetailDesign.md   →  aggregate boundaries and class relationships
-   README_VerifyDesign.md   →  test topology and verification coverage
+   README_ArchVerifyDesign.md   →  system-composition verification strategy
+   README_DetailVerifyDesign.md →  behavior inventory, discovery_ledger, and category strategy
+   README_VerifyDesign.md       →  verification-design routing index
 ```
 
 These are text documents, which is why LLMs can parse them, but they can also be rendered as Mermaid or PlantUML diagrams when a human wants the picture. The text stays the source of truth; the diagram is a view.
 
-### BDD Reconciliation in CaTDD
+### From Gherkin to CaTDD's Linked Verification Evidence
 
-In classical BDD, reconciliation means checking that feature files, step definitions, and production code all agree. In CaTDD the gap is gone, so reconciliation gets simpler:
+In classical BDD, reconciliation checks that feature files, step definitions, and production code agree. CaTDD keeps the relevant test design near executable code while retaining authoritative project artifacts:
 
 ```
-   feature file     =  AC comment in the test file
-   step definition  =  TC comment + TEST function in the same file
-   production code  =  written in the GREEN phase for that TC
+   source artifacts = registered story, AC, domain, and design contracts
+   test design      = source-linked TP / AC / TC comments and ledger entries
+   test evidence    = TC implementation and scope-specific results
+   production code  = changed in response to meaningful RED evidence
 ```
 
 The checks become:
 
-- Every AC has at least one TC tracing to it
+- Each in-scope AC has source-backed TP/TC design or an explicit unresolved disposition
 - Every TC's assertions actually verify the AC it claims to verify
-- Every production code change was driven by a RED TC
+- RED is distinguished from broken setup/harness execution; meaningful GREEN earns `CLOSED` at `mockSysRtm`
 
-All three can be automated by parsing the comment markers. No external BDD tool required.
+Tooling may parse structured comment markers, but CaTDD's method contracts define their meaning; parsing alone does not establish traceability or coverage.
 
 ---
 
@@ -636,7 +642,7 @@ AC-2: GIVEN checking account has $100,
 ### 3. TDD: Design the Test Cases
 
 ```cpp
-// P0 Functional / Typical — Core Domain
+// P0 Functional / Typical — ordinary successful behavior
 //  TC-1: verifyTransfer_byBasicTransfer_expectUpdatedBalances
 //    @[Purpose]: Verify the fundamental transfer operation
 //    @[Brief]: Set up two accounts, transfer $100, verify both balances
@@ -659,7 +665,7 @@ AC-2: GIVEN checking account has $100,
 
 ### 4. LLM: Implement the TDD Cycle
 
-The LLM reads the US/AC/TC design — BDD specification plus DDD domain model — and implements each case:
+The LLM reads the authoritative story and domain sources, then follows source-backed TP/oracle and qualified AC/TC design while implementing each case:
 
 ```
 TC-1: RED → implement TransferService.transfer($100)   → GREEN
@@ -673,10 +679,10 @@ Each implementation is bounded by the domain: the LLM knows from the OVERVIEW th
 ### 5. Review: Verify Against the Knowledge Book
 
 ```
-✅ BDD: every AC has one or more TCs — executable specifications exist
+✅ BDD: each in-scope AC links to its source-backed TP/TC design
 ✅ DDD: OVERVIEW declares the bounded context — the domain model is explicit
-✅ TDD: all TCs followed RED→GREEN — verification is complete
-✅ Synthesis: changes trace US → AC → TC → Code → Git commit
+✅ TDD: meaningful GREEN is recorded at mockSysRtm; realSysRtm evidence is separate
+✅ Synthesis: source → TP/oracle → US/AC/TC → test evidence is traceable
 ```
 
 ---
@@ -686,21 +692,19 @@ Each implementation is bounded by the domain: the LLM knows from the OVERVIEW th
 | Knowledge Book Principle | CaTDD Practice |
 |---|---|
 | TDD: test first, code second | Comment skeleton first, LLM generates TC → RED → GREEN |
-| BDD: specify behavior, not implementation | US/AC/TC chain is the executable specification |
-| DDD: speak the domain language | OVERVIEW + US/AC use domain terms consistently |
-| DDD: bound the model | One test file per bounded context / aggregate root |
-| TDD: small, verified steps | One TC at a time, ⚪→🔴→🟢 markers |
-| BDD: keep specs and tests together | AC comments and TEST functions in the same file |
-| DDD: strategic prioritization | P0 (core) → P1 (supporting) → P2 (generic) → P3 (docs) |
+| BDD: specify behavior, not implementation | Registered US/AC and source-linked TP/TC evidence |
+| DDD: speak the domain language | OVERVIEW + US/AC use canonical project terms consistently |
+| DDD: bound the model | Declare the SUT/bounded context and link to authoritative domain design |
+| TDD: small, verified steps | One ready TC at a time, with scope-specific status |
+| BDD: keep specs and tests together | Keep relevant verification comments near tests while linking to authoritative story and design sources |
+| DDD: strategic prioritization | Domain role informs risk; CaTDD category follows the verification concern |
 | SWE: knowledge in the code | Comment-alive design preserves decisions in the artifact |
 
 The LLM era does not make TDD, BDD, or DDD obsolete. It makes them **operational**. CaTDD is the operating system that runs all three on LLM hardware.
 
-### Packaging the Knowledge Book as Agent Skills
+### Agent Skills and Canonical Sources
 
-The Knowledge Book does not live only in books. CaTDD packages it into two reusable agent skills that any CodeAgent can load.
-
-**`comment-alive-test-driven-development`** packages CaTDD as a reusable capability. When a Copilot user loads the skill and says "use CaTDD," the agent has the full Knowledge Book at its disposal: the complete `CaTDD_methodPrompt.md`, the `CaTDD_designAndImplTemplate.cxx` template, and the `slashCommands` flow materials. The skill tells the agent WHO uses it, WHAT to create (a test file as a living design document), WHEN to apply it, WHERE to place output, WHY it matters (structured comments give LLMs the context to generate correct code), and HOW to execute in four phases: Scope → Design → Implement → Validate.
+Agent skills are task-oriented entry points, not a replacement source of CaTDD semantics. `comment-alive-test-driven-development` guides creation of new CaTDD tests; `UnitTesting-convert2CaTDD` addresses conversion of existing tests. For current category meaning, traceability, discovery, status, and workflow requirements, follow `methodPrompts/` and `slashCommands/` rather than assuming a packaged skill reference is current.
 
 **`user-story-centered-spec-coding`** packages the SpecCoding lifecycle as a reusable workflow. It tells the agent how to move work through pendingNews → todoUS → doingUS → doneUS, with abortUS preserving unsafe active stories for later analysis, CaTDD as the default testing method, and typical TDD as an alternative when requested. The skill bundles the complete Px-SpecFlow lifecycle: the flow document, all 27 `SPEC_*` command files, project-root README SPEC templates, and CaTDD method references as the default testing engine.
 
@@ -729,10 +733,26 @@ Both skills are generated from authored source by `agentSkills/makeSkill.sh`. Th
    TDD proves behavior.
    BDD specifies behavior.
    DDD models behavior.
-   CaTDD synthesizes all three into
-   one LLM-readable test file.
+   CaTDD links all three through
+   source-backed verification design and test evidence.
 ```
 
-The Knowledge Book of Software Engineering is not a museum of past practices. It is the operating manual for building correct, maintainable, domain-aligned software — with or without LLMs. CaTDD reads that manual and translates it into comment-alive verification design that LLMs, developers, and code agents can all understand, execute, and improve.
+The Knowledge Book of Software Engineering is not a museum of past practices. It is the operating manual for building correct, maintainable, domain-aligned software—with or without LLMs. CaTDD connects its practices through source-backed discovery, canonical domain language, registered US/AC/TP/TC identities, and test evidence. Living comments travel with tests; authoritative story, architecture, and verification-design artifacts remain their sources.
 
 **Comments is Verification Design. LLM Generates Code. Iterate Forward Together.**
+
+## Usage Example
+
+Use this prompt in an assistant with access to the project sources and CaTDD method files:
+
+```text
+Apply TDD, BDD, and DDD through CaTDD.
+Read the authoritative story, Ubiquitous Language, design, and verification
+sources first. Inventory source-backed obligations and observable oracles.
+Do not treat the test comment as a replacement for those sources.
+Create or preserve the registered Story ID and qualified AC/TP/TC IDs.
+Design and review the test before implementation; establish meaningful RED,
+then GREEN at mockSysRtm. Record realSysRtm separately if required.
+```
+
+Expected result: a source-linked design and a test plan that distinguishes mocked closure from real-runtime evidence.

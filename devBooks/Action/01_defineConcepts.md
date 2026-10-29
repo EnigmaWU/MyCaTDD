@@ -10,7 +10,18 @@ The whole idea fits in one sentence:
 
 > Comments is Verification Design. LLM Generates Code. Iterate Forward Together.
 
-**Why it matters.** In a normal project, design is written once, then the code changes, and the document quietly becomes wrong. Nobody notices until someone trusts the old document and makes a bad decision. CaTDD removes that failure mode: the design sits next to the code it describes, so you cannot change one without seeing the other.
+**Why it matters.** Verification intent can drift when it is separated from tests and implementation. CaTDD keeps the US/AC/TP/TC verification design beside the tests, while authoritative requirements, architecture, and verification-design artifacts remain in their project documents. Those sources are linked, not replaced, by the living comments.
+
+## 5W1H at a Glance
+
+| Question | Answer |
+|---|---|
+| **Who** | Developers and CodeAgents designing and verifying software |
+| **What** | A source-backed, comment-alive verification design connected to executable tests |
+| **When** | During test-point discovery, skeleton design, implementation, review, and maintenance |
+| **Where** | In test/source comments linked to authoritative project requirements and design artifacts |
+| **Why** | To preserve intent, expose coverage gaps, and keep verification evidence traceable |
+| **How** | Discover obligations first, classify by CaTDD lens, link US/AC/TP/TC, then verify with RED/GREEN evidence |
 
 ```
 ┌────────────────────────────┐      ┌────────────────────────────┐
@@ -31,26 +42,28 @@ The whole idea fits in one sentence:
 "Comment-alive" is the part that makes CaTDD different. It has four dimensions.
 
 ```
-   1. DESIGN LIVES IN THE FILE      test_feature.cxx
-      no separate spec doc          ├── // @[US-1] ...
-                                    ├── // @[AC-1] ...
-                                    └── // @[TC-1] ...
+   1. VERIFICATION DESIGN LIVES WITH TESTS
+      source artifacts remain authoritative
+                                    ├── // @[US]: US-<registered-id>
+                                    ├── // @[AC]: US-<id>-AC-<token>
+                                    ├── // @[TP]: US-<id>-TP-<token>
+                                    └── // @[TC]: US-<id>-TC-<token>
    2. COMMENTS MOVE WITH CODE       code refactored → comments updated
                                     in the same edit
 
-   3. MACHINES CAN READ THEM        an LLM sees @[US] @[AC] @[TC] markers
-                                    and knows what to build
+   3. MACHINES CAN READ THEM        an LLM sees @[US] @[AC] @[TP] @[TC]
+                                    and links tests to source-backed intent
 
-   4. THE CHAIN NEVER BREAKS        human need → US → AC → TC → assertion
+   4. THE EVIDENCE CHAIN             source → rule → TP/oracle → US/AC/TP/TC → test
 ```
 
-1. **Design detail lives in the test file.** You do not maintain a spec document, an architecture document, and a test plan in three places. The verification design sits where the code sits.
+1. **Verification design lives beside the test.** Comments keep test intent and implementation close, but do not replace the authoritative story, architecture, detail-design, or verification-design artifacts. They carry explicit source references so changes can be reconciled.
 
-2. **Comments evolve with the code.** When you refactor production code, you update the comments in the same file and the same commit. Intent and implementation stay in sync by construction, not by discipline.
+2. **Comments evolve with the code.** When behavior or tests change, update the relevant comments and source links with them. Reconcile that change with authoritative project artifacts rather than silently making the test comment a competing specification.
 
-3. **Comments are first-class artifacts that LLMs can parse and update.** An LLM reading a CaTDD test file sees `@[US]`, `@[AC]`, and `@[TC]` markers it can trace, validate, and generate code from. That is why CaTDD is LLM-friendly TDD.
+3. **Comments are first-class artifacts that LLMs can parse and update.** An LLM reading a CaTDD test file sees `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]` markers it can trace, validate, and generate code from. That is why CaTDD is LLM-friendly TDD.
 
-4. **US/AC/TC connects human intent to machine checks.** A User Story states business value, Acceptance Criteria make it testable, and Test Cases turn it into concrete assertions. The chain runs from human need to machine verification without a gap.
+4. **The US/AC/TP/TC chain connects human intent to machine checks.** A User Story states business value, Acceptance Criteria make it testable, source-backed Test Points define obligations and observable oracles, and Test Cases turn them into verification evidence. Cardinality links help reconciliation but do not prove that discovery is complete.
 
 ### The "TDD" Part
 
@@ -58,11 +71,11 @@ CaTDD keeps the classic Red → Green → Refactor cycle. What it adds is struct
 
 | Traditional TDD | CaTDD |
 |---|---|
-| Write a failing test | Write the structured comment design first (US/AC/TC), then the failing test |
+| Write a failing test | Write the structured comment design first (US/AC/TP/TC), then the failing test |
 | Implement to pass | Implement the smallest production code that passes |
 | Refactor | Refactor test and production code together |
-| Repeat | Move the TC status (⚪ → 🔴 → 🟢), then take the next test case |
-| Design is not captured | Design lives in the same file as the tests |
+| Repeat | Record `mockSysRtm` and `realSysRtm` status separately, then take the next ready test case |
+| Design is not captured | Keep local test design beside tests and link it to authoritative sources and the discovery ledger |
 
 > **Key point** — CaTDD is not a replacement for TDD. It is TDD with design structure, traceability, and machine-readability built in.
 
@@ -86,7 +99,7 @@ The second path is faster because the *why* was never lost.
 
 ## Category-Specific Method Prompts
 
-CaTDD does not treat every test as the same kind of test. It defines **15 test categories**, and gives each one its own method prompt: `CaTDD_methodPrompt4Cat-*.md`. A CodeAgent reads the prompt for the category it is working in, so it uses the right vocabulary, the right test points, and the right constraints.
+CaTDD defines **15 test categories**, each with a category-specific prompt named `CaTDD_methodPrompt4Cat-*.md`. Category identity comes from the verification lens and source artifact; risk can change execution order but does not rename a category. The separate test-point-discovery prompt provides the source-first inventory and Discovery Gate.
 
 ```
                          15 TEST CATEGORIES
@@ -122,18 +135,19 @@ CaTDD does not treat every test as the same kind of test. It defines **15 test c
 | Security | `CaTDD_methodPrompt4Cat-Security.md` | Threats, trust boundaries, secrets, protection |
 | Demo/Example | `CaTDD_methodPrompt4Cat-DemoExample.md` | Tutorials and documented examples |
 
-Every category prompt answers the same questions, so you always know where to look:
+Category prompts share routing and skeleton guidance, but their sections are not identical:
 
 | Section | The question it answers |
 |---|---|
 | **Position** | Where does this category sit in the priority framework? |
 | **Use When** | When is this the right category? |
 | **Do Not Use When** | When should this scenario move to another category? |
-| **TestPointsInMind** | What should I probe for in this category? |
-| **Design Skeleton** | What is the contract shape for this category? |
-| **Checklist** | How do I know the work is good enough? |
+| **Category semantics** | Which verification lens owns the concern? |
+| **Category prompt** | What category-specific design constraints apply? |
+| **Test-point discovery** | Which source-backed obligations and oracles are still unaccounted for? |
+| **Discovery Gate** | Is this scope ready for implementation, blocked, or still uncertain? |
 
-Ten of the fifteen files (the four P0 categories plus State, Capability, Interaction, Concurrency, Diagnosis, and Security) also carry **Design Focus**, **US/AC/TC Pattern**, **Naming Examples**, and **Common Mistakes**. The five remaining files (Performance, Robust, Compatibility, Configuration, Demo/Example) stay lean and route discovery through `TestPointsInMind`.
+Some category prompts provide deeper design focus, US/AC/TP/TC patterns, naming examples, and common mistakes; others remain concise. Use `CaTDD_methodPrompt-categorySemantics.md` and `CaTDD_methodPrompt-testPointDiscovery.md` for the shared classification and discovery rules.
 
 > **Why one file per category?** Because "write a test" is not one skill. A boundary test, a race-condition test, and a security test fail in different ways and need different design habits. Splitting them keeps each habit sharp.
 
@@ -153,22 +167,22 @@ Four small tests tell you *which* rule broke. One large test only tells you *som
 
 ## The Four-Layer Architecture
 
-MyCaTDD is built in four layers. Each layer has one job, and each layer depends only on the one above it.
+MyCaTDD separates method semantics, portable commands, agent execution, and reusable skills. The layers have distinct ownership; adapters and agents consume the upstream method and command contracts without redefining them.
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │ [1] methodPrompts   — where the method is defined   │
-│     CaTDD semantics, category meaning, US/AC/TC     │
+│     CaTDD semantics, category meaning, US/AC/TP/TC  │
 │     skeleton rules, status discipline, templates    │
 ├─────────────────────────────────────────────────────┤
 │ [2] slashCommands   — how the method is invoked     │
-│     Portable UT_*, SPEC_*, HARNESS_* commands       │
+│     Portable TEST_*, SPEC_*, HARNESS_* commands       │
 │     input/output handoff, tool-neutral execution    │
 ├─────────────────────────────────────────────────────┤
-│ [3] codeAgents      — who executes it               │
-│     utCodeAgentCLI (unit testing)                   │
-│     specCodeAgentCLI (SpecCoding lifecycle)         │
-│     planning, trace collection, reflection loops    │
+│ [3] codeAgents      — agent execution layer          │
+│     utCodeAgentCLI has a runnable implementation    │
+│     specCodeAgentCLI is a design target, not a      │
+│     finished production CLI                        │
 ├─────────────────────────────────────────────────────┤
 │ [4] agentSkills     — how it is packaged to go      │
 │     Comment-alive TDD skill, SpecCoding skill       │
@@ -201,7 +215,7 @@ A simple way to remember the layers:
 
 ### Layer 2: slashCommands — The Commandization Layer
 
-`slashCommands/` turns the stable steps of the method into commands you can invoke. It is the bridge between method semantics and the tool you happen to use: Copilot, Cline, Continue, or `utCodeAgentCLI`.
+`slashCommands/` turns stable method steps into portable commands you can invoke. Its test commands use the `TEST_*` prefix; `SPEC_*` commands orchestrate story lifecycle work, and `HARNESS_*` commands maintain the harness. Tool adapters may expose these Markdown contracts in native command form.
 
 The rule is simple:
 
@@ -219,12 +233,12 @@ The layer contains:
 |---|---|---|
 | Flow documents | `flows/` | P0-FuncTestsFlow, P1-DesignTestsFlow, P2-QualityTestsFlow, Px-SpecFlow. Each flow is a repeatable command sequence with entry points, gates, and loop-back paths |
 | Kit documents | `kits/` | Px-HarnessKits groups the `HARNESS_*` tool points that maintain CaTDD source, adapters, execution, diagnostics, and patch-back safety, without forcing a strict lifecycle |
-| Command templates | `UT_slashCommandTemplate.md`, `SPEC_slashCommandTemplate.md` | The shared shape every command follows: Command Header / CoT Pattern / WHO / WHAT / WHEN / WHERE / WHY / HOW / Input Contract / Output Contract / CodeAgent Compatibility. The SPEC template adds a Subagent Recommendation |
-| Command files | `commands/` | The three families `UT_*`, `SPEC_*`, and `HARNESS_*`, grouped by flow or kit. Each file tells a CodeAgent what to read, what to produce, what to preserve, and what to do next |
+| Command templates | `TEST_slashCommandTemplate.md`, `SPEC_slashCommandTemplate.md` | The shared shape every command follows: Command Header / CoT Pattern / WHO / WHAT / WHEN / WHERE / WHY / HOW / Input Contract / Output Contract / CodeAgent Compatibility. The SPEC template adds a Subagent Recommendation |
+| Command files | `commands/` | The three families `TEST_*`, `SPEC_*`, and `HARNESS_*`, grouped by flow or kit. Each file tells a CodeAgent what to read, what to produce, what to preserve, and what to do next |
 
 ### Layer 3: codeAgents — The Execution Layer
 
-`codeAgents/` describes the CaTDD-native agents. Today these are design and architecture specifications; the runnable implementations are in progress. Two agents are defined.
+`codeAgents/` contains agent-focused CLI layers at different maturity levels. `utCodeAgentCLI` has a runnable implementation; `specCodeAgentCLI` documents an intended layer contract and is not yet a complete production CLI.
 
 ```
   developer goal
@@ -236,7 +250,7 @@ The layer contains:
   ├───────────────────┤      ├────────────────────────┤
   │ plans from method │      │ runs module-level      │
   │ constraints       │      │ SpecCoding flow        │
-  │ invokes UT_*      │      │ invokes SPEC_*         │
+  │ invokes TEST_*      │      │ invokes SPEC_*         │
   │ collects traces   │      │ reuses utCodeAgentCLI  │
   │ reflects and      │      │ keeps traceability     │
   │ feeds back        │      │ from intent to checks  │
@@ -246,9 +260,9 @@ The layer contains:
               spec  →  unit tests  →  results
 ```
 
-- **`utCodeAgentCLI`** takes a developer goal, plans the work from CaTDD method constraints, invokes standardized slash command steps, collects traces, reflects on the outcome, and feeds reusable patterns back into the method and command layers. It preserves the design skeleton contract, US/AC/TC traceability, category classification, and the RED/GREEN status discipline.
+- **`utCodeAgentCLI`** is a runnable agent CLI for CaTDD-oriented test design and implementation. Its behavior must follow the current method and command contracts, including source-backed discovery, project-wide traceability, category classification, and explicit test-scope evidence.
 
-- **`specCodeAgentCLI`** orchestrates module-level SpecCoding from input to output. It is built on Px-SpecFlow, reuses the unit-testing strength of `utCodeAgentCLI`, and organizes scenario-level verification from spec intent to executable checks. It keeps traceability between the spec flow, the validation checkpoints, and the implementation outcome.
+- **`specCodeAgentCLI`** is a documented design target for module-level SpecCoding orchestration. Px-SpecFlow itself is operational as portable slash-command content; the CLI layer is not yet a complete runnable implementation.
 
 ### Layer 4: agentSkills — The Packaging Layer
 
@@ -314,14 +328,16 @@ Every skeleton keeps this minimum shape:
 //=================================================================================================
 // @[SUT]: [Declared SUT matching file overview]
 // @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
+// @[TestScope]: mockSysRtm (and realSysRtm when required)
 // @[Class]: P0 Functional / ValidFunc
 // @[Category]: Typical
 // @[Intent]: What this category proves for this component
 // @[UseWhen]: When this category applies
 // @[AvoidWhen]: When to move the scenario to another category
-// @[US]: User Story IDs covered by this category
-// @[AC]: Acceptance Criteria IDs covered by this category
-// @[TC]: Test Cases, status, and expected TDD next action
+// @[US]: Registered project-wide Story IDs covered by this category
+// @[AC]: Qualified Acceptance Criteria IDs covered by this category
+// @[TP]: Qualified, source-backed Test Point IDs covered by this category
+// @[TC]: Qualified Test Case IDs, scope-specific status, and next action
 //=================================================================================================
 ```
 
@@ -329,7 +345,8 @@ Read the skeleton as a set of promises:
 
 ```
    @[SUT]        what is under test        → stops scope creep
-   @[TestLevel]  unit / system / user      → sets how deep to test
+   @[TestLevel]  UnitTesting / SysTesting / UserTesting → declares the SUT level
+   @[TestScope]  mockSysRtm / realSysRtm   → declares the runtime evidence scope
    @[Intent]     what this proves          → the one-sentence "why"
    @[UseWhen]    when it applies           → protects the category
    @[AvoidWhen]  when to move elsewhere    → prevents misclassification
@@ -352,7 +369,7 @@ This skeleton is the contract that developers and CodeAgents both honor. A devel
           "not yet — TC-1 is still TODO"    (search code for 20 minutes)
 ```
 
-The skeleton turns an unanswerable question into a status line.
+The skeleton turns an unanswerable question into a status line. The short `TC-1` label in this illustration is shorthand only; real artifacts use registered, story-qualified identifiers and scope-specific status.
 
 ---
 
@@ -580,27 +597,27 @@ Performance in a batch processor
 
 ---
 
-## The US/AC/TC Contract
+## The US/AC/TP/TC Contract
 
-CaTDD connects a human need to a machine check with three linked artifacts. Each one answers a different question, and each one points at the next.
+CaTDD connects a human need to verification evidence through registered stories, criteria, source-backed test points, and test cases. Each answers a different question and preserves its source link.
 
 ```
-   User Story (US)          Acceptance Criteria (AC)        Test Case (TC)
-   ───────────────          ───────────────────────        ─────────────
-   why anyone cares    ──►  what must be true      ──►     how we check it
+   User Story (US)     Acceptance Criteria (AC)     Test Point (TP)     Test Case (TC)
+   ───────────────     ───────────────────────     ───────────────     ─────────────
+   why it matters  ──► what must hold ──────────► what to probe ────► how to check it
 
    business value           testable condition             concrete assertion
 
-        └────────────────────────┴──────────────────────────────┘
-                       every TC cites an AC, every AC cites a US
+        └──────────────────────────┴───────────────────────────────┘
+               every US has 1+ ACs; every AC has 1+ TPs; each TP maps to exactly 1 TC
 ```
 
 ### User Story (US) Template
 
 ```text
-US-n: As a [specific role/persona],
-      I want [specific capability or feature],
-      So that [concrete business value or benefit].
+US-<registered-id>: As a [specific role/persona],
+                    I want [specific capability or feature],
+                    So that [concrete business value or benefit].
 ```
 
 A module usually carries 2–5 User Stories. Each one should represent a distinct piece of user value, not a piece of code.
@@ -608,9 +625,9 @@ A module usually carries 2–5 User Stories. Each one should represent a distinc
 **Example from the IOC Event System:**
 
 ```text
-US-1: As an event producer in high-load scenarios,
-      I want to post events without blocking when the queue is full,
-      So that my application remains responsive under load.
+US-eventProducer-postEventsWithoutBlocking: As an event producer in high-load scenarios,
+                                            I want to post events without blocking when the queue is full,
+                                            So that my application remains responsive under load.
 ```
 
 > **Test for a good US:** can a product owner read it and say "yes, that is what I asked for"? If only an engineer can judge it, it is too technical.
@@ -618,38 +635,54 @@ US-1: As an event producer in high-load scenarios,
 ### Acceptance Criteria (AC) Template
 
 ```text
-AC-n: GIVEN [initial context and preconditions],
-      WHEN [specific trigger, action, or event],
-      THEN [expected observable outcome or behavior],
-       AND [additional expected outcomes if any].
+US-<registered-id>-AC-<token>: GIVEN [initial context and preconditions],
+                               WHEN [specific trigger, action, or event],
+                               THEN [observable outcome using canonical MUST/MUST NOT wording].
 ```
 
-Define 1–4 ACs per User Story. Each AC must be verifiable on its own.
+Register the Story ID in the project-wide story ledger and use stable, unique child IDs. In a complete design, each US must have at least one AC, each AC at least one TP, each TP exactly one TC, and each TC at least one TP. A TC may cover multiple TPs; an unassigned draft TP is a gap and blocks completion. AC outcomes use canonical Ubiquitous Language and normative terms from `README_UbiLang.md`.
 
 **Example:**
 
 ```text
-AC-1: GIVEN an event producer calling IOC_postEVT_inConlesMode,
-      WHEN IOC's EvtDescQueue is full in ASyncMode by blocking consumer,
-      THEN producer returns immediately without waiting,
-       AND returns IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC,
-       AND the event is not queued for processing.
+US-eventProducer-postEventsWithoutBlocking-AC-01:
+  GIVEN an event producer calls IOC_postEVT_inConlesMode while the queue is full,
+  WHEN the producer uses NonBlock mode,
+  THEN the call MUST return immediately with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC,
+   AND the event MUST NOT be queued for processing.
 ```
 
-This is one sentence, and it already tells the tester three separate facts to check.
+The project registry owns the Story ID; the qualified AC ID remains stable when referenced from other artifacts.
+
+### Test Point (TP)
+
+```text
+US-eventProducer-postEventsWithoutBlocking-TP-01:
+  Source: [authoritative API or design artifact#section]
+  Setup/action: [technical condition and probe]
+  Observable oracle: [source-backed expected evidence]
+  Category/level: P0 Functional / Edge / UnitTesting
+```
+
+Test points come from source-first discovery, not from already-written tests. Keep the discovery ledger and pass its Discovery Gate before treating the category skeleton as implementation-ready.
 
 ### Test Case (TC) Template
 
 ```text
-[@AC-n,US-n]
- TC-n:
+US-eventProducer-postEventsWithoutBlocking-TC-01:
+  @[US]: US-eventProducer-postEventsWithoutBlocking
+  @[AC]: US-eventProducer-postEventsWithoutBlocking-AC-01
+  @[TP]: US-eventProducer-postEventsWithoutBlocking-TP-01
+  @[TC]: US-eventProducer-postEventsWithoutBlocking-TC-01
    @[Name]: verifyBehavior_byCondition_expectResult
    @[Purpose]: Why this test matters and what it validates
    @[Brief]: What the test does in simple terms
-   @[Steps]: Detailed execution steps (optional, for complex tests)
-   @[Expect]: How to verify success
+   @[Expect]: Observable result using the authoritative source's terms
    @[Notes]: Additional context, gotchas, or dependencies
+   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
 ```
+
+For shared or inherited evidence, keep the owning qualified ID and record every relationship explicitly; do not copy IDs or treat a grep match as proof of coverage.
 
 The name follows one pattern everywhere, so a test name reads like a sentence:
 
@@ -666,20 +699,23 @@ verifyStateTransition_byInvalidSequence_expectError
 A single requirement is traceable end to end:
 
 ```
-  US-1   a producer must not block when the queue is full
+  US-eventProducer-postEventsWithoutBlocking  a producer must not block when the queue is full
    │
-   ├─► AC-1  returns immediately, with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
+   ├─► US-eventProducer-postEventsWithoutBlocking-AC-01  returns immediately, with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
    │    │
-   │    ├─► TC-1  verifyEventPost_byFullQueue_expectNonBlockReturn
-   │    ├─► TC-2  verifyEventPost_byFullQueue_expectNotQueued
-   │    └─► TC-3  verifyEventPost_byFullQueue_expectImmediateReturn
+   │    ├─► US-eventProducer-postEventsWithoutBlocking-TP-01  returns immediately
+   │    │    └─► US-eventProducer-postEventsWithoutBlocking-TC-01  verifyEventPost_byFullQueue_expectNonBlockReturn
+   │    ├─► US-eventProducer-postEventsWithoutBlocking-TP-02  returns IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
+   │    │    └─► US-eventProducer-postEventsWithoutBlocking-TC-02  verifyEventPost_byFullQueue_expectErrorCode
+   │    └─► US-eventProducer-postEventsWithoutBlocking-TP-03  does not queue the event
+   │         └─► US-eventProducer-postEventsWithoutBlocking-TC-03  verifyEventPost_byFullQueue_expectNotQueued
    │
    └─► code    the queue check in IOC_postEVT_inConlesMode
         │
-        └─► commit   "AC-1: non-blocking post when queue is full"
+        └─► commit   "US-eventProducer-postEventsWithoutBlocking-AC-01: non-blocking post when queue is full"
 ```
 
-One AC can produce several TCs, because "returns immediately", "returns this code", and "does not queue the event" are three different claims.
+One AC can produce several TPs, each mapped to exactly one TC, because "returns immediately", "returns this code", and "does not queue the event" are distinct claims. A single TC may cover several TPs when one execution verifies each obligation.
 
 **Example — the same requirement, badly written.** Compare these two ways to record the same intent:
 
@@ -713,11 +749,14 @@ CaTDD keeps the classic cycle and adds an explicit status for every test case.
 
 | Status | Meaning | What you do next |
 |---|---|---|
-| ⚪ TODO | The test is designed in comments but not written | Write the test code |
-| 🔴 RED | The test exists and fails because production code is missing | Implement the smallest production code that passes |
-| 🟢 GREEN | The test passes | Move to the next test case |
+| Marker | Meaning | Next action |
+|---|---|---|
+| ⚪ TODO | The test is designed but not yet run | Implement the test and establish a meaningful RED |
+| 🔴 RED | The test fails on the intended domain assertion | Implement the smallest production change |
+| 🟢 GREEN | The test passes at the recorded scope | Record evidence and continue or review |
+| ⚠️ BROKEN_TEST | Execution failed before reaching the intended domain assertion | Repair the test or fixture; do not treat as RED |
 
-> **Never skip RED.** If a test is green the first time you run it, either the code already exists or the test is not checking anything. Both are worth knowing before you trust it.
+Each tracked case records both scopes as `mockSysRtm <marker> | realSysRtm <marker>`. `CLOSED` is earned only by a meaningful GREEN at `mockSysRtm`; `realSysRtm` is additional evidence and is required when the story's completion conditions say so. A mocked pass must never be reported as real-runtime verification.
 
 ### The 4-Phase Test Structure
 
@@ -780,15 +819,13 @@ Between priority levels there are gates. A gate is not paperwork; it is a checkp
 
 Must complete: `ValidFunc(Typical + Edge) + InvalidFunc(Misuse + Fault)`
 
-- All Typical tests GREEN (80–90% core workflow coverage)
+- The source-first Discovery Gate passes for the declared P0 scope
+- Typical tests are GREEN at the declared mock scope
 - All Edge tests GREEN (boundaries and limits validated)
-- All Misuse tests GREEN or documented
-- All Fault tests GREEN or documented
+- Misuse and Fault obligations are GREEN, explicitly excluded with approval, or visibly unresolved
 - No critical correctness bugs
-- **Fast-Fail Six** tests all passing
-- Basic memory and resource leak checks clean
 
-**Exit criteria**: the API contract is tested on both the success and the failure path.
+**Exit criteria**: the declared P0 scope has source-backed obligations, observable oracles, and explicit dispositions. GREEN tests do not by themselves prove discovery completeness.
 
 ### Gate P1: Before Quality-Oriented Testing
 
@@ -910,7 +947,7 @@ One file per category, using the canonical name `test_{feature}_{category}.<ext>
 
 Mature test points move out of the freely-drafts file into their category file. Each feature keeps one file per canonical token; a category with nothing to test keeps `@[NoTestPoints]: <reason>`, which is a living decision rather than an empty file.
 
-> **Why keep a file for a category with no tests?** Because "we decided this does not apply" and "we forgot about it" look identical in a repository. The `@[NoTestPoints]` line makes the decision visible.
+> **Why keep a file for a category with no tests?** Record a source-backed not-applicable decision when evidence supports it. If the required source is missing, `@[NoTestPoints]` is a visible BLOCKED condition—not proof that the category does not apply. See the Discovery Gate in `CaTDD_methodPrompt-testPointDiscovery.md`.
 
 **Example — a name that tells you where to look.** A failing build reports `test_queue_designConcurrency.cxx`. You already know the failure is about thread safety, not about the happy path, before you open the file.
 
@@ -920,23 +957,23 @@ Mature test points move out of the freely-drafts file into their category file. 
 
 Every CaTDD test file carries a TODO / Implementation Tracking section. It lists every test case, its status, and where the work stands.
 
+This excerpt tracks the full-queue AC from the full chain above, preserving the same TP/TC IDs and verification obligations.
+
 ```
 //===========================================================================================
-// 🥇 HIGH PRIORITY – Core Functionality
+// P0 Functional / Edge - nonblocking post with a full queue
 //===========================================================================================
-//   ⚪ [@AC-1,US-1] TC-1: verifyCore_byBasicOperation_expectSuccess
-//   🔴 [@AC-2,US-1] TC-1: verifyCore_byMaxCapacity_expectProperHandling
+//   @[Trace]: US-eventProducer-postEventsWithoutBlocking | US-eventProducer-postEventsWithoutBlocking-AC-01 | US-eventProducer-postEventsWithoutBlocking-TP-01 | US-eventProducer-postEventsWithoutBlocking-TC-01
+//   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
+//   @[TC]: US-eventProducer-postEventsWithoutBlocking-TC-01 verifyEventPost_byFullQueue_expectNonBlockReturn
 //
-//===========================================================================================
-// 🥈 MEDIUM PRIORITY – Edge & Error Handling
-//===========================================================================================
-//   ⚪ [@AC-3,US-1] TC-1: verifyEdge_byEmptyQueue_expectEmptyResult
-//   ⚪ [@AC-4,US-2] TC-1: verifyMisuse_byDoubleInit_expectError
+//   @[Trace]: US-eventProducer-postEventsWithoutBlocking | US-eventProducer-postEventsWithoutBlocking-AC-01 | US-eventProducer-postEventsWithoutBlocking-TP-02 | US-eventProducer-postEventsWithoutBlocking-TC-02
+//   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
+//   @[TC]: US-eventProducer-postEventsWithoutBlocking-TC-02 verifyEventPost_byFullQueue_expectErrorCode
 //
-//===========================================================================================
-// 🥉 LOW PRIORITY – Advanced Scenarios
-//===========================================================================================
-//   ⚪ [@AC-5,US-2] TC-1: verifyPerformance_byHighLoad_expectAcceptableLatency
+//   @[Trace]: US-eventProducer-postEventsWithoutBlocking | US-eventProducer-postEventsWithoutBlocking-AC-01 | US-eventProducer-postEventsWithoutBlocking-TP-03 | US-eventProducer-postEventsWithoutBlocking-TC-03
+//   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
+//   @[TC]: US-eventProducer-postEventsWithoutBlocking-TC-03 verifyEventPost_byFullQueue_expectNotQueued
 //
 // 🚪 GATE P0: All P0 tests must be GREEN before proceeding to P1.
 ```
@@ -946,10 +983,10 @@ Read it as a dashboard:
 ```
    ⚪  not written yet        → the backlog for this file
    🔴  written, still failing → what you are working on now
-   🟢  passing                → done, and provably done
+   🟢  passing                → verified in that runtime scope
 
-   every line also names its @[AC] and @[US], so a status
-   report can be traced back to a requirement
+   each @[Trace] names its US, AC, TP, and TC, so a status
+   report preserves the complete requirement-to-test chain
 ```
 
 **Example — the section answers the daily question.** "What is left before I can start P1?" You read the P0 block, count the ⚪ and 🔴 lines, and answer in seconds. No separate status meeting and no separate tracker to update.
@@ -968,7 +1005,7 @@ The contract answers five questions, in one place:
    │  2  WHAT TO VERIFY    Acceptance Criteria, GIVEN/WHEN/THEN│
    │  3  HOW TO VERIFY     Test Cases with concrete assertions │
    │  4  WHAT PRIORITY     P0 → P1 → P2 → P3                   │
-   │  5  WHAT STATUS       ⚪ → 🔴 → 🟢                        │
+   │  5  WHAT STATUS       mockSysRtm | realSysRtm               │
    └──────────────────────────────────────────────────────────┘
                        the design skeleton holds all five
 ```
@@ -986,19 +1023,26 @@ The remaining chapters move from *what* to *how*.
     │
    Ch 2  chatVibeCoding     ── talk to an LLM, with structure
     │
-   Ch 3  callSlashCommands  ── run the command flows
-    │
-   Ch 4  asyncCodeAgent     ── let an agent do the work
-    │
-   Ch 5  applyClassicSWE    ── the TDD / BDD / DDD foundation
-    │
-   Ch 6  beyondXyzSpec      ── where CaTDD sits next to other tools
+    Ch 3  callSlashCommands  ── run the command flows
+     │
+    Ch 4  applyClassicSWE    ── the TDD / BDD / DDD foundation
+     │
+    Ch 5  beyondXyzSpec      ── where CaTDD sits next to other tools
 ```
 
 | Chapter | Chapter | What you get |
 |---|---|---|
 | **Chapter 2** | chatVibeCoding | How to work with an LLM in chat, and the difference between VibeCoding and SpecCoding |
 | **Chapter 3** | callSlashCommands | How to invoke the slash command system for repeatable execution |
-| **Chapter 4** | asyncCodeAgent | How code agents automate test design, test implementation, and the SpecCoding lifecycle |
-| **Chapter 5** | applyClassicSWE | The Knowledge Book of Software Engineering (TDD, BDD, DDD) and how CaTDD combines them |
-| **Chapter 6** | beyondXyzSpec | How CaTDD compares with other spec-driven tools, and what it adds |
+| **Chapter 4** | applyClassicSWE | The Knowledge Book of Software Engineering (TDD, BDD, DDD) and how CaTDD combines them |
+| **Chapter 5** | beyondXyzSpec | How CaTDD compares with other spec-driven tools, and what it adds |
+
+## Usage Example
+
+For the story "As an event producer, I want to post events without blocking," derive a readable actor-behavior ID and check the project ledger and lifecycle artifacts before registering it:
+
+```bash
+rg -n --hidden --fixed-strings 'US-eventProducer-postEventsWithoutBlocking' README_UserStories.md .catdd/spec
+```
+
+Review matches to distinguish an existing story declaration from references or examples. Check known module story sources as well, then register the ID and qualify its AC, TP, and TC identifiers with that same Story ID. Expected output identifies occurrences to reconcile before registration; an empty search does not replace the source check.
