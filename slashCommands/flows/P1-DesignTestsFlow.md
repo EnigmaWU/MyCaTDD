@@ -31,7 +31,7 @@ P1 is design-gated. Before drafting any P1 skeleton, confirm the category design
 
 ## Discovery Handoff
 
-Before any drafting route, declare the SUT, P1 category scope, domain profile(s), test level, and execution environment. Read confirmed design sources before existing skeletons, apply the [P1 discovery sweep](../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md#p1-design-discovery-sweep), and keep the source-derived obligations, questions, and dispositions in one `discovery_ledger` in living comments.
+Before any drafting route, declare the SUT, P1 category scope, domain profile(s), test level, and execution environment. Read confirmed design sources before existing skeletons, apply the [P1 discovery sweep](../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md#p1-design-discovery-sweep), and keep authoritative TP definitions, questions, and dispositions in the verification-design document's single `discovery_ledger`. Test comments reference its alias-qualified TP IDs. In SpecFlow, TP-definition changes route through `SPEC_updateDetailDesign`; do not maintain a second ledger in test files.
 
 Each route consumes that inventory and links its source-backed US/AC/TP/TC design back to the ledger. Every TP maps to exactly one TC in a complete design; a draft TP without a TC stays GAP even when another test level will own execution, and routing metadata is not coverage. A TC may cover multiple TPs. Hand the sources, scope, ledger, and proposed skeletons to a source-first independent review. If review is self-review, label it and record shared-blind-spot risk.
 

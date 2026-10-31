@@ -113,6 +113,8 @@ Expected result — one ToT pass:
 
 ## Conflict Guard
 
+Copy the registered StoryIdAlias and CreatedAt into the paired task artifact; do not generate them during planning. Task references use alias-qualified AC/TP/TC IDs. TP definitions and ownership remain in verification design, not in this execution checklist.
+
 Do not execute `autonomousMode` on `intent-clearing`, `requirement-oriented`, or `design-oriented` stories; only `implementation-oriented` stories support autonomous execution. If autonomous execution is triggered on non-implementation stories, halt and force interactive `manualMode`.
 Do not jump directly into implementation from planning. If the next safe step is unclear, stop with questions for the developer instead of guessing.
 Do not plan a story whose `README_UserStories.md` ledger state is SUSPENDED; route to `SPEC_resumeUserStory` first to resume before continuing planning.

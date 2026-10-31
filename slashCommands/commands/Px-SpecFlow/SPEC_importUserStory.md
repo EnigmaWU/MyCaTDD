@@ -70,7 +70,8 @@ Expected result:
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user-story artifact ready for `SPEC_openUserStory`.
 - Preserved source text, exact requirement IDs, acceptance-criterion IDs, priority, dependency hints, and status/checklist markers when present.
-- A registered project-wide Story ID and full Story-qualified AC references, with original local/external IDs retained as source-qualified aliases.
+- A registered project-wide Story ID, permanent `StoryIdAlias`, and verified `CreatedAt`, with new canonical AC references qualified by the alias. Preserve the existing pair when importing a registered story or another slice of it. Original local/external IDs remain source-qualified aliases and verbatim source text is unchanged.
+- For a newly created project story identity, capture its creation instant once at registration and keep the source's dates separately as provenance. For an existing identity without a known creation time, report the migration question instead of using the import time or inventing midnight. Alias collisions block registration.
 - Clear labels for structured user story, requirement slice, AC slice, backlog item, refactor requirement, research requirement, or documentation requirement input.
 - Source trace to the original document path, URL, or copied source text.
 - When the source is module/submodule `README_UserStory.md`, include explicit trace to the paired `README_UserGuide.md` and keep IDs stable for downstream `README_ArchDesign.md` and `README_DetailDesign.md` derivation.

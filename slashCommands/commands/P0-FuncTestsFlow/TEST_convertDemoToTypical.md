@@ -62,4 +62,6 @@ Expected result:
 
 ## Conflict Guard
 
+Resolve StoryIdAlias and the authoritative verification-design TP ledger before declaring the conversion complete. Each converted TC must list its covered TP IDs and their owning ACs; missing TP definitions are draft gaps routed to the design owner, not obligations invented from demo code. Preserve registered IDs and explicit legacy mappings.
+
 Demo tests are input material. Do not classify them as CaTDD `P3 Demo/Example` unless the goal is documentation-oriented demo coverage.

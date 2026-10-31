@@ -48,7 +48,7 @@ Build the inventory **from sources before reading existing skeletons as coverage
 4. Name relevant input, caller, state, dependency, and deployment dimensions and their supported values. Every discovered source conflict, missing contract, or uncertain applicability must create a QUESTION ledger row with the decision needed and its owner (or a request to identify the owner). Silence is not a not-applicable decision.
 5. Consult available incident reports, support cases, real usage examples, dependency documentation, and deployment differences as **discovery evidence**. Record whether these sources were reviewed, unavailable, or not applicable. Do not require incidents to exist in a new project. Implementation and mocks may reveal overlooked seams but are not the authority for expected behavior.
 
-Keep the inventory in the feature's FreelyDrafts or test-file overview/design comments. Link it from category files rather than maintaining a competing external specification. For large scopes, slice explicitly with the developer instead of silently sampling away whole operations.
+Keep the authoritative inventory in the verification-design document (`README_DetailVerifyDesign.md` in SpecFlow). FreelyDrafts may collect provisional notes, but reconcile them into that document before approval. Category/test files link to the inventory and TP IDs; they do not maintain a competing TP ledger. For large scopes, slice explicitly with the developer instead of silently sampling away whole operations.
 
 ## Stage-0 Elicitation Toolkit
 
@@ -226,9 +226,9 @@ This is a usage-priority guide, not a historical lineage or a source of product 
 
 ## Test-Point Ledger
 
-Keep one `discovery_ledger` in living comments, alongside the inventory and coverage matrix. Use a stable story-qualified TP ID distinct from US/AC/TC IDs under the [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract. Link each row to its source Story and AC IDs when applicable; if ownership is unknown, record a QUESTION rather than inventing a story. Each row represents a specific condition and observable obligation, not just a category name.
+Keep one authoritative `discovery_ledger` in the verification-design document, alongside the inventory and coverage matrix. Use a stable story-qualified TP ID built from the registered StoryIdAlias under the [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract. Each TP explicitly names exactly one owning AC and its sole covering TC plus test-file location; unknown ownership is QUESTION and a known in-scope TP without a TC is GAP. Test files define TCs and reference these TP IDs, not independent TP definitions. Each row represents a specific condition and observable obligation, not just a category name.
 
-Abbreviated IDs such as `TP-01`, `US-1`, `AC-1`, and `TC-1` in the examples below are illustrative only; real artifacts use registered Story IDs and qualified child IDs.
+Abbreviated IDs such as `TP-01`, `US-1`, `AC-1`, and `TC-1` in the examples below are illustrative only; real artifacts preserve the registered Story ID/StoryIdAlias pair and use alias-qualified child IDs. Numeric suffixes never determine AC ownership or TC coverage.
 
 ### Acceptance Criteria (AC) vs. Test Point (TP)
 
@@ -259,6 +259,8 @@ If an obligation needs independent test cases for distinct phases or outcomes, s
 | Field | Required content |
 | --- | --- |
 | TP ID and rule/source | Stable TP ID; source reference and rule ID, or evidence reference plus missing-source question. |
+| Owning AC ID | Exactly one qualified AC ID from its authoritative requirements source; QUESTION when unresolved. |
+| Covering TC ID and test file | Exactly one qualified TC ID and declaration path in a complete design; unassigned is GAP for a known in-scope obligation. A TC may cover multiple TP rows. |
 | Scenario | Concrete inputs, state, relevant environment/dependencies, and action. |
 | Oracle | Expected observable result and important promised side effects/non-effects; write unknown if unresolved. |
 | Verification method | Automated, manual, or hybrid procedure; execution environment and evidence capture. |
@@ -296,7 +298,7 @@ Every source rule and every applicable sweep dimension must link to ledger rows;
 Run this gate in addition to the [US -> AC -> TP -> TC cardinality gate](CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the same declared scope:
 
 1. **Source -> design**: every in-scope operation, model rule, quality predicate, and guide outcome is inventoried; every applicable P0/P1/P2/P3 sweep dimension has ledger evidence. Look for omitted behaviors even when existing TCs all have valid links.
-2. **Design -> source**: each DESIGNED row resolves to a real TC with source-backed setup, oracle, and verification procedure. Detect wrong categories, duplicates, missing observations/assertions, and invented expectations. Manual evidence and exact symbolic predicates are valid when specified.
+2. **Design -> source**: each DESIGNED row resolves to its owning AC and exactly one real TC with source-backed setup, oracle, and verification procedure. Reconcile the TC's complete `@[TP]` list and one `@[Trace]: StoryIdAlias | AC-ID | TP-ID | TC-ID` row per relationship against the authoritative ledger. Reject unknown IDs, conflicting owners, extra/missing links, and silent reparenting; shared or legacy evidence needs explicit provenance. Detect wrong categories, duplicates, missing assertions, and invented expectations. Manual evidence and exact symbolic predicates are valid when specified.
 3. **Independent challenge**: derive expected behavior from the sources before consulting the designer's ledger/skeletons, preferably with a second reviewer. A solo developer/agent must perform a separate source-first pass and label it self-review, with shared-blind-spot risk explicit. Record reviewer/process, sources examined, and a source-derived operation/outcome checklist reconciled against the ledger; a bare "reviewed" flag is insufficient. Ask, "Which realistic scenario could violate this contract while every proposed test still passes?" Record source-backed findings; turn unsupported hypotheses into questions.
 4. **Disposition audit**: review unknowns, exclusions, unexamined evidence, sampling omissions, and routing. An unimplemented designed TC is not a missing point. An in-scope obligation in any class remains GAP until adequate design is linked, even if another category or test level will execute it. Unknown source/oracle/scope or unresolved handoff ownership remains QUESTION. An accepted out-of-scope handoff is REFERRED and visible follow-up, not covered behavior or release readiness.
 5. **Stop and report**: perform one discovery sweep and one independent challenge; allow at most two repair/recheck rounds. Stop earlier on missing intent or no progress. Never loop until a desired PASS appears; report remaining gaps and ask for the needed decision.
@@ -439,7 +441,7 @@ Rules:
 
 Before converting discovered examples into US/AC/TP/TC, verify:
 
-- The Behavior Inventory, applicable P0/P1/P2/P3 discovery sweeps, and Test-Point Ledger are available in living comments.
+- The Behavior Inventory, applicable P0/P1/P2/P3 discovery sweeps, and authoritative Test-Point Ledger are available in the verification-design document; test comments reference them.
 - Every example has a source-backed rule.
 - Every rule's distinct outcomes and relevant conditions have concrete examples or explicit dispositions, not merely one example by quota.
 - Every unresolved question is visible and not silently converted into a test.

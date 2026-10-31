@@ -10,7 +10,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 
 `Comment-alive` means:
 
-- Design details live in the test or source file itself, in that language's documentation form (comments, doc comments, or docstrings).
+- TC design details live beside the test/source code in comments, doc comments, or docstrings. US/AC and authoritative TP definitions stay in their owning requirements and verification-design documents.
 - Comments evolve with code instead of drifting in separate documents.
 - Comments are first-class artifacts that humans and LLMs can parse.
 - US/AC/TP/TC structure bridges human intent and machine-executable tests.
@@ -32,7 +32,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 
 ## Design Skeleton Contract
 
-In CaTDD, **design** means a reusable comment skeleton inside the test or source file, not only an external explanation document.
+In CaTDD, **TC design** means a reusable comment skeleton inside the test or source file. It references authoritative US/AC and TP definitions rather than replacing their documents.
 
 Each skeleton is organized by:
 
@@ -53,6 +53,7 @@ Minimum skeleton shape:
 // @[UseWhen]: When this category applies
 // @[AvoidWhen]: When to move the scenario to another category
 // @[US]: User Story IDs covered by this category
+// @[StoryIdAlias]: Registered short aliases for those stories
 // @[AC]: Acceptance Criteria IDs covered by this category
 // @[TP]: Test Point IDs covered by this category
 // @[TC]: Test Cases, status, and expected TDD next action
@@ -87,6 +88,7 @@ For full category guidance, read `CaTDD_methodPrompt-categorySemantics.md`.
 ## Mandatory Traceability Constraints
 
 - Use the [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract: register a stable Story ID and carry full story-qualified AC/TP/TC IDs through design, test, and product-code trace references.
+- Keep the human-readable Story ID and permanent `StoryIdAlias` together in the registry. New AC/TP/TC IDs use the alias prefix; each TP explicitly identifies its owning AC and covering TC, and each TC lists every TP it covers. Resolve legacy/shared evidence through explicit mappings, not guessed prefixes.
 - P0 Functional design **MUST** include the full category set in order: `Typical -> Edge -> Misuse -> Fault` unless the developer explicitly limits scope.
 - Each US **MUST** map to at least one AC.
 - Each AC **MUST** map to at least one TP in a complete verification design.
@@ -110,7 +112,7 @@ US/AC/TP/TC cardinality proves linkage, not completeness: an entirely missing be
 - Distinguish Test Point (TP) from Test Case (TC): A TP is a source-backed verification obligation (the target) discovered in Stage-0/Stage-1; a TC is an executable specification artifact (the arrow) implementing obligations under US/AC. Each TP MUST be covered by exactly one TC in a complete design. Each TC MUST cover at least one TP and MAY cover multiple TPs when its setup and assertions distinguish every obligation. An unassigned draft TP is a gap, not completed coverage; split an obligation into distinct TPs when independent test cases are needed.
 - Discovery to Categorization: In Stage-0 (Freely Drafting), discover TPs breadth-first across sources and sweeps without premature category lock-in; in Stage-1 (Classifying Design), route each discovered TP to its proper CaTDD category based on its verification lens (Contract -> P0, Model -> P1, Envelope -> P2, Learning Surface -> P3).
 - Enforce **Source-First** review: inspect authoritative source artifacts and independently derive expected obligations before consulting existing test files or skeletons.
-- Keep a `discovery_ledger` in living design comments: each candidate has a source/rule, scenario, observable oracle, verification method/environment, category/test level, scope/routing metadata, and one disposition (DESIGNED, QUESTION, EXCLUDED, REFERRED, or GAP). A handoff does not close an unresolved in-scope obligation.
+- Keep authoritative TP definitions and the `discovery_ledger` in the verification-design document (`README_DetailVerifyDesign.md` in SpecFlow). Each candidate has an owning AC, covering TC or explicit gap, source/rule, scenario, oracle, verification method/environment, category/test level, scope/routing, and disposition. Test comments define TCs and reference TPs; they are not another TP authority. A handoff does not close an unresolved in-scope obligation.
 - Oracles may be numeric budgets or exact predicates; manual/hybrid evidence is valid when the procedure and expected observation are specified. Never infer product limits, precedence, or recovery behavior from a domain example.
 - Apply the **Discovery Gate** independently from source to skeleton as well as from skeleton to source. Category presence, TC counts, and passing tests do not prove all relevant points were discovered.
 - Unresolved in-scope questions or uncovered obligations prevent implementation readiness. Missing-source `@[NoTestPoints]` is blocked evidence, not a coverage exemption.

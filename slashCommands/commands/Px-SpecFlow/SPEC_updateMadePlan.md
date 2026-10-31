@@ -120,6 +120,8 @@ Expected result — two ReACT passes:
 
 ## Conflict Guard
 
+Preserve the Story ID/StoryIdAlias/CreatedAt mapping. Synchronize alias-qualified trace references and evidence, not independent TP definitions; the authoritative TP ledger remains in verification design. Do not infer AC ownership or TC coverage from child numbers.
+
 Do not use `SPEC_updateMadePlan` when no `*-UserStory-Tasks.md` exists yet; route to `SPEC_makePlan` to create the initial plan first.
 Do not falsify gate evidence: never check `[x]` on a task whose review gate failed, was bypassed, or has no observable artifact/verdict evidence.
 Do not use `SPEC_updateMadePlan` to silently drop failed review findings, weaken acceptance criteria, or remove required `SPEC_review*` gates from the checklist.

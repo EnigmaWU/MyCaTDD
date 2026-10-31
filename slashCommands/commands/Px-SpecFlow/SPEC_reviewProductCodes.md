@@ -75,6 +75,8 @@ Rework routes from this review to `SPEC_updateDetailDesign` or `SPEC_designTests
 
 ## Conflict Guard
 
+Resolve StoryIdAlias through the registry when tracing code to AC/TP/TC evidence. Alias-qualified code references must resolve to the original requirements, authoritative verification-design TPs, and test-file TCs; do not treat a long-Story-ID grep miss as missing coverage without resolving its alias and explicit legacy mappings.
+
 Do not commit when quality is not met or when verification evidence is missing without explanation. Do not route directly to `SPEC_commitStoryWorks`; run `SPEC_reviewImplTests` after product-code review when product code changed.
 
 ONE-MORE-THING: ask developer if something not sure

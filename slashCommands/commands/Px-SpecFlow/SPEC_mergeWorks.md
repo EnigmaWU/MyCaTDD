@@ -15,7 +15,7 @@ Run these steps once, in order. There is no retry loop; missing prerequisites or
 1. Verify `SPEC_closeUserStory` completed and `close_commit_ref` is present. Stop if not.
 2. Verify both `story_branch` and `target_branch` are named explicitly. Do not infer either.
 3. Check whether the story branch is already integrated. If so, check the integrated project for identity collisions before reporting `merge_skipped_reason`.
-4. Compare registered Story and qualified child IDs across both branches using [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Distinguish shared history and declared slices from independent definitions; stop and ask on conflicting identities.
+4. Compare registered Story ID/StoryIdAlias/CreatedAt mappings and qualified child IDs across both branches using [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Check alias collisions as well as AC/TP/TC ownership and coverage links in the integrated project. Distinguish shared history and declared slices from independent definitions; stop and ask on conflicting identities instead of silently renaming an accepted alias.
 5. Merge using the repository-approved `merge_strategy`.
 6. On conflicts, stop and report them; do not resolve without developer confirmation.
 7. Recheck the integrated project registry and story/AC/TP/TC declarations. If identities conflict or cannot be reconciled, report the merge as blocked for traceability and ask the developer; never silently renumber accepted IDs.

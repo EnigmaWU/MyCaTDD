@@ -111,9 +111,9 @@ methodPrompts/
 3. 阅读需要的 `CaTDD_methodPrompt-*.md` 子主题，获取详细方法指导。
 4. 复制 `CaTDD_designAndImplTemplate.cxx`、`CaTDD_designAndImplTemplate.ts`、`CaTDD_designAndImplTemplate.py` 或 `CaTDD_designAndImplTemplate.go`，或把其中的分区结构适配到你的语言。
 5. 声明 SUT、范围内的类别族、适用领域、测试层级与执行环境。先从来源列出验证义务，再把已有测试当作覆盖证据。通过 Example Mapping 捕获 Stage-0 示例与开放问题。
-6. 使用 [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) 进行适用的 P0/P1/P2/P3 扫描。OOPSI 与业务规则提取只是功能工作流的可选辅助；设计模型和质量约束使用各自的来源。在活注释中的 `discovery_ledger` 记录候选点与来源。
+6. 使用 [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) 进行适用的 P0/P1/P2/P3 扫描。在验证设计文档的 `discovery_ledger` 中记录权威 TP 定义、归属 AC、覆盖 TC 或草稿缺口及来源证据；SpecFlow 中该文档为 `README_DetailVerifyDesign.md`。测试注释引用此台账，不复制其权威定义。
 7. 按验证视角归类草稿，不按规则类型、领域或优先级归类。下面的优先级用于执行排序，并可按风险调整。
-8. 在实现代码之前，把 US/AC/TP/TC 注释写进测试文件。
+8. 按 [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) 解析已注册的 Story ID/StoryIdAlias/CreatedAt 映射。在实现代码之前编写 TC 注释，携带别名前缀的 AC/TP/TC 引用、完整 TP 列表和追溯行；US/AC 与 TP 定义保留在各自权威文档中。
 9. 独立审查 source -> ledger -> US/AC/TP/TC 及反向链接。完整设计要求每个 US 至少有一个 AC，每个 AC 至少有一个 TP，每个 TP 恰好映射到一个 TC，每个 TC 覆盖一个或多个 TP。尚未分配 TC 的草稿 TP 阻断设计完成。只有 cardinality 和 Discovery Gate 都通过、声明范围内 `ready_for_implementation: yes` 时，才为下一个 TC 编写失败测试。
 10. 只实现让该 TC 通过所需的最小生产代码。
 11. 更新 TC 状态标记，并保持注释与行为同步。
@@ -160,7 +160,9 @@ Use OOPSI/business-rule aids only for suitable functional sources; never infer
 limits, recovery policies, or technologies from domain examples.
 Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/test_your_feature_funcValidTypical.cxx or Test/test_your_feature_funcValidTypical.ts.
 Preserve US/AC/TC traceability and leave unclear product intent as questions.
-Keep a source-first behavior inventory and discovery_ledger in living comments.
+Keep the authoritative inventory and discovery_ledger in verification design.
+Use registered StoryIdAlias prefixes for new AC/TP/TC IDs and explicit links.
+Test comments define TCs and reference TPs; they are not another TP authority.
 Record verification_method, execution environment, observable oracle, and
 evidence capture for each candidate; keep handoff routing separate from status.
 Review sources independently of existing tests; report discovery_status,

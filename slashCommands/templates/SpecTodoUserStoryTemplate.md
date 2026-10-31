@@ -1,17 +1,22 @@
 # {{UserStoryTitle}}
 
 > **Story ID:** {{StoryID}} | **State:** todo | **Priority:** <!-- filled from Priority section below -->
+> **StoryIdAlias:** {{StoryIdAlias}}
+> **CreatedAt:** {{CreatedAt}}
 > **Source:** `.catdd/spec/analyzedNews/{{YYYYMMDD-original}}.md`
 > **Correction of:** <!-- present only for SPEC_analyzeAbortedUserStory: abortUS/YYYYMMDD-UserStory.md -->
 > **Parent Story:** <!-- present only for sub-UserStory: parent Story ID and `.catdd/spec/todoUS/{{parent}}.md` -->
 > **CaTDD Class:** {{P0 Functional / P1 Design / P2 Quality / P3 Addons}}
 > **Primary Category:** {{Typical / Edge / Misuse / Fault / State / Capability / Concurrency / Performance / Robust / Compatibility / Configuration / DemoExample}}
-> **Created:** {{YYYY-MM-DD}}
 
 <!-- How: {{StoryID}} is the complete, registered project-wide US ID. Preserve an existing ID;
      use US-<whoName>-<doWhat> with lowerCamelCase segments for new stories and check for
      collisions as specified in .catdd/methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids.
-     Each AC heading uses that ID and a unique stable child token. -->
+     Register StoryIdAlias = US-YYMMDD.HHMMSS from the verified CreatedAt instant in UTC+08:00;
+     CreatedAt is ISO 8601 with +08:00. Preserve both fields on revisions and lifecycle moves.
+     Stop on an unknown creation time or collision; never manufacture a timestamp.
+     Each new AC heading uses StoryIdAlias and a unique stable child token.
+     Existing IDs need an explicit migration mapping, never silent renumbering. -->
 
 ---
 
@@ -126,7 +131,7 @@
      sub-UserStory from this story when it is needed now, or raise an Initial Acceptance Question
      when the team must decide whether to split it. (→ SKILL: write-user-story + facilitate-example-mapping) -->
 
-### {{StoryID}}-AC-{{n}}: {{Happy Path Title}}
+### {{StoryIdAlias}}-AC-{{n}}: {{Happy Path Title}}
 
 **Example Trace:** EX-{{n}}
 **Rule:** {{business rule or constraint that governs this scenario}}
@@ -140,7 +145,7 @@
 
 **Open Questions:** {{or "None"}}
 
-### {{StoryID}}-AC-{{n}}: {{Alternate Typical Path Title}}
+### {{StoryIdAlias}}-AC-{{n}}: {{Alternate Typical Path Title}}
 
 **Example Trace:** EX-{{n}}
 **Rule:** {{business rule or constraint}}
@@ -154,7 +159,7 @@
 
 **Open Questions:** {{or "None"}}
 
-### {{StoryID}}-AC-{{n}}: {{Additional Scenario Title}}
+### {{StoryIdAlias}}-AC-{{n}}: {{Additional Scenario Title}}
 
 ---
 
@@ -185,23 +190,25 @@
      (Performance/Robust/Compatibility/Configuration) here. Split those into sub-UserStories or
      record them as open questions. (→ SKILL: write-user-story + elicit-requirements-models) -->
 
+TP/TC cells are references, not definitions. Keep them `pending` until verification design defines the TPs and test files define the TCs. Use alias-qualified IDs (or explicitly mapped legacy IDs), and reconcile each TP's owning AC and covering TC rather than inferring links from seed numbers.
+
 ### Edge (ValidFunc)
 
-| # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
-| --- | --- | --- | --- | --- | --- |
-| E{{n}} | {{valid boundary, option, limit, or lifecycle variation}} | {{how the system should respond}} | {{StoryID}}-AC-{{n}} | {{qualified TC ID or pending}} | {{draft / needs clarification}} |
+| # | Condition | Expected Behavior | AC Seed | TP Refs | TC Refs | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| E{{n}} | {{valid boundary, option, limit, or lifecycle variation}} | {{how the system should respond}} | {{StoryIdAlias}}-AC-{{n}} | {{qualified TP IDs or pending}} | {{qualified TC IDs or pending}} | {{draft / needs clarification}} |
 
 ### Misuse (InvalidFunc)
 
-| # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
-| --- | --- | --- | --- | --- | --- |
-| M{{n}} | {{caller violates API contract or uses invalid input/state}} | {{how the system should reject or protect}} | {{StoryID}}-AC-{{n}} | {{qualified TC ID or pending}} | {{draft / needs clarification}} |
+| # | Condition | Expected Behavior | AC Seed | TP Refs | TC Refs | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| M{{n}} | {{caller violates API contract or uses invalid input/state}} | {{how the system should reject or protect}} | {{StoryIdAlias}}-AC-{{n}} | {{qualified TP IDs or pending}} | {{qualified TC IDs or pending}} | {{draft / needs clarification}} |
 
 ### Fault (InvalidFunc)
 
-| # | Condition | Expected Behavior | AC Seed | TC Seed | Status |
-| --- | --- | --- | --- | --- | --- |
-| F{{n}} | {{dependency, resource, or runtime failure under valid caller behavior}} | {{cleanup, diagnostic, or deterministic failure behavior}} | {{StoryID}}-AC-{{n}} | {{qualified TC ID or pending}} | {{draft / needs clarification}} |
+| # | Condition | Expected Behavior | AC Seed | TP Refs | TC Refs | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| F{{n}} | {{dependency, resource, or runtime failure under valid caller behavior}} | {{cleanup, diagnostic, or deterministic failure behavior}} | {{StoryIdAlias}}-AC-{{n}} | {{qualified TP IDs or pending}} | {{qualified TC IDs or pending}} | {{draft / needs clarification}} |
 
 ---
 

@@ -68,6 +68,8 @@ This update runs inside the `SPEC_updateUserStory -> SPEC_reviewUserStory` rewor
 
 ## Conflict Guard
 
+Resolve and preserve StoryIdAlias and CreatedAt through the project registry. New AC IDs use the alias prefix; materially revised ACs need new stable child tokens and explicit supersession. Do not rename accepted IDs or TP ownership merely because the story text, title, or file moved.
+
 Do not invent new product scope outside the active story intent.
 Do not update `README_UserStories.md` for a story whose ledger state is SUSPENDED; require `SPEC_resumeUserStory` first to resume before updating.
 Do not move this step into architecture or detail-design decisions; route those to design-oriented commands.

@@ -43,9 +43,11 @@
 | ModuleTesting（已废弃） | 已废弃的层级名，不再使用。当模块本身是被声明的 SUT 时，模块级范围就是 `SysTesting`，因此它绝不是与三个 `TestLevel` 取值并列的第四个值。 |
 | `TestScope`（测试范围） | 测试点被执行时声明的运行时范围：`mockSysRtm`（把 SUT 的系统运行时——同级组件、依赖、运行时环境——替换为替身）或 `realSysRtm`（SUT 运行在真实系统运行时之上）。以 `@[TestScope]` 声明，独立于 `TestLevel`，因此任何层级都可在任一范围下运行。`mockSysRtm` 是第一范围并获得 `CLOSED`；`realSysRtm` 是第二范围，提供附加证据。 |
 | UT | 单元测试（Unit Testing）：聚焦于单个显式声明的 SUT 的验证活动，遵循项目约定的 `sut_unit_convention`（如模块接口、子模块接口、类、头文件接口、函数或组件）。在编码前通过 CaTDD 验证其公开契约、内部模型与质量属性。 |
-| TP | 测试点（Test Point）：从来源规则、模型、边界或故障模式中发掘出的具体验证义务或条件，记录在 `discovery_ledger` 中。从开发者/防御性视角表达“必须验证什么”（目标靶心），通常采用具体的 `GIVEN 技术状态/分区, WHEN 动作/交织时序, THEN 可观测预期` 描述。 |
+| StoryIdAlias | 已注册的人类可读 Story ID 的永久、项目内唯一短别名。格式为 `US-YYMMDD.HHMMSS`，来自已核实的 UTC+08:00 创建时刻；`CreatedAt` 保留完整 ISO 8601 时间。在故事注册表登记一对一映射，新 AC/TP/TC ID 使用此别名前缀。同秒冲突或历史创建时间缺失必须先协调，绝不静默复用或伪造时间。修订和生命周期移动保持别名不变；外部/来源别名是独立的来源信息。 |
+| Artifact Ownership | US/AC 定义位于故事注册表指定的权威需求来源（todo/doing 故事或正式模块需求）。`README_UserStories.md` 维护 Story ID、StoryIdAlias 与该来源的映射。TP 定义及其 AC/TC 链接属于验证设计文档，SpecFlow 中为 `README_DetailVerifyDesign.md`；架构验证通过相同 TP ID 提升引用。TC 定义、断言和执行证据属于测试文件。引用和活注释不得形成相互竞争的定义。 |
+| TP | 测试点（Test Point）：从来源发掘的具体验证义务或条件，从开发者/防御性视角表达“必须验证什么”。权威定义位于验证设计文档的 `discovery_ledger`。每个 TP 显式声明归属 AC、可观测预期和唯一覆盖 TC（或可见的草稿缺口），其带别名前缀的 ID 保持稳定。 |
 | TC | 测试用例（Test Case）：具有结构化元数据（`@[Name]`、`@[Expect]`、`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`）并显式链接 `@[US]`、`@[AC]`、`@[TP]`、`@[TC]` 的可执行规格工件。从执行视角表达“如何具体验证”（射向靶心的箭）。 |
-| US / AC / TP / TC Cardinality | 完整验证设计中，每个 US MUST 有一个或多个 AC，每个 AC MUST 有一个或多个 TP，每个 TP MUST 恰好映射到一个 TC，每个 TC MUST 覆盖一个或多个 TP。一个 TC MAY 覆盖多个 TP。草拟/发现阶段允许 TP 暂无 TC，但这是阻断设计完成的覆盖缺口。若需要不同的测试用例，应将义务拆分为不同 TP，而不是让一个 TP 映射多个 TC。 |
+| US / AC / TP / TC Cardinality | 完整验证设计中，每个 US MUST 有一个或多个 AC，每个 AC MUST 有一个或多个 TP，每个 TP 恰好归属一个 AC，每个 TP MUST 恰好映射到一个 TC，每个 TC MUST 覆盖一个或多个 TP。一个 TC MAY 覆盖多个 TP，显式列出 TP ID，并为每个关系记录一行 `@[Trace]: StoryIdAlias \| AC-ID \| TP-ID \| TC-ID`。未分配的草稿 TP 阻断完成。需要独立 TC 的义务应拆分为不同 TP；绝不按相同数字后缀推断关系。 |
 | AC vs TP | AC 出自用户/调用方视角（定义外部业务验收规则：`GIVEN 业务上下文, WHEN 触发操作, THEN 业务结果`）；TP 出自开发者/防御性视角（定义有来源支撑的边界、异常路径和并发技术探针）。完整设计中，每条 AC 分解为一个或多个 TP（$1:N$）。将 $TP == AC$ 画等号会导致边界和故障模式遗漏。 |
 | TP vs TC | 完整设计中的映射是多个 TP 对应一个 TC：每个 TP 恰好映射到一个 TC，一个 TC 可验证一个或多个 TP（$N:1$）。草稿中尚未分配 TC 的 TP 是显式缺口，不是已完成覆盖。若某项义务需要彼此独立的测试用例，应拆分为多个 TP，使每个 TP 仍恰好对应一个 TC。 |
 | Discovery to Categorization | 发现到归类的两阶段桥梁：在 Stage-0（自由草拟）阶段，基于来源和全面扫描广度优先发掘 TP，避免过早陷入分类偏见；在 Stage-1（分类设计）阶段，依据验证视角将各 TP 路由到正确的 CaTDD 类别（契约 -> P0，模型 -> P1，包络 -> P2，认知表面 -> P3），随后形式化为 US/AC/TP/TC 骨架。 |
@@ -179,22 +181,28 @@ AC 1 ──► 1..* TP
 ```text
 US-batchExporter-writeRecords: As a batch exporter, I want to write records,
                               So that accepted records are persisted.
+StoryIdAlias: US-261029.070003
+CreatedAt: 2026-10-29T07:00:03+08:00
 
-US-batchExporter-writeRecords-AC-01 (用户业务规则):
-  "GIVEN 1 到 100 条有效记录, WHEN 调用 write 时, THEN 持久化所有记录并返回 OK。"
+US-261029.070003-AC-01 (用户业务规则):
+  "GIVEN 1 到 100 条有效记录, WHEN 调用 write 时, THEN MUST 持久化所有记录并返回 OK。"
 
-分解为开发者技术探针测试点 (TPs):
-  ├── US-batchExporter-writeRecords-TP-01 (Typical): 写入 2 条记录 -> 返回 OK 且数据持久化 (P0 Typical)
-  ├── US-batchExporter-writeRecords-TP-02 (Edge):    写入 1 条记录 -> 返回 OK 且数据持久化 (P0 Edge)
-  ├── US-batchExporter-writeRecords-TP-03 (Edge):    写入 100 条记录 -> 返回 OK 且数据持久化 (P0 Edge)
-  ├── US-batchExporter-writeRecords-TP-04 (Misuse):  写入 0 条记录 -> 返回 INVALID_COUNT 且文件未修改 (P0 Misuse)
-  └── US-batchExporter-writeRecords-TP-05 (Misuse):  写入 101 条记录 -> 返回 INVALID_COUNT 且文件未修改 (P0 Misuse)
+US-261029.070003-AC-02 (用户业务规则):
+  "GIVEN 0 条或超过 100 条记录, WHEN 调用 write 时, THEN MUST 返回 INVALID_COUNT 且 MUST NOT 修改文件。"
 
-映射并实现为可执行测试用例 (TCs):
-  ├── US-batchExporter-writeRecords-TC-01: verifyWrite_byNominalBatch_expectSuccess (覆盖 TP-01)
-  ├── US-batchExporter-writeRecords-TC-02: verifyWrite_byBoundaryBatch_expectSuccess (覆盖 TP-02 与 TP-03)
-  ├── US-batchExporter-writeRecords-TC-03: verifyWrite_byZeroBatch_expectInvalidCount (覆盖 TP-04)
-  └── US-batchExporter-writeRecords-TC-04: verifyWrite_byOversizedBatch_expectInvalidCount (覆盖 TP-05)
+验证设计文档中的权威 TP 台账：
+TP ID | 归属 AC ID | 覆盖 TC ID | 探针 / 预期
+US-261029.070003-TP-01 | US-261029.070003-AC-01 | US-261029.070003-TC-01 | 写入 2 条记录 -> OK 且数据持久化 (Typical)
+US-261029.070003-TP-02 | US-261029.070003-AC-01 | US-261029.070003-TC-02 | 写入 1 条记录 -> OK 且数据持久化 (Edge)
+US-261029.070003-TP-03 | US-261029.070003-AC-01 | US-261029.070003-TC-02 | 写入 100 条记录 -> OK 且数据持久化 (Edge)
+US-261029.070003-TP-04 | US-261029.070003-AC-02 | US-261029.070003-TC-03 | 写入 0 条记录 -> INVALID_COUNT 且文件未修改 (Misuse)
+US-261029.070003-TP-05 | US-261029.070003-AC-02 | US-261029.070003-TC-04 | 写入 101 条记录 -> INVALID_COUNT 且文件未修改 (Misuse)
+
+测试文件中的 TC 声明：
+US-261029.070003-TC-01: verifyWrite_byNominalBatch_expectSuccess (覆盖 US-261029.070003-TP-01)
+US-261029.070003-TC-02: verifyWrite_byBoundaryBatch_expectSuccess (覆盖 US-261029.070003-TP-02, US-261029.070003-TP-03)
+US-261029.070003-TC-03: verifyWrite_byZeroBatch_expectInvalidCount (覆盖 US-261029.070003-TP-04)
+US-261029.070003-TC-04: verifyWrite_byOversizedBatch_expectInvalidCount (覆盖 US-261029.070003-TP-05)
 ```
 
 #### 4. 发现到分类（Stage-0 到 Stage-1 的两阶段桥梁）

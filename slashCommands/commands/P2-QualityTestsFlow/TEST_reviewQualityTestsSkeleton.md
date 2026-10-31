@@ -85,7 +85,7 @@ Expected result:
 - `review_evidence`: independent source-derived checklist, reviewer/process (or labeled self-review), sources examined, reconciliation, and residual risk.
 - Findings keyed by source/rule or TP ID, with US/AC/TC IDs only when they exist; identify missing obligations, weak oracles, unknown targets/policies, and required corrections or decisions.
 - `cardinality_gate`: `PASS | FAIL`; `discovery_status`: `PASS | GAPS | BLOCKED`; `ready_for_implementation`: `yes | no`. Any non-PASS sub-gate means no; `PASS` applies only to the reviewed scope, not execution or release readiness.
-- `review_verdict`: one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`, derived from the two sub-gates: both `PASS` → `PASS`; any `FAIL` or `GAPS` → `REVISE` with `rework_route = SPEC_updateDetailDesign`; unresolved source or scope question → `BLOCKED`; developer decision required → `ASK`.
+- `review_verdict`: one of `PASS`, `REVISE`, `BLOCKED`, or `ASK`, derived from the two sub-gates: both `PASS` → `PASS`; any `FAIL` or `GAPS` → `REVISE`. Route TP-definition/AC-ownership defects to the verification-design owner (`SPEC_updateDetailDesign` in SpecFlow), and TC skeleton or trace-reference defects to the skeleton owner (`SPEC_designTests` in SpecFlow). Unresolved source or scope question → `BLOCKED`; developer decision required → `ASK`.
 - Bounded-review stop reason and next action: `rework_route` on non-PASS, or `next_command = TEST_tellMeNextImplTest` on `PASS`.
 
 ## Review Gate Contract
@@ -103,6 +103,8 @@ Expected result:
 - Report `next_command = <COMMAND>` whenever the verdict is not `PASS`. The mapping from older verdict wording lives in the flow's Review Gate Contract table.
 
 ## Conflict Guard
+
+Resolve StoryIdAlias through the registry and reconcile the authoritative verification-design TP ledger with each TC's explicit TP list and trace rows. Unknown AC owners, missing/extra coverage links, or one TP assigned to multiple TCs block approval; test comments reference TPs rather than redefine them.
 
 This command reviews quality skeletons only. It should not redefine category rules or implement tests.
 

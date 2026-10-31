@@ -9,12 +9,16 @@ Paired with [{{YYYYMMDD-StorySlug-UserStory.md}}]({{YYYYMMDD-StorySlug-UserStory
 ## Active Story
 
 - **ID:** {{StoryID}}
+- **StoryIdAlias:** {{StoryIdAlias}}
+- **CreatedAt:** {{CreatedAt}}
 - **State:** {{doing / OPEN | suspended | aborted | done}}
 - **Priority:** {{P0 Functional | P1 Design | P2 Quality | P3 Addons}} / {{Category}}
 - **Branch:** `{{branch_name}}`
 - **Execution Mode:** `{{manualMode | autonomousMode (held until implementation-oriented) | autonomousMode (active)}}`
 - **Source:** `.catdd/spec/analyzedNews/{{YYYYMMDD-source}}.md` (or module `README_UserStory.md` + `README_UserGuide.md`)
 - **Project Story Ledger:** `README_UserStories.md`
+
+Resolve the ID/StoryIdAlias pair through the registry and preserve its creation instant. Task rows reference alias-qualified AC/TP/TC IDs. Authoritative TP definitions and ownership stay in `README_DetailVerifyDesign.md`; this task artifact tracks execution and evidence, not a second TP ledger.
 
 ---
 
@@ -75,8 +79,8 @@ Paired with [{{YYYYMMDD-StorySlug-UserStory.md}}]({{YYYYMMDD-StorySlug-UserStory
 
 | Source Obligation (`US/AC/ASR`) | Story / Guide | ArchDesign / UbiLang | DetailDesign / VerifyDesign (`TP`) | Test Design Skeleton (`US/AC/TC`) | ImplTest Body (`SETUP/BEHAVIOR/VERIFY`) | Gate Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| `{{StoryID}}-AC-{{n}}` | Defined (`MUST`) | `{{KEPT / DETAILED / N/A}}` | `{{KEPT / DETAILED}}: {{StoryID}}-TP-{{n}}` | `{{KEPT}}: {{StoryID}}-TC-{{n}}` | `{{KEPT (RED / GREEN)}}` | `{{PASS / REVISE / ASK}}` |
-| `{{StoryID}}-AC-{{n}}` | Defined (`MUST`) | `{{KEPT / REASSIGNED / EXCLUDED}}` | `{{DETAILED / VIOLATED / UNKNOWN}}` | `{{pending / qualified TC ID}}` | `{{pending}}` | `{{PASS / REVISE / ASK}}` |
+| `{{StoryIdAlias}}-AC-{{n}}` | Defined (`MUST`) | `{{KEPT / DETAILED / N/A}}` | `{{KEPT / DETAILED}}: {{StoryIdAlias}}-TP-{{n}}` | `{{KEPT}}: {{StoryIdAlias}}-TC-{{n}}` | `{{KEPT (RED / GREEN)}}` | `{{PASS / REVISE / ASK}}` |
+| `{{StoryIdAlias}}-AC-{{n}}` | Defined (`MUST`) | `{{KEPT / REASSIGNED / EXCLUDED}}` | `{{DETAILED / VIOLATED / UNKNOWN}}` | `{{pending / qualified TC ID}}` | `{{pending}}` | `{{PASS / REVISE / ASK}}` |
 
 ---
 

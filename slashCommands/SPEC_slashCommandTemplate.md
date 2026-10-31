@@ -111,6 +111,8 @@ State where the command reads and writes.
 - Related flow document: `flows/Px-SpecFlow.md`
 - Previous and next commands in the lifecycle
 
+For registered-story work, preserve the Story ID/StoryIdAlias/CreatedAt mapping and resolve aliases through the registry. Only explicit story creation allocates a new pair under the canonical identity contract. US/AC definitions stay in the declared requirements source, TP definitions in verification design, and TC definitions in test files; new child references use alias-qualified IDs and explicit ownership/coverage links.
+
 ## WHY
 
 State why this command exists.

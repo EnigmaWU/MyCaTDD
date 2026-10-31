@@ -111,9 +111,9 @@ Follow this workflow when starting a CaTDD test file.
 3. Read the needed `CaTDD_methodPrompt-*.md` subtopic for detailed guidance.
 4. Copy `CaTDD_designAndImplTemplate.cxx`, `CaTDD_designAndImplTemplate.ts`, `CaTDD_designAndImplTemplate.py`, or `CaTDD_designAndImplTemplate.go`, or adapt its section structure to your language.
 5. Declare SUT, in-scope classes, domain profile(s), test level, and execution environment. Inventory source obligations before treating existing tests as coverage. Capture Stage-0 examples and questions through Example Mapping.
-6. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) for the applicable P0/P1/P2/P3 sweeps. OOPSI and business-rule extraction are optional aids for functional workflows; design models and quality constraints use their own sources. Record candidates and source references in a `discovery_ledger` in living comments.
+6. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) for the applicable P0/P1/P2/P3 sweeps. Record authoritative TPs, their owning ACs, covering TCs or draft gaps, and source evidence in the verification-design document's `discovery_ledger` (`README_DetailVerifyDesign.md` in SpecFlow). Test comments reference this ledger rather than duplicate its definitions.
 7. Classify drafts by verification lens, not rule type, domain, or priority. Use the priority order below for execution, adjusted by risk.
-8. Write US/AC/TP/TC comments inside the test file before implementing code.
+8. Resolve the registered Story ID/StoryIdAlias/CreatedAt pair under [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Write TC comments with alias-qualified AC/TP/TC references, complete TP lists, and trace rows before implementing code; US/AC and TP definitions stay in their authoritative documents.
 9. Independently review source -> ledger -> US/AC/TP/TC and back. In a complete design, require each US to have at least one AC, each AC to have at least one TP, each TP to map to exactly one TC, and each TC to cover one or more TPs. Unassigned draft TPs block completion. Require both cardinality and the Discovery Gate to pass with `ready_for_implementation: yes` for the declared scope; then write one failing test for the next TC.
 10. Implement only enough production code to pass that TC.
 11. Update TC status markers and keep the comments synchronized with behavior.
@@ -160,7 +160,9 @@ Use OOPSI/business-rule aids only for suitable functional sources; never infer
 limits, recovery policies, or technologies from domain examples.
 Use methodPrompts/CaTDD_methodPrompt4Cat-Typical.md to fill the Typical skeleton in Test/test_your_feature_funcValidTypical.cxx or Test/test_your_feature_funcValidTypical.ts.
 Preserve US/AC/TC traceability and leave unclear product intent as questions.
-Keep a source-first behavior inventory and discovery_ledger in living comments.
+Keep the authoritative inventory and discovery_ledger in verification design.
+Use registered StoryIdAlias prefixes for new AC/TP/TC IDs and explicit links.
+Test comments define TCs and reference TPs; they are not another TP authority.
 Record verification_method, execution environment, observable oracle, and
 evidence capture for each candidate; keep handoff routing separate from status.
 Review sources independently of existing tests; report discovery_status,

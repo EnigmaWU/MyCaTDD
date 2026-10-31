@@ -10,7 +10,7 @@
 //      Example: test/test_command_execution_funcValidTypical_test.go
 //      Feature comes from module-interface usage scenarios; category uses CaTDD filename tokens.
 //   2. Fill in OVERVIEW: what you're testing and why
-//   3. Draft ideas freely in comments (FreelyDrafts with discovery ledger)
+//   3. Draft provisional ideas in comments; reconcile TPs into verification design
 //   4. Structure into US/AC/TC format with explicit TestEvidenceChain
 //   5. Implement tests first (TDD Red→Green cycle)
 //   6. Track progress in TODO section
@@ -19,8 +19,10 @@
 //   Design → Draft → Structure → Test (RED) → Code (GREEN) → Refactor → Repeat
 //
 // PROJECT-WIDE TRACE: The abbreviated sample IDs below are illustrative only.
-//   Replace them with registered Story IDs and qualified AC/TP/TC IDs from
-//   CaTDD_methodPrompt-testStructure.md; retain US/AC/TP/TC metadata per TC.
+//   Resolve StoryIdAlias through the registry; new AC/TP/TC IDs use its prefix.
+//   Keep authoritative TP definitions in the verification-design document.
+//   Test comments reference those TPs and define TCs, including every covered TP.
+//   CaTDD_methodPrompt-testStructure.md owns identity, ownership, and legacy mappings.
 //
 // REFERENCE: methodPrompts/CaTDD_methodPrompt.md for full methodology
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,9 +102,11 @@ DESIGN SKELETON CONTRACT:
     // @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
     // @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
     // @[US]: US-PROJECT-01
-    // @[AC]: US-PROJECT-01-AC-01
-    // @[TP]: US-PROJECT-01-TP-01
-    // @[TC]: US-PROJECT-01-TC-01 verifyCore_byValidInput_expectSuccess
+    // @[StoryIdAlias]: US-261029.070005
+    // @[AC]: US-261029.070005-AC-01
+    // @[TP]: US-261029.070005-TP-01
+    // @[TC]: US-261029.070005-TC-01 verifyCore_byValidInput_expectSuccess
+    // @[Trace]: US-261029.070005 | US-261029.070005-AC-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
     //=================================================================================================
 
   Developers fill this skeleton to make verification intent clear.
@@ -236,30 +240,16 @@ PRIORITY-3: OTHER-ADDONS TESTING (Documentation & Tutorials)
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF DISCOVERY & EVIDENCE CHAIN (FreelyDrafts)========================================
 /*
-SOURCE-FIRST TEST-POINT DISCOVERY (Optional living ledger in test file or FreelyDrafts)
+SOURCE-FIRST DISCOVERY REFERENCES (not authoritative TP definitions)
 
 DISCOVERY SCOPE: SUT=WorkerPool, feature=task_dispatch, level=UnitTesting
 DOMAIN / EXECUTION ENVIRONMENT: Go 1.21+, Linux/macOS, concurrent goroutines with race detector
-SOURCES / RULES:
-  - WorkerPoolSpec#2.1 (R-POOL-01: submit task executes asynchronously via worker goroutine)
-  - WorkerPoolSpec#2.3 (R-POOL-02: submit to full queue with non-blocking mode returns ErrQueueFull)
-  - WorkerPoolSpec#3.1 (R-POOL-03: submit nil task returns ErrNilTask immediately)
-  - WorkerPoolSpec#3.4 (R-POOL-04: worker panic is recovered and reported without terminating pool)
-DIMENSIONS: PoolState(Running, Draining, Closed) x TaskType(Normal, Panicking) x QueueBuffer(Empty, Partial, Full)
-SAMPLING: Full pairwise exploration of PoolState x TaskType
-REVIEW: Self-reviewed against worker pool specification; residual risk: timer precision on busy CI hosts
-
-DISCOVERY LEDGER:
- TP ID | Source/Rule   | Setup / Action                 | Observable Oracle                    | Category/Level | Disposition/Evidence
- ------|---------------|--------------------------------|--------------------------------------|----------------|----------------------
- TP-01 | Spec R-POOL-01| Submit valid job to running pool| Task executed, returns nil error     | Typical/unit   | DESIGNED: US-1/AC-1/TC-1
- TP-02 | Spec R-POOL-02| Submit to full non-blocking buf| Returns ErrQueueFull immediately     | Edge/unit      | DESIGNED: US-1/AC-2/TC-1
- TP-03 | Spec R-POOL-03| Submit nil job function        | Returns ErrNilTask immediately       | Misuse/unit    | DESIGNED: US-1/AC-3/TC-1
- TP-04 | Spec R-POOL-04| Task executes and panics       | Panic recovered, OnPanic hook called | Fault/unit     | DESIGNED: US-2/AC-1/TC-1
- TP-05 | Spec R-POOL-01| Cancel context during task     | Task observes ctx.Done() and aborts  | Fault/unit     | DESIGNED: US-2/AC-2/TC-1
-
-Discovery Gate: PASS (5 TPs identified, 0 GAPs, 0 BLOCKED)
-ready_for_implementation: yes
+DISCOVERY LEDGER: README_DetailVerifyDesign.md (or the declared standalone verification design)
+TP REFERENCES: [alias-qualified TP IDs owned by that document]
+REVIEW EVIDENCE: [current source-first gate result and its scope]
+Keep source rules, AC ownership, oracles, and dispositions in that ledger.
+Reconcile every TC's TP list and trace rows with its covering-TC links.
+A provisional note here is not an approved TP; route it to the design owner.
 */
 //======>END OF DISCOVERY & EVIDENCE CHAIN=========================================================
 

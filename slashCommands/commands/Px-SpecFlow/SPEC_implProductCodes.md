@@ -55,6 +55,7 @@ A `ROUTE` variant: if TC-002 had failed because the design never defined the err
 - [Px-SpecFlow](../../flows/Px-SpecFlow.md)
 - [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
+- Resolve the registered StoryIdAlias and preserve alias-qualified AC/TP/TC links in code and test evidence. TP definitions and ownership stay in verification design; implementation must not silently redefine them or allocate replacement IDs.
 
 ## Valid RED Gate
 

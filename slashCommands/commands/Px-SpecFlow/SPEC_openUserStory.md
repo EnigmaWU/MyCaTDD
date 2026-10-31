@@ -12,7 +12,7 @@ Move a selected user story from `.catdd/spec/todoUS/` into `.catdd/spec/doingUS/
 
 Run these steps once, in order. There is no retry loop; any failed check stops and asks the developer.
 
-1. Confirm `todo_user_story` is under `.catdd/spec/todoUS/`, its registered Story ID and qualified AC references satisfy [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids), and no story with the same ID already exists under `.catdd/spec/doingUS/`. Reconcile missing or conflicting legacy identities before opening; distinguish historical copies and declared partial-closure slices from independent stories.
+1. Confirm `todo_user_story` is under `.catdd/spec/todoUS/`, its Story ID/StoryIdAlias/CreatedAt mapping and qualified AC references satisfy [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids), and no independent active story resolves to the same ID or alias. Preserve the pair when moving; do not reallocate it. Reconcile missing or conflicting legacy identities before opening; distinguish historical copies and declared partial-closure slices from independent stories.
 2. Move (do not copy) the file into `.catdd/spec/doingUS/`, preserving its source trace links.
 3. Ask whether to create or switch to a dedicated branch for this story. Do not assume.
 4. Write the active-work status section marking the story open, and synchronize the project ledger's lifecycle path and state without replacing its authoritative requirements source.

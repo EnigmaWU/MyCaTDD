@@ -19,8 +19,10 @@
 //   Design → Draft → Structure → Test (RED) → Code (GREEN) → Refactor → Repeat
 //
 // PROJECT-WIDE TRACE: The abbreviated sample IDs below are illustrative only.
-//   Replace them with registered Story IDs and qualified AC/TP/TC IDs from
-//   CaTDD_methodPrompt-testStructure.md; retain US/AC/TP/TC metadata per TC.
+//   Resolve StoryIdAlias through the registry; new AC/TP/TC IDs use its prefix.
+//   Keep authoritative TP definitions in the verification-design document.
+//   Test comments reference those TPs and define TCs, including every covered TP.
+//   CaTDD_methodPrompt-testStructure.md owns identity, ownership, and legacy mappings.
 //
 // REFERENCE: methodPrompts/CaTDD_methodPrompt.md for full methodology
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,9 +94,11 @@
  *     // @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
  *     // @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
  *     // @[US]: US-PROJECT-01
- *     // @[AC]: US-PROJECT-01-AC-01
- *     // @[TP]: US-PROJECT-01-TP-01
- *     // @[TC]: US-PROJECT-01-TC-01 verifyCore_byValidInput_expectSuccess
+ *     // @[StoryIdAlias]: US-261029.070005
+ *     // @[AC]: US-261029.070005-AC-01
+ *     // @[TP]: US-261029.070005-TP-01
+ *     // @[TC]: US-261029.070005-TC-01 verifyCore_byValidInput_expectSuccess
+ *     // @[Trace]: US-261029.070005 | US-261029.070005-AC-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
  *     //=================================================================================================
  *
  *   Developers fill this skeleton to make verification intent clear.
@@ -236,30 +240,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF DISCOVERY & EVIDENCE CHAIN (FreelyDrafts)========================================
 /**
- * SOURCE-FIRST TEST-POINT DISCOVERY (Optional living ledger in test file or FreelyDrafts)
+ * SOURCE-FIRST DISCOVERY REFERENCES (not authoritative TP definitions)
  *
  * DISCOVERY SCOPE: SUT=InvocationValidator, feature=cli_validation, level=UnitTesting
  * DOMAIN / EXECUTION ENVIRONMENT: Node.js, TypeScript, POSIX CLI process boundary
- * SOURCES / RULES:
- *   - UserGuide § "IF: What You Want" (R-CLI-01: valid flag combo dispatches directly)
- *   - UserGuide § "CLI Argument Reference" (R-CLI-02: unknown flag rejected with exit code 1)
- *   - ArchDesign § 2.3 (R-CLI-03: mutually exclusive flags throw ValidationError)
- *   - ArchDesign § 4.1 (R-CLI-04: missing required config file handled gracefully)
- * DIMENSIONS: UserIntent(Design, Review, Implement) x TargetScope(Single, All) x InputSource(Inline, File)
- * SAMPLING: Systematic sweep across all user-intent-driven patterns
- * REVIEW: Self-reviewed against CLI specification; residual risk: platform shell escaping
- *
- * DISCOVERY LEDGER:
- *  TP ID | Source/Rule  | Setup / Action                 | Observable Oracle                   | Category/Level | Disposition/Evidence
- *  ------|--------------|--------------------------------|-------------------------------------|----------------|----------------------
- *  TP-01 | Guide R-CLI-01| Valid invocation arguments      | Exit code 0, dispatch ready         | Typical/unit   | DESIGNED: US-1/AC-1/TC-1
- *  TP-02 | Guide R-CLI-01| All-categories design command   | Exit code 0, all skeletons emitted  | Typical/unit   | DESIGNED: US-1/AC-1/TC-2
- *  TP-03 | Guide R-CLI-02| Unknown CLI flag provided       | Exit code 1, stderr describes flag  | Misuse/unit    | DESIGNED: US-1/AC-2/TC-1
- *  TP-04 | Arch R-CLI-03 | Conflicting flag combination   | Exit code 2, actionable conflict msg| Misuse/unit    | DESIGNED: US-1/AC-2/TC-2
- *  TP-05 | Arch R-CLI-04 | Target story file not found    | Exit code 3, ENOENT handled cleanly | Fault/unit     | DESIGNED: US-2/AC-1/TC-1
- *
- * Discovery Gate: PASS (5 TPs identified, 0 GAPs, 0 BLOCKED)
- * ready_for_implementation: yes
+ * DISCOVERY LEDGER: README_DetailVerifyDesign.md (or the declared standalone verification design)
+ * TP REFERENCES: [alias-qualified TP IDs owned by that document]
+ * REVIEW EVIDENCE: [current source-first gate result and its scope]
+ * Keep source rules, AC ownership, oracles, and dispositions in that ledger.
+ * Reconcile every TC's TP list and trace rows with its covering-TC links.
+ * A provisional note here is not an approved TP; route it to the design owner.
  */
 //======>END OF DISCOVERY & EVIDENCE CHAIN=========================================================
 

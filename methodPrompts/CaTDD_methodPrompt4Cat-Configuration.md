@@ -51,6 +51,8 @@ When this category applies, consider test points such as:
 
 Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
 
+Resolve StoryIdAlias through the registry for new alias-qualified AC/TP/TC IDs. Authoritative TP definitions, owning ACs, and covering TC links live in the verification-design document; this skeleton references them. Each TC lists all covered TPs and one trace row per relationship.
+
 ```text
 // @[Class]: P2 Quality
 // @[Category]: Configuration
@@ -60,6 +62,7 @@ Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-
 // @[ConfigMatrix]: [setting combinations]
 // @[ExpectedMode]: [behavior for each setting]
 // @[US]: [registered Story IDs]
+// @[StoryIdAlias]: [registered short aliases for the stories above]
 // @[AC]: [qualified AC IDs]
 // @[TP]: [qualified TP IDs]
 // @[TC]: [qualified TC ID] verify[Behavior]_by[ConfigSetting]_expect[ConfiguredResult]

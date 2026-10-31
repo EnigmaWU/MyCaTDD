@@ -91,6 +91,8 @@ git push -u origin us-123-suspend
 
 ## Conflict Guard
 
+Preserve StoryIdAlias, CreatedAt, and qualified child IDs when moving the story and tasks. Verify the same registry mapping and authoritative-source links survive suspension; a lane move never allocates a new alias.
+
 Do not suspend without an explicit `suspend_reason`.
 Do not suspend when no durable `resume_ref` is available for work that must be resumed.
 Do not rely on stash-only references when branch or worktree-based recovery is required.

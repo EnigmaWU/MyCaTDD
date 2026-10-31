@@ -98,6 +98,8 @@ Expected result — two passes:
 
 ## Conflict Guard
 
+Preserve the registered StoryIdAlias when referencing requirements. Architecture verification defines strategy and may reference promoted TP IDs from detailed verification design; it does not allocate duplicate TP definitions. Initial strategy may record future TP-design work without fabricating IDs or completed coverage.
+
 Do not start low-level detailed design, test writing, or coding from this command. Route to `SPEC_reviewArchDesign` next.
 
 ONE-MORE-THING: ask developer if something not sure

@@ -68,10 +68,11 @@ Expected result:
 ## Output Contract
 
 - CaTDD US/AC/TP/TC skeletons in committed test files, linked back to team-shared active story artifacts and project-root README SPEC docs.
-- The registered Story ID and full story-qualified AC, TP, and TC IDs at each relevant ledger and test declaration; preserve shared relationships and existing IDs across categories and test levels.
+- The registered Story ID/StoryIdAlias pair and alias-qualified AC, TP, and TC IDs at each relevant declaration. Each TP's authoritative verification-design row names its owning AC and sole covering TC; each TC lists all covered TP IDs and one `@[Trace]: StoryIdAlias | AC-ID | TP-ID | TC-ID` row per relationship. Preserve original IDs for shared/inherited evidence and explicit legacy mappings.
 - Enforced minimum traceability cardinality: each US has >=1 AC, each AC has >=1 TP, each TP maps to exactly one TC, and each TC covers >=1 TP.
 - Explicit SUT declaration in each designed test-file overview section.
 - This command inherits the strategy from `README_DetailVerifyDesign.md`; it never creates or redefines verification design.
+- Test files define TCs and reference authoritative TP definitions. Route new/changed TP obligations or AC ownership to `SPEC_updateDetailDesign`. For unchanged TPs, synchronizing covering-TC IDs and declaration paths after skeleton creation is trace maintenance, not permission to redefine the TP; reconcile ledger and TC metadata before handoff.
 - Error, resource, state, performance, compatibility, and diagnostic coverage linked to `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when those design surfaces exist.
 - A missing or stale `README_DetailVerifyDesign.md` is reported and routed to `SPEC_updateDetailDesign`; first-time creation happens in `SPEC_takeDetailDesign` from `slashCommands/templates/README_DetailVerifyDesignTemplate.md`.
 - Evidence that existing `TEST_design*Skeleton` command contracts were inspected before drafting category skeletons.

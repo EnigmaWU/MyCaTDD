@@ -118,6 +118,8 @@ On `REVISE`, route to `SPEC_updateDetailDesign` and record structured findings. 
 
 ## Conflict Guard
 
+Resolve StoryIdAlias through the registry and verify TP definitions have one owning AC. Check covering-TC references against any existing test declarations; known unassigned TPs remain draft gaps rather than completed coverage. Test files must not become a competing TP authority.
+
 Do not approve a detailed design that lacks testable acceptance criteria, clear API/state ownership, or consistency with the approved architecture.
 
 ONE-MORE-THING: ask developer if something not sure

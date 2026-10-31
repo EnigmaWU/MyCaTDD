@@ -22,10 +22,16 @@ Implemented. The ID checks were observed failing before the contract was added a
 - All P0 design commands reference the complete US/AC/TP/TC contract; the full P0 gate rejects unassigned or multiply assigned TPs and TCs without TPs.
 - Discovery reports failed cardinality when the expanded in-scope ledger contains unassigned TPs.
 - The Action chapter's three full-queue TC identities retain their behavior names, matching trace IDs, and one two-scope status per tracked case.
+- Permanent StoryIdAlias/CreatedAt metadata, alias-prefixed child IDs, and authoritative TP ownership in verification-design documents.
+- Execution of the documented alias-creation snippet: its UTC+08:00 timestamp and alias must describe the same instant.
+- Parsing the canonical requirements/TP-ledger/TC example as a graph: AC ownership, sole covering TC per TP, complete reverse TP lists, and literal-search trace rows.
+- Literal `grep -F` lookup across isolated registry, hidden story, verification-design, and test-file artifacts; a todo-to-doing move must preserve identity and creation time. Legacy references remain resolvable through a mapping without rewriting the archived source.
+- Acceptance of one TC covering multiple TPs, including TPs owned by different ACs.
+- Ten invalid fixtures reject duplicate aliases, aliases shadowing another Story ID, unknown creation times, alias/time mismatches, unknown ACs, unassigned TCs, duplicate TP definitions, two TCs claiming the same TP, omitted TP coverage, and wrong trace rows.
 
 ## Manual
 
-Run the command below from the repository root with Bash and standard command-line utilities. Review the ID allocation, collision, and legacy-handling guidance separately for semantic completeness. Vendored skill references, generated installations, and other book examples remain outside this check's scope; run related guide, review-gate, and bilingual-mirror checks when those surfaces change.
+Run the command below from the repository root with Bash, Python 3, and standard command-line utilities. Review the ID allocation, collision, and legacy-handling guidance separately for semantic completeness. Vendored skill references, generated installations, and other book examples remain outside this check's scope; run related guide, review-gate, and bilingual-mirror checks when those surfaces change.
 
 ## Usage Example
 

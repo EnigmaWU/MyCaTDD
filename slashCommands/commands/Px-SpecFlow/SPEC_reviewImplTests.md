@@ -62,6 +62,7 @@ Expected result:
 - [TEST_reviewImplTestCase](../../commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md)
 - [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
+- Resolve StoryIdAlias through the registry and reconcile each TC's complete TP list and trace rows with the authoritative verification-design ledger. Unknown IDs, conflicting AC owners, missing/extra TP coverage, and a TP mapped to multiple TCs block approval; legacy or inherited references require explicit provenance.
 
 ## Skill Integration Policy
 

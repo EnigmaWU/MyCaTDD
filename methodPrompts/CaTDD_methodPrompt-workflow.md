@@ -16,14 +16,16 @@ CaTDD uses two design stages before implementation.
 1. Define the component or feature under test.
 2. Declare the SUT, in-scope classes, domain profile(s), test level, and execution environment explicitly in the test-file overview. Embedded Linux is the primary usage context, followed by Microservices and LLM Agents; do not force unrelated profiles into a slice.
 3. Inventory all in-scope source rules before treating existing tests as coverage evidence.
-4. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) for Example Mapping and applicable P0/P1/P2/P3 sweeps. Capture source-defined examples, verification methods, and questions in living comments; domain hints never supply thresholds or product policy.
+4. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) for Example Mapping and applicable P0/P1/P2/P3 sweeps. Capture authoritative TP definitions, verification methods, and questions in the verification-design document; test comments reference them. Domain hints never supply thresholds or product policy.
 5. Classify drafts using `CaTDD_methodPrompt-categorySemantics.md`.
 6. Select category-specific prompt files when deeper category guidance is needed.
 
 ## Phase 2: Structured Verification Design
 
 1. Write User Stories using the role, capability, value structure.
+   Register the Story ID/StoryIdAlias/CreatedAt mapping once; preserve it across all later stages.
 2. Write Acceptance Criteria using GIVEN, WHEN, THEN.
+   Use alias-qualified AC/TP/TC IDs. Each TP ledger row explicitly names its owning AC and covering TC; each TC lists its covered TPs.
 3. Write Test Cases with structured metadata: `@[Name]`, `@[Purpose]`, `@[Brief]`, `@[Expect]`.
 4. Keep TC names in `verifyBehavior_byCondition_expectResult` form.
 5. Keep each test to no more than three key assertions; split if needed.

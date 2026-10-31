@@ -64,6 +64,8 @@ This update runs inside the `SPEC_updateDetailDesign -> SPEC_reviewDetailDesign`
 
 ## Conflict Guard
 
+Preserve StoryIdAlias and registered child identities. Update TP definitions and owning-AC relationships only in the authoritative verification-design ledger, with explicit supersession when an obligation changes meaning. Identify affected TC references for `SPEC_designTests` to reconcile; do not silently rewrite test-file TP meanings.
+
 Do not hide unresolved quality failures. Keep them visible until a later review passes.
 Never bypass `SPEC_reviewDetailDesign` after this update step.
 

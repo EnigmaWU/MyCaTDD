@@ -88,6 +88,8 @@ Expected result:
 
 ## Conflict Guard
 
+Resolve StoryIdAlias through the registry. Verify every covered TP and owning AC against the authoritative verification-design ledger and reconcile the TC's complete TP list and trace rows. Treat unknown or conflicting links as findings, not new TP definitions to author in test comments.
+
 If the implementation and skeleton disagree, do not choose automatically which one is truth. Report the conflict and ask whether method design or implementation should change.
 
 ONE-MORE-THING: ask developer if something not sure

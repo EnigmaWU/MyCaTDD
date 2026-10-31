@@ -83,6 +83,8 @@ Expected result — two passes:
 
 ## Conflict Guard
 
+Resolve StoryIdAlias through the registry. Define authoritative TP rows in `README_DetailVerifyDesign.md`, including explicit owning AC, oracle, and covering TC reference or visible draft gap. Do not put a second TP ledger in test files. TCs are defined in the later test skeletons; an unassigned draft TP must not be reported as completed coverage.
+
 Do not start coding from this command. Route to `SPEC_reviewDetailDesign` first.
 
 ONE-MORE-THING: ask developer if something not sure

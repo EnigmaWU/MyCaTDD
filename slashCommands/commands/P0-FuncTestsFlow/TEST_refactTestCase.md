@@ -64,6 +64,8 @@ Expected result:
 
 ## Conflict Guard
 
+Preserve StoryIdAlias and the complete AC/TP/TC trace graph. Refactoring changes neither TP definitions in verification design nor the owning AC/covering TC relationships; newly discovered obligations return to the design owner.
+
 Do not batch unrelated TCs. Do not change product behavior while refactoring a TC unless the developer explicitly authorizes a separate implementation step.
 Do not smuggle new behavior, new acceptance criteria, or new category coverage into refactor work; route those gaps to `SPEC_designTests`, `TEST_implTestCase`, or the developer.
 Do not mark refactor complete when the selected TC is not GREEN before and after the cleanup.

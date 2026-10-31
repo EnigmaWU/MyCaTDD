@@ -69,6 +69,8 @@ This update runs inside the `SPEC_updateArchDesign -> SPEC_reviewArchDesign` rew
 
 ## Conflict Guard
 
+Preserve StoryIdAlias and original IDs when updating promoted TP references. Keep authoritative TP definitions and AC ownership in detailed verification design; route a required TP-definition change to `SPEC_updateDetailDesign` instead of maintaining an architecture-side copy.
+
 Do not hide unresolved architecture quality failures. Keep them visible until `SPEC_reviewArchDesign` passes.
 Never bypass `SPEC_reviewArchDesign` after this update step.
 

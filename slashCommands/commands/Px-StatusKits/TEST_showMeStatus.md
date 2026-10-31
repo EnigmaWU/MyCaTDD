@@ -38,6 +38,7 @@ Run these steps once, in order. There is no retry loop.
 1. **Scope** — Read `test_file_or_files`. When it is omitted, discover CaTDD test files inside `ut_scope` by finding files that carry US/AC/TC comment skeletons. Record the exact scope being reported, and never widen it silently.
 2. **Collect** — Extract every TC tracking entry with its marker (`TODO`/`PLANNED`, `RED`/`FAILING`, `GREEN`/`PASSED`, `BROKEN_TEST`, `ISSUES`, `BLOCKED`), its `@AC` and `@US` linkage, and its file path. Preserve each marker exactly as written.
 3. **Cross-check** — Read the design-gate evidence for the scanned scope when it exists: `discovery_status` (`PASS`/`GAPS`/`BLOCKED`), `ready_for_implementation` (`yes`/`no`), and the `discovery_ledger` disposition counts per class (`DESIGNED`, `GAP`, `QUESTION`, `EXCLUDED`, `REFERRED`). When the scope is story-based, also read the story-level AC status dashboard if one exists.
+   Resolve StoryIdAlias through the registry, then read the authoritative TP ledger from the verification-design document. Reconcile owning AC and covering TC links against each TC's full `@[TP]` list and trace rows. Test comments are references, not another TP definition source; repeated references and explicit legacy aliases must not inflate counts. Report unresolved identities or links, never guess them.
 4. **Count** — Aggregate totals by marker, by CaTDD priority class (P0 Functional, P1 Design, P2 Quality, P3 Addons), and by file.
 5. **Grade** — Read the Completeness Level ladder top-down and stop at the last level whose entry question is answered `YES` by cited evidence. The upper levels are class-scoped: Level-3 needs every P0 Functional obligation `CLOSED`, Level-4 needs P1 Design, P2 Quality, and P3 Addons `CLOSED` as well, and Level-5 needs the coverage number over P0-P3 with every uncovered obligation carrying a recorded disposition. Record `level_evidence` (what decided it) and `level_gap` (the one decisive thing blocking the next level).
 6. **Report** — Emit the Status Report Shape below, order findings by risk (BROKEN_TEST, then RED, then BLOCKED, then ISSUES, then TODO), and recommend exactly one next command.
@@ -67,7 +68,7 @@ Expected result:
 
 - `test_file_or_files`: optional list of CaTDD test files to scan.
 - `ut_scope`: optional module, story, or directory scope. Defaults to the repository's CaTDD test files.
-- `focus`: optional user story, feature, or category to prioritize in the summary. It never narrows the scan silently.
+- `focus`: optional Story ID, StoryIdAlias, feature, or category to prioritize in the summary. Resolve registered aliases before matching; it never narrows the scan silently.
 - `include_execution_evidence`: optional. When `yes`, cite the last known test-run evidence path separately from marker status. Defaults to `no`.
 
 ## Completeness Level Model

@@ -233,6 +233,8 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 
 验证设计归属：`README_DetailVerifyDesign.md` 拥有行为清单、测试点发掘、行级的 CaTDD 分类 x 敏捷象限覆盖、子模块策略与分类文件；`README_ArchVerifyDesign.md` 拥有层级与边界图、运行时环境矩阵、替身可信度、系统级质量场景，以及跨层级与证据的象限平衡。单元格提到分类文件则归详细层设计，提到层级、环境、操作者或设备则归架构层设计。`README_VerifyStatusTraces.md` 是可选的动态状态伴随文档；story TASKs 或测试文件注释同样是有效选项。
 
+身份与定义归属：项目注册表绑定 Story ID、StoryIdAlias、CreatedAt 与权威 US/AC 来源。新的 AC/TP/TC ID 使用已注册的别名前缀。`README_DetailVerifyDesign.md` 保存权威 TP 定义、归属 AC 和唯一覆盖 TC 链接；测试文件定义 TC 并列出全部覆盖 TP，引用该台账而非复制定义。架构提升保持相同 TP ID。创建/导入登记别名，生命周期操作保持别名，审查/状态/合并解析并核验映射，包括显式的历史映射与共享证据引用。
+
 ### 3. 通用与需求（由开发者首先创建，之后由 `SPEC_updateUserStory` 和 `SPEC_reviewUserStory` 更新）
 
 | 文件 | 用途 |

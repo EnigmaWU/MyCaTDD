@@ -75,6 +75,7 @@ Expected result:
 
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
+- Preserve StoryIdAlias and CreatedAt for slices of the same story, label each slice explicitly, and retain original AC/TP/TC ownership. A genuinely independent successor requires separate registration; never allocate a new alias merely because a slice moved to another lane.
 
 ## Output Contract
 

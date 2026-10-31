@@ -23,7 +23,7 @@ The flow commands orchestrate execution; category meaning remains in `methodProm
 
 ## Discovery Handoff
 
-Before any drafting route, declare the SUT, P2 category scope, domain profile(s), test level, and execution environment. Read quality sources before existing skeletons and apply the [P2 discovery sweep](../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md#p2-quality-discovery-sweep). Keep candidate obligations, source references, verification methods, and dispositions in one `discovery_ledger` in living comments.
+Before any drafting route, declare the SUT, P2 category scope, domain profile(s), test level, and execution environment. Read quality sources before existing skeletons and apply the [P2 discovery sweep](../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md#p2-quality-discovery-sweep). Keep authoritative TP definitions, source references, verification methods, and dispositions in the verification-design document's single `discovery_ledger`. Test comments reference its alias-qualified TP IDs. In SpecFlow, TP-definition changes route through `SPEC_updateDetailDesign`; do not maintain a second ledger in test files.
 
 Use the source-defined six-part quality scenario: numeric budgets need units, targets, and workloads; exact matrix, configuration, diagnostic, or protection predicates need specified observable evidence. Manual/hybrid procedures are valid; missing automation is not missing intent. Missing sources or oracles are QUESTION, not invented targets. An in-scope handoff cannot replace adequate design. Give sources, scope, ledger, and skeletons to an independent source-first review; label self-review and its residual risk when applicable.
 

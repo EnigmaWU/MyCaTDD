@@ -122,6 +122,8 @@ Apply SKILLs **only** where the abort diagnosis indicates a need for correction.
 | **Always (regardless)** | `(→ SKILL: validate-requirements-criteria)` — hunt ambiguity in the corrected story. `(→ SKILL: prioritize-requirements)` — re-score all four dimensions (BV, UV, Cost, Risk). |
 
 ### Step 6 — Correct: Write the corrected story
+Preserve `StoryIdAlias` and `CreatedAt` for a revision of the same story. A new independent successor registers its own pair and records the original IDs/alias as lineage. New AC IDs use the owning alias prefix; inherited ACs retain their original owning IDs. Do not mutate historical abort evidence or invent missing creation times.
+
 Register the corrected story in `README_UserStories.md`, creating the ledger from `README_UserStoriesTemplate.md` if needed. Preserve the original registered Story ID when the corrected artifact is a revision of the same story. Assign a new descriptive human-readable `US-<whoName>-<doWhat>` ID with lowerCamelCase segments only when re-analysis establishes a materially different independent successor; retain source links to unchanged original AC IDs and record supersession or lineage without changing the historical abort artifact. Give new or materially revised ACs distinct qualified IDs under the corrected story. Stop on unresolved identity conflicts.
 
 Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. The following sections must be present and correct:

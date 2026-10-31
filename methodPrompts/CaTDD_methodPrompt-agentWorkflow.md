@@ -35,7 +35,8 @@ Checklist:
 - Fill the OVERVIEW section.
 - Declare SUT explicitly.
 - Apply [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md): capture freely drafted scenarios, systematic discovery dimensions, and a coverage matrix.
-- Keep a `discovery_ledger` with actual TC links or explicit questions, exclusions, referrals, and gaps.
+- Keep the authoritative `discovery_ledger` in the verification-design document, with owning ACs, covering TC links, or explicit questions, exclusions, referrals, and gaps. Test comments reference its TPs and define TCs.
+- Resolve each Story ID/StoryIdAlias pair through the registry before allocating alias-qualified AC/TP/TC IDs; preserve existing identities and creation times.
 - Classify test points using `CaTDD_methodPrompt-categorySemantics.md`.
 - Write US/AC/TC comments.
 - Populate TODO/tracking status.

@@ -19,6 +19,7 @@ Every class/category skeleton **MUST** preserve this minimum shape.
 // @[UseWhen]: When this category applies
 // @[AvoidWhen]: When to move the scenario to another category
 // @[US]: User Story IDs covered by this category
+// @[StoryIdAlias]: Registered short aliases for those stories
 // @[AC]: Acceptance Criteria IDs covered by this category
 // @[TP]: Test Point IDs covered by this category
 // @[TC]: Test Cases, status, and expected TDD next action
@@ -54,30 +55,35 @@ Each tracked test case **MUST** carry one `@[Status]` line that names both scope
 
 This layer names design stages, not workflow artifacts. The mapping from these stages to project documents is owned by the workflow layer.
 
+## Artifact Ownership
+
+| Artifact | Authoritative home | References elsewhere |
+| --- | --- | --- |
+| Story ID, `StoryIdAlias`, `CreatedAt` | Committed project story registry; in SpecFlow, `README_UserStories.md`. | Story/task metadata and test overviews preserve the registered mapping. |
+| US and AC definitions | The requirements source named by that registry: the current todo/doing story or formal module `README_UserStory.md`. | Working copies and design/test comments reference the source; they are not independently mutable requirements. |
+| TP definitions and ownership | The verification-design document; in SpecFlow, `README_DetailVerifyDesign.md` owns the authoritative TP definitions and `discovery_ledger`. | Architecture verification references/promotes the same TP IDs. Test files reference TPs, not a second authoritative ledger. |
+| TC design and execution | Test files, including living comments, assertions, and scope-specific status. | The verification ledger records each TP's covering TC ID and test-file location. |
+
+Standalone CaTDD uses the project's declared verification-design document for the TP ledger. FreelyDrafts may capture provisional discovery notes, but those notes must be reconciled into that document before design approval. Tests remain comment-alive: their TC intent, source links, and execution evidence stay beside the code. A referenced TP definition or ownership change goes through the verification-design owner before test metadata is synchronized.
+
 ## Coverage Matrix
 
 Use coverage matrices to make hidden combinations visible before writing test code.
 
 Build dimensions from source rules, not from tests already written. Link each applicable cell to TP IDs in the discovery ledger, or record a source-backed not-applicable reason. Document feasible-combination constraints and sampling limits; blank cells are unexamined, not covered. Apply the **Discovery Gate** in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md).
 
-### Discovery Evidence in Living Comments
+### Discovery References in Living Comments
 
-Keep one feature-level inventory and `discovery_ledger` in FreelyDrafts or the OVERVIEW / UNIT TESTING DESIGN comments; category files link to it. These comments supplement, not replace, US/AC/TP/TC or TODO status. The discovery subtopic owns the disposition/readiness semantics.
+Keep one feature-level inventory and `discovery_ledger` in the verification-design document. OVERVIEW / UNIT TESTING DESIGN comments link to it and carry TC-to-TP references, not competing TP definitions. The discovery subtopic owns disposition/readiness semantics.
 
 ```text
 // DISCOVERY SCOPE: [SUT, feature, in-scope classes, test level, approved limits]
 // DOMAIN / EXECUTION ENVIRONMENT: [profile(s), user-space/kernel boundary, host/simulator/target/HIL as relevant]
-// SOURCES / RULES: [artifact#section or rule ID -> behavior, model invariant, quality predicate, or guide outcome]
-// DIMENSIONS: [applicable P0/P1/P2/P3 sweep dimension/partition/combination -> TP IDs or reason not applicable]
-// SAMPLING: [feasible dimensions/constraints, selection method, omissions/rationale, risk-significant additions; or not applicable]
-// REVIEW: [reviewer/process or labeled self-review, sources, independently derived operation/outcome checklist, residual risk]
-// TP ID | Source/rule | Setup/action | Observable oracle | Category/level | Disposition/evidence
-// TP-01 | [source/R1] | [condition]  | [expected result]  | Typical/unit   | DESIGNED: [file, US/AC/TP/TC IDs]
-// TP-02 | [source/R2] | [condition]  | unknown            | provisional    | QUESTION: [question, decision owner]
-// VERIFICATION METHOD by TP ID: [automated/manual/hybrid procedure, environment, evidence capture]
-// SCOPE / ROUTING by TP ID: [in/out of scope, destination and owner if applicable; independent of disposition]
-// Discovery Gate: [PASS/GAPS/BLOCKED, review evidence, residual risk]
-// ready_for_implementation: [yes/no for this scope; not release readiness]
+// DISCOVERY LEDGER: [verification-design document and section]
+// @[StoryIdAlias]: [registered alias, not a new local ID]
+// @[TP]: [qualified TP IDs defined in that document]
+// @[Trace]: <StoryIdAlias> | <AC ID> | <TP ID> | <TC ID>
+// DISCOVERY REVIEW: [current gate-evidence reference; no independently edited duplicate report]
 ```
 
 ### Basic 2D Matrix
@@ -126,37 +132,47 @@ verifyStateTransition_byInvalidSequence_expectError
 US-<story>: As a [specific role/persona],
             I want [specific capability or feature],
             So that [concrete business value or benefit].
+StoryIdAlias: US-YYMMDD.HHMMSS
+CreatedAt: [verified creation instant in ISO 8601 with +08:00 offset]
 ```
 
 ### Acceptance Criteria
 
 ```text
-US-<story>-AC-<n>: GIVEN [initial context and preconditions],
-                   WHEN [specific trigger, action, or event],
-                   THEN [expected observable outcome stated with MUST / MUST NOT (or conditional SHOULD / optional MAY)].
+<StoryIdAlias>-AC-<n>: GIVEN [initial context and preconditions],
+                       WHEN [specific trigger, action, or event],
+                       THEN [expected observable outcome stated with MUST / MUST NOT (or conditional SHOULD / optional MAY)].
 ```
 
 ### Test Point
 
 ```text
-US-<story>-TP-<n>: [source-backed verification obligation and observable oracle]
+<StoryIdAlias>-TP-<n>: [source-backed verification obligation and observable oracle]
+  Owning AC ID: <StoryIdAlias>-AC-<n>
+  Covering TC ID: <StoryIdAlias>-TC-<n> [or unassigned: GAP while drafting]
+  Test file: [path to the TC declaration]
 ```
 
 In a complete design, each US MUST have at least one AC, each AC MUST link to at least one TP, each TP MUST map to exactly one TC, and each TC MUST cover at least one TP. A TC MAY cover multiple TPs. Unassigned TPs may remain during discovery or drafting, but they are open coverage gaps and MUST block design completion. If one obligation requires independent test cases, split it into distinct TPs so each TP still maps to exactly one TC.
 
+Each TP has exactly one owning AC. Unknown ownership is a QUESTION, not a fabricated link. A TC lists all covered TP IDs and their owning AC IDs; it may cover TPs from different ACs when each obligation is explicitly verified. Child numbers do not imply relationships. The ledger, TC metadata, and trace rows must agree in both directions.
+
 ### Test Case
 
 ```text
-US-<story>-TC-<n>:
+<StoryIdAlias>-TC-<n>:
   @[US]: US-<story>
-  @[AC]: US-<story>-AC-<n>
-  @[TP]: US-<story>-TP-<n>
-  @[TC]: US-<story>-TC-<n>
+  @[StoryIdAlias]: <StoryIdAlias>
+  @[AC]: [qualified owning AC IDs for the covered TPs]
+  @[TP]: [all covered, qualified TP IDs]
+  @[TC]: <StoryIdAlias>-TC-<n>
+  @[Trace]: <StoryIdAlias> | <AC ID> | <TP ID> | <TC ID>
   @[Name]: verifyBehavior_byCondition_expectResult
   @[Purpose]: Why this test matters
   @[Brief]: Setup, behavior, verify, cleanup in one sentence
   @[Expect]: Observable expected result (MUST / MUST NOT obligation using canonical README_UbiLang.md terms)
   @[Notes]: Optional dependencies, gotchas, or assumptions
+  @[Status]: mockSysRtm <marker> | realSysRtm <marker>
 ```
 
 ## Project-Wide Traceability IDs
@@ -166,40 +182,98 @@ This contract applies to each project using CaTDD, whether invoked through SpecF
 - Maintain one committed project-wide story registry. In SpecFlow, use the Story Ledger in `README_UserStories.md`; standalone CaTDD projects use their agreed committed requirements ledger. The registry identifies each Story ID and its current authoritative story/AC source. Story text and acceptance outcomes remain authoritative in that source, not in duplicated registry summaries.
 - Preserve an existing unambiguous project-wide Story ID, including IDs already registered from an import. For a new project Story ID, use the human-readable form `US-<whoName>-<doWhat>`. Write `<whoName>` and `<doWhat>` in lowerCamelCase, with hyphens only separating the `US`, actor, and behavior segments. Derive `<whoName>` from the actor or role in the story's "As a ..." statement and `<doWhat>` from its observable "I want ..." behavior (for example, `US-eventProducer-postEventsWithoutBlocking`). If the actor or behavior is unclear, ask rather than inventing either. The registered Story ID is the stable project-wide identity; keep it when titles, filenames, lifecycle state, or implementation details change.
 - Before registering a new Story ID, check the project registry and story declarations across all lifecycle lanes and module requirement sources, then check the integrated project again when concurrent branches are merged. If the candidate collides, refine it with meaningful domain, component, actor, or behavior context; do not append an opaque UUID or arbitrary number solely to force uniqueness. Stop and ask when the distinction cannot be named unambiguously. References and declared historical copies are not new independent stories.
+- Register exactly one permanent `StoryIdAlias` per Story ID, together with `CreatedAt`. Format the verified story-creation instant in UTC+08:00 as `US-YYMMDD.HHMMSS`; retain the full ISO 8601 instant with `+08:00` in `CreatedAt`. Capture it once, not separately for each field. The alias is a short identity reference, not a replacement for the human-readable Story ID or a date to regenerate when editing.
+- For a newly created project story identity, capture its actual creation instant at registration. Importing an existing identity preserves its verified original instant; dates on an external source remain separate provenance. A first import that creates a genuinely new project identity records that new identity's creation, not a fabricated date for the external requirement.
+- Check alias uniqueness before registration and again during integration, including imports and concurrent branches. An alias must not shadow another story's canonical ID. A same-second collision between independent stories MUST stop registration for reconciliation; never reuse an alias, append an unapproved suffix, or invent a different creation time. Repeated references to the same registered story are not collisions. Reject mismatched Story ID/alias/time pairs.
 - Preserve external or local source IDs as labeled aliases. If a source ID is already registered as the project-wide identity, preserve it; otherwise assign the new human-readable project ID and retain the source ID as an alias without rewriting source text or historical evidence.
-- Under each Story ID, use unique, stable qualified identifiers: `US-<story>-AC-<n>`, `US-<story>-TP-<n>`, and `US-<story>-TC-<n>`. Here `US-<story>` is the complete registered Story ID and `<n>` is a stable child token scoped to that story. Short tokens such as `01`, `02` are readable and sufficient because the full qualified ID includes the project-wide Story ID. Allocate child tokens without reuse and check for collisions again during integration; do not silently renumber accepted IDs.
+- New child declarations use `<StoryIdAlias>-AC-<n>`, `<StoryIdAlias>-TP-<n>`, and `<StoryIdAlias>-TC-<n>`. `<StoryIdAlias>` is the complete registered alias, including `US-`; `<n>` is a stable token unique within that story and artifact kind. TP tokens are story-scoped, not reset under each AC. Allocate without reuse and never infer AC ownership or TC coverage from matching suffixes.
+- Resolve either a Story ID or `StoryIdAlias` through the registry before reading or writing trace references. Preserve the pair across lifecycle moves, title/file changes, and revisions. A new independent successor gets its own pair and creation instant; a revision of the same story retains them.
+- Existing registered child IDs remain valid legacy identities. Introducing alias-prefixed forms for them requires an explicit old-ID-to-new-ID mapping and synchronized active references; it does not create new ACs, TPs, or TCs. Do not silently rewrite archives or imported source text. For an existing story without an alias, use a verified creation instant only; a date without a known time is insufficient. Report the missing decision and block alias allocation rather than inventing midnight or using the migration time. Legacy references remain readable while migration is pending.
 - Preserve the same ID when a story or test point moves between files, lifecycle states, categories, or test levels. Copies, revisions, and declared partial-closure slices are references to the same identity, not automatically duplicate stories. A materially different AC or test obligation receives a new ID with an explicit supersession or lineage link; do not silently reuse an old ID for a different meaning.
 - Keep legacy or external local IDs as labeled aliases, with their source and revision when needed. On ambiguous ownership, conflicting imports, or reused historical AC meanings, stop and request reconciliation rather than guessing or rewriting history. A new independent split or follow-up story gets its own Story ID and traces to its parent and original ACs.
-- Place the full qualified IDs on each AC, discovery-ledger TP, and TC declaration. Carry the corresponding Story IDs and AC/TP/TC references into relevant design, verification, test, and product-code boundaries using language-appropriate comments or an explicit source-to-symbol trace when comments are unsuitable. A literal search for the Story ID must find its declared ACs, TPs, TCs, and trace references.
+- Place the full alias-qualified IDs on new AC, verification-ledger TP, and test-file TC declarations. Carry those IDs into relevant design, test, and product-code trace references. A fixed-string search for `StoryIdAlias` must find the current declarations and trace rows in its family. A long Story ID search resolves the alias in the registry first; it need not occur in every child declaration. Follow explicit legacy or inherited references to their original owning sources.
 - In a complete design, each US MUST have at least one AC, each AC MUST link to at least one TP, each TP MUST map to exactly one TC, and each TC MUST cover at least one TP. A TC MAY cover multiple TPs, including TPs linked to different ACs when every relationship is explicit. Unassigned draft TPs are coverage gaps and MUST block design completion; if an obligation needs independent test cases, split it into separate TPs. Shared evidence retains one owning ID and explicitly lists every related Story ID and qualified AC/TP reference. Do not duplicate IDs or invent coverage merely to make a link.
-- Each TC's metadata must identify its relevant `@[US]`, `@[AC]`, and `@[TP]` values as well as its qualified `@[TC]` ID. When an AC, TP, or TC is shared or inherited, put the referencing Story ID and the original qualified ID together on the same trace line; for test evidence use `@[Trace]: <StoryID> | <AC ID> | <TP ID> | <TC ID>`. Record each actual relationship separately and retain the original owning ID rather than inventing copies. Unresolved or missing sources remain questions or gaps under the Discovery Gate; an ID or a grep hit is not proof of implementation or verification.
+- Each TC's metadata identifies its `@[US]` (canonical Story ID), `@[StoryIdAlias]`, `@[AC]`, `@[TP]`, and `@[TC]`. Use `@[Trace]: <StoryIdAlias> | <AC ID> | <TP ID> | <TC ID>` once per actual relationship. Each TP's ledger row names its owning AC and sole covering TC; each TC lists every TP it covers. Reject unknown IDs, conflicting owners, missing or extra coverage links, and duplicate aliases. A trace line is a reference, never a second TP definition.
+- Shared or inherited evidence retains its original owning IDs. A referencing story's trace row starts with that story's alias and may reference another registered owner's AC/TP/TC IDs only with explicit inheritance/sharing provenance. Do not require all four fields to share a prefix in that case, reparent a TP silently, or invent a duplicate TC. Unresolved or missing sources remain questions or gaps under the Discovery Gate; a grep hit is not proof of verification.
 
 ## Usage Example
 
-For the story "As an event producer, I want to post events without blocking," propose `US-eventProducer-postEventsWithoutBlocking`. In a SpecFlow project, run this from the project root before registration:
+For a new story, capture a candidate creation instant and alias once, then check the registry and known story sources before registering either:
 
 ```bash
-rg -n --hidden --fixed-strings 'US-eventProducer-postEventsWithoutBlocking' README_UserStories.md .catdd/spec
+python3 - <<'PY'
+from datetime import datetime, timedelta, timezone
+created_at = datetime.now(timezone(timedelta(hours=8))).replace(microsecond=0)
+print("CreatedAt:", created_at.isoformat())
+print("StoryIdAlias:", created_at.strftime("US-%y%m%d.%H%M%S"))
+PY
 ```
 
-Review matches to distinguish a registered story declaration from references or examples. Also check known module story sources before registration. Then use that same ID in qualified child identifiers; the following descriptions are illustrative, not inferred project requirements:
+The following is an illustrative, internally consistent artifact set, not a registered project story. Its assumed contract rejects a full-queue post without changing the queue and accepts a post with room exactly once.
+
+### Requirements and registry example
+
+The registry maps the pair to the authoritative requirements source; AC declarations live in that source:
 
 ```text
-US-eventProducer-postEventsWithoutBlocking-AC-01: User-visible acceptance outcome
-US-eventProducer-postEventsWithoutBlocking-TP-01: Source-backed verification obligation
-@[US]: US-eventProducer-postEventsWithoutBlocking
-@[AC]: US-eventProducer-postEventsWithoutBlocking-AC-01
-@[TP]: US-eventProducer-postEventsWithoutBlocking-TP-01
-@[TC]: US-eventProducer-postEventsWithoutBlocking-TC-01
+Story ID: US-queueClient-postWithinCapacity
+StoryIdAlias: US-261029.070004
+CreatedAt: 2026-10-29T07:00:04+08:00
+US-261029.070004-AC-01: A full-queue post MUST reject without changing the queue.
+US-261029.070004-AC-02: A post with room MUST enqueue exactly once.
 ```
 
-For a successor that reuses an existing AC, record both IDs together without reassigning the original AC:
+### Verification-design example
+
+These are authoritative TP rows in the verification-design document, not test comments:
 
 ```text
-US-eventProducer-confirmIdempotency -> US-eventProducer-postEventsWithoutBlocking-AC-01 (inherited acceptance criterion)
+TP ID | Owning AC ID | Covering TC ID | Source-backed obligation
+US-261029.070004-TP-01 | US-261029.070004-AC-01 | US-261029.070004-TC-01 | Full queue returns the specified rejection.
+US-261029.070004-TP-02 | US-261029.070004-AC-01 | US-261029.070004-TC-01 | Rejected post leaves the queue unchanged.
+US-261029.070004-TP-03 | US-261029.070004-AC-02 | US-261029.070004-TC-02 | Accepted post adds exactly one event.
 ```
 
-The command lists occurrences containing the candidate ID, including qualified child IDs. Review the referenced artifacts and their evidence; a search cannot prove that an unmarked declaration is unrelated or that a test passed.
+### Test-file reference example
+
+TC declarations reference the TP definitions and give each relationship its own searchable trace row:
+
+```text
+@[US]: US-queueClient-postWithinCapacity
+@[StoryIdAlias]: US-261029.070004
+@[TC]: US-261029.070004-TC-01
+@[AC]: US-261029.070004-AC-01
+@[TP]: US-261029.070004-TP-01, US-261029.070004-TP-02
+@[Trace]: US-261029.070004 | US-261029.070004-AC-01 | US-261029.070004-TP-01 | US-261029.070004-TC-01
+@[Trace]: US-261029.070004 | US-261029.070004-AC-01 | US-261029.070004-TP-02 | US-261029.070004-TC-01
+@[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
+
+@[US]: US-queueClient-postWithinCapacity
+@[StoryIdAlias]: US-261029.070004
+@[TC]: US-261029.070004-TC-02
+@[AC]: US-261029.070004-AC-02
+@[TP]: US-261029.070004-TP-03
+@[Trace]: US-261029.070004 | US-261029.070004-AC-02 | US-261029.070004-TP-03 | US-261029.070004-TC-02
+@[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
+```
+
+### Lookup and inherited evidence
+
+From the project root, a literal search finds the family or an individual relationship; `-F` treats the alias's dot literally:
+
+```bash
+rg -n --hidden --glob '!.git/**' -F 'US-261029.070004' .
+rg -n --hidden --glob '!.git/**' -F 'US-261029.070004-AC-01' .
+rg -n --hidden --glob '!.git/**' -F 'US-261029.070004-TC-01' .
+```
+
+Expected: the alias locates the registry, ACs, TP ledger, and TC references; the AC locates its owned TPs; TC-01 locates both covered TPs. Distinguish declarations from examples and historical references. Zero matches do not establish uniqueness unless every authoritative source was searched.
+
+An explicitly registered successor alias `US-261029.070006` may reference inherited evidence without changing the owning IDs:
+
+```text
+@[Trace]: US-261029.070006 | US-261029.070004-AC-01 | US-261029.070004-TP-01 | US-261029.070004-TC-01
+```
 
 ## Four-Phase Test Body
 
@@ -267,7 +341,7 @@ test_command_execution_qualitySecurity.cxx
 
 ## Implementation Tracking Template
 
-Use a TODO/tracking block that records category, status, and next action.
+Use a TODO/tracking block that records category, status, and next action. This excerpt references the Usage Example's existing AC/TP/TC identities; it does not define another TP ledger.
 
 ```text
 STATUS LEGEND:
@@ -278,15 +352,16 @@ STATUS LEGEND:
   ISSUES: known problem needing attention
   BLOCKED: cannot proceed due to a dependency or unresolved source
 
-P0 Functional:
-  [@AC-1,US-1] TC-1: verifyCore_byBasicOperation_expectSuccess - TODO
-  [@AC-2,US-1] TC-1: verifyMisuse_byDoubleInit_expectError - TODO
+P0 Functional / Typical:
+  @[TC]: US-261029.070004-TC-02
+  @[TP]: US-261029.070004-TP-03
+  @[Trace]: US-261029.070004 | US-261029.070004-AC-02 | US-261029.070004-TP-03 | US-261029.070004-TC-02
+  @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 
-P1 Design:
-  [@AC-3,US-2] TC-1: verifyState_byInvalidTransition_expectRejected - TODO
-  [@AC-3,US-2] TC-2: verifyFlow_byAdapterSequence_expectTranslateBeforeDispatch - TODO
-
-P2 Quality:
-  [@AC-4,US-3] TC-1: verifyPerformance_byHighLoad_expectWithinBudget - TODO
-  [@AC-4,US-3] TC-2: verifyFailure_byTimeout_expectActionableDiagnosticEvidence - TODO
+P0 Functional / Edge:
+  @[TC]: US-261029.070004-TC-01
+  @[TP]: US-261029.070004-TP-01, US-261029.070004-TP-02
+  @[Trace]: US-261029.070004 | US-261029.070004-AC-01 | US-261029.070004-TP-01 | US-261029.070004-TC-01
+  @[Trace]: US-261029.070004 | US-261029.070004-AC-01 | US-261029.070004-TP-02 | US-261029.070004-TC-01
+  @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 ```

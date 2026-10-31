@@ -125,9 +125,29 @@ assert_contains "$FILE_NAMING" '@[TestLevel]'
 assert_contains "$TEST_STRUCTURE" '@[TestScope]'
 assert_contains "$TEST_STRUCTURE" 'mockSysRtm <marker> | realSysRtm <marker>'
 assert_contains "$TEST_STRUCTURE" '## Project-Wide Traceability IDs'
-assert_contains "$TEST_STRUCTURE" '`US-<story>-AC-<n>`'
-assert_contains "$TEST_STRUCTURE" '`US-<story>-TP-<n>`'
-assert_contains "$TEST_STRUCTURE" '`US-<story>-TC-<n>`'
+assert_contains "$TEST_STRUCTURE" '`<StoryIdAlias>-AC-<n>`'
+assert_contains "$TEST_STRUCTURE" '`<StoryIdAlias>-TP-<n>`'
+assert_contains "$TEST_STRUCTURE" '`<StoryIdAlias>-TC-<n>`'
+assert_contains "$TEST_STRUCTURE" 'US-YYMMDD.HHMMSS'
+assert_contains "$TEST_STRUCTURE" 'UTC+08:00'
+assert_contains "$TEST_STRUCTURE" 'same-second collision'
+assert_contains "$TEST_STRUCTURE" 'exactly one owning AC'
+assert_contains "$TEST_STRUCTURE" '@[Trace]: <StoryIdAlias> | <AC ID> | <TP ID> | <TC ID>'
+assert_contains "$TEST_STRUCTURE" '## Artifact Ownership'
+assert_not_contains "$TEST_STRUCTURE" 'A literal search for the Story ID must find'
+assert_contains "$TODO_STORY_TEMPLATE" '**StoryIdAlias:** {{StoryIdAlias}}'
+assert_contains "$TODO_STORY_TEMPLATE" '**CreatedAt:** {{CreatedAt}}'
+assert_contains "$TODO_STORY_TEMPLATE" '| AC Seed | TP Refs | TC Refs |'
+assert_contains "$TODO_STORY_TEMPLATE" 'TP/TC cells are references, not definitions.'
+assert_contains "$STORY_LEDGER_TEMPLATE" '| Story ID | StoryIdAlias | CreatedAt'
+assert_contains "$STORY_LEDGER_TEMPLATE" '## Legacy Identity Mappings'
+assert_contains "$STORY_LEDGER_TEMPLATE" '| Legacy qualified ID | Current alias-qualified ID |'
+assert_contains "$DETAIL_VERIFY_TEMPLATE" 'authoritative TP definitions'
+assert_contains "$DETAIL_VERIFY_TEMPLATE" 'Owning AC ID'
+assert_contains "$DETAIL_VERIFY_TEMPLATE" 'Covering TC ID'
+assert_not_contains "$DETAIL_VERIFY_TEMPLATE" 'discovery_ledger` in living comments'
+assert_not_contains "$TEST_DISCOVERY" 'Keep one `discovery_ledger` in living comments'
+assert_not_contains "$DESIGN_FUNCTIONAL" 'otherwise place it in FreelyDrafts'
 assert_contains "$TEST_STRUCTURE" 'each TP MUST map to exactly one TC'
 assert_contains "$TEST_STRUCTURE" 'human-readable form'
 assert_contains "$TEST_STRUCTURE" 'US-<whoName>-<doWhat>'
@@ -135,7 +155,7 @@ assert_contains "$TEST_STRUCTURE" 'US-eventProducer-postEventsWithoutBlocking'
 assert_not_contains "$TEST_STRUCTURE" 'UUIDv4'
 assert_contains "$TEST_STRUCTURE" '@[TP]'
 assert_contains "$TODO_STORY_TEMPLATE" '**Story ID:** {{StoryID}}'
-assert_contains "$TODO_STORY_TEMPLATE" '### {{StoryID}}-AC-{{n}}:'
+assert_contains "$TODO_STORY_TEMPLATE" '### {{StoryIdAlias}}-AC-{{n}}:'
 assert_contains "$TODO_STORY_TEMPLATE" 'US-<whoName>-<doWhat> with lowerCamelCase segments'
 assert_contains "$ANALYZE_ISSUE" 'register the Story ID'
 assert_contains "$ANALYZE_ISSUE" 'project-wide-traceability-ids'
@@ -147,7 +167,7 @@ assert_contains "$IMPORT_STORY" 'assign a human-readable project Story ID in'
 assert_contains "$ANALYZE_ABORT" 'revision of the same story'
 assert_contains "$STORY_LEDGER_TEMPLATE" '## Story Identity Registry'
 assert_contains "$STORY_LEDGER_TEMPLATE" 'US-<whoName>-<doWhat>'
-assert_contains "$STORY_LEDGER_TEMPLATE" '{{StoryID}}-AC-{{n}}'
+assert_contains "$STORY_LEDGER_TEMPLATE" '{{StoryIdAlias}}-AC-{{n}}'
 for intake_command in "$ANALYZE_FEATURE" "$IMPORT_STORY" "$ANALYZE_ABORT" "$OPEN_STORY"; do
   assert_contains "$intake_command" 'project-wide-traceability-ids'
 done
@@ -156,22 +176,32 @@ assert_contains "$MASTER" 'Each TP **MUST** map to exactly one TC'
 assert_contains "$UBILANG" 'US / AC / TP / TC Cardinality'
 assert_contains "$UBILANG" 'each TP MUST map to exactly one TC'
 assert_contains "$UBILANG_ZH" '每个 TP MUST 恰好映射到一个 TC'
+assert_contains "$UBILANG" '| StoryIdAlias |'
+assert_contains "$UBILANG_ZH" '| StoryIdAlias |'
 assert_contains "$TEST_DISCOVERY" 'story-qualified TP ID'
 for trace_command in "$DESIGN_TESTS" "$IMPL_PRODUCT" "$DESIGN_FUNCTIONAL"; do
   assert_contains "$trace_command" 'project-wide-traceability-ids'
+  assert_contains "$trace_command" 'StoryIdAlias'
 done
 for template in "${TEMPLATES[@]}"; do
-  assert_contains "$template" 'US-PROJECT-01-AC-01'
-  assert_contains "$template" 'US-PROJECT-01-TP-01'
-  assert_contains "$template" 'US-PROJECT-01-TC-01'
+  assert_contains "$template" 'US-261029.070005-AC-01'
+  assert_contains "$template" 'US-261029.070005-TP-01'
+  assert_contains "$template" 'US-261029.070005-TC-01'
+  assert_contains "$template" 'StoryIdAlias'
+  assert_contains "$template" 'authoritative TP definitions'
   assert_contains "$template" 'abbreviated sample IDs'
 done
 assert_contains "$TASKS_TEMPLATE" '**ID:** {{StoryID}}'
-assert_contains "$DETAIL_TEMPLATE" '{{StoryID}}-AC-{{n}}'
-assert_contains "$DETAIL_VERIFY_TEMPLATE" '{{StoryID}}-TP-{{n}}'
-assert_contains "$ARCH_VERIFY_TEMPLATE" '{{StoryID}}-TP-{{n}}'
+assert_contains "$TASKS_TEMPLATE" '**StoryIdAlias:** {{StoryIdAlias}}'
+assert_not_contains "$TASKS_TEMPLATE" '{{StoryID}}-AC-'
+assert_not_contains "$TASKS_TEMPLATE" '{{StoryID}}-TP-'
+assert_not_contains "$TASKS_TEMPLATE" '{{StoryID}}-TC-'
+assert_contains "$DETAIL_TEMPLATE" '{{StoryIdAlias}}-AC-{{n}}'
+assert_contains "$DETAIL_VERIFY_TEMPLATE" '{{StoryIdAlias}}-TP-{{n}}'
+assert_contains "$ARCH_VERIFY_TEMPLATE" '{{StoryIdAlias}}-TP-{{n}}'
 for lifecycle_command in "$UPDATE_STORY" "$REVIEW_STORY" "$REVIEW_TESTS" "$CLOSE_STORY" "$PARTIAL_CLOSE" "$MERGE_WORKS"; do
   assert_contains "$lifecycle_command" 'project-wide-traceability-ids'
+  assert_contains "$lifecycle_command" 'StoryIdAlias'
 done
 assert_contains "$MERGE_WORKS" 'integrated project'
 assert_not_contains "$TEST_STRUCTURE" 'AC-n: GIVEN'
@@ -202,7 +232,7 @@ assert_contains "$DESIGN_FUNCTIONAL" 'every TP maps to exactly one TC'
 assert_contains "$DESIGN_FUNCTIONAL" 'every TC covers at least one TP'
 assert_contains "$DESIGN_FUNCTIONAL" 'a TP maps to zero or multiple TCs'
 
-story_id='US-eventProducer-postEventsWithoutBlocking'
+story_alias='US-261029.070001'
 case_names=(
   'verifyEventPost_byFullQueue_expectNonBlockReturn'
   'verifyEventPost_byFullQueue_expectErrorCode'
@@ -210,11 +240,12 @@ case_names=(
 )
 for index in "${!case_names[@]}"; do
   printf -v child_token '%02d' "$((index + 1))"
-  case_id="$story_id-TC-$child_token"
-  name_count="$(grep -Ec "$case_id[[:space:]]+${case_names[$index]}" "$ACTION_CONCEPTS")" || [[ $? -eq 1 ]]
-  case_count="$(grep -Ec "$case_id[[:space:]]+verify" "$ACTION_CONCEPTS")" || [[ $? -eq 1 ]]
+  case_id="$story_alias-TC-$child_token"
+  case_pattern="${case_id//./\\.}"
+  name_count="$(grep -Ec "$case_pattern[[:space:]]+${case_names[$index]}" "$ACTION_CONCEPTS")" || [[ $? -eq 1 ]]
+  case_count="$(grep -Ec "$case_pattern[[:space:]]+verify" "$ACTION_CONCEPTS")" || [[ $? -eq 1 ]]
   [[ "$name_count" -eq 2 && "$case_count" -eq 2 ]] || fail "$case_id must keep the same behavior in the full chain and tracking example"
-  assert_contains "$ACTION_CONCEPTS" "@[Trace]: $story_id | $story_id-AC-01 | $story_id-TP-$child_token | $case_id"
+  assert_contains "$ACTION_CONCEPTS" "@[Trace]: $story_alias | $story_alias-AC-01 | $story_alias-TP-$child_token | $case_id"
 done
 awk '
   /^## The Implementation Tracking Template$/ { tracking = 1; next }
@@ -240,6 +271,186 @@ awk '
     exit failed
   }
 ' "$ACTION_CONCEPTS" || fail "Action tracking example must give every TC one two-scope status"
+
+python3 -B - "$TEST_STRUCTURE" <<'PY'
+import copy
+import re
+import subprocess
+import sys
+import tempfile
+from datetime import datetime, timedelta
+from pathlib import Path
+
+document = Path(sys.argv[1]).read_text()
+usage = document.split("## Usage Example\n", 1)[1].split("## Four-Phase Test Body", 1)[0]
+candidate_match = re.search(r"python3 - <<'PY'\n(.*?)\nPY", usage, re.S)
+assert candidate_match is not None, "missing runnable alias-creation example"
+candidate_code = candidate_match.group(1)
+candidate = subprocess.run(
+    [sys.executable, "-B", "-c", candidate_code], check=True, capture_output=True, text=True
+)
+candidate_fields = dict(line.split(": ", 1) for line in candidate.stdout.splitlines())
+created = datetime.fromisoformat(candidate_fields["CreatedAt"])
+assert created.utcoffset() == timedelta(hours=8), "creation time must use UTC+08:00"
+assert candidate_fields["StoryIdAlias"] == created.strftime("US-%y%m%d.%H%M%S")
+
+requirements = usage.split("### Requirements and registry example", 1)[1].split("### Verification-design example", 1)[0]
+verification = usage.split("### Verification-design example", 1)[1].split("### Test-file reference example", 1)[0]
+tests = usage.split("### Test-file reference example", 1)[1].split("### Lookup and inherited evidence", 1)[0]
+metadata = dict(re.findall(r"^(Story ID|StoryIdAlias|CreatedAt): (.+)$", requirements, re.M))
+acs = re.findall(r"^(US-\d{6}\.\d{6}-AC-\d+):", requirements, re.M)
+tps = [tuple(part.strip() for part in line.split("|")[:3])
+       for line in verification.splitlines() if re.match(r"^US-\d{6}\.\d{6}-TP-", line)]
+cases = []
+for block in tests.split("@[US]: ")[1:]:
+    fields = {key: value for key, value in re.findall(r"^@\[(\w+)\]: (.+)$", block, re.M)}
+    fields["US"] = block.splitlines()[0]
+    fields["TP"] = fields["TP"].split(", ")
+    fields["AC"] = fields["AC"].split(", ")
+    fields["traces"] = [tuple(part.strip() for part in row.split("|"))
+                       for row in re.findall(r"^@\[Trace\]: (.+)$", block, re.M)]
+    cases.append(fields)
+
+def validate(registry, ac_ids, tp_rows, tc_records):
+    aliases = [entry["StoryIdAlias"] for entry in registry]
+    stories = [entry["Story ID"] for entry in registry]
+    assert len(aliases) == len(set(aliases)), "duplicate StoryIdAlias"
+    assert len(stories) == len(set(stories)), "duplicate Story ID"
+    identity_names = {}
+    for entry in registry:
+        for name in (entry["Story ID"], entry["StoryIdAlias"]):
+            assert identity_names.setdefault(name, entry["Story ID"]) == entry["Story ID"], "alias shadows another Story ID"
+        instant = datetime.fromisoformat(entry["CreatedAt"])
+        assert instant.utcoffset() == timedelta(hours=8), "unqualified creation time"
+        assert entry["StoryIdAlias"] == instant.strftime("US-%y%m%d.%H%M%S"), "alias/time mismatch"
+    assert len(ac_ids) == len(set(ac_ids)) and ac_ids, "invalid AC declarations"
+    points = {}
+    for tp, ac, tc in tp_rows:
+        assert tp not in points, "TP has multiple ownership/coverage declarations"
+        assert ac in ac_ids and tc, "TP has an unknown AC or unassigned TC"
+        points[tp] = (ac, tc)
+    assert set(ac_ids) == {ac for ac, _ in points.values()}, "AC has no TP"
+    seen_cases = set()
+    covered = set()
+    for case in tc_records:
+        alias = case["StoryIdAlias"]
+        assert any(entry["Story ID"] == case["US"] and entry["StoryIdAlias"] == alias
+                   for entry in registry), "unregistered story/alias pair"
+        tc = case["TC"]
+        assert tc not in seen_cases, "duplicate TC declaration"
+        seen_cases.add(tc)
+        assert case["TP"] and len(case["TP"]) == len(set(case["TP"])), "empty/duplicate TC coverage"
+        assert all(tp in points and points[tp][1] == tc for tp in case["TP"]), "dangling/conflicting TP coverage"
+        assert set(case["AC"]) == {points[tp][0] for tp in case["TP"]}, "wrong owning AC"
+        expected = {(alias, points[tp][0], tp, tc) for tp in case["TP"]}
+        assert len(case["traces"]) == len(expected) and set(case["traces"]) == expected, "trace-row drift"
+        covered.update(case["TP"])
+    assert covered == set(points), "TP omitted from its TC"
+    for kind, ids in (("AC", ac_ids), ("TP", points), ("TC", seen_cases)):
+        assert all(any(value.startswith(alias + "-" + kind + "-") for alias in aliases) for value in ids), "wrong alias prefix"
+
+baseline = ([metadata], acs, tps, cases)
+validate(*baseline)
+assert len(tps) == 3 and len(cases) == 2 and len(cases[0]["TP"]) == 2, "example must exercise many-TP-to-one-TC"
+for query, expected_count in ((metadata["StoryIdAlias"], 3), (acs[0], 2), (cases[0]["TC"], 2)):
+    rows = [row for case in cases for row in case["traces"] if query in " | ".join(row)]
+    assert len(rows) == expected_count, "fixed-string lookup loses relationships"
+
+with tempfile.TemporaryDirectory(prefix="catdd-alias-trace-") as directory:
+    root = Path(directory).resolve()
+    todo = root / ".catdd/spec/todoUS/example-UserStory.md"
+    doing = root / ".catdd/spec/doingUS/example-UserStory.md"
+    todo.parent.mkdir(parents=True)
+    doing.parent.mkdir(parents=True)
+    registry_path = root / "README_UserStories.md"
+    registry_text = "\n".join(f"{key}: {value}" for key, value in metadata.items())
+    legacy_id = metadata["Story ID"] + "-AC-01"
+    legacy_path = root / ".catdd/spec/doneUS/legacy-UserStory.md"
+    legacy_path.parent.mkdir(parents=True)
+    legacy_path.write_text(legacy_id + ": original accepted evidence\n", encoding="utf-8")
+    legacy_bytes = legacy_path.read_bytes()
+    registry_text += "\nLegacy Identity Mapping: " + legacy_id + " -> " + acs[0]
+    registry_path.write_text(registry_text + "\nSource: " + str(todo.relative_to(root)), encoding="utf-8")
+    todo.write_text(requirements + "\nState: todo\n", encoding="utf-8")
+    (root / "README_DetailVerifyDesign.md").write_text(verification, encoding="utf-8")
+    for category, block in zip(("funcValidEdge", "funcValidTypical"), tests.split("@[US]: ")[1:]):
+        (root / f"test_queue_{category}.cxx").write_text(
+            "\n".join("// " + line for line in ("@[US]: " + block).splitlines()), encoding="utf-8"
+        )
+    (root / "regex-decoy.txt").write_text(metadata["StoryIdAlias"].replace(".", "X"), encoding="utf-8")
+    (root / ".git").mkdir()
+    (root / ".git/ignored").write_text(metadata["StoryIdAlias"], encoding="utf-8")
+    for query, expected_count in ((metadata["StoryIdAlias"], 3), (acs[0], 2), (cases[0]["TC"], 2)):
+        result = subprocess.run(
+            ["grep", "-R", "-nF", "--exclude-dir=.git", query, "."],
+            cwd=root, check=True, capture_output=True, text=True,
+        )
+        assert "regex-decoy" not in result.stdout and "/.git/" not in result.stdout
+        assert len([line for line in result.stdout.splitlines() if "@[Trace]:" in line]) == expected_count
+        assert "README_DetailVerifyDesign.md:" in result.stdout
+        if query == metadata["StoryIdAlias"]:
+            assert ".catdd/spec/todoUS/example-UserStory.md:" in result.stdout
+            assert "README_UserStories.md:" in result.stdout
+    before = todo.read_text(encoding="utf-8")
+    todo.rename(doing)
+    doing.write_text(before.replace("State: todo", "State: doing"), encoding="utf-8")
+    registry_path.write_text(registry_text + "\nSource: " + str(doing.relative_to(root)), encoding="utf-8")
+    after_metadata = dict(re.findall(r"^(Story ID|StoryIdAlias|CreatedAt): (.+)$", doing.read_text(encoding="utf-8"), re.M))
+    assert after_metadata == metadata and not todo.exists(), "lifecycle move changed identity"
+    result = subprocess.run(
+        ["grep", "-R", "-nF", "--exclude-dir=.git", metadata["StoryIdAlias"], "."],
+        cwd=root, check=True, capture_output=True, text=True,
+    )
+    assert ".catdd/spec/doingUS/example-UserStory.md:" in result.stdout
+    assert ".catdd/spec/todoUS/example-UserStory.md:" not in result.stdout
+    legacy_lookup = subprocess.run(
+        ["grep", "-R", "-nF", "--exclude-dir=.git", legacy_id, "."],
+        cwd=root, check=True, capture_output=True, text=True,
+    )
+    assert "README_UserStories.md:" in legacy_lookup.stdout and acs[0] in legacy_lookup.stdout
+    assert ".catdd/spec/doneUS/legacy-UserStory.md:" in legacy_lookup.stdout
+    assert legacy_path.read_bytes() == legacy_bytes, "historical evidence was rewritten"
+
+registry, ac_ids, tp_rows, tc_records = copy.deepcopy(baseline)
+shared_tc = tc_records[0]["TC"]
+tp_rows[-1] = (tp_rows[-1][0], tp_rows[-1][1], shared_tc)
+tc_records[0]["TP"].append(tp_rows[-1][0])
+tc_records[0]["AC"].append(tp_rows[-1][1])
+tc_records[0]["traces"].append((metadata["StoryIdAlias"], tp_rows[-1][1], tp_rows[-1][0], shared_tc))
+validate(registry, ac_ids, tp_rows, tc_records[:1])
+
+for defect in ("duplicate-alias", "shadowed-id", "unknown-time", "wrong-time", "unknown-ac", "unassigned-tc", "duplicate-tp", "multiple-tcs", "missing-tp", "wrong-trace"):
+    registry, ac_ids, tp_rows, tc_records = copy.deepcopy(baseline)
+    if defect == "duplicate-alias":
+        registry.append({**registry[0], "Story ID": "US-otherActor-doOtherWork"})
+    elif defect == "shadowed-id":
+        registry.append({"Story ID": registry[0]["StoryIdAlias"], "StoryIdAlias": "US-261029.070002", "CreatedAt": "2026-10-29T07:00:02+08:00"})
+    elif defect == "unknown-time":
+        registry[0]["CreatedAt"] = "2026-10-29"
+    elif defect == "wrong-time":
+        registry[0]["CreatedAt"] = "2026-10-29T07:00:02+08:00"
+    elif defect == "unknown-ac":
+        tp_rows[0] = (tp_rows[0][0], metadata["StoryIdAlias"] + "-AC-99", tp_rows[0][2])
+    elif defect == "unassigned-tc":
+        tp_rows[0] = (tp_rows[0][0], tp_rows[0][1], "")
+    elif defect == "duplicate-tp":
+        tp_rows.append((tp_rows[0][0], tp_rows[0][1], tc_records[1]["TC"]))
+    elif defect == "multiple-tcs":
+        tc_records[1]["TP"].append(tp_rows[0][0])
+        tc_records[1]["AC"].append(tp_rows[0][1])
+        tc_records[1]["traces"].append((metadata["StoryIdAlias"], tp_rows[0][1], tp_rows[0][0], tc_records[1]["TC"]))
+    elif defect == "missing-tp":
+        tc_records[0]["TP"].pop()
+    else:
+        row = tc_records[0]["traces"][0]
+        tc_records[0]["traces"][0] = (row[0], ac_ids[1], row[2], row[3])
+    try:
+        validate(registry, ac_ids, tp_rows, tc_records)
+    except AssertionError:
+        continue
+    raise AssertionError("accepted invalid alias/trace fixture: " + defect)
+print("[methodPrompts-consistency-test] alias creation, graph, lookup, lifecycle/legacy preservation, and ten invalid fixtures verified")
+PY
 
 # 3. No deprecated level-prefixed test file names outside the vendored/refDoc material.
 deprecated_name_pattern='(UT|ST|UAT)_[A-Za-z0-9_]+-(Typical|Edge|Misuse|Fault|State|Capability|Interaction|Concurrency|Performance|Robust|Compatibility|Configuration|Diagnosis|Security)\.[A-Za-z]+'

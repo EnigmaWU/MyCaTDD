@@ -2,7 +2,7 @@
 
 ## What Is CaTDD?
 
-**CaTDD** stands for **Comment-alive Test-Driven Development**. It is a way to build software where the design lives *inside the code file* as structured comments, instead of in separate documents that slowly stop matching the code.
+**CaTDD** stands for **Comment-alive Test-Driven Development**. It keeps test-case design in structured source comments while linking those tests to authoritative requirements and TP definitions in verification-design documents.
 
 EnigmaWU created the method in 2023.10, and it has been used on real projects ever since.
 
@@ -46,7 +46,7 @@ The whole idea fits in one sentence:
       source artifacts remain authoritative
                                     ├── // @[US]: US-<registered-id>
                                     ├── // @[AC]: US-<id>-AC-<token>
-                                    ├── // @[TP]: US-<id>-TP-<token>
+                                    ├── // @[TP]: <StoryIdAlias>-TP-<token>
                                     └── // @[TC]: US-<id>-TC-<token>
    2. COMMENTS MOVE WITH CODE       code refactored → comments updated
                                     in the same edit
@@ -635,17 +635,21 @@ US-eventProducer-postEventsWithoutBlocking: As an event producer in high-load sc
 ### Acceptance Criteria (AC) Template
 
 ```text
-US-<registered-id>-AC-<token>: GIVEN [initial context and preconditions],
+<StoryIdAlias>-AC-<token>: GIVEN [initial context and preconditions],
                                WHEN [specific trigger, action, or event],
                                THEN [observable outcome using canonical MUST/MUST NOT wording].
 ```
 
-Register the Story ID in the project-wide story ledger and use stable, unique child IDs. In a complete design, each US must have at least one AC, each AC at least one TP, each TP exactly one TC, and each TC at least one TP. A TC may cover multiple TPs; an unassigned draft TP is a gap and blocks completion. AC outcomes use canonical Ubiquitous Language and normative terms from `README_UbiLang.md`.
+Register the human-readable Story ID together with its permanent StoryIdAlias and verified CreatedAt in the project-wide story ledger. New child IDs use the short alias prefix. In a complete design, each US has at least one AC, each AC at least one TP, each TP one owning AC and exactly one covering TC, and each TC at least one TP. A TC may cover multiple TPs; an unassigned draft TP blocks completion. AC outcomes use canonical Ubiquitous Language and normative terms.
 
 **Example:**
 
 ```text
-US-eventProducer-postEventsWithoutBlocking-AC-01:
+Story ID: US-eventProducer-postEventsWithoutBlocking
+StoryIdAlias: US-261029.070001
+CreatedAt: 2026-10-29T07:00:01+08:00
+
+US-261029.070001-AC-01:
   GIVEN an event producer calls IOC_postEVT_inConlesMode while the queue is full,
   WHEN the producer uses NonBlock mode,
   THEN the call MUST return immediately with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC,
@@ -657,23 +661,26 @@ The project registry owns the Story ID; the qualified AC ID remains stable when 
 ### Test Point (TP)
 
 ```text
-US-eventProducer-postEventsWithoutBlocking-TP-01:
+US-261029.070001-TP-01:
+  Owning AC ID: US-261029.070001-AC-01
+  Covering TC ID: US-261029.070001-TC-01
   Source: [authoritative API or design artifact#section]
   Setup/action: [technical condition and probe]
   Observable oracle: [source-backed expected evidence]
   Category/level: P0 Functional / Edge / UnitTesting
 ```
 
-Test points come from source-first discovery, not from already-written tests. Keep the discovery ledger and pass its Discovery Gate before treating the category skeleton as implementation-ready.
+Test points come from source-first discovery, not from already-written tests. Their authoritative definitions and owning-AC/covering-TC links live in the verification-design document (`README_DetailVerifyDesign.md` in SpecFlow). Test comments reference those TPs and define TCs. Pass the Discovery Gate before treating a category skeleton as implementation-ready.
 
 ### Test Case (TC) Template
 
 ```text
-US-eventProducer-postEventsWithoutBlocking-TC-01:
+US-261029.070001-TC-01:
   @[US]: US-eventProducer-postEventsWithoutBlocking
-  @[AC]: US-eventProducer-postEventsWithoutBlocking-AC-01
-  @[TP]: US-eventProducer-postEventsWithoutBlocking-TP-01
-  @[TC]: US-eventProducer-postEventsWithoutBlocking-TC-01
+  @[StoryIdAlias]: US-261029.070001
+  @[AC]: US-261029.070001-AC-01
+  @[TP]: US-261029.070001-TP-01
+  @[TC]: US-261029.070001-TC-01
    @[Name]: verifyBehavior_byCondition_expectResult
    @[Purpose]: Why this test matters and what it validates
    @[Brief]: What the test does in simple terms
@@ -701,18 +708,18 @@ A single requirement is traceable end to end:
 ```
   US-eventProducer-postEventsWithoutBlocking  a producer must not block when the queue is full
    │
-   ├─► US-eventProducer-postEventsWithoutBlocking-AC-01  returns immediately, with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
+   ├─► US-261029.070001-AC-01  returns immediately, with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
    │    │
-   │    ├─► US-eventProducer-postEventsWithoutBlocking-TP-01  returns immediately
-   │    │    └─► US-eventProducer-postEventsWithoutBlocking-TC-01  verifyEventPost_byFullQueue_expectNonBlockReturn
-   │    ├─► US-eventProducer-postEventsWithoutBlocking-TP-02  returns IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
-   │    │    └─► US-eventProducer-postEventsWithoutBlocking-TC-02  verifyEventPost_byFullQueue_expectErrorCode
-   │    └─► US-eventProducer-postEventsWithoutBlocking-TP-03  does not queue the event
-   │         └─► US-eventProducer-postEventsWithoutBlocking-TC-03  verifyEventPost_byFullQueue_expectNotQueued
+   │    ├─► US-261029.070001-TP-01  returns immediately
+   │    │    └─► US-261029.070001-TC-01  verifyEventPost_byFullQueue_expectNonBlockReturn
+   │    ├─► US-261029.070001-TP-02  returns IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
+   │    │    └─► US-261029.070001-TC-02  verifyEventPost_byFullQueue_expectErrorCode
+   │    └─► US-261029.070001-TP-03  does not queue the event
+   │         └─► US-261029.070001-TC-03  verifyEventPost_byFullQueue_expectNotQueued
    │
    └─► code    the queue check in IOC_postEVT_inConlesMode
         │
-        └─► commit   "US-eventProducer-postEventsWithoutBlocking-AC-01: non-blocking post when queue is full"
+        └─► commit   "US-261029.070001-AC-01: non-blocking post when queue is full"
 ```
 
 One AC can produce several TPs, each mapped to exactly one TC, because "returns immediately", "returns this code", and "does not queue the event" are distinct claims. A single TC may cover several TPs when one execution verifies each obligation.
@@ -963,17 +970,17 @@ This excerpt tracks the full-queue AC from the full chain above, preserving the 
 //===========================================================================================
 // P0 Functional / Edge - nonblocking post with a full queue
 //===========================================================================================
-//   @[Trace]: US-eventProducer-postEventsWithoutBlocking | US-eventProducer-postEventsWithoutBlocking-AC-01 | US-eventProducer-postEventsWithoutBlocking-TP-01 | US-eventProducer-postEventsWithoutBlocking-TC-01
+//   @[Trace]: US-261029.070001 | US-261029.070001-AC-01 | US-261029.070001-TP-01 | US-261029.070001-TC-01
 //   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
-//   @[TC]: US-eventProducer-postEventsWithoutBlocking-TC-01 verifyEventPost_byFullQueue_expectNonBlockReturn
+//   @[TC]: US-261029.070001-TC-01 verifyEventPost_byFullQueue_expectNonBlockReturn
 //
-//   @[Trace]: US-eventProducer-postEventsWithoutBlocking | US-eventProducer-postEventsWithoutBlocking-AC-01 | US-eventProducer-postEventsWithoutBlocking-TP-02 | US-eventProducer-postEventsWithoutBlocking-TC-02
+//   @[Trace]: US-261029.070001 | US-261029.070001-AC-01 | US-261029.070001-TP-02 | US-261029.070001-TC-02
 //   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
-//   @[TC]: US-eventProducer-postEventsWithoutBlocking-TC-02 verifyEventPost_byFullQueue_expectErrorCode
+//   @[TC]: US-261029.070001-TC-02 verifyEventPost_byFullQueue_expectErrorCode
 //
-//   @[Trace]: US-eventProducer-postEventsWithoutBlocking | US-eventProducer-postEventsWithoutBlocking-AC-01 | US-eventProducer-postEventsWithoutBlocking-TP-03 | US-eventProducer-postEventsWithoutBlocking-TC-03
+//   @[Trace]: US-261029.070001 | US-261029.070001-AC-01 | US-261029.070001-TP-03 | US-261029.070001-TC-03
 //   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
-//   @[TC]: US-eventProducer-postEventsWithoutBlocking-TC-03 verifyEventPost_byFullQueue_expectNotQueued
+//   @[TC]: US-261029.070001-TC-03 verifyEventPost_byFullQueue_expectNotQueued
 //
 // 🚪 GATE P0: All P0 tests must be GREEN before proceeding to P1.
 ```
@@ -1039,10 +1046,10 @@ The remaining chapters move from *what* to *how*.
 
 ## Usage Example
 
-For the story "As an event producer, I want to post events without blocking," derive a readable actor-behavior ID and check the project ledger and lifecycle artifacts before registering it:
+For the illustrative story above, register the readable Story ID and its verified creation-time alias under the [canonical identity contract](../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Then search the alias from the project root:
 
 ```bash
-rg -n --hidden --fixed-strings 'US-eventProducer-postEventsWithoutBlocking' README_UserStories.md .catdd/spec
+rg -n --hidden --glob '!.git/**' -F 'US-261029.070001' .
 ```
 
-Review matches to distinguish an existing story declaration from references or examples. Check known module story sources as well, then register the ID and qualify its AC, TP, and TC identifiers with that same Story ID. Expected output identifies occurrences to reconcile before registration; an empty search does not replace the source check.
+Expected: the registry, AC declarations, authoritative TP rows, and TC references are discoverable by the same alias. Search a qualified AC or TC ID to find its linked TPs. Distinguish declarations from examples and preserve legacy mappings; a grep hit proves a reference, not verification, and an empty search is not a complete uniqueness check.

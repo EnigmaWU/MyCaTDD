@@ -91,6 +91,8 @@ Expected result:
 
 ## Conflict Guard
 
+Resolve the selected TC's StoryIdAlias and explicit TP/AC references against the registry and authoritative verification-design ledger. Preserve the TC's complete TP list and trace rows; missing or changed TP intent routes to design, not an inline redefinition in the test file.
+
 Do not batch unrelated TCs. CaTDD implementation should move one selected TC at a time unless the developer asks for a batch.
 REFACTOR must not smuggle new behavior into an existing TC; missing points require a new TC or explicit developer approval.
 Do not mark REFACTOR complete if the selected TC body is missing strict 4-phase markers or key `VERIFY_KEYPOINT_xyz` assertions.

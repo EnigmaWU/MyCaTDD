@@ -124,6 +124,8 @@ On `REVISE`, route to `SPEC_updateArchDesign` and record structured findings. Th
 
 ## Conflict Guard
 
+Resolve StoryIdAlias and promoted TP references through the registry and detailed verification-design ledger. Architecture strategy must preserve those identities and must not redefine TP obligations or AC ownership in a second ledger.
+
 Do not approve an architecture that cannot explain its system boundary, module ownership, dependency direction, runtime/deployment boundaries, and traceability back to requirements.
 Do not approve an architecture that omits consuming-system context for the designed module.
 

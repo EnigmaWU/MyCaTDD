@@ -59,6 +59,8 @@ When this category applies, consider test points such as:
 
 Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids); abbreviated IDs in examples are illustrative only.
 
+Resolve StoryIdAlias through the registry for new alias-qualified AC/TP/TC IDs. Authoritative TP definitions, owning ACs, and covering TC links live in the verification-design document; this skeleton references them. Each TC lists all covered TPs and one trace row per relationship.
+
 ```text
 // @[SUT]: [Declared SUT matching file overview]
 // @[TestLevel]: UnitTesting (or SysTesting / UserTesting)
@@ -71,6 +73,7 @@ Use [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-
 // @[ThreatOrPolicy]: [threat actor, policy, or security rule]
 // @[ConstitutionalRule]: [K-rule-id or policy invariant, e.g., K-SEC-02 / CWE-200]
 // @[US]: [registered Story IDs]
+// @[StoryIdAlias]: [registered short aliases for the stories above]
 // @[AC]: [qualified AC IDs]
 // @[TP]: [qualified TP IDs]
 // @[TC]: [qualified TC ID] verify[Protection]_by[ThreatScenario]_expect[SafeDenialOrContainment]

@@ -64,4 +64,6 @@ Expected result:
 
 ## Conflict Guard
 
+Resolve a supplied StoryIdAlias or qualified TC ID through the project registry and authoritative verification-design ledger. Select by explicit TP/AC relationships, never matching numeric suffixes; unresolved identity or coverage links block selection.
+
 Selection follows CaTDD category priority from `methodPrompts`, not file order alone.

@@ -234,6 +234,8 @@ These document local implementation details, code tactics, and class/API behavio
 
 Verification-design placement: `README_DetailVerifyDesign.md` owns the behavior inventory, test-point discovery, row-level CaTDD category x Agile quadrant coverage, submodule strategy, and category files. `README_ArchVerifyDesign.md` owns the level-and-boundary map, runtime environment matrix, double credibility, system-scope quality scenarios, and the quadrant balance across levels and evidence. A cell naming a category file belongs to detail design; a cell naming a level, environment, operator, or equipment belongs to architecture design. `README_VerifyStatusTraces.md` is the optional dynamic companion for live status; story TASKs or test-file comments are valid alternatives.
 
+Identity and definition ownership: the project registry binds Story ID, StoryIdAlias, CreatedAt, and the authoritative US/AC source. New AC/TP/TC IDs use the registered alias prefix. `README_DetailVerifyDesign.md` holds authoritative TP definitions, owning ACs, and sole covering TC links; test files define TCs and list all covered TPs. Tests reference that ledger rather than duplicate it. Architecture promotion preserves the same TP ID. Creation/import registers aliases; lifecycle operations preserve them; review/status/merge resolve and verify the mappings, including explicit legacy and shared-evidence links.
+
 ### 3. General & Requirements (Created by DEVELOPER first, later updated by `SPEC_updateUserStory` and `SPEC_reviewUserStory`)
 
 | File | Purpose |

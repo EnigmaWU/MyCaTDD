@@ -33,7 +33,7 @@ This is the SpecCoding template for project-root `README_DetailDesign.md`. Creat
 
 | AC ID | Given | When | Then | Design Impact |
 | --- | --- | --- | --- | --- |
-| {{StoryID}}-AC-{{n}} | {{context}} | {{action}} | {{observable result}} | {{module/API/state change}} |
+| {{StoryIdAlias}}-AC-{{n}} | {{context}} | {{action}} | {{observable result}} | {{module/API/state change}} |
 
 ## Interface Design
 

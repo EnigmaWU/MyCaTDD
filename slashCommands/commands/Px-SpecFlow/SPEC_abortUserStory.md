@@ -77,6 +77,8 @@ Expected result:
 
 ## Conflict Guard
 
+Preserve StoryIdAlias, CreatedAt, and the original AC/TP/TC links in abort evidence. The registry continues to identify that historical story; a later independent successor registers its own pair rather than reusing the aborted alias.
+
 Do not use abort to silently discard work. Preserve the story, task checklist, source trace, abort reason, and any useful verification evidence.
 Do not continue implementation after aborting. The next round must start from `SPEC_analyzeAbortedUserStory` or `SPEC_importIssue`.
 Do not invent the replacement story.

@@ -82,6 +82,8 @@ Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPr
 
 ## Traceability and SUT constraints
 
+- Resolve Story ID and permanent StoryIdAlias through the project registry; new AC/TP/TC IDs use the alias prefix. Preserve the mapping and creation instant across lifecycle moves.
+- Requirements own US/AC definitions; `README_DetailVerifyDesign.md` owns authoritative TP definitions and explicit AC/TC links; test files own TCs and their complete TP lists. Architecture verification references the same TP IDs. Do not maintain a second TP ledger in test comments.
 - `SPEC_designTests` and related `TEST_design*Skeleton` commands should enforce minimum traceability cardinality: each US has at least 1 AC, each AC has at least 1 TP, each TP maps to exactly 1 TC, and each TC covers at least 1 TP.
 - Test design outputs must explicitly declare the SUT in the test-file overview (for example: `SUT: utCodeAgentCLI`).
 - Outputs with dangling traceability (US without AC, AC without TP, TP without exactly 1 TC, or TC without TP) should be blocked from being marked complete.

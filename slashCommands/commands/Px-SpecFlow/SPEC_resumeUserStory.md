@@ -61,6 +61,8 @@ Expected result:
 
 ## Conflict Guard
 
+Resolve and preserve StoryIdAlias and CreatedAt from the suspended story and registry. Reconcile conflicting identity mappings before resuming; never assign the resume time as the creation time or create replacement child IDs.
+
 Do not resume if the story already exists under `.catdd/spec/doingUS/`.
 Do not resume without validating the stored `resume_ref`.
 Do not mutate suspended history; move artifacts and preserve evidence.

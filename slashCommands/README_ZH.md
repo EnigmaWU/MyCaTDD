@@ -82,6 +82,8 @@
 
 ## 追溯与 SUT 约束
 
+- 通过项目注册表解析 Story ID 与永久 StoryIdAlias；新的 AC/TP/TC ID 使用别名前缀。生命周期移动保持映射和创建时刻不变。
+- US/AC 定义属于需求文档；`README_DetailVerifyDesign.md` 拥有权威 TP 定义及显式 AC/TC 链接；测试文件拥有 TC 和完整 TP 列表。架构验证引用相同 TP ID，测试注释不得维护第二份 TP 台账。
 - `SPEC_designTests` 与相关 `TEST_design*Skeleton` 命令应强制满足最小追溯基数：每个 US 至少有 1 个 AC，每个 AC 至少有 1 个 TP，每个 TP 恰好映射到 1 个 TC，每个 TC 至少覆盖 1 个 TP。
 - 测试设计产出必须在测试文件 Overview 中显式声明 SUT（例如：`SUT: utCodeAgentCLI`）。
 - 若存在未闭合追溯（US 无 AC、AC 无 TP、TP 未恰好映射到 1 个 TC，或 TC 未关联 TP），命令应阻止该设计结果作为完成态。

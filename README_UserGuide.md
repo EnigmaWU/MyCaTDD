@@ -136,7 +136,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 
 ### 3. Write Your First User Story
 
-> **ID note:** `US-1`, `AC-1`, and `TC-1` in this guide are illustrative shorthand, not project-wide IDs to copy into project artifacts. New project Story IDs use `US-<whoName>-<doWhat>` with lowerCamelCase segments, such as `US-eventProducer-postEventsWithoutBlocking`.
+> **ID note:** `US-1`, `AC-1`, and `TC-1` in this guide are illustrative shorthand, not project IDs to copy. Keep the human-readable `US-<whoName>-<doWhat>` Story ID, such as `US-eventProducer-postEventsWithoutBlocking`, and register its permanent `StoryIdAlias` (`US-YYMMDD.HHMMSS`, UTC+08:00 creation time). New AC/TP/TC IDs use that alias prefix. Requirements own US/AC definitions, verification design owns TPs, and test files own TCs with explicit TP references.
 
 ```cpp
 /**
@@ -199,13 +199,13 @@ TEST(EventPosting, verifyNonBlockPost_byFullQueue_expectImmediateReturn) {
 
 ## Usage Example
 
-For a SpecFlow project with its Story Ledger initialized, run from the project root to check a proposed ID before registration:
+After registering the illustrative Story ID/StoryIdAlias pair under the [canonical contract](methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids), run from the project root to find its trace family:
 
 ```bash
-rg -n --hidden --fixed-strings 'US-eventProducer-postEventsWithoutBlocking' README_UserStories.md .catdd/spec
+rg -n --hidden --glob '!.git/**' -F 'US-261029.070001' .
 ```
 
-Expected result: matching declarations, aliases, and references are shown for review. Refine the candidate if another story owns it; references and examples alone do not claim the ID.
+Expected result: matching registry, AC, TP, and TC declarations/references are shown. An AC-ID search locates its owned TPs; a TC-ID search locates its covered TPs. Resolve collisions before registration without inventing timestamps; examples and references alone do not claim an identity.
 
 ## The 3-Phase Workflow
 

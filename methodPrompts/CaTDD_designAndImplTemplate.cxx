@@ -19,8 +19,10 @@
 //   Design → Draft → Structure → Test (RED) → Code (GREEN) → Refactor → Repeat
 //
 // PROJECT-WIDE TRACE: The abbreviated sample IDs below are illustrative only.
-//   Replace them with registered Story IDs and qualified AC/TP/TC IDs from
-//   CaTDD_methodPrompt-testStructure.md; retain US/AC/TP/TC metadata per TC.
+//   Resolve StoryIdAlias through the registry; new AC/TP/TC IDs use its prefix.
+//   Keep authoritative TP definitions in the verification-design document.
+//   Test comments reference those TPs and define TCs, including every covered TP.
+//   CaTDD_methodPrompt-testStructure.md owns identity, ownership, and legacy mappings.
 //
 // REFERENCE: methodPrompts/CaTDD_methodPrompt.md for full methodology
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,9 +96,11 @@
  *     // @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
  *     // @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
  *     // @[US]: US-PROJECT-01
- *     // @[AC]: US-PROJECT-01-AC-01
- *     // @[TP]: US-PROJECT-01-TP-01
- *     // @[TC]: US-PROJECT-01-TC-01 verifyCore_byValidInput_expectSuccess
+ *     // @[StoryIdAlias]: US-261029.070005
+ *     // @[AC]: US-261029.070005-AC-01
+ *     // @[TP]: US-261029.070005-TP-01
+ *     // @[TC]: US-261029.070005-TC-01 verifyCore_byValidInput_expectSuccess
+ *     // @[Trace]: US-261029.070005 | US-261029.070005-AC-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
  *     //=================================================================================================
  *
  *   Developers fill this skeleton to make verification intent clear.
@@ -238,30 +242,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF DISCOVERY & EVIDENCE CHAIN (FreelyDrafts)========================================
 /**
- * SOURCE-FIRST TEST-POINT DISCOVERY (Optional living ledger in test file or FreelyDrafts)
+ * SOURCE-FIRST DISCOVERY REFERENCES (not authoritative TP definitions)
  *
  * DISCOVERY SCOPE: SUT=IOC_CommandAPI, feature=command_execution, level=UnitTesting
  * DOMAIN / EXECUTION ENVIRONMENT: Host Linux, POSIX threads, zero-heap critical path
- * SOURCES / RULES:
- *   - IOC_ArchDesign#3.1 (R-CMD-01: synchronous P2P command execution)
- *   - IOC_ArchDesign#3.4 (R-CMD-04: non-blocking return when EvtDescQueue full)
- *   - IOC_ArchDesign#3.5 (R-CMD-07: fast-fail null pointer validation)
- *   - IOC_ArchDesign#4.2 (R-CMD-12: worker thread allocation failure recovery)
- * DIMENSIONS: ServiceRole(CmdExecutor, CmdInitiator) x ClientRole(CmdInitiator, CmdExecutor) x Mode(Sync, Callback)
- * SAMPLING: Full pairwise exploration of service role x execution mode
- * REVIEW: Self-reviewed against IOC API spec v2.1; residual risk: multi-core scheduler drift
- *
- * DISCOVERY LEDGER:
- *  TP ID | Source/Rule  | Setup / Action                 | Observable Oracle                   | Category/Level | Disposition/Evidence
- *  ------|--------------|--------------------------------|-------------------------------------|----------------|----------------------
- *  TP-01 | Spec #3.1 R1 | Client sends PING via execCMD  | Callback returns PONG, code SUCCESS | Typical/unit   | DESIGNED: US-1/AC-1/TC-1
- *  TP-02 | Spec #3.2 R2 | Client sends multiple cmd types| Correct handler invoked per cmd type| Typical/unit   | DESIGNED: US-1/AC-1/TC-2
- *  TP-03 | Spec #3.4 R4 | Post to full queue in Async    | Return IOC_RESULT_TOO_MANY_QUEUING  | Edge/unit      | DESIGNED: US-1/AC-2/TC-1
- *  TP-04 | Spec #3.5 R7 | Pass null callback pointer     | Return IOC_RESULT_INVALID_PARAM     | Misuse/unit    | DESIGNED: US-2/AC-1/TC-1
- *  TP-05 | Spec #4.2 R2 | Worker thread fails allocation | Return error, log DIAG_WARN         | Fault/unit     | DESIGNED: US-2/AC-2/TC-1
- *
- * Discovery Gate: PASS (5 TPs identified, 0 GAPs, 0 BLOCKED)
- * ready_for_implementation: yes
+ * DISCOVERY LEDGER: README_DetailVerifyDesign.md (or the declared standalone verification design)
+ * TP REFERENCES: [alias-qualified TP IDs owned by that document]
+ * REVIEW EVIDENCE: [current source-first gate result and its scope]
+ * Keep source rules, AC ownership, oracles, and dispositions in that ledger.
+ * Reconcile every TC's TP list and trace rows with its covering-TC links.
+ * A provisional note here is not an approved TP; route it to the design owner.
  */
 //======>END OF DISCOVERY & EVIDENCE CHAIN=========================================================
 

@@ -98,6 +98,8 @@ State where the command reads and writes.
 - Related flow document under `slashCommands/flows/`
 - Previous and next commands in the automation flow, when applicable
 
+For traceability, resolve the canonical Story ID and StoryIdAlias through the project registry. New AC/TP/TC IDs use the alias prefix. Authoritative TP definitions and AC/TC ownership live in the verification-design document; test files define TCs and reference every covered TP with explicit trace rows. Do not infer links from suffixes or silently migrate legacy IDs.
+
 ## WHY
 
 State why this command exists.

@@ -16,7 +16,7 @@ Before the category loop:
 
 1. Read the main method and [test-point discovery method](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md). Declare SUT, scope, source references, and test level. Resolve relevant behavior documents from the interface and optional `behavior_sources`; ask if expected behavior is missing.
 2. Build the source-first Behavior Inventory and perform the P0 Discovery Sweep before consulting existing skeletons for coverage. Use available `deployment_evidence` as discovery input, not as authority for expected results. No incident history is required.
-3. Preserve one `discovery_ledger` in FreelyDrafts or test-file overview/design comments. Record rule/TP IDs, concrete scenarios, oracles, category/test level, and dispositions. Missing intent remains QUESTION, not a fabricated AC. Preserve existing IDs and unrelated skeletons.
+3. Use the authoritative `discovery_ledger` in the verification-design document (`README_DetailVerifyDesign.md` in SpecFlow). Record owning ACs, covering TCs, source rules, scenarios, oracles, category/test level, and dispositions there; test comments reference TPs and define TCs. In SpecFlow, route missing or changed TP definitions through `SPEC_updateDetailDesign` before drafting their TC references. Standalone use follows the project's declared verification-design owner. Missing intent remains QUESTION, not a fabricated AC.
 
 Then repeat per category in order — Typical, then Edge, Misuse, Fault.
 
@@ -59,7 +59,7 @@ Expected result:
 - `behavior_sources`: optional additional User Story, AC, UsageDesign, workflow, or error-contract sources; resolve references or ask when the interface is insufficient.
 - `scope`: optional developer-approved functional boundary; otherwise the full named feature, not a silently selected subset.
 - `deployment_evidence`: optional incident/reproduction, usage, or supported-environment evidence; record unavailable evidence without inventing it.
-- `discovery_ledger`: optional existing ledger location; otherwise place it in FreelyDrafts or target overview/design comments and return its location.
+- `discovery_ledger`: authoritative verification-design ledger location, supplied or resolved from source references. If missing, report the gap and route to its design owner; do not create an authoritative ledger in test comments.
 
 ## Method References
 
@@ -67,6 +67,7 @@ Expected result:
 - [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
 - [../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
+- Resolve StoryIdAlias from the story registry. New AC/TP/TC IDs use its prefix; each TP has an explicit owning AC and sole covering TC, and each TC lists every TP it covers. Preserve legacy mappings instead of silently renumbering.
 - [../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md)
 - [../../../methodPrompts/CaTDD_methodPrompt4Cat-Edge.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Edge.md)
 - [../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md)

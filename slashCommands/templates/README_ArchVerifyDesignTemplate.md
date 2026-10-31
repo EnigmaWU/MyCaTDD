@@ -32,6 +32,8 @@ Rules:
 
 ## Verification Constraints and Goals
 
+Resolve StoryIdAlias through the project story registry. TP references use alias-qualified IDs from `README_DetailVerifyDesign.md`; promotion changes strategy ownership, not TP identity, AC ownership, or its sole covering TC. Do not maintain a second TP definition or discovery ledger here.
+
 <!-- How: Start from WHAT must be proven at system scope and WHY it matters before choosing mechanics. -->
 
 | Constraint / Goal | Source | Why It Matters | Observable Evidence |
@@ -78,7 +80,7 @@ Rules:
 
 | TP ID | Obligation (from detail ledger) | Promoted level | Environment | Evidence owner | Detail design reference |
 | --- | --- | --- | --- | --- | --- |
-| {{StoryID}}-TP-{{n}} | {{obligation text}} | {{SysTesting/UserTesting}} | {{ENV id}} | {{owner}} | [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md) |
+| {{StoryIdAlias}}-TP-{{n}} | {{obligation text}} | {{SysTesting/UserTesting}} | {{ENV id}} | {{owner}} | [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md) |
 
 ## Evidence, Gates, and Equipment Ownership
 

@@ -47,7 +47,9 @@ Default classification order:
 
 - P0 functional design should cover the full `Typical -> Edge -> Misuse -> Fault` set by default unless the developer explicitly limits scope.
 - Each US must map to at least 1 AC.
-- Each AC must map to at least 1 TC.
+- Each AC must link to at least 1 TP; each TP has one owning AC and exactly one covering TC in a complete design. Each TC covers one or more TPs.
+- Register a permanent `StoryIdAlias` beside the human-readable Story ID; new AC/TP/TC IDs use its short prefix and explicit relationship links.
+- US/AC definitions stay in requirements, authoritative TPs in verification design, and TC definitions/evidence in test files. See [Artifact Ownership](CaTDD_methodPrompt-testStructure.md#artifact-ownership).
 - Design outputs must explicitly declare the SUT in the test-file overview (for example: `SUT: utCodeAgentCLI`).
 
 ## Typical contents

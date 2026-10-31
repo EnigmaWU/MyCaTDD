@@ -2,13 +2,14 @@
 
 This is the SpecCoding template for project-root `README_DetailVerifyDesign.md`. Create or update it from `SPEC_takeDetailDesign` and revise it from `SPEC_updateDetailDesign`; `SPEC_reviewDetailDesign` gates it. Use it when a story changes test points, CaTDD category coverage, submodule seams, fixtures, oracles, or per-module verification strategy.
 
-`README_DetailVerifyDesign.md` is a stable design artifact. It answers *which test points does this module and its submodules own, and how are they classified*, and it owns `UnitTesting` strategy. Apply the method prompts directly: `CaTDD_methodPrompt-testPointDiscovery.md` owns discovery, the `discovery_ledger`, and the Discovery Gate; `CaTDD_methodPrompt-categorySemantics.md` owns category routing; `CaTDD_methodPrompt-testStructure.md` and `CaTDD_methodPrompt-fileNaming.md` own `@[TestLevel]`, comment shape, and file names. Resolve those prompts under `methodPrompts/` in the CaTDD source repository or `.catdd/methodPrompts/` in an installed project.
+`README_DetailVerifyDesign.md` is a stable design artifact. It owns the authoritative TP definitions, their AC ownership and TC coverage links, and `UnitTesting` strategy. Apply the method prompts directly: `CaTDD_methodPrompt-testPointDiscovery.md` owns the discovery methodology, ledger schema, and Discovery Gate; `CaTDD_methodPrompt-categorySemantics.md` owns category routing; `CaTDD_methodPrompt-testStructure.md` and `CaTDD_methodPrompt-fileNaming.md` own identity, `@[TestLevel]`, comment shape, and file names. Resolve those prompts under `methodPrompts/` in the CaTDD source repository or `.catdd/methodPrompts/` in an installed project.
 
 `SysTesting` and `UserTesting` obligations are promoted to [README_ArchVerifyDesign.md](README_ArchVerifyDesign.md) under the same TP ID. Keep live RED/GREEN status, run output, and temporary trace churn in story TASKs, test files, or `README_VerifyStatusTraces.md`.
 
 ## Story and Design Inputs
 
 - Story: {{StoryID}} and {{title}}
+- StoryIdAlias: {{StoryIdAlias}} (resolve through `README_UserStories.md`; never allocate a new alias during design)
 - Active story artifact: {{.catdd/spec/doingUS path}}
 - Detail design: [README_DetailDesign.md](README_DetailDesign.md)
 - State design: [README_StateDesign.md](README_StateDesign.md)
@@ -40,7 +41,7 @@ Build this from sources before consulting existing skeletons. Existing tests are
 
 | TP ID | Category | `TestLevel` | Peer reality | Owning design | Promotion reference |
 | --- | --- | --- | --- | --- | --- |
-| {{StoryID}}-TP-{{n}} | {{Typical/Edge/Misuse/Fault/State/Capability/Interaction/Concurrency/Performance/Robust/Compatibility/Configuration/Diagnosis/Security/DemoExample}} | {{UnitTesting/SysTesting/UserTesting}} | {{real peer, target runtime, fake, stub, recorded}} | {{this document / README_ArchVerifyDesign.md}} | {{promoted TP row in the architecture design or n/a}} |
+| {{StoryIdAlias}}-TP-{{n}} | {{Typical/Edge/Misuse/Fault/State/Capability/Interaction/Concurrency/Performance/Robust/Compatibility/Configuration/Diagnosis/Security/DemoExample}} | {{UnitTesting/SysTesting/UserTesting}} | {{real peer, target runtime, fake, stub, recorded}} | {{this document / README_ArchVerifyDesign.md}} | {{promoted TP row in the architecture design or n/a}} |
 
 Rules:
 
@@ -72,13 +73,15 @@ Row-level category coverage lives here. Quadrant balance across levels, environm
 
 ## Test-Point Discovery Ledger
 
-Keep one feature-level inventory and `discovery_ledger` in living comments, alongside this design. `CaTDD_methodPrompt-testPointDiscovery.md` owns the row fields, dispositions (`DESIGNED / QUESTION / EXCLUDED / REFERRED / GAP`), and readiness semantics.
+Keep the single authoritative feature-level inventory and `discovery_ledger` in this document. Test-file comments reference these TP IDs and define TCs; they must not independently redefine TP meaning or ownership. `CaTDD_methodPrompt-testPointDiscovery.md` owns the row fields, dispositions (`DESIGNED / QUESTION / EXCLUDED / REFERRED / GAP`), and readiness semantics.
 
 ```text
-TP ID | Source/AC/rule | Setup/action | Observable oracle | Category/TestLevel | Disposition/evidence
-{{StoryID}}-TP-{{n}} | {{StoryID}}-AC-{{n}} / [source/R1] | [condition] | [expected result] | Typical/UnitTesting | DESIGNED: [file, qualified TC IDs]
-{{StoryID}}-TP-{{n}} | [source/R2] | [condition] | unknown | provisional | QUESTION: [question, decision owner]
+TP ID | Owning AC ID | Covering TC ID | Source/rule | Setup/action | Observable oracle | Category/TestLevel | Disposition/evidence
+{{StoryIdAlias}}-TP-{{n}} | {{StoryIdAlias}}-AC-{{a}} | {{StoryIdAlias}}-TC-{{t}} | [source/R1] | [condition] | [expected result] | Typical/UnitTesting | DESIGNED: [test-file path and TC declaration]
+{{StoryIdAlias}}-TP-{{n}} | unknown | unassigned | [source/R2] | [condition] | unknown | provisional | QUESTION: [question, decision owner]
 ```
+
+Each TP has exactly one owning AC and, in a complete design, exactly one covering TC. The tokens `n`, `a`, and `t` are independently allocated; equal numbers never imply a link. One TC may cover several TPs. Reconcile this table with every TC's `@[TP]` list and `@[Trace]: StoryIdAlias | AC-ID | TP-ID | TC-ID` rows; dangling or inconsistent links block completion. Unknown ownership is QUESTION; a known in-scope TP without a TC is GAP. Design-phase draft gaps remain visible until skeleton design supplies valid TC links.
 
 Discovery Gate report:
 
@@ -94,7 +97,7 @@ Residual risk and next action: ...
 
 | Submodule / unit | SUT boundary | Seams, fakes, fixtures | Oracle | Owned TP IDs |
 | --- | --- | --- | --- | --- |
-| {{submodule or class}} | {{declared boundary}} | {{seam and data design}} | {{observable result}} | {{StoryID}}-TP-{{n}} |
+| {{submodule or class}} | {{declared boundary}} | {{seam and data design}} | {{observable result}} | {{StoryIdAlias}}-TP-{{n}} |
 
 ## Test Approach Design
 

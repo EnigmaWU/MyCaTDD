@@ -10,7 +10,7 @@ USAGE:
      Example: tests/test_command_execution_funcValidTypical.py
      Feature comes from module-interface usage scenarios; category uses CaTDD filename tokens.
   2. Fill in OVERVIEW: what you're testing and why
-  3. Draft ideas freely in comments (FreelyDrafts with discovery ledger)
+  3. Draft provisional ideas in comments; reconcile TPs into verification design
   4. Structure into US/AC/TC format with explicit TestEvidenceChain
   5. Implement tests first (TDD Red->Green cycle)
   6. Track progress in TODO section
@@ -19,8 +19,10 @@ TDD WORKFLOW:
   Design -> Draft -> Structure -> Test (RED) -> Code (GREEN) -> Refactor -> Repeat
 
 PROJECT-WIDE TRACE: The abbreviated sample IDs below are illustrative only.
-  Replace them with registered Story IDs and qualified AC/TP/TC IDs from
-  CaTDD_methodPrompt-testStructure.md; retain US/AC/TP/TC metadata per TC.
+  Resolve StoryIdAlias through the registry; new AC/TP/TC IDs use its prefix.
+  Keep authoritative TP definitions in the verification-design document.
+  Test comments reference those TPs and define TCs, including every covered TP.
+  CaTDD_methodPrompt-testStructure.md owns identity, ownership, and legacy mappings.
 
 REFERENCE: methodPrompts/CaTDD_methodPrompt.md for full methodology
 """
@@ -92,9 +94,11 @@ DESIGN SKELETON CONTRACT:
     # @[UseWhen]: Inputs, state, dependencies, and caller behavior are valid.
     # @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
     # @[US]: US-PROJECT-01
-    # @[AC]: US-PROJECT-01-AC-01
-    # @[TP]: US-PROJECT-01-TP-01
-    # @[TC]: US-PROJECT-01-TC-01 verifyCore_byValidInput_expectSuccess
+    # @[StoryIdAlias]: US-261029.070005
+    # @[AC]: US-261029.070005-AC-01
+    # @[TP]: US-261029.070005-TP-01
+    # @[TC]: US-261029.070005-TC-01 verifyCore_byValidInput_expectSuccess
+    # @[Trace]: US-261029.070005 | US-261029.070005-AC-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
     # =============================================================================================
 
   Developers fill this skeleton to make verification intent clear.
@@ -228,30 +232,16 @@ PRIORITY-3: OTHER-ADDONS TESTING (Documentation & Tutorials)
 # =================================================================================================
 # ======>BEGIN OF DISCOVERY & EVIDENCE CHAIN (FreelyDrafts)========================================
 """
-SOURCE-FIRST TEST-POINT DISCOVERY (Optional living ledger in test file or FreelyDrafts)
+SOURCE-FIRST DISCOVERY REFERENCES (not authoritative TP definitions)
 
 DISCOVERY SCOPE: SUT=ModelRouter, feature=provider_routing, level=UnitTesting
 DOMAIN / EXECUTION ENVIRONMENT: Python 3.11+, asyncio, zero-allocation fast path
-SOURCES / RULES:
-  - RouterSpec#2.1 (R-ROUTE-01: route healthy primary provider first)
-  - RouterSpec#2.4 (R-ROUTE-02: fallback to secondary provider when primary returns 503)
-  - RouterSpec#3.1 (R-ROUTE-03: reject invalid model identifier with ValueError)
-  - RouterSpec#4.2 (R-ROUTE-04: mask ApiKEY in all debug logs and exceptions)
-DIMENSIONS: ModelTier(Standard, Premium) x ProviderHealth(Healthy, Degraded, Failed) x Fallback(Enabled, Disabled)
-SAMPLING: Full pairwise sweep of ModelTier x ProviderHealth
-REVIEW: Self-reviewed against routing architecture specification; residual risk: upstream timeout jitter
-
-DISCOVERY LEDGER:
- TP ID | Source/Rule   | Setup / Action                 | Observable Oracle                    | Category/Level | Disposition/Evidence
- ------|---------------|--------------------------------|--------------------------------------|----------------|----------------------
- TP-01 | Spec R-ROUTE-01| Route request with healthy env | Returns PrimaryProvider instance     | Typical/unit   | DESIGNED: US-1/AC-1/TC-1
- TP-02 | Spec R-ROUTE-01| Empty request payload          | Handled cleanly, returns valid route  | Edge/unit      | DESIGNED: US-1/AC-2/TC-1
- TP-03 | Spec R-ROUTE-03| Unknown model name provided    | Raises ValueError with model name    | Misuse/unit    | DESIGNED: US-1/AC-3/TC-1
- TP-04 | Spec R-ROUTE-02| Primary provider returns 503   | Routes to SecondaryProvider fallback | Fault/unit     | DESIGNED: US-2/AC-1/TC-1
- TP-05 | Spec R-ROUTE-04| Error raised during dispatch   | ApiKEY is masked as '***' in logs    | Security/unit  | DESIGNED: US-2/AC-2/TC-1
-
-Discovery Gate: PASS (5 TPs identified, 0 GAPs, 0 BLOCKED)
-ready_for_implementation: yes
+DISCOVERY LEDGER: README_DetailVerifyDesign.md (or the declared standalone verification design)
+TP REFERENCES: [alias-qualified TP IDs owned by that document]
+REVIEW EVIDENCE: [current source-first gate result and its scope]
+Keep source rules, AC ownership, oracles, and dispositions in that ledger.
+Reconcile every TC's TP list and trace rows with its covering-TC links.
+A provisional note here is not an approved TP; route it to the design owner.
 """
 # ======>END OF DISCOVERY & EVIDENCE CHAIN=========================================================
 

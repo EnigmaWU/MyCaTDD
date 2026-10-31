@@ -43,9 +43,11 @@ This is the shared glossary for CaTDD execution environments.
 | ModuleTesting | Retired level name, never used. Module-level scope is `SysTesting` when the module is the declared SUT, so it is never a fourth value beside the three `TestLevel` values. |
 | `TestScope` | The declared runtime scope of a verification: `mockSysRtm` (the SUT's system runtime — peers, dependencies, runtime environment — is replaced by doubles) or `realSysRtm` (the SUT runs against its real system runtime). Declared with `@[TestScope]` and independent of `TestLevel`, so any level runs at either scope. `mockSysRtm` is the first scope and earns `CLOSED`; `realSysRtm` is the second scope and adds evidence. |
 | UT | Unit Testing: Verification focused on a single declared SUT adhering to the project's agreed `sut_unit_convention` (e.g. `module-interface`, `submodule-interface`, `class`, `header-file`, `function`, or `component`). Verifies public contracts, internal design models, and quality properties via CaTDD before implementation. |
-| TP | Test Point: A discovered verification obligation or condition (the target). Represents WHAT must be verified from the DEVELOPER / DEFENSIVE perspective (partitions, boundaries, failure phases, interleavings), extracted from sources during Stage-0/Stage-1 discovery and tracked in `discovery_ledger`. Described via concrete `GIVEN technical state/partition, WHEN action/interleaving, THEN observable oracle`. |
+| StoryIdAlias | The permanent, project-unique short alias of a registered human-readable Story ID. Format: `US-YYMMDD.HHMMSS` from its verified UTC+08:00 creation instant; retain the full ISO 8601 instant in `CreatedAt`. Register the one-to-one mapping in the story registry. New AC/TP/TC IDs use this alias as their prefix. A same-second collision or missing historical creation time requires reconciliation, never silent reuse or a fabricated timestamp. Preserve aliases across revisions and lifecycle moves; external/source aliases are separate provenance. |
+| Artifact Ownership | US/AC definitions live in the authoritative requirements source identified by the story registry (a todo/doing story or formal module requirements). `README_UserStories.md` maps Story ID to StoryIdAlias and that source. TP definitions and their AC/TC links live in the verification-design document, `README_DetailVerifyDesign.md` in SpecFlow; architecture design promotes the same TP IDs. TC definitions, assertions, and execution evidence live in test files. References and living comments do not create competing definitions. |
+| TP | Test Point: A discovered verification obligation or condition (the target). Represents WHAT must be verified from the DEVELOPER / DEFENSIVE perspective, extracted during discovery and defined in the verification-design `discovery_ledger`. Each TP explicitly names its owning AC, observable oracle, and sole covering TC (or a visible draft gap); its alias-qualified ID remains stable. |
 | TC | Test Case: An executable verification specification artifact (the arrow). Represents HOW to verify one or more obligations, structured with `@[Name]`, `@[Expect]`, four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`), and explicit `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]` links. |
-| US / AC / TP / TC Cardinality | In a complete verification design, each US MUST have one or more ACs, each AC MUST have one or more TPs, each TP MUST map to exactly one TC, and each TC MUST cover one or more TPs. A TC MAY cover multiple TPs. An unassigned TP is allowed during drafting/discovery but is a gap that blocks design completion. If distinct test cases are needed, split the obligation into distinct TPs rather than assigning one TP to multiple TCs. |
+| US / AC / TP / TC Cardinality | In a complete verification design, each US MUST have one or more ACs, each AC MUST have one or more TPs, each TP has exactly one owning AC, each TP MUST map to exactly one TC, and each TC MUST cover one or more TPs. A TC MAY cover multiple TPs, with an explicit TP list and one `@[Trace]: StoryIdAlias \| AC-ID \| TP-ID \| TC-ID` row per relationship. Unassigned draft TPs block completion. Split obligations needing independent TCs into distinct TPs; never infer links from matching numeric suffixes. |
 | AC vs TP | AC is from the USER / CALLER perspective (defining external business rules for acceptance: `GIVEN context, WHEN action, THEN outcome`); TP is from the DEVELOPER / DEFENSIVE perspective (defining source-backed technical probes across boundaries, error paths, and concurrency). Each AC decomposes into one or more TPs in a complete design ($1:N$). Equating $TP == AC$ causes boundary and failure-mode omissions. |
 | TP vs TC | The complete-design mapping is many TPs to one TC: every TP maps to exactly one TC, while one TC may verify one or more TPs (`N:1`). A draft TP without a TC is an explicit gap, not completed coverage. If an obligation requires independent test cases, split it into separate TPs so each TP still has exactly one TC. |
 | Discovery to Categorization | Two-stage design bridge: In Stage-0 (Freely Drafting), discover TPs breadth-first across sources and sweeps without premature category lock-in. In Stage-1 (Classifying Design), route each discovered TP to its proper CaTDD category based on its verification lens (Contract -> P0, Model -> P1, Envelope -> P2, Learning Surface -> P3), then codify into US/AC/TP/TC skeletons. |
@@ -179,22 +181,28 @@ Worked Example:
 ```text
 US-batchExporter-writeRecords: As a batch exporter, I want to write records,
                               So that accepted records are persisted.
+StoryIdAlias: US-261029.070003
+CreatedAt: 2026-10-29T07:00:03+08:00
 
-US-batchExporter-writeRecords-AC-01 (User Rule):
-  "GIVEN 1 to 100 valid records, WHEN write is called, THEN persist all records and return OK."
+US-261029.070003-AC-01 (User Rule):
+  "GIVEN 1 to 100 valid records, WHEN write is called, THEN it MUST persist all records and return OK."
 
-Unpacks into Developer Test Points (TPs):
-  ├── US-batchExporter-writeRecords-TP-01 (Typical): Write 2 records -> OK and persisted (P0 Typical)
-  ├── US-batchExporter-writeRecords-TP-02 (Edge):    Write 1 record -> OK and persisted (P0 Edge)
-  ├── US-batchExporter-writeRecords-TP-03 (Edge):    Write 100 records -> OK and persisted (P0 Edge)
-  ├── US-batchExporter-writeRecords-TP-04 (Misuse):  Write 0 records -> INVALID_COUNT (P0 Misuse)
-  └── US-batchExporter-writeRecords-TP-05 (Misuse):  Write 101 records -> INVALID_COUNT (P0 Misuse)
+US-261029.070003-AC-02 (User Rule):
+  "GIVEN 0 or more than 100 records, WHEN write is called, THEN it MUST return INVALID_COUNT and MUST NOT modify files."
 
-Implements into Executable Test Cases (TCs):
-  ├── US-batchExporter-writeRecords-TC-01: verifyWrite_byNominalBatch_expectSuccess (implements TP-01)
-  ├── US-batchExporter-writeRecords-TC-02: verifyWrite_byBoundaryBatch_expectSuccess (implements TP-02 & TP-03)
-  ├── US-batchExporter-writeRecords-TC-03: verifyWrite_byZeroBatch_expectInvalidCount (implements TP-04)
-  └── US-batchExporter-writeRecords-TC-04: verifyWrite_byOversizedBatch_expectInvalidCount (implements TP-05)
+Authoritative TP ledger in verification design:
+TP ID | Owning AC ID | Covering TC ID | Probe / oracle
+US-261029.070003-TP-01 | US-261029.070003-AC-01 | US-261029.070003-TC-01 | Write 2 records -> OK and persisted (Typical)
+US-261029.070003-TP-02 | US-261029.070003-AC-01 | US-261029.070003-TC-02 | Write 1 record -> OK and persisted (Edge)
+US-261029.070003-TP-03 | US-261029.070003-AC-01 | US-261029.070003-TC-02 | Write 100 records -> OK and persisted (Edge)
+US-261029.070003-TP-04 | US-261029.070003-AC-02 | US-261029.070003-TC-03 | Write 0 records -> INVALID_COUNT and unchanged files (Misuse)
+US-261029.070003-TP-05 | US-261029.070003-AC-02 | US-261029.070003-TC-04 | Write 101 records -> INVALID_COUNT and unchanged files (Misuse)
+
+TC declarations in test files:
+US-261029.070003-TC-01: verifyWrite_byNominalBatch_expectSuccess (covers US-261029.070003-TP-01)
+US-261029.070003-TC-02: verifyWrite_byBoundaryBatch_expectSuccess (covers US-261029.070003-TP-02, US-261029.070003-TP-03)
+US-261029.070003-TC-03: verifyWrite_byZeroBatch_expectInvalidCount (covers US-261029.070003-TP-04)
+US-261029.070003-TC-04: verifyWrite_byOversizedBatch_expectInvalidCount (covers US-261029.070003-TP-05)
 ```
 
 #### 4. Discovery to Categorization (Stage-0 to Stage-1 Bridge)
