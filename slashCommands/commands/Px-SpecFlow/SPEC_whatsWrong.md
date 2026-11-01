@@ -75,10 +75,10 @@ Expected result:
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
-- [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
-- [SPEC_whatsNextTask.md](SPEC_whatsNextTask.md)
-- [../Px-HarnessKits/HARNESS_evolveHarness.md](../Px-HarnessKits/HARNESS_evolveHarness.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
+- [SPEC_whatsNextTask](SPEC_whatsNextTask.md)
+- [HARNESS_evolveHarness](../Px-HarnessKits/HARNESS_evolveHarness.md)
 
 ## Output Contract
 

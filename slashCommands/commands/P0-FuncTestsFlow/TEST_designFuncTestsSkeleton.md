@@ -63,15 +63,15 @@ Expected result:
 
 ## Method References
 
-- [../../flows/P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- [../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
+- [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [CaTDD_methodPrompt-testPointDiscovery](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 - Resolve StoryIdAlias from the story registry. New AC/TP/TC IDs use its prefix; every source CaTDD-AC must have `From / Given / When / Then / Counter`, with at least one Example or Rule under `From` or recorded `AskWhy` evidence. Each TP has an explicit owning AC and sole covering TC, and each TC lists every TP it covers. Preserve legacy mappings instead of silently renumbering.
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Edge.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Edge.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Fault.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Fault.md)
+- [CaTDD_methodPrompt4Cat-Typical](../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md)
+- [CaTDD_methodPrompt4Cat-Edge](../../../methodPrompts/CaTDD_methodPrompt4Cat-Edge.md)
+- [CaTDD_methodPrompt4Cat-Misuse](../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md)
+- [CaTDD_methodPrompt4Cat-Fault](../../../methodPrompts/CaTDD_methodPrompt4Cat-Fault.md)
 
 ## Output Contract
 

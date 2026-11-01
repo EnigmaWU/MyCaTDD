@@ -2,7 +2,7 @@
 
 `methodPrompts` contains method-level prompt assets for CaTDD.
 
-This README is the WHAT / WHY entry point for the method layer. For HOW, WHO, WHEN, and WHERE to use `methodPrompts/` standalone, read [README_UserGuide.md](README_UserGuide.md) or [README_UserGuide_ZH.md](README_UserGuide_ZH.md).
+This README is the WHAT / WHY entry point for the method layer. For HOW, WHO, WHEN, and WHERE to use `methodPrompts/` standalone, read [README_UserGuide](README_UserGuide.md) or [README_UserGuide_ZH](README_UserGuide_ZH.md).
 
 ## What
 

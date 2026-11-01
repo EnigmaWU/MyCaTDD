@@ -66,7 +66,7 @@ If the target path, symptom, or adapter surface is unclear, stop and ask the dev
 
 ## Diagnosis Workflow
 
-1. If `verification_report` is missing, run the checks from [HARNESS_verifyInstallation.md](HARNESS_verifyInstallation.md) in read-only mode first.
+1. If `verification_report` is missing, run the checks from [HARNESS_verifyInstallation](HARNESS_verifyInstallation.md) in read-only mode first.
 2. Group failed checks by installation surface:
    - Core `.catdd` assets.
    - Portable command inventory.
@@ -99,9 +99,9 @@ If the target path, symptom, or adapter surface is unclear, stop and ask the dev
 
 ## Method References
 
-- [Px-HarnessKits](../../kits/Px-HarnessKits.md)
+- [Px-HarnessKits kit](../../kits/Px-HarnessKits.md)
 - [HARNESS_verifyInstallation](HARNESS_verifyInstallation.md)
-- [methodPrompts](../../../methodPrompts/README.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
 
 ## Output Contract
 

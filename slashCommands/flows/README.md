@@ -6,7 +6,7 @@ Flow documents connect existing CodeAgent invocation surfaces to CaTDD method st
 
 Compared with `methodPrompts`, these files are more flow-first and automation-friendly. They explain how a CodeAgent should move through a method, not what the method means.
 
-Operational command kits that group tool-point commands without a strict lifecycle sequence live in [../kits](../kits).
+Operational command kits that group tool-point commands without a strict lifecycle sequence live in [kits](../kits).
 
 ## Priority Alignment
 
@@ -22,10 +22,10 @@ Flow priority uses the same Pn numbering as `methodPrompts`:
 
 ## Flow List
 
-- [Px-SpecFlow.md](Px-SpecFlow.md)
-- [P0-FuncTestsFlow.md](P0-FuncTestsFlow.md)
-- [P1-DesignTestsFlow.md](P1-DesignTestsFlow.md)
-- [P2-QualityTestsFlow.md](P2-QualityTestsFlow.md)
+- [Px-SpecFlow flow](Px-SpecFlow.md)
+- [P0-FuncTestsFlow](P0-FuncTestsFlow.md)
+- [P1-DesignTestsFlow](P1-DesignTestsFlow.md)
+- [P2-QualityTestsFlow](P2-QualityTestsFlow.md)
 
 ## Import Rule
 

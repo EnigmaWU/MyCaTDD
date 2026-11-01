@@ -118,7 +118,7 @@ Reported `status_signal` is one of:
 
 **Governed metrics.** Levels 4 and 5 are decided by measurement as well as evidence, so report the four governed metrics and read them for movement at Level-5: `traceability coverage` (share of ACs with at least one GREEN TC), `first_pass_gate_rate` (share of reviews passing without rework), `drift_incidents` (divergences caught by a gate rather than by a customer), and `re_analysis_rate` (stories needing abort or partial close, and why). `SpecCoding share` is reported beside them: the fraction of production changes that trace to an open story, were preceded by a test failing for the expected reason, and passed a gate. It measures discipline, not correctness, so it is always read together with `drift_incidents`.
 
-The canonical definitions of `maturity_level`, the three ladder terms Spec-First / Spec-Anchored / Spec-as-Source, and `SpecCoding share` live in [README_UbiLang.md](../../../README_UbiLang.md).
+The canonical definitions of `maturity_level`, the three ladder terms Spec-First / Spec-Anchored / Spec-as-Source, and `SpecCoding share` live in [README_UbiLang](../../../README_UbiLang.md).
 
 ## Status Report Shape
 
@@ -156,7 +156,7 @@ note: team-shared artifacts only unless include_local_work_state=yes
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
 - [Px-StatusKits kit](../../kits/Px-StatusKits.md)
 - [Px-HarnessKits kit](../../kits/Px-HarnessKits.md)
 - [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)

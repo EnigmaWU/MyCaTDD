@@ -49,9 +49,9 @@ Expected result:
 
 ## Method References
 
-- [../../flows/P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md)
+- [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [CaTDD_methodPrompt4Cat-Typical](../../../methodPrompts/CaTDD_methodPrompt4Cat-Typical.md)
 
 ## Output Contract
 

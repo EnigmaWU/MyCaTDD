@@ -55,7 +55,7 @@ Every core system concept in `{{ProjectName}}` **MUST** have one canonical term,
 
 | Domain Attribute / State Machine | Allowed Canonical Values | Invalid / Rejected Values | Owning Design Surface |
 | --- | --- | --- | --- |
-| `{{StateOrEnumName}}` | `{{VALUE_A}}`, `{{VALUE_B}}`, `{{VALUE_C}}` | {{Any unlisted string or state transition}} | `[README_StateDesign.md](README_StateDesign.md)` |
+| `{{StateOrEnumName}}` | `{{VALUE_A}}`, `{{VALUE_B}}`, `{{VALUE_C}}` | {{Any unlisted string or state transition}} | `[README_StateDesign](README_StateDesign.md)` |
 
 ---
 

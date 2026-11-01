@@ -117,7 +117,7 @@ Reported `status_signal` is one of:
 - `blocked` — the installation is incomplete or internally inconsistent and cannot be trusted for use.
 - `unknown` — the project root or the install marker could not be read. A readable root with no install is `Level-0`, never `unknown`. A single surface that cannot be confirmed is reported `unknown` at the surface level and caps the level; that alone does not make the whole report `unknown`.
 
-The canonical definitions of `integrity_level`, `status_signal`, the level model, and the HARNESS surface vocabulary live in [README_UbiLang.md](../../../README_UbiLang.md).
+The canonical definitions of `integrity_level`, `status_signal`, the level model, and the HARNESS surface vocabulary live in [README_UbiLang](../../../README_UbiLang.md).
 
 ## Status Report Shape
 
@@ -160,7 +160,7 @@ note: read-only inventory; no verification verdict and no mutation
 
 - [Px-HarnessKits kit](../../kits/Px-HarnessKits.md)
 - [Px-StatusKits kit](../../kits/Px-StatusKits.md)
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
 - [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 - [CaTDD_methodPrompt-troubleshooting](../../../methodPrompts/CaTDD_methodPrompt-troubleshooting.md)
 

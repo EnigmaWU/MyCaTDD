@@ -53,10 +53,10 @@ Expected result:
 
 ## Method References
 
-- [../../flows/P2-QualityTestsFlow.md](../../flows/P2-QualityTestsFlow.md)
-- [../../templates/README_PerfDesignTemplate.md](../../templates/README_PerfDesignTemplate.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Performance.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Performance.md)
+- [P2-QualityTestsFlow](../../flows/P2-QualityTestsFlow.md)
+- [README_PerfDesignTemplate](../../templates/README_PerfDesignTemplate.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [CaTDD_methodPrompt4Cat-Performance](../../../methodPrompts/CaTDD_methodPrompt4Cat-Performance.md)
 
 ## Output Contract
 

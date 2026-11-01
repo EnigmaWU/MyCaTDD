@@ -28,12 +28,12 @@ Key surfaces:
 
 | File | Purpose |
 | --- | --- |
-| [README_ArchDesign.md](README_ArchDesign.md) | Architecture design, module boundaries, dependencies, data flow, and key decisions. |
-| [README_UserStories.md](README_UserStories.md) | Project or module-scoped user stories and trace links. |
-| [README_UserGuide.md](README_UserGuide.md) | User-facing or developer-facing usage guidance. |
-| [README_DetailDesign.md](README_DetailDesign.md) | Detailed design, acceptance criteria, interfaces, state, and behavior decisions. |
-| [README_CompatDesign.md](README_CompatDesign.md) | Compatibility matrix, supported versions, platforms, protocols, formats, toolchains, and integration boundaries. |
-| [README_VerifyDesign.md](README_VerifyDesign.md) | Verification design, CaTDD category coverage, US/AC/TC traceability, and test strategy. |
+| [README_ArchDesign](README_ArchDesign.md) | Architecture design, module boundaries, dependencies, data flow, and key decisions. |
+| [README_UserStories](README_UserStories.md) | Project or module-scoped user stories and trace links. |
+| [README_UserGuide](README_UserGuide.md) | User-facing or developer-facing usage guidance. |
+| [README_DetailDesign](README_DetailDesign.md) | Detailed design, acceptance criteria, interfaces, state, and behavior decisions. |
+| [README_CompatDesign](README_CompatDesign.md) | Compatibility matrix, supported versions, platforms, protocols, formats, toolchains, and integration boundaries. |
+| [README_VerifyDesign](README_VerifyDesign.md) | Verification design, CaTDD category coverage, US/AC/TC traceability, and test strategy. |
 
 ## Current Scope
 

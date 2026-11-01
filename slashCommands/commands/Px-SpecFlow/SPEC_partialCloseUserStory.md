@@ -73,7 +73,7 @@ Expected result:
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 - Preserve StoryIdAlias and CreatedAt for slices of the same story, label each slice explicitly, and retain original CaTDD-AC/TP/TC ownership. Every accepted CaTDD-AC MUST retain `From / Given / When / Then / Counter` with at least one Example or Rule under `From`. An unresolved `From` requires `AskWhy` and visible slice risk. A genuinely independent successor requires separate registration; never allocate a new alias merely because a slice moved to another lane.
 

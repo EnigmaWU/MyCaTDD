@@ -106,7 +106,7 @@ Rules:
 
 ## Status Model
 
-Marker vocabulary follows `methodPrompts`. The `CLOSED` predicate, the `disposition` vocabulary, and `TestScope` are defined in [README_UbiLang.md](../../../README_UbiLang.md).
+Marker vocabulary follows `methodPrompts`. The `CLOSED` predicate, the `disposition` vocabulary, and `TestScope` are defined in [README_UbiLang](../../../README_UbiLang.md).
 
 | Marker | Meaning |
 | --- | --- |

@@ -130,7 +130,7 @@ bash scripts/test_installCaTDD4Custom.sh
 
 ## SpecCoding Artifact Policy
 
-UserGuide keeps this short. The detailed artifact policy is defined in [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md).
+UserGuide keeps this short. The detailed artifact policy is defined in [Px-SpecFlow flow](flows/Px-SpecFlow.md).
 
 Quick rules:
 
@@ -138,28 +138,28 @@ Quick rules:
 - Team-shared `README*` SPEC docs live in the project root and should be committed.
 - Local process trace stays gitignored: `.catdd/spec/WorkingProcessLog.md`.
 - `AGENTS.md` and its directory overrides are recorded by `SPEC_initProjectContext` and reconciled by `SPEC_updateProjectContext`. Ownership follows the region: the CaTDD-managed markers belong to CaTDD and are regenerable, everything else belongs to the project and is never rewritten. A file that existed before CaTDD is followed; one CaTDD created is mastered. `AGENTS.md` owns operating conventions only, never method semantics, gates, or project facts. Installer-generated adapters such as `.github/instructions/catdd.instructions.md` are rewritten wholesale and stay out of this model.
-- If policy details and this guide ever diverge, follow [Px-SpecFlow](flows/Px-SpecFlow.md) as the source of detailed lifecycle rules.
+- If policy details and this guide ever diverge, follow [Px-SpecFlow flow](flows/Px-SpecFlow.md) as the source of detailed lifecycle rules.
 
 ## Flow and Kit Map
 
 | Flow or kit | Purpose | Start here |
 | --- | --- | --- |
-| Px SpecFlow | Drive SpecCoding from project context and work item to reviewed, committed story | [Px-SpecFlow](flows/Px-SpecFlow.md) |
-| Px HarnessKits | Run Harness Engineering tool-point commands for CaTDD source, adapter, execution, diagnostic, and patch-back maintenance | [Px-HarnessKits](kits/Px-HarnessKits.md) |
-| Px StatusKits | Ask where UT, SPEC, or HARNESS work stands right now, read-only, and get one next command | [Px-StatusKits](kits/Px-StatusKits.md) |
+| Px SpecFlow | Drive SpecCoding from project context and work item to reviewed, committed story | [Px-SpecFlow flow](flows/Px-SpecFlow.md) |
+| Px HarnessKits | Run Harness Engineering tool-point commands for CaTDD source, adapter, execution, diagnostic, and patch-back maintenance | [Px-HarnessKits kit](kits/Px-HarnessKits.md) |
+| Px StatusKits | Ask where UT, SPEC, or HARNESS work stands right now, read-only, and get one next command | [Px-StatusKits kit](kits/Px-StatusKits.md) |
 | P0 FuncTestsFlow | Convert or design functional test skeletons, then implement TC-by-TC | [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md) |
 | P1 DesignTestsFlow | Extend stable functional coverage into design-gated State, Capability, and Concurrency skeletons | [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md) |
 | P2 QualityTestsFlow | Extend stable behavior into Performance, Robust, Compatibility, and Configuration | [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md) |
 
 ## Command Map
 
-Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow](commands/Px-SpecFlow/README.md), [Px-HarnessKits](commands/Px-HarnessKits/README.md), [Px-StatusKits](commands/Px-StatusKits/README.md), [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md), [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md), and [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md).
+Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow commands](commands/Px-SpecFlow/README.md), [Px-HarnessKits commands](commands/Px-HarnessKits/README.md), [Px-StatusKits commands](commands/Px-StatusKits/README.md), [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md), [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md), and [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md).
 
 | Developer need | Command template |
 | --- | --- |
 | Create or revise a portable SPEC slash command | [SPEC_slashCommandTemplate](SPEC_slashCommandTemplate.md) |
 | Create or revise a portable TEST slash command | [TEST_slashCommandTemplate](TEST_slashCommandTemplate.md) |
-| Drive a full SpecCoding lifecycle | [Px-SpecFlow](commands/Px-SpecFlow/README.md) |
+| Drive a full SpecCoding lifecycle | [Px-SpecFlow commands](commands/Px-SpecFlow/README.md) |
 | Patch installed CaTDD improvements back to the source repo | [HARNESS_patchCaTDDSource](commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | Verify a CaTDD installation before trusting target-project commands | [HARNESS_verifyInstallation](commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
 | Diagnose a failed or misworking CaTDD installation | [HARNESS_diagnoseInstallation](commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) |

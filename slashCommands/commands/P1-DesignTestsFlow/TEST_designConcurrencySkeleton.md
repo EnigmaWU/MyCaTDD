@@ -53,10 +53,10 @@ Expected result:
 
 ## Method References
 
-- [../../flows/P1-DesignTestsFlow.md](../../flows/P1-DesignTestsFlow.md)
-- [../../templates/README_ResourceDesignTemplate.md](../../templates/README_ResourceDesignTemplate.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Concurrency.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Concurrency.md)
+- [P1-DesignTestsFlow](../../flows/P1-DesignTestsFlow.md)
+- [README_ResourceDesignTemplate](../../templates/README_ResourceDesignTemplate.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [CaTDD_methodPrompt4Cat-Concurrency](../../../methodPrompts/CaTDD_methodPrompt4Cat-Concurrency.md)
 
 ## Output Contract
 

@@ -46,8 +46,8 @@ Expected result — one ReACT pass:
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
-- [methodPrompts](../../../methodPrompts/README.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
 
 ## Output Contract
 

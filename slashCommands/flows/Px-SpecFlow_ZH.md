@@ -128,7 +128,7 @@ CaTDD 中的每条 slash 命令均严格执行通用安全不变量：`ONE-MORE-
 
 每个门禁还要声明自己的范围对：`Reviews:`（评审什么）与 `Does not:`（不评审什么），使两个门禁可以共享同一制品而职责不同：`SPEC_reviewUserStory` 负责验收标准的内容，`SPEC_reviewDetailDesign` 负责其可测试性；`SPEC_reviewImplTests` 负责测试实现，`SPEC_reviewProductCodes` 负责代码与追溯关系。命名遵循同一分工：`*review*` 命令为已撰写制品把关，`HARNESS_verifyInstallation` 校验已安装的适配面，两者报告同一套词汇。
 
-`PASS`、`REVISE`、`BLOCKED`、`ASK` 的规范定义见 [README_UbiLang_ZH.md](../../README_UbiLang_ZH.md)；本表只负责把旧有的各命令说法映射到这套词汇。简要地说：`PASS` 让制品照原样继续，`REVISE` 先修改制品再重跑门禁，`BLOCKED` 等待某个归属方能提供的缺失输入，`ASK` 等待只有开发者才能作出的决定。当流程连问题本身都还无法表述时，应升级为 `SPEC_whatsWrong`，而不是 `ASK`。
+`PASS`、`REVISE`、`BLOCKED`、`ASK` 的规范定义见 [README_UbiLang_ZH](../../README_UbiLang_ZH.md)；本表只负责把旧有的各命令说法映射到这套词汇。简要地说：`PASS` 让制品照原样继续，`REVISE` 先修改制品再重跑门禁，`BLOCKED` 等待某个归属方能提供的缺失输入，`ASK` 等待只有开发者才能作出的决定。当流程连问题本身都还无法表述时，应升级为 `SPEC_whatsWrong`，而不是 `ASK`。
 
 并非每个制品都有专属门禁，因此流程显式指明归属，让"没有门禁"成为决策而非缺口：
 

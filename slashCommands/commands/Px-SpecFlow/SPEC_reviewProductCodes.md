@@ -44,7 +44,7 @@ Expected result:
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
 - [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 
 ## Output Contract

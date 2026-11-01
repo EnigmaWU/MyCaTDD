@@ -12,7 +12,7 @@ Use this command when Typical, Edge, Misuse, or Fault skeletons exist and the de
 
 ### ReACT Execution
 
-Use the Discovery Gate and bounded review budget in [CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md). Every finding must identify a source/rule or TP ID, an owning/provisional category, and a concrete fix or question. Missing behavior may have **no existing US/AC/TC ID**; never reject such a finding or invent an existing ID to satisfy the report format.
+Use the Discovery Gate and bounded review budget in [CaTDD_methodPrompt-testPointDiscovery](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md). Every finding must identify a source/rule or TP ID, an owning/provisional category, and a concrete fix or question. Missing behavior may have **no existing US/AC/TC ID**; never reject such a finding or invent an existing ID to satisfy the report format.
 
 1. **Thought** — Resolve and read the original behavior sources from `behavior_sources` or declared skeleton references. If unavailable, report BLOCKED, not a completeness verdict from tests alone. Independently inventory operations, outcomes, relevant partitions/combinations, public workflows, dependency phases, and production differences before consulting existing coverage.
 2. **Action** — Read skeletons and `discovery_ledger`; reconcile source -> TP -> US/AC/TC and back. Verify each DESIGNED row actually specifies its scenario and observable oracle. Audit exclusions, missing-source `@[NoTestPoints]`, weak mocks, referrals, unanswered questions, and sampling limits as well as duplicates and category conflicts. A missing ledger is a design gap; report a proposed source-first reconciliation without editing files.

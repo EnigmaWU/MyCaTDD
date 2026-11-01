@@ -12,7 +12,7 @@ Use this command to review the declared State, Capability, Interaction, and Conc
 
 ### ReACT Execution
 
-Use one discovery sweep and one independent challenge, with at most two repair/recheck rounds for the review report. Stop earlier on missing intent, conflicting sources, or no progress; do not loop until PASS. Apply the canonical P1 Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md).
+Use one discovery sweep and one independent challenge, with at most two repair/recheck rounds for the review report. Stop earlier on missing intent, conflicting sources, or no progress; do not loop until PASS. Apply the canonical P1 Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md).
 
 1. **Thought** — Read source artifacts first, before the designer's ledger or skeletons. Declare SUT, in-scope categories, domain profile(s), test level, and execution environment. Independently derive the source-backed state/guard, capability/responsibility, handoff, and interleaving obligations. Record a source-derived checklist and any missing source or applicability question.
 2. **Action** — Read the discovery_ledger and skeletons, then reconcile the independent checklist in both directions. Check source-backed setup/oracles, category placement, verification procedures, and US/AC/TC links. A missing obligation may have no existing US/AC/TC ID: identify it by source/rule or TP ID, category, and a concrete correction or question. A TODO TC can be DESIGNED; it is not a discovery gap merely because it is unimplemented.

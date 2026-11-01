@@ -52,9 +52,9 @@ flowchart LR
 
 ## Command Sequence
 
-1. Use [../commands/Px-StatusKits/TEST_showMeStatus.md](../commands/Px-StatusKits/TEST_showMeStatus.md) before selecting or implementing the next test case, and after a batch of implementation runs.
-2. Use [../commands/Px-StatusKits/SPEC_showMeStatus.md](../commands/Px-StatusKits/SPEC_showMeStatus.md) when resuming SpecCoding, before `SPEC_whatsNextTask`, or when lane state looks inconsistent.
-3. Use [../commands/Px-StatusKits/HARNESS_showMeStatus.md](../commands/Px-StatusKits/HARNESS_showMeStatus.md) after an install or refresh, and before `HARNESS_verifyInstallation` or `HARNESS_diagnoseInstallation`.
+1. Use [TEST_showMeStatus](../commands/Px-StatusKits/TEST_showMeStatus.md) before selecting or implementing the next test case, and after a batch of implementation runs.
+2. Use [SPEC_showMeStatus](../commands/Px-StatusKits/SPEC_showMeStatus.md) when resuming SpecCoding, before `SPEC_whatsNextTask`, or when lane state looks inconsistent.
+3. Use [HARNESS_showMeStatus](../commands/Px-StatusKits/HARNESS_showMeStatus.md) after an install or refresh, and before `HARNESS_verifyInstallation` or `HARNESS_diagnoseInstallation`.
 4. Chain the viewpoints when a full picture is needed: HARNESS for the surrounding installation, SPEC for lifecycle state, UT for test-level state.
 5. Always hand off to the owning command named in `next_command`. A status report never performs the fix.
 
@@ -106,7 +106,7 @@ Level rules:
 
 `level` and `status_signal` are not the same axis. The level says how far along the viewpoint is; the signal says whether the current state is safe to act on. A high level may still carry `attention` findings, and a genuine blocker caps the signal regardless of level.
 
-Canonical definitions of `status_signal`, `completeness_level`, `maturity_level`, `integrity_level`, `level_evidence`, `level_gap`, `CLOSED`, `testPassOnMock`, `TestScope`, the disposition vocabulary, and the Spec-First / Spec-Anchored / Spec-as-Source ladder live in [README_UbiLang.md](../../README_UbiLang.md). This kit and the three commands own the reporting procedure, not the meaning of the terms.
+Canonical definitions of `status_signal`, `completeness_level`, `maturity_level`, `integrity_level`, `level_evidence`, `level_gap`, `CLOSED`, `testPassOnMock`, `TestScope`, the disposition vocabulary, and the Spec-First / Spec-Anchored / Spec-as-Source ladder live in [README_UbiLang](../../README_UbiLang.md). This kit and the three commands own the reporting procedure, not the meaning of the terms.
 
 ## Conflict Guard
 

@@ -29,7 +29,7 @@ Symptoms:
 
 Resolution:
 
-1. Rebuild the behavior inventory from sources, not only the existing US -> AC -> TC chain. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md).
+1. Rebuild the behavior inventory from sources, not only the existing US -> AC -> TC chain. Use [CaTDD_methodPrompt-testPointDiscovery](CaTDD_methodPrompt-testPointDiscovery.md).
 2. Sweep missing conditions and outcomes, reconcile the discovery ledger, and repair linkage gaps separately.
 3. Reclassify by verification lens and ask whether missing behavior belongs in the current story or a sub-story.
 4. Mark `@[NoTestPoints]: <reason>` only after explicit consideration. Missing source remains QUESTION/BLOCKED, not a passed discovery gate.
@@ -106,7 +106,7 @@ Symptoms:
 
 Resolution:
 
-1. Follow **Escaped-Bug Feedback** in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md).
+1. Follow **Escaped-Bug Feedback** in [CaTDD_methodPrompt-testPointDiscovery](CaTDD_methodPrompt-testPointDiscovery.md).
 2. Distinguish a missing requirement or discovery point from a weak oracle, unimplemented test, or test not run in the relevant environment.
 3. Confirm expected behavior, add the source-backed regression skeleton, then follow RED/GREEN for the fix.
 4. Record the reusable discovery question that was missed and review neighboring scenarios; do not merely add one incident-specific TC and declare completeness.

@@ -81,9 +81,9 @@ Do not delete the overlay in the installed project as part of patch-back; local 
 
 ## Method References
 
-- [Px-HarnessKits](../../kits/Px-HarnessKits.md)
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
-- [methodPrompts](../../../methodPrompts/README.md)
+- [Px-HarnessKits kit](../../kits/Px-HarnessKits.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
 
 ## Output Contract
 

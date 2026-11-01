@@ -6,9 +6,9 @@ This is the SpecCoding template for project-root `README_SecurityDesign.md`. Cre
 
 - Story: {{US identifier and title}}
 - Source artifact: {{.catdd/spec/doingUS path or issue link}}
-- Related architecture design: [README_ArchDesign.md](README_ArchDesign.md)
-- Related detail design: [README_DetailDesign.md](README_DetailDesign.md)
-- Related verification design: [README_VerifyDesign.md](README_VerifyDesign.md)
+- Related architecture design: [README_ArchDesign](README_ArchDesign.md)
+- Related detail design: [README_DetailDesign](README_DetailDesign.md)
+- Related verification design: [README_VerifyDesign](README_VerifyDesign.md)
 
 ## Threat Model & Trust Boundaries
 

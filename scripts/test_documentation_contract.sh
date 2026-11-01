@@ -51,4 +51,41 @@ for layer in "${layers[@]}"; do
   grep -Fq "[$layer/README_UserGuide_ZH.md]($layer/README_UserGuide_ZH.md)" "$REPO_ROOT/README_UserGuide.md" || fail "main user guide missing $layer ZH sub-user-guide link"
 done
 
+link_label_issues="$(
+  find "$REPO_ROOT/methodPrompts" "$REPO_ROOT/slashCommands" -type f -name '*.md' -print0 \
+    | xargs -0 perl -ne '
+        BEGIN {
+          our (%seen_target, %seen_line, $current_file);
+          %seen_target = ();
+          %seen_line = ();
+          $current_file = "";
+        }
+        if ($ARGV ne $current_file) {
+          %seen_target = ();
+          %seen_line = ();
+          $current_file = $ARGV;
+        }
+        while (/\[([^\]]+)\]\(([^)]+)\)/g) {
+          my ($label, $target) = ($1, $2);
+          my $path_label =
+            $label =~ m{^(?:\./|\.\./)} ||
+            $label eq $target ||
+            $target =~ m{(?:^|/)\Q$label\E\.md(?:#|$)};
+          if ($label =~ /\.md/) {
+            print "$ARGV:$.: label must omit .md: [$label]($target)\n";
+          }
+          if ($label =~ m{/} && $path_label) {
+            print "$ARGV:$.: label must be a readable name, not a path: [$label]($target)\n";
+          }
+          if (exists $seen_target{$label} && $seen_target{$label} ne $target) {
+            print "$ARGV:$.: ambiguous label [$label] maps to [$seen_target{$label}] at line $seen_line{$label} and [$target]\n";
+          }
+          $seen_target{$label} = $target unless exists $seen_target{$label};
+          $seen_line{$label} = $. unless exists $seen_line{$label};
+        }
+      '
+)"
+[[ -z "$link_label_issues" ]] || fail "Markdown link labels must be clean, meaningful, and unambiguous:
+$link_label_issues"
+
 echo "[documentation-contract-test] PASSED: README/UserGuide contract is documented for completed layers"

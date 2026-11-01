@@ -77,7 +77,7 @@ Step: SPEC_implProductCodes
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
 - [SPEC_makePlan](SPEC_makePlan.md)
 - [SPEC_slashCommandTemplate](../../SPEC_slashCommandTemplate.md)
 

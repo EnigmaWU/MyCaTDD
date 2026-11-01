@@ -94,8 +94,8 @@ analysis_mode: BRAINSTORM
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
-- [methodPrompts/README](../../../methodPrompts/README.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 - Composed from requirements-analysis skills in `.github/skills/`: `write-user-story`, `build-feature-tree`, `elicit-requirements-models`, `extract-business-rules`, `facilitate-example-mapping`, `validate-requirements-criteria`, `prioritize-requirements`. See their `SKILL.md` for full technique details.
 

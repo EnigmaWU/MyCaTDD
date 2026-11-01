@@ -89,7 +89,7 @@ Span: SPEC_openUserStory -> SPEC_closeUserStory
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
 - [SPEC_commitStepWorks](SPEC_commitStepWorks.md)
 - [SPEC_closeUserStory](SPEC_closeUserStory.md)
 - [SPEC_slashCommandTemplate](../../SPEC_slashCommandTemplate.md)

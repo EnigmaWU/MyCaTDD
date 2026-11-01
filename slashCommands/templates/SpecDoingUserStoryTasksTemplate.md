@@ -2,7 +2,7 @@
 
 This is the SpecCoding template for `.catdd/spec/doingUS/{{YYYYMMDD-StorySlug}}-UserStory-Tasks.md` (and its preserved copies in `suspendUS/`, `abortUS/`, and `doneUS/`). Create it initially via `SPEC_makePlan` after `SPEC_openUserStory` or `SPEC_clearStoryIntent`, and synchronize/refine it via `SPEC_updateMadePlan` after review gates (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`), rework loops, story resumption, or `plan_drift` checkpoints.
 
-Paired with [{{YYYYMMDD-StorySlug-UserStory.md}}]({{YYYYMMDD-StorySlug-UserStory.md}}).
+Paired with [{{YYYYMMDD-StorySlug-UserStory}}]({{YYYYMMDD-StorySlug-UserStory.md}}).
 
 ---
 

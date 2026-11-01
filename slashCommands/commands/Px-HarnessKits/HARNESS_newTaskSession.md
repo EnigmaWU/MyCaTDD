@@ -132,9 +132,9 @@ The composed handoff note should follow this structure:
 
 ## Method References
 
-- [Px-HarnessKits](../../kits/Px-HarnessKits.md)
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
-- [methodPrompts](../../../methodPrompts/README.md)
+- [Px-HarnessKits kit](../../kits/Px-HarnessKits.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
 
 ## Output Contract
 

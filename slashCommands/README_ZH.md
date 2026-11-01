@@ -2,7 +2,7 @@
 
 本目录存放可复用的斜杠命令提示词、流程与工具包，用于将 CaTDD 方法落地为可触发命令。
 
-本 README 是命令连接层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何使用 `slashCommands/`，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
+本 README 是命令连接层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何使用 `slashCommands/`，请阅读 [README_UserGuide](README_UserGuide.md) 或 [README_UserGuide_ZH](README_UserGuide_ZH.md)。
 
 ## What
 
@@ -93,7 +93,7 @@
 - 独立用户指南（`README_UserGuide.md`、`README_UserGuide_ZH.md`）
 - `flows/` 下的流程文档
 - `kits/` 下的工具包文档
-- 共享命令模板 [TEST_slashCommandTemplate.md](TEST_slashCommandTemplate.md)
+- 共享命令模板 [TEST_slashCommandTemplate](TEST_slashCommandTemplate.md)
 - `commands/` 下的命令提示词模板
 - `commands/Px-HarnessKits/` 下的 HarnessKits 操作型命令
 - 防止与 `methodPrompts` 冲突的兼容性说明

@@ -6,9 +6,9 @@ Commands should follow their group contract so Copilot, Cline, Continue, `utCode
 
 ## Command Groups
 
-- [Px-SpecFlow](Px-SpecFlow): SpecCoding lifecycle for project context, work items, user stories, design, tests, product code, review, CI, and closure.
-- [Px-HarnessKits](Px-HarnessKits): Harness Engineering tool-point commands for CaTDD source, adapter, execution, diagnostic, and patch-back maintenance.
-- [Px-StatusKits](Px-StatusKits): read-only status reporting commands for the TEST, SPEC, and HARNESS viewpoints.
+- [Px-SpecFlow commands](Px-SpecFlow): SpecCoding lifecycle for project context, work items, user stories, design, tests, product code, review, CI, and closure.
+- [Px-HarnessKits commands](Px-HarnessKits): Harness Engineering tool-point commands for CaTDD source, adapter, execution, diagnostic, and patch-back maintenance.
+- [Px-StatusKits commands](Px-StatusKits): read-only status reporting commands for the TEST, SPEC, and HARNESS viewpoints.
 - [P0-FuncTestsFlow](P0-FuncTestsFlow): first imported flow for functional test skeleton and TC implementation.
 - [P1-DesignTestsFlow](P1-DesignTestsFlow): design test skeleton flow for State, Capability, and Concurrency.
 - [P2-QualityTestsFlow](P2-QualityTestsFlow): quality test skeleton flow for Performance, Robust, Compatibility, Configuration, and Security.

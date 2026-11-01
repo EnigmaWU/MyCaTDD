@@ -129,7 +129,7 @@ Invariants every review gate states: read-only by default, with repair only on e
 
 Every gate also states its own scope pair, `Reviews:` and `Does not:`, so two gates can share an artifact without sharing a lens: `SPEC_reviewUserStory` owns acceptance-criteria content and `SPEC_reviewDetailDesign` owns their testability; `SPEC_reviewImplTests` owns test implementation and `SPEC_reviewProductCodes` owns code plus traceability. The gate names follow the same split: `*review*` commands gate an authored artifact, while `HARNESS_verifyInstallation` verifies an installed surface. Both report the same vocabulary.
 
-Canonical definitions of `PASS`, `REVISE`, `BLOCKED`, and `ASK` live in [README_UbiLang.md](../../README_UbiLang.md); this table maps the older per-command wording onto them. In short: `PASS` proceeds with the artifact as-is, `REVISE` changes it first and re-runs the gate, `BLOCKED` waits for a missing input that an owner can supply, and `ASK` waits for a decision only the developer can make. When the flow cannot yet phrase the question, the escalation is `SPEC_whatsWrong`, not `ASK`.
+Canonical definitions of `PASS`, `REVISE`, `BLOCKED`, and `ASK` live in [README_UbiLang](../../README_UbiLang.md); this table maps the older per-command wording onto them. In short: `PASS` proceeds with the artifact as-is, `REVISE` changes it first and re-runs the gate, `BLOCKED` waits for a missing input that an owner can supply, and `ASK` waits for a decision only the developer can make. When the flow cannot yet phrase the question, the escalation is `SPEC_whatsWrong`, not `ASK`.
 
 Not every artifact carries a dedicated gate, and the flow names the owner so the absence is a decision rather than a gap:
 

@@ -91,9 +91,9 @@ grep -Fq 'story-agnostic' "$COMMIT_WORKS" || fail "SPEC_commitWorks must stay th
 grep -Fq 'next_command = SPEC_closeUserStory' "$COMMIT_STORY" || fail "SPEC_commitStoryWorks must continue to close at the pre_close checkpoint"
 grep -Fq 'next_command = SPEC_mergeWorks' "$COMMIT_STORY" || fail "SPEC_commitStoryWorks must hand off to SPEC_mergeWorks after close when integration is required"
 
-grep -Fq '[SPEC_makePlan.md](SPEC_makePlan.md)' "$COMMAND_README" || fail "Px-SpecFlow command README must list SPEC_makePlan"
-grep -Fq '[SPEC_updateMadePlan.md](SPEC_updateMadePlan.md)' "$COMMAND_README" || fail "Px-SpecFlow command README must list SPEC_updateMadePlan"
-grep -Fq '[SPEC_abortUserStory.md](SPEC_abortUserStory.md)' "$COMMAND_README" || fail "Px-SpecFlow command README must list SPEC_abortUserStory"
+grep -Fq '[SPEC_makePlan](SPEC_makePlan.md)' "$COMMAND_README" || fail "Px-SpecFlow command README must list SPEC_makePlan"
+grep -Fq '[SPEC_updateMadePlan](SPEC_updateMadePlan.md)' "$COMMAND_README" || fail "Px-SpecFlow command README must list SPEC_updateMadePlan"
+grep -Fq '[SPEC_abortUserStory](SPEC_abortUserStory.md)' "$COMMAND_README" || fail "Px-SpecFlow command README must list SPEC_abortUserStory"
 grep -Fq 'Create checkbox TASKs and choose the next SPEC step for an opened user story' "$USER_GUIDE" || fail "slashCommands user guide must map the TASKs command"
 grep -Fq 'SPEC_updateMadePlan' "$USER_GUIDE" || fail "slashCommands user guide must map SPEC_updateMadePlan"
 

@@ -111,8 +111,8 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 
 ## Method References
 
-- [Px-HarnessKits](../../kits/Px-HarnessKits.md)
-- [methodPrompts](../../../methodPrompts/README.md)
+- [Px-HarnessKits kit](../../kits/Px-HarnessKits.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
 
 ## Output Contract
 

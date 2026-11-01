@@ -2,15 +2,15 @@
 
 This is the SpecCoding template for project-root `README_ArchVerifyDesign.md`. Create or update it from `SPEC_takeArchDesign` and revise it from `SPEC_updateArchDesign`; `SPEC_reviewArchDesign` gates it. Use it when a story changes verification topology, the level-and-boundary map, the target runtime environment, peer/dependency doubles, evidence ownership, or system-scope quality scenarios.
 
-`README_ArchVerifyDesign.md` is a stable design artifact. It answers *with which other components, in which runtime environment, do we prove this*, and it owns `SysTesting` and `UserTesting` strategy. It does not own test-point discovery or CaTDD category design — [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md) owns those and promotes obligations here by TP ID. Keep live RED/GREEN status, run output, and temporary trace churn in story TASKs, test files, or `README_VerifyStatusTraces.md`.
+`README_ArchVerifyDesign.md` is a stable design artifact. It answers *with which other components, in which runtime environment, do we prove this*, and it owns `SysTesting` and `UserTesting` strategy. It does not own test-point discovery or CaTDD category design — [README_DetailVerifyDesign](README_DetailVerifyDesign.md) owns those and promotes obligations here by TP ID. Keep live RED/GREEN status, run output, and temporary trace churn in story TASKs, test files, or `README_VerifyStatusTraces.md`.
 
 ## Story and Design Inputs
 
 - Story: {{StoryID}} and {{title}}
 - Active story artifact: {{.catdd/spec/doingUS path}}
-- Architecture design: [README_ArchDesign.md](README_ArchDesign.md)
-- Detail-level verification design: [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md)
-- Related design surfaces: [README_UsageDesign.md](README_UsageDesign.md), [README_ErrorDesign.md](README_ErrorDesign.md), [README_PerfDesign.md](README_PerfDesign.md), [README_CompatDesign.md](README_CompatDesign.md), [README_DiagnosisDesign.md](README_DiagnosisDesign.md), [README_SecurityDesign.md](README_SecurityDesign.md)
+- Architecture design: [README_ArchDesign](README_ArchDesign.md)
+- Detail-level verification design: [README_DetailVerifyDesign](README_DetailVerifyDesign.md)
+- Related design surfaces: [README_UsageDesign](README_UsageDesign.md), [README_ErrorDesign](README_ErrorDesign.md), [README_PerfDesign](README_PerfDesign.md), [README_CompatDesign](README_CompatDesign.md), [README_DiagnosisDesign](README_DiagnosisDesign.md), [README_SecurityDesign](README_SecurityDesign.md)
 - Target runtime environments: {{host simulation / container / target board / HIL / staging / production-like}}
 - Dynamic trace artifact: {{README_VerifyStatusTraces.md / story TASKs / test-file comments / not needed}}
 
@@ -23,7 +23,7 @@ This is the SpecCoding template for project-root `README_ArchVerifyDesign.md`. C
 | --- | --- | --- | --- | --- |
 | `SysTesting` | {{declared SUT + real peers/dependencies in {{environment}}}} | {{contract and interaction behavior proven at this assembly}} | {{behaviors left to UnitTesting or unproven here}} | This document |
 | `UserTesting` | {{deployed composition and end-to-end user flow}} | {{full-flow outcome, prerequisites, and observed evidence}} | {{internal design properties not observable end to end}} | This document |
-| `UnitTesting` | {{only list units that need this environment, e.g. on-target driver checks}} | {{what the isolated check proves}} | {{environment or integration behavior it cannot prove}} | [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md) |
+| `UnitTesting` | {{only list units that need this environment, e.g. on-target driver checks}} | {{what the isolated check proves}} | {{environment or integration behavior it cannot prove}} | [README_DetailVerifyDesign](README_DetailVerifyDesign.md) |
 
 Rules:
 
@@ -73,14 +73,14 @@ Resolve StoryIdAlias through the project story registry. TP references use alias
 
 Rules:
 
-- This table decides balance across levels, environments, and evidence; the category-to-quadrant rows stay in [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md).
+- This table decides balance across levels, environments, and evidence; the category-to-quadrant rows stay in [README_DetailVerifyDesign](README_DetailVerifyDesign.md).
 - A quadrant with no level, environment, or evidence owner is a GAP recorded here, not a silent omission.
 
 ## Promoted Test Points from Detail Design
 
 | TP ID | Obligation (from detail ledger) | Promoted level | Environment | Evidence owner | Detail design reference |
 | --- | --- | --- | --- | --- | --- |
-| {{StoryIdAlias}}-TP-{{n}} | {{obligation text}} | {{SysTesting/UserTesting}} | {{ENV id}} | {{owner}} | [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md) |
+| {{StoryIdAlias}}-TP-{{n}} | {{obligation text}} | {{SysTesting/UserTesting}} | {{ENV id}} | {{owner}} | [README_DetailVerifyDesign](README_DetailVerifyDesign.md) |
 
 ## Evidence, Gates, and Equipment Ownership
 

@@ -12,7 +12,7 @@ Use this command to review the declared Performance, Robust, Compatibility, Conf
 
 ### ReACT Execution
 
-Use one discovery sweep and one independent challenge, with at most two repair/recheck rounds for the review report. Stop earlier on missing intent, conflicting sources, or no progress; do not loop until PASS. Apply the canonical P2 Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md).
+Use one discovery sweep and one independent challenge, with at most two repair/recheck rounds for the review report. Stop earlier on missing intent, conflicting sources, or no progress; do not loop until PASS. Apply the canonical P2 Discovery Gate in [CaTDD_methodPrompt-testPointDiscovery](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md).
 
 1. **Thought** — Read source artifacts first, before the designer's ledger or skeletons. Declare SUT, in-scope categories, domain profile(s), test level, and execution environment. Derive an independent checklist of budgets, sustained-use invariants, supported matrix rows, precedence, evidence fields, and protection policies. Capture source conflicts and missing expectations as questions; domain examples cannot supply thresholds or technologies.
 2. **Action** — Read the discovery_ledger and skeletons, then reconcile the checklist in both directions. Check each source-backed six-part quality scenario, including the response measure and artifact reference: numeric budgets need units/workloads/targets; exact predicates need expected matrix/policy/evidence results. A missing obligation may have no existing US/AC/TC ID; use its source/rule or TP ID. Manual or hybrid procedures are valid when their observation and evidence capture are explicit.

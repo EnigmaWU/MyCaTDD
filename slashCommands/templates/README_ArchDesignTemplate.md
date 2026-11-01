@@ -5,9 +5,9 @@ This is the SpecCoding template for project-root `README_ArchDesign.md`. Create 
 ## Context
 
 - Story link: {{.catdd/spec/doingUS/YYYYMMDD-UserStory.md or todo/done link}}
-- Related overview: [README.md](README.md)
-- Related ubiquitous language & concept model: [README_UbiLang.md](README_UbiLang.md)
-- Related detail design: [README_DetailDesign.md](README_DetailDesign.md)
+- Related overview: [README](README.md)
+- Related ubiquitous language & concept model: [README_UbiLang](README_UbiLang.md)
+- Related detail design: [README_DetailDesign](README_DetailDesign.md)
 
 ## Core System Concepts & Bounded Contexts
 

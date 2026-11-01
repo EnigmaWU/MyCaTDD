@@ -47,9 +47,9 @@ Expected result:
 
 ## Method References
 
-- [../../flows/P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md)
+- [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [CaTDD_methodPrompt4Cat-Misuse](../../../methodPrompts/CaTDD_methodPrompt4Cat-Misuse.md)
 
 ## Output Contract
 

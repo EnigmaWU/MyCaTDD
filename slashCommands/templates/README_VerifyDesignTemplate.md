@@ -8,8 +8,8 @@ This is the SpecCoding template for project-root `README_VerifyDesign.md` while 
 
 | Artifact | Owner commands | Scope | Link |
 | --- | --- | --- | --- |
-| `README_ArchVerifyDesign.md` | create/update `SPEC_takeArchDesign`; revise `SPEC_updateArchDesign`; gate `SPEC_reviewArchDesign` | `SysTesting` and `UserTesting` strategy: verification topology, level-and-boundary map, target runtime environment, double credibility, evidence and equipment ownership. | [README_ArchVerifyDesign.md](README_ArchVerifyDesign.md) |
-| `README_DetailVerifyDesign.md` | create/update `SPEC_takeDetailDesign`; revise `SPEC_updateDetailDesign`; gate `SPEC_reviewDetailDesign` | `UnitTesting` strategy: behavior inventory, `discovery_ledger`, Discovery Gate, CaTDD category x quadrant coverage, submodule strategy, fixtures and oracles. | [README_DetailVerifyDesign.md](README_DetailVerifyDesign.md) |
+| `README_ArchVerifyDesign.md` | create/update `SPEC_takeArchDesign`; revise `SPEC_updateArchDesign`; gate `SPEC_reviewArchDesign` | `SysTesting` and `UserTesting` strategy: verification topology, level-and-boundary map, target runtime environment, double credibility, evidence and equipment ownership. | [README_ArchVerifyDesign](README_ArchVerifyDesign.md) |
+| `README_DetailVerifyDesign.md` | create/update `SPEC_takeDetailDesign`; revise `SPEC_updateDetailDesign`; gate `SPEC_reviewDetailDesign` | `UnitTesting` strategy: behavior inventory, `discovery_ledger`, Discovery Gate, CaTDD category x quadrant coverage, submodule strategy, fixtures and oracles. | [README_DetailVerifyDesign](README_DetailVerifyDesign.md) |
 | Dynamic status location (optional) | updated by the working step that ran the verification | Live TP/TC status, commands, run results, temporary gaps: `README_VerifyStatusTraces.md` when the project keeps one, otherwise story TASKs or test-file comments. | {{path, story TASKs, or test-file comments}} |
 
 ## Rules

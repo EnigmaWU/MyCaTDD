@@ -60,7 +60,7 @@ Expected result:
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 - Preserve StoryIdAlias and CreatedAt on closure. Verify the registry still resolves the same story, every accepted CaTDD-AC has `From / Given / When / Then / Counter`, each `From` resolves to at least one Example or Rule, and the alias-qualified AC/TP/TC graph has no dangling ownership or coverage links. Moving artifacts does not create new identities.
 

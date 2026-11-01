@@ -55,7 +55,7 @@ Expected result:
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
 - [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
 - [P1-DesignTestsFlow](../../flows/P1-DesignTestsFlow.md)
 - [P2-QualityTestsFlow](../../flows/P2-QualityTestsFlow.md)

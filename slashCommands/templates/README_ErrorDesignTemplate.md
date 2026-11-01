@@ -6,9 +6,9 @@ This is the SpecCoding template for project-root `README_ErrorDesign.md`. Create
 
 - Story: {{US identifier and title}}
 - Source artifact: {{.catdd/spec/doingUS path or issue link}}
-- Related detail design: [README_DetailDesign.md](README_DetailDesign.md)
-- Related diagnosis design: [README_DiagnosisDesign.md](README_DiagnosisDesign.md)
-- Related verification design: [README_VerifyDesign.md](README_VerifyDesign.md)
+- Related detail design: [README_DetailDesign](README_DetailDesign.md)
+- Related diagnosis design: [README_DiagnosisDesign](README_DiagnosisDesign.md)
+- Related verification design: [README_VerifyDesign](README_VerifyDesign.md)
 
 ## Error Taxonomy
 

@@ -90,9 +90,9 @@ This ledger mirrors the authoritative story CaTDD-ACs; it does not replace their
 
 ## Traceability Notes
 
-- Related detail design: [README_DetailDesign.md](README_DetailDesign.md)
-- Related verification design: [README_VerifyDesign.md](README_VerifyDesign.md)
-- Related user guide: [README_UserGuide.md](README_UserGuide.md)
+- Related detail design: [README_DetailDesign](README_DetailDesign.md)
+- Related verification design: [README_VerifyDesign](README_VerifyDesign.md)
+- Related user guide: [README_UserGuide](README_UserGuide.md)
 
 ## Usage Example
 

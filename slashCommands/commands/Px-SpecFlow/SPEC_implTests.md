@@ -51,14 +51,14 @@ Expected result:
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
-- [P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [P1-DesignTestsFlow.md](../../flows/P1-DesignTestsFlow.md)
-- [P2-QualityTestsFlow.md](../../flows/P2-QualityTestsFlow.md)
-- [TEST_tellMeNextImplTest.md](../../commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md)
-- [TEST_implTestCase.md](../../commands/P0-FuncTestsFlow/TEST_implTestCase.md)
-- [TEST_reviewImplTestCase.md](../../commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
+- [P1-DesignTestsFlow](../../flows/P1-DesignTestsFlow.md)
+- [P2-QualityTestsFlow](../../flows/P2-QualityTestsFlow.md)
+- [TEST_tellMeNextImplTest](../../commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md)
+- [TEST_implTestCase](../../commands/P0-FuncTestsFlow/TEST_implTestCase.md)
+- [TEST_reviewImplTestCase](../../commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 
 ## Output Contract
 

@@ -60,7 +60,7 @@ Expected result:
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
 
 ## Output Contract
 

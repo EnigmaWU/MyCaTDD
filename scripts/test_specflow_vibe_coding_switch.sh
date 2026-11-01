@@ -94,11 +94,11 @@ zh_headings="$(grep -c '^##* ' "$FLOW_DOC_ZH")"
 [[ "$en_headings" -eq "$zh_headings" ]] || fail "flow heading mismatch after the discipline-mode section: EN=$en_headings, ZH=$zh_headings"
 
 # 8. Registries and term owners carry the switch.
-assert_contains "$COMMAND_README" '[SPEC_whatsWrong.md](SPEC_whatsWrong.md)'
+assert_contains "$COMMAND_README" '[SPEC_whatsWrong](SPEC_whatsWrong.md)'
 assert_contains "$USER_GUIDE" 'Discipline mode (SpecCoding vs VibeCoding)'
 assert_contains "$USER_GUIDE_ZH" '纪律模式（SpecCoding 与 VibeCoding）'
 assert_contains "$USER_GUIDE" '[SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md)'
-assert_contains "$USER_GUIDE_ZH" '[commands/Px-SpecFlow/SPEC_whatsWrong.md](commands/Px-SpecFlow/SPEC_whatsWrong.md)'
+assert_contains "$USER_GUIDE_ZH" '[SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md)'
 assert_contains "$SLASH_README" '`SPEC_whatsWrong` is the sanctioned bridge between the two'
 assert_contains "$SLASH_README_ZH" '`SPEC_whatsWrong` 是两者之间被正式认可的桥梁'
 assert_contains "$UBILANG" '| SPEC_whatsWrong |'

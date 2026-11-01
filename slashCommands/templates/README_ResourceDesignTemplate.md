@@ -6,9 +6,9 @@ This is the SpecCoding template for project-root `README_ResourceDesign.md`. Cre
 
 - Story: {{US identifier and title}}
 - Source artifact: {{.catdd/spec/doingUS path or issue link}}
-- Related detail design: [README_DetailDesign.md](README_DetailDesign.md)
-- Related performance design: [README_PerfDesign.md](README_PerfDesign.md)
-- Related verification design: [README_VerifyDesign.md](README_VerifyDesign.md)
+- Related detail design: [README_DetailDesign](README_DetailDesign.md)
+- Related performance design: [README_PerfDesign](README_PerfDesign.md)
+- Related verification design: [README_VerifyDesign](README_VerifyDesign.md)
 
 ## Resource Inventory
 

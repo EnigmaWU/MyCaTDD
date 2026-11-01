@@ -2,7 +2,7 @@
 
 `slashCommands` contains reusable slash-command prompts, flows, and kits that operationalize CaTDD methods.
 
-This README is the WHAT / WHY entry point for the command connector layer. For HOW, WHO, WHEN, and WHERE to use `slashCommands/`, read [README_UserGuide.md](README_UserGuide.md) or [README_UserGuide_ZH.md](README_UserGuide_ZH.md).
+This README is the WHAT / WHY entry point for the command connector layer. For HOW, WHO, WHEN, and WHERE to use `slashCommands/`, read [README_UserGuide](README_UserGuide.md) or [README_UserGuide_ZH](README_UserGuide_ZH.md).
 
 ## What
 
@@ -93,7 +93,7 @@ Future addon/demo commands should use `P3 Addons` to stay aligned with `methodPr
 - Standalone user guides (`README_UserGuide.md`, `README_UserGuide_ZH.md`)
 - Flow documents under `flows/`
 - Kit documents under `kits/`
-- Shared command template [TEST_slashCommandTemplate.md](TEST_slashCommandTemplate.md)
+- Shared command template [TEST_slashCommandTemplate](TEST_slashCommandTemplate.md)
 - Command prompt templates under `commands/`
 - HarnessKits operational commands under `commands/Px-HarnessKits/`
 - Compatibility notes that prevent conflicts with `methodPrompts`

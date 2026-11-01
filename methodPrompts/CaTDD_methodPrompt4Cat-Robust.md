@@ -33,7 +33,7 @@ Robust proves that the system remains stable after repeated or sustained use.
 
 ## TestPointsInMind
 
-First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
+First apply the source inventory and applicable sweep in [CaTDD_methodPrompt-testPointDiscovery](CaTDD_methodPrompt-testPointDiscovery.md). Record candidates in `discovery_ledger`; apply the Discovery Gate before implementation. Domain examples are optional prompts, not requirements or coverage quotas; use source-defined limits and oracles.
 
 When this category applies, consider test points such as:
 

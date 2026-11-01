@@ -4,7 +4,7 @@ Practical guide for {{target readers}} using {{ProjectName}}.
 
 This is the SpecCoding template for project-root `README_UserGuide.md`. Create or update it from `SPEC_takeDetailDesign` when a story needs user-facing or developer-facing usage guidance.
 
-For WHAT the project or module is and WHY it exists, read [README.md](README.md). This guide owns HOW, WHO, WHEN, WHERE, and runnable examples.
+For WHAT the project or module is and WHY it exists, read [README](README.md). This guide owns HOW, WHO, WHEN, WHERE, and runnable examples.
 
 ## Who
 

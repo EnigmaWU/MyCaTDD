@@ -78,8 +78,8 @@ git push -u origin us-123-suspend
 
 ## Method References
 
-- [Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
-- [methodPrompts](../../../methodPrompts/README.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
 
 ## Output Contract
 

@@ -57,12 +57,12 @@ Expected result:
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
-- [../../flows/P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [../../flows/P1-DesignTestsFlow.md](../../flows/P1-DesignTestsFlow.md)
-- [../../flows/P2-QualityTestsFlow.md](../../flows/P2-QualityTestsFlow.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- [../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
+- [P1-DesignTestsFlow](../../flows/P1-DesignTestsFlow.md)
+- [P2-QualityTestsFlow](../../flows/P2-QualityTestsFlow.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [CaTDD_methodPrompt-testPointDiscovery](../../../methodPrompts/CaTDD_methodPrompt-testPointDiscovery.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
 
 ## Output Contract

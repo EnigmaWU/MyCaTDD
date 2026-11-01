@@ -6,8 +6,8 @@ Kits group related tool-point commands without requiring a strict lifecycle sequ
 
 ## Kit List
 
-- [Px-HarnessKits.md](Px-HarnessKits.md)
-- [Px-StatusKits.md](Px-StatusKits.md)
+- [Px-HarnessKits kit](Px-HarnessKits.md)
+- [Px-StatusKits kit](Px-StatusKits.md)
 
 ## Import Rule
 

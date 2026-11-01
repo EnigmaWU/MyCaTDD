@@ -2,7 +2,7 @@
 
 面向使用 `slashCommands/` 将 CaTDD 运行为可重复 SpecCoding 工作流的开发者与 CodeAgent 的实践指南。
 
-关于这一层 WHAT 是什么、WHY 为什么存在，请阅读 [README.md](README.md)。本指南聚焦 HOW 如何使用、WHO 谁使用、WHEN 何时使用，以及 WHERE 资产位于哪里。
+关于这一层 WHAT 是什么、WHY 为什么存在，请阅读 [README](README.md)。本指南聚焦 HOW 如何使用、WHO 谁使用、WHEN 何时使用，以及 WHERE 资产位于哪里。
 
 ## 使用者
 
@@ -74,7 +74,7 @@ slashCommands/
 
 使用 `slashCommands/` 时，按以下流程执行。
 
-1. 阅读 [README.md](README.md)，理解 WHAT/WHY 层契约。
+1. 阅读 [README](README.md)，理解 WHAT/WHY 层契约。
 2. 从下面的流程与工具包地图中选择一个流程或工具包。
 3. 阅读流程或工具包文档，理解命令顺序、命令族和预期交接。
 4. 如果在目标项目使用，先用 Copilot 安装器或独立自定义适配器安装器安装 CaTDD。
@@ -130,7 +130,7 @@ bash scripts/test_installCaTDD4Custom.sh
 
 ## SpecCoding 产物策略
 
-本用户指南保持简洁。完整的产物策略以 [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) 为准。
+本用户指南保持简洁。完整的产物策略以 [Px-SpecFlow flow](flows/Px-SpecFlow.md) 为准。
 
 快速规则：
 
@@ -138,68 +138,68 @@ bash scripts/test_installCaTDD4Custom.sh
 - 团队共享的 `README*` SPEC 文档位于项目根目录并应提交。
 - 本地过程追踪保持 gitignore：`.catdd/spec/WorkingProcessLog.md`。
 - `AGENTS.md` 及其目录级 override 由 `SPEC_initProjectContext` 记录、由 `SPEC_updateProjectContext` 对齐。归属按区域划分：CaTDD 受管标记之间归 CaTDD 所有且可重新生成，其余归项目所有，绝不重写。早于 CaTDD 存在的文件被遵循；由 CaTDD 创建的被掌管。`AGENTS.md` 只拥有操作约定，绝不拥有方法语义、门禁或项目事实。`.github/instructions/catdd.instructions.md` 等安装器生成的适配文件会被整体重写，不在该模型范围内。
-- 若本指南与细节策略出现差异，以 [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) 的详细生命周期规则为准。
+- 若本指南与细节策略出现差异，以 [Px-SpecFlow flow](flows/Px-SpecFlow.md) 的详细生命周期规则为准。
 
 ## 流程与工具包地图
 
 | Flow or kit | Purpose | Start here |
 | --- | --- | --- |
-| Px SpecFlow | 从项目上下文和 work item 驱动 SpecCoding，直到故事完成审查与提交 | [flows/Px-SpecFlow.md](flows/Px-SpecFlow.md) |
-| Px HarnessKits | 运行维护 CaTDD 源、适配器、执行、诊断和 patch-back 的 Harness Engineering 工具点命令 | [kits/Px-HarnessKits.md](kits/Px-HarnessKits.md) |
-| Px StatusKits | 只读地查看 UT、SPEC、HARNESS 当前状态，并给出下一条命令 | [kits/Px-StatusKits.md](kits/Px-StatusKits.md) |
-| P0 FuncTestsFlow | 转换或设计功能测试骨架，然后逐个 TC 实现 | [flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md) |
-| P1 DesignTestsFlow | 在稳定功能覆盖基础上扩展 State、Capability、Concurrency | [flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md) |
-| P2 QualityTestsFlow | 在稳定行为基础上扩展 Performance、Robust、Compatibility、Configuration | [flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md) |
+| Px SpecFlow | 从项目上下文和 work item 驱动 SpecCoding，直到故事完成审查与提交 | [Px-SpecFlow flow](flows/Px-SpecFlow.md) |
+| Px HarnessKits | 运行维护 CaTDD 源、适配器、执行、诊断和 patch-back 的 Harness Engineering 工具点命令 | [Px-HarnessKits kit](kits/Px-HarnessKits.md) |
+| Px StatusKits | 只读地查看 UT、SPEC、HARNESS 当前状态，并给出下一条命令 | [Px-StatusKits kit](kits/Px-StatusKits.md) |
+| P0 FuncTestsFlow | 转换或设计功能测试骨架，然后逐个 TC 实现 | [P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md) |
+| P1 DesignTestsFlow | 在稳定功能覆盖基础上扩展 State、Capability、Concurrency | [P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md) |
+| P2 QualityTestsFlow | 在稳定行为基础上扩展 Performance、Robust、Compatibility、Configuration | [P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md) |
 
 ## 命令地图
 
-仅保留关键命令。完整的分流程或工具包命令地图请查看 [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md)、[commands/Px-HarnessKits/README.md](commands/Px-HarnessKits/README.md)、[commands/Px-StatusKits/README.md](commands/Px-StatusKits/README.md)、[flows/P0-FuncTestsFlow.md](flows/P0-FuncTestsFlow.md)、[flows/P1-DesignTestsFlow.md](flows/P1-DesignTestsFlow.md)、[flows/P2-QualityTestsFlow.md](flows/P2-QualityTestsFlow.md)。
+仅保留关键命令。完整的分流程或工具包命令地图请查看 [Px-SpecFlow commands](commands/Px-SpecFlow/README.md)、[Px-HarnessKits commands](commands/Px-HarnessKits/README.md)、[Px-StatusKits commands](commands/Px-StatusKits/README.md)、[P0-FuncTestsFlow](flows/P0-FuncTestsFlow.md)、[P1-DesignTestsFlow](flows/P1-DesignTestsFlow.md)、[P2-QualityTestsFlow](flows/P2-QualityTestsFlow.md)。
 
 | Developer need | Command template |
 | --- | --- |
-| 创建或修订可移植的 SPEC 斜杠命令 | [SPEC_slashCommandTemplate.md](SPEC_slashCommandTemplate.md) |
-| 创建或修订可移植的 UT 斜杠命令 | [TEST_slashCommandTemplate.md](TEST_slashCommandTemplate.md) |
-| 驱动完整 SpecCoding 生命周期 | [commands/Px-SpecFlow/README.md](commands/Px-SpecFlow/README.md) |
-| 将已安装项目中的 CaTDD 改进 patch 回源仓库 | [commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md](commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
-| 在信任目标项目命令前验证 CaTDD 安装 | [commands/Px-HarnessKits/HARNESS_verifyInstallation.md](commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
-| 诊断失败或异常工作的 CaTDD 安装 | [commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md](commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) |
-| 在开始新任务会话前捕获当前会话上下文 | [commands/Px-HarnessKits/HARNESS_newTaskSession.md](commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
-| 在有意义的成功或重复 Harness 证据后学习并演进 | 使用 `evolution_mode=auto` 的 [commands/Px-HarnessKits/HARNESS_evolveHarness.md](commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
-| 告诉我当前 SpecCoding 下一步该做什么 | [commands/Px-SpecFlow/SPEC_whatsNextTask.md](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
-| 告诉我当前 SpecCoding 在全部 `.catdd/spec/` 泳道的状态，并给出 Level-0…Level-5 maturity 评级 | [commands/Px-StatusKits/SPEC_showMeStatus.md](commands/Px-StatusKits/SPEC_showMeStatus.md) |
-| 告诉我当前 unit test 状态和下一条 UT 命令，并给出 Level-0…Level-5 completeness 评级 | [commands/Px-StatusKits/TEST_showMeStatus.md](commands/Px-StatusKits/TEST_showMeStatus.md) |
-| 告诉我当前 harness 与安装状态，并给出 Level-0…Level-5 integrity 评级 | [commands/Px-StatusKits/HARNESS_showMeStatus.md](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
-| 问"哪里不对"并切换到 VibeCoding 探索 | [commands/Px-SpecFlow/SPEC_whatsWrong.md](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
-| 为已打开的 user story 规划下一条 SPEC 步骤 | [commands/Px-SpecFlow/SPEC_makePlan.md](commands/Px-SpecFlow/SPEC_makePlan.md) |
-| 在阶段转换或漂移检查点同步 `[ ]`/`[x]` 状态并逐步细化故事 TASKs 计划 | [commands/Px-SpecFlow/SPEC_updateMadePlan.md](commands/Px-SpecFlow/SPEC_updateMadePlan.md) |
-| 导入已有结构化 User Story 或 AC 切片 | [commands/Px-SpecFlow/SPEC_importUserStory.md](commands/Px-SpecFlow/SPEC_importUserStory.md) |
-| 将 demo tests 转换为 CaTDD Typical 骨架 | [commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md](commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md) |
-| 设计完整 P0 Functional 骨架集 | [commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md) |
-| 设计 Typical 骨架 | [commands/P0-FuncTestsFlow/TEST_designTypicalSkeleton.md](commands/P0-FuncTestsFlow/TEST_designTypicalSkeleton.md) |
-| 设计 Edge 骨架 | [commands/P0-FuncTestsFlow/TEST_designEdgeSkeleton.md](commands/P0-FuncTestsFlow/TEST_designEdgeSkeleton.md) |
-| 设计 Misuse 骨架 | [commands/P0-FuncTestsFlow/TEST_designMisuseSkeleton.md](commands/P0-FuncTestsFlow/TEST_designMisuseSkeleton.md) |
-| 设计 Fault 骨架 | [commands/P0-FuncTestsFlow/TEST_designFaultSkeleton.md](commands/P0-FuncTestsFlow/TEST_designFaultSkeleton.md) |
-| 审查 P0 Functional 骨架集 | [commands/P0-FuncTestsFlow/TEST_reviewFuncTestsSkeleton.md](commands/P0-FuncTestsFlow/TEST_reviewFuncTestsSkeleton.md) |
-| 基于 `README_StateDesign.md` 或 `README_ArchDesign.md` 设计 State 骨架 | [commands/P1-DesignTestsFlow/TEST_designStateSkeleton.md](commands/P1-DesignTestsFlow/TEST_designStateSkeleton.md) |
-| 基于 `README_DetailDesign.md` 设计 Capability 骨架 | [commands/P1-DesignTestsFlow/TEST_designCapabilitySkeleton.md](commands/P1-DesignTestsFlow/TEST_designCapabilitySkeleton.md) |
-| 基于 `README_ResourceDesign.md` 设计 Concurrency 骨架 | [commands/P1-DesignTestsFlow/TEST_designConcurrencySkeleton.md](commands/P1-DesignTestsFlow/TEST_designConcurrencySkeleton.md) |
-| 审查 P1 Design 骨架 | [commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md](commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md) |
-| 基于 `README_PerfDesign.md` 设计 Performance 骨架 | [commands/P2-QualityTestsFlow/TEST_designPerformanceSkeleton.md](commands/P2-QualityTestsFlow/TEST_designPerformanceSkeleton.md) |
-| 基于 `README_ErrorDesign.md` 设计 Robust 骨架 | [commands/P2-QualityTestsFlow/TEST_designRobustSkeleton.md](commands/P2-QualityTestsFlow/TEST_designRobustSkeleton.md) |
-| 基于 `README_CompatDesign.md` 设计 Compatibility 骨架 | [commands/P2-QualityTestsFlow/TEST_designCompatibilitySkeleton.md](commands/P2-QualityTestsFlow/TEST_designCompatibilitySkeleton.md) |
-| 基于 `README_DetailDesign.md` 设计 Configuration 骨架 | [commands/P2-QualityTestsFlow/TEST_designConfigurationSkeleton.md](commands/P2-QualityTestsFlow/TEST_designConfigurationSkeleton.md) |
-| 基于 `README_SecurityDesign.md` 设计 Security 骨架 | [commands/P2-QualityTestsFlow/TEST_designSecuritySkeleton.md](commands/P2-QualityTestsFlow/TEST_designSecuritySkeleton.md) |
-| 审查 P2 Quality 骨架 | [commands/P2-QualityTestsFlow/TEST_reviewQualityTestsSkeleton.md](commands/P2-QualityTestsFlow/TEST_reviewQualityTestsSkeleton.md) |
-| 从已有骨架中选择下一个测试用例 | [commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md](commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md) |
-| 实现已选择的测试用例 | [commands/P0-FuncTestsFlow/TEST_implTestCase.md](commands/P0-FuncTestsFlow/TEST_implTestCase.md) |
-| 审查已实现的测试用例 | [commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md](commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md) |
-| 审查当前 story 范围内已实现的 unit tests | [commands/Px-SpecFlow/SPEC_reviewImplTests.md](commands/Px-SpecFlow/SPEC_reviewImplTests.md) |
-| 在不改变行为的前提下重构一个 GREEN 测试用例 | [commands/P0-FuncTestsFlow/TEST_refactTestCase.md](commands/P0-FuncTestsFlow/TEST_refactTestCase.md) |
-| 编排当前 story 范围内的 unit-test 重构 | [commands/Px-SpecFlow/SPEC_refactTests.md](commands/Px-SpecFlow/SPEC_refactTests.md) |
-| 在开启故事前提交导入/分析区间 | [commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md](commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) |
-| 提交故事区间内单个已验证的生命周期步骤 | [commands/Px-SpecFlow/SPEC_commitStepWorks.md](commands/Px-SpecFlow/SPEC_commitStepWorks.md) |
-| 把整个 open-to-close 故事区间提交为 just-done 提交 | [commands/Px-SpecFlow/SPEC_commitStoryWorks.md](commands/Px-SpecFlow/SPEC_commitStoryWorks.md) |
-| 从暂存或最近修改的文件生成通用提交信息 | [commands/Px-SpecFlow/SPEC_commitWorks.md](commands/Px-SpecFlow/SPEC_commitWorks.md) |
+| 创建或修订可移植的 SPEC 斜杠命令 | [SPEC_slashCommandTemplate](SPEC_slashCommandTemplate.md) |
+| 创建或修订可移植的 UT 斜杠命令 | [TEST_slashCommandTemplate](TEST_slashCommandTemplate.md) |
+| 驱动完整 SpecCoding 生命周期 | [Px-SpecFlow commands](commands/Px-SpecFlow/README.md) |
+| 将已安装项目中的 CaTDD 改进 patch 回源仓库 | [HARNESS_patchCaTDDSource](commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
+| 在信任目标项目命令前验证 CaTDD 安装 | [HARNESS_verifyInstallation](commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
+| 诊断失败或异常工作的 CaTDD 安装 | [HARNESS_diagnoseInstallation](commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) |
+| 在开始新任务会话前捕获当前会话上下文 | [HARNESS_newTaskSession](commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
+| 在有意义的成功或重复 Harness 证据后学习并演进 | 使用 `evolution_mode=auto` 的 [HARNESS_evolveHarness](commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
+| 告诉我当前 SpecCoding 下一步该做什么 | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
+| 告诉我当前 SpecCoding 在全部 `.catdd/spec/` 泳道的状态，并给出 Level-0…Level-5 maturity 评级 | [SPEC_showMeStatus](commands/Px-StatusKits/SPEC_showMeStatus.md) |
+| 告诉我当前 unit test 状态和下一条 UT 命令，并给出 Level-0…Level-5 completeness 评级 | [TEST_showMeStatus](commands/Px-StatusKits/TEST_showMeStatus.md) |
+| 告诉我当前 harness 与安装状态，并给出 Level-0…Level-5 integrity 评级 | [HARNESS_showMeStatus](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
+| 问"哪里不对"并切换到 VibeCoding 探索 | [SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md) |
+| 为已打开的 user story 规划下一条 SPEC 步骤 | [SPEC_makePlan](commands/Px-SpecFlow/SPEC_makePlan.md) |
+| 在阶段转换或漂移检查点同步 `[ ]`/`[x]` 状态并逐步细化故事 TASKs 计划 | [SPEC_updateMadePlan](commands/Px-SpecFlow/SPEC_updateMadePlan.md) |
+| 导入已有结构化 User Story 或 AC 切片 | [SPEC_importUserStory](commands/Px-SpecFlow/SPEC_importUserStory.md) |
+| 将 demo tests 转换为 CaTDD Typical 骨架 | [TEST_convertDemoToTypical](commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md) |
+| 设计完整 P0 Functional 骨架集 | [TEST_designFuncTestsSkeleton](commands/P0-FuncTestsFlow/TEST_designFuncTestsSkeleton.md) |
+| 设计 Typical 骨架 | [TEST_designTypicalSkeleton](commands/P0-FuncTestsFlow/TEST_designTypicalSkeleton.md) |
+| 设计 Edge 骨架 | [TEST_designEdgeSkeleton](commands/P0-FuncTestsFlow/TEST_designEdgeSkeleton.md) |
+| 设计 Misuse 骨架 | [TEST_designMisuseSkeleton](commands/P0-FuncTestsFlow/TEST_designMisuseSkeleton.md) |
+| 设计 Fault 骨架 | [TEST_designFaultSkeleton](commands/P0-FuncTestsFlow/TEST_designFaultSkeleton.md) |
+| 审查 P0 Functional 骨架集 | [TEST_reviewFuncTestsSkeleton](commands/P0-FuncTestsFlow/TEST_reviewFuncTestsSkeleton.md) |
+| 基于 `README_StateDesign.md` 或 `README_ArchDesign.md` 设计 State 骨架 | [TEST_designStateSkeleton](commands/P1-DesignTestsFlow/TEST_designStateSkeleton.md) |
+| 基于 `README_DetailDesign.md` 设计 Capability 骨架 | [TEST_designCapabilitySkeleton](commands/P1-DesignTestsFlow/TEST_designCapabilitySkeleton.md) |
+| 基于 `README_ResourceDesign.md` 设计 Concurrency 骨架 | [TEST_designConcurrencySkeleton](commands/P1-DesignTestsFlow/TEST_designConcurrencySkeleton.md) |
+| 审查 P1 Design 骨架 | [TEST_reviewDesignTestsSkeleton](commands/P1-DesignTestsFlow/TEST_reviewDesignTestsSkeleton.md) |
+| 基于 `README_PerfDesign.md` 设计 Performance 骨架 | [TEST_designPerformanceSkeleton](commands/P2-QualityTestsFlow/TEST_designPerformanceSkeleton.md) |
+| 基于 `README_ErrorDesign.md` 设计 Robust 骨架 | [TEST_designRobustSkeleton](commands/P2-QualityTestsFlow/TEST_designRobustSkeleton.md) |
+| 基于 `README_CompatDesign.md` 设计 Compatibility 骨架 | [TEST_designCompatibilitySkeleton](commands/P2-QualityTestsFlow/TEST_designCompatibilitySkeleton.md) |
+| 基于 `README_DetailDesign.md` 设计 Configuration 骨架 | [TEST_designConfigurationSkeleton](commands/P2-QualityTestsFlow/TEST_designConfigurationSkeleton.md) |
+| 基于 `README_SecurityDesign.md` 设计 Security 骨架 | [TEST_designSecuritySkeleton](commands/P2-QualityTestsFlow/TEST_designSecuritySkeleton.md) |
+| 审查 P2 Quality 骨架 | [TEST_reviewQualityTestsSkeleton](commands/P2-QualityTestsFlow/TEST_reviewQualityTestsSkeleton.md) |
+| 从已有骨架中选择下一个测试用例 | [TEST_tellMeNextImplTest](commands/P0-FuncTestsFlow/TEST_tellMeNextImplTest.md) |
+| 实现已选择的测试用例 | [TEST_implTestCase](commands/P0-FuncTestsFlow/TEST_implTestCase.md) |
+| 审查已实现的测试用例 | [TEST_reviewImplTestCase](commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md) |
+| 审查当前 story 范围内已实现的 unit tests | [SPEC_reviewImplTests](commands/Px-SpecFlow/SPEC_reviewImplTests.md) |
+| 在不改变行为的前提下重构一个 GREEN 测试用例 | [TEST_refactTestCase](commands/P0-FuncTestsFlow/TEST_refactTestCase.md) |
+| 编排当前 story 范围内的 unit-test 重构 | [SPEC_refactTests](commands/Px-SpecFlow/SPEC_refactTests.md) |
+| 在开启故事前提交导入/分析区间 | [SPEC_commitPreStoryWorks](commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) |
+| 提交故事区间内单个已验证的生命周期步骤 | [SPEC_commitStepWorks](commands/Px-SpecFlow/SPEC_commitStepWorks.md) |
+| 把整个 open-to-close 故事区间提交为 just-done 提交 | [SPEC_commitStoryWorks](commands/Px-SpecFlow/SPEC_commitStoryWorks.md) |
+| 从暂存或最近修改的文件生成通用提交信息 | [SPEC_commitWorks](commands/Px-SpecFlow/SPEC_commitWorks.md) |
 
 ## 质量检查清单
 

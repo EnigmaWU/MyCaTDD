@@ -51,12 +51,12 @@ Expected result:
 
 ## Method References
 
-- [Px-SpecFlow](../../flows/Px-SpecFlow.md)
-- [P0-FuncTestsFlow.md](../../flows/P0-FuncTestsFlow.md)
-- [TEST_refactTestCase.md](../../commands/P0-FuncTestsFlow/TEST_refactTestCase.md)
-- [TEST_reviewImplTestCase.md](../../commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md)
-- [SPEC_reviewImplTests.md](SPEC_reviewImplTests.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [P0-FuncTestsFlow](../../flows/P0-FuncTestsFlow.md)
+- [TEST_refactTestCase](../../commands/P0-FuncTestsFlow/TEST_refactTestCase.md)
+- [TEST_reviewImplTestCase](../../commands/P0-FuncTestsFlow/TEST_reviewImplTestCase.md)
+- [SPEC_reviewImplTests](SPEC_reviewImplTests.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
 
 ## Output Contract
 

@@ -149,7 +149,7 @@ assert_contains "$UBILANG" 'the escalation is `SPEC_whatsWrong` rather than ASK'
 assert_contains "$UBILANG_ZH" 'PASS = 制品照原样继续；REVISE = 先修改制品，再重新跑门禁'
 assert_contains "$UBILANG_ZH" '注意与 TC 状态标记 `🚫 BLOCKED` 区分'
 assert_contains "$UBILANG_ZH" '应升级为 `SPEC_whatsWrong` 而非 ASK'
-assert_contains "$FLOW_DOC" 'Canonical definitions of `PASS`, `REVISE`, `BLOCKED`, and `ASK` live in [README_UbiLang.md](../../README_UbiLang.md)'
-assert_contains "$FLOW_DOC_ZH" '`PASS`、`REVISE`、`BLOCKED`、`ASK` 的规范定义见 [README_UbiLang_ZH.md](../../README_UbiLang_ZH.md)'
+assert_contains "$FLOW_DOC" 'Canonical definitions of `PASS`, `REVISE`, `BLOCKED`, and `ASK` live in [README_UbiLang](../../README_UbiLang.md)'
+assert_contains "$FLOW_DOC_ZH" '`PASS`、`REVISE`、`BLOCKED`、`ASK` 的规范定义见 [README_UbiLang_ZH](../../README_UbiLang_ZH.md)'
 
 echo "[review-class-consistency-test] PASSED: all review gates report PASS/REVISE/BLOCKED/ASK with the same invariants, and the older vocabularies map in the flow"

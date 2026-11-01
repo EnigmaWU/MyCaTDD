@@ -2,7 +2,7 @@
 
 本目录存放 CaTDD 的方法级提示词资产。
 
-本 README 是方法层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何独立使用 `methodPrompts/`，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
+本 README 是方法层的 WHAT / WHY 入口。关于 HOW、WHO、WHEN、WHERE 如何独立使用 `methodPrompts/`，请阅读 [README_UserGuide](README_UserGuide.md) 或 [README_UserGuide_ZH](README_UserGuide_ZH.md)。
 
 ## What
 

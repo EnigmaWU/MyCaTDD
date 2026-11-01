@@ -4,17 +4,17 @@ This is the SpecCoding template for project-root `README_DetailVerifyDesign.md`.
 
 `README_DetailVerifyDesign.md` is a stable design artifact. It owns the authoritative TP definitions, their AC ownership and TC coverage links, and `UnitTesting` strategy. Apply the method prompts directly: `CaTDD_methodPrompt-testPointDiscovery.md` owns the discovery methodology, ledger schema, and Discovery Gate; `CaTDD_methodPrompt-categorySemantics.md` owns category routing; `CaTDD_methodPrompt-testStructure.md` and `CaTDD_methodPrompt-fileNaming.md` own identity, `@[TestLevel]`, comment shape, and file names. Resolve those prompts under `methodPrompts/` in the CaTDD source repository or `.catdd/methodPrompts/` in an installed project.
 
-`SysTesting` and `UserTesting` obligations are promoted to [README_ArchVerifyDesign.md](README_ArchVerifyDesign.md) under the same TP ID. Keep live RED/GREEN status, run output, and temporary trace churn in story TASKs, test files, or `README_VerifyStatusTraces.md`.
+`SysTesting` and `UserTesting` obligations are promoted to [README_ArchVerifyDesign](README_ArchVerifyDesign.md) under the same TP ID. Keep live RED/GREEN status, run output, and temporary trace churn in story TASKs, test files, or `README_VerifyStatusTraces.md`.
 
 ## Story and Design Inputs
 
 - Story: {{StoryID}} and {{title}}
 - StoryIdAlias: {{StoryIdAlias}} (resolve through `README_UserStories.md`; never allocate a new alias during design)
 - Active story artifact: {{.catdd/spec/doingUS path}}
-- Detail design: [README_DetailDesign.md](README_DetailDesign.md)
-- State design: [README_StateDesign.md](README_StateDesign.md)
-- Architecture-level verification design: [README_ArchVerifyDesign.md](README_ArchVerifyDesign.md)
-- Related design surfaces: [README_ErrorDesign.md](README_ErrorDesign.md), [README_ResourceDesign.md](README_ResourceDesign.md), [README_PerfDesign.md](README_PerfDesign.md), [README_CompatDesign.md](README_CompatDesign.md), [README_DiagnosisDesign.md](README_DiagnosisDesign.md), [README_SecurityDesign.md](README_SecurityDesign.md)
+- Detail design: [README_DetailDesign](README_DetailDesign.md)
+- State design: [README_StateDesign](README_StateDesign.md)
+- Architecture-level verification design: [README_ArchVerifyDesign](README_ArchVerifyDesign.md)
+- Related design surfaces: [README_ErrorDesign](README_ErrorDesign.md), [README_ResourceDesign](README_ResourceDesign.md), [README_PerfDesign](README_PerfDesign.md), [README_CompatDesign](README_CompatDesign.md), [README_DiagnosisDesign](README_DiagnosisDesign.md), [README_SecurityDesign](README_SecurityDesign.md)
 - SUT, target verification level, and runtime scope: {{declared SUT}} / {{UnitTesting / SysTesting / UserTesting}} / {{mockSysRtm / realSysRtm}}
 - Target test files or future file pattern: `test_{{feature_token}}_{{category_token}}.{{ext}}`
 - Dynamic trace artifact: {{README_VerifyStatusTraces.md / story TASKs / test-file comments / not needed}}
@@ -69,7 +69,7 @@ Rules:
 | P2 Quality: Security | Q4 Technology/Critique | Prove policy-defined denial, containment, integrity, and permitted effects. | {{Yes/No}} | `test_{{feature}}_qualitySecurity.{{ext}}` or `@[NoTestPoints]: <reason>` |
 | P3 Addons: DemoExample | Q2 Business/Support, Q3 Business/Critique | Prove a user-facing demo or usage example remains executable and understandable. | {{Yes/No}} | `test_{{feature}}_addonDemoExample.{{ext}}` or `@[NoTestPoints]: <reason>` |
 
-Row-level category coverage lives here. Quadrant balance across levels, environments, and evidence ownership belongs to [README_ArchVerifyDesign.md](README_ArchVerifyDesign.md); do not restate it in this table.
+Row-level category coverage lives here. Quadrant balance across levels, environments, and evidence ownership belongs to [README_ArchVerifyDesign](README_ArchVerifyDesign.md); do not restate it in this table.
 
 ## Test-Point Discovery Ledger
 
@@ -141,7 +141,7 @@ digital video/audio points:
 - Sync test points: {{A/V sync drift, timestamp discontinuity, seek/flush behavior}}
 - Format test points: {{codec, resolution, frame rate, sample rate, channel layout partitions}}
 
-Environment, HIL topology, and equipment ownership for these points belong to [README_ArchVerifyDesign.md](README_ArchVerifyDesign.md); this document owns the test points and their categories.
+Environment, HIL topology, and equipment ownership for these points belong to [README_ArchVerifyDesign](README_ArchVerifyDesign.md); this document owns the test points and their categories.
 
 ## Usage Example
 

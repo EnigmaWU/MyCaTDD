@@ -111,7 +111,7 @@ methodPrompts/
 3. 阅读需要的 `CaTDD_methodPrompt-*.md` 子主题，获取详细方法指导。
 4. 复制 `CaTDD_designAndImplTemplate.cxx`、`CaTDD_designAndImplTemplate.ts`、`CaTDD_designAndImplTemplate.py` 或 `CaTDD_designAndImplTemplate.go`，或把其中的分区结构适配到你的语言。
 5. 声明 SUT、范围内的类别族、适用领域、测试层级与执行环境。先从来源列出验证义务，再把已有测试当作覆盖证据。通过 Example Mapping 捕获 Stage-0 示例与开放问题。
-6. 使用 [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) 进行适用的 P0/P1/P2/P3 扫描。在验证设计文档的 `discovery_ledger` 中记录权威 TP 定义、归属 AC、覆盖 TC 或草稿缺口及来源证据；SpecFlow 中该文档为 `README_DetailVerifyDesign.md`。测试注释引用此台账，不复制其权威定义。
+6. 使用 [CaTDD_methodPrompt-testPointDiscovery](CaTDD_methodPrompt-testPointDiscovery.md) 进行适用的 P0/P1/P2/P3 扫描。在验证设计文档的 `discovery_ledger` 中记录权威 TP 定义、归属 AC、覆盖 TC 或草稿缺口及来源证据；SpecFlow 中该文档为 `README_DetailVerifyDesign.md`。测试注释引用此台账，不复制其权威定义。
 7. 按验证视角归类草稿，不按规则类型、领域或优先级归类。下面的优先级用于执行排序，并可按风险调整。
 8. 按 [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) 解析已注册的 Story ID/StoryIdAlias/CreatedAt 映射。每条 CaTDD-AC 使用 `FROM / GIVEN / WHEN / THEN / COUNTER`；`FROM` 必须解析到至少一个 Example 或 Rule，否则执行 `AskWhy` 并保存人类回答。在实现代码之前编写 TC 注释，携带别名前缀的 AC/TP/TC 引用、完整 TP 列表和追溯行；US/CaTDD-AC 与 TP 定义保留在各自权威文档中。
 9. 独立审查 source -> ledger -> US/AC/TP/TC 及反向链接。完整设计要求每个 US 至少有一个 AC，每个 AC 至少有一个 TP，每个 TP 恰好映射到一个 TC，每个 TC 覆盖一个或多个 TP。尚未分配 TC 的草稿 TP 阻断设计完成。只有 cardinality 和 Discovery Gate 都通过、声明范围内 `ready_for_implementation: yes` 时，才为下一个 TC 编写失败测试。
@@ -265,7 +265,7 @@ ready_for_implementation, exclusions, referrals, and residual risks separately.
 - 分类图例图标不得复用状态字形。分类列表中出现 `⚠️` 或 `🚫` 即与本表冲突。
 - 发现门禁结论（`PASS | GAPS | BLOCKED`）不等于台账处置（`DESIGNED | QUESTION | EXCLUDED | REFERRED | GAP`）；两者都不替代 TC 标记。
 - 标记不等于覆盖。覆盖率只统计 `DESIGNED` 台账行；`QUESTION`、`EXCLUDED`、`REFERRED`、`GAP` 作为未覆盖的原因单独报告。
-- `CLOSED` 是单个测试用例的关闭谓词：已设计、已链接 US/AC，并在 `@[TestScope]: mockSysRtm`、其声明的 `@[TestLevel]` 下、满足 Anti-Test-Theater 规则通过。其证据记号为 `testPassOnMock`；`mockSysRtm` 的结果绝不作为系统级已验证报告。规范定义见 [README_UbiLang_ZH.md](../README_UbiLang_ZH.md)。
+- `CLOSED` 是单个测试用例的关闭谓词：已设计、已链接 US/AC，并在 `@[TestScope]: mockSysRtm`、其声明的 `@[TestLevel]` 下、满足 Anti-Test-Theater 规则通过。其证据记号为 `testPassOnMock`；`mockSysRtm` 的结果绝不作为系统级已验证报告。规范定义见 [README_UbiLang_ZH](../README_UbiLang_ZH.md)。
 
 ## 质量检查清单
 

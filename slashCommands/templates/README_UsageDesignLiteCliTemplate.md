@@ -40,10 +40,10 @@ Do not use this CLI when:
 - Working directory requirement: {{repository root / any directory / specific directory}}
 - Reads from: {{arguments / stdin / env vars / config files / repository files}}
 - Writes to: {{stdout / stderr / output files / temp files / no persistent files}}
-- Related overview: [README.md](README.md)
-- Related user guide: [README_UserGuide.md](README_UserGuide.md)
-- Related detail design: [README_DetailDesign.md](README_DetailDesign.md)
-- Related verification design: [README_VerifyDesign.md](README_VerifyDesign.md)
+- Related overview: [README](README.md)
+- Related user guide: [README_UserGuide](README_UserGuide.md)
+- Related detail design: [README_DetailDesign](README_DetailDesign.md)
+- Related verification design: [README_VerifyDesign](README_VerifyDesign.md)
 - Source story: {{.catdd/spec/doingUS path or issue link}}
 
 ## Why

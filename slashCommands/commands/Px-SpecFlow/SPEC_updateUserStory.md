@@ -48,8 +48,8 @@ Expected result:
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
-- [../../../methodPrompts/README.md](../../../methodPrompts/README.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
 
 ## Output Contract
 

@@ -236,11 +236,11 @@ If the target path is unclear, stop and ask the developer. Require a clear trace
 
 ## Method References
 
-- [Px-HarnessKits](../../kits/Px-HarnessKits.md)
+- [Px-HarnessKits kit](../../kits/Px-HarnessKits.md)
 - [TTHE: Test-Time Harness Evolution](https://arxiv.org/abs/2607.08124) -- Nie et al., arXiv:2607.08124 [cs.SE], 2026. Source paper for the Observe-Propose-Judge population loop, harness-as-adaptation-state, and label-free proxy-signal design.
 - [HARNESS_collectRunArtifacts](HARNESS_collectRunArtifacts.md) -- future command for trace collection.
 - [HARNESS_verifyInstallation](HARNESS_verifyInstallation.md)
-- [methodPrompts](../../../methodPrompts/README.md)
+- [methodPrompts README](../../../methodPrompts/README.md)
 
 ## Output Contract
 

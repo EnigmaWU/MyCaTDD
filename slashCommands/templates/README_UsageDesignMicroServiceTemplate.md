@@ -42,13 +42,13 @@ Do not use this service when:
 - Protocols: {{HTTP REST / gRPC / event bus / WebSocket / other}}
 - Reads from: {{request body / headers / query params / topics / storage / dependencies}}
 - Writes to: {{response / events / database / cache / object store / logs}}
-- Related overview: [README.md](README.md)
-- Related user guide: [README_UserGuide.md](README_UserGuide.md)
-- Related architecture design: [README_ArchDesign.md](README_ArchDesign.md)
-- Related detail design: [README_DetailDesign.md](README_DetailDesign.md)
-- Related error design: [README_ErrorDesign.md](README_ErrorDesign.md)
-- Related compatibility design: [README_CompatDesign.md](README_CompatDesign.md)
-- Related diagnosis design: [README_DiagnosisDesign.md](README_DiagnosisDesign.md)
+- Related overview: [README](README.md)
+- Related user guide: [README_UserGuide](README_UserGuide.md)
+- Related architecture design: [README_ArchDesign](README_ArchDesign.md)
+- Related detail design: [README_DetailDesign](README_DetailDesign.md)
+- Related error design: [README_ErrorDesign](README_ErrorDesign.md)
+- Related compatibility design: [README_CompatDesign](README_CompatDesign.md)
+- Related diagnosis design: [README_DiagnosisDesign](README_DiagnosisDesign.md)
 - Source story: {{.catdd/spec/doingUS path or issue link}}
 
 ## Why

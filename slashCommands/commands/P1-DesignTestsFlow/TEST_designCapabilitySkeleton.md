@@ -53,10 +53,10 @@ Expected result:
 
 ## Method References
 
-- [../../flows/P1-DesignTestsFlow.md](../../flows/P1-DesignTestsFlow.md)
-- [../../templates/README_DetailDesignTemplate.md](../../templates/README_DetailDesignTemplate.md)
-- [../../../methodPrompts/CaTDD_methodPrompt.md](../../../methodPrompts/CaTDD_methodPrompt.md)
-- [../../../methodPrompts/CaTDD_methodPrompt4Cat-Capability.md](../../../methodPrompts/CaTDD_methodPrompt4Cat-Capability.md)
+- [P1-DesignTestsFlow](../../flows/P1-DesignTestsFlow.md)
+- [README_DetailDesignTemplate](../../templates/README_DetailDesignTemplate.md)
+- [CaTDD_methodPrompt](../../../methodPrompts/CaTDD_methodPrompt.md)
+- [CaTDD_methodPrompt4Cat-Capability](../../../methodPrompts/CaTDD_methodPrompt4Cat-Capability.md)
 
 ## Output Contract
 

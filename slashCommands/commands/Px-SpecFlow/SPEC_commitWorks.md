@@ -69,8 +69,8 @@ WHY
 
 ## Method References
 
-- [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
-- [../../SPEC_slashCommandTemplate.md](../../SPEC_slashCommandTemplate.md)
+- [Px-SpecFlow flow](../../flows/Px-SpecFlow.md)
+- [SPEC_slashCommandTemplate](../../SPEC_slashCommandTemplate.md)
 
 ## Output Contract
 

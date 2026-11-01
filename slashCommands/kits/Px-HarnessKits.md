@@ -64,11 +64,11 @@ flowchart LR
 
 ## Command Sequence
 
-1. Use [../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) when an installed project has effective CaTDD meta-file improvements that should be patched back to the original CaTDD repository on a non-default branch.
-2. Use [../commands/Px-HarnessKits/HARNESS_verifyInstallation.md](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) before trusting a fresh install, after installing into a real target project, or before releasing installer/generator changes.
-3. Use [../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) only after verification fails or an installed target project misworks.
-4. Use [../commands/Px-HarnessKits/HARNESS_newTaskSession.md](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) at the end of a task session to capture and preserve important context before starting a new session.
-5. Use [../commands/Px-HarnessKits/HARNESS_evolveHarness.md](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) after meaningful verified success or repeated harness evidence. Default to `evolution_mode=auto` and `dry_run=true`: bounded lessons select `refine`; repeated/systemic evidence may select `restructure`; no durable lesson may return `no reusable learning`. Any approved mutation must pass explicit acceptance criteria using external evidence and stop on success, retry bound, or no progress.
+1. Use [HARNESS_patchCaTDDSource](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) when an installed project has effective CaTDD meta-file improvements that should be patched back to the original CaTDD repository on a non-default branch.
+2. Use [HARNESS_verifyInstallation](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) before trusting a fresh install, after installing into a real target project, or before releasing installer/generator changes.
+3. Use [HARNESS_diagnoseInstallation](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) only after verification fails or an installed target project misworks.
+4. Use [HARNESS_newTaskSession](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) at the end of a task session to capture and preserve important context before starting a new session.
+5. Use [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) after meaningful verified success or repeated harness evidence. Default to `evolution_mode=auto` and `dry_run=true`: bounded lessons select `refine`; repeated/systemic evidence may select `restructure`; no durable lesson may return `no reusable learning`. Any approved mutation must pass explicit acceptance criteria using external evidence and stop on success, retry bound, or no progress.
 
 ## Conflict Guard
 
