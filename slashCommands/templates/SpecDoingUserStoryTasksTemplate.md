@@ -18,7 +18,7 @@ Paired with [{{YYYYMMDD-StorySlug-UserStory.md}}]({{YYYYMMDD-StorySlug-UserStory
 - **Source:** `.catdd/spec/analyzedNews/{{YYYYMMDD-source}}.md` (or module `README_UserStory.md` + `README_UserGuide.md`)
 - **Project Story Ledger:** `README_UserStories.md`
 
-Resolve the ID/StoryIdAlias pair through the registry and preserve its creation instant. Task rows reference alias-qualified AC/TP/TC IDs. Authoritative TP definitions and ownership stay in `README_DetailVerifyDesign.md`; this task artifact tracks execution and evidence, not a second TP ledger.
+Resolve the ID/StoryIdAlias pair through the registry and preserve its creation instant. Task rows reference alias-qualified CaTDD-AC/TP/TC IDs. Every CaTDD-AC uses `From / Given / When / Then / Counter`; unresolved `From` evidence remains an `AskWhy` blocker. Authoritative TP definitions and ownership stay in `README_DetailVerifyDesign.md`; this task artifact tracks execution and evidence, not a second TP ledger.
 
 ---
 
@@ -62,7 +62,7 @@ Resolve the ID/StoryIdAlias pair through the registry and preserve its creation 
 | **Expressive (E)** | `E3 Verifiable` | `{{satisfied / partial / gap / question}}` | {{observable ACs, `discovery_ledger` TPs, `TestEvidenceChain`, completion criteria}} | `{{SPEC_reviewDetailDesign / SPEC_designTests / none}}` |
 | **Precise (P)** | `P1 Dependency Control` | `{{satisfied / partial / gap / question / N/A}}` | {{declared assumptions, boundary constraints, dependency failure modes (`Fault`)}} | `{{SPEC_takeArchDesign / SPEC_takeDetailDesign / none}}` |
 | **Precise (P)** | `P2 Complete` | `{{satisfied / partial / gap / question}}` | {{Typical + Edge + Misuse + Fault coverage, quality/resource/security constraints}} | `{{SPEC_reviewUserStory / SPEC_reviewDetailDesign / none}}` |
-| **Interpretable (I)** | `I1 Conforming` | `{{satisfied / partial / gap}}` | {{standard templates, stable `US/AC/TP/TC` IDs}} | `{{SPEC_updateUserStory / SPEC_designTests / none}}` |
+| **Interpretable (I)** | `I1 Conforming` | `{{satisfied / partial / gap}}` | {{standard templates, stable `US/CaTDD-AC/TP/TC` IDs}} | `{{SPEC_updateUserStory / SPEC_designTests / none}}` |
 | **Interpretable (I)** | `I2 Consistent` | `{{satisfied / partial / gap / question}}` | {{ubiquitous language, `README_UserStories.md` ledger sync, cross-artifact alignment}} | `{{SPEC_reviewUserStory / SPEC_reviewDetailDesign / SPEC_reviewProductCodes}}` |
 | **Interpretable (I)** | `I3 Comprehensible` | `{{satisfied / partial / gap / N/A}}` | {{structured sections, cross-doc links, worked/usage examples, companion test READMEs}} | `{{SPEC_reviewDetailDesign / SPEC_reviewImplTests / none}}` |
 | **Compartmentalized (C)** | `C1 Scope Discipline` | `{{satisfied / partial / gap / question}}` | {{explicit `In scope` / `Non-goals`, product `WHAT/WHY` separated from design `HOW`}} | `{{SPEC_clearStoryIntent / SPEC_reviewUserStory / none}}` |
@@ -79,8 +79,8 @@ Resolve the ID/StoryIdAlias pair through the registry and preserve its creation 
 
 | Source Obligation (`US/AC/ASR`) | Story / Guide | ArchDesign / UbiLang | DetailDesign / VerifyDesign (`TP`) | Test Design Skeleton (`US/AC/TC`) | ImplTest Body (`SETUP/BEHAVIOR/VERIFY`) | Gate Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| `{{StoryIdAlias}}-AC-{{n}}` | Defined (`MUST`) | `{{KEPT / DETAILED / N/A}}` | `{{KEPT / DETAILED}}: {{StoryIdAlias}}-TP-{{n}}` | `{{KEPT}}: {{StoryIdAlias}}-TC-{{n}}` | `{{KEPT (RED / GREEN)}}` | `{{PASS / REVISE / ASK}}` |
-| `{{StoryIdAlias}}-AC-{{n}}` | Defined (`MUST`) | `{{KEPT / REASSIGNED / EXCLUDED}}` | `{{DETAILED / VIOLATED / UNKNOWN}}` | `{{pending / qualified TC ID}}` | `{{pending}}` | `{{PASS / REVISE / ASK}}` |
+| `{{StoryIdAlias}}-AC-{{Category}}-{{n}}` | Defined (`MUST`; `From` resolved or `AskWhy` recorded) | `{{KEPT / DETAILED / N/A}}` | `{{KEPT / DETAILED}}: {{StoryIdAlias}}-TP-{{n}}` | `{{KEPT}}: {{StoryIdAlias}}-TC-{{n}}` | `{{KEPT (RED / GREEN)}}` | `{{PASS / REVISE / ASK}}` |
+| `{{StoryIdAlias}}-AC-{{Category}}-{{n}}` | Defined (`MUST`) | `{{KEPT / REASSIGNED / EXCLUDED}}` | `{{DETAILED / VIOLATED / UNKNOWN}}` | `{{pending / qualified TC ID}}` | `{{pending}}` | `{{PASS / REVISE / ASK}}` |
 
 ---
 

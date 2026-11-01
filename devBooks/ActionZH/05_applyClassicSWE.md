@@ -148,26 +148,33 @@ Feature: CashWithdrawal.feature        UT_Account.cxx:
                                               expectReducedBalance) { ... }
 ```
 
-CaTDD 的 US/AC/TC 链**就是**BDD 规格，但它以注释的形式存在于测试文件中，而不是单独的 `.feature` 文件中。步骤定义和测试实现是同一个制品——TEST 函数。规格说明与验证之间的间隙不复存在。
+CaTDD 的 US/CaTDD-AC/TP/TC 链保留 BDD 的可观察行为核心，同时把来源、对照案例与验证设计分开。权威需求、TP 定义和 TC 执行证据各有明确归属，不形成相互竞争的重复定义。
 
-### BDD 作为 CaTDD 的验收标准契约
+### BDD 作为 CaTDD-AC 的契约核心
 
-每个 CaTDD 验收标准都遵循 BDD 格式：
+每条 CaTDD-AC 在 BDD 场景上增加来源与对照：
 
+```markdown
+- **FROM**
+  - **Example:** EX-n
+  - **Rule:** RULE-n
+- **GIVEN**
+  - [前置条件与上下文]
+- **WHEN**
+  - [特定动作或事件]
+- **THEN**
+  - [预期的可观察结果]
+- **COUNTER**
+  - [对照案例及预期差异]
 ```
-AC-n: GIVEN [前置条件与上下文],
-      WHEN [特定动作或事件],
-      THEN [预期的可观察结果],
-       AND [如有额外的结果].
-```
 
-这并非巧合——它是 BDD 的 GIVEN/WHEN/THEN 格式作为 CaTDD 中**规范的可测试条件**。创建一个鲜活的文档调和检查清单来验证 BDD 一致性。
+`FROM` 必须解析到至少一个来源支撑的 Example 或 Rule；两者均缺失时向人类执行 `AskWhy` 并保存回答。`GIVEN/WHEN/THEN` 仍是规范 BDD 核心，`COUNTER` 补充边界对照。
 
 ### BDD 调和检查清单
 
 建立自动化的调和测试，断言源代码、BDD 规格说明与外部文档之间的一致性：
 
-- 强制每个 CaTDD AC 能映射到一个或多个 TC 实现（无孤立的验收标准，无未记录的测试用例）
+- 强制每条 CaTDD-AC 能映射到一个或多个 TP/TC，且 `FROM` 证据可解析（无孤立标准，无未记录测试）
 - 验证 AC 描述与步骤特定的实现细节相区分——一个 TC 应验证一个 AC，而不是重复其他 AC 的步骤
 - 生成清晰的 Markdown 报告，总结哪些 AC 已测试、哪些已规划、哪些已阻塞
 
@@ -175,7 +182,7 @@ AC-n: GIVEN [前置条件与上下文],
 
 LLM 是模式匹配器，而非业务分析师。它们能令人信服地生成 GIVEN/WHEN/THEN 结构，但无法判断 THEN 子句是否反映了真实的业务规则。配合 CaTDD 的 BDD 提供了护栏：
 
-- **开发者编写 AC**——以 GIVEN/WHEN/THEN 表达的业务规则
+- **开发者编写 CaTDD-AC**——记录来源、规则、BDD 场景与对照案例
 - **LLM 生成 TC**——验证 AC 的具体测试
 - **开发者审查 TC**——这个测试是否真正验证了 AC 所陈述的内容？
 - **LLM 实现测试代码**——4阶段实现
@@ -328,8 +335,8 @@ CaTDD 不是堆叠在三个学科之上的第四个方法论，而是一种**融
 │  └──────────────────────────┬────────────────────────────────┘ │
 │                             │ traces to                          │
 │  ┌──────────────────────────▼────────────────────────────────┐ │
-│  │ AC: Acceptance Criteria — Executable Specs (BDD)          │ │
-│  │ GIVEN [context], WHEN [action], THEN [outcome]            │ │
+│  │ CaTDD-AC: FROM + GIVEN/WHEN/THEN + COUNTER                │ │
+│  │ provenance, observable outcome, boundary contrast         │ │
 │  └──────────────────────────┬────────────────────────────────┘ │
 │                             │ traces to                          │
 │  ┌──────────────────────────▼────────────────────────────────┐ │
@@ -353,7 +360,7 @@ CaTDD 不是堆叠在三个学科之上的第四个方法论，而是一种**融
 
 一个单一的测试文件包含：
 - **DDD 的限界上下文**（OVERVIEW 部分）
-- **BDD 的可执行规格**（US/AC 链，使用 GIVEN/WHEN/THEN）
+- **CaTDD-AC 的可执行规格**（FROM / GIVEN / WHEN / THEN / COUNTER）
 - **TDD 的验证循环**（TC 实现，使用 RED→GREEN 标记）
 - **DDD 的战略优先级排序**（P0→P3 框架映射到核心/支撑/通用）
 
@@ -456,7 +463,7 @@ TEST(AccountWithdraw, verifyWithdraw_bySufficientBalance_expectReducedBalance) {
 }
 ```
 
-这种转换保留了 BDD 的结构，但消除了规格说明与测试之间的分离。GIVEN/WHEN/THEN 存在于 AC 注释中。场景实现存在于其正下方的 TEST 函数中。LLM 在读取此文件时，在一个连续的上下文中看到了从业务需求到可执行验证的完整链条。
+BDD 核心得以保留，同时工件归属明确：权威 CaTDD-AC（`FROM / GIVEN / WHEN / THEN / COUNTER`）位于需求来源，测试文件定义 TC 并显式引用它。LLM 可以沿连续证据链从需求走到可执行验证，而无需复制或替代验收标准。
 
 ---
 

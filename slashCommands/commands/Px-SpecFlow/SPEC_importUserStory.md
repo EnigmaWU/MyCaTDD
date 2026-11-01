@@ -41,7 +41,7 @@ Expected result:
 3. AC-01..AC-04 copied verbatim with their IDs, `priority: P1`, and the dependency note on US-03 preserved. Wording is **not** improved or rephrased.
 4. Source trace records `services/payment/README_UserStory.md#US-07` plus the paired `services/payment/README_UserGuide.md`.
 5. Written to `.catdd/spec/todoUS/20260904-payment-retry-UserStory.md`.
-6. Reported: path + `next_command = SPEC_openUserStory`. No new AC is invented — the vague AC-04 wording is carried across as-is for `SPEC_reviewUserStory` to catch later.
+6. Reported: path, plus `AskWhy` when any imported criterion has neither Example nor Rule under `From`. Save the human answer and only then report `next_command = SPEC_openUserStory`; no new AC or provenance is invented.
 
 ## Inputs
 
@@ -70,6 +70,7 @@ Expected result:
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user-story artifact ready for `SPEC_openUserStory`.
 - Preserved source text, exact requirement IDs, acceptance-criterion IDs, priority, dependency hints, and status/checklist markers when present.
+- Preserved or explicitly normalized CaTDD-AC evidence fields: `From / Given / When / Then / Counter`. If an imported AC has neither `From` Example nor Rule, stop and report `AskWhy`; save the human answer as `Example (AskWhy)` or `Rule (AskWhy)` before declaring the artifact ready for opening.
 - A registered project-wide Story ID, permanent `StoryIdAlias`, and verified `CreatedAt`, with new canonical AC references qualified by the alias. Preserve the existing pair when importing a registered story or another slice of it. Original local/external IDs remain source-qualified aliases and verbatim source text is unchanged.
 - For a newly created project story identity, capture its creation instant once at registration and keep the source's dates separately as provenance. For an existing identity without a known creation time, report the migration question instead of using the import time or inventing midnight. Alias collisions block registration.
 - Clear labels for structured user story, requirement slice, AC slice, backlog item, refactor requirement, research requirement, or documentation requirement input.
@@ -88,6 +89,7 @@ When invoked during an active chat conversation -- for example, when a developer
 ## Conflict Guard
 
 Importing is not analysis. Do not invent new user stories, acceptance criteria, dependencies, priorities, implementation details, or verification results in this command.
+Do not invent missing CaTDD-AC provenance or a Counter. Ask why, preserve the human answer, and keep unresolved evidence visible as a blocker.
 
 This command is for already structured/formalized user-story input. If the source is issue-level or feature-level raw intent, use `SPEC_importIssue` or `SPEC_importFeature` and follow with analysis.
 

@@ -14,7 +14,7 @@ Register `StoryIdAlias` and `CreatedAt` with the Story ID: one permanent alias p
 
 IDs are never reused for different meanings. Historical copies and declared partial-closure slices remain linked to their identity; distinguish them from independent stories and conflicting duplicate registrations. Record aliases and revisions explicitly rather than rewriting historical evidence.
 
-Resolve either the human-readable Story ID or `StoryIdAlias` here before following child IDs. Keep this mapping distinct from external/source aliases. New AC/TP/TC IDs use the owning story's alias as their prefix; accepted legacy IDs require explicit old-to-new mappings before active references migrate. The registry points to requirements and the verification-design TP ledger; it does not duplicate their definitions.
+Resolve either the human-readable Story ID or `StoryIdAlias` here before following child IDs. Keep this mapping distinct from external/source aliases. New AC/TP/TC IDs use the owning story's alias as their prefix; AC IDs also name their CaTDD category. Accepted legacy IDs require explicit old-to-new mappings before active references migrate. The registry points to requirements and the verification-design TP ledger; it does not duplicate their definitions.
 
 ## Legacy Identity Mappings
 
@@ -58,11 +58,15 @@ Record approved AC/TP/TC reference migrations here, or `None`. Qualify ambiguous
          So that {{value}}.
 ```
 
-## Acceptance Criteria Ledger
+## CaTDD-AC Ledger
 
-| AC ID | Story | Given | When | Then | Status | Verification Trace |
-| --- | --- | --- | --- | --- | --- |
-| {{StoryIdAlias}}-AC-{{n}} | {{StoryID}} | {{context}} | {{action}} | {{observable result}} | {{draft/reviewed/verified}} | {{qualified TP / TC IDs and test or review evidence}} |
+| AC ID | Story | From | Given | When | Then | Counter | Status | Verification Trace |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| {{StoryIdAlias}}-AC-{{Category}}-{{n}} | {{StoryID}} | {{EX-n / RULE-n / AskWhy evidence}} | {{context}} | {{action}} | {{observable result}} | {{contrasting case and expected distinction}} | {{draft/reviewed/verified}} | {{qualified TP / TC IDs and test or review evidence}} |
+
+This ledger mirrors the authoritative story CaTDD-ACs; it does not replace their detailed `From / Given / When / Then / Counter` statements.
+
+`From` MUST resolve at least one source-backed Example or Rule. If both are missing, record the `AskWhy` question and save the human response as `Example (AskWhy)` or `Rule (AskWhy)` before marking the AC reviewed.
 
 ## Lifecycle Links
 

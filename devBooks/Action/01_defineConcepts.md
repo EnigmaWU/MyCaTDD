@@ -63,7 +63,7 @@ The whole idea fits in one sentence:
 
 3. **Comments are first-class artifacts that LLMs can parse and update.** An LLM reading a CaTDD test file sees `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]` markers it can trace, validate, and generate code from. That is why CaTDD is LLM-friendly TDD.
 
-4. **The US/AC/TP/TC chain connects human intent to machine checks.** A User Story states business value, Acceptance Criteria make it testable, source-backed Test Points define obligations and observable oracles, and Test Cases turn them into verification evidence. Cardinality links help reconciliation but do not prove that discovery is complete.
+4. **The US/AC/TP/TC chain connects human intent to machine checks.** A User Story states business value, CaTDD-ACs make it testable with provenance and a contrasting case, source-backed Test Points define obligations and observable oracles, and Test Cases turn them into verification evidence. Cardinality links help reconciliation but do not prove that discovery is complete.
 
 ### The "TDD" Part
 
@@ -335,7 +335,7 @@ Every skeleton keeps this minimum shape:
 // @[UseWhen]: When this category applies
 // @[AvoidWhen]: When to move the scenario to another category
 // @[US]: Registered project-wide Story IDs covered by this category
-// @[AC]: Qualified Acceptance Criteria IDs covered by this category
+// @[AC]: Qualified CaTDD-AC IDs covered by this category
 // @[TP]: Qualified, source-backed Test Point IDs covered by this category
 // @[TC]: Qualified Test Case IDs, scope-specific status, and next action
 //=================================================================================================
@@ -602,7 +602,7 @@ Performance in a batch processor
 CaTDD connects a human need to verification evidence through registered stories, criteria, source-backed test points, and test cases. Each answers a different question and preserves its source link.
 
 ```
-   User Story (US)     Acceptance Criteria (AC)     Test Point (TP)     Test Case (TC)
+   User Story (US)     CaTDD-AC                    Test Point (TP)     Test Case (TC)
    ───────────────     ───────────────────────     ───────────────     ─────────────
    why it matters  ──► what must hold ──────────► what to probe ────► how to check it
 
@@ -632,15 +632,27 @@ US-eventProducer-postEventsWithoutBlocking: As an event producer in high-load sc
 
 > **Test for a good US:** can a product owner read it and say "yes, that is what I asked for"? If only an engineer can judge it, it is too technical.
 
-### Acceptance Criteria (AC) Template
+### CaTDD-AC Template
 
-```text
-<StoryIdAlias>-AC-<token>: GIVEN [initial context and preconditions],
-                               WHEN [specific trigger, action, or event],
-                               THEN [observable outcome using canonical MUST/MUST NOT wording].
+```markdown
+#### <StoryIdAlias>-AC-<Category>-<token>: <title>
+
+- **FROM**
+  - **Example:** EX-<token> / CEX-<token>
+  - **Rule:** RULE-<token> / BR-<token> / <authoritative constraint>
+- **GIVEN**
+  - <initial context and preconditions>
+  - **AND** <additional precondition>
+- **WHEN**
+  - <specific trigger, action, or event>
+  - **AND** <additional action or event>
+- **THEN**
+  - <observable outcome using canonical MUST/MUST NOT wording>
+- **COUNTER**
+  - <nearby invalid, excluded, or failure case and its expected distinction>
 ```
 
-Register the human-readable Story ID together with its permanent StoryIdAlias and verified CreatedAt in the project-wide story ledger. New child IDs use the short alias prefix. In a complete design, each US has at least one AC, each AC at least one TP, each TP one owning AC and exactly one covering TC, and each TC at least one TP. A TC may cover multiple TPs; an unassigned draft TP blocks completion. AC outcomes use canonical Ubiquitous Language and normative terms.
+CaTDD-AC is an evidence-anchored BDD-style acceptance criterion. `From` MUST contain at least one source-backed Example Trace or Rule; if both are missing, stop and `AskWhy` from the human, then save the answer as `Example (AskWhy)` or `Rule (AskWhy)`. When both are available, record both. `Counter` states the distinguishing expected outcome, not only a second condition. Register the human-readable Story ID together with its permanent StoryIdAlias and verified CreatedAt in the project-wide story ledger. New child IDs use the short alias prefix; AC IDs also name their current CaTDD category. In a complete design, each US has at least one AC, each AC at least one TP, each TP one owning AC and exactly one covering TC, and each TC at least one TP. A TC may cover multiple TPs; an unassigned draft TP blocks completion. AC outcomes use canonical Ubiquitous Language and normative terms.
 
 **Example:**
 
@@ -649,11 +661,19 @@ Story ID: US-eventProducer-postEventsWithoutBlocking
 StoryIdAlias: US-261029.070001
 CreatedAt: 2026-10-29T07:00:01+08:00
 
-US-261029.070001-AC-01:
-  GIVEN an event producer calls IOC_postEVT_inConlesMode while the queue is full,
-  WHEN the producer uses NonBlock mode,
-  THEN the call MUST return immediately with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC,
-   AND the event MUST NOT be queued for processing.
+US-261029.070001-AC-Edge-01:
+- **FROM**
+  - **Example:** EX-02 (full queue, NonBlock call)
+  - **Rule:** RULE-04 (IOC API contract requires a non-blocking failure when the queue is full)
+- **GIVEN**
+  - An event producer calls IOC_postEVT_inConlesMode while the queue is full.
+- **WHEN**
+  - The producer uses NonBlock mode.
+- **THEN**
+  - The call MUST return immediately with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC.
+  - **AND** The event MUST NOT be queued for processing.
+- **COUNTER**
+  - CEX-02: The queue has room; the call MUST succeed and queue exactly one event.
 ```
 
 The project registry owns the Story ID; the qualified AC ID remains stable when referenced from other artifacts.
@@ -662,7 +682,7 @@ The project registry owns the Story ID; the qualified AC ID remains stable when 
 
 ```text
 US-261029.070001-TP-01:
-  Owning AC ID: US-261029.070001-AC-01
+  Owning AC ID: US-261029.070001-AC-Edge-01
   Covering TC ID: US-261029.070001-TC-01
   Source: [authoritative API or design artifact#section]
   Setup/action: [technical condition and probe]
@@ -678,7 +698,7 @@ Test points come from source-first discovery, not from already-written tests. Th
 US-261029.070001-TC-01:
   @[US]: US-eventProducer-postEventsWithoutBlocking
   @[StoryIdAlias]: US-261029.070001
-  @[AC]: US-261029.070001-AC-01
+  @[AC]: US-261029.070001-AC-Edge-01
   @[TP]: US-261029.070001-TP-01
   @[TC]: US-261029.070001-TC-01
    @[Name]: verifyBehavior_byCondition_expectResult
@@ -708,7 +728,7 @@ A single requirement is traceable end to end:
 ```
   US-eventProducer-postEventsWithoutBlocking  a producer must not block when the queue is full
    │
-   ├─► US-261029.070001-AC-01  returns immediately, with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
+   ├─► US-261029.070001-AC-Edge-01  returns immediately, with IOC_RESULT_TOO_MANY_QUEUING_EVTEDESC
    │    │
    │    ├─► US-261029.070001-TP-01  returns immediately
    │    │    └─► US-261029.070001-TC-01  verifyEventPost_byFullQueue_expectNonBlockReturn
@@ -719,7 +739,7 @@ A single requirement is traceable end to end:
    │
    └─► code    the queue check in IOC_postEVT_inConlesMode
         │
-        └─► commit   "US-261029.070001-AC-01: non-blocking post when queue is full"
+        └─► commit   "US-261029.070001-AC-Edge-01: non-blocking post when queue is full"
 ```
 
 One AC can produce several TPs, each mapped to exactly one TC, because "returns immediately", "returns this code", and "does not queue the event" are distinct claims. A single TC may cover several TPs when one execution verifies each obligation.
@@ -970,15 +990,15 @@ This excerpt tracks the full-queue AC from the full chain above, preserving the 
 //===========================================================================================
 // P0 Functional / Edge - nonblocking post with a full queue
 //===========================================================================================
-//   @[Trace]: US-261029.070001 | US-261029.070001-AC-01 | US-261029.070001-TP-01 | US-261029.070001-TC-01
+//   @[Trace]: US-261029.070001 | US-261029.070001-AC-Edge-01 | US-261029.070001-TP-01 | US-261029.070001-TC-01
 //   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
 //   @[TC]: US-261029.070001-TC-01 verifyEventPost_byFullQueue_expectNonBlockReturn
 //
-//   @[Trace]: US-261029.070001 | US-261029.070001-AC-01 | US-261029.070001-TP-02 | US-261029.070001-TC-02
+//   @[Trace]: US-261029.070001 | US-261029.070001-AC-Edge-01 | US-261029.070001-TP-02 | US-261029.070001-TC-02
 //   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
 //   @[TC]: US-261029.070001-TC-02 verifyEventPost_byFullQueue_expectErrorCode
 //
-//   @[Trace]: US-261029.070001 | US-261029.070001-AC-01 | US-261029.070001-TP-03 | US-261029.070001-TC-03
+//   @[Trace]: US-261029.070001 | US-261029.070001-AC-Edge-01 | US-261029.070001-TP-03 | US-261029.070001-TC-03
 //   @[Status]: mockSysRtm ⚪ | realSysRtm ⚪
 //   @[TC]: US-261029.070001-TC-03 verifyEventPost_byFullQueue_expectNotQueued
 //
@@ -1009,7 +1029,7 @@ The contract answers five questions, in one place:
 ```
    ┌──────────────────────────────────────────────────────────┐
    │  1  WHAT MATTERS      User Stories with business value    │
-   │  2  WHAT TO VERIFY    Acceptance Criteria, GIVEN/WHEN/THEN│
+   │  2  WHAT TO VERIFY    CaTDD-AC: FROM/GIVEN/WHEN/THEN/COUNTER│
    │  3  HOW TO VERIFY     Test Cases with concrete assertions │
    │  4  WHAT PRIORITY     P0 → P1 → P2 → P3                   │
    │  5  WHAT STATUS       mockSysRtm | realSysRtm               │

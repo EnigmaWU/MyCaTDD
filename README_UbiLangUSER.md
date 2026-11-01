@@ -15,7 +15,8 @@ Companion: [README_UbiLangDEV.md](README_UbiLangDEV.md) holds the vocabulary for
 | --- | --- |
 | CaTDD | Comment-alive Test-Driven Development. |
 | Comment-alive | Verification intent is encoded in the source file itself, in that language's documentation form (comments, doc comments, or docstrings), adjacent to the code and kept true as the code changes. |
-| US / AC / TC | User Story / Acceptance Criteria / Test Case traceability chain. |
+| US / CaTDD-AC / TP / TC | User Story / evidence-anchored Acceptance Criterion / Test Point / Test Case traceability chain. |
+| CaTDD-AC | An evidence-anchored BDD-style Acceptance Criterion with `From / Given / When / Then / Counter`. `From` records at least one source-backed Example or Rule; if both are missing, the human is asked `AskWhy` and the answer is saved as `Example (AskWhy)` or `Rule (AskWhy)`. `Counter` records the expected distinction for a relevant invalid, excluded, boundary, or failure case. |
 | Skeleton | Comment-only test design artifact containing traceability markers and planned test intent. |
 | RED | Executable failing test state before product-code changes. |
 | GREEN | Passing test state after product-code changes. |
@@ -28,7 +29,7 @@ Companion: [README_UbiLangDEV.md](README_UbiLangDEV.md) holds the vocabulary for
 | BLOCKED | A `review_verdict` for a missing input: a required source artifact, piece of evidence, or dependency is absent, so the gate cannot judge the artifact at all. It is resolved by whoever can supply that input — usually an owner command named in `rework_route` — and only degenerates into `ASK` when the human is the only possible supplier. A BLOCKED report always names the missing input. Distinct from the TC status marker `🚫 BLOCKED`, which marks a test case that cannot proceed; the verdict describes a gate outcome, the marker describes a test state. |
 | ASK | A `review_verdict` for a missing decision: the answer exists only in the human developer's judgment — intent, trade-off, acceptance, or scope. It is the human-in-the-loop token and the same outcome `ONE-MORE-THING` produces, so no rework route exists yet and the gate stops. A well-formed ASK presents options (A/B, yes/no, keep/adopt) so the developer can choose. When the flow cannot yet phrase the question at all, the escalation is `SPEC_whatsWrong` rather than ASK. |
 | Source-First | Review and discovery discipline that inspects authoritative source artifacts (contracts, design models, quality policies) and independently derives expected obligations before reading existing skeletons or test code, preventing author blind spots. |
-| TestEvidenceChain | The unbroken evidentiary chain answering WHY we need a test and HOW to test correctly: from source artifact -> rule/invariant -> Test Point (TP) -> observable oracle -> CaTDD category (WHY) -> US/AC/TC -> Test Case (TC) -> RED/GREEN implementation (HOW). |
+| TestEvidenceChain | The unbroken evidentiary chain answering WHY we need a test and HOW to test correctly: from source artifact -> rule/invariant -> Test Point (TP) -> observable oracle -> CaTDD category (WHY) -> US/CaTDD-AC/TP/TC trace links -> Test Case (TC) -> RED/GREEN implementation (HOW). |
 | SUT | System Under Test: The explicitly declared software boundary under verification (e.g. `SUT: utCodeAgentCLI`, `SUT: PaymentGatewayInterface`). It establishes the strict dividing line between caller behavior (`P0 Misuse` on caller contract violation) and external dependencies/runtime (`P0 Fault` on dependency failure). |
 | TestLevel | The declared SUT scope of a verification: exactly one of `UnitTesting`, `SysTesting`, or `UserTesting`. Declared inside the test file with `@[TestLevel]` and never encoded in the filename. It answers how much of the developed system is *inside* the SUT, not what that system's runtime is made of — that is `TestScope` — and not which design document owns the strategy. |
 | UnitTesting | A `TestLevel`: one unit is the SUT, verified inside its own boundary under the project's `sut_unit_convention` (submodule, class, header file, function, or component). When the project has no subdivision, `UnitTesting` and `SysTesting` name the same SUT and are equivalent. CaTDD categories and the Discovery Gate apply; strategy is designed in `README_DetailVerifyDesign.md`. |
@@ -36,11 +37,14 @@ Companion: [README_UbiLangDEV.md](README_UbiLangDEV.md) holds the vocabulary for
 | UserTesting | A `TestLevel` inside `SysTesting`: the same system SUT, oriented to usage scenarios — documented end-to-end, demo, and example flows. It is not CaTDD category testing: it consumes US/AC expectations and category-covered behavior instead of defining category skeletons. |
 | `TestScope` | The declared runtime scope of a verification: `mockSysRtm` (the SUT's system runtime — peers, dependencies, runtime environment — is replaced by doubles) or `realSysRtm` (the SUT runs against its real system runtime). Declared with `@[TestScope]` and independent of `TestLevel`, so any level runs at either scope. `mockSysRtm` is the first scope and earns `CLOSED`; `realSysRtm` is the second scope and adds evidence. |
 | UT | Unit Testing: Verification focused on a single declared SUT adhering to the project's agreed `sut_unit_convention` (e.g. `module-interface`, `submodule-interface`, `class`, `header-file`, `function`, or `component`). Verifies public contracts, internal design models, and quality properties via CaTDD before implementation. |
-| TP | Test Point: A discovered verification obligation or condition (the target). Represents WHAT must be verified from the DEVELOPER / DEFENSIVE perspective (partitions, boundaries, failure phases, interleavings), extracted from sources during Stage-0/Stage-1 discovery and tracked in `discovery_ledger`. Described via concrete `GIVEN technical state/partition, WHEN action/interleaving, THEN observable oracle`. |
-| TC | Test Case: An executable verification specification artifact (the arrow). Represents HOW to verify an obligation, structured with `@[Name]`, `@[Expect]`, and four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`) linked to `[@AC-n, US-n]`. |
-| AC vs TP | AC is from the USER / CALLER perspective (defining external business rules for acceptance: `GIVEN context, WHEN action, THEN outcome`); TP is from the DEVELOPER / DEFENSIVE perspective (defining technical probes across boundaries, error paths, and concurrency to verify whether the AC holds). One AC typically unpacks into multiple TPs ($1:N$). Equating $TP == AC$ causes boundary and failure-mode omissions. |
-| TP vs TC | Cardinality between TP and TC is not strictly 1:1. A TP can exist without a TC (`1:0` -> GAP, exposing missing test points); a complex TP may require multiple TCs (`1:N`); and one TC may genuinely verify multiple TPs (`N:1`) when assertions distinguish each obligation. Equating `TC == TP` prematurely hides missing test points. |
-| Discovery to Categorization | Two-stage design bridge: In Stage-0 (Freely Drafting), discover TPs breadth-first across sources and sweeps without premature category lock-in. In Stage-1 (Classifying Design), route each discovered TP to its proper CaTDD category based on its verification lens (Contract -> P0, Model -> P1, Envelope -> P2, Learning Surface -> P3), then codify into US/AC/TC skeletons. |
+| StoryIdAlias | The permanent, project-unique short alias of a registered human-readable Story ID. Format: `US-YYMMDD.HHMMSS` from its verified UTC+08:00 creation instant; retain the full ISO 8601 instant in `CreatedAt`. Register the one-to-one mapping in the story registry. New AC/TP/TC IDs use this alias as their prefix; AC IDs also name their current CaTDD category as `StoryIdAlias-AC-Category-n`. A same-second collision or missing historical creation time requires reconciliation, never silent reuse or a fabricated timestamp. Preserve aliases across revisions and lifecycle moves; external/source aliases are separate provenance. |
+| Artifact Ownership | US/CaTDD-AC definitions live in the authoritative requirements source identified by the story registry (a todo/doing story or formal module requirements). `README_UserStories.md` maps Story ID to StoryIdAlias and that source. TP definitions and their AC/TC links live in the verification-design document, `README_DetailVerifyDesign.md` in SpecFlow; architecture design promotes the same TP IDs. TC definitions, assertions, and execution evidence live in test files. References and living comments do not create competing definitions. |
+| TP | Test Point: A discovered verification obligation or condition (the target). Represents WHAT must be verified from the DEVELOPER / DEFENSIVE perspective, extracted during discovery and defined in the verification-design `discovery_ledger`. Each TP explicitly names its owning AC, observable oracle, and sole covering TC (or a visible draft gap); its alias-qualified ID remains stable. |
+| TC | Test Case: An executable verification specification artifact (the arrow). Represents HOW to verify one or more obligations, structured with `@[Name]`, `@[Expect]`, four-phase execution (`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`), and explicit `@[US]`, `@[AC]`, `@[TP]`, and `@[TC]` links. |
+| US / AC / TP / TC Cardinality | In a complete verification design, each US MUST have one or more ACs, each AC MUST have one or more TPs, each TP has exactly one owning AC, each TP MUST map to exactly one TC, and each TC MUST cover one or more TPs. A TC MAY cover multiple TPs, with an explicit TP list and one `@[Trace]: StoryIdAlias \| AC-ID \| TP-ID \| TC-ID` row per relationship. Unassigned draft TPs block completion. Split obligations needing independent TCs into distinct TPs; never infer links from matching numeric suffixes. |
+| AC vs TP | A CaTDD-AC is from the USER / CALLER perspective (defining external business rules for acceptance) and uses `From / Given / When / Then / Counter`; TP is from the DEVELOPER / DEFENSIVE perspective (defining source-backed technical probes across boundaries, error paths, and concurrency). Each AC decomposes into one or more TPs in a complete design ($1:N$). Equating $TP == AC$ causes boundary and failure-mode omissions. |
+| TP vs TC | The complete-design mapping is many TPs to one TC: every TP maps to exactly one TC, while one TC may verify one or more TPs (`N:1`). A draft TP without a TC is an explicit gap, not completed coverage. If an obligation requires independent test cases, split it into separate TPs so each TP still has exactly one TC. |
+| Discovery to Categorization | Two-stage design bridge: In Stage-0 (Freely Drafting), discover TPs breadth-first across sources and sweeps without premature category lock-in. In Stage-1 (Classifying Design), route each discovered TP to its proper CaTDD category based on its verification lens (Contract -> P0, Model -> P1, Envelope -> P2, Learning Surface -> P3), then codify into US/AC/TP/TC skeletons. |
 | manualMode | The human-driven form of SpecCoding: the developer types each `SPEC_doXYZ`, the assistant advances step by step, asks focused questions when intent, criteria, or safety is unclear, and pauses for developer confirmation before proceeding. It is the default for a human chat session and the fallback whenever an `autonomousMode` run must halt at the orientation boundary. |
 | autonomousMode | The flow-driven form of SpecCoding: the Flow calls the next `SPEC_doXYZ` itself. It is the default for a code agent or CLI runner that drives Px-SpecFlow, such as `specCodeAgentCLI`, and an opt-in for a human session via `execution_mode: autonomousMode` on entry commands. Strictly supported ONLY for `implementation-oriented` stories: requirements and architecture need human intent, so the run halts back to `manualMode` at that boundary. The driver declares the mode explicitly rather than having it inferred, advances through Part 2.b implementation and review steps until terminal state (`closeUserStory`, `abortUserStory`, or `suspendUserStory`), and can never enter VibeCoding because there is no human intent source. |
 | analysis_mode | Command-level execution mode within analysis commands (`SPEC_analyzeIssue`, `SPEC_analyzeFeature`) operating under `manualMode`. `BRAINSTORM` (default) engages in interactive step-by-step dialogue with the developer and MUST record the dialogue and decisions under `## Chat History` (`chatHistory`) inside the archived `.catdd/spec/analyzedNews/` file. `AUTONOMOUS` runs the composed SKILL analysis pipeline in one shot to draft `todoUS` without interrupting for each step, appends the autonomous prompt/reasoning trace under `## Chat History` in `.catdd/spec/analyzedNews/`, and records assumptions/questions while marking the story NOT ready if blocking questions remain. |
@@ -48,15 +52,16 @@ Companion: [README_UbiLangDEV.md](README_UbiLangDEV.md) holds the vocabulary for
 | commit span | The lifecycle interval a commit closes, and the unit Px-SpecFlow splits commits by instead of by file set. `pre-story` span = intake/analysis artifacts before `SPEC_openUserStory`; `story` span = `SPEC_openUserStory -> SPEC_closeUserStory`; `step` span = one verified lifecycle step inside the story span. |
 | SPEC_commitPreStoryWorks | Story-span command that commits the pre-story interval: import/analysis artifacts, `pendingNews/` to `analyzedNews/` moves, `todoUS/` stories, and the `README_UserStories.md` ledger produced before `SPEC_openUserStory`. Available as an option in `manualMode`; the default pre-story checkpoint when the intake ran headless with `analysis_mode: AUTONOMOUS`. The pre-story span never runs in `autonomousMode`, because autonomous execution is restricted to `implementation-oriented` story work. |
 | SPEC_commitStepWorks | Story-span command that commits exactly one verified lifecycle step inside the `SPEC_openUserStory -> SPEC_closeUserStory` interval, only at step boundaries `SPEC_makePlan` recorded as `commit_step = yes` and only after that step's gate reached `PASS`/`GREEN`. Available as an option in `manualMode`; the default at every planned step boundary in `autonomousMode`. |
-| SPEC_updateMadePlan | SpecFlow planning-maintenance command that appends a chronological row to the `## Trajectory` table, synchronizes `[ ]`/`[x]` task status, gate/commit evidence, and work orientation in an existing `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact, and progressively expands coarse tasks into detailed design or US/AC/TC execution slices and step-commit boundaries after any of the five `SPEC_review*` gates (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`), rework loops, story resumption, or `plan_drift` checkpoints. |
+| SPEC_updateMadePlan | SpecFlow planning-maintenance command that appends a chronological row to the `## Trajectory` table, synchronizes `[ ]`/`[x]` task status, gate/commit evidence, and work orientation in an existing `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact, and progressively expands coarse tasks into detailed design or US/AC/TP/TC execution slices and step-commit boundaries after any of the five `SPEC_review*` gates (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`), rework loops, story resumption, or `plan_drift` checkpoints. |
 | Trajectory | The append-only chronological execution table (`## Trajectory` with columns `#`, `Date`, `Command / Gate`, `Verdict / Evidence / Commit`, `Plan Delta -> Next Command`) inside `.catdd/spec/doingUS/*-UserStory-Tasks.md` (seeded from `SpecDoingUserStoryTasksTemplate.md` by `SPEC_makePlan` and appended by `SPEC_updateMadePlan`). It separates the historical path of gate verdicts, bounded rework attempts ($1..B$), and step commits from the forward-looking `[ ]`/`[x]` `## Task Checklist` so every `[x]` task is backed by auditable evidence. |
 | EPIC Specification Sufficiency | Two-stage progressive specification-sufficiency gate based on the EPIC framework (arXiv:2610.07534): Stage 1 evaluates story-level EPIC lenses inside `todoUS/*-UserStory.md` (`## Story Readiness Snapshot`) during `SPEC_analyzeIssue` / `SPEC_analyzeFeature` / `SPEC_analyzeAbortedUserStory`; Stage 2 maintains the 10-dimension artifact-set ledger (`E1..E3`, `P1..P2`, `I1..I3`, `C1..C2` with dispositions `satisfied / partial / gap / question / N/A`) plus the `### Cross-Artifact Semantic-Delta Matrix` under `## EPIC Specification Sufficiency` in `doingUS/*-UserStory-Tasks.md`, seeded by `SPEC_makePlan`, updated by `SPEC_updateMadePlan` after each `SPEC_review*` gate, and verified at `SPEC_closeUserStory`. |
-| Cross-Artifact Semantic-Delta Matrix | The four-stage transformation-preservation matrix (`EPIC I2.3`) audited across `SPEC_reviewArchDesign` (`Story/Guide -> ArchDesign/UbiLang`), `SPEC_reviewDetailDesign` (`ArchDesign -> DetailDesign -> DetailVerifyDesign`), `SPEC_designTests` + `TEST_review{Func,Design,Quality}TestsSkeleton` (`DetailVerifyDesign TP -> US/AC/TC Skeleton`), and `SPEC_reviewImplTests` (`US/AC/TC Skeleton -> Implemented Test Body & Companion README`). Classifies every obligation transition as `KEPT` (meaning unchanged), `DETAILED` (concretized or decomposed with rationale), `REASSIGNED` (handed off to another owner; maps to `REFERRED` in `discovery_ledger`), `EXCLUDED` (out of scope with approval), `VIOLATED` (conflict or silent weakening; blocks gate with `REVISE`), or `UNKNOWN` (missing evidence; blocks gate with `ASK` / `BLOCKED`). |
+| Cross-Artifact Semantic-Delta Matrix | The four-stage transformation-preservation matrix (`EPIC I2.3`) audited across `SPEC_reviewArchDesign` (`Story/Guide -> ArchDesign/UbiLang`), `SPEC_reviewDetailDesign` (`ArchDesign -> DetailDesign -> DetailVerifyDesign`), `SPEC_designTests` + `TEST_review{Func,Design,Quality}TestsSkeleton` (`DetailVerifyDesign TP -> US/AC/TP/TC Skeleton`), and `SPEC_reviewImplTests` (`US/AC/TP/TC Skeleton -> Implemented Test Body & Companion README`). Classifies every obligation transition as `KEPT` (meaning unchanged), `DETAILED` (concretized or decomposed with rationale), `REASSIGNED` (handed off to another owner; maps to `REFERRED` in `discovery_ledger`), `EXCLUDED` (out of scope with approval), `VIOLATED` (conflict or silent weakening; blocks gate with `REVISE`), or `UNKNOWN` (missing evidence; blocks gate with `ASK` / `BLOCKED`). |
 | Story Completion Conditions | Story-specific Definition of Done (`EPIC E3.4`) declared inside `*-UserStory.md` (`SpecTodoUserStoryTemplate.md`) under `## Story Completion Conditions (EPIC E3.4)`. States the required `TestLevel`s (`UnitTesting`, `SysTesting`, `UserTesting`), required `TestScope` & runtime environment (`mockSysRtm` vs. `realSysRtm`), required CaTDD category tiers (`P0/P1/P2/P3`), required `README*` SPEC/doc surfaces, explicit `Not-Done Conditions (MUST NOT close if)`, and `Approved Deferrals`. Audited by `SPEC_reviewUserStory` and enforced at closure by `SPEC_closeUserStory` and `SPEC_partialCloseUserStory`. |
 | SPEC_commitStoryWorks | Story-span command that commits the whole `SPEC_openUserStory -> SPEC_closeUserStory` interval as the just-done UserStory commit, including terminal lifecycle/meta changes. It serves the `pre_close` checkpoint (providing `commit_ref` for `SPEC_closeUserStory`), the `post_close` checkpoint (satisfying `close_commit_required`), and the `span_end` checkpoint after a partial close, abort, or suspend. Available as an option in `manualMode`; the default at story completion in `autonomousMode`. |
 | SPEC_commitWorks | General, story-agnostic commit command: it resolves scope from staged files first and most recently modified files second, then generates a repository-style commit log message. It never advances SpecFlow lifecycle state and never closes a commit span. |
 | Semantic Falsification Gate | The verification gate distinguishing valid `🔴 RED` from `⚠️ BROKEN_TEST`. A test is validly RED only if it compiles/loads cleanly, executes through SETUP and BEHAVIOR, and fails strictly on an expected domain assertion in VERIFY (`AssertionError`, `Expected X but got Y`). If execution fails due to syntax errors, missing imports, fixture crashes, or unhandled exceptions in test setup, it is `⚠️ BROKEN_TEST`, not valid RED; production code generation is blocked until the test harness is repaired. |
 | Anti-Test-Theater | The engineering discipline preventing LLMs from generating hollow, superficial, or self-fulfilling tests. Forbids "mock-testing-mock" (asserting mock return values directly without SUT transformation), forbids vacuous truthiness assertions (`assert != null` or `assert True`), and requires that assertions verify real SUT state mutations, return calculations, or domain invariants. |
+| Ambiguity Smell Classifier | The systematic Stage-0 diagnostic instrument scanning requirements for unstated, underspecified, or subjective constructs before test design begins. Based on the Ambiguity Smell Taxonomy (AST), it flags seven smell classes: `SMELL-ACTOR` (passive voice without actor), `SMELL-BOUND` (unbounded adjectives), `SMELL-BRANCH` (missing negative/exception paths), `SMELL-STATE` (unstated lifecycle bounds), `SMELL-VAGUE` (vague verbs and loopholes), `SMELL-MODAL` (weak modals `"should"`/`"might"` without exception rules, or synonym drift against `README_UbiLang.md`), and `SMELL-RACE` (unstated concurrency rules). Detecting any smell mandates recording a `QUESTION` in `discovery_ledger` and triggers the universal `ONE-MORE-THING` stop rule to prevent AI hallucination. |
 | Normative Vocabulary (`MUST` / `MUST NOT` / `SHOULD` / `MAY`) | Controlled modal vocabulary (`EPIC E1.4`) governing all CaTDD specifications, ACs, design invariants ($K$), test `@[Expect]` oracles, and slash commands: `MUST` (`SHALL`) = hard mandatory obligation that blocks the gate if unverified; `MUST NOT` (`SHALL NOT`) = hard prohibition or safety boundary; `SHOULD` / `SHOULD NOT` = conditional preference permitted to deviate only with a recorded tradeoff, ADR, or explicit exception condition; `MAY` = optional behavior. Project-specific domain terms and this modal contract live canonically in project-root `README_UbiLang.md` (seeded from `README_UbiLangTemplate.md`) and are linked as `REFERENCE` memory from `.catdd/spec/projectContext.md` without duplicating glossary tables. |
 
 ### Category Vocabulary
@@ -130,7 +135,7 @@ flowchart TD
     end
 
     subgraph HOW["Tier 2: HOW (Specification & Test Execution)"]
-        Cat --> Spec["US / AC / TC Living Skeleton Design"]
+        Cat --> Spec["US / AC / TP / TC Living Skeleton Design"]
         Spec --> TC["Test Case (TC) — HOW to verify (Arrow)"]
         TC --> RedGreen["Four-phase Test Body (SETUP -> BEHAVIOR -> VERIFY -> CLEANUP) -> RED -> GREEN"]
     end
@@ -138,30 +143,50 @@ flowchart TD
     WHY --> HOW
 ```
 
-#### 3. AC vs. TP vs. TC ($1 \text{ AC} : N \text{ TPs} : M \text{ TCs}$)
+#### 3. US / AC / TP / TC Cardinality
 
-- **Acceptance Criteria (AC)**: User perspective — "What business rule must hold?"
+The completed coverage chain is:
+
+```text
+US 1 ──► 1..* ACs
+AC 1 ──► 1..* TPs
+Each TP ──► exactly 1 TC
+Each TC ──► 1..* TPs
+```
+
+During drafting and discovery, TPs may not yet have TCs. That is an open coverage gap; the design MUST NOT be considered complete until every TP maps to exactly one TC.
+
+- **CaTDD-AC**: User perspective — "Why is this criterion trusted, what must hold, and what contrast proves its boundary?"
 - **Test Point (TP)**: Developer perspective — "What technical boundary or failure probe must be verified?" (Target)
-- **Test Case (TC)**: Execution perspective — "How do we execute the test in code?" (Arrow)
+- **Test Case (TC)**: Execution perspective — "How do we execute the test in code?" (Arrow). One TC may cover multiple TPs; one TP must not be assigned to multiple TCs.
 
 Worked Example:
 
 ```text
-AC-01 (User Rule):
-  "GIVEN 1 to 100 valid records, WHEN write is called, THEN persist all records and return OK."
+US-batchExporter-writeRecords: As a batch exporter, I want to write records,
+                              So that accepted records are persisted.
+StoryIdAlias: US-261029.070003
+CreatedAt: 2026-10-29T07:00:03+08:00
 
-Unpacks into Developer Test Points (TPs):
-  ├── TP-01 (Typical): Write 2 records (nominal valid partition) -> OK and persisted (P0 Typical)
-  ├── TP-02 (Edge):    Write 1 record (minimum valid boundary)   -> OK and persisted (P0 Edge)
-  ├── TP-03 (Edge):    Write 100 records (maximum valid boundary)-> OK and persisted (P0 Edge)
-  ├── TP-04 (Misuse):  Write 0 records (below valid range)       -> INVALID_COUNT (P0 Misuse)
-  └── TP-05 (Misuse):  Write 101 records (above valid range)     -> INVALID_COUNT (P0 Misuse)
+US-261029.070003-AC-Typical-01 (User Rule):
+  "GIVEN 1 to 100 valid records, WHEN write is called, THEN it MUST persist all records and return OK."
 
-Implements into Executable Test Cases (TCs):
-  ├── TC-01: verifyWrite_byNominalBatch_expectSuccess      (implements TP-01)
-  ├── TC-02: verifyWrite_byBoundaryBatch_expectSuccess     (implements TP-02 & TP-03)
-  ├── TC-03: verifyWrite_byZeroBatch_expectInvalidCount    (implements TP-04)
-  └── TC-04: verifyWrite_byOversizedBatch_expectInvalidCount(implements TP-05)
+US-261029.070003-AC-Misuse-01 (User Rule):
+  "GIVEN 0 or more than 100 records, WHEN write is called, THEN it MUST return INVALID_COUNT and MUST NOT modify files."
+
+Authoritative TP ledger in verification design:
+TP ID | Owning AC ID | Covering TC ID | Probe / oracle
+US-261029.070003-TP-01 | US-261029.070003-AC-Typical-01 | US-261029.070003-TC-01 | Write 2 records -> OK and persisted (Typical)
+US-261029.070003-TP-02 | US-261029.070003-AC-Typical-01 | US-261029.070003-TC-02 | Write 1 record -> OK and persisted (Edge)
+US-261029.070003-TP-03 | US-261029.070003-AC-Typical-01 | US-261029.070003-TC-02 | Write 100 records -> OK and persisted (Edge)
+US-261029.070003-TP-04 | US-261029.070003-AC-Misuse-01 | US-261029.070003-TC-03 | Write 0 records -> INVALID_COUNT and unchanged files (Misuse)
+US-261029.070003-TP-05 | US-261029.070003-AC-Misuse-01 | US-261029.070003-TC-04 | Write 101 records -> INVALID_COUNT and unchanged files (Misuse)
+
+TC declarations in test files:
+US-261029.070003-TC-01: verifyWrite_byNominalBatch_expectSuccess (covers US-261029.070003-TP-01)
+US-261029.070003-TC-02: verifyWrite_byBoundaryBatch_expectSuccess (covers US-261029.070003-TP-02, US-261029.070003-TP-03)
+US-261029.070003-TC-03: verifyWrite_byZeroBatch_expectInvalidCount (covers US-261029.070003-TP-04)
+US-261029.070003-TC-04: verifyWrite_byOversizedBatch_expectInvalidCount (covers US-261029.070003-TP-05)
 ```
 
 #### 4. Discovery to Categorization (Stage-0 to Stage-1 Bridge)
@@ -175,7 +200,7 @@ flowchart LR
     Route --> P1["P1 Model Lens<br/>(State, Capability, Interaction, Concurrency)"]
     Route --> P2["P2 Envelope Lens<br/>(Perf, Robust, Compat, Config, Diag, Sec)"]
     Route --> P3["P3 Learning Lens<br/>(Demo/Example)"]
-    P0 --> Stage1["Stage-1: Classifying Design<br/>(Codify into US/AC/TC living skeletons)"]
+    P0 --> Stage1["Stage-1: Classifying Design<br/>(Codify into US/AC/TP/TC living skeletons)"]
     P1 --> Stage1
     P2 --> Stage1
     P3 --> Stage1
@@ -185,7 +210,7 @@ flowchart LR
 
 Use this glossary when:
 
-- writing or reviewing US/AC/TC skeletons,
+- writing or reviewing US/AC/TP/TC skeletons,
 - reading a `TEST_showMeStatus`, `SPEC_showMeStatus`, or `HARNESS_showMeStatus` report,
 - interpreting a gate verdict,
 - reconciling wording drift between your project and the installed method.

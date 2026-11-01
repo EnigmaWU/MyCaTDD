@@ -1,6 +1,6 @@
 # CaTDD Method Prompt - Test Structure
 
-This subtopic defines the comment skeleton, US/AC/TP/TC structure, coverage matrix, naming conventions, and tracking shape used by CaTDD test files.
+This subtopic defines the comment skeleton, US/CaTDD-AC/TP/TC structure, coverage matrix, naming conventions, and tracking shape used by CaTDD test files.
 
 ## Comment Skeleton
 
@@ -20,7 +20,7 @@ Every class/category skeleton **MUST** preserve this minimum shape.
 // @[AvoidWhen]: When to move the scenario to another category
 // @[US]: User Story IDs covered by this category
 // @[StoryIdAlias]: Registered short aliases for those stories
-// @[AC]: Acceptance Criteria IDs covered by this category
+// @[AC]: CaTDD-AC IDs covered by this category
 // @[TP]: Test Point IDs covered by this category
 // @[TC]: Test Cases, status, and expected TDD next action
 //=================================================================================================
@@ -136,19 +136,38 @@ StoryIdAlias: US-YYMMDD.HHMMSS
 CreatedAt: [verified creation instant in ISO 8601 with +08:00 offset]
 ```
 
-### Acceptance Criteria
+### CaTDD-AC
 
-```text
-<StoryIdAlias>-AC-<n>: GIVEN [initial context and preconditions],
-                       WHEN [specific trigger, action, or event],
-                       THEN [expected observable outcome stated with MUST / MUST NOT (or conditional SHOULD / optional MAY)].
+```markdown
+#### <StoryIdAlias>-AC-<Category>-<n>: <title>
+
+- **FROM**
+  - **Example:** EX-<n> / CEX-<n>
+  - **Rule:** RULE-<n> / BR-<n> / <authoritative constraint>
+- **GIVEN**
+  - <initial context and preconditions>
+  - **AND** <additional precondition>
+- **WHEN**
+  - <specific trigger, action, or event>
+  - **AND** <additional action or event>
+- **THEN**
+  - <expected observable outcome using MUST / MUST NOT>
+- **COUNTER**
+  - <nearby invalid, excluded, or failure case and its expected distinction>
 ```
+
+**CaTDD-AC** is an evidence-anchored BDD-style acceptance criterion: `From / Given / When / Then / Counter`. It retains the standard BDD core while adding provenance and a contrasting case.
+
+- `From` MUST contain at least one source-backed Example or Rule. When both are available, record both. Multiple directly supporting examples may be listed.
+- If both are missing or unresolved, stop and `AskWhy` from the human. Save the answer under `From` as `- **Example (AskWhy):** ...` or `- **Rule (AskWhy):** ...` before approving the CaTDD-AC; never invent the missing evidence or behavior.
+- `Counter` states a contrasting boundary, invalid, excluded, or failure case together with the expected distinction, not merely another condition.
+- `<Category>` is the current CaTDD category token from `CaTDD_methodPrompt.md`, such as `Typical`, `Edge`, `Misuse`, `Fault`, `State`, or `Performance`. The story template keeps the stable P0 four-category set explicit and links P1/P2/P3 sections to the current CaTDD taxonomy rather than duplicating an evolving category list.
 
 ### Test Point
 
 ```text
 <StoryIdAlias>-TP-<n>: [source-backed verification obligation and observable oracle]
-  Owning AC ID: <StoryIdAlias>-AC-<n>
+  Owning AC ID: <StoryIdAlias>-AC-<Category>-<n>
   Covering TC ID: <StoryIdAlias>-TC-<n> [or unassigned: GAP while drafting]
   Test file: [path to the TC declaration]
 ```
@@ -186,7 +205,7 @@ This contract applies to each project using CaTDD, whether invoked through SpecF
 - For a newly created project story identity, capture its actual creation instant at registration. Importing an existing identity preserves its verified original instant; dates on an external source remain separate provenance. A first import that creates a genuinely new project identity records that new identity's creation, not a fabricated date for the external requirement.
 - Check alias uniqueness before registration and again during integration, including imports and concurrent branches. An alias must not shadow another story's canonical ID. A same-second collision between independent stories MUST stop registration for reconciliation; never reuse an alias, append an unapproved suffix, or invent a different creation time. Repeated references to the same registered story are not collisions. Reject mismatched Story ID/alias/time pairs.
 - Preserve external or local source IDs as labeled aliases. If a source ID is already registered as the project-wide identity, preserve it; otherwise assign the new human-readable project ID and retain the source ID as an alias without rewriting source text or historical evidence.
-- New child declarations use `<StoryIdAlias>-AC-<n>`, `<StoryIdAlias>-TP-<n>`, and `<StoryIdAlias>-TC-<n>`. `<StoryIdAlias>` is the complete registered alias, including `US-`; `<n>` is a stable token unique within that story and artifact kind. TP tokens are story-scoped, not reset under each AC. Allocate without reuse and never infer AC ownership or TC coverage from matching suffixes.
+- New child declarations use `<StoryIdAlias>-AC-<Category>-<n>`, `<StoryIdAlias>-TP-<n>`, and `<StoryIdAlias>-TC-<n>`. `<StoryIdAlias>` is the complete registered alias, including `US-`; `<Category>` is a current CaTDD category token; `<n>` is a stable token unique within that story, artifact kind, and AC category. TP tokens are story-scoped, not reset under each AC. Allocate without reuse and never infer AC ownership or TC coverage from matching suffixes.
 - Resolve either a Story ID or `StoryIdAlias` through the registry before reading or writing trace references. Preserve the pair across lifecycle moves, title/file changes, and revisions. A new independent successor gets its own pair and creation instant; a revision of the same story retains them.
 - Existing registered child IDs remain valid legacy identities. Introducing alias-prefixed forms for them requires an explicit old-ID-to-new-ID mapping and synchronized active references; it does not create new ACs, TPs, or TCs. Do not silently rewrite archives or imported source text. For an existing story without an alias, use a verified creation instant only; a date without a known time is insufficient. Report the missing decision and block alias allocation rather than inventing midnight or using the migration time. Legacy references remain readable while migration is pending.
 - Preserve the same ID when a story or test point moves between files, lifecycle states, categories, or test levels. Copies, revisions, and declared partial-closure slices are references to the same identity, not automatically duplicate stories. A materially different AC or test obligation receives a new ID with an explicit supersession or lineage link; do not silently reuse an old ID for a different meaning.
@@ -219,8 +238,8 @@ The registry maps the pair to the authoritative requirements source; AC declarat
 Story ID: US-queueClient-postWithinCapacity
 StoryIdAlias: US-261029.070004
 CreatedAt: 2026-10-29T07:00:04+08:00
-US-261029.070004-AC-01: A full-queue post MUST reject without changing the queue.
-US-261029.070004-AC-02: A post with room MUST enqueue exactly once.
+US-261029.070004-AC-Edge-01: A full-queue post MUST reject without changing the queue.
+US-261029.070004-AC-Typical-01: A post with room MUST enqueue exactly once.
 ```
 
 ### Verification-design example
@@ -229,9 +248,9 @@ These are authoritative TP rows in the verification-design document, not test co
 
 ```text
 TP ID | Owning AC ID | Covering TC ID | Source-backed obligation
-US-261029.070004-TP-01 | US-261029.070004-AC-01 | US-261029.070004-TC-01 | Full queue returns the specified rejection.
-US-261029.070004-TP-02 | US-261029.070004-AC-01 | US-261029.070004-TC-01 | Rejected post leaves the queue unchanged.
-US-261029.070004-TP-03 | US-261029.070004-AC-02 | US-261029.070004-TC-02 | Accepted post adds exactly one event.
+US-261029.070004-TP-01 | US-261029.070004-AC-Edge-01 | US-261029.070004-TC-01 | Full queue returns the specified rejection.
+US-261029.070004-TP-02 | US-261029.070004-AC-Edge-01 | US-261029.070004-TC-01 | Rejected post leaves the queue unchanged.
+US-261029.070004-TP-03 | US-261029.070004-AC-Typical-01 | US-261029.070004-TC-02 | Accepted post adds exactly one event.
 ```
 
 ### Test-file reference example
@@ -242,18 +261,18 @@ TC declarations reference the TP definitions and give each relationship its own 
 @[US]: US-queueClient-postWithinCapacity
 @[StoryIdAlias]: US-261029.070004
 @[TC]: US-261029.070004-TC-01
-@[AC]: US-261029.070004-AC-01
+@[AC]: US-261029.070004-AC-Edge-01
 @[TP]: US-261029.070004-TP-01, US-261029.070004-TP-02
-@[Trace]: US-261029.070004 | US-261029.070004-AC-01 | US-261029.070004-TP-01 | US-261029.070004-TC-01
-@[Trace]: US-261029.070004 | US-261029.070004-AC-01 | US-261029.070004-TP-02 | US-261029.070004-TC-01
+@[Trace]: US-261029.070004 | US-261029.070004-AC-Edge-01 | US-261029.070004-TP-01 | US-261029.070004-TC-01
+@[Trace]: US-261029.070004 | US-261029.070004-AC-Edge-01 | US-261029.070004-TP-02 | US-261029.070004-TC-01
 @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 
 @[US]: US-queueClient-postWithinCapacity
 @[StoryIdAlias]: US-261029.070004
 @[TC]: US-261029.070004-TC-02
-@[AC]: US-261029.070004-AC-02
+@[AC]: US-261029.070004-AC-Typical-01
 @[TP]: US-261029.070004-TP-03
-@[Trace]: US-261029.070004 | US-261029.070004-AC-02 | US-261029.070004-TP-03 | US-261029.070004-TC-02
+@[Trace]: US-261029.070004 | US-261029.070004-AC-Typical-01 | US-261029.070004-TP-03 | US-261029.070004-TC-02
 @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 ```
 
@@ -263,7 +282,7 @@ From the project root, a literal search finds the family or an individual relati
 
 ```bash
 rg -n --hidden --glob '!.git/**' -F 'US-261029.070004' .
-rg -n --hidden --glob '!.git/**' -F 'US-261029.070004-AC-01' .
+rg -n --hidden --glob '!.git/**' -F 'US-261029.070004-AC-Edge-01' .
 rg -n --hidden --glob '!.git/**' -F 'US-261029.070004-TC-01' .
 ```
 
@@ -272,7 +291,7 @@ Expected: the alias locates the registry, ACs, TP ledger, and TC references; the
 An explicitly registered successor alias `US-261029.070006` may reference inherited evidence without changing the owning IDs:
 
 ```text
-@[Trace]: US-261029.070006 | US-261029.070004-AC-01 | US-261029.070004-TP-01 | US-261029.070004-TC-01
+@[Trace]: US-261029.070006 | US-261029.070004-AC-Edge-01 | US-261029.070004-TP-01 | US-261029.070004-TC-01
 ```
 
 ## Four-Phase Test Body
@@ -355,13 +374,13 @@ STATUS LEGEND:
 P0 Functional / Typical:
   @[TC]: US-261029.070004-TC-02
   @[TP]: US-261029.070004-TP-03
-  @[Trace]: US-261029.070004 | US-261029.070004-AC-02 | US-261029.070004-TP-03 | US-261029.070004-TC-02
+  @[Trace]: US-261029.070004 | US-261029.070004-AC-Typical-01 | US-261029.070004-TP-03 | US-261029.070004-TC-02
   @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 
 P0 Functional / Edge:
   @[TC]: US-261029.070004-TC-01
   @[TP]: US-261029.070004-TP-01, US-261029.070004-TP-02
-  @[Trace]: US-261029.070004 | US-261029.070004-AC-01 | US-261029.070004-TP-01 | US-261029.070004-TC-01
-  @[Trace]: US-261029.070004 | US-261029.070004-AC-01 | US-261029.070004-TP-02 | US-261029.070004-TC-01
+  @[Trace]: US-261029.070004 | US-261029.070004-AC-Edge-01 | US-261029.070004-TP-01 | US-261029.070004-TC-01
+  @[Trace]: US-261029.070004 | US-261029.070004-AC-Edge-01 | US-261029.070004-TP-02 | US-261029.070004-TC-01
   @[Status]: mockSysRtm ⚪ TODO/PLANNED | realSysRtm ⚪ TODO/PLANNED
 ```

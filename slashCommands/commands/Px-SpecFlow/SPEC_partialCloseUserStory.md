@@ -75,7 +75,7 @@ Expected result:
 
 - [../../flows/Px-SpecFlow.md](../../flows/Px-SpecFlow.md)
 - [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids)
-- Preserve StoryIdAlias and CreatedAt for slices of the same story, label each slice explicitly, and retain original AC/TP/TC ownership. A genuinely independent successor requires separate registration; never allocate a new alias merely because a slice moved to another lane.
+- Preserve StoryIdAlias and CreatedAt for slices of the same story, label each slice explicitly, and retain original CaTDD-AC/TP/TC ownership. Every accepted CaTDD-AC MUST retain `From / Given / When / Then / Counter` with at least one Example or Rule under `From`. An unresolved `From` requires `AskWhy` and visible slice risk. A genuinely independent successor requires separate registration; never allocate a new alias merely because a slice moved to another lane.
 
 ## Output Contract
 
@@ -88,6 +88,7 @@ Expected result:
   - the rejected slice must not remain active in `.catdd/spec/doingUS/` after the abort.
   - the original story must not be duplicated across active, done, and abort lanes without a clear split.
   - accepted and rejected slices retain the original registered Story ID and qualified AC IDs, with explicit slice and lineage records rather than silently minted replacement identities.
+  - accepted slices do not claim closure while a CaTDD-AC has unresolved `From` evidence.
 - A partial-closure summary showing:
   - accepted scope
   - rejected scope

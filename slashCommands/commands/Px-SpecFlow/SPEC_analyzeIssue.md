@@ -102,7 +102,7 @@ analysis_mode: BRAINSTORM
 ## Output Contract
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
-- One project-wide Story ID registered in `README_UserStories.md`, with each AC declared under its full Story-qualified AC ID.
+- One project-wide Story ID registered in `README_UserStories.md`, with each AC declared under its category-qualified Story alias ID.
 - The source issue moved from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` as a team-shared raw input archive.
 - The archived raw issue metadata is normalized to analyzed state:
   - `status: analyzed`
@@ -183,7 +183,7 @@ Scan the issue and related docs for policies, calculations, constraints, or regu
 
 ### Step 8 — Map rules to examples
 
-For each acceptance scenario: state the governing Rule, give at least one concrete Example and one counter-example, list any open Questions. `(→ SKILL: facilitate-example-mapping)`
+For each CaTDD-AC, write `From / Given / When / Then / Counter` and resolve at least one source-backed Example or Rule under `From`. If both are missing or unresolved, stop and `AskWhy` from the human; save the answer under `From` as `Example (AskWhy): ...` or `Rule (AskWhy): ...`. When both are available, record both and retain an applicable counter-example. `(→ SKILL: facilitate-example-mapping)`
 
 ### Step 9 — Hunt ambiguity
 
@@ -203,7 +203,7 @@ Score Business Value, User Value, Cost/Effort, and Risk/Complexity each 1-9. Com
 
 ### Step 11 — Write artifact & archive
 
-Register `StoryIdAlias` and `CreatedAt` together with the Story ID, following the canonical identity contract. New AC headings use `{{StoryIdAlias}}-AC-{{n}}`. Preserve an existing pair; missing historical creation times or same-second collisions require reconciliation before alias allocation. Source/import timestamps are provenance, not permission to invent a story-creation time.
+Register `StoryIdAlias` and `CreatedAt` together with the Story ID, following the canonical identity contract. New AC headings use `{{StoryIdAlias}}-AC-{{Category}}-{{n}}`; use the category sections in `SpecTodoUserStoryTemplate.md`, with P0 mandatory and P1/P2/P3 optional. Preserve an existing pair; missing historical creation times or same-second collisions require reconciliation before alias allocation. Source/import timestamps are provenance, not permission to invent a story-creation time.
 
 Before writing the todo artifact, register the Story ID in the project story ledger, creating `README_UserStories.md` from `README_UserStoriesTemplate.md` if needed. Follow the [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract: preserve an existing unambiguous ID or derive a descriptive human-readable ID in `US-<whoName>-<doWhat>` form, writing both segments in lowerCamelCase. Derive them from the story's actor and observable behavior, and ask if either is unclear. Check the project registry and known story sources, and assign each AC a distinct qualified ID. Refine a collision with meaningful context rather than an arbitrary number or UUID. Register blocked drafts too; do not archive the input if story/ledger registration cannot be reconciled. Preserve external or legacy IDs as source-qualified aliases, and stop for conflicting or ambiguous identities.
 

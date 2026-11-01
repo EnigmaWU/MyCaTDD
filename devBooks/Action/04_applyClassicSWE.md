@@ -182,20 +182,27 @@ Test runner: Cucumber/JBehave          TEST(Account, verifyWithdraw_
                                               expectReducedBalance) { ... }
 ```
 
-CaTDD's registered US and acceptance criteria remain authoritative story artifacts; qualified AC/TP/TC links bring their source-backed obligations into test design. When test comments and code share a file, they keep verification intent adjacent to execution without replacing the story or design sources.
+CaTDD's registered US and CaTDD-ACs remain authoritative story artifacts; qualified AC/TP/TC links bring their source-backed obligations into test design. When test comments and code share a file, they keep verification intent adjacent to execution without replacing the story or design sources.
 
-### BDD as the CaTDD Acceptance Criteria Contract
+### BDD as the CaTDD-AC Contract
 
-Every CaTDD Acceptance Criterion follows the BDD format:
+Every CaTDD-AC extends BDD with provenance and a counter-case:
 
+```markdown
+- **FROM**
+  - **Example:** EX-n
+  - **Rule:** RULE-n
+- **GIVEN**
+  - [preconditions and context]
+- **WHEN**
+  - [specific action or event]
+- **THEN**
+  - [expected observable outcome]
+- **COUNTER**
+  - [contrasting case and expected distinction]
 ```
-AC-n: GIVEN [preconditions and context],
-      WHEN [specific action or event],
-      THEN [expected observable outcome],
-       AND [additional outcome if any].
-```
 
-This is not a coincidence. GIVEN/WHEN/THEN is the **canonical testable condition** in CaTDD. A living documentation reconciliation checklist keeps it honest.
+`FROM` must resolve at least one source-backed Example or Rule. If both are missing, ask `AskWhy` and preserve the human answer. GIVEN/WHEN/THEN remains the **canonical BDD core**; FROM adds provenance and COUNTER adds boundary contrast.
 
 ### BDD Reconciliation Checklist
 
@@ -210,7 +217,7 @@ Set up automated reconciliation tests that assert consistency between source cod
 LLMs are pattern matchers, not business analysts. They produce convincing GIVEN/WHEN/THEN structures without being able to judge whether the THEN clause matches the real business rule. BDD inside CaTDD supplies the guardrail by splitting ownership:
 
 ```
-   developer writes the AC      the business rule, in GIVEN/WHEN/THEN
+   developer writes the CaTDD-AC evidence, rule, scenario, and counter-case
    LLM generates the TC         the concrete test that verifies the AC
    developer reviews the TC     does this test verify what the AC states?
    LLM implements the code      the 4-phase test implementation
@@ -369,8 +376,8 @@ CaTDD is not a fourth methodology stacked on top of three others. It connects TD
    │  US: registered User Story — business intent (BDD)            │
    │  As a [role], I want [capability], So that [value]            │
    │                          │ traces to                          │
-   │  AC: qualified Acceptance Criteria (BDD)                      │
-   │  GIVEN/WHEN/THEN with canonical terms and normative outcomes  │
+   │  CaTDD-AC: FROM + GIVEN/WHEN/THEN + COUNTER                   │
+   │  provenance, canonical terms, observable outcome, contrast    │
    │                          │                                    │
    │  TC: Test Cases — Verification Design (TDD + BDD)             │
    │  qualified IDs + scope-specific status + @[Expect]            │
@@ -384,7 +391,7 @@ CaTDD is not a fourth methodology stacked on top of three others. It connects TD
 The test file keeps relevant verification design beside executable evidence; it links to, but does not replace, authoritative story, domain, and verification-design artifacts.
 
 - **DDD's bounded context** — the OVERVIEW section
-- **BDD's behavior contract** — registered US/AC identities and canonical GIVEN/WHEN/THEN outcomes
+- **BDD's behavior contract** — registered US/CaTDD-AC identities with `FROM / GIVEN / WHEN / THEN / COUNTER`
 - **Source-backed discovery** — qualified TPs and the verification-design ledger
 - **TDD's verification cycle** — TC implementation with scope-specific RED/GREEN evidence
 - **DDD's domain model** — bounded context and canonical terms from project design sources
@@ -484,7 +491,7 @@ TEST(AccountWithdraw, verifyWithdraw_bySufficientBalance_expectReducedBalance) {
 }
 ```
 
-The structure of BDD survives; the separation between specification and test does not. GIVEN/WHEN/THEN lives in the AC comment, and the scenario implementation sits right below it. An LLM reading the file sees the whole chain — business requirement to executable verification — in one continuous context.
+The BDD core survives while artifact ownership remains explicit. The authoritative CaTDD-AC, including `FROM / GIVEN / WHEN / THEN / COUNTER`, lives in the requirements source; the test file defines TCs and traces back to it. An LLM can follow one continuous chain from requirement to executable verification without duplicating or replacing the criterion.
 
 ---
 

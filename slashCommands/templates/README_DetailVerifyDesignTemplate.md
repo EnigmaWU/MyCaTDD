@@ -76,8 +76,8 @@ Row-level category coverage lives here. Quadrant balance across levels, environm
 Keep the single authoritative feature-level inventory and `discovery_ledger` in this document. Test-file comments reference these TP IDs and define TCs; they must not independently redefine TP meaning or ownership. `CaTDD_methodPrompt-testPointDiscovery.md` owns the row fields, dispositions (`DESIGNED / QUESTION / EXCLUDED / REFERRED / GAP`), and readiness semantics.
 
 ```text
-TP ID | Owning AC ID | Covering TC ID | Source/rule | Setup/action | Observable oracle | Category/TestLevel | Disposition/evidence
-{{StoryIdAlias}}-TP-{{n}} | {{StoryIdAlias}}-AC-{{a}} | {{StoryIdAlias}}-TC-{{t}} | [source/R1] | [condition] | [expected result] | Typical/UnitTesting | DESIGNED: [test-file path and TC declaration]
+TP ID | Owning CaTDD-AC ID | Covering TC ID | Source/rule | Setup/action | Observable oracle | Category/TestLevel | Disposition/evidence
+{{StoryIdAlias}}-TP-{{n}} | {{StoryIdAlias}}-AC-{{Category}}-{{a}} | {{StoryIdAlias}}-TC-{{t}} | [source/R1] | [condition] | [expected result] | Typical/UnitTesting | DESIGNED: [test-file path and TC declaration]
 {{StoryIdAlias}}-TP-{{n}} | unknown | unassigned | [source/R2] | [condition] | unknown | provisional | QUESTION: [question, decision owner]
 ```
 
@@ -113,9 +113,9 @@ Residual risk and next action: ...
 
 <!-- This table is only a handoff summary. Keep live detailed status elsewhere. -->
 
-| Verification Area | US/AC Scope | Evidence Owner | Evidence Location | Status Meaning |
+| Verification Area | US/CaTDD-AC Scope | Evidence Owner | Evidence Location | Status Meaning |
 | --- | --- | --- | --- | --- |
-| {{area}} | {{US/AC range}} | {{test file / TASKs / CI / manual note}} | {{path or command}} | {{planned / designed / implemented / reviewed}} |
+| {{area}} | {{US/CaTDD-AC range}} | {{test file / TASKs / CI / manual note}} | {{path or command}} | {{planned / designed / implemented / reviewed}} |
 
 ## Risks and Deferred Coverage
 

@@ -20,7 +20,8 @@
 //
 // PROJECT-WIDE TRACE: The abbreviated sample IDs below are illustrative only.
 //   Resolve StoryIdAlias through the registry; new AC/TP/TC IDs use its prefix.
-//   Keep authoritative TP definitions in the verification-design document.
+//   Keep authoritative CaTDD-ACs in requirements and TP definitions in verification design.
+//   A CaTDD-AC uses From / Given / When / Then / Counter; unresolved From asks AskWhy.
 //   Test comments reference those TPs and define TCs, including every covered TP.
 //   CaTDD_methodPrompt-testStructure.md owns identity, ownership, and legacy mappings.
 //
@@ -97,10 +98,10 @@
  *     // @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
  *     // @[US]: US-PROJECT-01
  *     // @[StoryIdAlias]: US-261029.070005
- *     // @[AC]: US-261029.070005-AC-01
+ *     // @[AC]: US-261029.070005-AC-Typical-01
  *     // @[TP]: US-261029.070005-TP-01
  *     // @[TC]: US-261029.070005-TC-01 verifyCore_byValidInput_expectSuccess
- *     // @[Trace]: US-261029.070005 | US-261029.070005-AC-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
+ *     // @[Trace]: US-261029.070005 | US-261029.070005-AC-Typical-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
  *     //=================================================================================================
  *
  *   Developers fill this skeleton to make verification intent clear.
@@ -119,7 +120,7 @@
  *     - Fault:  External dependency or environment fails SUT (SUT degrades or handles failure).
  *
  * CARDINALITIES & PERSPECTIVES:
- *   - 1 AC : N TPs: AC is from User/Caller perspective (GIVEN context, WHEN action, THEN outcome).
+ *   - 1 AC : N TPs: CaTDD-AC is from User/Caller perspective (FROM provenance, GIVEN context, WHEN action, THEN outcome, COUNTER contrast).
  *                   TP is from Developer/Defensive perspective (GIVEN state, WHEN action, THEN oracle).
  *   - TP : TC: Target obligation (WHAT) vs. executable arrow (HOW).
  *              Each TP MUST be covered by exactly one TC in a complete design.
@@ -312,70 +313,87 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF ACCEPTANCE CRITERIA DESIGN=======================================================
 /**
- * ACCEPTANCE CRITERIA define WHAT should be tested (make User Stories testable)
+ * CaTDD-AC (Evidence-Anchored Acceptance Criteria) define WHY a criterion is trusted and WHAT must hold.
+ * Authoritative CaTDD-AC definitions live in the requirements source; test comments reference them.
  *
- * FORMAT: GIVEN [initial context], WHEN [trigger/action], THEN [expected outcome]
+ * FORMAT: FROM [Example / Rule], GIVEN [initial context], WHEN [trigger/action],
+ *         THEN [expected outcome], COUNTER [contrasting case and expected distinction]
  *
  * GUIDELINES:
- *   - Each US should have 1-4 ACs (more for complex features)
- *   - Each AC should be independently verifiable
- *   - Use precise, unambiguous language
- *   - Include both success and failure scenarios
- *   - Consider edge conditions explicitly
+ *   - Each US should have 1-4 CaTDD-ACs (more for complex features)
+ *   - Each CaTDD-AC uses category-qualified IDs: <StoryIdAlias>-AC-<Category>-<n>
+ *   - FROM MUST resolve at least one source-backed Example or Rule; if both are missing, stop and AskWhy
+ *   - COUNTER states a contrasting boundary, invalid, or failure case and its expected distinction
+ *   - Each AC should be independently verifiable with precise, unambiguous language
  *
  * TEMPLATE:
  *
  * [@US-1] [Brief description of what US-1 covers]
- *  AC-1: GIVEN [preconditions and initial context],
- *         WHEN [specific trigger, action, or event occurs],
- *         THEN [expected observable outcome or behavior],
- *          AND [additional expected outcomes if any].
+ *  AC-1:
+ *   - FROM
+ *     - Example: EX-1 / CEX-1
+ *     - Rule: RULE-1 / BR-1 / [authoritative constraint]
+ *   - GIVEN [preconditions and initial context]
+ *   - WHEN [specific trigger, action, or event occurs]
+ *   - THEN [expected observable outcome stated with MUST / MUST NOT]
+ *     - AND [additional expected outcomes if any]
+ *   - COUNTER [contrasting case and expected distinction]
  *
- *  AC-2: GIVEN [preconditions and initial context],
- *         WHEN [specific trigger, action, or event occurs],
- *         THEN [expected observable outcome or behavior],
- *          AND [additional expected outcomes if any].
- *
- *  AC-n: GIVEN [preconditions and initial context],
- *         WHEN [specific trigger, action, or event occurs],
- *         THEN [expected observable outcome or behavior].
+ *  AC-2:
+ *   - FROM
+ *     - Example: EX-2
+ *     - Rule: RULE-2
+ *   - GIVEN [preconditions and initial context]
+ *   - WHEN [specific trigger, action, or event occurs]
+ *   - THEN [expected observable outcome or behavior]
+ *   - COUNTER [contrasting case and expected distinction]
  *
  * [@US-2] [Brief description of what US-2 covers]
- *  AC-1: GIVEN [preconditions and initial context],
- *         WHEN [specific trigger, action, or event occurs],
- *         THEN [expected observable outcome or behavior].
- *
- *  AC-n: GIVEN [preconditions and initial context],
- *         WHEN [specific trigger, action, or event occurs],
- *         THEN [expected observable outcome or behavior].
+ *  AC-1:
+ *   - FROM
+ *     - Example: EX-3
+ *     - Rule: RULE-3
+ *   - GIVEN [preconditions and initial context]
+ *   - WHEN [specific trigger, action, or event occurs]
+ *   - THEN [expected observable outcome or behavior]
+ *   - COUNTER [contrasting case and expected distinction]
  *
  *---------------------------------------------------------------------------------------------------
  * REAL EXAMPLES:
  *
  * [@US-1] Non-blocking event posting under high load
- *  AC-1: GIVEN an event producer calling IOC_postEVT_inConlesMode,
- *         WHEN IOC's EvtDescQueue is full in ASyncMode by blocking consumer,
- *         THEN producer returns immediately without waiting,
- *          AND returns IOC_RESULT_TOO_MANY_QUEUING_EVTDESC,
- *          AND the event is not queued for processing.
+ *  AC-1:
+ *   - FROM
+ *     - Example: EX-1 (full queue in ASyncMode by blocking consumer)
+ *     - Rule: RULE-1 (IOC API contract requires immediate non-blocking failure when full)
+ *   - GIVEN an event producer calling IOC_postEVT_inConlesMode while EvtDescQueue is full in ASyncMode
+ *   - WHEN producer posts an event in NonBlock mode
+ *   - THEN producer MUST return immediately without waiting
+ *     - AND MUST return IOC_RESULT_TOO_MANY_QUEUING_EVTDESC
+ *     - AND the event MUST NOT be queued for processing
+ *   - COUNTER CEX-1 (queue has room; call MUST succeed and queue the event)
  *
- *  AC-2: GIVEN event producer calling IOC_postEVT_inConlesMode,
- *         WHEN IOC's EvtDescQueue is not empty in SyncMode,
- *         THEN producer returns immediately without waiting,
- *          AND returns IOC_RESULT_TOO_MANY_QUEUING_EVTDESC,
- *          AND the event is not processed synchronously.
+ *  AC-2:
+ *   - FROM
+ *     - Example: EX-2 (non-empty queue in SyncMode)
+ *     - Rule: RULE-2 (SyncMode rejects while queued events remain)
+ *   - GIVEN an event producer calling IOC_postEVT_inConlesMode while EvtDescQueue is not empty in SyncMode
+ *   - WHEN producer posts an event
+ *   - THEN producer MUST return immediately without waiting
+ *     - AND MUST return IOC_RESULT_TOO_MANY_QUEUING_EVTDESC
+ *     - AND the event MUST NOT be processed synchronously
+ *   - COUNTER CEX-2 (empty queue in SyncMode; event is processed synchronously)
  *
  * [@US-2] Command execution via callback mechanism
- *  AC-1: GIVEN a service with CmdExecutor capability and registered CbExecCmd_F,
- *         WHEN client sends PING command via IOC_execCMD,
- *         THEN callback executes synchronously in service context,
- *          AND service processes command and returns PONG result,
- *          AND client receives result within timeout period.
- *
- *  AC-2: GIVEN service supports multiple command types (PING, ECHO, CALC),
- *         WHEN client sends different command types with appropriate payloads,
- *         THEN each command is processed by callback with correct handler,
- *          AND results match expected output for each command type.
+ *  AC-1:
+ *   - FROM
+ *     - Example: EX-3 (PING -> PONG callback)
+ *     - Rule: RULE-3 (CmdExecutor callback contract)
+ *   - GIVEN a service with CmdExecutor capability and registered CbExecCmd_F
+ *   - WHEN client sends PING command via IOC_execCMD
+ *   - THEN callback MUST execute synchronously in service context
+ *     - AND service MUST process command and return PONG result within timeout period
+ *   - COUNTER CEX-3 (unregistered callback or expired timeout returns documented error code)
  */
 //=======>END OF ACCEPTANCE CRITERIA DESIGN========================================================
 

@@ -20,7 +20,7 @@
 
 ```mermaid
 graph TD
-    A[US: User Story] --> B[AC: Acceptance Criteria]
+    A[US: User Story] --> B[CaTDD-AC]
     B --> C[TC: Test Cases<br/>Verification Design]
     C --> D[TEST Implementation<br/>LLM Generated]
     D --> E[Production Code<br/>LLM Generated]
@@ -136,7 +136,7 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 
 ### 3. Write Your First User Story
 
-> **ID note:** `US-1`, `AC-1`, and `TC-1` in this guide are illustrative shorthand, not project IDs to copy. Keep the human-readable `US-<whoName>-<doWhat>` Story ID, such as `US-eventProducer-postEventsWithoutBlocking`, and register its permanent `StoryIdAlias` (`US-YYMMDD.HHMMSS`, UTC+08:00 creation time). New AC/TP/TC IDs use that alias prefix. Requirements own US/AC definitions, verification design owns TPs, and test files own TCs with explicit TP references.
+> **ID note:** `US-1`, `AC-1`, and `TC-1` in this guide are illustrative shorthand, not project IDs to copy. Keep the human-readable `US-<whoName>-<doWhat>` Story ID, such as `US-eventProducer-postEventsWithoutBlocking`, and register its permanent `StoryIdAlias` (`US-YYMMDD.HHMMSS`, UTC+08:00 creation time). New AC/TP/TC IDs use that alias prefix; AC IDs also include their CaTDD category. Requirements own US/CaTDD-AC definitions, verification design owns TPs, and test files own TCs with explicit TP references.
 
 ```cpp
 /**
@@ -146,14 +146,19 @@ If your project does not have a `Test/` directory, create one or adjust the dest
  */
 ```
 
-### 4. Define Acceptance Criteria
+### 4. Define CaTDD-AC
 
 ```cpp
 /**
  * [@US-1] Non-blocking event posting
- *  AC-1: GIVEN event queue is full,
- *        WHEN I post an event in async mode,
- *        THEN it returns immediately with error code.
+ *  AC-1:
+ *   - FROM
+ *     - Example: EX-1 (full queue, NonBlock post)
+ *     - Rule: RULE-1 (API contract requires immediate failure)
+ *   - GIVEN event queue is full
+ *   - WHEN I post an event in async mode
+ *   - THEN it returns immediately with error code
+ *   - COUNTER CEX-1 (queue has room and the post succeeds)
  */
 ```
 
@@ -274,15 +279,20 @@ US-2: As a service implementor,
       So that I can process requests immediately without polling.
 ```
 
-**Step 5: Define Acceptance Criteria (AC)**  
-Make stories testable with GIVEN/WHEN/THEN:
+**Step 5: Define CaTDD-AC**
+Make stories testable with `FROM / GIVEN / WHEN / THEN / COUNTER`:
 
 ```cpp
 /**
  * [@US-{n}] Brief description
- *  AC-{n}: GIVEN [preconditions],
- *          WHEN [action],
- *          THEN [expected outcome].
+ *  AC-{n}:
+ *   - FROM
+ *     - Example: EX-{n}
+ *     - Rule: RULE-{n} / authoritative constraint
+ *   - GIVEN [preconditions]
+ *   - WHEN [action]
+ *   - THEN [expected outcome]
+ *   - COUNTER [contrasting case and expected distinction]
  */
 ```
 
@@ -290,16 +300,25 @@ Make stories testable with GIVEN/WHEN/THEN:
 
 ```cpp
 [@US-1] Non-blocking event posting
- AC-1: GIVEN event queue is full,
-       WHEN producer posts event in async mode,
-       THEN returns immediately without blocking,
-        AND returns IOC_RESULT_TOO_MANY_QUEUING_EVTDESC,
-        AND event is not queued.
+ AC-1:
+  - FROM
+    - Example: EX-1 (full queue, NonBlock post)
+    - Rule: RULE-1 (API contract requires immediate failure)
+  - GIVEN event queue is full
+  - WHEN producer posts event in async mode
+  - THEN returns immediately without blocking
+    - AND returns IOC_RESULT_TOO_MANY_QUEUING_EVTDESC
+  - COUNTER CEX-1 (queue has room and the post succeeds)
 
- AC-2: GIVEN event queue has space,
-       WHEN producer posts event in async mode,
-       THEN returns immediately with success,
-        AND event is queued for processing.
+ AC-2:
+  - FROM
+    - Example: EX-2 (queue has space)
+    - Rule: RULE-2 (accepted post is queued)
+  - GIVEN event queue has space
+  - WHEN producer posts event in async mode
+  - THEN returns immediately with success
+    - AND event is queued for processing
+  - COUNTER CEX-2 (full queue must reject instead)
 ```
 
 **Step 6: Specify Test Cases (TC)**  
@@ -393,7 +412,7 @@ TEST(EventPosting, verifyNonBlockPost_byFullQueue_expectImmediateReturn) {
 ```mermaid
 graph TD
     US[User Story US<br/>WHY we need this feature<br/>Business value from user perspective]
-    AC[Acceptance Criteria AC<br/>WHAT behavior must be satisfied<br/>Testable conditions]
+    AC[CaTDD-AC<br/>FROM provenance + testable GIVEN/WHEN/THEN<br/>COUNTER distinction]
     TC[Test Case TC<br/>HOW to verify the behavior<br/>Concrete verification steps]
     
     US --> AC
@@ -407,7 +426,7 @@ graph TD
 ```
 User Story (US) - WHY we need this feature
     ↓
-Acceptance Criteria (AC) - WHAT behavior must be satisfied
+CaTDD-AC - WHY the criterion is trusted + WHAT behavior must be satisfied
     ↓
 Test Case (TC) - HOW to verify the behavior
 ```
@@ -451,23 +470,30 @@ US-1: As a developer,
 
 ---
 
-### Acceptance Criteria (AC) - The "What"
+### CaTDD-AC - Evidence-Anchored BDD
 
-**Purpose**: Define testable conditions that satisfy the US
+**Purpose**: Define a traceable BDD-style acceptance criterion that satisfies the US.
 
 **Format**:
 
-```
-GIVEN [context/preconditions],
-WHEN [action/trigger],
-THEN [expected outcome],
- AND [additional outcomes].
+```text
+FROM
+  Example EX-n / CEX-n
+  Rule RULE-n / BR-n / authoritative constraint
+GIVEN [context/preconditions]
+  AND [additional precondition]
+WHEN [action/trigger]
+  AND [additional action]
+THEN [expected outcome]
+COUNTER [contrasting case and expected distinction]
 ```
 
 **Guidelines**:
 
-- Each US should have 1-4 ACs
+- Each US should have 1-4 CaTDD-ACs
 - Each AC must be independently verifiable
+- `FROM` must contain at least one source-backed Example or Rule; if both are missing, ask `AskWhy`
+- `COUNTER` must state a contrasting case with its expected distinction
 - Use precise, unambiguous language
 - Cover both success and failure scenarios
 
@@ -475,19 +501,24 @@ THEN [expected outcome],
 
 ```
 [@US-1] Non-blocking event posting
- AC-1: GIVEN event queue is full,
-       WHEN producer posts event in async mode,
-       THEN returns immediately without blocking,
-        AND returns IOC_RESULT_TOO_MANY_QUEUING_EVTDESC,
-        AND event is not queued.
+ AC-1:
+  - FROM
+    - Example: EX-1 (full queue, NonBlock post)
+    - Rule: RULE-1 (API contract requires immediate failure)
+  - GIVEN event queue is full
+  - WHEN producer posts event in async mode
+  - THEN returns immediately without blocking
+    - AND returns IOC_RESULT_TOO_MANY_QUEUING_EVTDESC
+  - COUNTER CEX-1 (queue has room and the post succeeds)
 ```
 
 **Bad Example** ❌:
 
 ```
-AC-1: GIVEN queue,
-      WHEN post,
-      THEN works.
+AC-1:
+  - GIVEN queue
+  - WHEN post
+  - THEN works
 ```
 
 (Too vague, not testable, missing details)
@@ -976,10 +1007,12 @@ If your project does not have a `Test/` directory, create one or adjust the dest
 - [ ] Focus on business value
 - [ ] 2-5 US for the module
 
-### ✅ Step 6: Define Acceptance Criteria
+### ✅ Step 6: Define CaTDD-AC
 
-- [ ] Use GIVEN/WHEN/THEN format
-- [ ] 1-4 AC per US
+- [ ] Use `FROM / GIVEN / WHEN / THEN / COUNTER` format
+- [ ] Resolve at least one source-backed Example or Rule under `FROM`
+- [ ] Ask `AskWhy` and save the human answer when both are missing
+- [ ] 1-4 CaTDD-ACs per US
 - [ ] Make each AC independently verifiable
 - [ ] Cover success AND failure cases
 
@@ -1234,7 +1267,7 @@ Looking for concrete CaTDD implementations? Check these IOC test files:
 
 ## Quick Reference
 
-### US/AC/TC Template
+### US/CaTDD-AC/TC Template
 
 ```cpp
 /**
@@ -1243,9 +1276,13 @@ Looking for concrete CaTDD implementations? Check these IOC test files:
  *       So that [value].
  * 
  * [@US-n] Brief description
- *  AC-n: GIVEN [context],
- *        WHEN [action],
- *        THEN [outcome].
+ *  AC-n:
+ *   - FROM
+ *     - Example: EX-n / Rule: RULE-n
+ *   - GIVEN [context]
+ *   - WHEN [action]
+ *   - THEN [outcome]
+ *   - COUNTER [contrasting case and expected distinction]
  * 
  * [@AC-n,US-n]
  *  TC-n:

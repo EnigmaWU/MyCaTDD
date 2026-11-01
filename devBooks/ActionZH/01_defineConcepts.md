@@ -20,7 +20,7 @@
 
 3. **注释是 LLM 可以解析和更新的一等工件。** 阅读 CaTDD 测试文件的 LLM 能看到结构化的 `@[US]`、`@[AC]`、`@[TC]` 标记，它可以追踪、验证这些标记并从中生成代码。这就是 CaTDD 被称为"LLM 友好的 TDD"的原因。
 
-4. **US/AC/TC 格式在人类意图和机器可执行测试之间架起了桥梁。** 用户故事（User Story）表达业务价值。验收标准（Acceptance Criteria）使故事可测试。测试用例（Test Case）将验收标准连接到具体的断言。这条链路从人类需求直达机器验证，中间没有缺口。
+4. **US/AC/TC 格式在人类意图和机器可执行测试之间架起了桥梁。** 用户故事（User Story）表达业务价值。CaTDD-AC 通过证据、规则、场景和对照案例使故事可测试。测试用例（Test Case）将验收标准连接到具体的断言。这条链路从人类需求直达机器验证，中间没有缺口。
 
 ### "TDD" 部分
 
@@ -189,7 +189,7 @@ methodPrompts ──→ slashCommands ──→ codeAgents
 // @[UseWhen]: 何时使用此类别
 // @[AvoidWhen]: 何时将场景移至其他类别
 // @[US]: 此类别覆盖的 User Story ID
-// @[AC]: 此类别覆盖的 Acceptance Criteria ID
+// @[AC]: 此类别覆盖的 CaTDD-AC ID
 // @[TC]: Test Cases、状态及预期的 TDD 下一步动作
 //=================================================================================================
 ```
@@ -378,7 +378,7 @@ Uncertainty: 1（已知）→ 3（未知）
 CaTDD 的核心是从人类需求到机器可执行测试的可追溯链路：
 
 ```
-User Story (US) → Acceptance Criteria (AC) → Test Case (TC)
+User Story (US) → CaTDD-AC → Test Case (TC)
       ↓                    ↓                      ↓
    业务价值            可测试条件              具体断言
 ```
@@ -401,25 +401,47 @@ US-1: 作为高负载场景下的事件生产者，
       以便我的应用在负载下保持响应。
 ```
 
-### 验收标准（Acceptance Criteria）模板
+### CaTDD-AC 模板
 
-```
-AC-n: GIVEN [初始上下文和前置条件]，
-      WHEN [特定的触发器、动作或事件]，
-      THEN [预期的可观察结果或行为]，
-       AND [如有额外的预期结果]。
+```markdown
+#### AC-n：<标题>
+
+- **FROM**
+  - **Example:** EX-n / CEX-n
+  - **Rule:** RULE-n / BR-n / <权威约束>
+- **GIVEN**
+  - <初始上下文和前置条件>
+  - **AND** <附加前置条件>
+- **WHEN**
+  - <特定的触发器、动作或事件>
+  - **AND** <附加动作或事件>
+- **THEN**
+  - <使用 MUST / MUST NOT 表达的可观察结果>
+- **COUNTER**
+  - <对照案例及其预期差异>
 ```
 
-每个 US 定义 1–4 个 AC。每个 AC 必须可独立验证。
+每条 CaTDD-AC 的 `FROM` 必须解析到至少一个来源支撑的 Example 或 Rule。两者均缺失时，执行 `AskWhy` 并将人类回答保存为 `Example (AskWhy)` 或 `Rule (AskWhy)`。每个 US 定义 1–4 个 CaTDD-AC，每条都必须可独立验证。
 
 **真实示例**：
 
 ```
-AC-1: GIVEN 一个事件生产者调用 IOC_postEVT_inConlesMode，
-      WHEN IOC 的 EvtDescQueue 在 ASyncMode 下因阻塞消费者而满，
-      THEN 生产者立即返回而不等待，
-       AND 返回 IOC_RESULT_TOO_MANY_QUEUING_EVTDESC，
-       AND 该事件未被加入处理队列。
+#### AC-1：队列满时非阻塞发布事件
+
+- **FROM**
+  - **Example:** EX-1（队列已满，NonBlock 调用）
+  - **Rule:** RULE-1（API 契约要求立即返回失败）
+- **GIVEN**
+  - 一个事件生产者调用 IOC_postEVT_inConlesMode
+  - **AND** EvtDescQueue 已满
+- **WHEN**
+  - 生产者使用 NonBlock 模式发布事件
+- **THEN**
+  - 调用立即返回而不等待
+  - **AND** 返回 IOC_RESULT_TOO_MANY_QUEUING_EVTDESC
+  - **AND** 该事件未被加入处理队列
+- **COUNTER**
+  - CEX-1：队列有空间，同一调用必须成功并将事件加入队列
 ```
 
 ### 测试用例（Test Case）模板
@@ -625,7 +647,7 @@ CaTDD 从根本上重新定义了设计。设计不是编码开始之前就完�
 这份合约声明了：
 
 1. **什么重要** — 以附带业务价值的 User Story 表达
-2. **要验证什么** — 以 GIVEN/WHEN/THEN 格式的 Acceptance Criteria 表达
+2. **要验证什么** — 以 `FROM / GIVEN / WHEN / THEN / COUNTER` 格式的 CaTDD-AC 表达
 3. **如何验证** — 以带有具体断言的 Test Case 表达
 4. **什么优先级** — 以 P0→P1→P2→P3 框架表达
 5. **什么状态** — 以 ⚪→🔴→🟢 标记表达

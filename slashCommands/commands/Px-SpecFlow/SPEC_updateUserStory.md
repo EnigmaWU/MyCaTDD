@@ -54,6 +54,7 @@ Expected result:
 ## Output Contract
 
 - Updated project-root `README_UbiLang.md` when the story introduces or revises domain terminology, and AC outcomes normalized to controlled modal vocabulary (`MUST` / `MUST NOT` for mandatory acceptance outcomes, `SHOULD` with exception rules, `MAY` for optional behavior).
+- Updated CaTDD-AC statements preserving `From / Given / When / Then / Counter`. If `From` has neither a source-backed Example nor Rule, stop with `AskWhy` and save the human answer as `Example (AskWhy)` or `Rule (AskWhy)`; never silently invent provenance.
 - Updated project-root `README_UserStories.md` with requirement-level revisions, TODO/DONE state synchronization, and stable US/AC trace IDs.
 - Preserved historical AC identities and explicit lineage for any approved materially changed AC; propagate the resulting qualified IDs into downstream trace references.
 - Updated module or submodule `README_UserStory.md` when module-local requirement docs are used.
@@ -68,7 +69,7 @@ This update runs inside the `SPEC_updateUserStory -> SPEC_reviewUserStory` rewor
 
 ## Conflict Guard
 
-Resolve and preserve StoryIdAlias and CreatedAt through the project registry. New AC IDs use the alias prefix; materially revised ACs need new stable child tokens and explicit supersession. Do not rename accepted IDs or TP ownership merely because the story text, title, or file moved.
+Resolve and preserve StoryIdAlias and CreatedAt through the project registry. New AC IDs use the alias and current CaTDD category as their prefix; materially revised ACs need new stable child tokens and explicit supersession. Do not rename accepted IDs or TP ownership merely because the story text, title, or file moved.
 
 Do not invent new product scope outside the active story intent.
 Do not update `README_UserStories.md` for a story whose ledger state is SUSPENDED; require `SPEC_resumeUserStory` first to resume before updating.

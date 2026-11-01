@@ -12,7 +12,7 @@ Review the active user story, project-level requirement ledger (`README_UserStor
 
 Run this loop; each pass must produce changed evidence or it is the last pass.
 
-1. **Thought** — Read `doing_user_story`, `project_user_stories_doc`, and the paired `module_user_guide_doc`. For each AC, decide whether it is (a) testable through a CaTDD skeleton, (b) traced to a US/AC id in the ledger, (c) consistent with the ledger's TODO/DONE state. Name the ACs that fail any of the three.
+1. **Thought** — Read `doing_user_story`, `project_user_stories_doc`, and the paired `module_user_guide_doc`. For each CaTDD-AC, decide whether it is (a) testable through a CaTDD skeleton, (b) explicit in `From / Given / When / Then / Counter` with resolvable Example/Rule evidence, (c) traced to a US/CaTDD-AC ID in the ledger, and (d) consistent with the ledger's TODO/DONE state. Name every criterion that fails a check.
 2. **Action** — Write the review result as one verdict — `pass`, `revise requirements`, `transfer to design`, `close requirement-only`, or `ask developer` — with one finding line per failing AC.
 3. **Observation** — Check every finding names a file, an AC id, and a concrete fix. If a finding is vague, or if the ledger check was skipped, go back to **Thought**.
 4. **Stop** — Exit when the verdict is stable and all findings are actionable. Report the verdict, findings, assumptions, and next command.
@@ -58,6 +58,7 @@ Expected result — one ReACT pass:
 - `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Explicit consistency check that `README_UserStories.md` TODO/DONE story state and AC trace/status match lifecycle artifacts and active story content.
 - Identity gate: verify the registered Story ID/StoryIdAlias/CreatedAt mapping, alias-qualified AC IDs, explicit legacy mappings, revision/supersession links, and collision checks against [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Missing or conflicting identity evidence blocks approval; historical copies and declared slices are not independent duplicate stories. The registry names the authoritative US/AC source, not a competing requirements copy.
+- CaTDD-AC evidence gate: verify every AC has a `From / Given / When / Then / Counter` statement and that `From` resolves to at least one source-backed Example or Rule. If both are missing or unresolved, `AskWhy` from the human and route the saved `Example (AskWhy)` or `Rule (AskWhy)` evidence through `SPEC_updateUserStory`; do not approve or invent an answer.
 - Normative & Ubiquitous Language Gate (`EPIC E1.3, E1.4, I2.1`): verify that mandatory AC `THEN` outcomes and business rules use `MUST` / `MUST NOT` (flagging weak modals like unbacked `"should"` / `"might"` as `SMELL-MODAL`), and verify that domain terms match `README_UbiLang.md` without synonym drift.
 - Story Completion Conditions Gate (`EPIC E3.4`): verify that `## Story Completion Conditions` in the active `*-UserStory.md` explicitly declares story-specific `Required TestLevel`, `Required TestScope & Environment` (`mockSysRtm` vs. `realSysRtm`), `Required CaTDD Categories`, `Required SPEC & Doc Surfaces`, `Not-Done Conditions`, and `Approved Deferrals`.
 - Missing acceptance criteria, ambiguity, README SPEC doc gaps, edge cases, measurable outcomes, and risk list from a clarify/analyze/checklist-style review gate.
@@ -86,6 +87,7 @@ On revise findings, route to `SPEC_updateUserStory` and record structured findin
 ## Conflict Guard
 
 Do not approve a story when acceptance criteria cannot be tested through CaTDD skeletons.
+Do not approve a CaTDD-AC whose `From` has neither a source-backed Example nor a Rule; ask why and preserve the human answer before continuing.
 Do not approve requirement updates when `README_UserStories.md` TODO/DONE state or AC trace/status is inconsistent with story lifecycle artifacts.
 Do not review a story whose `README_UserStories.md` ledger state is SUSPENDED; require `SPEC_resumeUserStory` first to resume before reviewing.
 Do not route directly from requirement review to unit-test design; transfer to design-oriented work first when architecture or detail design is still needed.

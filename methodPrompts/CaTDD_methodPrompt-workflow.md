@@ -24,7 +24,8 @@ CaTDD uses two design stages before implementation.
 
 1. Write User Stories using the role, capability, value structure.
    Register the Story ID/StoryIdAlias/CreatedAt mapping once; preserve it across all later stages.
-2. Write Acceptance Criteria using GIVEN, WHEN, THEN.
+2. Write each CaTDD-AC as `From / Given / When / Then / Counter`.
+   `From` MUST resolve at least one source-backed Example or Rule; if both are missing, `AskWhy` from the human and save the answer as `Example (AskWhy)` or `Rule (AskWhy)`.
    Use alias-qualified AC/TP/TC IDs. Each TP ledger row explicitly names its owning AC and covering TC; each TC lists its covered TPs.
 3. Write Test Cases with structured metadata: `@[Name]`, `@[Purpose]`, `@[Brief]`, `@[Expect]`.
 4. Keep TC names in `verifyBehavior_byCondition_expectResult` form.

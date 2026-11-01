@@ -29,11 +29,13 @@ This is the SpecCoding template for project-root `README_DetailDesign.md`. Creat
 | Scenarios | {{happy path, edge, misuse, fault, state, quality scenarios}} |
 | Inputs | {{API args, config, env, files, events, dependencies, state}} |
 
-## Acceptance Criteria
+## CaTDD-AC Traceability
 
-| AC ID | Given | When | Then | Design Impact |
+Reference the authoritative story CaTDD-AC; do not redefine it here. A `From` that remains unresolved is an `AskWhy` blocker.
+
+| AC ID | Authoritative Source | From Evidence | Counter Reference | Design Impact |
 | --- | --- | --- | --- | --- |
-| {{StoryIdAlias}}-AC-{{n}} | {{context}} | {{action}} | {{observable result}} | {{module/API/state change}} |
+| {{StoryIdAlias}}-AC-{{Category}}-{{n}} | {{requirements path and section}} | {{EX-n / RULE-n / AskWhy evidence}} | {{CEX-n or contrast reference}} | {{module/API/state change}} |
 
 ## Interface Design
 

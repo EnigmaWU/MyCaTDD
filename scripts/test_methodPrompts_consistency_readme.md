@@ -13,8 +13,8 @@ Implemented. The ID checks were observed failing before the contract was added a
 - Category-prompt sections, canonical test-file names, and status vocabulary.
 - Every category skeleton carries US, AC, TP, and TC metadata and references the project-wide ID contract.
 - Required metadata in language templates and consistency of method README claims.
-- A project-wide ID contract for User Stories and their AC, TP, and TC identifiers.
-- Issue analysis and the todo-story template propagate registered Story IDs into AC declarations.
+- A project-wide ID contract for User Stories and their CaTDD-AC, TP, and TC identifiers.
+- Issue analysis and the todo-story template propagate registered Story IDs into category-qualified CaTDD-AC declarations.
 - Feature analysis, story import, abort recovery, and story opening reference the same ID contract and registry.
 - Discovery, test-design and product-code handoffs, and all four language templates carry qualified US/AC/TP/TC examples.
 - Planning and design templates plus lifecycle review, closure, and merge commands preserve registered identities.
@@ -23,6 +23,8 @@ Implemented. The ID checks were observed failing before the contract was added a
 - Discovery reports failed cardinality when the expanded in-scope ledger contains unassigned TPs.
 - The Action chapter's three full-queue TC identities retain their behavior names, matching trace IDs, and one two-scope status per tracked case.
 - Permanent StoryIdAlias/CreatedAt metadata, alias-prefixed child IDs, and authoritative TP ownership in verification-design documents.
+- The story template exposes 12 consistent nested-list CaTDD-AC blocks using `FROM / GIVEN / WHEN / THEN / COUNTER`.
+- Canonical guidance and lifecycle commands require at least one Example or Rule under `FROM`, otherwise `AskWhy` and saved human evidence.
 - Execution of the documented alias-creation snippet: its UTC+08:00 timestamp and alias must describe the same instant.
 - Parsing the canonical requirements/TP-ledger/TC example as a graph: AC ownership, sole covering TC per TP, complete reverse TP lists, and literal-search trace rows.
 - Literal `grep -F` lookup across isolated registry, hidden story, verification-design, and test-file artifacts; a todo-to-doing move must preserve identity and creation time. Legacy references remain resolvable through a mapping without rewriting the archived source.

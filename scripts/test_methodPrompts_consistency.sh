@@ -5,8 +5,10 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 METHOD_DIR="$REPO_ROOT/methodPrompts"
 UBILANG="$REPO_ROOT/README_UbiLang.md"
 UBILANG_ZH="$REPO_ROOT/README_UbiLang_ZH.md"
+UBILANG_USER="$REPO_ROOT/README_UbiLangUSER.md"
 FILE_NAMING="$METHOD_DIR/CaTDD_methodPrompt-fileNaming.md"
 MASTER="$METHOD_DIR/CaTDD_methodPrompt.md"
+WORKFLOW="$METHOD_DIR/CaTDD_methodPrompt-workflow.md"
 TEST_STRUCTURE="$METHOD_DIR/CaTDD_methodPrompt-testStructure.md"
 TEST_DISCOVERY="$METHOD_DIR/CaTDD_methodPrompt-testPointDiscovery.md"
 TODO_STORY_TEMPLATE="$REPO_ROOT/slashCommands/templates/SpecTodoUserStoryTemplate.md"
@@ -35,6 +37,7 @@ GUIDE="$METHOD_DIR/README_UserGuide.md"
 GUIDE_ZH="$METHOD_DIR/README_UserGuide_ZH.md"
 ROOT_GUIDE="$REPO_ROOT/README_UserGuide.md"
 ACTION_CONCEPTS="$REPO_ROOT/devBooks/Action/01_defineConcepts.md"
+ACTION_CONCEPTS_ZH="$REPO_ROOT/devBooks/ActionZH/01_defineConcepts.md"
 TEMPLATES=(
   "$METHOD_DIR/CaTDD_designAndImplTemplate.cxx"
   "$METHOD_DIR/CaTDD_designAndImplTemplate.ts"
@@ -125,7 +128,8 @@ assert_contains "$FILE_NAMING" '@[TestLevel]'
 assert_contains "$TEST_STRUCTURE" '@[TestScope]'
 assert_contains "$TEST_STRUCTURE" 'mockSysRtm <marker> | realSysRtm <marker>'
 assert_contains "$TEST_STRUCTURE" '## Project-Wide Traceability IDs'
-assert_contains "$TEST_STRUCTURE" '`<StoryIdAlias>-AC-<n>`'
+assert_contains "$TEST_STRUCTURE" '`<StoryIdAlias>-AC-<Category>-<n>`'
+assert_contains "$TEST_STRUCTURE" '- **COUNTER**'
 assert_contains "$TEST_STRUCTURE" '`<StoryIdAlias>-TP-<n>`'
 assert_contains "$TEST_STRUCTURE" '`<StoryIdAlias>-TC-<n>`'
 assert_contains "$TEST_STRUCTURE" 'US-YYMMDD.HHMMSS'
@@ -134,16 +138,48 @@ assert_contains "$TEST_STRUCTURE" 'same-second collision'
 assert_contains "$TEST_STRUCTURE" 'exactly one owning AC'
 assert_contains "$TEST_STRUCTURE" '@[Trace]: <StoryIdAlias> | <AC ID> | <TP ID> | <TC ID>'
 assert_contains "$TEST_STRUCTURE" '## Artifact Ownership'
+assert_contains "$TEST_STRUCTURE" '### CaTDD-AC'
+assert_contains "$TEST_STRUCTURE" 'From / Given / When / Then / Counter'
 assert_not_contains "$TEST_STRUCTURE" 'A literal search for the Story ID must find'
 assert_contains "$TODO_STORY_TEMPLATE" '**StoryIdAlias:** {{StoryIdAlias}}'
 assert_contains "$TODO_STORY_TEMPLATE" '**CreatedAt:** {{CreatedAt}}'
-assert_contains "$TODO_STORY_TEMPLATE" '| AC Seed | TP Refs | TC Refs |'
-assert_contains "$TODO_STORY_TEMPLATE" 'TP/TC cells are references, not definitions.'
+assert_contains "$TODO_STORY_TEMPLATE" '## CaTDD-AC - P0-Functional (`MUST`)'
+assert_contains "$TODO_STORY_TEMPLATE" '{{StoryIdAlias}}-AC-Typical-{{n}}'
+assert_contains "$TODO_STORY_TEMPLATE" '{{StoryIdAlias}}-AC-Edge-{{n}}'
+assert_contains "$TODO_STORY_TEMPLATE" '{{StoryIdAlias}}-AC-Misuse-{{n}}'
+assert_contains "$TODO_STORY_TEMPLATE" '{{StoryIdAlias}}-AC-Fault-{{n}}'
+assert_contains "$TODO_STORY_TEMPLATE" '## CaTDD-AC - P1-Design (`OPTIONAL`)'
+assert_contains "$TODO_STORY_TEMPLATE" '## CaTDD-AC - P2-Quality (`OPTIONAL`)'
+assert_contains "$TODO_STORY_TEMPLATE" '## CaTDD-AC - P3-DemoExample (`OPTIONAL`)'
+assert_contains "$TODO_STORY_TEMPLATE" '../../methodPrompts/CaTDD_methodPrompt.md#category-semantics'
+assert_not_contains "$TODO_STORY_TEMPLATE" '## P0 Functional Second-Part Acceptance Criteria'
+assert_not_contains "$TODO_STORY_TEMPLATE" 'Edge/Misuse/Fault seeds'
+assert_not_contains "$TODO_STORY_TEMPLATE" 'E/M/F seeds'
+assert_not_contains "$ANALYZE_ABORT" 'Edge Cases & Error Paths'
+assert_contains "$TODO_STORY_TEMPLATE" '- **COUNTER**'
+assert_contains "$TODO_STORY_TEMPLATE" 'TP/TC references are not definitions.'
+assert_contains "$TODO_STORY_TEMPLATE" 'Every AC MUST have a From section resolving at least one'
+assert_contains "$TODO_STORY_TEMPLATE" 'Example (AskWhy): ...'
+assert_contains "$TODO_STORY_TEMPLATE" 'Rule (AskWhy): ...'
+if grep -Eq '^\*\*Example:\*\*|^\*\*Rule:\*\*' "$TODO_STORY_TEMPLATE"; then
+  fail "Example and Rule must be nested under CaTDD-AC From"
+fi
+ac_block_count="$(grep -Ec '^#### .*AC-' "$TODO_STORY_TEMPLATE")"
+from_count="$(grep -c '^- \*\*FROM\*\*$' "$TODO_STORY_TEMPLATE")"
+given_count="$(grep -c '^- \*\*GIVEN\*\*$' "$TODO_STORY_TEMPLATE")"
+when_count="$(grep -c '^- \*\*WHEN\*\*$' "$TODO_STORY_TEMPLATE")"
+then_count="$(grep -c '^- \*\*THEN\*\*$' "$TODO_STORY_TEMPLATE")"
+counter_count="$(grep -c '^- \*\*COUNTER\*\*$' "$TODO_STORY_TEMPLATE")"
+[[ "$ac_block_count" -eq 12 && "$from_count" -eq 12 && "$given_count" -eq 12 && "$when_count" -eq 12 && "$then_count" -eq 12 && "$counter_count" -eq 12 ]] || fail "every story-template CaTDD-AC block MUST use the same nested From/Given/When/Then/Counter shape"
 assert_contains "$STORY_LEDGER_TEMPLATE" '| Story ID | StoryIdAlias | CreatedAt'
+assert_contains "$STORY_LEDGER_TEMPLATE" '## CaTDD-AC Ledger'
+assert_contains "$STORY_LEDGER_TEMPLATE" '| AC ID | Story | From | Given | When | Then | Counter | Status | Verification Trace |'
 assert_contains "$STORY_LEDGER_TEMPLATE" '## Legacy Identity Mappings'
 assert_contains "$STORY_LEDGER_TEMPLATE" '| Legacy qualified ID | Current alias-qualified ID |'
 assert_contains "$DETAIL_VERIFY_TEMPLATE" 'authoritative TP definitions'
-assert_contains "$DETAIL_VERIFY_TEMPLATE" 'Owning AC ID'
+assert_contains "$DETAIL_VERIFY_TEMPLATE" 'Owning CaTDD-AC ID'
+assert_contains "$DETAIL_TEMPLATE" '## CaTDD-AC Traceability'
+assert_contains "$DETAIL_TEMPLATE" 'A `From` that remains unresolved is an `AskWhy` blocker'
 assert_contains "$DETAIL_VERIFY_TEMPLATE" 'Covering TC ID'
 assert_not_contains "$DETAIL_VERIFY_TEMPLATE" 'discovery_ledger` in living comments'
 assert_not_contains "$TEST_DISCOVERY" 'Keep one `discovery_ledger` in living comments'
@@ -155,7 +191,7 @@ assert_contains "$TEST_STRUCTURE" 'US-eventProducer-postEventsWithoutBlocking'
 assert_not_contains "$TEST_STRUCTURE" 'UUIDv4'
 assert_contains "$TEST_STRUCTURE" '@[TP]'
 assert_contains "$TODO_STORY_TEMPLATE" '**Story ID:** {{StoryID}}'
-assert_contains "$TODO_STORY_TEMPLATE" '### {{StoryIdAlias}}-AC-{{n}}:'
+assert_contains "$TODO_STORY_TEMPLATE" '#### {{StoryIdAlias}}-AC-Typical-{{n}}:'
 assert_contains "$TODO_STORY_TEMPLATE" 'US-<whoName>-<doWhat> with lowerCamelCase segments'
 assert_contains "$ANALYZE_ISSUE" 'register the Story ID'
 assert_contains "$ANALYZE_ISSUE" 'project-wide-traceability-ids'
@@ -167,36 +203,68 @@ assert_contains "$IMPORT_STORY" 'assign a human-readable project Story ID in'
 assert_contains "$ANALYZE_ABORT" 'revision of the same story'
 assert_contains "$STORY_LEDGER_TEMPLATE" '## Story Identity Registry'
 assert_contains "$STORY_LEDGER_TEMPLATE" 'US-<whoName>-<doWhat>'
-assert_contains "$STORY_LEDGER_TEMPLATE" '{{StoryIdAlias}}-AC-{{n}}'
+assert_contains "$STORY_LEDGER_TEMPLATE" '{{StoryIdAlias}}-AC-{{Category}}-{{n}}'
 for intake_command in "$ANALYZE_FEATURE" "$IMPORT_STORY" "$ANALYZE_ABORT" "$OPEN_STORY"; do
   assert_contains "$intake_command" 'project-wide-traceability-ids'
 done
 assert_contains "$MASTER" 'project-wide-traceability-ids'
 assert_contains "$MASTER" 'Each TP **MUST** map to exactly one TC'
+assert_contains "$MASTER" 'Each CaTDD-AC **MUST** use `From / Given / When / Then / Counter`'
+assert_contains "$WORKFLOW" '`From` MUST resolve at least one source-backed Example or Rule'
 assert_contains "$UBILANG" 'US / AC / TP / TC Cardinality'
 assert_contains "$UBILANG" 'each TP MUST map to exactly one TC'
 assert_contains "$UBILANG_ZH" '每个 TP MUST 恰好映射到一个 TC'
 assert_contains "$UBILANG" '| StoryIdAlias |'
 assert_contains "$UBILANG_ZH" '| StoryIdAlias |'
+assert_contains "$UBILANG" '| CaTDD-AC |'
+assert_contains "$UBILANG_ZH" '| CaTDD-AC |'
+assert_contains "$UBILANG_USER" '| CaTDD-AC |'
+assert_contains "$UBILANG_USER" '| StoryIdAlias |'
+assert_contains "$UBILANG_USER" '| Artifact Ownership |'
+assert_contains "$UBILANG_USER" 'US / AC / TP / TC Cardinality'
+assert_contains "$UBILANG_USER" 'every TP maps to exactly one TC'
+assert_contains "$UBILANG_USER" 'US-261029.070003-AC-Typical-01'
+assert_not_contains "$UBILANG_USER" 'a complex TP may require multiple TCs'
+assert_contains "$GUIDE" 'FROM / GIVEN / WHEN / THEN / COUNTER'
+assert_contains "$GUIDE_ZH" 'FROM / GIVEN / WHEN / THEN / COUNTER'
+assert_contains "$ROOT_GUIDE" 'FROM / GIVEN / WHEN / THEN / COUNTER'
+assert_contains "$ACTION_CONCEPTS" '### CaTDD-AC Template'
+assert_contains "$ACTION_CONCEPTS_ZH" '### CaTDD-AC 模板'
 assert_contains "$TEST_DISCOVERY" 'story-qualified TP ID'
+assert_contains "$TEST_DISCOVERY" 'CaTDD-AC Evidence Gate (`AskWhy`)'
+assert_contains "$TEST_DISCOVERY" 'Every CaTDD-AC MUST have a `From` section resolving at least one source-backed Example or Rule'
+assert_contains "$ANALYZE_FEATURE" 'stop and `AskWhy` from the human'
+assert_contains "$ANALYZE_ISSUE" 'save the answer under `From`'
+assert_contains "$REVIEW_STORY" 'CaTDD-AC evidence gate: verify every AC has a `From / Given / When / Then / Counter` statement'
+assert_contains "$IMPORT_STORY" 'Preserved or explicitly normalized CaTDD-AC evidence fields'
+assert_contains "$OPEN_STORY" 'Verify every CaTDD-AC has `From / Given / When / Then / Counter`'
+assert_contains "$UPDATE_STORY" 'Updated CaTDD-AC statements preserving'
+assert_contains "$CLOSE_STORY" 'every accepted CaTDD-AC has `From / Given / When / Then / Counter`'
+assert_contains "$PARTIAL_CLOSE" 'Every accepted CaTDD-AC MUST retain `From / Given / When / Then / Counter`'
+assert_contains "$DESIGN_FUNCTIONAL" 'every source CaTDD-AC must have `From / Given / When / Then / Counter`'
+assert_contains "$DESIGN_TESTS" 'Every CaTDD-AC must have `From / Given / When / Then / Counter`'
+assert_contains "$REVIEW_TESTS" 'The owning CaTDD-AC must retain `From / Given / When / Then / Counter`'
 for trace_command in "$DESIGN_TESTS" "$IMPL_PRODUCT" "$DESIGN_FUNCTIONAL"; do
   assert_contains "$trace_command" 'project-wide-traceability-ids'
   assert_contains "$trace_command" 'StoryIdAlias'
 done
 for template in "${TEMPLATES[@]}"; do
-  assert_contains "$template" 'US-261029.070005-AC-01'
+  assert_contains "$template" 'US-261029.070005-AC-Typical-01'
   assert_contains "$template" 'US-261029.070005-TP-01'
   assert_contains "$template" 'US-261029.070005-TC-01'
   assert_contains "$template" 'StoryIdAlias'
   assert_contains "$template" 'authoritative TP definitions'
   assert_contains "$template" 'abbreviated sample IDs'
+  assert_contains "$template" 'CaTDD-AC (Evidence-Anchored Acceptance Criteria)'
+  assert_contains "$template" '- FROM'
+  assert_contains "$template" '- COUNTER'
 done
 assert_contains "$TASKS_TEMPLATE" '**ID:** {{StoryID}}'
 assert_contains "$TASKS_TEMPLATE" '**StoryIdAlias:** {{StoryIdAlias}}'
 assert_not_contains "$TASKS_TEMPLATE" '{{StoryID}}-AC-'
 assert_not_contains "$TASKS_TEMPLATE" '{{StoryID}}-TP-'
 assert_not_contains "$TASKS_TEMPLATE" '{{StoryID}}-TC-'
-assert_contains "$DETAIL_TEMPLATE" '{{StoryIdAlias}}-AC-{{n}}'
+assert_contains "$DETAIL_TEMPLATE" '{{StoryIdAlias}}-AC-{{Category}}-{{n}}'
 assert_contains "$DETAIL_VERIFY_TEMPLATE" '{{StoryIdAlias}}-TP-{{n}}'
 assert_contains "$ARCH_VERIFY_TEMPLATE" '{{StoryIdAlias}}-TP-{{n}}'
 for lifecycle_command in "$UPDATE_STORY" "$REVIEW_STORY" "$REVIEW_TESTS" "$CLOSE_STORY" "$PARTIAL_CLOSE" "$MERGE_WORKS"; do
@@ -245,7 +313,7 @@ for index in "${!case_names[@]}"; do
   name_count="$(grep -Ec "$case_pattern[[:space:]]+${case_names[$index]}" "$ACTION_CONCEPTS")" || [[ $? -eq 1 ]]
   case_count="$(grep -Ec "$case_pattern[[:space:]]+verify" "$ACTION_CONCEPTS")" || [[ $? -eq 1 ]]
   [[ "$name_count" -eq 2 && "$case_count" -eq 2 ]] || fail "$case_id must keep the same behavior in the full chain and tracking example"
-  assert_contains "$ACTION_CONCEPTS" "@[Trace]: $story_alias | $story_alias-AC-01 | $story_alias-TP-$child_token | $case_id"
+  assert_contains "$ACTION_CONCEPTS" "@[Trace]: $story_alias | $story_alias-AC-Edge-01 | $story_alias-TP-$child_token | $case_id"
 done
 awk '
   /^## The Implementation Tracking Template$/ { tracking = 1; next }
@@ -298,7 +366,7 @@ requirements = usage.split("### Requirements and registry example", 1)[1].split(
 verification = usage.split("### Verification-design example", 1)[1].split("### Test-file reference example", 1)[0]
 tests = usage.split("### Test-file reference example", 1)[1].split("### Lookup and inherited evidence", 1)[0]
 metadata = dict(re.findall(r"^(Story ID|StoryIdAlias|CreatedAt): (.+)$", requirements, re.M))
-acs = re.findall(r"^(US-\d{6}\.\d{6}-AC-\d+):", requirements, re.M)
+acs = re.findall(r"^(US-\d{6}\.\d{6}-AC-[A-Za-z]+-\d+):", requirements, re.M)
 tps = [tuple(part.strip() for part in line.split("|")[:3])
        for line in verification.splitlines() if re.match(r"^US-\d{6}\.\d{6}-TP-", line)]
 cases = []
@@ -348,6 +416,7 @@ def validate(registry, ac_ids, tp_rows, tc_records):
     assert covered == set(points), "TP omitted from its TC"
     for kind, ids in (("AC", ac_ids), ("TP", points), ("TC", seen_cases)):
         assert all(any(value.startswith(alias + "-" + kind + "-") for alias in aliases) for value in ids), "wrong alias prefix"
+    assert all(any(re.fullmatch(re.escape(alias) + r"-AC-[A-Za-z]+-\d+", value) for alias in aliases) for value in ac_ids), "AC is not category-qualified"
 
 baseline = ([metadata], acs, tps, cases)
 validate(*baseline)

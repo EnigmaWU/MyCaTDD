@@ -47,6 +47,7 @@ CaTDD 方法提示词支持两个设计阶段：
 
 - P0 功能设计默认应完整覆盖 `Typical -> Edge -> Misuse -> Fault`，除非开发者明确限制范围。
 - 每个 US 至少对应 1 个 AC。
+- 每条 CaTDD-AC 使用 `From / Given / When / Then / Counter`；`From` 至少解析到一个来源支撑的 Example 或 Rule，两者均缺失时执行 `AskWhy` 并保存人类回答。
 - 每个 AC 至少关联 1 个 TP；完整设计中每个 TP 恰好归属一个 AC 并由一个 TC 覆盖，每个 TC 覆盖一个或多个 TP。
 - 在人类可读 Story ID 旁登记永久 `StoryIdAlias`；新的 AC/TP/TC ID 使用其短前缀，并显式记录关系。
 - US/AC 定义属于需求文档，权威 TP 定义属于验证设计，TC 定义与证据属于测试文件。参见 [Artifact Ownership](CaTDD_methodPrompt-testStructure.md#artifact-ownership)。

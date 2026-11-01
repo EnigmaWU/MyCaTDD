@@ -107,7 +107,7 @@ Px-SpecFlow explicitly documents six refinements adopted from Spec Kit, each ada
    Spec Kit idea                  CaTDD home
    ─────────────                  ──────────
    constitution            →      .catdd/spec/projectContext.md
-   spec.md (what/why)      →      User Story + Acceptance Criteria
+   spec.md (what/why)      →      User Story + CaTDD-AC
    plan.md (how)           →      README_* design docs
    tasks.md                →      *-UserStory-Tasks.md
 ```

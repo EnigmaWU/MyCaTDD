@@ -270,7 +270,7 @@ Interaction（P1）以及 Diagnosis/Security（P2）目前没有专门的 `UT_de
 
 **1. 按类别驱动的测试设计。** 15 种测试类别，每种有其自己的 method prompt（`CaTDD_methodPrompt4Cat-*.md`），定义位置、使用时机/避免时机路由规则、测试点、设计骨架契约和检查清单；大多数 prompt 还带有命名示例与常见错误指引。一个设计 Typical 骨架的 CodeAgent 阅读 `CaTDD_methodPrompt4Cat-Typical.md` 后，会精确知道应用什么模式、词汇和约束。
 
-**2. 嵌入测试文件的 US/AC/TC 可追溯性。** 规格说明**不**存在于单独的文档中。User Story、Acceptance Criteria 和 Test Case 规格以结构化注释的形式存在于与测试代码相同的文件中。当规格变化时，注释随之变化。当注释变化时，LLM 重新生成测试。不存在规格与代码之间的间隙。
+**2. US/CaTDD-AC/TP/TC 的可追溯性。** 权威 US/CaTDD-AC 位于需求来源，TP 位于验证设计，TC 规格与执行证据留在测试文件。CaTDD-AC 使用 `From / Given / When / Then / Counter`；当 `From` 缺少 Example 与 Rule 时必须执行 `AskWhy` 并保存人类回答。规格变化时连同引用同步更新，不形成相互竞争的重复定义。
 
 **3. P1 和 P2 的 Design Source Gate（设计源关卡）。** 在任何 P1 或 P2 骨架起草之前，必须存在所需的项目根设计文档：
 

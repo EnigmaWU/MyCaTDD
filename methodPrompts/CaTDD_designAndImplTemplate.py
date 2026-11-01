@@ -20,7 +20,8 @@ TDD WORKFLOW:
 
 PROJECT-WIDE TRACE: The abbreviated sample IDs below are illustrative only.
   Resolve StoryIdAlias through the registry; new AC/TP/TC IDs use its prefix.
-  Keep authoritative TP definitions in the verification-design document.
+  Keep authoritative CaTDD-ACs in requirements and TP definitions in verification design.
+  A CaTDD-AC uses From / Given / When / Then / Counter; unresolved From asks AskWhy.
   Test comments reference those TPs and define TCs, including every covered TP.
   CaTDD_methodPrompt-testStructure.md owns identity, ownership, and legacy mappings.
 
@@ -95,10 +96,10 @@ DESIGN SKELETON CONTRACT:
     # @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
     # @[US]: US-PROJECT-01
     # @[StoryIdAlias]: US-261029.070005
-    # @[AC]: US-261029.070005-AC-01
+    # @[AC]: US-261029.070005-AC-Typical-01
     # @[TP]: US-261029.070005-TP-01
     # @[TC]: US-261029.070005-TC-01 verifyCore_byValidInput_expectSuccess
-    # @[Trace]: US-261029.070005 | US-261029.070005-AC-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
+    # @[Trace]: US-261029.070005 | US-261029.070005-AC-Typical-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
     # =============================================================================================
 
   Developers fill this skeleton to make verification intent clear.
@@ -117,7 +118,7 @@ SUT BOUNDARY INVARIANT:
     - Fault:  External dependency or environment fails SUT (SUT degrades or handles failure).
 
 CARDINALITIES & PERSPECTIVES:
-  - 1 AC : N TPs: AC is from User/Caller perspective (GIVEN context, WHEN action, THEN outcome).
+  - 1 AC : N TPs: CaTDD-AC is from User/Caller perspective (FROM provenance, GIVEN context, WHEN action, THEN outcome, COUNTER contrast).
                   TP is from Developer/Defensive perspective (GIVEN state, WHEN action, THEN oracle).
   - TP : TC: Target obligation (WHAT) vs. executable arrow (HOW).
              Each TP MUST be covered by exactly one TC in a complete design.
@@ -272,30 +273,56 @@ COVERAGE MATRIX:
 # =================================================================================================
 # ======>BEGIN OF ACCEPTANCE CRITERIA DESIGN=======================================================
 """
-ACCEPTANCE CRITERIA:
+CaTDD-AC (Evidence-Anchored Acceptance Criteria) — authoritative definitions live in requirements;
+test comments reference them with FROM / GIVEN / WHEN / THEN / COUNTER (missing FROM -> AskWhy):
 
 [@US-1] Optimal healthy provider routing
- AC-1: GIVEN a healthy primary provider and valid model request,
-        WHEN route() is called,
-        THEN the primary provider is selected and returned.
+ AC-1:
+  - FROM
+    - Example: EX-1 (healthy primary provider)
+    - Rule: R-ROUTE-01 (primary dispatch contract)
+  - GIVEN a healthy primary provider and valid model request
+  - WHEN route() is called
+  - THEN the primary provider MUST be selected and returned
+  - COUNTER CEX-1 (unhealthy primary provider triggers fallback under US-2 AC-1)
 
- AC-2: GIVEN a request with empty optional parameters,
-        WHEN route() is called,
-        THEN default configuration parameters are applied.
+ AC-2:
+  - FROM
+    - Example: EX-2 (empty optional parameters)
+    - Rule: R-ROUTE-02 (default parameter resolution)
+  - GIVEN a request with empty optional parameters
+  - WHEN route() is called
+  - THEN default configuration parameters MUST be applied
+  - COUNTER CEX-2 (explicit caller parameters override defaults)
 
- AC-3: GIVEN an invalid or empty model identifier,
-        WHEN route() is called,
-        THEN a ValueError is raised with an actionable explanation.
+ AC-3:
+  - FROM
+    - Example: CEX-3 (empty or unknown model identifier)
+    - Rule: R-ROUTE-03 (input validation contract)
+  - GIVEN an invalid or empty model identifier
+  - WHEN route() is called
+  - THEN a ValueError MUST be raised with an actionable explanation
+  - COUNTER EX-1 (known model identifier succeeds)
 
 [@US-2] Fault tolerance and security diagnostics
- AC-1: GIVEN the primary provider is unavailable (HTTP 503 or timeout),
-        WHEN route() is called with fallback enabled,
-        THEN the router automatically falls back to the secondary provider,
-         AND emits a warning log with the failover cause.
+ AC-1:
+  - FROM
+    - Example: EX-4 (primary HTTP 503 with fallback enabled)
+    - Rule: R-ROUTE-04 (failover contract)
+  - GIVEN the primary provider is unavailable (HTTP 503 or timeout)
+  - WHEN route() is called with fallback enabled
+  - THEN the router MUST automatically fall back to the secondary provider
+    - AND MUST emit a warning log with the failover cause
+  - COUNTER CEX-4 (fallback disabled raises upstream error without secondary dispatch)
 
- AC-2: GIVEN a provider error containing sensitive credentials,
-        WHEN the error is logged or re-raised,
-        THEN all ApiKEY values are replaced with masked placeholders.
+ AC-2:
+  - FROM
+    - Example: EX-5 (provider error containing ApiKEY)
+    - Rule: R-SEC-01 (credential redaction policy)
+  - GIVEN a provider error containing sensitive credentials
+  - WHEN the error is logged or re-raised
+  - THEN all ApiKEY values MUST be replaced with masked placeholders
+  - COUNTER CEX-5 (non-sensitive diagnostic fields remain intact)
 """
 # ======>END OF ACCEPTANCE CRITERIA DESIGN========================================================
 

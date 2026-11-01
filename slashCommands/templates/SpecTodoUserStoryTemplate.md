@@ -7,7 +7,7 @@
 > **Correction of:** <!-- present only for SPEC_analyzeAbortedUserStory: abortUS/YYYYMMDD-UserStory.md -->
 > **Parent Story:** <!-- present only for sub-UserStory: parent Story ID and `.catdd/spec/todoUS/{{parent}}.md` -->
 > **CaTDD Class:** {{P0 Functional / P1 Design / P2 Quality / P3 Addons}}
-> **Primary Category:** {{Typical / Edge / Misuse / Fault / State / Capability / Concurrency / Performance / Robust / Compatibility / Configuration / DemoExample}}
+> **Primary Category:** {{Primary CaTDD category from methodPrompts/CaTDD_methodPrompt.md}}
 
 <!-- How: {{StoryID}} is the complete, registered project-wide US ID. Preserve an existing ID;
      use US-<whoName>-<doWhat> with lowerCamelCase segments for new stories and check for
@@ -15,7 +15,7 @@
      Register StoryIdAlias = US-YYMMDD.HHMMSS from the verified CreatedAt instant in UTC+08:00;
      CreatedAt is ISO 8601 with +08:00. Preserve both fields on revisions and lifecycle moves.
      Stop on an unknown creation time or collision; never manufacture a timestamp.
-     Each new AC heading uses StoryIdAlias and a unique stable child token.
+     Each new AC ID uses StoryIdAlias, its CaTDD category token, and a unique stable child token.
      Existing IDs need an explicit migration mapping, never silent renumbering. -->
 
 ---
@@ -44,10 +44,11 @@
 | --- | --- | --- | --- |
 | User value & behavioral scope are explicit | `C1 Scope Discipline` | {{yes/no}} | {{role + business value + in-scope/non-goals source}} |
 | Observable & measurable outcome exists | `E1 Unambiguous` + `E3 Verifiable` | {{yes/no}} | {{output, state change, threshold, file, response, or behavior}} |
-| Concrete examples & exceptional paths exist | `E2 Singular` + `P2 Complete` | {{yes/no}} | {{Example Mapping rows, atomic scenarios, Edge/Misuse/Fault seeds}} |
+| Concrete examples & exceptional paths exist | `E2 Singular` + `P2 Complete` | {{yes/no}} | {{Example Mapping rows, atomic scenarios, Edge/Misuse/Fault CaTDD-ACs}} |
+| Every AC has source-backed evidence | `E3 Verifiable` + `I2 Consistent` | {{yes/no}} | {{each AC resolves at least one Example or Rule; missing both triggers AskWhy}} |
 | Dependencies, assumptions & risks are declared | `P1 Dependency Control` | {{yes/no}} | {{Risks & Assumptions rows, upstream/downstream constraints}} |
 | Story-specific completion conditions are stated | `E3.4 Completion & Readiness` | {{yes/no}} | {{Story Completion Conditions: TestLevel, TestScope, CaTDD categories, Not-Done rules}} |
-| Template structure & stable IDs are preserved | `I1 Conforming` | {{yes/no}} | {{StoryID, qualified AC IDs, RULE-n, EX-n, E/M/F seeds}} |
+| Template structure & stable IDs are preserved | `I1 Conforming` | {{yes/no}} | {{StoryID, StoryIdAlias, category-qualified CaTDD-AC IDs, RULE-n, EX-n, CEX-n}} |
 | Blocking questions remain | `E1.1 Clarification-Seeking` | {{yes/no}} | {{Initial Acceptance Questions + Ambiguity Warnings references}} |
 | Story size is acceptable | `E2 Singular` + `C1 Scope Discipline` | {{yes/no}} | {{Sub-UserStory Candidates / split rationale}} |
 | Ready decision | Stage 1 Sufficiency Gate | {{Ready / Blocked / Too Large / Needs Split}} | {{why this decision is correct}} |
@@ -121,45 +122,246 @@
 
 ---
 
-## Acceptance Criteria
+## CaTDD-AC - P0-Functional (`MUST`)
 
-<!-- How: For a P0 Functional main UserStory, use this section for Typical behavior first:
-     the main acceptance criteria and core scenarios that prove the user-visible capability works.
-     Keep 3-7 scenarios, one behavior per scenario. Happy path first, then important alternate
-     Typical paths. Put P0 Edge/Misuse/Fault in the second-part AC section below.
-     If a concern is P1 Design or P2 Quality, do not force it into this AC list: create a
-     sub-UserStory from this story when it is needed now, or raise an Initial Acceptance Question
-     when the team must decide whether to split it. (→ SKILL: write-user-story + facilitate-example-mapping) -->
+<!-- How: P0-Functional and all four categories below are mandatory. State ACs from the
+     user/caller perspective and give every AC a category-qualified ID. Keep 3-7 Typical
+     scenarios, one behavior per scenario, then capture relevant Edge, Misuse, and Fault cases.
+     Every CaTDD-AC uses the same From / Given / When / Then / Counter shape.
+     CaTDD-AC evidence gate: Every AC MUST have a From section resolving at least one
+     source-backed Example or Rule.
+     If both are missing or unresolved, stop and AskWhy from the human. Save the human answer
+     under From as `Example (AskWhy): ...` or `Rule (AskWhy): ...`. When both are
+     available, record both; retain an applicable counter-example. AskWhy evidence is a trace
+     rationale, not permission to invent behavior.
+     Category meaning comes from CaTDD_methodPrompt.md; category labels do not turn ACs into TPs.
+     (→ SKILL: write-user-story + facilitate-example-mapping) -->
 
-### {{StoryIdAlias}}-AC-{{n}}: {{Happy Path Title}}
+### Typical (ValidFunc)
 
-**Example Trace:** EX-{{n}}
-**Rule:** {{business rule or constraint that governs this scenario}}
-**Given** {{precondition using canonical `README_UbiLang.md` terms}}
-**When** {{action or event}}
-**Then** {{observable outcome stated with `MUST` / `MUST NOT` (or conditional `SHOULD` / optional `MAY`)}}
+#### {{StoryIdAlias}}-AC-Typical-{{n}}: {{Happy Path Title}}
 
-| Concrete Examples | Counter-Examples |
-| --- | --- |
-| {{success case 1}} | {{failure case 1}} |
-
-**Open Questions:** {{or "None"}}
-
-### {{StoryIdAlias}}-AC-{{n}}: {{Alternate Typical Path Title}}
-
-**Example Trace:** EX-{{n}}
-**Rule:** {{business rule or constraint}}
-**Given** {{precondition using canonical `README_UbiLang.md` terms}}
-**When** {{action or event}}
-**Then** {{observable outcome stated with `MUST` / `MUST NOT` (or conditional `SHOULD` / optional `MAY`)}}
-
-| Concrete Examples | Counter-Examples |
-| --- | --- |
-| {{success case}} | {{failure case}} |
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{business rule or constraint that governs this scenario}}
+- **GIVEN**
+  - {{precondition using canonical `README_UbiLang.md` terms}}
+  - **AND** {{additional precondition}}
+- **WHEN**
+  - {{action or event}}
+  - **AND** {{additional action or event}}
+- **THEN**
+  - {{observable outcome stated with `MUST` / `MUST NOT` (or conditional `SHOULD` / optional `MAY`)}}
+- **COUNTER**
+  - {{counter-example or invalid variant and its expected distinction}}
 
 **Open Questions:** {{or "None"}}
 
-### {{StoryIdAlias}}-AC-{{n}}: {{Additional Scenario Title}}
+#### {{StoryIdAlias}}-AC-Typical-{{n}}: {{Alternate Typical Path Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{business rule or constraint}}
+- **GIVEN**
+  - {{precondition using canonical `README_UbiLang.md` terms}}
+  - **AND** {{additional precondition}}
+- **WHEN**
+  - {{action or event}}
+  - **AND** {{additional action or event}}
+- **THEN**
+  - {{observable outcome stated with `MUST` / `MUST NOT` (or conditional `SHOULD` / optional `MAY`)}}
+- **COUNTER**
+  - {{counter-example or invalid variant and its expected distinction}}
+
+**Open Questions:** {{or "None"}}
+
+#### {{StoryIdAlias}}-AC-Typical-{{n}}: {{Additional Scenario Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{business rule or constraint}}
+- **GIVEN**
+  - {{precondition}}
+  - **AND** {{additional precondition}}
+- **WHEN**
+  - {{action or event}}
+  - **AND** {{additional action or event}}
+- **THEN**
+  - {{observable outcome}}
+- **COUNTER**
+  - {{counter-example and its expected distinction, or "None"}}
+
+### Edge (ValidFunc)
+
+#### {{StoryIdAlias}}-AC-Edge-{{n}}: {{Valid Boundary or Variation Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{business rule or constraint}}
+- **GIVEN**
+  - {{valid boundary, option, limit, or lifecycle variation}}
+  - **AND** {{additional relevant precondition}}
+- **WHEN**
+  - {{action or event}}
+  - **AND** {{additional action or event}}
+- **THEN**
+  - {{observable outcome}}
+- **COUNTER**
+  - {{nearby invalid or out-of-scope value and the expected distinction}}
+
+### Misuse (InvalidFunc)
+
+#### {{StoryIdAlias}}-AC-Misuse-{{n}}: {{Caller Misuse Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{API contract or precondition violated by the caller}}
+- **GIVEN**
+  - {{caller violates the API contract or uses invalid input/state}}
+  - **AND** {{additional relevant precondition}}
+- **WHEN**
+  - {{action or event}}
+  - **AND** {{additional action or event}}
+- **THEN**
+  - {{system MUST reject or protect as specified}}
+- **COUNTER**
+  - {{valid caller behavior that must not be rejected as misuse}}
+
+### Fault (InvalidFunc)
+
+#### {{StoryIdAlias}}-AC-Fault-{{n}}: {{Runtime Fault Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{dependency, resource, or runtime failure contract}}
+- **GIVEN**
+  - {{valid caller behavior with an injected or real system fault}}
+  - **AND** {{additional relevant precondition}}
+- **WHEN**
+  - {{action or event}}
+  - **AND** {{additional action or event}}
+- **THEN**
+  - {{cleanup, diagnostic, or deterministic failure behavior}}
+- **COUNTER**
+  - {{healthy dependency or normal runtime path that must not enter fault handling}}
+
+TP/TC references are not definitions. Reconcile each TP's owning AC and covering TC rather than inferring links from numeric suffixes; authoritative TP definitions and links stay in verification design.
+
+## CaTDD-AC - P1-Design (`OPTIONAL`)
+
+<!-- How: Include this section only when the story needs P1-Design coverage. Use the current
+     CaTDD category list and definitions rather than copying the full taxonomy here. The two
+     Concurrency/Capability blocks below are examples; replace them with applicable categories.
+     Full taxonomy: ../../methodPrompts/CaTDD_methodPrompt.md#category-semantics -->
+
+#### {{StoryIdAlias}}-AC-Concurrency-{{n}}: {{P1 Concurrency Example Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{concurrency or synchronization rule}}
+- **GIVEN**
+  - {{source-backed concurrent execution state and preconditions}}
+  - **AND** {{additional relevant precondition}}
+- **WHEN**
+  - {{concurrent action or interleaving}}
+  - **AND** {{additional concurrent action or interleaving}}
+- **THEN**
+  - {{concurrency-safe externally observable outcome}}
+- **COUNTER**
+  - {{race, ordering violation, or unsafe interleaving and its expected distinction}}
+
+#### {{StoryIdAlias}}-AC-Capability-{{n}}: {{P1 Capability Example Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{design capability or enabled-behavior rule}}
+- **GIVEN**
+  - {{source-backed design capability and preconditions}}
+  - **AND** {{additional relevant precondition}}
+- **WHEN**
+  - {{capability is exercised}}
+  - **AND** {{additional capability action}}
+- **THEN**
+  - {{capability-enabled externally observable outcome}}
+- **COUNTER**
+  - {{unsupported use or configuration where the capability must remain disabled}}
+
+## CaTDD-AC - P2-Quality (`OPTIONAL`)
+
+<!-- How: Include this section only when the story needs P2-Quality coverage. Use the current
+     CaTDD category list and measurable source-backed constraints. The Performance/Security blocks
+     below are examples; replace them with applicable categories.
+     Full taxonomy: ../../methodPrompts/CaTDD_methodPrompt.md#category-semantics -->
+
+#### {{StoryIdAlias}}-AC-Performance-{{n}}: {{P2 Performance Example Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{measurable performance constraint and source}}
+- **GIVEN**
+  - {{specified workload, environment, and preconditions}}
+  - **AND** {{additional relevant precondition}}
+- **WHEN**
+  - {{measured action or event}}
+  - **AND** {{additional measured action}}
+- **THEN**
+  - {{observable metric result MUST remain within the stated threshold}}
+- **COUNTER**
+  - {{workload or environment outside the declared constraint scope}}
+
+#### {{StoryIdAlias}}-AC-Security-{{n}}: {{P2 Security Example Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{security policy, threat, or invariant}}
+- **GIVEN**
+  - {{specified threat scenario and protected state}}
+  - **AND** {{additional relevant precondition}}
+- **WHEN**
+  - {{attempted action or event}}
+  - **AND** {{additional attempted action}}
+- **THEN**
+  - {{observable safe denial, containment, or protection outcome}}
+- **COUNTER**
+  - {{unauthorized outcome or sensitive disclosure that MUST NOT occur}}
+
+## CaTDD-AC - P3-DemoExample (`OPTIONAL`)
+
+<!-- How: Include this section only when the story needs P3-Addons/Demo-Example coverage.
+     Use the current CaTDD category list and definitions. These two blocks are illustrative.
+     Full taxonomy: ../../methodPrompts/CaTDD_methodPrompt.md#category-semantics -->
+
+#### {{StoryIdAlias}}-AC-DemoExample-{{n}}: {{First User-Facing Example Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{documented demo or guide behavior}}
+- **GIVEN**
+  - {{first documented setup and preconditions}}
+  - **AND** {{additional documented precondition}}
+- **WHEN**
+  - {{documented user-facing step}}
+  - **AND** {{additional documented user-facing step}}
+- **THEN**
+  - {{expected executable result}}
+- **COUNTER**
+  - {{misuse of the example or missing documented dependency and its expected distinction}}
+
+#### {{StoryIdAlias}}-AC-DemoExample-{{n}}: {{Second User-Facing Example Title}}
+
+- **FROM**
+  - **Example:** EX-{{n}}
+  - **Rule:** {{documented demo or guide behavior}}
+- **GIVEN**
+  - {{second documented setup and preconditions}}
+  - **AND** {{additional documented precondition}}
+- **WHEN**
+  - {{documented user-facing step}}
+  - **AND** {{additional documented user-facing step}}
+- **THEN**
+  - {{expected executable result}}
+- **COUNTER**
+  - {{observed result that means the example is stale or not executable}}
 
 ---
 
@@ -178,40 +380,6 @@
 
 ---
 
-## P0 Functional Second-Part Acceptance Criteria
-
-<!-- How: For P0 Functional stories, keep Typical in the main Acceptance Criteria section above.
-     Use this second part for P0 Functional coverage that sharpens the same story without changing
-     its primary intent:
-     - Edge = unusual but valid inputs, options, limits, or lifecycle states.
-     - Misuse = invalid caller behavior or API contract violation.
-     - Fault = dependency, resource, or runtime failure while the caller behavior is valid.
-     Do not put P1 Design (State/Capability/Concurrency) or P2 Quality
-     (Performance/Robust/Compatibility/Configuration) here. Split those into sub-UserStories or
-     record them as open questions. (→ SKILL: write-user-story + elicit-requirements-models) -->
-
-TP/TC cells are references, not definitions. Keep them `pending` until verification design defines the TPs and test files define the TCs. Use alias-qualified IDs (or explicitly mapped legacy IDs), and reconcile each TP's owning AC and covering TC rather than inferring links from seed numbers.
-
-### Edge (ValidFunc)
-
-| # | Condition | Expected Behavior | AC Seed | TP Refs | TC Refs | Status |
-| --- | --- | --- | --- | --- | --- | --- |
-| E{{n}} | {{valid boundary, option, limit, or lifecycle variation}} | {{how the system should respond}} | {{StoryIdAlias}}-AC-{{n}} | {{qualified TP IDs or pending}} | {{qualified TC IDs or pending}} | {{draft / needs clarification}} |
-
-### Misuse (InvalidFunc)
-
-| # | Condition | Expected Behavior | AC Seed | TP Refs | TC Refs | Status |
-| --- | --- | --- | --- | --- | --- | --- |
-| M{{n}} | {{caller violates API contract or uses invalid input/state}} | {{how the system should reject or protect}} | {{StoryIdAlias}}-AC-{{n}} | {{qualified TP IDs or pending}} | {{qualified TC IDs or pending}} | {{draft / needs clarification}} |
-
-### Fault (InvalidFunc)
-
-| # | Condition | Expected Behavior | AC Seed | TP Refs | TC Refs | Status |
-| --- | --- | --- | --- | --- | --- | --- |
-| F{{n}} | {{dependency, resource, or runtime failure under valid caller behavior}} | {{cleanup, diagnostic, or deterministic failure behavior}} | {{StoryIdAlias}}-AC-{{n}} | {{qualified TP IDs or pending}} | {{qualified TC IDs or pending}} | {{draft / needs clarification}} |
-
----
-
 ## Sub-UserStory Candidates
 
 <!-- How: Preserve important non-P0 concerns without polluting the main story. If a P1/P2 concern
@@ -221,7 +389,7 @@ TP/TC cells are references, not definitions. Keep them `pending` until verificat
 
 | Candidate | CaTDD Class / Category | Why It Is Not In Main AC | Recommendation | Status |
 | --- | --- | --- | --- | --- |
-| {{sub-story candidate}} | {{P1 Design: State/Capability/Concurrency or P2 Quality: Performance/Robust/Compatibility/Configuration}} | {{reason this is not P0 Typical/Edge/Misuse/Fault}} | {{create sub-UserStory / ask acceptance question / defer}} | {{open / deferred / created}} |
+| {{sub-story candidate}} | {{P1/P2/P3 CaTDD category from methodPrompts/CaTDD_methodPrompt.md}} | {{reason this is not P0 Typical/Edge/Misuse/Fault}} | {{create sub-UserStory / ask acceptance question / defer}} | {{open / deferred / created}} |
 
 **Split Decision:** {{keep as one story / split before opening / create follow-up story after P0}}
 
@@ -229,12 +397,12 @@ TP/TC cells are references, not definitions. Keep them `pending` until verificat
 
 ## Scope
 
-**In scope:**
+### In scope
 
 - {{scope item 1}}
 - {{scope item 2}}
 
-**Non-goals:**
+### Non-goals
 
 - {{explicitly excluded item 1}}
 - {{explicitly excluded item 2}}
@@ -252,7 +420,7 @@ TP/TC cells are references, not definitions. Keep them `pending` until verificat
 | --- | --- |
 | **Required `TestLevel`** | {{`UnitTesting` only / `UnitTesting + SysTesting` / `UnitTesting + SysTesting + UserTesting`}} |
 | **Required `TestScope` & Environment** | {{`mockSysRtm` (`testPassOnMock`) sufficient / `MUST` also pass `realSysRtm` on target runtime/OS/hardware}} |
-| **Required CaTDD Categories** | {{`P0 Functional (Typical, Edge, Misuse, Fault)` / `+ P1 (State, Capability, Interaction, Concurrency)` / `+ P2 (...)`}} |
+| **Required CaTDD Categories** | {{mandatory P0 Typical/Edge/Misuse/Fault + any opt-in P1/P2/P3 categories selected from methodPrompts/CaTDD_methodPrompt.md}} |
 | **Required SPEC & Doc Surfaces** | {{`README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, companion `*_readme.md`}} |
 | **Not-Done Conditions (`MUST NOT close if`)** | {{explicit story-specific conditions that forbid premature closure, e.g., only mock passes when realSysRtm is required, or any AC lacks GREEN TC}} |
 | **Approved Deferrals** | {{items explicitly deferred to Sub-UserStories or follow-up issues without invalidating this story's acceptance claim; if an in-scope AC fails at close, `MUST` use `SPEC_partialCloseUserStory`}} |

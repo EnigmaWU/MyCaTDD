@@ -103,7 +103,7 @@ install_fresh() {
   assert_file "$dir/.catdd/slashCommands/TEST_slashCommandTemplate.md"
   assert_contains "$dir/.catdd/methodPrompts/CaTDD_methodPrompt-testStructure.md" '## Project-Wide Traceability IDs'
   assert_contains "$dir/.catdd/methodPrompts/CaTDD_methodPrompt4Cat-Typical.md" 'project-wide-traceability-ids'
-  assert_contains "$dir/.catdd/slashCommands/templates/SpecTodoUserStoryTemplate.md" '{{StoryID}}-AC-{{n}}'
+  assert_contains "$dir/.catdd/slashCommands/templates/SpecTodoUserStoryTemplate.md" '{{StoryIdAlias}}-AC-Typical-{{n}}'
   assert_contains "$dir/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_analyzeIssue.md" 'project-wide-traceability-ids'
   assert_dir "$dir/.catdd/spec/pendingNews"
   assert_absent "$dir/README_UbiLang.md"

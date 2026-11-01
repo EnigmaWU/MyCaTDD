@@ -20,7 +20,7 @@
 | --- | --- |
 | CaTDD | Comment-alive Test-Driven Development（注释存活测试驱动开发）。 |
 | Comment-alive | 在代码生成前，以结构化注释显式表达验证意图。 |
-| US / AC / TP / TC | User Story / Acceptance Criteria / Test Point / Test Case 的可追溯链路。 |
+| US / CaTDD-AC / TP / TC | User Story / 以证据为依据的验收标准 / Test Point / Test Case 的可追溯链路。 |
 | Skeleton | 仅注释的测试设计骨架，包含追溯标记和计划测试意图。 |
 | RED | 产品代码修改前，处于可执行且预期失败的测试状态。 |
 | GREEN | 产品代码修改后，测试通过状态。 |
@@ -34,7 +34,7 @@
 | BLOCKED（受阻） | `review_verdict` 中表示"缺少输入"的结论：必需的来源制品、证据或依赖缺失，门禁根本无法评判该制品。它由能提供该输入的一方解除——通常是 `rework_route` 指明的归属命令；只有当人类是唯一可能的提供者时，才退化为 `ASK`。BLOCKED 报告必须指明缺失的输入。注意与 TC 状态标记 `🚫 BLOCKED` 区分：后者标记无法继续的测试用例，前者描述的是门禁结论。 |
 | ASK（提问） | `review_verdict` 中表示"缺少决定"的结论：答案只存在于人类开发者的判断中——意图、取舍、验收或范围。它是"把人类拉入回路"的结论，与 `ONE-MORE-THING` 的产出相同；此时还不存在返工路由，门禁停下。规范的 ASK 会给出选项（A/B、是/否、保留/采纳）让人选择。当流程连问题本身都还无法表述时，应升级为 `SPEC_whatsWrong` 而非 ASK。 |
 | Source-First | 源头在先：先审视权威来源工件（契约、架构模型、质量策略）并独立推导预期验证义务，再查阅已有骨架或测试代码，消除作者自身盲区。 |
-| TestEvidenceChain | 测试证据链：回答“为什么需要这个测试（WHY）”与“如何正确进行测试（HOW）”的完整无断裂证据链：从来源工件 -> 规则/不变量 -> 测试点（TP） -> 可观测预期（Oracle） -> CaTDD 分类（WHY 层面） -> US/AC/TP/TC 追溯链 -> 测试用例（TC） -> RED/GREEN 实现（HOW 层面）。 |
+| TestEvidenceChain | 测试证据链：回答“为什么需要这个测试（WHY）”与“如何正确进行测试（HOW）”的完整无断裂证据链：从来源工件 -> 规则/不变量 -> 测试点（TP） -> 可观测预期（Oracle） -> CaTDD 分类（WHY 层面） -> US/CaTDD-AC/TP/TC 追溯链 -> 测试用例（TC） -> RED/GREEN 实现（HOW 层面）。 |
 | SUT | 被测系统 / 被测目标（System Under Test）：在测试中显式声明的被测软件边界（如 `SUT: utCodeAgentCLI`）。它确立了调用方（调用者违反契约属于 `P0 Misuse`）与外部依赖/环境（依赖故障属于 `P0 Fault`）之间的严格分界线。 |
 | TestLevel（测试层级） | 测试点被执行时声明的 SUT 范围，取且仅取 `UnitTesting`、`SysTesting`、`UserTesting` 三者之一。在测试文件内以 `@[TestLevel]` 声明，绝不写入文件名。它回答"所开发的系统有多少在 SUT 之内"，而不是"该系统的运行时由什么构成"（那属于 `TestScope`），也不是"哪份设计文档拥有该策略"。 |
 | UnitTesting（单元级） | `TestLevel` 之一：以单个单元为 SUT，在其自身边界内、遵循项目 `sut_unit_convention`（子模块、类、头文件、函数或组件）进行的验证。当项目没有再做细分时，`UnitTesting` 与 `SysTesting` 指向同一个 SUT，二者等价。CaTDD 分类与发现门禁适用，其策略设计归属 `README_DetailVerifyDesign.md`。 |
@@ -43,12 +43,13 @@
 | ModuleTesting（已废弃） | 已废弃的层级名，不再使用。当模块本身是被声明的 SUT 时，模块级范围就是 `SysTesting`，因此它绝不是与三个 `TestLevel` 取值并列的第四个值。 |
 | `TestScope`（测试范围） | 测试点被执行时声明的运行时范围：`mockSysRtm`（把 SUT 的系统运行时——同级组件、依赖、运行时环境——替换为替身）或 `realSysRtm`（SUT 运行在真实系统运行时之上）。以 `@[TestScope]` 声明，独立于 `TestLevel`，因此任何层级都可在任一范围下运行。`mockSysRtm` 是第一范围并获得 `CLOSED`；`realSysRtm` 是第二范围，提供附加证据。 |
 | UT | 单元测试（Unit Testing）：聚焦于单个显式声明的 SUT 的验证活动，遵循项目约定的 `sut_unit_convention`（如模块接口、子模块接口、类、头文件接口、函数或组件）。在编码前通过 CaTDD 验证其公开契约、内部模型与质量属性。 |
-| StoryIdAlias | 已注册的人类可读 Story ID 的永久、项目内唯一短别名。格式为 `US-YYMMDD.HHMMSS`，来自已核实的 UTC+08:00 创建时刻；`CreatedAt` 保留完整 ISO 8601 时间。在故事注册表登记一对一映射，新 AC/TP/TC ID 使用此别名前缀。同秒冲突或历史创建时间缺失必须先协调，绝不静默复用或伪造时间。修订和生命周期移动保持别名不变；外部/来源别名是独立的来源信息。 |
-| Artifact Ownership | US/AC 定义位于故事注册表指定的权威需求来源（todo/doing 故事或正式模块需求）。`README_UserStories.md` 维护 Story ID、StoryIdAlias 与该来源的映射。TP 定义及其 AC/TC 链接属于验证设计文档，SpecFlow 中为 `README_DetailVerifyDesign.md`；架构验证通过相同 TP ID 提升引用。TC 定义、断言和执行证据属于测试文件。引用和活注释不得形成相互竞争的定义。 |
+| StoryIdAlias | 已注册的人类可读 Story ID 的永久、项目内唯一短别名。格式为 `US-YYMMDD.HHMMSS`，来自已核实的 UTC+08:00 创建时刻；`CreatedAt` 保留完整 ISO 8601 时间。在故事注册表登记一对一映射，新 AC/TP/TC ID 使用此别名前缀；AC ID 还以 `StoryIdAlias-AC-Category-n` 标明当前 CaTDD 类别。同秒冲突或历史创建时间缺失必须先协调，绝不静默复用或伪造时间。修订和生命周期移动保持别名不变；外部/来源别名是独立的来源信息。 |
+| Artifact Ownership | US/CaTDD-AC 定义位于故事注册表指定的权威需求来源（todo/doing 故事或正式模块需求）。`README_UserStories.md` 维护 Story ID、StoryIdAlias 与该来源的映射。TP 定义及其 AC/TC 链接属于验证设计文档，SpecFlow 中为 `README_DetailVerifyDesign.md`；架构验证通过相同 TP ID 提升引用。TC 定义、断言和执行证据属于测试文件。引用和活注释不得形成相互竞争的定义。 |
+| CaTDD-AC | 采用 `From / Given / When / Then / Counter` 的、以证据为依据的 BDD 风格验收标准。`From` 记录至少一个来源支撑的 Example 或 Rule；两者均缺失时向人类执行 `AskWhy`，并将回答保存为 `Example (AskWhy)` 或 `Rule (AskWhy)`。`Counter` 记录相关无效、排除、边界或失败案例的预期差异。 |
 | TP | 测试点（Test Point）：从来源发掘的具体验证义务或条件，从开发者/防御性视角表达“必须验证什么”。权威定义位于验证设计文档的 `discovery_ledger`。每个 TP 显式声明归属 AC、可观测预期和唯一覆盖 TC（或可见的草稿缺口），其带别名前缀的 ID 保持稳定。 |
 | TC | 测试用例（Test Case）：具有结构化元数据（`@[Name]`、`@[Expect]`、`SETUP -> BEHAVIOR -> VERIFY -> CLEANUP`）并显式链接 `@[US]`、`@[AC]`、`@[TP]`、`@[TC]` 的可执行规格工件。从执行视角表达“如何具体验证”（射向靶心的箭）。 |
 | US / AC / TP / TC Cardinality | 完整验证设计中，每个 US MUST 有一个或多个 AC，每个 AC MUST 有一个或多个 TP，每个 TP 恰好归属一个 AC，每个 TP MUST 恰好映射到一个 TC，每个 TC MUST 覆盖一个或多个 TP。一个 TC MAY 覆盖多个 TP，显式列出 TP ID，并为每个关系记录一行 `@[Trace]: StoryIdAlias \| AC-ID \| TP-ID \| TC-ID`。未分配的草稿 TP 阻断完成。需要独立 TC 的义务应拆分为不同 TP；绝不按相同数字后缀推断关系。 |
-| AC vs TP | AC 出自用户/调用方视角（定义外部业务验收规则：`GIVEN 业务上下文, WHEN 触发操作, THEN 业务结果`）；TP 出自开发者/防御性视角（定义有来源支撑的边界、异常路径和并发技术探针）。完整设计中，每条 AC 分解为一个或多个 TP（$1:N$）。将 $TP == AC$ 画等号会导致边界和故障模式遗漏。 |
+| AC vs TP | CaTDD-AC 出自用户/调用方视角（定义外部业务验收规则），采用 `From / Given / When / Then / Counter`；TP 出自开发者/防御性视角（定义有来源支撑的边界、异常路径和并发技术探针）。完整设计中，每条 AC 分解为一个或多个 TP（$1:N$）。将 $TP == AC$ 画等号会导致边界和故障模式遗漏。 |
 | TP vs TC | 完整设计中的映射是多个 TP 对应一个 TC：每个 TP 恰好映射到一个 TC，一个 TC 可验证一个或多个 TP（$N:1$）。草稿中尚未分配 TC 的 TP 是显式缺口，不是已完成覆盖。若某项义务需要彼此独立的测试用例，应拆分为多个 TP，使每个 TP 仍恰好对应一个 TC。 |
 | Discovery to Categorization | 发现到归类的两阶段桥梁：在 Stage-0（自由草拟）阶段，基于来源和全面扫描广度优先发掘 TP，避免过早陷入分类偏见；在 Stage-1（分类设计）阶段，依据验证视角将各 TP 路由到正确的 CaTDD 类别（契约 -> P0，模型 -> P1，包络 -> P2，认知表面 -> P3），随后形式化为 US/AC/TP/TC 骨架。 |
 | manualMode | SpecCoding 的人类驱动形态：由开发者逐条输入 `SPEC_doXYZ`，助手逐步推进，在意图、验收标准或安全性模糊时暂停并提出针对性问题，等待开发者明确确认。它是人类聊天会话的默认值，也是 `autonomousMode` 运行在导向边界处必须暂停时的回退模式。 |
@@ -184,19 +185,19 @@ US-batchExporter-writeRecords: As a batch exporter, I want to write records,
 StoryIdAlias: US-261029.070003
 CreatedAt: 2026-10-29T07:00:03+08:00
 
-US-261029.070003-AC-01 (用户业务规则):
+US-261029.070003-AC-Typical-01 (用户业务规则):
   "GIVEN 1 到 100 条有效记录, WHEN 调用 write 时, THEN MUST 持久化所有记录并返回 OK。"
 
-US-261029.070003-AC-02 (用户业务规则):
+US-261029.070003-AC-Misuse-01 (用户业务规则):
   "GIVEN 0 条或超过 100 条记录, WHEN 调用 write 时, THEN MUST 返回 INVALID_COUNT 且 MUST NOT 修改文件。"
 
 验证设计文档中的权威 TP 台账：
 TP ID | 归属 AC ID | 覆盖 TC ID | 探针 / 预期
-US-261029.070003-TP-01 | US-261029.070003-AC-01 | US-261029.070003-TC-01 | 写入 2 条记录 -> OK 且数据持久化 (Typical)
-US-261029.070003-TP-02 | US-261029.070003-AC-01 | US-261029.070003-TC-02 | 写入 1 条记录 -> OK 且数据持久化 (Edge)
-US-261029.070003-TP-03 | US-261029.070003-AC-01 | US-261029.070003-TC-02 | 写入 100 条记录 -> OK 且数据持久化 (Edge)
-US-261029.070003-TP-04 | US-261029.070003-AC-02 | US-261029.070003-TC-03 | 写入 0 条记录 -> INVALID_COUNT 且文件未修改 (Misuse)
-US-261029.070003-TP-05 | US-261029.070003-AC-02 | US-261029.070003-TC-04 | 写入 101 条记录 -> INVALID_COUNT 且文件未修改 (Misuse)
+US-261029.070003-TP-01 | US-261029.070003-AC-Typical-01 | US-261029.070003-TC-01 | 写入 2 条记录 -> OK 且数据持久化 (Typical)
+US-261029.070003-TP-02 | US-261029.070003-AC-Typical-01 | US-261029.070003-TC-02 | 写入 1 条记录 -> OK 且数据持久化 (Edge)
+US-261029.070003-TP-03 | US-261029.070003-AC-Typical-01 | US-261029.070003-TC-02 | 写入 100 条记录 -> OK 且数据持久化 (Edge)
+US-261029.070003-TP-04 | US-261029.070003-AC-Misuse-01 | US-261029.070003-TC-03 | 写入 0 条记录 -> INVALID_COUNT 且文件未修改 (Misuse)
+US-261029.070003-TP-05 | US-261029.070003-AC-Misuse-01 | US-261029.070003-TC-04 | 写入 101 条记录 -> INVALID_COUNT 且文件未修改 (Misuse)
 
 测试文件中的 TC 声明：
 US-261029.070003-TC-01: verifyWrite_byNominalBatch_expectSuccess (覆盖 US-261029.070003-TP-01)

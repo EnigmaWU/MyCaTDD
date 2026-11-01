@@ -262,7 +262,7 @@ and classify the resolved items into CaTDD categories. Keep open questions visib
 - Fills the OVERVIEW section (WHAT/WHERE/WHY/SCOPE)
 - Inventories authoritative sources, rules, dimensions, oracles, and questions
 - Creates or preserves registered project-wide Story IDs and qualified child IDs
-- Writes Acceptance Criteria with canonical terms and normative outcomes
+- Writes CaTDD-ACs with source-backed `From`, canonical BDD scenario, normative outcomes, and a `Counter` distinction
 - Links source-backed Test Points to categorized Test Cases
 - Reconciles the discovery ledger and reports the Discovery Gate
 - Populates the TODO tracking section
@@ -661,7 +661,7 @@ The LLM produces a design. You read it. It looks reasonable. You say "implement 
 **Fix**: review every output against the CaTDD contract by name:
 
 - Do the User Stories express real user value?
-- Do the Acceptance Criteria use GIVEN/WHEN/THEN precisely?
+- Do the CaTDD-ACs use `From / Given / When / Then / Counter` precisely, with unresolved `From` evidence handled through `AskWhy`?
 - Do the Test Cases trace back to an AC and a US?
 - Is the category right — is this really Edge and not Misuse?
 - Does the assertion verify the claim the test is named for?

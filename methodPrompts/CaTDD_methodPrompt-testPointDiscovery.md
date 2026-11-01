@@ -131,6 +131,12 @@ Workflow:
 5. Route each example to the CaTDD category that matches its verification lens.
 6. Convert only source-backed examples into US/AC/TP/TC.
 
+### CaTDD-AC Evidence Gate (`AskWhy`)
+
+Every CaTDD-AC MUST have a `From` section resolving at least one source-backed Example or Rule. An Example points to a concrete `EX-n`/`CEX-n`; a Rule names a `RULE-n`, `BR-n`, or authoritative source constraint.
+
+If both are missing or unresolved, stop and `AskWhy` from the human before approving the CaTDD-AC. Save the human's answer under `From` as `Example (AskWhy): ...` or `Rule (AskWhy): ...`. Do not fabricate the missing field, and do not treat the answer as permission to invent an unstated product rule. When both are available, record both. The `Counter` section retains a contrasting case whenever it meaningfully distinguishes the boundary or invalid behavior.
+
 For every applicable P0/P1/P2/P3 sweep below, record source/rule references, dimensions and outcomes, TP IDs, or an explicit exclusion rationale. Keep verification methods, execution environments, feasible combinations, and sampling limits visible. A category heading or a checklist tick alone is not discovery evidence. A narrower declared scope does not require unrelated classes or domain profiles, but unresolved applicability within that scope is a QUESTION.
 
 ## P0 Discovery Sweep
@@ -230,11 +236,11 @@ Keep one authoritative `discovery_ledger` in the verification-design document, a
 
 Abbreviated IDs such as `TP-01`, `US-1`, `AC-1`, and `TC-1` in the examples below are illustrative only; real artifacts preserve the registered Story ID/StoryIdAlias pair and use alias-qualified child IDs. Numeric suffixes never determine AC ownership or TC coverage.
 
-### Acceptance Criteria (AC) vs. Test Point (TP)
+### CaTDD-AC vs. Test Point (TP)
 
 AC and TP serve different roles and perspectives in the TestEvidenceChain:
 
-- **Acceptance Criteria (AC)**: Formulated from the **USER / Stakeholder / Contract perspective** (WHAT external business behavior must hold for acceptance). Expressed in domain-level `GIVEN [context], WHEN [action], THEN [outcome]` specifying external conditions under which the story is accepted.
+- **CaTDD-AC**: Formulated from the **USER / Stakeholder / Contract perspective** (WHAT external business behavior must hold for acceptance). Expressed as `From / Given / When / Then / Counter`, where `From` supplies at least one supporting Example or Rule and `Counter` supplies the expected contrast.
 - **Test Point (TP)**: Formulated from the **DEVELOPER / Defensive / Verification perspective** (WHAT technical condition, boundary offset, failure phase, or interleaving must be probed). Expressed in technical `GIVEN [state/partition], WHEN [action/schedule], THEN [observable oracle]` probing whether the AC holds under stress, misuse, and failure.
 
 Cardinality between AC and TP is typically **$1 : N$**:

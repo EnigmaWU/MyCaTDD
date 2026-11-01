@@ -31,7 +31,7 @@ The minimum design chain is:
 
 ```text
 US: User Story -> why the behavior matters
-AC: Acceptance Criteria -> what must be true
+CaTDD-AC: evidence-backed acceptance criterion -> FROM / GIVEN / WHEN / THEN / COUNTER
 TC: Test Case -> how to verify it concretely
 ```
 
@@ -113,7 +113,7 @@ Follow this workflow when starting a CaTDD test file.
 5. Declare SUT, in-scope classes, domain profile(s), test level, and execution environment. Inventory source obligations before treating existing tests as coverage. Capture Stage-0 examples and questions through Example Mapping.
 6. Use [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md) for the applicable P0/P1/P2/P3 sweeps. Record authoritative TPs, their owning ACs, covering TCs or draft gaps, and source evidence in the verification-design document's `discovery_ledger` (`README_DetailVerifyDesign.md` in SpecFlow). Test comments reference this ledger rather than duplicate its definitions.
 7. Classify drafts by verification lens, not rule type, domain, or priority. Use the priority order below for execution, adjusted by risk.
-8. Resolve the registered Story ID/StoryIdAlias/CreatedAt pair under [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Write TC comments with alias-qualified AC/TP/TC references, complete TP lists, and trace rows before implementing code; US/AC and TP definitions stay in their authoritative documents.
+8. Resolve the registered Story ID/StoryIdAlias/CreatedAt pair under [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Write each CaTDD-AC with `FROM / GIVEN / WHEN / THEN / COUNTER`; `FROM` must resolve at least one Example or Rule, otherwise ask `AskWhy` and save the human answer. Write TC comments with alias-qualified AC/TP/TC references, complete TP lists, and trace rows before implementing code; US/CaTDD-AC and TP definitions stay in their authoritative documents.
 9. Independently review source -> ledger -> US/AC/TP/TC and back. In a complete design, require each US to have at least one AC, each AC to have at least one TP, each TP to map to exactly one TC, and each TC to cover one or more TPs. Unassigned draft TPs block completion. Require both cardinality and the Discovery Gate to pass with `ready_for_implementation: yes` for the declared scope; then write one failing test for the next TC.
 10. Implement only enough production code to pass that TC.
 11. Update TC status markers and keep the comments synchronized with behavior.
@@ -240,7 +240,7 @@ Every category skeleton should preserve this minimum shape:
 // @[UseWhen]: When this category applies
 // @[AvoidWhen]: When to move the scenario to another category
 // @[US]: User Story IDs covered by this category
-// @[AC]: Acceptance Criteria IDs covered by this category
+// @[AC]: CaTDD-AC IDs covered by this category
 // @[TC]: Test Cases, status, and expected TDD next action
 //=================================================================================================
 ```

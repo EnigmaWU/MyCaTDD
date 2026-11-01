@@ -10,7 +10,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 
 `Comment-alive` means:
 
-- TC design details live beside the test/source code in comments, doc comments, or docstrings. US/AC and authoritative TP definitions stay in their owning requirements and verification-design documents.
+- TC design details live beside the test/source code in comments, doc comments, or docstrings. US/CaTDD-AC and authoritative TP definitions stay in their owning requirements and verification-design documents.
 - Comments evolve with code instead of drifting in separate documents.
 - Comments are first-class artifacts that humans and LLMs can parse.
 - US/AC/TP/TC structure bridges human intent and machine-executable tests.
@@ -32,7 +32,7 @@ CaTDD turns design intent into executable tests by writing structured living com
 
 ## Design Skeleton Contract
 
-In CaTDD, **TC design** means a reusable comment skeleton inside the test or source file. It references authoritative US/AC and TP definitions rather than replacing their documents.
+In CaTDD, **TC design** means a reusable comment skeleton inside the test or source file. It references authoritative US/CaTDD-AC and TP definitions rather than replacing their documents.
 
 Each skeleton is organized by:
 
@@ -54,7 +54,7 @@ Minimum skeleton shape:
 // @[AvoidWhen]: When to move the scenario to another category
 // @[US]: User Story IDs covered by this category
 // @[StoryIdAlias]: Registered short aliases for those stories
-// @[AC]: Acceptance Criteria IDs covered by this category
+// @[AC]: CaTDD-AC IDs covered by this category
 // @[TP]: Test Point IDs covered by this category
 // @[TC]: Test Cases, status, and expected TDD next action
 //=================================================================================================
@@ -88,9 +88,10 @@ For full category guidance, read `CaTDD_methodPrompt-categorySemantics.md`.
 ## Mandatory Traceability Constraints
 
 - Use the [Project-Wide Traceability IDs](CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract: register a stable Story ID and carry full story-qualified AC/TP/TC IDs through design, test, and product-code trace references.
-- Keep the human-readable Story ID and permanent `StoryIdAlias` together in the registry. New AC/TP/TC IDs use the alias prefix; each TP explicitly identifies its owning AC and covering TC, and each TC lists every TP it covers. Resolve legacy/shared evidence through explicit mappings, not guessed prefixes.
+- Keep the human-readable Story ID and permanent `StoryIdAlias` together in the registry. New AC/TP/TC IDs use the alias prefix, and AC IDs also name their CaTDD category (`<StoryIdAlias>-AC-<Category>-<n>`); each TP explicitly identifies its owning AC and covering TC, and each TC lists every TP it covers. Resolve legacy/shared evidence through explicit mappings, not guessed prefixes.
 - P0 Functional design **MUST** include the full category set in order: `Typical -> Edge -> Misuse -> Fault` unless the developer explicitly limits scope.
 - Each US **MUST** map to at least one AC.
+- Each CaTDD-AC **MUST** use `From / Given / When / Then / Counter`, with `From` resolving at least one source-backed Example or Rule. If both are missing or unresolved, `AskWhy` from the human and save the answer as `Example (AskWhy)` or `Rule (AskWhy)`.
 - Each AC **MUST** map to at least one TP in a complete verification design.
 - Each TP **MUST** map to exactly one TC in a complete verification design; each TC **MUST** cover at least one TP and **MAY** cover multiple TPs.
 - Unassigned draft TPs are open coverage gaps and **MUST** block design completion. If one obligation needs independent test cases, split it into distinct TPs so each TP maps to exactly one TC.
@@ -108,7 +109,7 @@ US/AC/TP/TC cardinality proves linkage, not completeness: an entirely missing be
 - CaTDD serves primarily Embedded Linux, secondarily Microservices, and thirdly LLM Agents. Select applicable domain profiles for the declared SUT; these are usage priorities, not a historical lineage, mandatory technology stack, or category order.
 - Before approving skeletons in **Stage-1: Classifying Design**, reconcile the applicable P0 Functional, P1 Design, P2 Quality, and P3 Addons sweeps in [CaTDD_methodPrompt-testPointDiscovery.md](CaTDD_methodPrompt-testPointDiscovery.md). Classify by verification lens, not rule type or domain.
 - Maintain an unbroken **TestEvidenceChain**: every test must establish an unbroken chain answering **WHY** we need the test point (source artifact -> rule/invariant -> Test Point (TP) -> observable oracle -> CaTDD category) and **HOW** we execute the test correctly (US/AC/TP/TC -> Test Case (TC) -> RED/GREEN test).
-- Distinguish Acceptance Criteria (AC) from Test Point (TP): AC is formulated from the **User/Caller perspective** (`GIVEN context, WHEN action, THEN outcome`) defining what external rule must hold for acceptance. TP is formulated from the **Developer/Defensive perspective** (`GIVEN technical state/partition, WHEN action/interleaving, THEN observable oracle`) defining the concrete technical probe (nominal path, boundary offset, caller misuse, dependency fault, race condition) required to verify whether that AC holds. One AC typically unpacks into multiple TPs ($1:N$); equating $TP == AC$ causes boundary and failure omissions.
+- Distinguish CaTDD-AC from Test Point (TP): CaTDD-AC is formulated from the **User/Caller perspective** as `From / Given / When / Then / Counter`, defining why the criterion is trusted and what external rule must hold for acceptance. `From` names at least one Example or Rule; `Counter` states the expected contrast. TP is formulated from the **Developer/Defensive perspective** (`GIVEN technical state/partition, WHEN action/interleaving, THEN observable oracle`) defining the concrete technical probe required to verify whether that AC holds. One AC typically unpacks into multiple TPs ($1:N$); equating $TP == AC$ causes boundary and failure omissions.
 - Distinguish Test Point (TP) from Test Case (TC): A TP is a source-backed verification obligation (the target) discovered in Stage-0/Stage-1; a TC is an executable specification artifact (the arrow) implementing obligations under US/AC. Each TP MUST be covered by exactly one TC in a complete design. Each TC MUST cover at least one TP and MAY cover multiple TPs when its setup and assertions distinguish every obligation. An unassigned draft TP is a gap, not completed coverage; split an obligation into distinct TPs when independent test cases are needed.
 - Discovery to Categorization: In Stage-0 (Freely Drafting), discover TPs breadth-first across sources and sweeps without premature category lock-in; in Stage-1 (Classifying Design), route each discovered TP to its proper CaTDD category based on its verification lens (Contract -> P0, Model -> P1, Envelope -> P2, Learning Surface -> P3).
 - Enforce **Source-First** review: inspect authoritative source artifacts and independently derive expected obligations before consulting existing test files or skeletons.
@@ -124,7 +125,7 @@ Use the category's source artifact to decide whether a test point is valid.
 
 | Class | Category Family | Primary Source of Truth | Missing Source Behavior |
 | --- | --- | --- | --- |
-| P0 Functional | Typical / Edge / Misuse / Fault | User Story, Acceptance Criteria, UsageDesign, API contract | Ask for AC/usage contract or mark `@[NoTestPoints]` |
+| P0 Functional | Typical / Edge / Misuse / Fault | User Story, CaTDD-AC, UsageDesign, API contract | Ask for CaTDD-AC/usage contract or mark `@[NoTestPoints]` |
 | P1 Design | State / Capability / Interaction / Concurrency | ArchDesign, DetailDesign, StateDesign, sequence or interaction diagrams | Ask where the design model lives before drafting tests |
 | P2 Quality | Performance / Robust / Compatibility / Configuration / Diagnosis / Security | PerfDesign, ResourceDesign, CompatDesign, ErrorDesign, DiagnosisDesign, SecurityDesign, threat model, VerifyDesign | Ask for measurable constraints, compatibility rules, diagnostic evidence, security policy, or config matrix |
 | P3 Addons | Demo/Example | UserGuide, README examples, demo scripts | Ask for executable example intent or mark `@[NoTestPoints]` |

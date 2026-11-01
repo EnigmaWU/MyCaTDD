@@ -68,7 +68,7 @@ Expected result:
 ## Output Contract
 
 - CaTDD US/AC/TP/TC skeletons in committed test files, linked back to team-shared active story artifacts and project-root README SPEC docs.
-- The registered Story ID/StoryIdAlias pair and alias-qualified AC, TP, and TC IDs at each relevant declaration. Each TP's authoritative verification-design row names its owning AC and sole covering TC; each TC lists all covered TP IDs and one `@[Trace]: StoryIdAlias | AC-ID | TP-ID | TC-ID` row per relationship. Preserve original IDs for shared/inherited evidence and explicit legacy mappings.
+- The registered Story ID/StoryIdAlias pair and alias-qualified CaTDD-AC, TP, and TC IDs at each relevant declaration. Every CaTDD-AC must have `From / Given / When / Then / Counter`, with at least one Example or Rule under `From` or recorded `AskWhy` evidence. Each TP's authoritative verification-design row names its owning AC and sole covering TC; each TC lists all covered TP IDs and one `@[Trace]: StoryIdAlias | AC-ID | TP-ID | TC-ID` row per relationship. Preserve original IDs for shared/inherited evidence and explicit legacy mappings.
 - Enforced minimum traceability cardinality: each US has >=1 AC, each AC has >=1 TP, each TP maps to exactly one TC, and each TC covers >=1 TP.
 - Explicit SUT declaration in each designed test-file overview section.
 - This command inherits the strategy from `README_DetailVerifyDesign.md`; it never creates or redefines verification design.

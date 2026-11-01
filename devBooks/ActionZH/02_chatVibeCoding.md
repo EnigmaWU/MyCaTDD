@@ -151,7 +151,7 @@ CaTDD 的 VibeCoding 遵循方法各阶段的自然推进：
 - 填充 OVERVIEW 部分（WHAT/WHERE/WHY/SCOPE）
 - 定义覆盖矩阵维度
 - 编写 User Stories（2–5 个，As a/I want/So that 格式）
-- 编写 Acceptance Criteria（GIVEN/WHEN/THEN）
+- 编写 CaTDD-AC：`From / Given / When / Then / Counter`，缺少 `From` 证据时执行 `AskWhy`
 - 使用结构化元数据详细说明 Test Cases
 - 填充 TODO 跟踪部分
 
@@ -463,7 +463,7 @@ LLM 产出了一个设计。你读了，它看起来合理，你说"实现"。�
 
 **解决办法**：对照 CaTDD 合约明确审查每个输出：
 - User Stories 是否表达了真正的用户价值？
-- Acceptance Criteria 是否精确地使用了 GIVEN/WHEN/THEN？
+- CaTDD-AC 是否精确使用了 `From / Given / When / Then / Counter`，并记录了缺失 `From` 的 `AskWhy` 回答？
 - Test Cases 是否追溯回 AC 和 US？
 - 类别是否正确（这真的是 Edge 而不是 Misuse？）？
 - 断言测试的内容是否正确？

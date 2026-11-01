@@ -63,7 +63,7 @@ Expected result:
 ## Output Contract
 
 - A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
-- A project-wide Story ID registered in `README_UserStories.md` and full Story-qualified AC IDs in the story.
+- A project-wide Story ID registered in `README_UserStories.md` and category-qualified Story alias AC IDs in the story.
 - The source feature or imported user-story input moved from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` as a team-shared raw input archive.
 - The archived raw feature metadata is normalized to analyzed state:
   - `status: analyzed`
@@ -97,7 +97,7 @@ Choose the right model type: state diagram (if status changes over time), flow d
 Scan the feature text for policies, calculations, regulations, or constraints that are business logic (not software functions). Classify each: Fact, Constraint, Action Enabler, Inference, Computation. If a rule implies a functional requirement (e.g., "must be 18" → system needs birthdate input), note it. If a calculation is implied but the formula is missing, flag it as a question. `(→ SKILL: extract-business-rules)`
 
 ### Step 6 — Map rules to examples
-For each acceptance scenario: state the governing Rule, provide at least one concrete Example and one counter-example, list any open Questions. If too many Rules accumulate, the story may be too big — consider splitting. `(→ SKILL: facilitate-example-mapping)`
+For each CaTDD-AC, write `From / Given / When / Then / Counter` and resolve at least one source-backed Example or Rule under `From`. If both are missing or unresolved, stop and `AskWhy` from the human; save the answer under `From` as `Example (AskWhy): ...` or `Rule (AskWhy): ...`. When both are available, record both and retain an applicable counter-example. If too many Rules accumulate, the story may be too big — consider splitting. `(→ SKILL: facilitate-example-mapping)`
 
 ### Step 7 — Hunt ambiguity
 Scan the entire story draft for Ambiguity Smells using the Ambiguity Smell Taxonomy (AST):
@@ -114,7 +114,7 @@ For each smell, generate a precise clarifying question under `## Ambiguity Warni
 Score Business Value, User Value, Cost/Effort, and Risk/Complexity each 1-9. Compute Priority Score = (BV + UV) / (Cost + Risk). Record the rationale for each score. If fewer than 3 items exist in total, skip formal scoring and use pairwise comparison instead. `(→ SKILL: prioritize-requirements)`
 
 ### Step 9 — Write artifact & archive
-Register `StoryIdAlias` and `CreatedAt` together with the Story ID, following the canonical identity contract. New AC headings use `{{StoryIdAlias}}-AC-{{n}}`. Preserve an existing pair; missing historical creation times or same-second collisions require reconciliation before alias allocation.
+Register `StoryIdAlias` and `CreatedAt` together with the Story ID, following the canonical identity contract. New AC headings use `{{StoryIdAlias}}-AC-{{Category}}-{{n}}`; use the category sections in `SpecTodoUserStoryTemplate.md`, with P0 mandatory and P1/P2/P3 optional. Preserve an existing pair; missing historical creation times or same-second collisions require reconciliation before alias allocation.
 
 Before writing the todo artifact, register its Story ID in `README_UserStories.md`, creating the ledger from `README_UserStoriesTemplate.md` if needed. Follow [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids): preserve an existing unambiguous ID or derive a descriptive human-readable ID in `US-<whoName>-<doWhat>` form, writing both segments in lowerCamelCase. Derive them from the story's actor and observable behavior, and ask if either is unclear. Check the registry and known story sources, and give every AC a distinct qualified ID. Refine a collision with meaningful context rather than an arbitrary number or UUID. Register blocked drafts too; do not archive the input while identity registration is unresolved. Preserve source IDs as labeled aliases and stop on conflicting or ambiguous identities.
 

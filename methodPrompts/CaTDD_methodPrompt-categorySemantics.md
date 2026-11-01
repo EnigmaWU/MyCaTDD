@@ -27,7 +27,7 @@ Use the category's source artifact to decide whether a test point is valid.
 
 | Class | Category Family | Primary Source of Truth | Missing Source Behavior |
 | --- | --- | --- | --- |
-| P0 Functional | Typical / Edge / Misuse / Fault | User Story, Acceptance Criteria, UsageDesign, API contract | Ask for AC/usage contract or mark `@[NoTestPoints]` |
+| P0 Functional | Typical / Edge / Misuse / Fault | User Story, CaTDD-AC, UsageDesign, API contract | Ask for CaTDD-AC/usage contract or mark `@[NoTestPoints]` |
 | P1 Design | State / Capability / Interaction / Concurrency | ArchDesign, DetailDesign, StateDesign, sequence or interaction diagrams | Ask where the design model lives before drafting tests |
 | P2 Quality | Performance / Robust / Compatibility / Configuration / Diagnosis / Security | PerfDesign, ResourceDesign, CompatDesign, ErrorDesign, DiagnosisDesign, SecurityDesign, threat model, VerifyDesign | Ask for measurable constraints, compatibility rules, diagnostic evidence, security policy, or config matrix |
 | P3 Addons | Demo/Example | UserGuide, README examples, demo scripts | Ask for executable example intent or mark `@[NoTestPoints]` |

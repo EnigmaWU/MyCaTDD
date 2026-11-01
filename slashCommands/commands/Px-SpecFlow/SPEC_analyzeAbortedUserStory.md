@@ -122,7 +122,7 @@ Apply SKILLs **only** where the abort diagnosis indicates a need for correction.
 | **Always (regardless)** | `(→ SKILL: validate-requirements-criteria)` — hunt ambiguity in the corrected story. `(→ SKILL: prioritize-requirements)` — re-score all four dimensions (BV, UV, Cost, Risk). |
 
 ### Step 6 — Correct: Write the corrected story
-Preserve `StoryIdAlias` and `CreatedAt` for a revision of the same story. A new independent successor registers its own pair and records the original IDs/alias as lineage. New AC IDs use the owning alias prefix; inherited ACs retain their original owning IDs. Do not mutate historical abort evidence or invent missing creation times.
+Preserve `StoryIdAlias` and `CreatedAt` for a revision of the same story. A new independent successor registers its own pair and records the original IDs/alias as lineage. New CaTDD-AC IDs use the owning alias and current CaTDD category as their prefix; every new or revised criterion uses `From / Given / When / Then / Counter`, asks `AskWhy` when neither Example nor Rule resolves, and records the human answer. Inherited ACs retain their original owning IDs. Do not mutate historical abort evidence or invent missing creation times.
 
 Register the corrected story in `README_UserStories.md`, creating the ledger from `README_UserStoriesTemplate.md` if needed. Preserve the original registered Story ID when the corrected artifact is a revision of the same story. Assign a new descriptive human-readable `US-<whoName>-<doWhat>` ID with lowerCamelCase segments only when re-analysis establishes a materially different independent successor; retain source links to unchanged original AC IDs and record supersession or lineage without changing the historical abort artifact. Give new or materially revised ACs distinct qualified IDs under the corrected story. Stop on unresolved identity conflicts.
 
@@ -131,10 +131,12 @@ Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. The foll
 - **Story Statement** — updated if intent changed; otherwise preserved from original
 - **Story Readiness Snapshot** — Stage 1 EPIC story sufficiency lenses (`E1 Unambiguous`, `E2 Singular`, `E3 Verifiable`, `E3.4 Completion & Readiness`, `P1 Dependency Control`, `P2 Complete`, `I1 Conforming`, `C1 Scope Discipline`) re-evaluated after abort correction
 - **Priority** — always re-scored (Step 5 mandate)
+- **Example Mapping** — rules, concrete examples, counter-examples, and pink questions updated per the re-analysis; otherwise preserved
 - **Visual Model** — updated if design flaw or quality dead-end was diagnosed; otherwise preserved or marked as not changed
-- **Acceptance Criteria** — scenarios modified, added, or removed per the re-analysis; unchanged scenarios preserved verbatim
+- **Input and Output Dictionary** — updated if input/output contracts or limits changed; otherwise preserved
+- **CaTDD-AC - P0-Functional and applicable optional P1/P2/P3 sections** — scenarios (`Typical`, `Edge`, `Misuse`, `Fault`, plus optional P1/P2/P3) modified, added, or removed per the re-analysis; unchanged scenarios preserved verbatim
 - **Business Rules** — updated if rules were wrong/missing; otherwise preserved
-- **Edge Cases & Error Paths** — updated if new gaps found; otherwise preserved
+- **Sub-UserStory Candidates** — updated if non-P0 concerns or split decisions changed; otherwise preserved
 - **Scope** — updated if scope was wrong; otherwise preserved
 - **Story Completion Conditions (`EPIC E3.4`)** — updated if required `TestLevel`, `TestScope`, CaTDD categories, SPEC/doc surfaces, Not-Done conditions, or approved deferrals changed due to the abort diagnosis
 - **Risks & Assumptions** — rejected assumptions documented here as "formerly assumed X, abort proved Y"

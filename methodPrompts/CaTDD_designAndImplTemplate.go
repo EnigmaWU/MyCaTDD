@@ -20,7 +20,8 @@
 //
 // PROJECT-WIDE TRACE: The abbreviated sample IDs below are illustrative only.
 //   Resolve StoryIdAlias through the registry; new AC/TP/TC IDs use its prefix.
-//   Keep authoritative TP definitions in the verification-design document.
+//   Keep authoritative CaTDD-ACs in requirements and TP definitions in verification design.
+//   A CaTDD-AC uses From / Given / When / Then / Counter; unresolved From asks AskWhy.
 //   Test comments reference those TPs and define TCs, including every covered TP.
 //   CaTDD_methodPrompt-testStructure.md owns identity, ownership, and legacy mappings.
 //
@@ -103,10 +104,10 @@ DESIGN SKELETON CONTRACT:
     // @[AvoidWhen]: Scenario is mainly Edge, Misuse, Fault, State, or Concurrency.
     // @[US]: US-PROJECT-01
     // @[StoryIdAlias]: US-261029.070005
-    // @[AC]: US-261029.070005-AC-01
+    // @[AC]: US-261029.070005-AC-Typical-01
     // @[TP]: US-261029.070005-TP-01
     // @[TC]: US-261029.070005-TC-01 verifyCore_byValidInput_expectSuccess
-    // @[Trace]: US-261029.070005 | US-261029.070005-AC-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
+    // @[Trace]: US-261029.070005 | US-261029.070005-AC-Typical-01 | US-261029.070005-TP-01 | US-261029.070005-TC-01
     //=================================================================================================
 
   Developers fill this skeleton to make verification intent clear.
@@ -125,7 +126,7 @@ SUT BOUNDARY INVARIANT:
     - Fault:  External dependency or environment fails SUT (SUT degrades or handles failure).
 
 CARDINALITIES & PERSPECTIVES:
-  - 1 AC : N TPs: AC is from User/Caller perspective (GIVEN context, WHEN action, THEN outcome).
+  - 1 AC : N TPs: CaTDD-AC is from User/Caller perspective (FROM provenance, GIVEN context, WHEN action, THEN outcome, COUNTER contrast).
                   TP is from Developer/Defensive perspective (GIVEN state, WHEN action, THEN oracle).
   - TP : TC: Target obligation (WHAT) vs. executable arrow (HOW).
              Each TP MUST be covered by exactly one TC in a complete design.
@@ -282,30 +283,56 @@ COVERAGE MATRIX:
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //======>BEGIN OF ACCEPTANCE CRITERIA DESIGN=======================================================
 /*
-ACCEPTANCE CRITERIA:
+CaTDD-AC (Evidence-Anchored Acceptance Criteria) — authoritative definitions live in requirements;
+test comments reference them with FROM / GIVEN / WHEN / THEN / COUNTER (missing FROM -> AskWhy):
 
 [@US-1] Concurrent task dispatching
- AC-1: GIVEN a running WorkerPool with available workers,
-        WHEN a valid task is submitted,
-        THEN the task executes asynchronously and completes successfully.
+ AC-1:
+  - FROM
+    - Example: EX-1 (valid task submission on running pool)
+    - Rule: R-POOL-01 (asynchronous worker dispatch contract)
+  - GIVEN a running WorkerPool with available workers
+  - WHEN a valid task is submitted
+  - THEN the task MUST execute asynchronously and complete successfully
+  - COUNTER CEX-1 (submission to an unstarted or closed pool is rejected)
 
- AC-2: GIVEN a WorkerPool with a full queue in non-blocking mode,
-        WHEN an additional task is submitted,
-        THEN the submission returns ErrQueueFull immediately without blocking.
+ AC-2:
+  - FROM
+    - Example: EX-2 (full queue in non-blocking mode)
+    - Rule: R-POOL-02 (non-blocking backpressure contract)
+  - GIVEN a WorkerPool with a full queue in non-blocking mode
+  - WHEN an additional task is submitted
+  - THEN the submission MUST return ErrQueueFull immediately without blocking
+  - COUNTER CEX-2 (queue with available capacity accepts the task)
 
- AC-3: GIVEN a running WorkerPool,
-        WHEN a nil task function is submitted,
-        THEN ErrNilTask is returned immediately.
+ AC-3:
+  - FROM
+    - Example: CEX-3 (nil task function)
+    - Rule: R-POOL-03 (caller argument validation)
+  - GIVEN a running WorkerPool
+  - WHEN a nil task function is submitted
+  - THEN ErrNilTask MUST be returned immediately
+  - COUNTER EX-1 (non-nil task function is accepted)
 
 [@US-2] Failure isolation and cancellation
- AC-1: GIVEN a running WorkerPool,
-        WHEN a submitted task panics during execution,
-        THEN the panic is recovered, other workers continue processing,
-         AND the configured OnPanic handler is invoked.
+ AC-1:
+  - FROM
+    - Example: EX-4 (panicking task recovery)
+    - Rule: R-POOL-04 (worker panic containment contract)
+  - GIVEN a running WorkerPool
+  - WHEN a submitted task panics during execution
+  - THEN the panic MUST be recovered, other workers MUST continue processing,
+    - AND the configured OnPanic handler MUST be invoked
+  - COUNTER CEX-4 (normal task completion does not invoke OnPanic)
 
- AC-2: GIVEN an executing task associated with a cancellable context,
-        WHEN the context is cancelled,
-        THEN the task detects ctx.Done() and halts execution promptly.
+ AC-2:
+  - FROM
+    - Example: EX-5 (context cancellation mid-execution)
+    - Rule: R-POOL-05 (context cancellation responsiveness)
+  - GIVEN an executing task associated with a cancellable context
+  - WHEN the context is cancelled
+  - THEN the task MUST detect ctx.Done() and halt execution promptly
+  - COUNTER CEX-5 (uncancelled context allows task to run to completion)
 */
 //=======>END OF ACCEPTANCE CRITERIA DESIGN========================================================
 
