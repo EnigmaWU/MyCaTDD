@@ -106,6 +106,11 @@ done
 
 grep -Fq '## 2. Core System Concept Model' "$REPO_ROOT/slashCommands/templates/README_UbiLangTemplate.md" || fail "README_UbiLangTemplate.md must include Core System Concept Model"
 grep -Fq '## Core System Concepts & Bounded Contexts' "$REPO_ROOT/slashCommands/templates/README_ArchDesignTemplate.md" || fail "README_ArchDesignTemplate.md must include Core System Concepts & Bounded Contexts"
+grep -Fq '## Architecture Characteristic Derivation' "$REPO_ROOT/slashCommands/templates/README_ArchDesignTemplate.md" || fail "README_ArchDesignTemplate.md must include Architecture Characteristic Derivation"
+grep -Fq '## Architecture Quanta' "$REPO_ROOT/slashCommands/templates/README_ArchDesignTemplate.md" || fail "README_ArchDesignTemplate.md must include Architecture Quanta"
+grep -Fq 'Gated CaTDD Lenses / Categories (`Source-of-Truth Gate`)' "$REPO_ROOT/slashCommands/templates/README_ArchDesignTemplate.md" || fail "README_ArchDesignTemplate.md must map Px-SpecFlow surfaces to Gated CaTDD Lenses / Categories"
+grep -Fq '## Architecture Fitness Functions' "$REPO_ROOT/slashCommands/templates/README_ArchDesignTemplate.md" || fail "README_ArchDesignTemplate.md must include Architecture Fitness Functions"
+grep -Fq 'Verification Route (`CaTDD P0/P1/P2/P3 TP` vs. `Non-TC Arch-Fitness: Static / Monitor / Chaos / Manual`)' "$REPO_ROOT/slashCommands/templates/README_ArchDesignTemplate.md" || fail "README_ArchDesignTemplate.md must distinguish CaTDD P0/P1/P2/P3 TP from Non-TC Arch-Fitness"
 grep -Fq 'define-ubiquitous-language' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeArchDesign.md" || fail "SPEC_takeArchDesign must wire define-ubiquitous-language skill"
 grep -Fq 'define-bounded-contexts' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_takeArchDesign.md" || fail "SPEC_takeArchDesign must wire define-bounded-contexts skill"
 grep -Fq 'define-ubiquitous-language' "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_reviewArchDesign.md" || fail "SPEC_reviewArchDesign must wire define-ubiquitous-language skill"
