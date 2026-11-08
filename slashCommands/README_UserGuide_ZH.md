@@ -115,10 +115,11 @@ echo "$TARGET_DIR"
 
 ## 原生适配生成
 
-标准安装器仅支持 Copilot，并从可移植的 `SPEC_*`、`TEST_*` 与 `HARNESS_*` 命令文件生成原生包装：
+标准安装器支持 `ChatCopilotLocal`（别名：`Copilot`、`GitHub/Copilot`）与 `ChatCopilotAgentHost`，并从可移植的 `SPEC_*`、`TEST_*` 与 `HARNESS_*` 命令文件生成原生 prompt 或 skill 包装：
 
 ```bash
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot --clean-prompts
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent ChatCopilotAgentHost --clean-prompts
 ```
 
 需要 Continue 格式的 prompt 包装时，请使用独立的自定义适配器安装器：

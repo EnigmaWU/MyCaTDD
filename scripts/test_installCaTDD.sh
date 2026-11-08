@@ -28,11 +28,11 @@ assert_absent() {
 }
 
 assert_contains() {
-  grep -Fq "$2" "$1" || fail "$1 missing expected content: $2"
+  grep -Fq -- "$2" "$1" || fail "$1 missing expected content: $2"
 }
 
 assert_not_contains() {
-  ! grep -Fq "$2" "$1" || fail "$1 should not contain: $2"
+  ! grep -Fq -- "$2" "$1" || fail "$1 should not contain: $2"
 }
 
 [[ -x "$INSTALLER" ]] || fail "missing executable installer: scripts/installCaTDD.sh"
@@ -136,10 +136,60 @@ install_fresh() {
 
 install_fresh
 
-echo "[installCaTDD-test] Test: GitHub/Copilot alias works"
+echo "[installCaTDD-test] Test: ChatCopilotLocal and Copilot alias work"
 TARGET2="$WORK/alias"
 "$INSTALLER" --targetDir "$TARGET2" --targetCodeAgent "GitHub/Copilot" --init --yes >/dev/null 2>&1
 assert_file "$TARGET2/.catdd/methodPrompts/README.md"
+assert_contains "$TARGET2/.catdd/CaTDD_INSTALL.md" '- Target agent: ChatCopilotLocal'
+TARGET_LOCAL="$WORK/explicit-local"
+"$INSTALLER" --targetDir "$TARGET_LOCAL" --targetCodeAgent "ChatCopilotLocal" --init --yes >/dev/null 2>&1
+assert_file "$TARGET_LOCAL/.github/prompts/TEST_convertDemoToTypical.prompt.md"
+assert_contains "$TARGET_LOCAL/.catdd/CaTDD_INSTALL.md" '- Target agent: ChatCopilotLocal'
+
+echo "[installCaTDD-test] Test: ChatCopilotAgentHost fresh install and skill generation"
+install_agent_host() {
+  local dir="$WORK/fresh-ChatCopilotAgentHost"
+  local marker
+  "$INSTALLER" --targetDir "$dir" --targetCodeAgent ChatCopilotAgentHost --init --clean-prompts --yes >/dev/null 2>&1
+  assert_file "$dir/.catdd/methodPrompts/README.md"
+  assert_file "$dir/.catdd/slashCommands/TEST_slashCommandTemplate.md"
+  assert_dir "$dir/.catdd/spec/pendingNews"
+  assert_file "$dir/.catdd/CaTDD_INSTALL.manifest"
+  marker="$dir/.catdd/CaTDD_INSTALL.md"
+  assert_contains "$marker" '- Target agent: ChatCopilotAgentHost'
+
+  assert_file "$dir/.github/instructions/catdd.instructions.md"
+  assert_contains "$dir/.github/instructions/catdd.instructions.md" '.github/skills/test-*/SKILL.md'
+  assert_contains "$dir/.github/instructions/catdd.instructions.md" '/HARNESS_evolveHarness'
+  assert_absent "$dir/.github/prompts/TEST_convertDemoToTypical.prompt.md"
+
+  assert_file "$dir/.github/skills/test-convert-demo-to-typical/SKILL.md"
+  assert_file "$dir/.github/skills/spec-open-user-story/SKILL.md"
+  assert_file "$dir/.github/skills/harness-patch-ca-tdd-source/SKILL.md"
+  assert_file "$dir/.github/skills/harness-verify-installation/SKILL.md"
+  assert_file "$dir/.github/skills/harness-diagnose-installation/SKILL.md"
+  assert_contains "$dir/.github/skills/test-convert-demo-to-typical/SKILL.md" 'name: test-convert-demo-to-typical'
+  assert_contains "$dir/.github/skills/test-convert-demo-to-typical/SKILL.md" 'disable-model-invocation: true'
+  assert_contains "$dir/.github/skills/test-convert-demo-to-typical/SKILL.md" 'thin Copilot adapter'
+  assert_contains "$dir/.github/skills/test-convert-demo-to-typical/SKILL.md" '../../../.catdd/slashCommands/commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md'
+  assert_contains "$dir/.github/skills/test-convert-demo-to-typical/SKILL.md" '../../../.catdd/methodPrompts/README.md'
+
+  source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+  skill_count="$(find "$dir/.github/skills" -mindepth 2 -maxdepth 2 -type f -name 'SKILL.md' | wc -l | tr -d '[:space:]')"
+  [[ "$skill_count" == "$source_count" ]] || fail "expected $source_count installed Copilot skills, got $skill_count"
+
+  # Ensure non-wrapper user skills in .github/skills survive --clean-prompts
+  mkdir -p "$dir/.github/skills/test-driven-development"
+  printf '# Hand-authored skill\n' > "$dir/.github/skills/test-driven-development/SKILL.md"
+  mkdir -p "$dir/.github/skills/spec-stale-wrapper"
+  printf 'You are running a Copilot-native skill wrapper around a portable CaTDD slash command.\n' > "$dir/.github/skills/spec-stale-wrapper/SKILL.md"
+  "$INSTALLER" --targetDir "$dir" --targetCodeAgent ChatCopilotAgentHost --clean-prompts --yes >/dev/null 2>&1
+  assert_file "$dir/.github/skills/test-driven-development/SKILL.md"
+  assert_absent "$dir/.github/skills/spec-stale-wrapper/SKILL.md"
+  rm -rf "$dir"
+}
+
+install_agent_host
 
 echo "[installCaTDD-test] Test: evolved file survives refresh, --force-overwrite restores canonical"
 S1="$WORK/sync-keep"

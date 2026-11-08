@@ -16,7 +16,7 @@ usage() {
 Usage: scripts/installCaTDD.sh --targetDir DIR --targetCodeAgent AGENT [options]
 
 Install or refresh CaTDD methodPrompts, slashCommands, and Copilot-native
-prompt wrappers into a target project.
+prompt or skill wrappers into a target project.
 
 Refresh is patch-aware: target files updated after the previous install (for
 example by HARNESS_evolveHarness) are never silently overwritten. When both
@@ -32,8 +32,10 @@ them.
 
 Options:
   --targetDir DIR           Target project directory (alias: --target DIR).
-  --targetCodeAgent AGENT   Code agent to install for. Supported: Copilot.
-  --clean-prompts           Remove and regenerate generated prompt wrappers.
+  --targetCodeAgent AGENT   Code agent to install for. Supported:
+                            ChatCopilotLocal (aliases: Copilot, GitHub/Copilot),
+                            ChatCopilotAgentHost.
+  --clean-prompts           Remove and regenerate generated prompt or skill wrappers.
   --init                    Create the target directory if it does not exist.
   --force-overwrite         Overwrite target-evolved files with canonical source.
   --verbose                 Print detailed action steps.
@@ -99,11 +101,14 @@ fi
 # Map agent name to its install profile
 AGENT_LABEL=""
 case "$TARGET_AGENT" in
-  Copilot|GitHub/Copilot)
-    AGENT_LABEL="Copilot"
+  ChatCopilotLocal|Copilot|GitHub/Copilot)
+    AGENT_LABEL="ChatCopilotLocal"
+    ;;
+  ChatCopilotAgentHost)
+    AGENT_LABEL="ChatCopilotAgentHost"
     ;;
   *)
-    echo "[installCaTDD] Unknown --targetCodeAgent: $TARGET_AGENT. Supported: Copilot" >&2
+    echo "[installCaTDD] Unknown --targetCodeAgent: $TARGET_AGENT. Supported: ChatCopilotLocal, ChatCopilotAgentHost (aliases: Copilot, GitHub/Copilot)" >&2
     exit 2
     ;;
 esac
@@ -559,10 +564,49 @@ This directory is managed by `scripts/installCaTDD.sh` from MyCaTDD.
 Refresh this project by rerunning the installer from the MyCaTDD repository.
 MARKER
 
+rel_to_workspace() {
+  local path="$1"
+  if [[ "$path" == "$TARGET_DIR" ]]; then
+    printf '%s\n' "."
+  elif [[ "$path" == "$TARGET_DIR/"* ]]; then
+    printf '%s\n' "${path#$TARGET_DIR/}"
+  else
+    printf '%s\n' "$path"
+  fi
+}
+
+to_skill_name() {
+  local raw_name="$1"
+  printf '%s' "$raw_name" \
+    | sed -E 's/([A-Z]+)([A-Z][a-z])/\1-\2/g; s/([a-z0-9])([A-Z])/\1-\2/g' \
+    | tr '[:upper:]' '[:lower:]' \
+    | tr '_' '-'
+}
+
+clean_copilot_wrappers() {
+  local prompts_dir="$1"
+  local skills_dir="$2"
+  local existing
+  if [[ -d "$prompts_dir" ]]; then
+    find "$prompts_dir" -maxdepth 1 -type f \( -name 'UT_*.prompt.md' -o -name 'TEST_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) -delete
+  fi
+  if [[ -d "$skills_dir" ]]; then
+    for existing in "$skills_dir"/ut-* "$skills_dir"/test-* "$skills_dir"/spec-* "$skills_dir"/harness-*; do
+      [[ -d "$existing" ]] || continue
+      if [[ -f "$existing/SKILL.md" ]] && grep -Fq 'portable CaTDD slash command' "$existing/SKILL.md"; then
+        rm -rf "$existing"
+      elif [[ -z "$(ls -A "$existing" 2>/dev/null)" ]]; then
+        rm -rf "$existing"
+      fi
+    done
+  fi
+}
+
 case "$AGENT_LABEL" in
-  Copilot)
+  ChatCopilotLocal)
     GITHUB_DIR="$TARGET_DIR/.github"
     PROMPTS_DIR="$GITHUB_DIR/prompts"
+    SKILLS_DIR="$GITHUB_DIR/skills"
     INSTRUCTIONS_DIR="$GITHUB_DIR/instructions"
     mkdir -p "$PROMPTS_DIR" "$INSTRUCTIONS_DIR"
 
@@ -588,19 +632,8 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 INSTRUCTIONS
 
     if [[ "$CLEAN_PROMPTS" -eq 1 ]]; then
-      find "$PROMPTS_DIR" -maxdepth 1 -type f \( -name 'UT_*.prompt.md' -o -name 'TEST_*.prompt.md' -o -name 'SPEC_*.prompt.md' -o -name 'HARNESS_*.prompt.md' \) -delete
+      clean_copilot_wrappers "$PROMPTS_DIR" "$SKILLS_DIR"
     fi
-
-    rel_to_workspace() {
-      local path="$1"
-      if [[ "$path" == "$TARGET_DIR" ]]; then
-        printf '%s\n' "."
-      elif [[ "$path" == "$TARGET_DIR/"* ]]; then
-        printf '%s\n' "${path#$TARGET_DIR/}"
-      else
-        printf '%s\n' "$path"
-      fi
-    }
 
     generated_count=0
     while IFS= read -r source_file; do
@@ -654,11 +687,126 @@ PROMPT
 
     echo "[${LOG_TAG}] Generated $generated_count Copilot prompt wrappers in .github/prompts"
 
-    echo "[${LOG_TAG}] Installed CaTDD for Copilot into $TARGET_DIR"
+    echo "[${LOG_TAG}] Installed CaTDD for $AGENT_LABEL into $TARGET_DIR"
     echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
     echo "[${LOG_TAG}] Slash command source: .catdd/slashCommands"
     echo "[${LOG_TAG}] SpecCoding artifacts: .catdd/spec"
     echo "[${LOG_TAG}] Copilot prompts: .github/prompts"
+    ;;
+
+  ChatCopilotAgentHost)
+    GITHUB_DIR="$TARGET_DIR/.github"
+    PROMPTS_DIR="$GITHUB_DIR/prompts"
+    SKILLS_DIR="$GITHUB_DIR/skills"
+    INSTRUCTIONS_DIR="$GITHUB_DIR/instructions"
+    if [[ -e "$SKILLS_DIR" && ! -d "$SKILLS_DIR" ]]; then
+      echo "[${LOG_TAG}] Cannot create .github/skills because .github/skills exists and is not a directory." >&2
+      exit 1
+    fi
+    mkdir -p "$SKILLS_DIR" "$INSTRUCTIONS_DIR"
+
+    log_replace_or_new "$INSTRUCTIONS_DIR/catdd.instructions.md"
+    cat > "$INSTRUCTIONS_DIR/catdd.instructions.md" <<'INSTRUCTIONS'
+---
+description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* slash commands."
+---
+# CaTDD Project Instructions
+
+- CaTDD method source: `.catdd/methodPrompts/`
+- Portable slash command source: `.catdd/slashCommands/`
+- Copilot skill wrappers: `.github/skills/test-*/SKILL.md`, `.github/skills/spec-*/SKILL.md`, and `.github/skills/harness-*/SKILL.md`
+- Treat Copilot skill files as thin adapters over `.catdd/slashCommands/`.
+- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
+- Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
+- Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
+- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
+- Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
+- Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
+- After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_evolveHarness` with `evolution_mode=auto`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running `HARNESS_evolveHarness`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
+- Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
+INSTRUCTIONS
+
+    if [[ "$CLEAN_PROMPTS" -eq 1 ]]; then
+      clean_copilot_wrappers "$PROMPTS_DIR" "$SKILLS_DIR"
+    fi
+
+    generated_count=0
+    while IFS= read -r source_file; do
+      command_file="$(basename "$source_file")"
+      command_name="${command_file%.md}"
+      skill_name="$(to_skill_name "$command_name")"
+      flow_name="$(basename "$(dirname "$source_file")")"
+      rel_source="$(rel_to_workspace "$source_file")"
+      rel_method_index="$(rel_to_workspace "$CATDD_DIR/methodPrompts/README.md")"
+      rel_slash_template="$(rel_to_workspace "$CATDD_DIR/slashCommands/TEST_slashCommandTemplate.md")"
+      rel_flow_docs="$(rel_to_workspace "$CATDD_DIR/slashCommands/flows")"
+      rel_kit_docs="$(rel_to_workspace "$CATDD_DIR/slashCommands/kits")"
+
+      if [[ ! "$skill_name" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || [[ "${#skill_name}" -gt 64 ]]; then
+        echo "[${LOG_TAG}] Cannot derive a valid Copilot skill name from: $command_file (got '$skill_name')" >&2
+        exit 1
+      fi
+
+      desc_line=""
+      desc_line="$(awk '/^## Purpose/ {found=1; next} found && /^[[:space:]]*$/ {next} found && /^[^#]/ {print; exit}' "$source_file" | head -c 200 | tr -d '"\\' | tr '\n' ' ')"
+      if [[ -n "$desc_line" ]]; then
+        description="Run CaTDD slash command ${command_name} (flow ${flow_name}). ${desc_line}"
+      else
+        description="Run CaTDD slash command ${command_name} (flow ${flow_name})"
+      fi
+      description="$(printf '%s' "${description:0:400}" | sed -E 's/[[:space:]]+$//')"
+
+      skill_dir="$SKILLS_DIR/$skill_name"
+      mkdir -p "$skill_dir"
+      output_file="$skill_dir/SKILL.md"
+
+      cat > "$output_file" <<SKILL
+---
+name: $skill_name
+description: "$description"
+argument-hint: "Fill required command inputs, source files, target files, language, and test framework"
+disable-model-invocation: true
+---
+# $command_name
+
+You are running a Copilot-native skill wrapper around a portable CaTDD slash command.
+
+## Source Command
+
+- Canonical command name: $command_name
+- Portable command path: $rel_source
+- Default workspace link: [$rel_source](../../../$rel_source)
+- Flow or kit: $flow_name
+
+## Method Source of Truth
+
+- CaTDD method index: [$rel_method_index](../../../$rel_method_index)
+- Slash command contract: [$rel_slash_template](../../../$rel_slash_template)
+- Flow docs: [$rel_flow_docs](../../../$rel_flow_docs)
+- Kit docs: [$rel_kit_docs](../../../$rel_kit_docs)
+
+## Execution Rules
+
+1. Read and follow the portable source command before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
+2. Treat this file as a thin Copilot adapter; do not redefine CaTDD method semantics here.
+3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
+4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.
+5. Ask for missing product intent instead of inventing requirements.
+6. Report the next recommended slash command when the step finishes.
+
+ONE-MORE-THING: ask developer if something not sure
+SKILL
+
+      generated_count=$((generated_count + 1))
+    done < <(find "$CATDD_DIR/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | sort)
+
+    echo "[${LOG_TAG}] Generated $generated_count Copilot skill wrappers in .github/skills"
+
+    echo "[${LOG_TAG}] Installed CaTDD for $AGENT_LABEL into $TARGET_DIR"
+    echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
+    echo "[${LOG_TAG}] Slash command source: .catdd/slashCommands"
+    echo "[${LOG_TAG}] SpecCoding artifacts: .catdd/spec"
+    echo "[${LOG_TAG}] Copilot skills: .github/skills"
     ;;
 
 esac

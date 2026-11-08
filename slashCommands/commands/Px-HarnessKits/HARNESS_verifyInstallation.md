@@ -44,7 +44,7 @@ Expected result:
 ## Inputs
 
 - `target_project_repo`: installed project repository to verify.
-- `code_agent`: target adapter surface to verify. Allowed values: `copilot`, `continue`, `cline`, `custom`, `antigravity`, `codex`, or `auto`.
+- `code_agent`: target adapter surface to verify. Allowed values: `copilot`, `chat-copilot-local`, `chat-copilot-agent-host`, `continue`, `cline`, `custom`, `antigravity`, `codex`, or `auto`.
 - `codex_prompts_dir`: optional deprecated Codex custom-prompt directory to verify when `code_agent=codex`. When omitted, verify only the `.agents/skills/` surface, because Codex custom prompts live outside the target project.
 - `custom_adapter_dir`: optional custom adapter directory when `code_agent=custom`. Default: `.customCodeAgent`.
 - `expected_command_families`: optional command family list. Default: `TEST_*`, `SPEC_*`, and `HARNESS_*`.
@@ -93,7 +93,8 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 
 ### Adapter Surfaces
 
-- `copilot`: verify `.github/instructions/catdd.instructions.md` plus `.github/prompts/*.prompt.md` wrappers.
+- `copilot` / `chat-copilot-local`: verify `.github/instructions/catdd.instructions.md` plus `.github/prompts/*.prompt.md` wrappers.
+- `chat-copilot-agent-host`: verify `.github/instructions/catdd.instructions.md` plus `.github/skills/*/SKILL.md` wrappers; ensure `HARNESS_verifyInstallation` maps to `harness-verify-installation`.
 - `continue`: verify `.continue/rules/catdd.md` plus `.continue/prompts/*.prompt` wrappers.
 - `cline`: verify `.clinerules/catdd.md` plus `.cline/skills/*/SKILL.md`; ensure `HARNESS_verifyInstallation` maps to `harness-verify-installation`.
 - `custom`: verify the configured custom rule and prompt directories, using Continue-format prompt wrappers.
