@@ -35,10 +35,10 @@ Do not invoke `HARNESS_showMeStatus` when:
 
 Repeat until every harness surface in scope is classified.
 
-1. **Thought** — From the surfaces already read, name what is still unexplained: an installed version that cannot be compared to any source, a generated adapter tree with no matching portable command set, a per-user surface that cannot be confirmed from the repository, or a diagnostic result with no date.
-2. **Action** — Run the next read-only inspection: read the install marker and manifest, count generated adapters against the portable command set, check instruction surfaces, compare installed version against the CaTDD source when a source path is available, and read prior verification, diagnosis, or evolution records when present.
-3. **Observation** — Classify each surface as `healthy`, `attention`, `unknown`, or `not-installed`. Then read the Integrity Level ladder top-down and stop at the last level whose entry question is answered `YES` by cited evidence. A surface that cannot be confirmed from evidence is reported `unknown` with the reason → return to **Thought** for one more read-only signal, or stop and report the gap.
-4. **Stop** — Exit when every surface is classified, the integrity level plus `level_evidence` and `level_gap` are recorded, findings are ordered by risk, and exactly one next harness command is recommended.
+1. **Thought** — From the surfaces already read, name what is still unexplained: an installed version that cannot be compared to any source, a generated adapter tree with no matching portable command set, a shadowed instruction layer or `<Name>Evolved.md` overlay, duplicate prompt and skill wrappers active together, a per-user surface that cannot be confirmed from the repository, or a diagnostic result with no date.
+2. **Action** — Run the next read-only inspection: read the install marker and manifest, count generated adapters against the portable command set, inspect the effective instruction/command layer precedence stack and invocation-policy headers (`disable-model-invocation: true` or `allow_implicit_invocation: false`), compare installed version against the CaTDD source when a source path is available, and read prior verification, diagnosis, or evolution records when present.
+3. **Observation** — Classify each surface as `healthy`, `attention`, `unknown`, or `not-installed`, and record any layer shadowing, overlay staleness, or duplicate-surface collision. Then read the Integrity Level ladder top-down and stop at the last level whose entry question is answered `YES` by cited evidence. A surface that cannot be confirmed from evidence is reported `unknown` with the reason → return to **Thought** for one more read-only signal, or stop and report the gap.
+4. **Stop** — Exit when every surface is classified, the effective layer precedence and invocation hygiene are summarized, the integrity level plus `level_evidence` and `level_gap` are recorded, findings are ordered by risk, and exactly one next harness command is recommended.
 
 ### Worked Example
 
@@ -51,11 +51,11 @@ project_root: ~/work/acme-pay
 
 Expected result:
 
-- **Thought**: candidates — the install marker may not match the CaTDD source version, and the generated adapter count may not match the portable command count.
-- **Action**: read `.catdd/CaTDD_INSTALL.md` and `.catdd/CaTDD_INSTALL.manifest`, count `.catdd/slashCommands/commands/**`, count generated wrappers, and read `.catdd/spec/projectContext.md`.
-- **Observation**: install identity is `20260101.01` for target agent `Copilot`, and a source repository is available at `20260201.03` → `attention` (source drift). Adapter count matches the portable command count → `healthy`. The Codex per-user prompt directory cannot be confirmed from the repository → `unknown`, with the reason stated instead of guessed. No verification, diagnosis, or evolution record is present → `unknown`.
+- **Thought**: candidates — the install marker may not match the CaTDD source version, the generated adapter count may not match the portable command count, and instruction or overlay layers may shadow canonical commands.
+- **Action**: read `.catdd/CaTDD_INSTALL.md` and `.catdd/CaTDD_INSTALL.manifest`, count `.catdd/slashCommands/commands/**`, count generated wrappers, inspect `<Name>Evolved.md` overlays and `AGENTS.md` / `.github/instructions/` layers, and read `.catdd/spec/projectContext.md`.
+- **Observation**: install identity is `20260101.01` for target agent `ChatCopilotLocal`, and a source repository is available at `20260201.03` → `attention` (source drift). Adapter count matches the portable command count and no duplicate `.github/skills/{test,spec,harness}-*` wrappers collide with `.github/prompts/` → `healthy`. Layer precedence is clean (1 local `SPEC_implTestsEvolved.md` overlay supersedes `SPEC_implTests.md` at `based_on: 20260101.01`). The Codex per-user prompt directory cannot be confirmed from the repository → `unknown`, with the reason stated instead of guessed. No verification, diagnosis, or evolution record is present → `unknown`.
 - **Observation (grade)**: Level-1 passes (an install marker exists and adapters are generated). The Level-2 question passes — adapter count equals the portable command count, the manifest baseline is coherent, and the managed-file reconciliation ratio is 1.0. The Level-3 question fails — the installed version trails the source with no recorded pin. So `integrity_level: Level-2 (Consistent)`, `level_evidence: reconciliation ratio 1.0; adapter count matches the portable command count; installed 20260101.01 vs source 20260201.03`, `level_gap: refresh the install to the source version, or record why it is pinned, to reach Level-3 (Current)`.
-- **Stop**: report `viewpoint: HARNESS`, `status_signal: attention`, `integrity_level: Level-2`, the surface table, the source-drift finding with both versions, and `next_command: HARNESS_verifyInstallation` after the refresh.
+- **Stop**: report `viewpoint: HARNESS`, `status_signal: attention`, `integrity_level: Level-2`, the surface table, `layer_precedence`, `invocation_hygiene`, the source-drift finding with both versions, and `next_command: HARNESS_verifyInstallation` after the refresh.
 
 ## Inputs
 
@@ -103,17 +103,31 @@ Harness surfaces:
 | Surface | Evidence |
 | --- | --- |
 | Installation identity | `.catdd/CaTDD_INSTALL.md`, `.catdd/CaTDD_INSTALL.manifest`, `.install-baseline/` |
-| Portable method and command source | `.catdd/methodPrompts/`, `.catdd/slashCommands/` |
-| Generated adapters | Per-agent wrapper trees such as `.github/prompts/`, `.continue/prompts/`, `.clinerules/`, `.antigravityrules/`, `.agents/skills/` |
-| Per-user surfaces | Codex custom prompts under `$CODEX_HOME/prompts`; not shared through the repository |
-| Instruction surfaces | `AGENTS.md` family and per-agent rule files, respecting managed-region ownership |
+| Portable method and command source | `.catdd/methodPrompts/`, `.catdd/slashCommands/` (including local `<Name>Evolved.md` overlays) |
+| Generated adapters | Per-agent wrapper trees such as `.github/prompts/` (`ChatCopilotLocal`), `.github/skills/` (`ChatCopilotAgentHost`), `.agents/skills/` (`Codex`), `.customCodeAgent/` (`Custom`), `.continue/prompts/`, `.clinerules/`, `.antigravityrules/` |
+| Invocation hygiene | Explicit-only skill invocation guards (`disable-model-invocation: true` in `.github/skills/*/SKILL.md`; `allow_implicit_invocation: false` in `.agents/skills/*/agents/openai.yaml`) and absence of duplicate `.github/prompts/` + `.github/skills/{test,spec,harness}-*` command wrappers |
+| Per-user surfaces | Personal agent surfaces such as `$CODEX_HOME/prompts` or `~/.copilot/`; not shared through the repository |
+| Instruction surfaces | `AGENTS.md` / `AGENTS.override.md` chain (root to `$CWD`) and `.github/instructions/catdd.instructions.md`, respecting managed-region ownership and authority ceiling |
 | Lifecycle workspace | `.catdd/spec/` lanes and `projectContext.md` |
 | Prior harness evidence | Last `HARNESS_verifyInstallation`, `HARNESS_diagnoseProject`, `HARNESS_diagnoseInstallation`, or `HARNESS_evolveHarness` result |
 
+### Effective Layer Precedence & Shadowing Diagnostics
+
+Inspired by config-layer diagnostics (`/debug-config`), `HARNESS_showMeStatus` inspects and reports how guidance and commands resolve from lowest to highest precedence, surfacing any shadowing or authority-ceiling violations:
+
+| Order (lowest → highest within its scope) | Layer | Authority & Shadowing Rule |
+| --- | --- | --- |
+| 1. Method ceiling | `.catdd/methodPrompts/` | Owns CaTDD category semantics, priority order, and US/AC/TP/TC rules. Never overridden by any downstream layer. |
+| 2. Canonical commands | `.catdd/slashCommands/**/<Name>.md` | Owns portable flow, kit, and command contracts. |
+| 3. Local evolved overlays | `.catdd/slashCommands/**/<Name>Evolved.md` | Supersedes its canonical `<Name>.md` sibling locally. Report active overlays and flag `attention` if `based_on` trails the installed version. |
+| 4. Project context & K-invariants | `.catdd/spec/projectContext.md` | Owns project facts, `K-SEC-*` constitutional invariants, SUT granularity, and the recorded `AGENTS.md` surface inventory. |
+| 5. Native adapter rules & wrappers | `.github/instructions/catdd.instructions.md`, `AGENTS.md` managed block, `.github/prompts/`, `.github/skills/`, `.agents/skills/` | Thin, regenerable adapters over Layers 1–3. Flag `attention` if both `.github/prompts/` and `.github/skills/{test,spec,harness}-*` are active simultaneously, or if generated skills lack explicit-only invocation guards. |
+| 6. Directory instruction chain | Root `AGENTS.md` → nested `AGENTS.md` / `AGENTS.override.md` | Capped at operating conventions. Flag `attention` if a directory `AGENTS.override.md` shadows a root `AGENTS.md` managed block without carrying the CaTDD pointers, or if combined `AGENTS.md` chain size approaches the 32 KiB truncation limit. |
+
 Reported `status_signal` is one of:
 
-- `healthy` — install identity is present, adapters match the portable command set, and no drift is found.
-- `attention` — source drift, a missing or extra adapter, or stale harness evidence.
+- `healthy` — install identity is present, adapters match the portable command set, layer precedence and invocation hygiene are clean, and no drift is found.
+- `attention` — source drift, a missing or extra adapter, duplicate active prompt+skill wrappers, unguarded implicit skill invocation, shadowed `AGENTS.md` managed block, stale `<Name>Evolved.md` `based_on` version, or stale harness evidence.
 - `blocked` — the installation is incomplete or internally inconsistent and cannot be trusted for use.
 - `unknown` — the project root or the install marker could not be read. A readable root with no install is `Level-0`, never `unknown`. A single surface that cannot be confirmed is reported `unknown` at the surface level and caps the level; that alone does not make the whole report `unknown`.
 
@@ -133,7 +147,10 @@ install: version <v> | target_agent <agent> | managed_files <n>
 source_compare: <source version and drift, or "no source_root provided">
 surfaces:
   - <surface>: <healthy | attention | unknown | not-installed> — <evidence>
-adapter_counts: <agent: generated n of portable m>
+layer_precedence:
+  - <layer 1..6>: <active | shadowed | stale-overlay | not-present> — <path and override/shadow detail>
+invocation_hygiene: <explicit-only guards verified | duplicate prompt+skill collision | implicit-invocation risk | not-applicable>
+adapter_counts: <agent: generated n of portable m (including k Evolved overlays)>
 reconciliation: <managed files matching the manifest / total managed>
 verification_freshness: <age of the last passing HARNESS_verifyInstallation, or "none recorded">
 prior_evidence: <last verification/diagnosis/evolution result, or "none recorded">
@@ -149,6 +166,8 @@ note: read-only inventory; no verification verdict and no mutation
 - One `integrity_level` from Level-0 to Level-5, or `unknown` when the project root or install marker could not be read.
 - `level_evidence` and `level_gap` that cite a manifest, a count, a version comparison, or a verification record — never a feeling.
 - Installed version, target agent, and managed-file count when an install marker exists.
+- Effective `layer_precedence` summary (Layers 1–6) reporting active `<Name>Evolved.md` overlays (and any `based_on` staleness), `AGENTS.md` / `AGENTS.override.md` shadowing, and combined instruction chain size risks.
+- `invocation_hygiene` summary reporting whether skill wrappers enforce explicit-only invocation (`disable-model-invocation: true` or `allow_implicit_invocation: false`) and whether duplicate `.github/prompts/` + `.github/skills/` command wrappers exist.
 - Adapter counts compared against the portable command set, per agent.
 - The managed-file reconciliation ratio and the verification freshness whenever Level-2 or Level-4 is reported, or an explicit statement that the measure could not be taken.
 - Per-user surfaces reported explicitly as unconfirmable from the repository rather than silently omitted.

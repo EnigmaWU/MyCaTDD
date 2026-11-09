@@ -33,7 +33,7 @@ The three commands deliberately share one outer report shape — `viewpoint`, `s
 | --- | --- | --- | --- |
 | Unit-test status | UT | Report TC markers, per-class closure, ledger dispositions, obligation coverage, and the next UT command. | [TEST_showMeStatus](../commands/Px-StatusKits/TEST_showMeStatus.md) |
 | SpecCoding status | SPEC | Report lane counts, the active story and its gate, the maturity level, AC totals, the governed metrics, and lane drift. | [SPEC_showMeStatus](../commands/Px-StatusKits/SPEC_showMeStatus.md) |
-| Harness status | HARNESS | Report installation identity, adapters, instruction surfaces, source drift, reconciliation, verification freshness, and prior harness evidence. | [HARNESS_showMeStatus](../commands/Px-StatusKits/HARNESS_showMeStatus.md) |
+| Harness status | HARNESS | Report installation identity, adapters, effective layer precedence, invocation hygiene, instruction surfaces, source drift, reconciliation, verification freshness, and prior harness evidence. | [HARNESS_showMeStatus](../commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 
 Reasoning patterns differ by evidence shape rather than by convention: `TEST_showMeStatus` is `Linear` because a marker scan is exhaustive and deterministic, while `SPEC_showMeStatus` and `HARNESS_showMeStatus` are `ReACT` because lanes and harness surfaces can contradict each other and may need one more read before a finding is provable.
 

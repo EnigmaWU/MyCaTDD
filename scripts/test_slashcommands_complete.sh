@@ -243,6 +243,11 @@ assert_contains "slashCommands/kits/Px-StatusKits.md" "read-only"
 assert_contains "$status_kit_dir/TEST_showMeStatus.md" "BROKEN_TEST"
 assert_contains "$status_kit_dir/SPEC_showMeStatus.md" ".catdd/spec/"
 assert_contains "$status_kit_dir/HARNESS_showMeStatus.md" "not a PASS/WARN/FAIL verification verdict"
+assert_contains "$status_kit_dir/HARNESS_showMeStatus.md" "### Effective Layer Precedence & Shadowing Diagnostics"
+assert_contains "$status_kit_dir/HARNESS_showMeStatus.md" "layer_precedence:"
+assert_contains "$status_kit_dir/HARNESS_showMeStatus.md" "invocation_hygiene:"
+assert_contains "$status_kit_dir/HARNESS_showMeStatus.md" "disable-model-invocation: true"
+assert_contains "$status_kit_dir/HARNESS_showMeStatus.md" "allow_implicit_invocation: false"
 
 if grep -Fq "Future Command Candidates" "$REPO_ROOT/slashCommands/flows/P1-DesignTestsFlow.md"; then
   fail "P1 flow still describes completed commands as future candidates"
