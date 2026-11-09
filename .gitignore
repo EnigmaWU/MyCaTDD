@@ -93,7 +93,10 @@ Testing/
 /.customCodeAgent/prompts/TEST_*.prompt
 /.customCodeAgent/prompts/SPEC_*.prompt
 /.customCodeAgent/prompts/HARNESS_*.prompt
+/.agents/skills/ut-*/
 /.agents/skills/test-*/
+/.agents/skills/spec-*/
+/.agents/skills/harness-*/
 /.cline/skills/
 
 book*

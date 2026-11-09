@@ -109,7 +109,7 @@ CaTDD 术语 **VibeCoding** 和 **SpecCoding** 的定义见 [slashCommands/READM
 
 ## 安装 / 刷新到 CodeAgent 项目
 
-可以用下面的命令把 CaTDD 安装或刷新到已有的 Copilot 项目：
+可以用下面的命令把 CaTDD 安装或刷新到已有的 Copilot 或 Codex 项目：
 
 ```bash
 # VS Code Local harness（在 .github/prompts/ 生成 prompt 包装；别名：Copilot）
@@ -117,6 +117,9 @@ scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot -
 
 # VS Code Copilot harness / Agent Host（在 .github/skills/ 生成 skill 包装）
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent ChatCopilotAgentHost --clean-prompts
+
+# OpenAI Codex CLI / IDE / Desktop（在 .agents/skills/ 生成 skill 包装并更新 AGENTS.md 受管块）
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex --clean-prompts
 ```
 
 如果目标目录还不存在，增加 `--init`：
@@ -135,11 +138,11 @@ scripts/installCaTDD.sh --targetDir /path/to/new-project --targetCodeAgent Copil
 
 - `.catdd/methodPrompts/`：安装后的 CaTDD 方法源，用于手工阅读与方法真理源。
 - `.catdd/slashCommands/`：安装后的可移植流程命令源，用于自动化。
-- `.github/prompts/TEST_*.prompt.md` 和 `.github/prompts/SPEC_*.prompt.md`（`ChatCopilotLocal` / `Copilot`）或 `.github/skills/<skill-name>/SKILL.md`（`ChatCopilotAgentHost`）：从 `slashCommands` 生成的 Copilot 原生薄适配。
-- `.github/instructions/catdd.instructions.md`：指向 `.catdd/` 的 Copilot instruction 文件。
+- `.github/prompts/TEST_*.prompt.md` 和 `.github/prompts/SPEC_*.prompt.md`（`ChatCopilotLocal` / `Copilot`）、`.github/skills/<skill-name>/SKILL.md`（`ChatCopilotAgentHost`）或 `.agents/skills/<skill-name>/SKILL.md`（`Codex`）：从 `slashCommands` 生成的原生薄适配。
+- `.github/instructions/catdd.instructions.md`（`ChatCopilotLocal` / `ChatCopilotAgentHost`）或 `AGENTS.md` 中的受管 `CaTDD Codex instructions` 块（`Codex`）：指向 `.catdd/` 的项目指令文件。
 - `.catdd/CaTDD_INSTALL.manifest` 与 `.catdd/.install-baseline/`：用于检测并合并目标演进文件的补丁感知刷新状态。本地 `<Name>Evolved.md` 覆盖文件刻意不记录在此，因此可跨刷新存活。
 
-标准安装器支持 `ChatCopilotLocal`（别名：`Copilot`、`GitHub/Copilot`）与 `ChatCopilotAgentHost`。需要自定义适配流程时，请使用独立的 `scripts/installCaTDD4Custom.sh`。
+标准安装器支持 `ChatCopilotLocal`（别名：`Copilot`、`GitHub/Copilot`）、`ChatCopilotAgentHost` 与 `Codex`（别名：`OpenAI/Codex`）。需要自定义适配流程时，请使用独立的 `scripts/installCaTDD4Custom.sh`。
 
 在本源仓库中，生成的 `.github/prompts/TEST_*.prompt.md` 与 `.github/prompts/SPEC_*.prompt.md` 文件只是临时 Copilot 适配输出，并被刻意忽略。应提交 `methodPrompts`、`slashCommands`、脚本与文档；需要时再为目标项目重新生成原生适配。
 

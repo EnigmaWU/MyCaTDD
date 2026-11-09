@@ -85,7 +85,7 @@ err_out="$("$INSTALLER" --targetDir "$WORK" 2>&1)" || true
 grep -Fq 'Missing required --targetCodeAgent' <<< "$err_out" || fail "missing --targetCodeAgent not detected"
 
 echo "[installCaTDD-test] Test: unknown agent exits error"
-for unsupported_agent in Continue Cline Antigravity Codex; do
+for unsupported_agent in Continue Cline Antigravity; do
   err_out="$("$INSTALLER" --targetDir "$WORK" --targetCodeAgent "$unsupported_agent" 2>&1)" || true
   grep -Fq 'Unknown --targetCodeAgent' <<< "$err_out" || fail "unsupported agent not rejected: $unsupported_agent"
 done
@@ -190,6 +190,56 @@ install_agent_host() {
 }
 
 install_agent_host
+
+echo "[installCaTDD-test] Test: Codex fresh install, AGENTS.md patch, and skill generation"
+install_codex() {
+  local dir="$WORK/fresh-Codex"
+  local marker
+  mkdir -p "$dir"
+  printf '# Existing Project Agents Guide\n\nKeep custom repo notes.\n' > "$dir/AGENTS.md"
+  "$INSTALLER" --targetDir "$dir" --targetCodeAgent Codex --init --clean-prompts --yes >/dev/null 2>&1
+  assert_file "$dir/.catdd/methodPrompts/README.md"
+  assert_file "$dir/.catdd/slashCommands/TEST_slashCommandTemplate.md"
+  assert_dir "$dir/.catdd/spec/pendingNews"
+  assert_file "$dir/.catdd/CaTDD_INSTALL.manifest"
+  marker="$dir/.catdd/CaTDD_INSTALL.md"
+  assert_contains "$marker" '- Target agent: Codex'
+
+  assert_file "$dir/AGENTS.md"
+  assert_contains "$dir/AGENTS.md" '# Existing Project Agents Guide'
+  assert_contains "$dir/AGENTS.md" 'Keep custom repo notes.'
+  assert_contains "$dir/AGENTS.md" 'BEGIN CaTDD Codex instructions'
+  assert_contains "$dir/AGENTS.md" '.agents/skills'
+  assert_contains "$dir/AGENTS.md" '/HARNESS_evolveHarness'
+
+  assert_file "$dir/.agents/skills/test-convert-demo-to-typical/SKILL.md"
+  assert_file "$dir/.agents/skills/test-convert-demo-to-typical/agents/openai.yaml"
+  assert_file "$dir/.agents/skills/spec-open-user-story/SKILL.md"
+  assert_file "$dir/.agents/skills/harness-patch-ca-tdd-source/SKILL.md"
+  assert_file "$dir/.agents/skills/harness-verify-installation/SKILL.md"
+  assert_file "$dir/.agents/skills/harness-diagnose-installation/SKILL.md"
+  assert_contains "$dir/.agents/skills/test-convert-demo-to-typical/SKILL.md" 'TEST_convertDemoToTypical'
+  assert_contains "$dir/.agents/skills/test-convert-demo-to-typical/SKILL.md" 'thin Codex Skill adapter'
+  assert_contains "$dir/.agents/skills/test-convert-demo-to-typical/agents/openai.yaml" 'display_name: "TEST_convertDemoToTypical"'
+  assert_contains "$dir/.agents/skills/test-convert-demo-to-typical/agents/openai.yaml" 'allow_implicit_invocation: false'
+
+  source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
+  skill_count="$(find "$dir/.agents/skills" -mindepth 2 -maxdepth 2 -type f -name 'SKILL.md' | wc -l | tr -d '[:space:]')"
+  [[ "$skill_count" == "$source_count" ]] || fail "expected $source_count installed Codex skills, got $skill_count"
+  assert_absent "$dir/.codex/prompts"
+
+  # Ensure non-wrapper user skills in .agents/skills survive --clean-prompts
+  mkdir -p "$dir/.agents/skills/test-custom-codex-skill"
+  printf '# Hand-authored Codex skill\n' > "$dir/.agents/skills/test-custom-codex-skill/SKILL.md"
+  mkdir -p "$dir/.agents/skills/spec-stale-wrapper"
+  printf 'You are running a Codex Skill wrapper around a portable CaTDD slash command.\n' > "$dir/.agents/skills/spec-stale-wrapper/SKILL.md"
+  "$INSTALLER" --targetDir "$dir" --targetCodeAgent "OpenAI/Codex" --clean-prompts --yes >/dev/null 2>&1
+  assert_file "$dir/.agents/skills/test-custom-codex-skill/SKILL.md"
+  assert_absent "$dir/.agents/skills/spec-stale-wrapper/SKILL.md"
+  rm -rf "$dir"
+}
+
+install_codex
 
 echo "[installCaTDD-test] Test: evolved file survives refresh, --force-overwrite restores canonical"
 S1="$WORK/sync-keep"

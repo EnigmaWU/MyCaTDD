@@ -43,7 +43,7 @@ Expected result:
 ## Inputs
 
 - `target_project_repo`: installed project repository to diagnose.
-- `code_agent`: target adapter surface to diagnose. Allowed values: `copilot`, `chat-copilot-local`, `chat-copilot-agent-host`, `continue`, `cline`, `custom`, `antigravity`, or `auto`.
+- `code_agent`: target adapter surface to diagnose. Allowed values: `copilot`, `chat-copilot-local`, `chat-copilot-agent-host`, `codex`, `continue`, `cline`, `custom`, `antigravity`, or `auto`.
 - `symptom`: observed misworking behavior, failed command, missing wrapper, broken rule, or failed verification output.
 - `verification_report`: optional output from `HARNESS_verifyInstallation`.
 - `failed_checks`: optional explicit failed check list from a previous verification run.
@@ -92,7 +92,7 @@ If the target path, symptom, or adapter surface is unclear, stop and ask the dev
 | Evolved overlay ignored at runtime | Agent followed canonical `<Name>.md` instead of the superseding `<Name>Evolved.md` | Confirm the adapter rule resolves overlays; read the evolved file; regenerate adapters if the rule text is stale. |
 | Evolved overlay looks stale after a base update | Canonical base changed after the overlay's `based_on` header | Re-review the overlay, refresh it with `HARNESS_evolveHarness`, or promote it with `HARNESS_patchCaTDDSource`. |
 | Evolved overlay missing after a refresh | An older installer reset the managed tree before preserving overlays | Restore from project git or local backup, rerun refresh, and confirm overlays survive `--force-overwrite`. |
-| Main installer rejects the requested target agent | The standard installer supports `ChatCopilotLocal` (alias: `Copilot`) and `ChatCopilotAgentHost` only | Select `ChatCopilotLocal`, `ChatCopilotAgentHost`, or `Copilot`, or use `scripts/installCaTDD4Custom.sh` for the separate custom-adapter workflow. |
+| Main installer rejects the requested target agent | The standard installer supports `ChatCopilotLocal` (alias: `Copilot`), `ChatCopilotAgentHost`, and `Codex` only | Select `ChatCopilotLocal`, `ChatCopilotAgentHost`, `Codex`, or `Copilot`, or use `scripts/installCaTDD4Custom.sh` for the separate custom-adapter workflow. |
 | Rule file missing command-family guidance | Old installer version or overwritten native rule | Rerun installer and compare rule marker against current CaTDD source. |
 | Antigravity prompt wrapper missing | Not a failure unless Antigravity wrapper generation is explicitly supported | Verify `.antigravityrules/catdd.md` and portable `.catdd` assets instead. |
 | Command exists but editor cannot invoke it | Editor cache, extension reload needed, command palette indexing lag | Reload the editor or refresh the relevant CodeAgent command surface after file checks pass. |

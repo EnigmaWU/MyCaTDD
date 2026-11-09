@@ -113,7 +113,7 @@ For the CaTDD terms **VibeCoding** and **SpecCoding**, see [slashCommands/README
 
 ## Install / Refresh into Code Agent Projects
 
-Install or refresh CaTDD into an existing Copilot-enabled project with:
+Install or refresh CaTDD into an existing Copilot or Codex project with:
 
 ```bash
 # VS Code Local harness (prompts in .github/prompts/; alias: Copilot)
@@ -121,6 +121,9 @@ scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot -
 
 # VS Code Copilot harness / Agent Host (skills in .github/skills/)
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent ChatCopilotAgentHost --clean-prompts
+
+# OpenAI Codex CLI / IDE / Desktop (skills in .agents/skills/ + managed block in AGENTS.md)
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex --clean-prompts
 ```
 
 For a new target directory, add `--init`:
@@ -139,11 +142,11 @@ The installer creates or refreshes these target-project assets:
 
 - `.catdd/methodPrompts/`: installed CaTDD method source for manual reading and method truth.
 - `.catdd/slashCommands/`: installed portable flow-command source for automation.
-- `.github/prompts/TEST_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` (`ChatCopilotLocal` / `Copilot`) or `.github/skills/<skill-name>/SKILL.md` (`ChatCopilotAgentHost`): Copilot-native thin adapters generated from `slashCommands`.
-- `.github/instructions/catdd.instructions.md`: Copilot instruction file that points agents back to `.catdd/`.
+- `.github/prompts/TEST_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` (`ChatCopilotLocal` / `Copilot`), `.github/skills/<skill-name>/SKILL.md` (`ChatCopilotAgentHost`), or `.agents/skills/<skill-name>/SKILL.md` (`Codex`): native thin adapters generated from `slashCommands`.
+- `.github/instructions/catdd.instructions.md` (`ChatCopilotLocal` / `ChatCopilotAgentHost`) or a managed `CaTDD Codex instructions` block in `AGENTS.md` (`Codex`): project instructions that point agents back to `.catdd/`.
 - `.catdd/CaTDD_INSTALL.manifest` and `.catdd/.install-baseline/`: patch-aware refresh state used to detect and merge target-evolved files. Local `<Name>Evolved.md` overlays are deliberately not tracked here and survive refresh.
 
-The standard installer supports `ChatCopilotLocal` (aliases: `Copilot`, `GitHub/Copilot`) and `ChatCopilotAgentHost`. Use `scripts/installCaTDD4Custom.sh` when you need its separate custom adapter workflow.
+The standard installer supports `ChatCopilotLocal` (aliases: `Copilot`, `GitHub/Copilot`), `ChatCopilotAgentHost`, and `Codex` (alias: `OpenAI/Codex`). Use `scripts/installCaTDD4Custom.sh` when you need its separate custom adapter workflow.
 
 In this source repository, generated `.github/prompts/TEST_*.prompt.md` and `.github/prompts/SPEC_*.prompt.md` files are temporary Copilot adapter output and are intentionally ignored. Commit `methodPrompts`, `slashCommands`, scripts, and docs; regenerate native adapters for target projects when needed.
 

@@ -115,11 +115,12 @@ Expected result:
 
 ## Native Adapter Generation
 
-The standard installer supports `ChatCopilotLocal` (aliases: `Copilot`, `GitHub/Copilot`) and `ChatCopilotAgentHost`, generating native prompt or skill wrappers from portable `SPEC_*`, `TEST_*`, and `HARNESS_*` command files:
+The standard installer supports `ChatCopilotLocal` (aliases: `Copilot`, `GitHub/Copilot`), `ChatCopilotAgentHost`, and `Codex` (alias: `OpenAI/Codex`), generating native prompt or skill wrappers from portable `SPEC_*`, `TEST_*`, and `HARNESS_*` command files:
 
 ```bash
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Copilot --clean-prompts
 scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent ChatCopilotAgentHost --clean-prompts
+scripts/installCaTDD.sh --targetDir /path/to/project --targetCodeAgent Codex --clean-prompts
 ```
 
 Use the separate custom adapter installer when you need its Continue-format prompt wrappers:
