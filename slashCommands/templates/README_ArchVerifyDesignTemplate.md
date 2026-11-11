@@ -7,7 +7,7 @@ This is the SpecCoding template for project-root `README_ArchVerifyDesign.md`. C
 ## Story and Design Inputs
 
 - Story: {{StoryID}} and {{title}}
-- Active story artifact: {{.catdd/spec/doingUS path}}
+- Active story artifact: {{.catdd/metaspec/doingUS path}}
 - Architecture design: [README_ArchDesign](README_ArchDesign.md)
 - Detail-level verification design: [README_DetailVerifyDesign](README_DetailVerifyDesign.md)
 - Related design surfaces: [README_UsageDesign](README_UsageDesign.md), [README_ErrorDesign](README_ErrorDesign.md), [README_PerfDesign](README_PerfDesign.md), [README_CompatDesign](README_CompatDesign.md), [README_DiagnosisDesign](README_DiagnosisDesign.md), [README_SecurityDesign](README_SecurityDesign.md)

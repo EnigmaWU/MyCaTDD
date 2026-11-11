@@ -4,8 +4,8 @@
 
 ## Context
 
-- Architecture baseline story: [../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
-- Architecture-changing update story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
+- Architecture baseline story: [../../.catdd/metaspec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/metaspec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Architecture-changing update story: [../../.catdd/metaspec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/metaspec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - Requirements index: [README_UserStory_ZH.md](README_UserStory_ZH.md)
 - USER requirements: [README_UserStory4USER_ZH.md](README_UserStory4USER_ZH.md)
 - INVENTOR requirements: [README_UserStory4INVENTOR_ZH.md](README_UserStory4INVENTOR_ZH.md)

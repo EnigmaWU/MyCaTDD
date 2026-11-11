@@ -1,5 +1,9 @@
 # SPEC_reviewDetailDesign
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Review detailed design immediately after `SPEC_takeDetailDesign` and before `SPEC_reviewUserStory` or test skeleton design, so local API, state, and testability gaps are found before CaTDD test design begins.
@@ -23,7 +27,7 @@ Gating the detail design before test skeletons are written:
 
 ```text
 /SPEC_reviewDetailDesign
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 readme_detail_design: README_DetailDesign.md
 readme_spec_files: README_StateDesign.md, README_ErrorDesign.md
 ```
@@ -38,7 +42,7 @@ Expected result — two passes:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `readme_arch_design`: project-root or module-scoped `README_ArchDesign.md`.
 - `readme_arch_design_zh`: optional matching `README_ArchDesign_ZH.md` mirror.
 - `readme_detail_design`: project-root or module-scoped `README_DetailDesign.md`.

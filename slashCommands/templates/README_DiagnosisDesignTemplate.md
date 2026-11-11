@@ -5,7 +5,7 @@ This is the SpecCoding template for project-root `README_DiagnosisDesign.md`. Cr
 ## Story or Issue Context
 
 - Story or issue: {{US identifier, bug id, field issue id, or CI failure}}
-- Source artifact: {{.catdd/spec/doingUS path, issue link, log bundle, or reproduction link}}
+- Source artifact: {{.catdd/metaspec/doingUS path, issue link, log bundle, or reproduction link}}
 - Related detail design: [README_DetailDesign](README_DetailDesign.md)
 - Related state design: [README_StateDesign](README_StateDesign.md)
 - Related performance design: [README_PerfDesign](README_PerfDesign.md)

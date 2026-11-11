@@ -1,5 +1,9 @@
 # SPEC_takeArchDesign
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Create or update high-level architecture design for the architecture-changing active user story, defining module-context architecture and consuming-system context, architecture views, architecture-oriented SPEC surface coverage, component decomposition, module boundaries, dependencies, data flows, and key technical trade-offs before detailed class or API design begins.
@@ -31,7 +35,7 @@ A story introduces a pluggable payment gateway:
 
 ```text
 /SPEC_takeArchDesign
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 readme_arch_design: README_ArchDesign.md
 readme_arch_template: slashCommands/templates/README_ArchDesignTemplate.md
 ```
@@ -47,7 +51,7 @@ Expected result — two passes:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/` that creates or changes architecture decisions, architecture boundaries, deployment/runtime strategy, or architecture-oriented SPEC surfaces.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/` that creates or changes architecture decisions, architecture boundaries, deployment/runtime strategy, or architecture-oriented SPEC surfaces.
 - `projectContext_file`: current project context.
 - `readme_arch_design`: project-root `README_ArchDesign.md` to create or update.
 - `readme_arch_template`: matching template under `slashCommands/templates/README_ArchDesignTemplate.md`.

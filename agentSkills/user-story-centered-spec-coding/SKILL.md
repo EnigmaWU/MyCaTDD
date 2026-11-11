@@ -47,7 +47,7 @@ Do not use this skill for one-off test design without a story lifecycle. Use `co
 Use this skill in repositories that have, or want to create, SpecCoding artifacts under:
 
 ```text
-.catdd/spec/
+.catdd/metaspec/
   projectContext.md
   pendingNews/
   todoUS/
@@ -102,10 +102,10 @@ The result is less hidden chat state and more durable project knowledge.
 Depending on the lifecycle phase, this skill produces or updates:
 
 - `.catdd/spec/projectContext.md`
-- `.catdd/spec/pendingNews/*.md`
-- `.catdd/spec/todoUS/*-UserStory.md`
-- `.catdd/spec/doingUS/*-UserStory.md`
-- `.catdd/spec/doneUS/*-UserStory.md`
+- `.catdd/metaspec/pendingNews/*.md`
+- `.catdd/metaspec/todoUS/*-UserStory.md`
+- `.catdd/metaspec/doingUS/*-UserStory.md`
+- `.catdd/metaspec/doneUS/*-UserStory.md`
 - Project-root README SPEC docs as needed.
 - Test design and implementation artifacts.
 - Product code changes.
@@ -140,19 +140,19 @@ If the testing method is unclear, default UnitTesting to CaTDD and explicitly no
 
 1. Determine whether the input is an issue/bug or feature/product idea.
 2. Use `SPEC_importIssue` or `SPEC_importFeature` intent.
-3. Store pending work under `.catdd/spec/pendingNews/`.
+3. Store pending work under `.catdd/metaspec/pendingNews/`.
 4. Preserve source links, raw facts, and unresolved questions.
 
 ### Phase 3: Analyze Into a User Story
 
 1. Use `SPEC_analyzeIssue` or `SPEC_analyzeFeature` intent.
-2. Convert pending input into a traceable user story under `.catdd/spec/todoUS/`.
+2. Convert pending input into a traceable user story under `.catdd/metaspec/todoUS/`.
 3. Include role, capability, value, acceptance criteria candidates, risk, and open questions.
 4. Do not invent product intent.
 
 ### Phase 4: Open and Design the Story
 
-1. Use `SPEC_openUserStory` intent to move selected work into `.catdd/spec/doingUS/`, and use `SPEC_makePlan` to create the initial paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` checklist.
+1. Use `SPEC_openUserStory` intent to move selected work into `.catdd/metaspec/doingUS/`, and use `SPEC_makePlan` to create the initial paired `.catdd/metaspec/doingUS/*-UserStory-Tasks.md` checklist.
 2. Use `SPEC_takeDetailDesign` intent to produce detail design and acceptance criteria.
 3. Create or update project-root README SPEC docs only when the project needs those shared surfaces; use `slashCommands/templates/README_*Template.md` when creating one for the first time.
 4. Use `SPEC_reviewUserStory` to gate story and design readiness.
@@ -171,13 +171,13 @@ If the testing method is unclear, default UnitTesting to CaTDD and explicitly no
 1. Use `SPEC_implProductCodes` intent to implement product code that satisfies tests.
 2. Use `SPEC_reviewProductCodes` intent to review implementation quality and traceability.
 3. If quality fails but the current story remains valid, route back to the needed design, test, or product-code step.
-4. If the current story's scope, assumptions, or intent are no longer safe, use `SPEC_abortUserStory` intent to move it to `.catdd/spec/abortUS/` for later analysis or next-round improvement.
+4. If the current story's scope, assumptions, or intent are no longer safe, use `SPEC_abortUserStory` intent to move it to `.catdd/metaspec/abortUS/` for later analysis or next-round improvement.
 5. Keep the active story open until quality gates are satisfied or explicitly aborted.
 
 ### Phase 7: Commit, CI, and Closure
 
 1. Use `SPEC_commitStoryWorks` intent to commit the whole `SPEC_openUserStory -> SPEC_closeUserStory` span, using `SPEC_commitStepWorks` at the step boundaries the plan marked committable and `SPEC_commitPreStoryWorks` for the intake span that preceded the story. `SPEC_commitWorks` stays available as the general, story-agnostic commit command.
-2. Use `SPEC_closeUserStory` intent to move reviewed completed work to `.catdd/spec/doneUS/`, then rerun `SPEC_commitStoryWorks` with `commit_checkpoint = post_close` when close generated lifecycle/meta changes.
+2. Use `SPEC_closeUserStory` intent to move reviewed completed work to `.catdd/metaspec/doneUS/`, then rerun `SPEC_commitStoryWorks` with `commit_checkpoint = post_close` when close generated lifecycle/meta changes.
 3. Record any reusable lessons that should feed back into `methodPrompts`, `slashCommands`, or `agentSkills`.
 
 ## Resources

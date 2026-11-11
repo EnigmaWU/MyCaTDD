@@ -137,7 +137,7 @@ pendingNews/  →  analyzedNews/  →  todoUS/  →  doingUS/  →  doneUS/
                                                ↘ abortUS/（已保留）
 ```
 
-七个生命周期目录，每个都在 `.catdd/spec/` 下的版本控制目录中：
+七个生命周期目录，每个都在 `.catdd/metaspec/` 下的版本控制目录中：
 
 | 状态 | 目录 | 含义 |
 |---|---|---|
@@ -320,7 +320,7 @@ P2 采用同样的关卡，在任何骨架起草之前：
 | **设计源关卡** | 无 | 无 | **是** — P1/P2 要求确认的 README_* 文档 |
 | **模型层级指导** | 不存在 | 推荐高推理模型 | **按命令层级映射** (SOTA/HighPerf/Flash) |
 | **审查关卡** | `/speckit.analyze` (跨制品) | `/opsx:verify` (实现后) | **6 个审查关卡**：架构→详细→故事→测试→代码→提交 |
-| **制品持久化** | 文件系统 (specs 目录) | 文件系统 (changes 目录) | **团队共享的 `.catdd/spec/`，每种制品有提交策略** |
+| **制品持久化** | 文件系统 (specs 目录) | 文件系统 (changes 目录) | **团队共享的 `.catdd/metaspec/`，每种制品有提交策略** |
 | **项目根文档** | Spec + plan，然后手动 | Proposal + design，然后手动 | **13 种 README* SPEC 文档类型**，通过 SPEC 命令按需创建 |
 | **既有代码库 (Brownfield)** | 主要是全新项目 (greenfield) | **优先既有代码库** (为现有代码库设计) | **两者皆可** — 将现有代码分析为 US/AC/TC |
 | **安装方式** | `uv tool install specify-cli` (Python) | `npm install -g @fission-ai/openspec` (TypeScript) | Markdown prompt 文件 (agent 无关) |

@@ -3,6 +3,23 @@
 本文件定义了 CaTDD 安装器会分发到目标项目根目录的词汇体系。
 它是统一语义契约，用于保证方法提示词、slash 命令、代码智能体和生成适配器中的关键术语保持一致。
 
+## CaTDD 规格模型
+
+CaTDD 的目标是创建、验证并演进完整的 `SPEC`，而不是把自身的工作流记录当作 `SPEC`：
+
+```text
+SPEC = youWantR + iWhyD + aiHowC
+```
+
+| 术语 | 规范含义 |
+| --- | --- |
+| `SPEC` | 通过 CaTDD 生成的完整规格，由需求、设计理由、验证以及产品代码实现共同构成。 |
+| `R` / `youWantR` | Requirement（需求）：用户明确表达的目标结果、约束与验收意图。需求与 User Story 是可追溯的承载表面。 |
+| `D` / `iWhyD` | Design（设计）：承载理由的架构与详细设计，解释为什么预期解决方案采用当前形式。 |
+| `C` / `aiHowC` | Code（代码）：通过测试与产品代码实现的 AI 辅助落地与验证，回答需求与设计如何成为可执行行为。 |
+| `metaspec` | 用于生成、追溯、评审并演进 `SPEC` 的元级模型与控制工作区。它保存项目上下文、导入、计划、门禁、评审、任务状态与轨迹。metaspec 产物本身不自动等同于 `R`、`D`、`C` 或完整 `SPEC`。 |
+| `metaspec_root` | 选择活跃 metaspec 工作区的项目相对路径：`.catdd/metaspec`、`.agents/metaspec` 或兼容旧项目的 `.catdd/spec`。 |
+
 ## Who
 
 - 维护 `methodPrompts/` 的方法维护者。
@@ -24,9 +41,9 @@
 | Skeleton | 仅注释的测试设计骨架，包含追溯标记和计划测试意图。 |
 | RED | 产品代码修改前，处于可执行且预期失败的测试状态。 |
 | GREEN | 产品代码修改后，测试通过状态。 |
-| SpecCoding | 将验证设计工件作为可执行规格生命周期的 CaTDD 工作流。 |
+| SpecCoding | 创建并维护完整 `SPEC = youWantR + iWhyD + aiHowC` 的 CaTDD 工作流，同时把过程控制、追溯与评审知识持久化为 `metaspec`。 |
 | VibeCoding | 快速创意/原型模式；结果仍应回收并对齐到 CaTDD 追溯体系。在已开启的故事内，它必须通过 `SPEC_whatsWrong` 显式进入，仅在 `manualMode` 下可用，`ONE-MORE-THING` 始终生效，且探索性修改在某个 `SPEC_*` 步骤重新采纳前始终保持 `unadopted`。 |
-| SPEC_whatsWrong | Px-SpecFlow 升级阶梯的第三级，也是从 SpecCoding 进入 VibeCoding 的桥梁。它判定触发原因、校验 `manualMode`、在不移动泳道也不写团队制品的前提下冻结流程、把本次探索以 `adoption_status = unadopted` 记录到 `.catdd/spec/WorkingProcessLog.md`、把每项发现路由到归属命令、报告 `learning_command = /HARNESS_evolveHarness` 且 `evolution_mode=auto`，并用任意 `SPEC_doXYZ`（例如 `SPEC_whatsNextTask`）恢复流程。 |
+| SPEC_whatsWrong | Px-SpecFlow 升级阶梯的第三级，也是从 SpecCoding 进入 VibeCoding 的桥梁。它判定触发原因、校验 `manualMode`、在不移动泳道也不写团队制品的前提下冻结流程、把本次探索以 `adoption_status = unadopted` 记录到 `.catdd/metaspec/WorkingProcessLog.md`、把每项发现路由到归属命令、报告 `learning_command = /HARNESS_evolveHarness` 且 `evolution_mode=auto`，并用任意 `SPEC_doXYZ`（例如 `SPEC_whatsNextTask`）恢复流程。 |
 | agent instruction surface（智能体指令面） | 告诉 code agent 如何在本项目中工作的仓库文件：`AGENTS.md`，以及目录级覆盖用的 `AGENTS.override.md`。`SPEC_initProjectContext` 会记录每个文件的位置、作用域、来源、按区域的归属以及一行摘要；`SPEC_updateProjectContext` 负责对齐它们。来源判定取自文件本身：仅有受管区域 = `catdd-created`，仅有手写内容 = `pre-existing`，两者都有 = `mixed`，空文件 = `present-empty`。归属按区域划分：CaTDD 受管标记之间的区域可重新生成且归 CaTDD 所有，其余归项目所有。其权限上限为"操作约定"，绝不凌驾于方法语义、分类语义、门禁规则、追溯关系或项目事实之上。由安装器生成的适配文件（`.github/instructions/*.md`、`.clinerules/*.md`、`.continue/rules/*.md`、`.antigravityrules/*.md`）与生成目录会被整体重写，不在该模型范围内。 |
 | review_verdict（评审结论） | 每个 review 命令每轮报告的唯一门禁结论：`PASS`、`REVISE`、`BLOCKED`、`ASK` 四者之一，并伴随 `severity`（`blocking | advisory`，默认 `blocking`）以及 `rework_route`（结论不是 `PASS` 时必填，写明归属命令）。`cardinality_gate`、`discovery_status`、`ready_for_implementation` 等子门禁用于支撑结论，不构成独立的结论词汇。旧有的各命令结论（`GAPS`、`WARN`、`FAIL`、`RISKY` 及动作型结论）在 Px-SpecFlow 的 Review Gate Contract 映射表中对应到该集合。 |
 | PASS（通过） | `review_verdict` 之一：门禁按现状接受该制品，不要求任何阻断性修改，下游步骤可以直接消费它。仍可附带 `severity = advisory` 的发现，它们记录风险但不阻断工作。PASS 不等于"完美"，而是"可以安全推进"；它要求在声明范围内所有子门禁均为 `PASS`。 |
@@ -54,13 +71,13 @@
 | Discovery to Categorization | 发现到归类的两阶段桥梁：在 Stage-0（自由草拟）阶段，基于来源和全面扫描广度优先发掘 TP，避免过早陷入分类偏见；在 Stage-1（分类设计）阶段，依据验证视角将各 TP 路由到正确的 CaTDD 类别（契约 -> P0，模型 -> P1，包络 -> P2，认知表面 -> P3），随后形式化为 US/AC/TP/TC 骨架。 |
 | manualMode | SpecCoding 的人类驱动形态：由开发者逐条输入 `SPEC_doXYZ`，助手逐步推进，在意图、验收标准或安全性模糊时暂停并提出针对性问题，等待开发者明确确认。它是人类聊天会话的默认值，也是 `autonomousMode` 运行在导向边界处必须暂停时的回退模式。 |
 | autonomousMode | SpecCoding 的流程驱动形态：由流程自身调用下一条 `SPEC_doXYZ`。对于驱动 Px-SpecFlow 的 code agent 或 CLI 运行器（如 `specCodeAgentCLI`）它是默认值；对人类会话则需在入口命令上显式传入 `execution_mode: autonomousMode`。**严格仅支持实现导向（implementation-oriented）的用户故事**：需求与架构需要人类意图，运行会在该边界暂停并退回 `manualMode`。模式由驱动方显式声明而非推断，自动推进 Part 2.b 的实现与评审步骤直至最终状态（`closeUserStory`、`abortUserStory` 或 `suspendUserStory`），并且因为缺少人类意图来源而永远无法进入 VibeCoding。 |
-| analysis_mode | 分析命令内部（`SPEC_analyzeIssue`、`SPEC_analyzeFeature`）在 `manualMode` 流程下的命令级执行模式。`BRAINSTORM`（头脑风暴，默认）与开发者进行交互式逐步对话探讨，并必须在归档的 `.catdd/spec/analyzedNews/` 文件中以 `## Chat History`（`chatHistory`）章节记录对话与决策；`AUTONOMOUS`（自主分析）单次执行多技能分析流水线草拟 `todoUS` 而不逐步打断，在 `.catdd/spec/analyzedNews/` 的 `## Chat History` 下记录自主推理/提示轨迹，显式记录假设与疑问并在存在阻塞性问题时将故事标记为未就绪（NOT ready）。 |
+| analysis_mode | 分析命令内部（`SPEC_analyzeIssue`、`SPEC_analyzeFeature`）在 `manualMode` 流程下的命令级执行模式。`BRAINSTORM`（头脑风暴，默认）与开发者进行交互式逐步对话探讨，并必须在归档的 `.catdd/metaspec/analyzedNews/` 文件中以 `## Chat History`（`chatHistory`）章节记录对话与决策；`AUTONOMOUS`（自主分析）单次执行多技能分析流水线草拟 `todoUS` 而不逐步打断，在 `.catdd/metaspec/analyzedNews/` 的 `## Chat History` 下记录自主推理/提示轨迹，显式记录假设与疑问并在存在阻塞性问题时将故事标记为未就绪（NOT ready）。 |
 | ONE-MORE-THING | 跨 CaTDD 全局通用安全不变量：无论在 `manualMode` 还是 `autonomousMode` 下，只要遇到不确定、来源缺失、冲突或未明确的事项，智能体都必须暂停并向开发者提问以获取明确答案。自主模式绝非猜测或臆造需求的许可；在 `autonomousMode` 下遇到 ONE-MORE-THING 时立即暂停自主推进并输出结构化 `manual_required` 提问。 |
 | commit span（提交区间） | 一次提交所关闭的生命周期区间，也是 Px-SpecFlow 的提交切分单位（按区间而非按文件集合切分）。`pre-story` 区间 = `SPEC_openUserStory` 之前的导入/分析制品；`story` 区间 = `SPEC_openUserStory -> SPEC_closeUserStory`；`step` 区间 = 故事区间内单个已验证的生命周期步骤。 |
 | SPEC_commitPreStoryWorks | 故事前区间提交命令：提交 `SPEC_openUserStory` 之前产生的导入/分析制品，包括 `pendingNews/` 到 `analyzedNews/` 的移动、`todoUS/` 故事以及 `README_UserStories.md` 台账。在 `manualMode` 下是可选命令；当导入阶段以 `analysis_mode: AUTONOMOUS` 无值守运行时作为默认的故事前检查点。故事前区间绝不运行于 `autonomousMode`，因为自主执行严格限于实现导向的故事工作。 |
 | SPEC_commitStepWorks | 故事区间内的步骤提交命令：仅提交 `SPEC_openUserStory -> SPEC_closeUserStory` 区间里单个已验证的生命周期步骤，且仅在 `SPEC_makePlan` 记录为 `commit_step = yes` 的步骤边界上，并且该步骤门禁达到 `PASS`/`GREEN` 之后才提交。在 `manualMode` 下是可选命令；在 `autonomousMode` 下是每个已规划步骤边界的默认行为。 |
-| SPEC_updateMadePlan | SpecFlow 计划维护命令：在全部五个 `SPEC_review*` 审查关卡（`SPEC_reviewUserStory`、`SPEC_reviewArchDesign`、`SPEC_reviewDetailDesign`、`SPEC_reviewImplTests`、`SPEC_reviewProductCodes`）、返工循环、故事恢复或 `plan_drift` 检查点之后，向已有 `.catdd/spec/doingUS/*-UserStory-Tasks.md` 制品的 `## Trajectory` 轨迹表追加时间顺序行，同步 `[ ]`/`[x]` 任务状态、门禁/提交证据与工作导向，并将粗粒度任务逐步细化为详细设计或 US/AC/TP/TC 执行切片与步骤提交边界。 |
-| Trajectory（执行轨迹） | `.catdd/spec/doingUS/*-UserStory-Tasks.md` 中的只追加时间顺序执行表（`## Trajectory`，含 `#`、`Date`、`Command / Gate`、`Verdict / Evidence / Commit`、`Plan Delta -> Next Command` 五列，由 `SPEC_makePlan` 基于 `SpecDoingUserStoryTasksTemplate.md` 初始化，并由 `SPEC_updateMadePlan` 追加）。它将历史门禁结论、有界返工计数（$1..B$）与步骤提交记录从面向后续执行的 `[ ]`/`[x]` `## Task Checklist` 中分离出来，确保每个 `[x]` 任务都有可审计的门禁或提交证据支撑。 |
+| SPEC_updateMadePlan | SpecFlow 计划维护命令：在全部五个 `SPEC_review*` 审查关卡（`SPEC_reviewUserStory`、`SPEC_reviewArchDesign`、`SPEC_reviewDetailDesign`、`SPEC_reviewImplTests`、`SPEC_reviewProductCodes`）、返工循环、故事恢复或 `plan_drift` 检查点之后，向已有 `.catdd/metaspec/doingUS/*-UserStory-Tasks.md` 制品的 `## Trajectory` 轨迹表追加时间顺序行，同步 `[ ]`/`[x]` 任务状态、门禁/提交证据与工作导向，并将粗粒度任务逐步细化为详细设计或 US/AC/TP/TC 执行切片与步骤提交边界。 |
+| Trajectory（执行轨迹） | `.catdd/metaspec/doingUS/*-UserStory-Tasks.md` 中的只追加时间顺序执行表（`## Trajectory`，含 `#`、`Date`、`Command / Gate`、`Verdict / Evidence / Commit`、`Plan Delta -> Next Command` 五列，由 `SPEC_makePlan` 基于 `SpecDoingUserStoryTasksTemplate.md` 初始化，并由 `SPEC_updateMadePlan` 追加）。它将历史门禁结论、有界返工计数（$1..B$）与步骤提交记录从面向后续执行的 `[ ]`/`[x]` `## Task Checklist` 中分离出来，确保每个 `[x]` 任务都有可审计的门禁或提交证据支撑。 |
 | EPIC Specification Sufficiency（EPIC 规范充分性） | 基于 EPIC 框架（arXiv:2610.07534）的两阶段渐进式规范充分性门禁：第一阶段在 `SPEC_analyzeIssue` / `SPEC_analyzeFeature` / `SPEC_analyzeAbortedUserStory` 生成 `todoUS/*-UserStory.md` 时通过 `## Story Readiness Snapshot` 检查故事级 EPIC 维度；第二阶段在 `doingUS/*-UserStory-Tasks.md` 的 `## EPIC Specification Sufficiency` 下维护覆盖全制品集合的 10 维台账（`E1..E3`、`P1..P2`、`I1..I3`、`C1..C2`，状态取 `satisfied / partial / gap / question / N/A`）及 `### Cross-Artifact Semantic-Delta Matrix`，由 `SPEC_makePlan` 初始化，在每次 `SPEC_review*` 门禁后由 `SPEC_updateMadePlan` 刷新，并在 `SPEC_closeUserStory` 关闭前校验。 |
 | Cross-Artifact Semantic-Delta Matrix（跨制品语义差异矩阵） | 贯穿四个关键审查阶段（`SPEC_reviewArchDesign`：`Story/Guide -> ArchDesign/UbiLang`；`SPEC_reviewDetailDesign`：`ArchDesign -> DetailDesign -> DetailVerifyDesign`；`SPEC_designTests` + `TEST_review{Func,Design,Quality}TestsSkeleton`：`DetailVerifyDesign TP -> US/AC/TP/TC Skeleton`；`SPEC_reviewImplTests`：`US/AC/TP/TC Skeleton -> 已实现测试体与伴随 README`）的转换保真矩阵（`EPIC I2.3`）。将每项义务的跨文档转换分类为 `KEPT`（原义保持 / 语义保真）、`DETAILED`（显式细化 / 具体分解，附理由）、`REASSIGNED`（改派转交 / 委派他方，附责任方；对应 `discovery_ledger` 的 `REFERRED`）、`EXCLUDED`（批准排除 / 明确出界，附批准）、`VIOLATED`（违背冲突 / 暗中弱化，以 `REVISE` 阻断门禁）或 `UNKNOWN`（证据缺失 / 未知待问，以 `ASK` / `BLOCKED` 阻断门禁）。 |
 | Story Completion Conditions（故事完成条件） | 声明在 `*-UserStory.md`（`SpecTodoUserStoryTemplate.md`）内部 `## Story Completion Conditions (EPIC E3.4)` 下的故事专属完成定义（`EPIC E3.4`）。显式规定关闭该故事必须满足的 `TestLevel`（`UnitTesting`、`SysTesting`、`UserTesting`）、`TestScope` 与目标运行环境（`mockSysRtm` 是否足够或必须通过 `realSysRtm`）、CaTDD 分类层级（`P0/P1/P2/P3`）、`README*` 规格/文档更新面、显式“未完成禁止关闭条件”（`Not-Done Conditions`）以及经批准的延后项（`Approved Deferrals`）。由 `SPEC_reviewUserStory` 审查完整性，并在 `SPEC_closeUserStory` 与 `SPEC_partialCloseUserStory` 关闭时强制校验。 |

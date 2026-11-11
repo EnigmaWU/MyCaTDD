@@ -3,9 +3,9 @@
 > **Story ID:** {{StoryID}} | **State:** todo | **Priority:** <!-- filled from Priority section below -->
 > **StoryIdAlias:** {{StoryIdAlias}}
 > **CreatedAt:** {{CreatedAt}}
-> **Source:** `.catdd/spec/analyzedNews/{{YYYYMMDD-original}}.md`
+> **Source:** `.catdd/metaspec/analyzedNews/{{YYYYMMDD-original}}.md`
 > **Correction of:** <!-- present only for SPEC_analyzeAbortedUserStory: abortUS/YYYYMMDD-UserStory.md -->
-> **Parent Story:** <!-- present only for sub-UserStory: parent Story ID and `.catdd/spec/todoUS/{{parent}}.md` -->
+> **Parent Story:** <!-- present only for sub-UserStory: parent Story ID and `.catdd/metaspec/todoUS/{{parent}}.md` -->
 > **CaTDD Class:** {{P0 Functional / P1 Design / P2 Quality / P3 Addons}}
 > **Primary Category:** {{Primary CaTDD category from methodPrompts/CaTDD_methodPrompt.md}}
 
@@ -471,11 +471,11 @@ TP/TC references are not definitions. Reconcile each TP's owning AC and covering
 
 | From → To | Link |
 | --- | --- |
-| This story → Raw input & `## Chat History` | `.catdd/spec/analyzedNews/{{file}}` |
+| This story → Raw input & `## Chat History` | `.catdd/metaspec/analyzedNews/{{file}}` |
 | Project story index | `README_UserStories.md` |
 | Project ubiquitous language | `README_UbiLang.md` |
-| Parent story | `.catdd/spec/todoUS/{{parent-story-file}}` |
-| Sub-UserStory candidates | `.catdd/spec/todoUS/{{sub-story-file-or-candidate}}` |
+| Parent story | `.catdd/metaspec/todoUS/{{parent-story-file}}` |
+| Sub-UserStory candidates | `.catdd/metaspec/todoUS/{{sub-story-file-or-candidate}}` |
 | This story ID | {{StoryID}} |
 
 ---

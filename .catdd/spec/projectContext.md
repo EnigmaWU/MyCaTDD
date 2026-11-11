@@ -11,6 +11,7 @@ This file is the team-shared, always-loaded working memory for SpecCoding in thi
 - Default branch: `main`.
 - Purpose: productize CaTDD from method text into commandized, automated, and reusable CodeAgent workflows.
 - CaTDD means Comment-alive Test-Driven Development, invented by EnigmaWU.
+- `SPEC = youWantR + iWhyD + aiHowC` and the distinction between `SPEC` and `metaspec` are defined canonically in [README_UbiLang](../../README_UbiLang.md); do not redefine them here.
 - Core slogan: `Comments is Verification Design. LLM Generates Code. Iterate Forward Together.`
 - The repository is both the CaTDD source repository and, after self-install, a target project for exercising its own `SPEC_*` workflow.
 
@@ -93,6 +94,8 @@ bash scripts/test_installCaTDD.sh
 Use focused checks such as `git diff --check -- <files>` for edited Markdown or shell files before committing.
 
 ## SpecFlow Lifecycle State
+
+metaspec_root: .catdd/spec
 
 - Lifecycle state is operational memory. Do not store directory snapshots, filenames, counts, or next-task recommendations in this file.
 - Before reading or updating lifecycle state, inspect all live directories and use that output as the source of truth:

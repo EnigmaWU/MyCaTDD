@@ -1,8 +1,12 @@
 # SPEC_importIssue
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Import an issue, bug report, defect, or support problem into `.catdd/spec/pendingNews/` as raw SpecCoding input.
+Import an issue, bug report, defect, or support problem into `<metaspec_root>/pendingNews/` as raw SpecCoding input.
 
 ## CoT Pattern
 
@@ -16,7 +20,7 @@ Run these steps once, in order. There is no retry loop; import never re-analyzes
 2. Read `issue_source` and preserve the source text verbatim, or a traceable summary plus its link.
 3. Classify the input with a lightweight label: issue, bug, defect, regression, refactor, or research. Do not go further.
 4. Capture observed and expected behavior when the source states them. Do not infer them when it does not.
-5. Write `.catdd/spec/pendingNews/*-Issue.md`.
+5. Write `<metaspec_root>/pendingNews/*-Issue.md`.
 6. Report the output path, the mode used, and `next_command = SPEC_analyzeIssue`.
 
 ### Worked Example
@@ -35,14 +39,14 @@ Expected result:
 2. Issue body preserved verbatim; the log excerpt kept with its source link.
 3. Classified `bug` / `regression`.
 4. Observed ("customer charged twice") and expected ("charged once") are stated in the report, so both are captured. Root cause is **not** guessed.
-5. Written to `.catdd/spec/pendingNews/20260904-double-charge-on-retry-Issue.md`.
+5. Written to `<metaspec_root>/pendingNews/20260904-double-charge-on-retry-Issue.md`.
 6. Reported: path + `mode = subagent` + `next_command = SPEC_analyzeIssue`. No user story or AC is created here.
 
 ## Inputs
 
 - `issue_source`: issue URL, copied issue text, bug report, support note, or developer-reported problem.
 - `projectContext_file`: optional project context.
-- `target_pending_file`: optional file name under `.catdd/spec/pendingNews/`.
+- `target_pending_file`: optional file name under `<metaspec_root>/pendingNews/`.
 - `import_mode`: optional `inline | subagent | auto` (default: `auto`).
 - `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record the mode in the pending artifact or downstream handoff; autonomous execution is strictly supported only for implementation-oriented stories once planned.
 
@@ -53,7 +57,7 @@ Expected result:
 
 ## Output Contract
 
-- A `.catdd/spec/pendingNews/*-Issue.md` team-shared persistent issue artifact.
+- A `<metaspec_root>/pendingNews/*-Issue.md` team-shared persistent issue artifact.
 - Preserved source text or a traceable summary.
 - Clear labels for issue, bug, defect, regression, refactor, or research input.
 - Output file path and the selected execution mode (`inline` or `subagent`).

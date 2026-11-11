@@ -1,8 +1,12 @@
 # SPEC_initProjectContext
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Create the first `.catdd/spec/projectContext.md` for a target project before SpecCoding begins.
+Create the first `projectContext.md` in the selected SpecCoding workspace for a target project before SpecCoding begins. New projects default to `.catdd/metaspec`; existing `.agents/metaspec` and legacy `.catdd/spec` projects retain their selected root.
 
 ## CoT Pattern
 
@@ -13,7 +17,7 @@ Create the first `.catdd/spec/projectContext.md` for a target project before Spe
 Repeat until every drafted fact is either sourced or explicitly marked as an assumption.
 
 1. **Thought** — Read `existing_docs` and `known_constraints`. Detect the project's `AGENTS.md` family (see Agent Instruction Surface Rule below) and resolve each file's provenance and ownership. Separate what the material actually states from what you would be guessing.
-2. **Action** — Before drafting, ask the three Setup Questions below in order, skipping any question that was already supplied as input. Then draft `.catdd/spec/projectContext.md`, including the `## Agent Instruction Surfaces` section.
+2. **Action** — Resolve the workspace using [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Before drafting, ask the three Setup Questions below in order, skipping any question that was already supplied as input. Then draft `<metaspec_root>/projectContext.md`, including `metaspec_root` under `## SpecFlow Lifecycle State` and the `## Agent Instruction Surfaces` section.
 3. **Observation** — Walk every line of the draft: is it traceable to project material, or is it an assumption? Unmarked guesses return to **Thought**. Encoded CaTDD category rules must be replaced with a link to `methodPrompts`. A file entry that claims authority over method semantics, category meaning, gates, or project facts returns to **Thought** and is reframed as an operating convention or an open question.
 4. **Stop** — Exit when facts and assumptions are cleanly separated. Report the assumption list needing developer confirmation and the next command.
 
@@ -45,6 +49,7 @@ Expected result — two passes:
 ## Inputs
 
 - `project_root`: target project directory.
+- `metaspec_root`: optional selected workspace. Allowed values are `.catdd/metaspec`, `.agents/metaspec`, or legacy `.catdd/spec`. Omit when the workspace can be resolved unambiguously; new projects default to `.catdd/metaspec`.
 - `known_constraints`: language, framework, test framework, architecture, product goals, and team conventions.
 - `existing_docs`: optional README, architecture notes, issue templates, or test docs.
 - `agents_md_files`: optional detected list of repository `AGENTS.md` files (root and nested, including `AGENTS.override.md`). When omitted, detect them from the repository root and the current working directory chain before drafting.
@@ -59,7 +64,7 @@ Expected result — two passes:
 
 ## Output Contract
 
-- A `.catdd/spec/projectContext.md` team-shared persistent artifact with project facts, constraints, code conventions, test conventions, `sut_unit_convention`, constitution-level guardrails, `## Constitutional Invariants (K)`, `default_lang` (US_EN or ZH_CN), a `REFERENCE` link to project-root `README_UbiLang.md` (from `slashCommands/templates/README_UbiLangTemplate.md`) for domain ubiquitous language and controlled normative vocabulary (`MUST`, `MUST NOT`, `SHOULD`, `MAY`), and open questions.
+- A `<metaspec_root>/projectContext.md` team-shared persistent artifact with `metaspec_root`, project facts, constraints, code conventions, test conventions, `sut_unit_convention`, constitution-level guardrails, `## Constitutional Invariants (K)`, `default_lang` (US_EN or ZH_CN), a `REFERENCE` link to project-root `README_UbiLang.md` (from `slashCommands/templates/README_UbiLangTemplate.md`) for domain ubiquitous language and controlled normative vocabulary (`MUST`, `MUST NOT`, `SHOULD`, `MAY`), and open questions.
 - A clearly recorded `sut_unit_convention` with scope, rationale, and example SUT name so later `SPEC_designTests` declarations stay consistent.
 - Clearly codified `## Constitutional Invariants (K)` that govern all downstream generation and verification.
 - A `## Agent Instruction Surfaces` section listing every detected `AGENTS.md` family file with its path, scope, provenance (`pre-existing`, `mixed`, `catdd-created`, or `present-empty`), ownership by region, managed-region markers when present, and a one-line summary limited to the operating conventions it owns.

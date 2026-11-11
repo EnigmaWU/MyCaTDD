@@ -18,7 +18,11 @@ All `SPEC_*` commands and the artifacts they produce **MUST** use controlled nor
 - **`MUST NOT`** (`SHALL NOT`): hard prohibition or safety/security boundary.
 - **`SHOULD` / `SHOULD NOT`**: conditional preference that may be bypassed only with a recorded tradeoff, ADR, or explicit exception condition.
 - **`MAY`**: explicitly optional behavior.
-- **No Synonym Drift (`I2.1`)**: domain terms **MUST** match `README_UbiLang.md` (referenced from `.catdd/spec/projectContext.md`); unapproved aliases or weak modals (`"should"` / `"might"` in an AC) are flagged as `SMELL-MODAL`.
+- **No Synonym Drift (`I2.1`)**: domain terms **MUST** match `README_UbiLang.md` (referenced from `.catdd/metaspec/projectContext.md`); unapproved aliases or weak modals (`"should"` / `"might"` in an AC) are flagged as `SMELL-MODAL`.
+
+## Metaspec Workspace Resolution
+
+Every command **MUST** follow [Metaspec Workspace Resolution](MetaspecWorkspaceResolution.md) before reading or writing lifecycle artifacts. The resolved root is declared as `metaspec_root` in `projectContext.md` and can be `.catdd/metaspec`, `.agents/metaspec`, or legacy `.catdd/spec`. New examples and installations use `.catdd/metaspec`.
 
 ## Command Header
 
@@ -105,7 +109,7 @@ State when to use this command.
 
 State where the command reads and writes.
 
-- Input artifacts: `.catdd/spec/` lifecycle files, project-root `README*` SPEC docs, test files, product code files
+- Input artifacts: lifecycle files under the resolved `metaspec_root`, project-root `README*` SPEC docs, test files, product code files
 - Output artifacts: same category as inputs, updated by this command
 - Related `methodPrompts` references
 - Related flow document: `flows/Px-SpecFlow.md`
@@ -149,11 +153,11 @@ Omit this section for commands that must run synchronously or whose output is im
 
 List command parameters using portable placeholders:
 
-- `{{doing_user_story}}`: active user story file under `.catdd/spec/doingUS/`
-- `{{todo_user_story}}`: selected user story under `.catdd/spec/todoUS/`
-- `{{pending_file}}`: pending issue, feature, or imported user-story input under `.catdd/spec/pendingNews/`
-- `{{analyzed_file}}`: archived raw issue, feature, or imported user-story input under `.catdd/spec/analyzedNews/`
-- `{{projectContext_file}}`: `.catdd/spec/projectContext.md`
+- `{{doing_user_story}}`: active user story file under `<metaspec_root>/doingUS/`
+- `{{todo_user_story}}`: selected user story under `<metaspec_root>/todoUS/`
+- `{{pending_file}}`: pending issue, feature, or imported user-story input under `<metaspec_root>/pendingNews/`
+- `{{analyzed_file}}`: archived raw issue, feature, or imported user-story input under `<metaspec_root>/analyzedNews/`
+- `{{projectContext_file}}`: `<metaspec_root>/projectContext.md`, including its `metaspec_root` declaration
 - `{{readme_spec_files}}`: one or more project-root `README*.md` SPEC docs
 - `{{related_docs}}`: optional architecture, design, test, or reproduction notes
 - `{{developer_goal}}`: optional developer intent or context that is not captured in artifacts

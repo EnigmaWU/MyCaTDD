@@ -1,12 +1,16 @@
 # SPEC_suspendUserStory
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Suspend an active user story when work must pause, while preserving a durable resume reference.
 
 ## CoT Pattern
 
-**Linear** -- Direct execution. Given a selected active story and a suspend reason, this command moves the active story and its paired task artifact from `.catdd/spec/doingUS/` to `.catdd/spec/suspendUS/` and records a durable git resume reference.
+**Linear** -- Direct execution. Given a selected active story and a suspend reason, this command moves the active story and its paired task artifact from `<metaspec_root>/doingUS/` to `<metaspec_root>/suspendUS/` and records a durable git resume reference.
 
 ### Linear Execution
 
@@ -26,7 +30,7 @@ Work must pause for an urgent production fix:
 
 ```text
 /SPEC_suspendUserStory
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
 suspend_reason: Paused for P0 incident INC-4471; resuming after the incident closes.
 resume_ref: us-123-suspend
 working_tree_state: uncommitted changes in services/payment/retry.ts
@@ -45,15 +49,15 @@ Expected result:
    git push -u origin us-123-suspend
    ```
 
-4. Story and tasks moved to `.catdd/spec/suspendUS/`.
+4. Story and tasks moved to `<metaspec_root>/suspendUS/`.
 5. Reason and `us-123-suspend` recorded in the suspended artifact.
 6. ID absent from `doingUS` → verified.
 7. Reported: `next_command = SPEC_resumeUserStory`.
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact paired with the story.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
+- `doing_tasks_file`: optional active `<metaspec_root>/doingUS/*-UserStory-Tasks.md` task artifact paired with the story.
 - `suspend_reason`: explicit reason for pausing instead of continuing in place.
 - `resume_ref`: durable git resume reference, typically a branch name or worktree path.
 - `working_tree_state`: optional note indicating whether uncommitted changes exist.
@@ -65,7 +69,7 @@ Expected result:
 - Also valid: an explicit worktree path tied to the suspended story.
 - Fallback only: stash identifiers; use only when branch/worktree creation is not possible.
 - Recommended checkpoint before suspend: create at least one commit on the resume branch, and push when team handoff is expected.
-- Terminal commit checkpoint: when the suspend moved story/tasks files into `.catdd/spec/suspendUS/` and normalized links, report `commit_checkpoint = span_end` with `next_command = /SPEC_commitStoryWorks` so the lane move and the WIP checkpoint land on the resume branch instead of being left dirty. If the story was not planned through `SPEC_makePlan`, the equivalent WIP commit shown below is sufficient.
+- Terminal commit checkpoint: when the suspend moved story/tasks files into `<metaspec_root>/suspendUS/` and normalized links, report `commit_checkpoint = span_end` with `next_command = /SPEC_commitStoryWorks` so the lane move and the WIP checkpoint land on the resume branch instead of being left dirty. If the story was not planned through `SPEC_makePlan`, the equivalent WIP commit shown below is sufficient.
 
 Example:
 
@@ -83,10 +87,10 @@ git push -u origin us-123-suspend
 
 ## Output Contract
 
-- A `.catdd/spec/suspendUS/*-UserStory.md` team-shared suspended story artifact preserving source trace, suspend reason, and resume guidance.
-- A paired `.catdd/spec/suspendUS/*-UserStory-Tasks.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
+- A `<metaspec_root>/suspendUS/*-UserStory.md` team-shared suspended story artifact preserving source trace, suspend reason, and resume guidance.
+- A paired `<metaspec_root>/suspendUS/*-UserStory-Tasks.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
 - Recorded `resume_ref` under the suspended story so the next developer can resume deterministically.
-- Local `.catdd/spec/doingUS/` active work state removed after the suspended artifact is created.
+- Local `<metaspec_root>/doingUS/` active work state removed after the suspended artifact is created.
 - Next recommended command: `SPEC_resumeUserStory`.
 
 ## Conflict Guard
@@ -97,6 +101,6 @@ Do not suspend without an explicit `suspend_reason`.
 Do not suspend when no durable `resume_ref` is available for work that must be resumed.
 Do not rely on stash-only references when branch or worktree-based recovery is required.
 Do not use a dirty, uncheckpointed branch as the only `resume_ref` for team handoff scenarios.
-Do not leave the same story ID under both `.catdd/spec/doingUS/` and `.catdd/spec/suspendUS/`.
+Do not leave the same story ID under both `<metaspec_root>/doingUS/` and `<metaspec_root>/suspendUS/`.
 
 ONE-MORE-THING: ask developer if something not sure

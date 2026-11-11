@@ -1,5 +1,9 @@
 # SPEC_mergeWorks
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Merge a closed story branch into the target integration branch when branch integration is still required.
@@ -27,7 +31,7 @@ A closed story still lives on its own branch:
 
 ```text
 /SPEC_mergeWorks
-closed_user_story: .catdd/spec/doneUS/20260904-payment-retry-UserStory.md
+closed_user_story: <metaspec_root>/doneUS/20260904-payment-retry-UserStory.md
 story_branch: feat/payment-retry
 target_branch: main
 close_commit_ref: 9f8e7d6
@@ -47,7 +51,7 @@ Expected result:
 
 ## Inputs
 
-- `closed_user_story`: completed story under `.catdd/spec/doneUS/`.
+- `closed_user_story`: completed story under `<metaspec_root>/doneUS/`.
 - `story_branch`: dedicated branch that contains committed story work.
 - `target_branch`: integration branch to receive the story changes.
 - `close_commit_ref`: commit evidence from `SPEC_closeUserStory`.

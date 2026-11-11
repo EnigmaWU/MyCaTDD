@@ -1,5 +1,9 @@
 # TEST_designFuncTestsSkeleton
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Design the P0 Functional CaTDD skeleton set for an explicit scope: Typical, Edge, Misuse, and Fault, backed by a reconciled behavior inventory and test-point ledger.
@@ -25,7 +29,7 @@ Then repeat per category in order — Typical, then Edge, Misuse, Fault.
 3. **Observation** — Check the [US/AC/TP/TC cardinality](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the declared scope: every US has at least one AC, every AC has at least one TP, every TP maps to exactly one TC, and every TC covers at least one TP. Reconcile source obligations to TCs; an unassigned draft TP blocks completion, and a missing behavior is GAP even when the original links pass. Move misplaced scenarios rather than duplicating them; retain concrete P1/P2 or test-level referrals without designing those categories here.
 4. **Stop** — After all four categories, apply the method's Discovery Gate and cross-category reconciliation within its bounded review budget. Stop on unresolved intent/no progress and report gaps rather than claiming completeness. An empty category needs a reasoned `@[NoTestPoints]`; missing source is BLOCKED, not a pass. Recommend `TEST_reviewFuncTestsSkeleton` with sources and ledger for independent review; keep `ready_for_implementation: no` until that review passes.
 
-## Usage Example
+### Worked Example
 
 Designing the full P0 set from a gateway interface. IDs below are abbreviated; generated artifacts use registered Story IDs and qualified AC/TP/TC IDs.
 

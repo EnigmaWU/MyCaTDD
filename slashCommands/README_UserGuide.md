@@ -136,9 +136,11 @@ UserGuide keeps this short. The detailed artifact policy is defined in [Px-SpecF
 
 Quick rules:
 
-- Team-shared lifecycle state lives under `.catdd/spec/` and should be committed: `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, and other lifecycle directories.
+- Team-shared lifecycle state lives under the `metaspec_root` declared in `projectContext.md`. New projects default to `.catdd/metaspec/`; `.agents/metaspec/` and legacy `.catdd/spec/` are supported alternatives.
+- Commit the selected workspace's `doingUS/`, `suspendUS/`, `abortUS/`, and other lifecycle directories.
+- Use `/HARNESS_migrateMetaspec` or the installer's explicit `--migrate-metaspec` option to move a sole legacy workspace. Normal installation refresh preserves `.catdd/spec/`.
 - Team-shared `README*` SPEC docs live in the project root and should be committed.
-- Local process trace stays gitignored: `.catdd/spec/WorkingProcessLog.md`.
+- Local process trace stays gitignored as `WorkingProcessLog.md` in every supported workspace.
 - `AGENTS.md` and its directory overrides are recorded by `SPEC_initProjectContext` and reconciled by `SPEC_updateProjectContext`. Ownership follows the region: the CaTDD-managed markers belong to CaTDD and are regenerable, everything else belongs to the project and is never rewritten. A file that existed before CaTDD is followed; one CaTDD created is mastered. `AGENTS.md` owns operating conventions only, never method semantics, gates, or project facts. Installer-generated adapters such as `.github/instructions/catdd.instructions.md` are rewritten wholesale and stay out of this model.
 - If policy details and this guide ever diverge, follow [Px-SpecFlow flow](flows/Px-SpecFlow.md) as the source of detailed lifecycle rules.
 
@@ -169,7 +171,7 @@ Key commands only. For full flow- or kit-specific command maps, use [Px-SpecFlow
 | Capture session context before starting a new task session | [HARNESS_newTaskSession](commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | Learn and evolve after a meaningful verified success or repeated harness evidence | [HARNESS_evolveHarness](commands/Px-HarnessKits/HARNESS_evolveHarness.md) with `evolution_mode=auto` |
 | Tell me what SpecCoding task to do next | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
-| Tell me the current SpecCoding status across every `.catdd/spec/` lane, with a Level-0…Level-5 maturity grade | [SPEC_showMeStatus](commands/Px-StatusKits/SPEC_showMeStatus.md) |
+| Tell me the current SpecCoding status across every `.catdd/metaspec/` lane, with a Level-0…Level-5 maturity grade | [SPEC_showMeStatus](commands/Px-StatusKits/SPEC_showMeStatus.md) |
 | Tell me the current unit-test status and the next UT command, with a Level-0…Level-5 completeness grade | [TEST_showMeStatus](commands/Px-StatusKits/TEST_showMeStatus.md) |
 | Tell me the current harness and installation status, with a Level-0…Level-5 integrity grade | [HARNESS_showMeStatus](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 | Ask what is wrong and switch into a VibeCoding investigation | [SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md) |

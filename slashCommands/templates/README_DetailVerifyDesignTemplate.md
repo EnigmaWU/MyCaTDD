@@ -10,7 +10,7 @@ This is the SpecCoding template for project-root `README_DetailVerifyDesign.md`.
 
 - Story: {{StoryID}} and {{title}}
 - StoryIdAlias: {{StoryIdAlias}} (resolve through `README_UserStories.md`; never allocate a new alias during design)
-- Active story artifact: {{.catdd/spec/doingUS path}}
+- Active story artifact: {{.catdd/metaspec/doingUS path}}
 - Detail design: [README_DetailDesign](README_DetailDesign.md)
 - State design: [README_StateDesign](README_StateDesign.md)
 - Architecture-level verification design: [README_ArchVerifyDesign](README_ArchVerifyDesign.md)

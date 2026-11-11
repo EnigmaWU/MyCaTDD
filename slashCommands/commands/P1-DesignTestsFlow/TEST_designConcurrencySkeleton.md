@@ -1,5 +1,9 @@
 # TEST_designConcurrencySkeleton
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Design a CaTDD Concurrency skeleton from project-root `README_ResourceDesign.md` and stable functional behavior.

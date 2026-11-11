@@ -44,7 +44,7 @@ Do not use this CLI when:
 - Related user guide: [README_UserGuide](README_UserGuide.md)
 - Related detail design: [README_DetailDesign](README_DetailDesign.md)
 - Related verification design: [README_VerifyDesign](README_VerifyDesign.md)
-- Source story: {{.catdd/spec/doingUS path or issue link}}
+- Source story: {{.catdd/metaspec/doingUS path or issue link}}
 
 ## Why
 

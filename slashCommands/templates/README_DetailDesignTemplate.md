@@ -5,7 +5,7 @@ This is the SpecCoding template for project-root `README_DetailDesign.md`. Creat
 ## Story Context
 
 - Story: {{StoryID}} and {{title}}
-- Source artifact: {{.catdd/spec/doingUS path or issue link}}
+- Source artifact: {{.catdd/metaspec/doingUS path or issue link}}
 - Related overview: [README](README.md)
 - Related user stories: [README_UserStories](README_UserStories.md)
 

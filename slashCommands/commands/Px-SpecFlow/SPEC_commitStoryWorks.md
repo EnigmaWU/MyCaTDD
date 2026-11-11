@@ -1,5 +1,9 @@
 # SPEC_commitStoryWorks
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Commit the whole `SPEC_openUserStory -> SPEC_closeUserStory` story span as one story-scoped unit, and serve both story-scope commit checkpoints.
@@ -18,9 +22,9 @@ Commit the whole `SPEC_openUserStory -> SPEC_closeUserStory` story span as one s
 
 Run these steps once, in order. There is no retry loop; an ambiguous or unverified span stops and asks the developer.
 
-1. Identify the span endpoint: the active story in `.catdd/spec/doingUS/` for `pre_close`; the closed story in `.catdd/spec/doneUS/` for `post_close`; or the terminal lane written by `SPEC_abortUserStory`, `SPEC_suspendUserStory`, or `SPEC_partialCloseUserStory` for `span_end`. Require the paired `*-UserStory-Tasks.md` artifact when the story was planned.
+1. Identify the span endpoint: the active story in `<metaspec_root>/doingUS/` for `pre_close`; the closed story in `<metaspec_root>/doneUS/` for `post_close`; or the terminal lane written by `SPEC_abortUserStory`, `SPEC_suspendUserStory`, or `SPEC_partialCloseUserStory` for `span_end`. Require the paired `*-UserStory-Tasks.md` artifact when the story was planned.
 2. Resolve the span scope: story and tasks artifacts, product code and test files, project-root `README*` SPEC docs, and the terminal lifecycle/meta changes — the `doingUS -> doneUS` or `doingUS -> abortUS` or `doingUS -> suspendUS` moves, the accepted/rejected split artifacts for partial close, story-link normalization, `README_UserStories.md` TODO/DONE/AC sync, and project-context updates.
-3. Exclude `.catdd/spec/WorkingProcessLog.md` and generated adapter output. Stop and ask when in-scope files belong to another story, to unrelated work, or to a review finding that is still unresolved.
+3. Exclude `<metaspec_root>/WorkingProcessLog.md` and generated adapter output. Stop and ask when in-scope files belong to another story, to unrelated work, or to a review finding that is still unresolved.
 4. Apply the commit policy recorded by `SPEC_makePlan`:
    - `single_story_commit = yes`: squash the span into one story commit, list the step commit refs that are absorbed, and confirm with the developer in `manualMode` before rewriting history.
    - Otherwise: commit the remaining uncommitted span changes and record the span commit refs already in history, including step commits.
@@ -39,7 +43,7 @@ An implementation-oriented story passed test and product-code review; step commi
 ```text
 /SPEC_commitStoryWorks
 commit_checkpoint: pre_close
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
 step_commit_refs: 3b7e910, 55ac2d1
 single_story_commit: no
 verification_summary: 38/38 unit tests GREEN; lint clean; reviews passed
@@ -74,9 +78,9 @@ Span: SPEC_openUserStory -> SPEC_closeUserStory
 ## Inputs
 
 - `commit_checkpoint`: `pre_close`, `post_close`, or `span_end`.
-- `doing_user_story`: active story under `.catdd/spec/doingUS/` for `pre_close`.
-- `closed_user_story`: closed story under `.catdd/spec/doneUS/` for `post_close`.
-- `terminal_story_lane`: `.catdd/spec/abortUS/`, `.catdd/spec/suspendUS/`, or the accepted `.catdd/spec/doneUS/` artifact for `span_end`, plus the rejected `.catdd/spec/abortUS/` remainder when the span ended by partial close.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/` for `pre_close`.
+- `closed_user_story`: closed story under `<metaspec_root>/doneUS/` for `post_close`.
+- `terminal_story_lane`: `<metaspec_root>/abortUS/`, `<metaspec_root>/suspendUS/`, or the accepted `<metaspec_root>/doneUS/` artifact for `span_end`, plus the rejected `<metaspec_root>/abortUS/` remainder when the span ended by partial close.
 - `tasks_file`: paired `*-UserStory-Tasks.md` artifact for the story span and its commit plan.
 - `span_files`: files that belong to the story span, including story artifacts, tests, product code, project-root `README*` SPEC docs, and close-generated lifecycle/meta changes.
 - `step_commit_refs`: step commits already created by `SPEC_commitStepWorks` inside this span.
@@ -125,6 +129,6 @@ Do not mark closure complete while post-close lifecycle/meta changes remain unco
 Do not report the lifecycle as fully finished when branch integration is still required after close.
 Do not leave an abort, suspend, or partial-close lane move uncommitted; those terminal transitions end the span and route here with `commit_checkpoint = span_end`.
 Do not include unadopted VibeCoding excursion edits in the span commit; they enter story work only after a `SPEC_*` step re-adopts them or they are reverted.
-Do not commit `.catdd/spec/WorkingProcessLog.md` or other gitignored local work state.
+Do not commit `<metaspec_root>/WorkingProcessLog.md` or other gitignored local work state.
 
 ONE-MORE-THING: ask developer if something not sure

@@ -1,8 +1,12 @@
 # SPEC_importFeature
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Import a feature request, enhancement idea, product request, or developer proposal into `.catdd/spec/pendingNews/` as raw SpecCoding input.
+Import a feature request, enhancement idea, product request, or developer proposal into `<metaspec_root>/pendingNews/` as raw SpecCoding input.
 
 ## CoT Pattern
 
@@ -15,7 +19,7 @@ Run these steps once, in order. There is no retry loop; import never designs the
 1. Read `feature_source` and preserve the source text verbatim, or a traceable summary plus its link.
 2. Classify the input with a lightweight label: feature, enhancement, experiment, refactor, or research.
 3. Capture the stated user value when the source gives it. Do not invent a justification when it does not.
-4. Write `.catdd/spec/pendingNews/*-Feature.md`.
+4. Write `<metaspec_root>/pendingNews/*-Feature.md`.
 5. Report the output path and `next_command = SPEC_analyzeFeature`.
 
 ### Worked Example
@@ -25,7 +29,7 @@ An idea surfaces mid-session and should not derail the current work:
 ```text
 /SPEC_importFeature
 feature_source: "Let users cap the retry count per merchant, some merchants want 1 attempt only"
-projectContext_file: .catdd/spec/projectContext.md
+projectContext_file: <metaspec_root>/projectContext.md
 ```
 
 Expected result:
@@ -33,14 +37,14 @@ Expected result:
 1. Requester wording preserved verbatim, attributed to the chat session.
 2. Classified `enhancement`.
 3. Stated user value — "some merchants want 1 attempt only" — captured. No ACs, no design, no per-merchant config schema invented.
-4. Written to `.catdd/spec/pendingNews/20260904-per-merchant-retry-cap-Feature.md`.
+4. Written to `<metaspec_root>/pendingNews/20260904-per-merchant-retry-cap-Feature.md`.
 5. Reported: path + `next_command = SPEC_analyzeFeature`. Per the Subagent Recommendation below, this ran in a subagent so the active conversation continued uninterrupted.
 
 ## Inputs
 
 - `feature_source`: feature URL, copied request text, product note, design sketch, or chat summary.
 - `projectContext_file`: optional project context.
-- `target_pending_file`: optional file name under `.catdd/spec/pendingNews/`.
+- `target_pending_file`: optional file name under `<metaspec_root>/pendingNews/`.
 - `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record the mode in the pending artifact or downstream handoff; autonomous execution is strictly supported only for implementation-oriented stories once planned.
 
 ## Method References
@@ -50,7 +54,7 @@ Expected result:
 
 ## Output Contract
 
-- A `.catdd/spec/pendingNews/*-Feature.md` team-shared persistent feature artifact.
+- A `<metaspec_root>/pendingNews/*-Feature.md` team-shared persistent feature artifact.
 - Preserved source text or a traceable summary.
 - Clear labels for feature, enhancement, experiment, refactor, or research input.
 

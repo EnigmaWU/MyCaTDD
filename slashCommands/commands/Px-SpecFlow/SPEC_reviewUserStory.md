@@ -1,5 +1,9 @@
 # SPEC_reviewUserStory
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Review the active user story, project-level requirement ledger (`README_UserStories.md`), usage guidance, and acceptance criteria after requirement-oriented updates.
@@ -25,7 +29,7 @@ After `SPEC_updateUserStory` rewrote AC-03 and AC-04 of the active story, run:
 
 ```text
 /SPEC_reviewUserStory
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
 project_user_stories_doc: README_UserStories.md
 module_user_guide_doc: services/payment/README_UserGuide.md
 ```
@@ -39,7 +43,7 @@ Expected result — one ReACT pass:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `project_user_stories_doc`: project-root `README_UserStories.md` updated by `SPEC_updateUserStory`.
 - `module_user_story_doc`: optional module or submodule `README_UserStory.md` updated by `SPEC_updateUserStory` when module-local requirement docs are used.
 - `module_user_guide_doc`: paired module or submodule `README_UserGuide.md` updated by `SPEC_updateUserStory`.
@@ -54,7 +58,7 @@ Expected result — one ReACT pass:
 
 ## Output Contract
 
-- `review_verdict` recorded against team-shared `.catdd/spec/doingUS/` work state: `PASS` with `next_command = SPEC_commitStoryWorks` for close requirement-only; `REVISE` with `rework_route = SPEC_updateUserStory` for revise requirements or `SPEC_takeDetailDesign` for transfer to design; `ASK` when the developer must decide; `BLOCKED` when the requirement source or ledger needed for the review is unavailable.
+- `review_verdict` recorded against team-shared `<metaspec_root>/doingUS/` work state: `PASS` with `next_command = SPEC_commitStoryWorks` for close requirement-only; `REVISE` with `rework_route = SPEC_updateUserStory` for revise requirements or `SPEC_takeDetailDesign` for transfer to design; `ASK` when the developer must decide; `BLOCKED` when the requirement source or ledger needed for the review is unavailable.
 - `severity`: optional `blocking | advisory`, defaulting to `blocking`.
 - Explicit consistency check that `README_UserStories.md` TODO/DONE story state and AC trace/status match lifecycle artifacts and active story content.
 - Identity gate: verify the registered Story ID/StoryIdAlias/CreatedAt mapping, alias-qualified AC IDs, explicit legacy mappings, revision/supersession links, and collision checks against [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Missing or conflicting identity evidence blocks approval; historical copies and declared slices are not independent duplicate stories. The registry names the authoritative US/AC source, not a competing requirements copy.

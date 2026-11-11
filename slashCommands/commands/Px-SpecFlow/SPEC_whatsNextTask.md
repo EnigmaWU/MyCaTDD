@@ -1,5 +1,9 @@
 # SPEC_whatsNextTask
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Recommend the next SpecCoding task when a developer is new to the flow or resuming paused work.
@@ -10,7 +14,7 @@ Recommend the next SpecCoding task when a developer is new to the flow or resumi
 
 ### ToT Execution
 
-1. **Generate** — Inventory every `.catdd/spec/` lane that is non-empty and list the command each lane could justify (including `SPEC_updateMadePlan` when an active `*-UserStory-Tasks.md` has stale `[ ]`/`[x]` status or coarse tasks after a phase transition). Produce at least two candidates whenever more than one lane has content.
+1. **Generate** — Inventory every `<metaspec_root>/` lane that is non-empty and list the command each lane could justify (including `SPEC_updateMadePlan` when an active `*-UserStory-Tasks.md` has stale `[ ]`/`[x]` status or coarse tasks after a phase transition). Produce at least two candidates whenever more than one lane has content.
 2. **Evaluate** — For each candidate, name the artifact that proves it is runnable now. A candidate whose required input is missing or inconsistent is rejected, not deferred.
 3. **Select** — Choose the candidate that advances the furthest-along work without skipping a gate (routing to `SPEC_updateMadePlan` first if the active story's task plan is out of date with completed gates or needs slice breakdown before implementation). Never select a closing or destructive step on inconsistent state — stop and ask instead.
 4. **Execute** — Report exactly one command, its rationale, and the inputs to prepare.
@@ -22,7 +26,7 @@ A developer returns to a repository mid-flow:
 
 ```text
 /SPEC_whatsNextTask
-projectContext_file: .catdd/spec/projectContext.md
+projectContext_file: <metaspec_root>/projectContext.md
 ```
 
 Expected result:
@@ -35,13 +39,13 @@ Expected result:
 
 ## Inputs
 
-- `projectContext_file`: optional `.catdd/spec/projectContext.md`.
-- `pending_news_files`: optional `.catdd/spec/pendingNews/*.md`.
-- `todo_user_story_files`: optional `.catdd/spec/todoUS/*-UserStory.md`.
-- `doing_user_story_files`: optional `.catdd/spec/doingUS/*-UserStory.md`.
-- `suspended_user_story_files`: optional `.catdd/spec/suspendUS/*-UserStory.md`.
-- `done_user_story_files`: optional `.catdd/spec/doneUS/*-UserStory.md`.
-- `working_log`: optional `.catdd/spec/WorkingProcessLog.md`.
+- `projectContext_file`: optional `<metaspec_root>/projectContext.md`.
+- `pending_news_files`: optional `<metaspec_root>/pendingNews/*.md`.
+- `todo_user_story_files`: optional `<metaspec_root>/todoUS/*-UserStory.md`.
+- `doing_user_story_files`: optional `<metaspec_root>/doingUS/*-UserStory.md`.
+- `suspended_user_story_files`: optional `<metaspec_root>/suspendUS/*-UserStory.md`.
+- `done_user_story_files`: optional `<metaspec_root>/doneUS/*-UserStory.md`.
+- `working_log`: optional `<metaspec_root>/WorkingProcessLog.md`.
 - `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, verify the active story's orientation in `*-UserStory-Tasks.md`. Autonomous execution is strictly supported only for implementation-oriented stories; if orientation is intent-clearing, requirement-oriented, or design-oriented, recommend manualMode.
 
 ## Method References

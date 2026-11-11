@@ -427,14 +427,14 @@ for query, expected_count in ((metadata["StoryIdAlias"], 3), (acs[0], 2), (cases
 
 with tempfile.TemporaryDirectory(prefix="catdd-alias-trace-") as directory:
     root = Path(directory).resolve()
-    todo = root / ".catdd/spec/todoUS/example-UserStory.md"
-    doing = root / ".catdd/spec/doingUS/example-UserStory.md"
+    todo = root / ".catdd/metaspec/todoUS/example-UserStory.md"
+    doing = root / ".catdd/metaspec/doingUS/example-UserStory.md"
     todo.parent.mkdir(parents=True)
     doing.parent.mkdir(parents=True)
     registry_path = root / "README_UserStories.md"
     registry_text = "\n".join(f"{key}: {value}" for key, value in metadata.items())
     legacy_id = metadata["Story ID"] + "-AC-01"
-    legacy_path = root / ".catdd/spec/doneUS/legacy-UserStory.md"
+    legacy_path = root / ".catdd/metaspec/doneUS/legacy-UserStory.md"
     legacy_path.parent.mkdir(parents=True)
     legacy_path.write_text(legacy_id + ": original accepted evidence\n", encoding="utf-8")
     legacy_bytes = legacy_path.read_bytes()
@@ -458,7 +458,7 @@ with tempfile.TemporaryDirectory(prefix="catdd-alias-trace-") as directory:
         assert len([line for line in result.stdout.splitlines() if "@[Trace]:" in line]) == expected_count
         assert "README_DetailVerifyDesign.md:" in result.stdout
         if query == metadata["StoryIdAlias"]:
-            assert ".catdd/spec/todoUS/example-UserStory.md:" in result.stdout
+            assert ".catdd/metaspec/todoUS/example-UserStory.md:" in result.stdout
             assert "README_UserStories.md:" in result.stdout
     before = todo.read_text(encoding="utf-8")
     todo.rename(doing)
@@ -470,14 +470,14 @@ with tempfile.TemporaryDirectory(prefix="catdd-alias-trace-") as directory:
         ["grep", "-R", "-nF", "--exclude-dir=.git", metadata["StoryIdAlias"], "."],
         cwd=root, check=True, capture_output=True, text=True,
     )
-    assert ".catdd/spec/doingUS/example-UserStory.md:" in result.stdout
-    assert ".catdd/spec/todoUS/example-UserStory.md:" not in result.stdout
+    assert ".catdd/metaspec/doingUS/example-UserStory.md:" in result.stdout
+    assert ".catdd/metaspec/todoUS/example-UserStory.md:" not in result.stdout
     legacy_lookup = subprocess.run(
         ["grep", "-R", "-nF", "--exclude-dir=.git", legacy_id, "."],
         cwd=root, check=True, capture_output=True, text=True,
     )
     assert "README_UserStories.md:" in legacy_lookup.stdout and acs[0] in legacy_lookup.stdout
-    assert ".catdd/spec/doneUS/legacy-UserStory.md:" in legacy_lookup.stdout
+    assert ".catdd/metaspec/doneUS/legacy-UserStory.md:" in legacy_lookup.stdout
     assert legacy_path.read_bytes() == legacy_bytes, "historical evidence was rewritten"
 
 registry, ac_ids, tp_rows, tc_records = copy.deepcopy(baseline)

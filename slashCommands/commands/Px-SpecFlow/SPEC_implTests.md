@@ -1,5 +1,9 @@
 # SPEC_implTests
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Implement selected CaTDD test cases for the active user story in test-first order, consuming `SPEC_designTests` handoff slices through `P0-FuncTestsFlow` first and only then P1/P2 slices when they are ready.
@@ -25,7 +29,7 @@ Implementing the first TC from the design handoff:
 
 ```text
 /SPEC_implTests
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 tc_slices: TC-001 (Typical, P0, TODO)
 ```
 

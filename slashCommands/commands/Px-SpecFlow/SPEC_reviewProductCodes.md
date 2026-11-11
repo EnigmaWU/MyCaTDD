@@ -1,5 +1,9 @@
 # SPEC_reviewProductCodes
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Review product code, tests, and traceability before post-product-code unit-test implementation review, commit, or abort routing.
@@ -24,7 +28,7 @@ Product code was just implemented against RED tests:
 ```text
 /SPEC_reviewProductCodes
 changed_files: services/payment/gatewayPort.ts, services/payment/adapters/stripe.ts
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 verification_output: 12 passing, 0 failing
 ```
 
@@ -38,7 +42,7 @@ Expected result:
 ## Inputs
 
 - `changed_files`: product and test files changed for the active story.
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `readme_spec_files`: optional project-root `README*` SPEC files relevant to the changed code.
 - `verification_output`: test, lint, build, or manual verification output.
 

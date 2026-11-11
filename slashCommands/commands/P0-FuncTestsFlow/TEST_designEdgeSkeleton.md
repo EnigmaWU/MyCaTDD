@@ -1,5 +1,9 @@
 # TEST_designEdgeSkeleton
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Design a CaTDD Edge functional skeleton from valid behavior boundaries and existing Typical coverage.
@@ -19,7 +23,7 @@ Repeat until the Edge skeleton holds only valid boundary behavior.
 3. **Observation** — Check validity: every Edge case must be input the contract *accepts*. A case the contract rejects belongs to Misuse; a case caused by a dependency belongs to Fault → back to **Thought** and hand it over. Check the [US/AC/TP/TC cardinality](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the declared scope; unassigned TPs block completion.
 4. **Stop** — Exit when all cases are valid boundaries and the cardinality check passes. Recommend `TEST_designMisuseSkeleton` or `TEST_reviewFuncTestsSkeleton`.
 
-## Usage Example
+### Worked Example
 
 Adding boundary coverage on top of Typical. IDs below are abbreviated; generated artifacts use registered Story IDs and qualified AC/TP/TC IDs.
 

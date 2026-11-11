@@ -1,8 +1,12 @@
 # SPEC_analyzeFeature
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Analyze a pending feature request, enhancement, or imported structured user-story source, generate a user story artifact under `.catdd/spec/todoUS/`, and archive the raw input under `.catdd/spec/analyzedNews/`.
+Analyze a pending feature request, enhancement, or imported structured user-story source, generate a user story artifact under `<metaspec_root>/todoUS/`, and archive the raw input under `<metaspec_root>/analyzedNews/`.
 
 ## CoT Pattern
 
@@ -24,14 +28,14 @@ The Analysis Pipeline below is not a straight run — wrap it in this loop.
    - Step 2 lacks role, capability, or business value → in `BRAINSTORM` mode, stop and ask the developer; in `AUTONOMOUS` mode, record a blocking question.
 4. **Stop** — Exit after Step 9. If any Initial Acceptance Question is still open, mark the story NOT ready; it may not proceed to `SPEC_openUserStory`.
 
-## Usage Example
+### Worked Example
 
 A feature request is analyzed into a story:
 
 ```text
 /SPEC_analyzeFeature
-pending_feature: .catdd/spec/pendingNews/20260904-per-merchant-retry-cap-Feature.md
-projectContext_file: .catdd/spec/projectContext.md
+pending_feature: <metaspec_root>/pendingNews/20260904-per-merchant-retry-cap-Feature.md
+projectContext_file: <metaspec_root>/projectContext.md
 ```
 
 Expected result:
@@ -42,11 +46,11 @@ Expected result:
 - **Step 5**: implied rule — "cap must not exceed the system-wide max" — but the max is never stated. Flagged as a question. **Not** guessed.
 - **Step 7**: source says retries should stop "quickly" → flagged: "Is 'quickly' a time bound or an attempt bound?" No threshold substituted.
 - **Step 8**: BV 7, UV 8, Cost 3, Risk 2 → score 3.0.
-- **Step 9**: written to `.catdd/spec/todoUS/`, raw feature archived to `analyzedNews/` with `status: analyzed` and a `## Chat History` section recording the feature-tree split and ambiguity Q&A. Two questions remain open → story marked **NOT ready**; it cannot proceed to `SPEC_openUserStory` until they are answered.
+- **Step 9**: written to `<metaspec_root>/todoUS/`, raw feature archived to `analyzedNews/` with `status: analyzed` and a `## Chat History` section recording the feature-tree split and ambiguity Q&A. Two questions remain open → story marked **NOT ready**; it cannot proceed to `SPEC_openUserStory` until they are answered.
 
 ## Inputs
 
-- `pending_feature`: feature or imported user-story file under `.catdd/spec/pendingNews/`.
+- `pending_feature`: feature or imported user-story file under `<metaspec_root>/pendingNews/`.
 - `projectContext_file`: current project context.
 - `related_docs`: optional architecture, README, API, design, product, or test docs.
 - `SpecTodoUserStoryTemplate`: output template at `../../templates/SpecTodoUserStoryTemplate.md`.
@@ -62,15 +66,15 @@ Expected result:
 
 ## Output Contract
 
-- A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
+- A `<metaspec_root>/todoUS/*-UserStory.md` team-shared persistent user story artifact.
 - A project-wide Story ID registered in `README_UserStories.md` and category-qualified Story alias AC IDs in the story.
-- The source feature or imported user-story input moved from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` as a team-shared raw input archive.
+- The source feature or imported user-story input moved from `<metaspec_root>/pendingNews/` to `<metaspec_root>/analyzedNews/` as a team-shared raw input archive.
 - The archived raw feature metadata is normalized to analyzed state:
   - `status: analyzed`
   - `analyzed_by: SPEC_analyzeFeature`
   - `analyzed_on: YYYY-MM-DD`
   - `analysis_mode: BRAINSTORM | AUTONOMOUS`
-- A mandatory `## Chat History` (`chatHistory`) section appended to the archived `.catdd/spec/analyzedNews/*-Feature.md` file to preserve how the feature was analyzed:
+- A mandatory `## Chat History` (`chatHistory`) section appended to the archived `<metaspec_root>/analyzedNews/*-Feature.md` file to preserve how the feature was analyzed:
   - In `BRAINSTORM` mode: chronological turn-by-turn or Q&A record of the developer and CodeAgent dialogue (clarification questions asked, developer answers/quotes, feature-tree split proposals and selections, business-rule/ambiguity resolutions, and final `BRAINSTORM` decisions).
   - In `AUTONOMOUS` mode: chronological autonomous reasoning/prompt trace across Steps 1-9, recorded assumptions, and open `ONE-MORE-THING` / Initial Acceptance Questions surfaced.
 - A value-focused, independently testable user story slice with user value, priority, acceptance scenarios, edge cases, scope, non-goals, risks, assumptions, and initial acceptance questions.
@@ -118,9 +122,9 @@ Register `StoryIdAlias` and `CreatedAt` together with the Story ID, following th
 
 Before writing the todo artifact, register its Story ID in `README_UserStories.md`, creating the ledger from `README_UserStoriesTemplate.md` if needed. Follow [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids): preserve an existing unambiguous ID or derive a descriptive human-readable ID in `US-<whoName>-<doWhat>` form, writing both segments in lowerCamelCase. Derive them from the story's actor and observable behavior, and ask if either is unclear. Check the registry and known story sources, and give every AC a distinct qualified ID. Refine a collision with meaningful context rather than an arbitrary number or UUID. Register blocked drafts too; do not archive the input while identity registration is unresolved. Preserve source IDs as labeled aliases and stop on conflicting or ambiguous identities.
 
-Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`, including the Stage 1 EPIC-mapped `## Story Readiness Snapshot` (`E1 Unambiguous`, `E2 Singular`, `E3 Verifiable`, `E3.4 Completion & Readiness`, `P1 Dependency Control`, `P2 Complete`, `I1 Conforming`, `C1 Scope Discipline`) and story-specific `## Story Completion Conditions (`EPIC E3.4`)` (`Required TestLevel`, `Required TestScope & Environment`, `Required CaTDD Categories`, `Required SPEC & Doc Surfaces`, `Not-Done Conditions`, and `Approved Deferrals`). Move the raw feature from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/`. Update trace links both ways. **Gate:** if any Initial Acceptance Questions remain open or any required Stage 1 EPIC lens in `## Story Readiness Snapshot` is `no`, mark the story NOT ready — it may not proceed to `SPEC_openUserStory` until resolved (the full 10-dimension `## EPIC Specification Sufficiency` ledger will be seeded in `*-UserStory-Tasks.md` by `SPEC_makePlan`).
+Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`, including the Stage 1 EPIC-mapped `## Story Readiness Snapshot` (`E1 Unambiguous`, `E2 Singular`, `E3 Verifiable`, `E3.4 Completion & Readiness`, `P1 Dependency Control`, `P2 Complete`, `I1 Conforming`, `C1 Scope Discipline`) and story-specific `## Story Completion Conditions (`EPIC E3.4`)` (`Required TestLevel`, `Required TestScope & Environment`, `Required CaTDD Categories`, `Required SPEC & Doc Surfaces`, `Not-Done Conditions`, and `Approved Deferrals`). Move the raw feature from `<metaspec_root>/pendingNews/` to `<metaspec_root>/analyzedNews/`. Update trace links both ways. **Gate:** if any Initial Acceptance Questions remain open or any required Stage 1 EPIC lens in `## Story Readiness Snapshot` is `no`, mark the story NOT ready — it may not proceed to `SPEC_openUserStory` until resolved (the full 10-dimension `## EPIC Specification Sufficiency` ledger will be seeded in `*-UserStory-Tasks.md` by `SPEC_makePlan`).
 
-After moving the raw feature, normalize analyzed metadata, append `## Chat History`, and update trace links in the archived `.catdd/spec/analyzedNews/*-Feature.md` file:
+After moving the raw feature, normalize analyzed metadata, append `## Chat History`, and update trace links in the archived `<metaspec_root>/analyzedNews/*-Feature.md` file:
 
 - set `status: analyzed`
 - add/update `analyzed_by: SPEC_analyzeFeature`
@@ -135,7 +139,7 @@ After moving the raw feature, normalize analyzed metadata, append `## Chat Histo
 
 If the feature or imported user-story source lacks user value, actor, or outcome, create questions and keep the story draft incomplete instead of inventing requirements.
 
-- Do not archive a raw feature into `.catdd/spec/analyzedNews/` without appending a `## Chat History` section (`chatHistory`) that records how the feature was analyzed (especially the developer/CodeAgent dialogue and decisions in `BRAINSTORM` mode).
+- Do not archive a raw feature into `<metaspec_root>/analyzedNews/` without appending a `## Chat History` section (`chatHistory`) that records how the feature was analyzed (especially the developer/CodeAgent dialogue and decisions in `BRAINSTORM` mode).
 - Do not run `AUTONOMOUS` mode unless the developer explicitly requested it.
 - In `BRAINSTORM` mode, do not generate `todoUS` before key intent is clarified with the developer.
 - In `AUTONOMOUS` mode, do not hide missing intent behind assumptions; record every material unknown as an Initial Acceptance Question.

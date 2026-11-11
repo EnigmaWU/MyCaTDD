@@ -1,5 +1,9 @@
 # SPEC_partialCloseUserStory
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Partially close an active user story by separating the accepted scope from the rejected or intentionally deferred scope, preserving the rejected slice in the abort lane and closing the accepted slice with traceability.
@@ -14,7 +18,7 @@ This command is the explicit bridge between `SPEC_closeUserStory` and `SPEC_abor
 
 Run these steps once, in order. There is no retry loop; a failed split validation stops and asks the developer.
 
-1. Validate there is exactly one active target story in `.catdd/spec/doingUS/` for the selected story ID.
+1. Validate there is exactly one active target story in `<metaspec_root>/doingUS/` for the selected story ID.
 2. Capture `accepted_scope` and `rejected_scope` in explicit structured form. If `accepted_scope` is empty or not materially valid, stop and fall back to `SPEC_abortUserStory`.
 3. Confirm the accepted slice is verified, reviewable, and satisfies the `## Story Completion Conditions` (`EPIC E3.4`) applicable to the accepted ACs. Never close a rejected slice as accepted.
 4. Move the accepted slice into the close lane and record its close evidence.
@@ -30,7 +34,7 @@ Three of four ACs shipped; the fourth turned out to rest on a bad assumption:
 
 ```text
 /SPEC_partialCloseUserStory
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
 accepted_scope:
   accepted_summary: AC-01..AC-03 bounded retry with exponential backoff
   accepted_evidence: 38/38 GREEN; commit a1b2c3d
@@ -46,16 +50,16 @@ Expected result:
 1. Exactly one active story matches → check passes.
 2. Both scopes structured; `accepted_scope` is materially valid → no fallback to abort.
 3. AC-01..AC-03 carry passing evidence → accepted slice is closeable.
-4. Accepted slice written to `.catdd/spec/doneUS/` with commit `a1b2c3d`.
-5. Rejected slice written to `.catdd/spec/abortUS/` keeping the failing test reference verbatim.
+4. Accepted slice written to `<metaspec_root>/doneUS/` with commit `a1b2c3d`.
+5. Rejected slice written to `<metaspec_root>/abortUS/` keeping the failing test reference verbatim.
 6. Ledger: AC-01..AC-03 DONE, AC-04 marked aborted — not silently dropped.
 7. Story ID present in `doneUS` and `abortUS` as a declared split, absent from `doingUS` → normalized.
 8. Reported: accepted lane complete; rejected lane `next_command = SPEC_importIssue`.
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact paired with the story.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
+- `doing_tasks_file`: optional active `<metaspec_root>/doingUS/*-UserStory-Tasks.md` artifact paired with the story.
 - `accepted_scope`: structured summary of what remains valid and should be closed.
   - Required structure:
     - `accepted_summary`: concise description of the work that still meets product intent.
@@ -79,13 +83,13 @@ Expected result:
 
 ## Output Contract
 
-- A `.catdd/spec/doneUS/*-UserStory.md` artifact for the accepted scope once the accepted slice is verified.
-- A `.catdd/spec/abortUS/*-UserStory.md` artifact for the rejected scope with preserved reasoning and evidence.
-- A paired `.catdd/spec/doneUS/*-UserStory-Tasks.md` artifact when the accepted slice was planned via `SPEC_makePlan`.
-- A paired `.catdd/spec/abortUS/*-UserStory-Tasks.md` artifact when the rejected slice was planned via `SPEC_makePlan`.
+- A `<metaspec_root>/doneUS/*-UserStory.md` artifact for the accepted scope once the accepted slice is verified.
+- A `<metaspec_root>/abortUS/*-UserStory.md` artifact for the rejected scope with preserved reasoning and evidence.
+- A paired `<metaspec_root>/doneUS/*-UserStory-Tasks.md` artifact when the accepted slice was planned via `SPEC_makePlan`.
+- A paired `<metaspec_root>/abortUS/*-UserStory-Tasks.md` artifact when the rejected slice was planned via `SPEC_makePlan`.
 - Lane normalization guarantee:
-  - the accepted slice must not remain in `.catdd/spec/doingUS/` after the close.
-  - the rejected slice must not remain active in `.catdd/spec/doingUS/` after the abort.
+  - the accepted slice must not remain in `<metaspec_root>/doingUS/` after the close.
+  - the rejected slice must not remain active in `<metaspec_root>/doingUS/` after the abort.
   - the original story must not be duplicated across active, done, and abort lanes without a clear split.
   - accepted and rejected slices retain the original registered Story ID and qualified AC IDs, with explicit slice and lineage records rather than silently minted replacement identities.
   - accepted slices do not claim closure while a CaTDD-AC has unresolved `From` evidence.
@@ -108,7 +112,7 @@ Expected result:
 Do not use `SPEC_partialCloseUserStory` as a silent alias for `SPEC_abortUserStory`.
 Do not treat the entire story as accepted when only part of it is valid.
 Do not discard rejected reasoning; preserve the evidence in the abort lane.
-Do not leave the active story in `.catdd/spec/doingUS/` after a split, or leave undeclared same-ID records that could be mistaken for independent stories.
+Do not leave the active story in `<metaspec_root>/doingUS/` after a split, or leave undeclared same-ID records that could be mistaken for independent stories.
 Do not close the accepted slice without its review or verification evidence.
 If `accepted_scope` is empty or not materially valid, require a clearer split or fall back to `SPEC_abortUserStory`.
 

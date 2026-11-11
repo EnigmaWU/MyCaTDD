@@ -1,5 +1,9 @@
 # SPEC_patchOriginalCaTDD
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Patch effective CaTDD meta-file improvements from an installed project back to the original CaTDD source repository.

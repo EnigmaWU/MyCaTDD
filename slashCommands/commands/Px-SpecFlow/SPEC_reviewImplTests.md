@@ -1,5 +1,9 @@
 # SPEC_reviewImplTests
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Review implemented CaTDD unit tests for the active user story after `SPEC_implTests`, and again after `SPEC_implProductCodes` plus `SPEC_reviewProductCodes` before refactor, commit, or closure.
@@ -27,7 +31,7 @@ Two TCs were just implemented and product code does not exist yet:
 
 ```text
 /SPEC_reviewImplTests
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 target_test_files: services/payment/SysTests/test_payment_gateway_funcValidTypical.ts
 implementation_status: TC-001 RED, TC-002 RED
 verification_output: 0 passing, 2 failing (module not found)
@@ -43,7 +47,7 @@ Expected result:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `target_test_files`: implemented unit test files to review.
 - `tc_slices`: selected or implemented test-case slices, including US/AC/TC, category, priority, dependency, target file, and validation checkpoint.
 - `implementation_status`: current TC markers such as `TODO`, `RED`, `GREEN`, `ISSUES`, or `BLOCKED`.

@@ -17,6 +17,7 @@ Commands should follow their group contract so Copilot, Cline, Continue, `utCode
 
 Commands may orchestrate work, request inputs, and define output shape. They must not redefine CaTDD category meaning. Use `methodPrompts` as the source of truth.
 
+- Every command MUST follow [Metaspec Workspace Resolution](../MetaspecWorkspaceResolution.md) before reading or writing SpecCoding artifacts.
 - `SPEC_*` commands are SpecCoding lifecycle commands.
 - `TEST_*` commands are test design and implementation commands.
 - `HARNESS_*` commands are operational Harness Engineering tool-point commands.

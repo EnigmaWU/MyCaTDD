@@ -1,8 +1,12 @@
 # SPEC_showMeStatus
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Report the current SpecCoding status from the SPEC viewpoint: what sits in each `.catdd/spec/` lane, which story is actually active, which gate it is sitting behind, and which command should run next.
+Report the current SpecCoding status from the SPEC viewpoint: what sits in each `<metaspec_root>/` lane, which story is actually active, which gate it is sitting behind, and which command should run next.
 
 This command is read-only. It answers "where does SpecCoding stand right now?" without moving lifecycle state, editing artifacts, or committing anything.
 
@@ -32,10 +36,10 @@ Do not invoke `SPEC_showMeStatus` when:
 
 ### ReACT Execution
 
-Repeat until every `.catdd/spec/` lane and every active story is accounted for.
+Repeat until every `<metaspec_root>/` lane and every active story is accounted for.
 
 1. **Thought** — From the lanes and files already read, name what is still unexplained: an empty lane that should hold content, a story that appears in two lanes, an active story whose AC totals do not match its dashboard, or a referenced artifact that does not exist.
-2. **Action** — Run the next read-only inspection: list lane contents, read the active story's status markers, `## Trajectory` table, and `## Task Checklist` in `*-UserStory-Tasks.md`, read `.catdd/spec/projectContext.md` for declared conventions, and read any story-level AC dashboard that exists.
+2. **Action** — Run the next read-only inspection: list lane contents, read the active story's status markers, `## Trajectory` table, and `## Task Checklist` in `*-UserStory-Tasks.md`, read `<metaspec_root>/projectContext.md` for declared conventions, and read any story-level AC dashboard that exists.
    Resolve the Story ID/StoryIdAlias/CreatedAt mapping through `README_UserStories.md`. Report collisions, mismatched pairs, or missing legacy mappings as identity drift; do not allocate aliases during a status scan or count references as independent stories.
 3. **Observation** — Classify each lane and each finding as `current`, `empty`, `stale`, `drifting`, or `unknown`. Then read the Maturity Level ladder top-down and stop at the last level whose entry question is answered `YES` by cited evidence; Levels 4 and 5 additionally need the regeneration evidence and the published metrics, so they are never decided from lane state alone. A finding that cannot cite a file, lane, or artifact is unproven → return to **Thought** for one more read-only signal, or drop it.
 4. **Stop** — Exit when every lane is classified, the maturity level plus `level_evidence` and `level_gap` are recorded, drift findings are ordered by risk, and exactly one next command is recommended for the active work.
@@ -61,7 +65,7 @@ Expected result:
 
 - `project_root`: optional. Defaults to the current workspace root.
 - `focus`: optional Story ID, StoryIdAlias, feature, or lane to lead the summary. Resolve registered aliases before matching; it never narrows the inventory silently.
-- `include_local_work_state`: optional. When `yes`, also report `.catdd/spec/WorkingProcessLog.md` state. That file is local, gitignored work state and is never treated as team-shared truth. Defaults to `no`.
+- `include_local_work_state`: optional. When `yes`, also report `<metaspec_root>/WorkingProcessLog.md` state. That file is local, gitignored work state and is never treated as team-shared truth. Defaults to `no`.
 
 ## Maturity Level Model
 
@@ -71,8 +75,8 @@ Read the ladder top-down and stop at the last level whose entry question is answ
 
 | Level | Name | In one line | Entry question (must be YES to earn this level) | Blocks this level |
 | --- | --- | --- | --- | --- |
-| Level-0 | Uninitialized | The project is readable, and SpecCoding has not started. | Is the project readable with no `.catdd/spec/` content? | `.catdd/spec/projectContext.md` exists. |
-| Level-1 | Spec-First | The spec is written down before the code, but nothing keeps the two aligned. | Does `.catdd/spec/projectContext.md` exist with the lifecycle lanes readable? | A lifecycle lane is missing or unreadable. |
+| Level-0 | Uninitialized | The project is readable, and SpecCoding has not started. | Is the project readable with no `<metaspec_root>/` content? | `<metaspec_root>/projectContext.md` exists. |
+| Level-1 | Spec-First | The spec is written down before the code, but nothing keeps the two aligned. | Does `<metaspec_root>/projectContext.md` exist with the lifecycle lanes readable? | A lifecycle lane is missing or unreadable. |
 | Level-2 | Organized | Everything is in the right lane, once. | Is every artifact in exactly one lane that matches its state, with stable ids and paired TASKs files? | A story is duplicated across lanes, placed in the wrong lane, or missing its paired artifact. |
 | Level-3 | Spec-Anchored | Gates connect the spec to the code, so drift is detected and must be resolved. | Does the active story show its gates in order (intent → design → review) with a current task checklist and AC status markers, and do closed stories carry verification evidence with AC totals reconciled against their story files? | A required gate is skipped or unrecorded, the markers are stale, a closed story lacks evidence, or AC totals disagree with the story file. |
 | Level-4 | Spec-as-Source | The spec is the source and the code is derived from it through a verified pipeline. | Do the four preconditions hold — a complete spec, deterministic regeneration, verification of regenerated code, and no hand edits to generated files — with the governed metrics published? | Any precondition is unproven, regeneration evidence is absent, or the metrics are not published. |
@@ -88,7 +92,7 @@ Reading the ladder quickly:
 
 Rules:
 
-- Report `maturity_level: unknown` only when `.catdd/spec/` could not be read. A readable project with no `.catdd/spec/` content is `Level-0`.
+- Report `maturity_level: unknown` only when `<metaspec_root>/` could not be read. A readable project with no `<metaspec_root>/` content is `Level-0`.
 - Backlog sitting in `pendingNews/` is correct placement, not drift. Only a wrong lane, a duplicate, or a missing paired artifact fails Level-2.
 - A story stalled behind an unrecorded gate caps the report at Level-2 however full the lanes look.
 - Level-3 is where the method lives: SpecTDD is Spec-Anchored by design, so a repository legitimately tops out at Level-3. Level-4 is a direction, not a default target, and it is never claimed without regeneration evidence plus the published metrics.
@@ -114,7 +118,7 @@ Reported `status_signal` is one of:
 - `healthy` — one or fewer active stories, no dangling rename, and no lane contradiction.
 - `attention` — backlog movement, unanalyzed intake, or non-blocking drift findings.
 - `blocked` — at least one active story is stalled behind an unresolved gate, missing artifact, or contradictory lane placement.
-- `unknown` — `.catdd/spec/` could not be read. A readable project with no `.catdd/spec/` content is `Level-0`, never `unknown`.
+- `unknown` — `<metaspec_root>/` could not be read. A readable project with no `<metaspec_root>/` content is `Level-0`, never `unknown`.
 
 **Governed metrics.** Levels 4 and 5 are decided by measurement as well as evidence, so report the four governed metrics and read them for movement at Level-5: `traceability coverage` (share of ACs with at least one GREEN TC), `first_pass_gate_rate` (share of reviews passing without rework), `drift_incidents` (divergences caught by a gate rather than by a customer), and `re_analysis_rate` (stories needing abort or partial close, and why). `SpecCoding share` is reported beside them: the fraction of production changes that trace to an open story, were preceded by a test failing for the expected reason, and passed a gate. It measures discipline, not correctness, so it is always read together with `drift_incidents`.
 
@@ -145,7 +149,7 @@ note: team-shared artifacts only unless include_local_work_state=yes
 ## Output Contract
 
 - One Status Report Shape block covering every lane, including empty lanes.
-- One `maturity_level` from Level-0 to Level-5, or `unknown` when `.catdd/spec/` could not be read.
+- One `maturity_level` from Level-0 to Level-5, or `unknown` when `<metaspec_root>/` could not be read.
 - `level_evidence` and `level_gap` that cite a lane, a path, or a reconciliation result — never a feeling.
 - Lane counts, active story detail with its current gate, and AC totals when a dashboard or story markers exist.
 - Drift findings each citing paths: a story in two lanes, a missing TASKs file, a dangling story reference, or lane/AC totals that contradict the story files.
@@ -166,7 +170,7 @@ note: team-shared artifacts only unless include_local_work_state=yes
 
 - This command never moves lifecycle state. It reports lane placement; it does not change it.
 - Never rewrite, rename, or relocate a story, tasks file, or dashboard from here.
-- Never treat `.catdd/spec/WorkingProcessLog.md` as team-shared truth; it is local work state and stays gitignored.
+- Never treat `<metaspec_root>/WorkingProcessLog.md` as team-shared truth; it is local work state and stays gitignored.
 - Report lane drift; do not silently pick the "correct" lane. A story in two lanes is reported with both paths and routed to its owning command.
 - Never inflate the maturity level. A level without cited evidence is reported as the level below it.
 - Never confuse amount of work with maturity: a full backlog in the wrong lanes is still Level-1.

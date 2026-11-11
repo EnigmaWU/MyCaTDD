@@ -136,9 +136,11 @@ bash scripts/test_installCaTDD4Custom.sh
 
 快速规则：
 
-- 团队共享生命周期状态位于 `.catdd/spec/` 并应提交：`.catdd/spec/doingUS/`、`.catdd/spec/suspendUS/`、`.catdd/spec/abortUS/` 及其他生命周期目录。
+- 团队共享生命周期状态位于 `projectContext.md` 声明的 `metaspec_root` 下。新项目默认使用 `.catdd/metaspec/`；`.agents/metaspec/` 与兼容旧项目的 `.catdd/spec/` 都是受支持的替代位置。
+- 提交所选工作区中的 `doingUS/`、`suspendUS/`、`abortUS/` 及其他生命周期目录。
+- 使用 `/HARNESS_migrateMetaspec` 或安装器的显式 `--migrate-metaspec` 选项迁移唯一的旧工作区；普通安装刷新保留 `.catdd/spec/`。
 - 团队共享的 `README*` SPEC 文档位于项目根目录并应提交。
-- 本地过程追踪保持 gitignore：`.catdd/spec/WorkingProcessLog.md`。
+- 每个受支持工作区中的本地过程追踪 `WorkingProcessLog.md` 均保持 gitignore。
 - `AGENTS.md` 及其目录级 override 由 `SPEC_initProjectContext` 记录、由 `SPEC_updateProjectContext` 对齐。归属按区域划分：CaTDD 受管标记之间归 CaTDD 所有且可重新生成，其余归项目所有，绝不重写。早于 CaTDD 存在的文件被遵循；由 CaTDD 创建的被掌管。`AGENTS.md` 只拥有操作约定，绝不拥有方法语义、门禁或项目事实。`.github/instructions/catdd.instructions.md` 等安装器生成的适配文件会被整体重写，不在该模型范围内。
 - 若本指南与细节策略出现差异，以 [Px-SpecFlow flow](flows/Px-SpecFlow.md) 的详细生命周期规则为准。
 
@@ -168,7 +170,7 @@ bash scripts/test_installCaTDD4Custom.sh
 | 在开始新任务会话前捕获当前会话上下文 | [HARNESS_newTaskSession](commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | 在有意义的成功或重复 Harness 证据后学习并演进 | 使用 `evolution_mode=auto` 的 [HARNESS_evolveHarness](commands/Px-HarnessKits/HARNESS_evolveHarness.md) |
 | 告诉我当前 SpecCoding 下一步该做什么 | [SPEC_whatsNextTask](commands/Px-SpecFlow/SPEC_whatsNextTask.md) |
-| 告诉我当前 SpecCoding 在全部 `.catdd/spec/` 泳道的状态，并给出 Level-0…Level-5 maturity 评级 | [SPEC_showMeStatus](commands/Px-StatusKits/SPEC_showMeStatus.md) |
+| 告诉我当前 SpecCoding 在全部 `.catdd/metaspec/` 泳道的状态，并给出 Level-0…Level-5 maturity 评级 | [SPEC_showMeStatus](commands/Px-StatusKits/SPEC_showMeStatus.md) |
 | 告诉我当前 unit test 状态和下一条 UT 命令，并给出 Level-0…Level-5 completeness 评级 | [TEST_showMeStatus](commands/Px-StatusKits/TEST_showMeStatus.md) |
 | 告诉我当前 harness 与安装状态，并给出 Level-0…Level-5 integrity 评级 | [HARNESS_showMeStatus](commands/Px-StatusKits/HARNESS_showMeStatus.md) |
 | 问"哪里不对"并切换到 VibeCoding 探索 | [SPEC_whatsWrong](commands/Px-SpecFlow/SPEC_whatsWrong.md) |

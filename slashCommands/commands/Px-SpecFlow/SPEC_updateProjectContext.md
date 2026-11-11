@@ -1,8 +1,12 @@
 # SPEC_updateProjectContext
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Refresh `.catdd/spec/projectContext.md` when project facts, constraints, conventions, or decisions change, while keeping it compact enough to serve as the always-loaded working memory for future `SPEC_*` commands.
+Refresh the resolved `projectContext.md` when project facts, constraints, conventions, or decisions change, while keeping it compact enough to serve as the always-loaded working memory for future `SPEC_*` commands.
 
 ## CoT Pattern
 
@@ -12,9 +16,9 @@ Refresh `.catdd/spec/projectContext.md` when project facts, constraints, convent
 
 Run this loop until the context file satisfies the Output Contract and the Context Budget.
 
-1. **Thought** — Read `change_source` and `projectContext_file`. Classify each candidate fact as `CORE`, `REFERENCE`, `OPERATIONAL`, `EPISODIC`, or `TRANSIENT` per the Memory Classification Rule. Diff the recorded `## Agent Instruction Surfaces` inventory against the `AGENTS.md` family on disk (added, removed, changed, or managed region added) and resolve each difference against the Agent Surface Reconcile Rule. Use filesystem-backed lifecycle inventory before touching `SpecFlow Lifecycle State`.
+1. **Thought** — Resolve the workspace and read `change_source` and `projectContext_file`. Verify that its `metaspec_root` declaration matches its physical root; report drift instead of rewriting the declaration from context prose. Classify each candidate fact as `CORE`, `REFERENCE`, `OPERATIONAL`, `EPISODIC`, or `TRANSIENT` per the Memory Classification Rule. Diff the recorded `## Agent Instruction Surfaces` inventory against the `AGENTS.md` family on disk (added, removed, changed, or managed region added) and resolve each difference against the Agent Surface Reconcile Rule. Use filesystem-backed lifecycle inventory before touching `SpecFlow Lifecycle State`.
 2. **Action** — Apply the minimum update: edit existing facts in place, link rather than copy `REFERENCE` material, delete superseded wording per the Supersession Rule, and reconcile surfaces per their ownership.
-3. **Observation** — Run `wc -l .catdd/spec/projectContext.md` against the Context Budget, and check that provenance survived and assumptions are still separated from confirmed rules. If over budget, compact per the Compaction Procedure and return to **Action**. If a fact lost its source, or a project-owned surface region was rewritten, return to **Thought**.
+3. **Observation** — Run `wc -l <metaspec_root>/projectContext.md` against the Context Budget, and check that provenance survived and assumptions are still separated from confirmed rules. If over budget, compact per the Compaction Procedure and return to **Action**. If a fact lost its source, or a project-owned surface region was rewritten, return to **Thought**.
 4. **Stop** — Exit when the file is within budget with no semantic loss. Report classifications applied, removals, and line count.
 
 ### Worked Example
@@ -23,7 +27,7 @@ After an architecture decision is recorded in an ADR, run:
 
 ```text
 /SPEC_updateProjectContext
-projectContext_file: .catdd/spec/projectContext.md
+projectContext_file: <metaspec_root>/projectContext.md
 change_source: codeAgents/utCodeAgentCLI/ADRs/ADR_RuntimeLanguage.md
 ```
 
@@ -31,17 +35,18 @@ Expected result — one ReACT pass:
 
 - **Thought**: the chosen runtime is `CORE`; the rejected alternatives and their rationale are `REFERENCE` (they belong in the ADR, not the context file).
 - **Action**: the existing runtime line is updated in place as `CORE`, the ADR is linked as `REFERENCE`, and the superseded runtime wording is deleted.
-- **Observation**: `wc -l .catdd/spec/projectContext.md` is within the Context Budget and every kept fact still names its source → loop exits.
+- **Observation**: `wc -l <metaspec_root>/projectContext.md` is within the Context Budget and every kept fact still names its source → loop exits.
 - Reported: 1 `CORE` update, 1 `REFERENCE` link, 1 superseded line removed.
 
 ## Inputs
 
 - `projectContext_file`: existing project context.
+- `metaspec_root`: optional explicit resolution check. The value MUST match the `metaspec_root` declaration and the physical context location.
 - `change_source`: commit, discussion, issue, architecture decision, review result, or new project document.
 - `agents_md_files`: optional detected list of repository `AGENTS.md` files to diff against the recorded inventory. When omitted, detect them from the repository root and the current working directory chain.
 - `sut_unit_convention`: optional updated SUT unit boundary for CaTDD unit tests (for example, switching from `class` to `module-interface`, refining a project-specific scope, or adding per-layer conventions). Only change this when the project has explicitly decided a different unit granularity.
 - `constitutional_invariants`: optional updated list of non-negotiable security, compliance, privacy, or safety rules ($K$) to record under `## Constitutional Invariants (K)`.
-- `lifecycle_dirs`: optional `.catdd/spec/pendingNews`, `.catdd/spec/analyzedNews`, `.catdd/spec/todoUS`, `.catdd/spec/doingUS`, `.catdd/spec/suspendUS`, `.catdd/spec/doneUS`, and `.catdd/spec/abortUS` directories when refreshing SpecFlow lifecycle state.
+- `lifecycle_dirs`: optional resolved `pendingNews`, `analyzedNews`, `todoUS`, `doingUS`, `suspendUS`, `doneUS`, and `abortUS` directories under `metaspec_root` when refreshing SpecFlow lifecycle state.
 - `context_budget`: optional project-specific working-memory budget. Default soft limit: 200 lines or approximately 3,000 tokens.
 
 ## Method References
@@ -51,9 +56,9 @@ Expected result — one ReACT pass:
 
 ## Output Contract
 
-- Updated `.catdd/spec/projectContext.md` team-shared persistent artifact containing compact, confirmed working memory, `## Constitutional Invariants (K)` guardrails, and links to canonical detail.
+- Updated `<metaspec_root>/projectContext.md` team-shared persistent artifact containing the validated `metaspec_root`, compact confirmed working memory, `## Constitutional Invariants (K)` guardrails, and links to canonical detail.
 - Updated `sut_unit_convention` when the change source includes a unit-boundary decision, including the new scope, rationale, and example SUT name.
-- If `SpecFlow Lifecycle State` is updated, evidence that current lifecycle directories were read from the filesystem before editing, for example `ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/suspendUS .catdd/spec/doneUS .catdd/spec/abortUS` or an equivalent directory listing.
+- If `SpecFlow Lifecycle State` is updated, evidence that current lifecycle directories were read from the filesystem before editing, for example `ls -lrt "$metaspec_root"/{pendingNews,analyzedNews,todoUS,doingUS,suspendUS,doneUS,abortUS}` or an equivalent directory listing.
 - A short change log describing what was added, replaced, linked, compacted, or discarded and why.
 - A budget report with the resulting line count and, when available, approximate token count.
 - Open questions for uncertain project intent.
@@ -81,9 +86,9 @@ Treat `projectContext.md` as bounded working memory and a routing index, not as 
 
 | Tier | Source of truth | Read policy |
 | --- | --- | --- |
-| Working memory | `.catdd/spec/projectContext.md` | Read for every `SPEC_*` command. Keep only constitution-level guardrails and broadly reused project facts. |
+| Working memory | `<metaspec_root>/projectContext.md` | Read for every `SPEC_*` command. Keep only constitution-level guardrails and broadly reused project facts. |
 | Semantic memory | Project-root and module `README*` SPEC docs, method docs, and stable configuration | Retrieve when the current story, module, or quality concern requires it. Keep only a concise link and routing description in project context. |
-| Operational memory | Live `.catdd/spec/*News/` and `*US/` directories, repository state, and command output | Recompute from the filesystem when needed. Do not preserve snapshots as durable project context. |
+| Operational memory | Live `<metaspec_root>/*News/` and `*US/` directories, repository state, and command output | Recompute from the filesystem when needed. Do not preserve snapshots as durable project context. |
 | Episodic memory | ADRs, analyzed inputs, completed or aborted stories, review evidence, and Git history | Retrieve for rationale, diagnosis, or audit. Do not copy completed-work narratives into project context. |
 
 ## Memory Classification Rule
@@ -104,7 +109,7 @@ If an item fits more than one class, choose the narrowest canonical owner. Promo
 ## Context Budget
 
 - Use a soft limit of 200 lines or approximately 3,000 tokens unless `context_budget` defines another limit.
-- Measure the file before and after the update. A copy-exec line-count check is `wc -l .catdd/spec/projectContext.md`.
+- Measure the file before and after the update. A copy-exec line-count check is `wc -l <metaspec_root>/projectContext.md`.
 - Trigger compaction when the context exceeds the budget, contains duplicated or superseded entries, or accumulates operational or episodic detail.
 - The budget is subordinate to correctness. If the file cannot fit without deleting an active guardrail, unresolved project-wide question, or source route, leave it over budget and ask the developer which information may be externalized.
 
@@ -136,7 +141,7 @@ When the update touches `SpecFlow Lifecycle State`, do not rely on chat memory, 
 Recommended command:
 
 ```bash
-ls -lrt .catdd/spec/pendingNews .catdd/spec/analyzedNews .catdd/spec/todoUS .catdd/spec/doingUS .catdd/spec/suspendUS .catdd/spec/doneUS .catdd/spec/abortUS
+ls -lrt <metaspec_root>/pendingNews <metaspec_root>/analyzedNews <metaspec_root>/todoUS <metaspec_root>/doingUS <metaspec_root>/suspendUS <metaspec_root>/doneUS <metaspec_root>/abortUS
 ```
 
 If one of those directories does not exist, report the absence explicitly instead of inventing an empty or populated state. Persist the absence only when it reflects a confirmed project configuration rather than a temporary checkout condition. Do not paste exhaustive or summarized pending, analyzed, todo, doing, suspend, done, or abort file state into `projectContext.md`; those snapshots drift and should come from the live directory command. Preserve stable project facts that are not lifecycle inventory.
@@ -157,7 +162,7 @@ Before completing the update, verify all of the following:
 ## Conflict Guard
 
 Do not use project context to override CaTDD method rules; update `methodPrompts` first if the method itself changes.
-Do not update pending, analyzed, todo, doing, suspend, done, or abort lifecycle state without first inspecting the corresponding `.catdd/spec/` directories. Do not turn `projectContext.md` into a duplicated lifecycle file index.
+Do not update pending, analyzed, todo, doing, suspend, done, or abort lifecycle state without first inspecting the corresponding `<metaspec_root>/` directories. Do not turn `projectContext.md` into a duplicated lifecycle file index.
 Do not satisfy the budget by deleting provenance, unresolved project-wide questions, active guardrails, or the only surviving copy of a decision.
 Do not rewrite a hand-written region of any `AGENTS.md` file, and do not update its CaTDD managed region without checking it against project context first.
 Do not treat an `AGENTS.md` as authority over method semantics, category meaning, gate rules, traceability, or project facts; report the conflict and ask.

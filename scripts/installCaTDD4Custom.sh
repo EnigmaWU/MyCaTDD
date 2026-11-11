@@ -8,6 +8,7 @@ CLEAN_PROMPTS=0
 INIT=0
 VERBOSE=0
 YES=0
+MIGRATE_METASPEC=0
 
 usage() {
   cat <<'USAGE'
@@ -20,6 +21,8 @@ Options:
   --target DIR      Target project directory.
   --custom-dir NAME Custom subdir name under target (default: .customCodeAgent).
   --clean-prompts   Remove existing generated TEST_*.prompt, SPEC_*.prompt, and HARNESS_*.prompt files before regenerating wrappers.
+  --migrate-metaspec Explicitly migrate a sole legacy .catdd/spec workspace to
+                     .catdd/metaspec. Normal refresh preserves legacy.
   --init            Create the target directory if it does not exist.
   --verbose         Print detailed action steps for diagnosis.
   --yes, -y         Skip the Y/n confirmation prompt (non-interactive / scripted use).
@@ -41,6 +44,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --clean-prompts)
       CLEAN_PROMPTS=1
+      shift
+      ;;
+    --migrate-metaspec)
+      MIGRATE_METASPEC=1
       shift
       ;;
     --init)
@@ -91,10 +98,12 @@ fi
 
 TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
 CATDD_DIR="$TARGET_DIR/.catdd"
-SPEC_DIR="$CATDD_DIR/spec"
+SPEC_DIR="$CATDD_DIR/metaspec"
 CUSTOM_ROOT_DIR="$TARGET_DIR/$CUSTOM_DIR"
 CUSTOM_RULES_DIR="$CUSTOM_ROOT_DIR/rules"
 CUSTOM_PROMPTS_DIR="$CUSTOM_ROOT_DIR/prompts"
+METASPEC_HELPER_SRC="$REPO_ROOT/scripts/migrateCaTDDMetaspec.sh"
+METASPEC_HELPER_INSTALLED="$CATDD_DIR/scripts/migrateCaTDDMetaspec.sh"
 
 # Compute version from the latest git commit in the MyCaTDD source repo
 CATDD_VERSION="$(git -C "$REPO_ROOT" log -1 --format='%ad' --date='format:%Y%m%d.%H' 2>/dev/null || echo 'unknown')"
@@ -233,7 +242,27 @@ if [[ -e "$CUSTOM_ROOT_DIR" && ! -d "$CUSTOM_ROOT_DIR" ]]; then
   exit 1
 fi
 
-mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/suspendUS" "$SPEC_DIR/abortUS" "$SPEC_DIR/doneUS" "$CUSTOM_RULES_DIR" "$CUSTOM_PROMPTS_DIR"
+[[ -x "$METASPEC_HELPER_SRC" ]] || {
+  echo "[installCaTDD4Custom] Metaspec migration helper is missing or not executable: $METASPEC_HELPER_SRC" >&2
+  exit 1
+}
+HAS_METASPEC_WORKSPACE=0
+for _metaspec_candidate in .catdd/metaspec .agents/metaspec .catdd/spec; do
+  if [[ -d "$TARGET_DIR/$_metaspec_candidate" ]]; then
+    HAS_METASPEC_WORKSPACE=1
+  fi
+done
+if [[ "$MIGRATE_METASPEC" -eq 1 || "$HAS_METASPEC_WORKSPACE" -eq 0 ]]; then
+  "$METASPEC_HELPER_SRC" --project-root "$TARGET_DIR" --apply --quiet
+else
+  "$METASPEC_HELPER_SRC" --project-root "$TARGET_DIR" --quiet
+fi
+
+SPEC_ROOT_REL="$("$METASPEC_HELPER_SRC" --project-root "$TARGET_DIR" --print-root)"
+for _lifecycle_lane in pendingNews analyzedNews todoUS doingUS suspendUS abortUS doneUS; do
+  mkdir -p "$TARGET_DIR/$SPEC_ROOT_REL/$_lifecycle_lane"
+done
+mkdir -p "$CATDD_DIR" "$CUSTOM_RULES_DIR" "$CUSTOM_PROMPTS_DIR"
 
 update_spec_gitignore() {
   local gitignore_file="$TARGET_DIR/.gitignore"
@@ -269,6 +298,8 @@ update_spec_gitignore() {
     fi
     cat <<'GITIGNORE'
 # BEGIN CaTDD SpecCoding local state
+/.catdd/metaspec/WorkingProcessLog.md
+/.agents/metaspec/WorkingProcessLog.md
 /.catdd/spec/WorkingProcessLog.md
 # END CaTDD SpecCoding local state
 GITIGNORE
@@ -282,6 +313,10 @@ log_replace_or_new "$CATDD_DIR/slashCommands"
 rm -rf "$CATDD_DIR/methodPrompts" "$CATDD_DIR/slashCommands"
 cp -R "$REPO_ROOT/methodPrompts" "$CATDD_DIR/methodPrompts"
 cp -R "$REPO_ROOT/slashCommands" "$CATDD_DIR/slashCommands"
+log_replace_or_new "$METASPEC_HELPER_INSTALLED"
+mkdir -p "$(dirname "$METASPEC_HELPER_INSTALLED")"
+cp "$METASPEC_HELPER_SRC" "$METASPEC_HELPER_INSTALLED"
+chmod +x "$METASPEC_HELPER_INSTALLED"
 update_spec_gitignore
 
 log_replace_or_new "$CATDD_DIR/CaTDD_INSTALL.md"
@@ -292,12 +327,13 @@ This directory is managed by \
 
 - \`methodPrompts/\` is the installed CaTDD method source.
 - \`slashCommands/\` is the installed portable flow-command source.
-- \`spec/\` is the installed SpecCoding artifact workspace.
+- \`scripts/migrateCaTDDMetaspec.sh\` selects or migrates the SpecCoding artifact workspace.
+- \`projectContext.md\` declares the active \`metaspec_root\`; supported roots are \`.catdd/metaspec/\`, \`.agents/metaspec/\`, and legacy \`.catdd/spec/\`.
 - Custom project rule: \`$CUSTOM_DIR/rules/catdd.md\`.
 - Continue-format prompt wrappers: \`$CUSTOM_DIR/prompts/TEST_*.prompt\`, \`$CUSTOM_DIR/prompts/SPEC_*.prompt\`, and \`$CUSTOM_DIR/prompts/HARNESS_*.prompt\`.
-- Commit team-shared SpecCoding artifacts under \`.catdd/spec/\`, such as \`projectContext.md\`, \`pendingNews/\`, \`analyzedNews/\`, \`todoUS/\`, \`doingUS/\`, \`suspendUS/\`, \`abortUS/\`, and \`doneUS/\`.
+- Commit team-shared SpecCoding artifacts under the resolved \`metaspec_root\`, such as \`projectContext.md\`, \`pendingNews/\`, \`analyzedNews/\`, \`todoUS/\`, \`doingUS/\`, \`suspendUS/\`, \`abortUS/\`, and \`doneUS/\`.
 - Use project-root \`README*\` files for shared SPEC docs such as \`README.md\`, \`README_ArchDesign.md\`, \`README_UserStories.md\`, \`README_UserGuide.md\`, \`README_DetailDesign.md\`, \`README_DetailVerifyDesign.md\`, \`README_ErrorDesign.md\`, \`README_ResourceDesign.md\`, \`README_StateDesign.md\`, \`README_PerfDesign.md\`, \`README_CompatDesign.md\`, \`README_DiagnosisDesign.md\`, \`README_ArchVerifyDesign.md\`, and \`README_VerifyDesign.md\` as needed.
-- Keep local SpecCoding work state such as \`.catdd/spec/WorkingProcessLog.md\` gitignored.
+- Keep local SpecCoding work state such as \`WorkingProcessLog.md\` gitignored in every supported workspace.
 
 Refresh this project by rerunning the installer from the MyCaTDD repository.
 MARKER
@@ -314,18 +350,21 @@ This is a custom project rule installed by MyCaTDD. Use it when working with CaT
 - Portable slash command source: \`.catdd/slashCommands/\`
 - Continue-format prompt wrappers: \`$CUSTOM_DIR/prompts/TEST_*.prompt\`, \`$CUSTOM_DIR/prompts/SPEC_*.prompt\`, and \`$CUSTOM_DIR/prompts/HARNESS_*.prompt\`
 - SpecCoding flow: \`.catdd/slashCommands/flows/Px-SpecFlow.md\`
-- SpecCoding artifact workspace: \`.catdd/spec/\`
+- SpecCoding artifact workspace: the \`metaspec_root\` declared in \`projectContext.md\`, defaulting to \`.catdd/metaspec/\`
+- Workspace migration helper: \`.catdd/scripts/migrateCaTDDMetaspec.sh\`
 - Project-root README SPEC docs: \`README.md\`, \`README_ArchDesign.md\`, \`README_UserStories.md\`, \`README_UserGuide.md\`, \`README_DetailDesign.md\`, \`README_DetailVerifyDesign.md\`, \`README_ErrorDesign.md\`, \`README_ResourceDesign.md\`, \`README_StateDesign.md\`, \`README_PerfDesign.md\`, \`README_CompatDesign.md\`, \`README_DiagnosisDesign.md\`, \`README_ArchVerifyDesign.md\`, and \`README_VerifyDesign.md\` as needed.
 
 ## Custom Behavior
 
 - Treat this file as a thin custom adapter over \`.catdd/methodPrompts/\` and \`.catdd/slashCommands/\`.
+- Before reading or writing SpecCoding artifacts, follow \`.catdd/slashCommands/MetaspecWorkspaceResolution.md\`; supported roots are \`.catdd/metaspec/\`, \`.agents/metaspec/\`, and legacy \`.catdd/spec/\`.
 - Use \`$CUSTOM_DIR/prompts/\` for triggerable TEST_*, SPEC_*, and HARNESS_* prompt wrappers in Continue format.
 - Treat \`.catdd/methodPrompts/\` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Use \`.catdd/slashCommands/commands/\` for TEST_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
-- Keep SpecCoding lifecycle state under \`.catdd/spec/\`.
-- Commit team-shared artifacts such as \`.catdd/spec/projectContext.md\`, \`.catdd/spec/pendingNews/\`, \`.catdd/spec/analyzedNews/\`, \`.catdd/spec/todoUS/\`, \`.catdd/spec/doingUS/\`, \`.catdd/spec/suspendUS/\`, \`.catdd/spec/abortUS/\`, \`.catdd/spec/doneUS/\`, and project-root \`README*\` SPEC docs.
-- Keep local work state such as \`.catdd/spec/WorkingProcessLog.md\` gitignored.
+- Keep SpecCoding lifecycle state under the resolved \`metaspec_root\`.
+- Commit team-shared artifacts such as \`projectContext.md\`, \`pendingNews/\`, \`analyzedNews/\`, \`todoUS/\`, \`doingUS/\`, \`suspendUS/\`, \`abortUS/\`, \`doneUS/\`, and project-root \`README*\` SPEC docs under the resolved workspace.
+- Keep local work state such as \`WorkingProcessLog.md\` gitignored in every supported workspace.
+- Use \`/HARNESS_migrateMetaspec\` to reconcile or migrate workspaces; never merge populated roots during normal command execution.
 - Prefer explicit SpecFlow intake commands: \`SPEC_importIssue\`, \`SPEC_importFeature\`, \`SPEC_importUserStory\`, \`SPEC_analyzeIssue\`, and \`SPEC_analyzeFeature\`.
 - After every meaningful verified success, report \`success_learning_checkpoint = recommended\` and remind the developer to run \`/HARNESS_evolveHarness\` with \`evolution_mode=auto\`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running \`HARNESS_evolveHarness\`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
@@ -338,6 +377,6 @@ generate_custom_prompts
 echo "[installCaTDD4Custom] Installed CaTDD for custom adapter into $TARGET_DIR"
 echo "[installCaTDD4Custom] Method source: .catdd/methodPrompts"
 echo "[installCaTDD4Custom] Slash command source: .catdd/slashCommands"
-echo "[installCaTDD4Custom] SpecCoding artifacts: .catdd/spec"
+echo "[installCaTDD4Custom] SpecCoding artifacts: $SPEC_ROOT_REL"
 echo "[installCaTDD4Custom] Custom rule: $CUSTOM_DIR/rules/catdd.md"
 echo "[installCaTDD4Custom] Custom prompts: $CUSTOM_DIR/prompts"

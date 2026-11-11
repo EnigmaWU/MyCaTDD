@@ -1,5 +1,9 @@
 # HARNESS_evolveHarness
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Learn from verified CaTDD successes and failures, then evolve the correct canonical artifact at the smallest justified depth. One command supports lightweight evidence-backed refinement and heavier trace-driven restructuring without changing model weights or silently mutating source.
@@ -71,7 +75,7 @@ Expected result:
 - `learning_source`: optional completed session summary, closed story, commit, review, issue resolution, verification report, or execution trace.
 - `learning_evidence`: objective outcome evidence and, when available, contribution and reuse evidence.
 - `trace_source`: optional trace source selector. Default: `auto`.
-  - `auto`: discover traces from `.catdd/spec/WorkingProcessLog.md`, verification reports, and recent test-script runs.
+  - `auto`: discover traces from `<metaspec_root>/WorkingProcessLog.md`, verification reports, and recent test-script runs.
   - `run_artifacts_dir`: read from a directory produced by `HARNESS_collectRunArtifacts`.
   - `verification_report`: read from a previous `HARNESS_verifyInstallation` output.
   - `manual`: developer-supplied trace snippets or failure observations.
@@ -129,7 +133,7 @@ When `auto` lacks enough evidence to choose safely, return `ASK`; do not default
 
 | Candidate lesson | Canonical owner | Evolution action |
 | --- | --- | --- |
-| Stable project-wide fact, constraint, or routing rule | `.catdd/spec/projectContext.md` | Delegate through `SPEC_updateProjectContext`; do not append session history. |
+| Stable project-wide fact, constraint, or routing rule | `<metaspec_root>/projectContext.md` | Delegate through `SPEC_updateProjectContext`; do not append session history. |
 | Product behavior, acceptance criterion, edge case, or design decision | User story or project/module `README*` SPEC document | Delegate through the narrowest SpecFlow command. |
 | CaTDD category meaning, US/AC/TC semantics, or method rule | `methodPrompts/` | Require a reviewed method-level story. |
 | Portable CodeAgent workflow or slash-command contract | `slashCommands/commands/` or `slashCommands/flows/` | Write to the `<Name>Evolved.md` overlay, never the canonical `<Name>.md`; refine when bounded, restructure only with systemic evidence. |

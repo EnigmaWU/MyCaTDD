@@ -4,8 +4,8 @@ This document defines the high-level architecture for `utCodeAgentCLI`: a CaTDD-
 
 ## Context
 
-- Architecture baseline story: [../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/spec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
-- Architecture-changing update story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
+- Architecture baseline story: [../../.catdd/metaspec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md](../../.catdd/metaspec/doingUS/20260530-design-utCodeAgentCLI-architecture-UserStory.md)
+- Architecture-changing update story: [../../.catdd/metaspec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/metaspec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - Requirements index: [README_UserStory.md](README_UserStory.md)
 - USER requirements: [README_UserStory4USER.md](README_UserStory4USER.md)
 - INVENTOR requirements: [README_UserStory4INVENTOR.md](README_UserStory4INVENTOR.md)

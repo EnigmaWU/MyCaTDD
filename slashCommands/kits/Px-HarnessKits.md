@@ -36,6 +36,7 @@ Harness loops follow the same bounded loop policy as `Px-SpecFlow`'s [Loop Guard
 | Source patch-back | Move effective installed-project CaTDD improvements back to source with allowlists and safety gates. | [HARNESS_patchCaTDDSource](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) |
 | Installation verification | Prove an installed CaTDD target project has complete `.catdd` assets, native wrappers, rules, skills, and source-of-truth links before use. | [HARNESS_verifyInstallation](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) |
 | Installation diagnosis | Investigate a failed or misworking installed CaTDD target project and recommend safe repair from verification evidence. | [HARNESS_diagnoseInstallation](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) |
+| Workspace migration | Select, validate, and migrate supported SpecCoding artifact workspaces without merging them. | [HARNESS_migrateMetaspec](../commands/Px-HarnessKits/HARNESS_migrateMetaspec.md) |
 | Project diagnosis | Diagnose project correctness, consistency, and SpecCoding/CaTDD drift without mutating source by default. | [HARNESS_diagnoseProject](../commands/Px-HarnessKits/HARNESS_diagnoseProject.md) |
 | Session handoff | Capture and preserve important session context — lifecycle state, key files, decisions, environment facts — when finishing a task and starting a new session. | [HARNESS_newTaskSession](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) |
 | Run diagnosis | Future commands for collecting run artifacts and diagnosing non-installation harness/test failures. | Future `HARNESS_collectRunArtifacts`, `HARNESS_diagnoseFailure` |
@@ -67,12 +68,13 @@ flowchart LR
 1. Use [HARNESS_patchCaTDDSource](../commands/Px-HarnessKits/HARNESS_patchCaTDDSource.md) when an installed project has effective CaTDD meta-file improvements that should be patched back to the original CaTDD repository on a non-default branch.
 2. Use [HARNESS_verifyInstallation](../commands/Px-HarnessKits/HARNESS_verifyInstallation.md) before trusting a fresh install, after installing into a real target project, or before releasing installer/generator changes.
 3. Use [HARNESS_diagnoseInstallation](../commands/Px-HarnessKits/HARNESS_diagnoseInstallation.md) only after verification fails or an installed target project misworks.
-4. Use [HARNESS_newTaskSession](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) at the end of a task session to capture and preserve important context before starting a new session.
-5. Use [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) after meaningful verified success or repeated harness evidence. Default to `evolution_mode=auto` and `dry_run=true`: bounded lessons select `refine`; repeated/systemic evidence may select `restructure`; no durable lesson may return `no reusable learning`. Any approved mutation must pass explicit acceptance criteria using external evidence and stop on success, retry bound, or no progress.
+4. Use [HARNESS_migrateMetaspec](../commands/Px-HarnessKits/HARNESS_migrateMetaspec.md) when moving a legacy `.catdd/metaspec` workspace or reconciling `.catdd/metaspec` and `.agents/metaspec`; always begin with its dry run.
+5. Use [HARNESS_newTaskSession](../commands/Px-HarnessKits/HARNESS_newTaskSession.md) at the end of a task session to capture and preserve important context before starting a new session.
+6. Use [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) after meaningful verified success or repeated harness evidence. Default to `evolution_mode=auto` and `dry_run=true`: bounded lessons select `refine`; repeated/systemic evidence may select `restructure`; no durable lesson may return `no reusable learning`. Any approved mutation must pass explicit acceptance criteria using external evidence and stop on success, retry bound, or no progress.
 
 ## Conflict Guard
 
-- `HARNESS_*` commands are tool-point commands. Do not force them through `.catdd/spec/doingUS/` unless the developer deliberately wraps harness maintenance in a SpecFlow story.
+- `HARNESS_*` commands are tool-point commands. Do not force them through the resolved `doingUS/` lane unless the developer deliberately wraps harness maintenance in a SpecFlow story.
 - HarnessKits commands may read SpecFlow artifacts for context, but they must not move lifecycle state.
 - Portable source files remain the source of truth; generated native wrappers are adapters.
 - CaTDD category semantics must still come from `methodPrompts`.

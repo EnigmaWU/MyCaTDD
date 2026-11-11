@@ -1,5 +1,9 @@
 # HARNESS_diagnoseInstallation
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Diagnose a failed or misworking CaTDD installation by classifying installation-surface failures, identifying likely root causes, and recommending repair actions.
@@ -126,7 +130,7 @@ Do not classify `<Name>Evolved.md` local overlays as installation failures; they
 Do not classify product-code, test-design, or SpecFlow lifecycle failures as installation failures unless installed CaTDD assets or adapter surfaces are inconsistent.
 Do not fail Antigravity installations for missing prompt wrappers unless Antigravity wrapper generation is explicitly added later.
 Do not fail Codex installations for a missing custom-prompt directory unless the developer asked for that deprecated surface.
-Do not move SpecFlow lifecycle state or create `.catdd/spec/doingUS/` entries.
+Do not move SpecFlow lifecycle state or create `<metaspec_root>/doingUS/` entries.
 Do not expose secrets from target project files in the diagnosis report.
 
 ONE-MORE-THING: ask developer if something not sure

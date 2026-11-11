@@ -1,5 +1,9 @@
 # TEST_designFaultSkeleton
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Design a CaTDD Fault functional skeleton from failure conditions, dependency errors, and recoverable or reportable fault behavior.
@@ -19,7 +23,7 @@ Repeat until every case is an externally caused, functionally specified fault.
 3. **Observation** — Check both boundaries: a failure the caller caused belongs to Misuse → back to **Thought**; a case that is really about sustained degradation, stress, or resource exhaustion is P2 Robust, not P0 Fault → back to **Thought** and defer it. Check the [US/AC/TP/TC cardinality](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the declared scope; unassigned TPs block completion.
 4. **Stop** — Exit when every case is externally caused, functionally specified, and the cardinality check passes. Recommend `TEST_reviewFuncTestsSkeleton`.
 
-## Usage Example
+### Worked Example
 
 Specifying failure behavior for the authorize call. IDs below are abbreviated; generated artifacts use registered Story IDs and qualified AC/TP/TC IDs.
 

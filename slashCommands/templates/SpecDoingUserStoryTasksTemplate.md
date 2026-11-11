@@ -1,6 +1,6 @@
 # TASKs: {{UserStoryTitle}}
 
-This is the SpecCoding template for `.catdd/spec/doingUS/{{YYYYMMDD-StorySlug}}-UserStory-Tasks.md` (and its preserved copies in `suspendUS/`, `abortUS/`, and `doneUS/`). Create it initially via `SPEC_makePlan` after `SPEC_openUserStory` or `SPEC_clearStoryIntent`, and synchronize/refine it via `SPEC_updateMadePlan` after review gates (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`), rework loops, story resumption, or `plan_drift` checkpoints.
+This is the SpecCoding template for `.catdd/metaspec/doingUS/{{YYYYMMDD-StorySlug}}-UserStory-Tasks.md` (and its preserved copies in `suspendUS/`, `abortUS/`, and `doneUS/`). Create it initially via `SPEC_makePlan` after `SPEC_openUserStory` or `SPEC_clearStoryIntent`, and synchronize/refine it via `SPEC_updateMadePlan` after review gates (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`), rework loops, story resumption, or `plan_drift` checkpoints.
 
 Paired with [{{YYYYMMDD-StorySlug-UserStory}}]({{YYYYMMDD-StorySlug-UserStory.md}}).
 
@@ -15,7 +15,7 @@ Paired with [{{YYYYMMDD-StorySlug-UserStory}}]({{YYYYMMDD-StorySlug-UserStory.md
 - **Priority:** {{P0 Functional | P1 Design | P2 Quality | P3 Addons}} / {{Category}}
 - **Branch:** `{{branch_name}}`
 - **Execution Mode:** `{{manualMode | autonomousMode (held until implementation-oriented) | autonomousMode (active)}}`
-- **Source:** `.catdd/spec/analyzedNews/{{YYYYMMDD-source}}.md` (or module `README_UserStory.md` + `README_UserGuide.md`)
+- **Source:** `.catdd/metaspec/analyzedNews/{{YYYYMMDD-source}}.md` (or module `README_UserStory.md` + `README_UserGuide.md`)
 - **Project Story Ledger:** `README_UserStories.md`
 
 Resolve the ID/StoryIdAlias pair through the registry and preserve its creation instant. Task rows reference alias-qualified CaTDD-AC/TP/TC IDs. Every CaTDD-AC uses `From / Given / When / Then / Counter`; unresolved `From` evidence remains an `AskWhy` blocker. Authoritative TP definitions and ownership stay in `README_DetailVerifyDesign.md`; this task artifact tracks execution and evidence, not a second TP ledger.
@@ -108,7 +108,7 @@ Resolve the ID/StoryIdAlias pair through the registry and preserve its creation 
 
 ### Phase 1: Intake, Opening, and Intent
 
-- [x] **SPEC_openUserStory** — Moved story to `.catdd/spec/doingUS/` on branch `{{branch_name}}`.
+- [x] **SPEC_openUserStory** — Moved story to `.catdd/metaspec/doingUS/` on branch `{{branch_name}}`.
 - [ ] **SPEC_clearStoryIntent** — {{Record CLEARED Mutual Intent Contract, or mark `[x] Skipped (intent already aligned)`}}.
 - [x] **SPEC_makePlan** — Created initial `*-UserStory-Tasks.md`, classified orientation, and locked commit plan.
 
@@ -137,7 +137,7 @@ Resolve the ID/StoryIdAlias pair through the registry and preserve its creation 
 ### Phase 4: Commit, Closure, and Merge
 
 - [ ] **SPEC_commitStoryWorks** (`pre_close`) — Commit the verified story span (`commit_ref = {{sha}}`).
-- [ ] **SPEC_closeUserStory** — Verify truthful checklist/Trajectory (`no plan_drift`), move story and tasks to `.catdd/spec/doneUS/`, and sync `README_UserStories.md`.
+- [ ] **SPEC_closeUserStory** — Verify truthful checklist/Trajectory (`no plan_drift`), move story and tasks to `.catdd/metaspec/doneUS/`, and sync `README_UserStories.md`.
 - [ ] **SPEC_commitStoryWorks** (`post_close`) — Commit close-generated lifecycle/meta changes when `close_commit_required = yes`.
 - [ ] **SPEC_mergeWorks** — Merge dedicated branch when integration is required, or mark `[x] Auto-skipped`.
 
@@ -188,14 +188,14 @@ Resolve the ID/StoryIdAlias pair through the registry and preserve its creation 
 ```text
 # 1. Create initial task artifact after opening a story
 /SPEC_makePlan
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
-tasks_file: .catdd/spec/doingUS/20260904-payment-retry-UserStory-Tasks.md
-projectContext_file: .catdd/spec/projectContext.md
+doing_user_story: .catdd/metaspec/doingUS/20260904-payment-retry-UserStory.md
+tasks_file: .catdd/metaspec/doingUS/20260904-payment-retry-UserStory-Tasks.md
+projectContext_file: .catdd/metaspec/projectContext.md
 
 # 2. Synchronize [x]/[ ] status, append Trajectory row, and refine slices after any review gate
 /SPEC_updateMadePlan
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
-tasks_file: .catdd/spec/doingUS/20260904-payment-retry-UserStory-Tasks.md
+doing_user_story: .catdd/metaspec/doingUS/20260904-payment-retry-UserStory.md
+tasks_file: .catdd/metaspec/doingUS/20260904-payment-retry-UserStory-Tasks.md
 trigger_reason: review_gate_completed
 review_evidence: SPEC_reviewImplTests PASS (TC-001, TC-002 valid RED)
 ```

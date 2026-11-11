@@ -1,8 +1,12 @@
 # SPEC_updateMadePlan
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Synchronize and progressively refine an existing `.catdd/spec/doingUS/*-UserStory-Tasks.md` task plan after lifecycle phase transitions, review verdicts, rework loops, story resumption, or `plan_drift` detection, keeping `[ ]`/`[x]` task status truthful and expanding coarse phases into detailed design or US/AC/TC execution slices.
+Synchronize and progressively refine an existing `<metaspec_root>/doingUS/*-UserStory-Tasks.md` task plan after lifecycle phase transitions, review verdicts, rework loops, story resumption, or `plan_drift` detection, keeping `[ ]`/`[x]` task status truthful and expanding coarse phases into detailed design or US/AC/TC execution slices.
 
 Use `SPEC_makePlan` to create the initial task plan right after `SPEC_openUserStory` or `SPEC_clearStoryIntent`. Use `SPEC_updateMadePlan` whenever an already-made task plan is out of date with actual gate/commit evidence or needs finer-grained tasks for the next phase.
 
@@ -15,7 +19,7 @@ Use `SPEC_makePlan` to create the initial task plan right after `SPEC_openUserSt
 Repeat until the paired `*-UserStory-Tasks.md` artifact is truthful, sufficiently detailed for the current lifecycle phase, and free of `plan_drift`.
 
 1. **Thought** — Compare the existing `*-UserStory-Tasks.md` against the active story, `README_UserStories.md`, reviewed `README*` SPEC docs, test skeletons, and actual git commits. Identify: (a) completed steps still marked `[ ]` or checked `[x]` steps lacking gate evidence (`plan_drift`), (b) work-orientation transitions (for example `requirement-oriented` → `design-oriented`, or `design-oriented` → `implementation-oriented`), (c) changes in the 10-dimension `## EPIC Specification Sufficiency` ledger (`satisfied / partial / gap / question / N/A`), (d) coarse placeholder tasks that must now expand into concrete architecture/detail design tasks or US/AC/TC test-and-code slices with parallel markers, and (e) step-commit boundaries that need updating.
-2. **Action** — Update `.catdd/spec/doingUS/*-UserStory-Tasks.md` (following [SpecDoingUserStoryTasksTemplate](../../templates/SpecDoingUserStoryTasksTemplate.md)): refresh the `## EPIC Specification Sufficiency` table dispositions and evidence, append a new chronological row to the `## Trajectory` table (`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`), and synchronize the `Current Readiness` table, `Work Orientation`, `[x]`/`[ ]` checkboxes in `## Task Checklist` with gate/commit citations, expanded phase or US/AC/TC slice tasks, `Candidate Next Steps`, `Rejected Next Steps`, `Selected Next Command`, and the commit plan (`commit_step = yes|no|optional`, `single_story_commit`, and recorded `commit_ref`s).
+2. **Action** — Update `<metaspec_root>/doingUS/*-UserStory-Tasks.md` (following [SpecDoingUserStoryTasksTemplate](../../templates/SpecDoingUserStoryTasksTemplate.md)): refresh the `## EPIC Specification Sufficiency` table dispositions and evidence, append a new chronological row to the `## Trajectory` table (`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`), and synchronize the `Current Readiness` table, `Work Orientation`, `[x]`/`[ ]` checkboxes in `## Task Checklist` with gate/commit citations, expanded phase or US/AC/TC slice tasks, `Candidate Next Steps`, `Rejected Next Steps`, `Selected Next Command`, and the commit plan (`commit_step = yes|no|optional`, `single_story_commit`, and recorded `commit_ref`s).
 3. **Observation** — Check the updated plan against four invariants: (a) every `[x]` task is backed by an append-only `## Trajectory` row citing real gate or commit evidence (prior `## Trajectory` rows are never deleted or overwritten), (b) when entering `implementation-oriented` Part 2.b, required EPIC dimensions in `## EPIC Specification Sufficiency` are `satisfied` (or explicitly `N/A` / risk-accepted) and tasks are broken down into ordered US/AC/TC slices (P0 Functional first, then gated P1/P2) and explicit `SPEC_commitStepWorks` boundaries rather than a single coarse implementation checkbox, (c) any `REVISE` verdict from `SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, or `SPEC_reviewProductCodes` records its finding IDs and bounded attempt count (`Attempt k of 3`) in `## Trajectory` and `## Task Checklist`, and (d) the selected next command's prerequisites are all `[x]`. If any `[x]` lacks evidence, any slice omits a required review gate, or `execution_mode` violates the orientation boundary, return to **Thought** or **Action**.
 4. **Stop** — Print the updated TASKs checklist and latest `## Trajectory` row, the updated work orientation and `execution_mode` status, and `next_command = <selected SPEC command>`.
 
@@ -25,9 +29,9 @@ A story opened as `requirement-oriented` and initially planned by `SPEC_makePlan
 
 ```text
 /SPEC_updateMadePlan
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
-tasks_file: .catdd/spec/doingUS/20260904-payment-retry-UserStory-Tasks.md
-projectContext_file: .catdd/spec/projectContext.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
+tasks_file: <metaspec_root>/doingUS/20260904-payment-retry-UserStory-Tasks.md
+projectContext_file: <metaspec_root>/projectContext.md
 trigger_reason: phase_transition_after_detail_design_pass
 detail_design: README_DetailDesign.md
 verify_design: README_DetailVerifyDesign.md
@@ -44,8 +48,8 @@ Expected result — two ReACT passes:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `tasks_file`: existing `.catdd/spec/doingUS/*-UserStory-Tasks.md` file created by `SPEC_makePlan` to synchronize and refine. If this file does not exist yet, stop and route to `SPEC_makePlan`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
+- `tasks_file`: existing `<metaspec_root>/doingUS/*-UserStory-Tasks.md` file created by `SPEC_makePlan` to synchronize and refine. If this file does not exist yet, stop and route to `SPEC_makePlan`.
 - `projectContext_file`: current project context.
 - `trigger_reason`: reason for updating the plan:
   - `phase_transition`: moving across `intent-clearing`, `requirement-oriented`, `design-oriented`, or `implementation-oriented` phases (for example after `SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, or `SPEC_reviewDetailDesign` passes).
@@ -67,7 +71,7 @@ Expected result — two ReACT passes:
 
 ## Output Contract
 
-- An updated, team-shared `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact conforming to [SpecDoingUserStoryTasksTemplate](../../templates/SpecDoingUserStoryTasksTemplate.md).
+- An updated, team-shared `<metaspec_root>/doingUS/*-UserStory-Tasks.md` artifact conforming to [SpecDoingUserStoryTasksTemplate](../../templates/SpecDoingUserStoryTasksTemplate.md).
 - A refreshed 10-dimension `## EPIC Specification Sufficiency` table (`E1..E3`, `P1..P2`, `I1..I3`, `C1..C2`) and `### Cross-Artifact Semantic-Delta Matrix` (`KEPT`, `DETAILED`, `REASSIGNED`, `EXCLUDED`, `VIOLATED`, `UNKNOWN` across `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_designTests` + `TEST_review*TestsSkeleton`, and `SPEC_reviewImplTests`) recording updated dispositions (`satisfied / partial / gap / question / N/A`), affected IDs/evidence, and owning next commands as upstream gates pass or revise.
 - A newly appended row in the `## Trajectory` table (`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`) recording the review verdict (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, or `SPEC_reviewProductCodes`), rework attempt (`Attempt k of 3`), phase transition, or commit checkpoint without deleting or overwriting prior rows.
 - Synchronized `[x]` and `[ ]` Markdown checkbox tasks in `## Task Checklist` where every `[x]` item is backed by a `## Trajectory` row citing the gate verdict, commit ref, or explicit skip rationale.

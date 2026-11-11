@@ -1,8 +1,12 @@
 # SPEC_analyzeAbortedUserStory
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Analyze an aborted user story, audit its preserved evidence, diagnose the abort cause, selectively re-apply requirements-analysis techniques to the affected parts, and generate a corrected user story artifact under `.catdd/spec/todoUS/`. The original aborted story remains in `.catdd/spec/abortUS/` as historical evidence — it is never mutated.
+Analyze an aborted user story, audit its preserved evidence, diagnose the abort cause, selectively re-apply requirements-analysis techniques to the affected parts, and generate a corrected user story artifact under `<metaspec_root>/todoUS/`. The original aborted story remains in `<metaspec_root>/abortUS/` as historical evidence — it is never mutated.
 
 ## CoT Pattern
 
@@ -18,16 +22,16 @@ Drive the Analysis Pipeline below with this loop. The point of the loop is selec
    - A rejection with no supporting evidence → return to **Thought**; do not reject valid work just because the story was aborted.
    - Step 4's gates fail → stop and route out instead of forcing a corrected story.
    - Replacement intent still unclear → record a question rather than inventing a requirement.
-4. **Stop** — Exit after Step 7. The aborted story in `.catdd/spec/abortUS/` must be byte-identical to how it started.
+4. **Stop** — Exit after Step 7. The aborted story in `<metaspec_root>/abortUS/` must be byte-identical to how it started.
 
-## Usage Example
+### Worked Example
 
 The payment-retry story was aborted on a bad idempotency assumption:
 
 ```text
 /SPEC_analyzeAbortedUserStory
-aborted_user_story: .catdd/spec/abortUS/20260904-payment-retry-UserStory.md
-aborted_tasks_file: .catdd/spec/abortUS/20260904-payment-retry-UserStory-Tasks.md
+aborted_user_story: <metaspec_root>/abortUS/20260904-payment-retry-UserStory.md
+aborted_tasks_file: <metaspec_root>/abortUS/20260904-payment-retry-UserStory-Tasks.md
 ```
 
 Expected result:
@@ -38,12 +42,12 @@ Expected result:
 - **Action (Step 3)**: rejected — "gateway is idempotent", disproved by `TC-RETRY-009`.
 - **Observation**: a first draft also rejected AC-02, but nothing in the abort evidence touches AC-02 → over-correction → back to **Thought** → AC-02 restored to the preserved list.
 - **Action (Step 5)**: only `extract-business-rules` and `validate-requirements-criteria` re-applied, scoped to the idempotency rule. The feature tree and prioritization are **not** redone.
-- **Stop**: corrected story written to `.catdd/spec/todoUS/` with an **Abort Evidence** section and `### Re-Analysis Chat History` (plus an appended re-analysis round under `## Chat History` in the linked `analyzedNews/` file when present); `abortUS/` copy untouched.
+- **Stop**: corrected story written to `<metaspec_root>/todoUS/` with an **Abort Evidence** section and `### Re-Analysis Chat History` (plus an appended re-analysis round under `## Chat History` in the linked `analyzedNews/` file when present); `abortUS/` copy untouched.
 
 ## Inputs
 
-- `aborted_user_story`: aborted story under `.catdd/spec/abortUS/`.
-- `aborted_tasks_file`: optional `.catdd/spec/abortUS/*-UserStory-Tasks.md` task artifact paired with the aborted story.
+- `aborted_user_story`: aborted story under `<metaspec_root>/abortUS/`.
+- `aborted_tasks_file`: optional `<metaspec_root>/abortUS/*-UserStory-Tasks.md` task artifact paired with the aborted story.
 - `projectContext_file`: current project context.
 - `related_docs`: optional README SPEC docs, arch/detail design docs, review findings, test output, implementation notes, or reproduction evidence.
 - `SpecTodoUserStoryTemplate`: output template at `../../templates/SpecTodoUserStoryTemplate.md`.
@@ -57,12 +61,12 @@ Expected result:
 
 ## Output Contract
 
-- A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact for the corrected next round.
+- A `<metaspec_root>/todoUS/*-UserStory.md` team-shared persistent user story artifact for the corrected next round.
 - Source trace from the new todo story to the aborted story and its paired tasks.
 - The original registered Story ID when the corrected artifact is a revision of the same story; otherwise, a new human-readable `US-<whoName>-<doWhat>` ID with lowerCamelCase segments for a materially different independent successor, with explicit links to the original Story and AC identities.
 - A corrected, independently testable user-story slice with preserved valid intent, rejected invalid assumptions, acceptance scenarios, risks, non-goals, and open questions.
-- The aborted story remains preserved in `.catdd/spec/abortUS/` as historical evidence — it is never mutated.
-- The story follows `SpecTodoUserStoryTemplate.md` structure and includes the **Abort Evidence** section documenting the abort diagnosis plus `### Re-Analysis Chat History` (`chatHistory`) capturing the developer/CodeAgent re-analysis dialogue, preserved/rejected decisions, and resolved questions (and appends a re-analysis round to `## Chat History` in the linked `.catdd/spec/analyzedNews/` artifact when one exists).
+- The aborted story remains preserved in `<metaspec_root>/abortUS/` as historical evidence — it is never mutated.
+- The story follows `SpecTodoUserStoryTemplate.md` structure and includes the **Abort Evidence** section documenting the abort diagnosis plus `### Re-Analysis Chat History` (`chatHistory`) capturing the developer/CodeAgent re-analysis dialogue, preserved/rejected decisions, and resolved questions (and appends a re-analysis round to `## Chat History` in the linked `<metaspec_root>/analyzedNews/` artifact when one exists).
 - Explicit documentation of what was kept (valid) and what was rejected (invalid) from the original story.
 
 ## Analysis Pipeline
@@ -148,7 +152,7 @@ Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`. The foll
 **Gate:** if any Initial Acceptance Questions remain open, mark the story NOT ready — it may not proceed to `SPEC_openUserStory`.
 
 ### Step 7 — Write & trace
-Write the corrected story (including `### Re-Analysis Chat History` under `## Abort Evidence`, and appending the re-analysis round to `## Chat History` in the linked `.catdd/spec/analyzedNews/` file when one exists). Do NOT mutate or delete the original `abortUS/` files — they are permanent historical evidence. Source trace the new story to both the archived raw input (if any) and the aborted story + tasks.
+Write the corrected story (including `### Re-Analysis Chat History` under `## Abort Evidence`, and appending the re-analysis round to `## Chat History` in the linked `<metaspec_root>/analyzedNews/` file when one exists). Do NOT mutate or delete the original `abortUS/` files — they are permanent historical evidence. Source trace the new story to both the archived raw input (if any) and the aborted story + tasks.
 
 ## Conflict Guard
 

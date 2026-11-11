@@ -523,13 +523,13 @@ Every work item moves through analyzed, active, and archive lanes. `suspendUS` a
 
 | Stage | Directory | Meaning |
 |---|---|---|
-| **pendingNews** | `.catdd/spec/pendingNews/` | Work waiting to be analyzed. Raw issues and feature requests. |
-| **analyzedNews** | `.catdd/spec/analyzedNews/` | Raw inputs archived after analysis — the preserved source trace. |
-| **todoUS** | `.catdd/spec/todoUS/` | Work analyzed and ready to pick up. Structured user stories with acceptance criteria candidates. |
-| **doingUS** | `.catdd/spec/doingUS/` | Active work in progress. Opened user stories going through design, test, or implementation. |
-| **suspendUS** | `.catdd/spec/suspendUS/` | Suspended active stories preserved with a durable resume reference (branch/worktree). |
-| **abortUS** | `.catdd/spec/abortUS/` | Aborted active work preserved for later analysis or a next-round improvement input. |
-| **doneUS** | `.catdd/spec/doneUS/` | Completed work. Reviewed, committed, CI-passed stories. |
+| **pendingNews** | `.catdd/metaspec/pendingNews/` | Work waiting to be analyzed. Raw issues and feature requests. |
+| **analyzedNews** | `.catdd/metaspec/analyzedNews/` | Raw inputs archived after analysis — the preserved source trace. |
+| **todoUS** | `.catdd/metaspec/todoUS/` | Work analyzed and ready to pick up. Structured user stories with acceptance criteria candidates. |
+| **doingUS** | `.catdd/metaspec/doingUS/` | Active work in progress. Opened user stories going through design, test, or implementation. |
+| **suspendUS** | `.catdd/metaspec/suspendUS/` | Suspended active stories preserved with a durable resume reference (branch/worktree). |
+| **abortUS** | `.catdd/metaspec/abortUS/` | Aborted active work preserved for later analysis or a next-round improvement input. |
+| **doneUS** | `.catdd/metaspec/doneUS/` | Completed work. Reviewed, committed, CI-passed stories. |
 
 An example of the lanes doing their job:
 
@@ -928,7 +928,7 @@ Use the commit command that matches the lifecycle span:
 - `SPEC_mergeWorks` — after `SPEC_closeUserStory`, merge the closed story branch into the target integration branch when branch integration is still required; it is auto-skipped when no dedicated story branch was used.
 - `SPEC_partialCloseUserStory` — split one active story when only part of its scope is accepted: the accepted slice closes with traceability while the rejected or deferred slice moves to `abortUS/` with explicit reasons and evidence.
 
-`SPEC_whatsNextTask` can be invoked at any point to read the current `.catdd/spec/` state and recommend the single next command. It is the cheapest way to answer "what now?" without re-reading the whole lifecycle.
+`SPEC_whatsNextTask` can be invoked at any point to read the current `.catdd/metaspec/` state and recommend the single next command. It is the cheapest way to answer "what now?" without re-reading the whole lifecycle.
 
 ---
 
@@ -1001,7 +1001,7 @@ Used when the action is deterministic given complete, valid inputs.
 
 ## SpecFlow Artifacts
 
-### Lifecycle Artifacts (under `.catdd/spec/`)
+### Lifecycle Artifacts (under `.catdd/metaspec/`)
 
 | Artifact | Purpose | Git Policy |
 |---|---|---|

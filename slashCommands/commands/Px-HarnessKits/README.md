@@ -13,6 +13,7 @@ This directory contains `HARNESS_*` command templates for CaTDD Harness Engineer
 | [HARNESS_diagnoseInstallation](HARNESS_diagnoseInstallation.md) | Diagnose a failed or misworking CaTDD installation and recommend safe repair actions. |
 | [HARNESS_diagnoseProject](HARNESS_diagnoseProject.md) | Diagnose repo correctness, consistency, and SpecCoding / CaTDD drift without mutating source by default. |
 | [HARNESS_newTaskSession](HARNESS_newTaskSession.md) | Capture and preserve important session context when finishing the current task and starting a new session, so the next CodeAgent session can resume without re-investigation. |
+| [HARNESS_migrateMetaspec](HARNESS_migrateMetaspec.md) | Diagnose and migrate the SpecCoding artifact workspace to `.catdd/metaspec` while preserving alternate-root compatibility. |
 | [HARNESS_evolveHarness](HARNESS_evolveHarness.md) | Learn from verified success or failure, route lessons to canonical owners, and choose lightweight `refine` or trace-driven `restructure` evolution. |
 
 ## Contract

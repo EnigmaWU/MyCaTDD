@@ -1,5 +1,9 @@
 # TEST_designMisuseSkeleton
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Design a CaTDD Misuse functional skeleton from invalid caller behavior, unsupported inputs, and contract violations.
@@ -19,7 +23,7 @@ Repeat until every case is attributable to the caller.
 3. **Observation** — Check attribution: ask who caused the failure. Caused by the caller → Misuse. Caused by a dependency, resource, or environment → Fault → back to **Thought** and hand it over; never convert an environmental failure into a Misuse case. Check the [US/AC/TP/TC cardinality](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the declared scope; unassigned TPs block completion.
 4. **Stop** — Exit when every case is caller-attributable and the cardinality check passes. Recommend `TEST_designFaultSkeleton` or `TEST_reviewFuncTestsSkeleton`.
 
-## Usage Example
+### Worked Example
 
 Specifying rejection behavior for the authorize call. IDs below are abbreviated; generated artifacts use registered Story IDs and qualified AC/TP/TC IDs.
 

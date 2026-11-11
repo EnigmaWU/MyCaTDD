@@ -1,5 +1,9 @@
 # SPEC_commitStepWorks
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Commit exactly one verified lifecycle step inside the `SPEC_openUserStory -> SPEC_closeUserStory` story span.
@@ -14,7 +18,7 @@ Commit exactly one verified lifecycle step inside the `SPEC_openUserStory -> SPE
 
 Run these steps once, in order. There is no retry loop; an unplanned or unverified step stops and asks the developer.
 
-1. Read the commit plan recorded by `SPEC_makePlan` in the paired `.catdd/spec/doingUS/*-UserStory-Tasks.md`. If no commit plan exists, stop and route to `SPEC_makePlan`.
+1. Read the commit plan recorded by `SPEC_makePlan` in the paired `<metaspec_root>/doingUS/*-UserStory-Tasks.md`. If no commit plan exists, stop and route to `SPEC_makePlan`.
 2. Locate the current step entry and read its recorded decision:
    - `commit_step = yes`: the step is committable in both modes; continue.
    - `commit_step = optional`: the step is committable only when the developer explicitly invokes this command in `manualMode`. Continue on that explicit invocation and keep the draft-approval step; when the developer did not invoke it, skip the boundary and leave the work for `SPEC_commitStoryWorks`.
@@ -32,8 +36,8 @@ Run these steps once, in order. There is no retry loop; an unplanned or unverifi
 
 ```text
 /SPEC_commitStepWorks
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
-tasks_file: .catdd/spec/doingUS/20260904-payment-retry-UserStory-Tasks.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
+tasks_file: <metaspec_root>/doingUS/20260904-payment-retry-UserStory-Tasks.md
 step_command: SPEC_implProductCodes
 step_verification_summary: 38/38 unit tests GREEN; lint clean
 ```
@@ -65,8 +69,8 @@ Step: SPEC_implProductCodes
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `tasks_file`: paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact holding the commit plan.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
+- `tasks_file`: paired `<metaspec_root>/doingUS/*-UserStory-Tasks.md` artifact holding the commit plan.
 - `commit_plan`: the step-boundary commit decisions recorded by `SPEC_makePlan`.
 - `step_command`: the lifecycle step that just finished, for example `SPEC_implTests` or `SPEC_implProductCodes`.
 - `step_files`: files produced or changed by that step.
@@ -101,7 +105,7 @@ Step: SPEC_implProductCodes
 
 Do not commit a step whose gate is failed, blocked, partial, or unverified.
 Do not commit a step that `SPEC_makePlan` did not mark committable; ask the developer instead of adding an unplanned commit boundary.
-Do not include story-level lifecycle or meta artifacts such as `.catdd/spec/doingUS/` moves, `README_UserStories.md` ledger sync, or project-context updates; those belong to `SPEC_commitStoryWorks`.
+Do not include story-level lifecycle or meta artifacts such as `<metaspec_root>/doingUS/` moves, `README_UserStories.md` ledger sync, or project-context updates; those belong to `SPEC_commitStoryWorks`.
 Do not include another step's output in this commit.
 Do not auto-commit in `manualMode` unless `auto_commit` is explicitly enabled.
 Do not claim the story span is complete because a step commit exists.

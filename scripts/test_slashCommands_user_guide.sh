@@ -31,9 +31,10 @@ grep -Fq '.catdd/slashCommands/README_UserGuide.md' "$GUIDE" || fail "slashComma
 ! grep -Eq 'makeSlashCmd4(Copilot|Continue|Codex|Cline)' "$GUIDE" || fail "slashCommands user guide references a removed generator"
 grep -Fq 'flows/P0-FuncTestsFlow.md' "$GUIDE" || fail "slashCommands user guide missing flow map"
 grep -Fq 'commands/P0-FuncTestsFlow/TEST_implTestCase.md' "$GUIDE" || fail "slashCommands user guide missing command map"
-grep -Fq '.catdd/spec/doingUS/' "$GUIDE" || fail "slashCommands user guide missing local SpecCoding artifact policy"
-grep -Fq '.catdd/spec/suspendUS/' "$GUIDE" || fail "slashCommands user guide missing suspended SpecCoding artifact policy"
-grep -Fq '.catdd/spec/abortUS/' "$GUIDE" || fail "slashCommands user guide missing aborted SpecCoding artifact policy"
+grep -Fq '`metaspec_root` declared in `projectContext.md`' "$GUIDE" || fail "slashCommands user guide missing active workspace policy"
+grep -Fq '`doingUS/`' "$GUIDE" || fail "slashCommands user guide missing local SpecCoding artifact policy"
+grep -Fq '`suspendUS/`' "$GUIDE" || fail "slashCommands user guide missing suspended SpecCoding artifact policy"
+grep -Fq '`abortUS/`' "$GUIDE" || fail "slashCommands user guide missing aborted SpecCoding artifact policy"
 
 grep -Fq '## 使用者' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing 使用者 section"
 grep -Fq '## Usage Example' "$GUIDE_ZH" || fail "Chinese slashCommands user guide missing copy-exec Usage Example section"

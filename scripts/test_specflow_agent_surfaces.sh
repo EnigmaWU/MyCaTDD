@@ -94,7 +94,7 @@ assert_contains "$USER_GUIDE" 'A file that existed before CaTDD is followed; one
 assert_contains "$USER_GUIDE_ZH" '早于 CaTDD 存在的文件被遵循；由 CaTDD 创建的被掌管。'
 
 # 6. The installer states the region ownership it writes.
-assert_contains "$INSTALLER" 'This block is the CaTDD-owned region and projects the rules recorded in `.catdd/spec/projectContext.md`'
+assert_contains "$INSTALLER" 'This block is the CaTDD-owned region and projects the rules recorded in `<metaspec_root>/projectContext.md`'
 assert_contains "$INSTALLER" 'text outside these markers belongs to the project and is never rewritten by CaTDD'
 
 echo "[specflow-agent-surfaces-test] PASSED: agent instruction surfaces are recorded, followed or mastered by region, and capped at operating conventions"

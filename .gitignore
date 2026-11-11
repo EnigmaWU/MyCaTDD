@@ -73,6 +73,7 @@ Testing/
 # CaTDD generated install/adapter outputs in this source repo
 /.catdd/methodPrompts/
 /.catdd/slashCommands/
+/.catdd/scripts/
 /.catdd/CaTDD_INSTALL.md
 /.catdd/CaTDD_INSTALL.manifest
 /.catdd/.install-baseline/
@@ -105,5 +106,7 @@ book*
 /refDocs/*
 
 # BEGIN CaTDD SpecCoding local state
+/.catdd/metaspec/WorkingProcessLog.md
+/.agents/metaspec/WorkingProcessLog.md
 /.catdd/spec/WorkingProcessLog.md
 # END CaTDD SpecCoding local state

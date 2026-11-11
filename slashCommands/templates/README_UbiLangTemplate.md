@@ -2,7 +2,26 @@
 
 This is the SpecCoding template for project-root `README_UbiLang.md`. This file is an **Architecture-Oriented** SPEC surface (`1. Architecture-Oriented` in `Px-SpecFlow`) and serves as the canonical project-level and bounded-context dictionary for domain ubiquitous language (`EPIC I2.1`) and controlled normative vocabulary (`EPIC E1.3 / E1.4`).
 
-Create or update it via `SPEC_takeArchDesign` / `SPEC_updateArchDesign` (and gate it via `SPEC_reviewArchDesign`; `SPEC_updateUserStory` may propose new domain terms when requirement scope introduces them). Reference it as a 1-line `REFERENCE` link in `.catdd/spec/projectContext.md` via `SPEC_initProjectContext` / `SPEC_updateProjectContext` so `.catdd/spec/projectContext.md` stays within its 200-line working-memory budget without duplicating glossary tables.
+Create or update it via `SPEC_takeArchDesign` / `SPEC_updateArchDesign` (and gate it via `SPEC_reviewArchDesign`; `SPEC_updateUserStory` may propose new domain terms when requirement scope introduces them). Reference it as a 1-line `REFERENCE` link in `.catdd/metaspec/projectContext.md` via `SPEC_initProjectContext` / `SPEC_updateProjectContext` so `.catdd/metaspec/projectContext.md` stays within its 200-line working-memory budget without duplicating glossary tables.
+
+---
+
+## CaTDD Specification Model
+
+CaTDD creates and evolves a complete `SPEC`; it does not treat workflow bookkeeping as the `SPEC` itself:
+
+```text
+SPEC = youWantR + iWhyD + aiHowC
+```
+
+| Term | Canonical Meaning |
+| --- | --- |
+| `SPEC` | The complete requirement, design, verification, and product-code realization produced through CaTDD. |
+| `R` / `youWantR` | Requirement: the intended outcome, constraints, and acceptance intent. |
+| `D` / `iWhyD` | Design: the rationale-bearing architecture and detailed design. |
+| `C` / `aiHowC` | Code: tests and product code that realize and verify the requirement and design. |
+| `metaspec` | The meta-level control workspace for producing, tracing, reviewing, and evolving `SPEC`; its files are not automatically `R`, `D`, `C`, or the complete `SPEC`. |
+| `metaspec_root` | The project-relative path selected in `projectContext.md`: `.catdd/metaspec`, `.agents/metaspec`, or legacy `.catdd/spec`. |
 
 ---
 
@@ -62,7 +81,7 @@ Every core system concept in `{{ProjectName}}` **MUST** have one canonical term,
 ## Sync & Review Rules
 
 - **No Synonym Drift (`I2.1`)**: Do not use multiple terms (for example `session` vs `conversation`, or `adapter` vs `handler`) for the same boundary across `*-UserStory.md`, `README_ArchDesign.md`, `README_DetailDesign.md`, test skeletons, and code.
-- **No Duplication in `projectContext.md`**: Keep the full glossary table here in `README_UbiLang.md`; `.catdd/spec/projectContext.md` **MUST** only link to `README_UbiLang.md` as `REFERENCE` memory.
+- **No Duplication in `projectContext.md`**: Keep the full glossary table here in `README_UbiLang.md`; `.catdd/metaspec/projectContext.md` **MUST** only link to `README_UbiLang.md` as `REFERENCE` memory.
 - **Story Delta Check**: When `SPEC_analyzeIssue`, `SPEC_analyzeFeature`, or `SPEC_updateUserStory` introduces or changes a domain term, add or update its row here before `SPEC_reviewUserStory` passes.
 
 ## Usage Example

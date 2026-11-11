@@ -389,13 +389,13 @@ pendingNews ──(分析)──→ todoUS → doingUS → doneUS
 
 | 阶段 | 目录 | 含义 |
 |---|---|---|
-| **pendingNews** | `.catdd/spec/pendingNews/` | 等待分析的工作。原始 Issue 与功能请求。 |
-| **analyzedNews** | `.catdd/spec/analyzedNews/` | 分析后存档的原始输入——保留源追溯。 |
-| **todoUS** | `.catdd/spec/todoUS/` | 已分析、可领取的工作。结构化用户故事及候选验收标准。 |
-| **doingUS** | `.catdd/spec/doingUS/` | 正在进行中的活跃工作。处于设计、测试或实现阶段的已开启用户故事。 |
-| **suspendUS** | `.catdd/spec/suspendUS/` | 暂停的活跃故事，附持久恢复引用（分支/worktree），供暂停而非就地继续时使用。 |
-| **abortUS** | `.catdd/spec/abortUS/` | 已中止的活跃工作，保留以供后续分析或作为下一轮改进的输入。 |
-| **doneUS** | `.catdd/spec/doneUS/` | 已完成的工作。经审查、已提交、CI 通过的故事。 |
+| **pendingNews** | `.catdd/metaspec/pendingNews/` | 等待分析的工作。原始 Issue 与功能请求。 |
+| **analyzedNews** | `.catdd/metaspec/analyzedNews/` | 分析后存档的原始输入——保留源追溯。 |
+| **todoUS** | `.catdd/metaspec/todoUS/` | 已分析、可领取的工作。结构化用户故事及候选验收标准。 |
+| **doingUS** | `.catdd/metaspec/doingUS/` | 正在进行中的活跃工作。处于设计、测试或实现阶段的已开启用户故事。 |
+| **suspendUS** | `.catdd/metaspec/suspendUS/` | 暂停的活跃故事，附持久恢复引用（分支/worktree），供暂停而非就地继续时使用。 |
+| **abortUS** | `.catdd/metaspec/abortUS/` | 已中止的活跃工作，保留以供后续分析或作为下一轮改进的输入。 |
+| **doneUS** | `.catdd/metaspec/doneUS/` | 已完成的工作。经审查、已提交、CI 通过的故事。 |
 
 ### 完整命令序列
 
@@ -714,7 +714,7 @@ CaTDD 元文件改进回写上游。
 - `SPEC_mergeWorks` —— 在 `SPEC_closeUserStory` 之后、仍需分支集成时，将已关闭的故事分支合并到目标集成分支；未使用专属故事分支时自动跳过。
 - `SPEC_partialCloseUserStory` —— 当活跃故事只有部分范围被接受时拆分：已接受部分带可追溯性关闭，被拒绝或延后部分连同显式理由与证据移入 `abortUS/`。
 
-`SPEC_whatsNextTask` 可随时调用，读取当前 `.catdd/spec/` 状态并推荐唯一下一步命令。
+`SPEC_whatsNextTask` 可随时调用，读取当前 `.catdd/metaspec/` 状态并推荐唯一下一步命令。
 
 ---
 
@@ -779,7 +779,7 @@ SPEC 命令使用三种 CoT 推理模式，根据命令的决策复杂度进行�
 
 SpecFlow 创建并维护一组可追溯的工作制品：
 
-### 生命周期工作制品（位于 `.catdd/spec/` 下）
+### 生命周期工作制品（位于 `.catdd/metaspec/` 下）
 
 | 工作制品 | 用途 | Git 策略 |
 |---|---|---|

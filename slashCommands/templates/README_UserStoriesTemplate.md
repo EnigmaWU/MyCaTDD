@@ -30,25 +30,25 @@ Record approved AC/TP/TC reference migrations here, or `None`. Qualify ambiguous
 
 | Story ID | Title | State | Source | Trace Link |
 | --- | --- | --- | --- | --- |
-| {{StoryID}} | {{Story title}} | {{todo/doing}} | {{Issue/feature/input}} | {{.catdd/spec/todoUS or doingUS path}} |
+| {{StoryID}} | {{Story title}} | {{todo/doing}} | {{Issue/feature/input}} | {{.catdd/metaspec/todoUS or doingUS path}} |
 
 ### SUSPENDED Stories
 
 | Story ID | Title | Suspended On | Resume Reference | Trace Link |
 | --- | --- | --- | --- | --- |
-| {{StoryID}} | {{Story title}} | {{YYYY-MM-DD}} | {{git branch / worktree}} | {{.catdd/spec/suspendUS path}} |
+| {{StoryID}} | {{Story title}} | {{YYYY-MM-DD}} | {{git branch / worktree}} | {{.catdd/metaspec/suspendUS path}} |
 
 ### DONE Stories
 
 | Story ID | Title | Closed On | Evidence | Trace Link |
 | --- | --- | --- | --- | --- |
-| {{StoryID}} | {{Story title}} | {{YYYY-MM-DD}} | {{commit/CI/review reference}} | {{.catdd/spec/doneUS path}} |
+| {{StoryID}} | {{Story title}} | {{YYYY-MM-DD}} | {{commit/CI/review reference}} | {{.catdd/metaspec/doneUS path}} |
 
 ### ABORTED Stories
 
 | Story ID | Title | Aborted On | Evidence / Successor | Trace Link |
 | --- | --- | --- | --- | --- |
-| {{StoryID}} | {{Story title}} | {{YYYY-MM-DD}} | {{reason and successor ID if any}} | {{.catdd/spec/abortUS path}} |
+| {{StoryID}} | {{Story title}} | {{YYYY-MM-DD}} | {{reason and successor ID if any}} | {{.catdd/metaspec/abortUS path}} |
 
 ## Active Story
 
@@ -70,12 +70,12 @@ This ledger mirrors the authoritative story CaTDD-ACs; it does not replace their
 
 ## Lifecycle Links
 
-- Pending input: `.catdd/spec/pendingNews/{{file}}`
-- Todo story: `.catdd/spec/todoUS/{{file}}`
-- Active story: `.catdd/spec/doingUS/{{file}}`
-- Suspended story: `.catdd/spec/suspendUS/{{file}}`
-- Aborted story: `.catdd/spec/abortUS/{{file}}`
-- Done story: `.catdd/spec/doneUS/{{file}}`
+- Pending input: `.catdd/metaspec/pendingNews/{{file}}`
+- Todo story: `.catdd/metaspec/todoUS/{{file}}`
+- Active story: `.catdd/metaspec/doingUS/{{file}}`
+- Suspended story: `.catdd/metaspec/suspendUS/{{file}}`
+- Aborted story: `.catdd/metaspec/abortUS/{{file}}`
+- Done story: `.catdd/metaspec/doneUS/{{file}}`
 
 ## Sync Rules
 
@@ -85,7 +85,7 @@ This ledger mirrors the authoritative story CaTDD-ACs; it does not replace their
 - Keep AC status aligned with story lifecycle and verification evidence.
 - Preserve registered IDs, StoryIdAlias, and CreatedAt across lifecycle moves; keep explicit historical revision, alias, and partial-closure links.
 - Stop on an unresolved identity collision or reused AC meaning; do not silently renumber accepted IDs or conflate independent stories.
-- Do not leave story ID state mismatches between this ledger and `.catdd/spec/*US/` artifacts.
+- Do not leave story ID state mismatches between this ledger and `.catdd/metaspec/*US/` artifacts.
 - Do not close or update a story whose ledger state is SUSPENDED until it has been resumed via `SPEC_resumeUserStory`.
 
 ## Traceability Notes
@@ -113,4 +113,4 @@ Expected result: the temporary file shows a user-story index, acceptance criteri
 
 ## Maintenance Rule
 
-Keep this file as the mandatory project-level ledger for TODO/DOING/DONE and AC status. Keep active work details in `.catdd/spec/doingUS/` until the story is ready to close.
+Keep this file as the mandatory project-level ledger for TODO/DOING/DONE and AC status. Keep active work details in `.catdd/metaspec/doingUS/` until the story is ready to close.

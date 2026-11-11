@@ -54,7 +54,7 @@ assert_contains "$WHATS_WRONG" 'the agent may propose the switch, but it can nev
 # 4. The Flow is frozen and the excursion is recorded in local work state.
 assert_contains "$WHATS_WRONG" 'Freeze SpecCoding state'
 assert_contains "$WHATS_WRONG" 'assert the frozen classes stay untouched'
-assert_contains "$WHATS_WRONG" '.catdd/spec/WorkingProcessLog.md'
+assert_contains "$WHATS_WRONG" '<metaspec_root>/WorkingProcessLog.md'
 assert_contains "$WHATS_WRONG" 'adoption_status = unadopted'
 
 # 5. ONE-MORE-THING stays binding, exploration stays unadopted.
@@ -110,11 +110,11 @@ assert_contains "$UBILANG_ZH" '仅在 `manualMode` 下可用'
 assert_contains "$WHATS_NEXT" 'Recommend the next SpecCoding task'
 
 # 10. Freeze scope is defined by artifact class, not by a blanket "no writes" claim.
-assert_contains "$WHATS_WRONG" 'Frozen during VibeCoding: `.catdd/spec/**` except `WorkingProcessLog.md`, `README_UserStories.md`, `projectContext.md`, and the paired `*-UserStory-Tasks.md`'
+assert_contains "$WHATS_WRONG" 'Frozen during VibeCoding: `<metaspec_root>/**` except `WorkingProcessLog.md`, `README_UserStories.md`, `projectContext.md`, and the paired `*-UserStory-Tasks.md`'
 assert_contains "$WHATS_WRONG" 'Allowed but unadopted: product code, tests, and design docs'
-assert_contains "$WHATS_WRONG" 'Local always: `.catdd/spec/WorkingProcessLog.md`'
-assert_contains "$FLOW_DOC" 'Frozen: `.catdd/spec/**` except `WorkingProcessLog.md`'
-assert_contains "$FLOW_DOC_ZH" '冻结：除 `WorkingProcessLog.md` 之外的 `.catdd/spec/**`'
+assert_contains "$WHATS_WRONG" 'Local always: `<metaspec_root>/WorkingProcessLog.md`'
+assert_contains "$FLOW_DOC" 'Frozen: `.catdd/metaspec/**` except `WorkingProcessLog.md`'
+assert_contains "$FLOW_DOC_ZH" '冻结：除 `WorkingProcessLog.md` 之外的 `.catdd/metaspec/**`'
 
 # 11. The exhausted-loop response is reconciled between the ladder and the Loop Guard.
 assert_contains "$FLOW_DOC" 'a `manualMode` session may escalate to `SPEC_whatsWrong` while the problem is still unproven'

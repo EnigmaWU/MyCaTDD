@@ -4,7 +4,7 @@ This is the SpecCoding template for project-root `README_ArchDesign.md`. Create 
 
 ## Context
 
-- Story link: {{.catdd/spec/doingUS/YYYYMMDD-UserStory.md or todo/done link}}
+- Story link: {{.catdd/metaspec/doingUS/YYYYMMDD-UserStory.md or todo/done link}}
 - Related overview: [README](README.md)
 - Related ubiquitous language & concept model: [README_UbiLang](README_UbiLang.md)
 - Related detail design: [README_DetailDesign](README_DetailDesign.md)

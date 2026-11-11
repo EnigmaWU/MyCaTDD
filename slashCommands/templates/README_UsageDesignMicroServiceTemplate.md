@@ -49,7 +49,7 @@ Do not use this service when:
 - Related error design: [README_ErrorDesign](README_ErrorDesign.md)
 - Related compatibility design: [README_CompatDesign](README_CompatDesign.md)
 - Related diagnosis design: [README_DiagnosisDesign](README_DiagnosisDesign.md)
-- Source story: {{.catdd/spec/doingUS path or issue link}}
+- Source story: {{.catdd/metaspec/doingUS path or issue link}}
 
 ## Why
 

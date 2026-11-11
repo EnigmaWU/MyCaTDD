@@ -1,5 +1,9 @@
 # SPEC_reviewArchDesign
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Review high-level architecture design immediately after `SPEC_takeArchDesign` and before `SPEC_takeDetailDesign`, so architecture boundary mistakes are found before detailed class, API, or test design begins.
@@ -25,7 +29,7 @@ Gating the architecture for the multi-gateway story:
 
 ```text
 /SPEC_reviewArchDesign
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 readme_arch_design: README_ArchDesign.md
 readme_arch_design_zh: README_ArchDesign_ZH.md
 ```
@@ -40,7 +44,7 @@ Expected result — two passes:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/` that creates or changes architecture decisions, architecture boundaries, deployment/runtime strategy, or architecture-oriented SPEC surfaces.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/` that creates or changes architecture decisions, architecture boundaries, deployment/runtime strategy, or architecture-oriented SPEC surfaces.
 - `projectContext_file`: current project context.
 - `readme_arch_design`: project-root or module-scoped `README_ArchDesign.md`.
 - `readme_arch_design_zh`: optional matching `README_ArchDesign_ZH.md` mirror.

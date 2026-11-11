@@ -1,5 +1,9 @@
 # HARNESS_verifyInstallation
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Verify that an installed CaTDD target project contains complete, consistent, and thin adapter assets generated from the portable CaTDD source before the developer trusts the installation.
@@ -74,7 +78,7 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 - `.catdd/slashCommands/commands/` contains portable `TEST_*`, `SPEC_*`, and `HARNESS_*` command files.
 - `.catdd/slashCommands/commands/` may contain local `<Name>Evolved.md` overlays; these are expected and counted as portable commands.
 - `.catdd/slashCommands/kits/Px-HarnessKits.md` exists when any `HARNESS_*` command exists.
-- `.catdd/spec/analyzedNews`, `.catdd/spec/suspendUS`, and `.catdd/spec/abortUS` exist.
+- `<metaspec_root>/analyzedNews`, `<metaspec_root>/suspendUS`, and `<metaspec_root>/abortUS` exist.
 - `.catdd/CaTDD_INSTALL.md` exists and records the installed version when available.
 
 ### Command Inventory
@@ -148,7 +152,7 @@ Do not treat generated adapter wrappers as source-of-truth when portable command
 Do not report `<Name>Evolved.md` local overlays as unexpected wrapper files or drift; they are intentional local evolution and follow the same portable-command and wrapper rules as canonical commands.
 Do not fail Antigravity installations for missing prompt wrappers unless Antigravity wrapper generation is explicitly added later.
 Do not fail Codex installations for a missing custom-prompt directory unless `codex_prompts_dir` was explicitly provided.
-Do not move SpecFlow lifecycle state or create `.catdd/spec/doingUS/` entries.
+Do not move SpecFlow lifecycle state or create `<metaspec_root>/doingUS/` entries.
 Do not verify against a different source repository unless `expected_source_repo` is explicitly provided.
 
 ONE-MORE-THING: ask developer if something not sure

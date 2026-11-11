@@ -10,6 +10,7 @@ INIT=0
 VERBOSE=0
 YES=0
 FORCE_OVERWRITE=0
+MIGRATE_METASPEC=0
 
 usage() {
   cat <<'USAGE'
@@ -39,6 +40,8 @@ Options:
   --clean-prompts           Remove and regenerate generated prompt or skill wrappers.
   --init                    Create the target directory if it does not exist.
   --force-overwrite         Overwrite target-evolved files with canonical source.
+  --migrate-metaspec        Explicitly migrate a sole legacy .catdd/spec workspace
+                            to .catdd/metaspec. Normal refresh preserves legacy.
   --verbose                 Print detailed action steps.
   --yes, -y                 Skip confirmation prompt.
   -h, --help                Show this help.
@@ -67,6 +70,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --force-overwrite)
       FORCE_OVERWRITE=1
+      shift
+      ;;
+    --migrate-metaspec)
+      MIGRATE_METASPEC=1
       shift
       ;;
     --verbose)
@@ -131,9 +138,11 @@ fi
 
 TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
 CATDD_DIR="$TARGET_DIR/.catdd"
-SPEC_DIR="$CATDD_DIR/spec"
+SPEC_DIR="$CATDD_DIR/metaspec"
 MANIFEST_FILE="$CATDD_DIR/CaTDD_INSTALL.manifest"
 BASELINE_ROOT="$CATDD_DIR/.install-baseline"
+METASPEC_HELPER_SRC="$REPO_ROOT/scripts/migrateCaTDDMetaspec.sh"
+METASPEC_HELPER_INSTALLED="$CATDD_DIR/scripts/migrateCaTDDMetaspec.sh"
 
 # Optional source override (used by tests to simulate upstream changes)
 SOURCE_ROOT="${CATDD_SOURCE_ROOT:-$REPO_ROOT}"
@@ -198,7 +207,28 @@ log_replace_or_new() {
   fi
 }
 
-mkdir -p "$CATDD_DIR" "$SPEC_DIR/pendingNews" "$SPEC_DIR/analyzedNews" "$SPEC_DIR/todoUS" "$SPEC_DIR/doingUS" "$SPEC_DIR/suspendUS" "$SPEC_DIR/abortUS" "$SPEC_DIR/doneUS"
+[[ -x "$METASPEC_HELPER_SRC" ]] || {
+  echo "[${LOG_TAG}] Metaspec migration helper is missing or not executable: $METASPEC_HELPER_SRC" >&2
+  exit 1
+}
+HAS_METASPEC_WORKSPACE=0
+for _metaspec_candidate in .catdd/metaspec .agents/metaspec .catdd/spec; do
+  if [[ -d "$TARGET_DIR/$_metaspec_candidate" ]]; then
+    HAS_METASPEC_WORKSPACE=1
+  fi
+done
+if [[ "$MIGRATE_METASPEC" -eq 1 || "$HAS_METASPEC_WORKSPACE" -eq 0 ]]; then
+  "$METASPEC_HELPER_SRC" --project-root "$TARGET_DIR" --apply --quiet
+else
+  # Validate the selected root and ambiguity without relocating legacy state.
+  "$METASPEC_HELPER_SRC" --project-root "$TARGET_DIR" --quiet
+fi
+
+SPEC_ROOT_REL="$("$METASPEC_HELPER_SRC" --project-root "$TARGET_DIR" --print-root)"
+for _lifecycle_lane in pendingNews analyzedNews todoUS doingUS suspendUS abortUS doneUS; do
+  mkdir -p "$TARGET_DIR/$SPEC_ROOT_REL/$_lifecycle_lane"
+done
+mkdir -p "$CATDD_DIR"
 
 update_spec_gitignore() {
   local gitignore_file="$TARGET_DIR/.gitignore"
@@ -234,6 +264,8 @@ update_spec_gitignore() {
     fi
     cat <<'GITIGNORE'
 # BEGIN CaTDD SpecCoding local state
+/.catdd/metaspec/WorkingProcessLog.md
+/.agents/metaspec/WorkingProcessLog.md
 /.catdd/spec/WorkingProcessLog.md
 # END CaTDD SpecCoding local state
 GITIGNORE
@@ -282,7 +314,7 @@ update_codex_agents_md() {
 
 This managed block is installed by `scripts/installCaTDD.sh` from MyCaTDD. Use it when working with CaTDD, SpecCoding, VibeCoding, comment-alive tests, US/AC/TC skeletons, or TEST_*, SPEC_*, and HARNESS_* commands.
 
-This block is the CaTDD-owned region and projects the rules recorded in `.catdd/spec/projectContext.md`; text outside these markers belongs to the project and is never rewritten by CaTDD.
+This block is the CaTDD-owned region and projects the rules recorded in `<metaspec_root>/projectContext.md`; text outside these markers belongs to the project and is never rewritten by CaTDD.
 
 ### Installed Sources
 
@@ -290,7 +322,8 @@ This block is the CaTDD-owned region and projects the rules recorded in `.catdd/
 - Portable slash command source: `.catdd/slashCommands/`
 - Codex skill wrappers: `.agents/skills/` (invoke with `$test-*`, `$spec-*`, `$harness-*`, or from `/skills`)
 - SpecCoding flow: `.catdd/slashCommands/flows/Px-SpecFlow.md`
-- SpecCoding artifact workspace: `.catdd/spec/`
+- SpecCoding artifact workspace: the `metaspec_root` declared in `projectContext.md`, defaulting to `.catdd/metaspec/`
+- Workspace migration helper: `.catdd/scripts/migrateCaTDDMetaspec.sh`
 - Project-root README SPEC docs: `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
 
 ### Codex Behavior
@@ -299,9 +332,11 @@ This block is the CaTDD-owned region and projects the rules recorded in `.catdd/
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Codex skill names are lowercase and hyphenated: `test-convert-demo-to-typical` adapts `TEST_convertDemoToTypical`.
-- Keep SpecCoding lifecycle state under `.catdd/spec/`.
-- Commit team-shared artifacts such as `.catdd/spec/projectContext.md`, `.catdd/spec/pendingNews/`, `.catdd/spec/analyzedNews/`, `.catdd/spec/todoUS/`, `.catdd/spec/doingUS/`, `.catdd/spec/suspendUS/`, `.catdd/spec/abortUS/`, `.catdd/spec/doneUS/`, and project-root `README*` SPEC docs.
-- Keep local work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
+- Before reading or writing lifecycle state, follow `.catdd/slashCommands/MetaspecWorkspaceResolution.md`; supported roots are `.catdd/metaspec/`, `.agents/metaspec/`, and legacy `.catdd/spec/`.
+- Keep SpecCoding lifecycle state under the resolved `metaspec_root`.
+- Commit team-shared artifacts such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, `doneUS/`, and project-root `README*` SPEC docs under the resolved `metaspec_root`.
+- Keep local work state such as `WorkingProcessLog.md` gitignored in every supported workspace.
+- Use `/HARNESS_migrateMetaspec` to reconcile or migrate workspaces; never merge populated roots during normal command execution.
 - Prefer explicit SpecFlow intake commands: `SPEC_importIssue`, `SPEC_importFeature`, `SPEC_importUserStory`, `SPEC_analyzeIssue`, and `SPEC_analyzeFeature`.
 - After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_evolveHarness` with `evolution_mode=auto`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running `HARNESS_evolveHarness`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
@@ -618,6 +653,11 @@ else
 fi
 manifest_flush
 
+log_replace_or_new "$METASPEC_HELPER_INSTALLED"
+mkdir -p "$(dirname "$METASPEC_HELPER_INSTALLED")"
+cp "$METASPEC_HELPER_SRC" "$METASPEC_HELPER_INSTALLED"
+chmod +x "$METASPEC_HELPER_INSTALLED"
+
 log_replace_or_new "$CATDD_DIR/CaTDD_INSTALL.md"
 printf '# CaTDD Install Marker\n\n- Installed version: %s\n- Target agent: %s\n\n' "$CATDD_VERSION" "$AGENT_LABEL" > "$CATDD_DIR/CaTDD_INSTALL.md"
 cat >> "$CATDD_DIR/CaTDD_INSTALL.md" <<'MARKER'
@@ -625,7 +665,8 @@ This directory is managed by `scripts/installCaTDD.sh` from MyCaTDD.
 
 - `methodPrompts/` is the installed CaTDD method source.
 - `slashCommands/` is the installed portable flow-command source.
-- `spec/` is the installed SpecCoding artifact workspace.
+- `scripts/migrateCaTDDMetaspec.sh` selects or migrates the SpecCoding artifact workspace.
+- `projectContext.md` declares the active `metaspec_root`; supported roots are `.catdd/metaspec/`, `.agents/metaspec/`, and legacy `.catdd/spec/`.
 - `CaTDD_INSTALL.manifest` records the canonical baseline hash of every managed file.
 - `.install-baseline/` stores canonical baseline content used for three-way merge.
 - Refresh keeps target files evolved after install (for example by `HARNESS_evolveHarness`).
@@ -633,9 +674,9 @@ This directory is managed by `scripts/installCaTDD.sh` from MyCaTDD.
 - `HARNESS_evolveHarness` writes slash-command learning to local `<Name>Evolved.md` overlays, which supersede the canonical `<Name>.md` locally.
   Overlays are local-only: refresh and `--force-overwrite` preserve them instead of overwriting or deleting them.
 - `--force-overwrite` restores canonical source for all managed files.
-- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
+- Commit team-shared SpecCoding artifacts under the resolved `metaspec_root`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
-- Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
+- Keep local SpecCoding work state such as `WorkingProcessLog.md` gitignored in every supported workspace.
 
 Refresh this project by rerunning the installer from the MyCaTDD repository.
 MARKER
@@ -697,12 +738,14 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Portable slash command source: `.catdd/slashCommands/`
 - Copilot prompt wrappers: `.github/prompts/TEST_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, and `.github/prompts/HARNESS_*.prompt.md`
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
+- Before reading or writing SpecCoding artifacts, follow `.catdd/slashCommands/MetaspecWorkspaceResolution.md` and use the `metaspec_root` declared in `projectContext.md`.
+- Supported workspaces are canonical `.catdd/metaspec/`, agent-owned `.agents/metaspec/`, and legacy `.catdd/spec/`; use `HARNESS_migrateMetaspec` rather than merging populated roots.
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
-- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
+- Commit team-shared SpecCoding artifacts under the resolved `metaspec_root`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
-- Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
+- Keep local SpecCoding work state such as `WorkingProcessLog.md` gitignored in every supported workspace.
 - After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_evolveHarness` with `evolution_mode=auto`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running `HARNESS_evolveHarness`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
 INSTRUCTIONS
@@ -766,7 +809,7 @@ PROMPT
     echo "[${LOG_TAG}] Installed CaTDD for $AGENT_LABEL into $TARGET_DIR"
     echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
     echo "[${LOG_TAG}] Slash command source: .catdd/slashCommands"
-    echo "[${LOG_TAG}] SpecCoding artifacts: .catdd/spec"
+    echo "[${LOG_TAG}] SpecCoding artifacts: $SPEC_ROOT_REL"
     echo "[${LOG_TAG}] Copilot prompts: .github/prompts"
     ;;
 
@@ -795,9 +838,9 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
-- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
+- Commit team-shared SpecCoding artifacts under the resolved `metaspec_root`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
-- Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
+- Keep local SpecCoding work state such as `WorkingProcessLog.md` gitignored in every supported workspace.
 - After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_evolveHarness` with `evolution_mode=auto`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running `HARNESS_evolveHarness`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.
 INSTRUCTIONS
@@ -881,7 +924,7 @@ SKILL
     echo "[${LOG_TAG}] Installed CaTDD for $AGENT_LABEL into $TARGET_DIR"
     echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
     echo "[${LOG_TAG}] Slash command source: .catdd/slashCommands"
-    echo "[${LOG_TAG}] SpecCoding artifacts: .catdd/spec"
+    echo "[${LOG_TAG}] SpecCoding artifacts: $SPEC_ROOT_REL"
     echo "[${LOG_TAG}] Copilot skills: .github/skills"
     ;;
 
@@ -982,7 +1025,7 @@ YAML
     echo "[${LOG_TAG}] Installed CaTDD for Codex into $TARGET_DIR"
     echo "[${LOG_TAG}] Method source: .catdd/methodPrompts"
     echo "[${LOG_TAG}] Slash command source: .catdd/slashCommands"
-    echo "[${LOG_TAG}] SpecCoding artifacts: .catdd/spec"
+    echo "[${LOG_TAG}] SpecCoding artifacts: $SPEC_ROOT_REL"
     echo "[${LOG_TAG}] Codex instructions: AGENTS.md (managed CaTDD block)"
     echo "[${LOG_TAG}] Codex skills: .agents/skills"
     ;;

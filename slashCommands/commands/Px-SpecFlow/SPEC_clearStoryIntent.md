@@ -1,5 +1,9 @@
 # SPEC_clearStoryIntent
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Clear the mutual intent between the developer and CodeAgent for an opened user story before architecture, detail design, test design, or implementation begins.
@@ -23,7 +27,7 @@ Before design starts on a freshly opened story:
 
 ```text
 /SPEC_clearStoryIntent
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
 developer_goal: Stop duplicate charges. Do not touch the settlement path.
 ```
 
@@ -37,7 +41,7 @@ Expected result — two passes:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `projectContext_file`: current project context.
 - `developer_goal`: optional direct developer statement of desired outcome, priority, constraints, non-goals, or success signal.
 - `codeagent_intent`: optional CodeAgent summary of what it believes it should do next.
@@ -50,7 +54,7 @@ Expected result — two passes:
 
 ## Output Contract
 
-- A `Mutual Intent Contract` recorded in the team-shared active story under `.catdd/spec/doingUS/`.
+- A `Mutual Intent Contract` recorded in the team-shared active story under `<metaspec_root>/doingUS/`.
 - The contract states developer intent, CodeAgent intent, in-scope work, out-of-scope work, success signal, assumptions, and open questions.
 - Review result: `CLEARED`, `REVISE`, or `ASK`.
 - If `CLEARED`: next recommended command is `SPEC_makePlan`, which decides whether the story needs architecture design, detail design, review, or can go directly to unit-test design.

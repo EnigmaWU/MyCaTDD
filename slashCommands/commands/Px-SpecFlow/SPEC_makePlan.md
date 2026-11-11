@@ -1,5 +1,9 @@
 # SPEC_makePlan
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Create the initial task artifact paired with the active user story after `SPEC_openUserStory` or `SPEC_clearStoryIntent`, decide which `SPEC_*` command should run next, and decide the story's commit plan.
@@ -24,9 +28,9 @@ A story was just opened that changes both `README_UserStories.md` wording and th
 
 ```text
 /SPEC_makePlan
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
-tasks_file: .catdd/spec/doingUS/20260904-payment-retry-UserStory-Tasks.md
-projectContext_file: .catdd/spec/projectContext.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
+tasks_file: <metaspec_root>/doingUS/20260904-payment-retry-UserStory-Tasks.md
+projectContext_file: <metaspec_root>/projectContext.md
 ```
 
 Expected result — one ToT pass:
@@ -39,8 +43,8 @@ Expected result — one ToT pass:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `tasks_file`: paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` file to create or update for the opened story.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
+- `tasks_file`: paired `<metaspec_root>/doingUS/*-UserStory-Tasks.md` file to create or update for the opened story.
 - `projectContext_file`: current project context.
 - `mutual_intent_contract`: optional intent-clearing notes produced by `SPEC_clearStoryIntent`.
 - `module_user_story_doc`: optional module or submodule `README_UserStory.md` affected by the active story.
@@ -59,7 +63,7 @@ Expected result — one ToT pass:
 
 ## Output Contract
 
-- A team-shared `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact coupled with the opened user story, structured from [SpecDoingUserStoryTasksTemplate](../../templates/SpecDoingUserStoryTasksTemplate.md).
+- A team-shared `<metaspec_root>/doingUS/*-UserStory-Tasks.md` task artifact coupled with the opened user story, structured from [SpecDoingUserStoryTasksTemplate](../../templates/SpecDoingUserStoryTasksTemplate.md).
 - The task artifact records the active story, current readiness, work orientation, the Stage 2 10-dimension `## EPIC Specification Sufficiency` ledger (`E1..E3`, `P1..P2`, `I1..I3`, `C1..C2` with `satisfied / partial / gap / question / N/A` dispositions, evidence/affected IDs, and owning next commands), an append-only `## Trajectory` table (`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`) initialized with row `1`, skipped or satisfied prerequisites, candidate next steps, rejected next steps, selected next step, and rationale.
 - The task artifact uses Markdown checkbox tasks: `[ ]` for pending work, `[x]` for satisfied or completed work.
 - After creating or updating the artifact, print the current TASKs checklist in the command response so developers can see `[ ]` and `[x]` status immediately.

@@ -1,5 +1,9 @@
 # HARNESS_diagnoseProject
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Diagnose the health of a project across two critical axes:
@@ -70,7 +74,7 @@ Expected result:
   - `consistency`: focus on naming, docs, command contracts, folder/asset alignment, and stale evidence
   - `speccoding`: focus on lifecycle adherence, story state, review gates, and CaTDD workflow drift
 - `evidence_sources`: optional list of files, directories, or command outputs to include.
-  - Common defaults: `README*`, `.catdd/spec/`, `methodPrompts/`, `slashCommands/`, `codeAgents/`, `scripts/`, recent `git status`, recent verification outputs
+  - Common defaults: `README*`, `<metaspec_root>/`, `methodPrompts/`, `slashCommands/`, `codeAgents/`, `scripts/`, recent `git status`, recent verification outputs
 - `allow_repair`: optional flag. Default: `false`. Diagnosis is read-only unless explicitly enabled.
 - `developer_notes`: optional mission context or suspected drift.
 
@@ -99,7 +103,7 @@ If the target path or evidence base is unclear, stop and ask the developer.
    - stale or duplicate story copies across lanes
    - inconsistent status markers or mismatched references
 4. Inspect SpecCoding / CaTDD health:
-   - whether `.catdd/spec/` state reflects actual flow progress
+   - whether `<metaspec_root>/` state reflects actual flow progress
    - whether open/doing/done/abort lanes are coherent
    - whether review, update, design, and implementation gates were followed
    - whether project-level rules and canonical source-of-truth boundaries are respected
@@ -122,7 +126,7 @@ If the target path or evidence base is unclear, stop and ask the developer.
 | consistency-risk | docs, commands, or filesystem state disagree with each other | fix the drift and re-check the contract |
 | speccoding-drift | lifecycle or CaTDD rules are being skipped, duplicated, or misapplied | route to the narrowest `SPEC_*` or `HARNESS_*` command |
 | deadloop-risk | the same story or command bounces across lifecycle artifacts, task checkboxes, or review passes with no state progress (see `Px-SpecFlow` Loop Guard) | route to `SPEC_abortUserStory`, `SPEC_whatsWrong` in `manualMode`, `SPEC_whatsNextTask`, or `ASK`; do not continue the same rework loop |
-| agent-surface-drift | a recorded `AGENTS.md` family file is missing, an unrecorded one is present, or its CaTDD-managed region no longer matches `.catdd/spec/projectContext.md` | refresh the inventory with `SPEC_updateProjectContext`; let the installer regenerate the managed region, and never hand-edit a project-owned region |
+| agent-surface-drift | a recorded `AGENTS.md` family file is missing, an unrecorded one is present, or its CaTDD-managed region no longer matches `<metaspec_root>/projectContext.md` | refresh the inventory with `SPEC_updateProjectContext`; let the installer regenerate the managed region, and never hand-edit a project-owned region |
 | healthy | no strong evidence of project drift | continue with the current task |
 
 ## Method References
@@ -159,7 +163,7 @@ If the target path or evidence base is unclear, stop and ask the developer.
 Do not mutate source or lifecycle state in this diagnostic command.
 Do not invent product requirements or story changes while diagnosing.
 Do not confuse a project-health issue with a product bug unless the evidence clearly points to that ownership boundary.
-Do not skip the canonical source-of-truth checks for `methodPrompts/`, `slashCommands/`, and `.catdd/spec/`.
+Do not skip the canonical source-of-truth checks for `methodPrompts/`, `slashCommands/`, and `<metaspec_root>/`.
 Do not treat a missing command or stale doc as proof of a product bug without checking the evidence.
 Do not claim the project is healthy without explicit evidence from the repository state or verification output.
 Do not move a story or generate a close/abort action as part of diagnosis.

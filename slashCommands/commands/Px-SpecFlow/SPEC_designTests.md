@@ -1,5 +1,9 @@
 # SPEC_designTests
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Design CaTDD unit test skeletons for the active user story after story and detail design review pass. For P0, this means designing the CaTDD Functional skeleton set `Typical`, `Edge`, `Misuse`, and `Fault` first; promote to `P1-DesignTestsFlow` or `P2-QualityTestsFlow` only when their gates are satisfied.
@@ -25,7 +29,7 @@ Designing skeletons after detail-design review passed:
 
 ```text
 /SPEC_designTests
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 detail_design: README_DetailDesign.md
 ```
 
@@ -39,7 +43,7 @@ Expected result:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `detail_design`: reviewed design and acceptance criteria, usually from project-root `README_DetailDesign.md`.
 - `error_design`: optional project-root `README_ErrorDesign.md` for error taxonomy, fault handling, recovery, degradation, or user-visible failure semantics.
 - `resource_design`: optional project-root `README_ResourceDesign.md` for finite resources, allocation policy, memory, CPU, power, handle, or contention behavior.

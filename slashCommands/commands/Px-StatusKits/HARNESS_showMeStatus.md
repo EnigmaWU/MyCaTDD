@@ -1,5 +1,9 @@
 # HARNESS_showMeStatus
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Report the current harness status from the HARNESS viewpoint: what CaTDD installation, generated adapters, instruction surfaces, diagnostics, and evolution state exist around this project, and which harness command should run next.
@@ -52,7 +56,7 @@ project_root: ~/work/acme-pay
 Expected result:
 
 - **Thought**: candidates — the install marker may not match the CaTDD source version, the generated adapter count may not match the portable command count, and instruction or overlay layers may shadow canonical commands.
-- **Action**: read `.catdd/CaTDD_INSTALL.md` and `.catdd/CaTDD_INSTALL.manifest`, count `.catdd/slashCommands/commands/**`, count generated wrappers, inspect `<Name>Evolved.md` overlays and `AGENTS.md` / `.github/instructions/` layers, and read `.catdd/spec/projectContext.md`.
+- **Action**: read `.catdd/CaTDD_INSTALL.md` and `.catdd/CaTDD_INSTALL.manifest`, count `.catdd/slashCommands/commands/**`, count generated wrappers, inspect `<Name>Evolved.md` overlays and `AGENTS.md` / `.github/instructions/` layers, and read `<metaspec_root>/projectContext.md`.
 - **Observation**: install identity is `20260101.01` for target agent `ChatCopilotLocal`, and a source repository is available at `20260201.03` → `attention` (source drift). Adapter count matches the portable command count and no duplicate `.github/skills/{test,spec,harness}-*` wrappers collide with `.github/prompts/` → `healthy`. Layer precedence is clean (1 local `SPEC_implTestsEvolved.md` overlay supersedes `SPEC_implTests.md` at `based_on: 20260101.01`). The Codex per-user prompt directory cannot be confirmed from the repository → `unknown`, with the reason stated instead of guessed. No verification, diagnosis, or evolution record is present → `unknown`.
 - **Observation (grade)**: Level-1 passes (an install marker exists and adapters are generated). The Level-2 question passes — adapter count equals the portable command count, the manifest baseline is coherent, and the managed-file reconciliation ratio is 1.0. The Level-3 question fails — the installed version trails the source with no recorded pin. So `integrity_level: Level-2 (Consistent)`, `level_evidence: reconciliation ratio 1.0; adapter count matches the portable command count; installed 20260101.01 vs source 20260201.03`, `level_gap: refresh the install to the source version, or record why it is pinned, to reach Level-3 (Current)`.
 - **Stop**: report `viewpoint: HARNESS`, `status_signal: attention`, `integrity_level: Level-2`, the surface table, `layer_precedence`, `invocation_hygiene`, the source-drift finding with both versions, and `next_command: HARNESS_verifyInstallation` after the refresh.
@@ -108,7 +112,7 @@ Harness surfaces:
 | Invocation hygiene | Explicit-only skill invocation guards (`disable-model-invocation: true` in `.github/skills/*/SKILL.md`; `allow_implicit_invocation: false` in `.agents/skills/*/agents/openai.yaml`) and absence of duplicate `.github/prompts/` + `.github/skills/{test,spec,harness}-*` command wrappers |
 | Per-user surfaces | Personal agent surfaces such as `$CODEX_HOME/prompts` or `~/.copilot/`; not shared through the repository |
 | Instruction surfaces | `AGENTS.md` / `AGENTS.override.md` chain (root to `$CWD`) and `.github/instructions/catdd.instructions.md`, respecting managed-region ownership and authority ceiling |
-| Lifecycle workspace | `.catdd/spec/` lanes and `projectContext.md` |
+| Lifecycle workspace | `<metaspec_root>/` lanes and `projectContext.md` |
 | Prior harness evidence | Last `HARNESS_verifyInstallation`, `HARNESS_diagnoseProject`, `HARNESS_diagnoseInstallation`, or `HARNESS_evolveHarness` result |
 
 ### Effective Layer Precedence & Shadowing Diagnostics
@@ -120,7 +124,7 @@ Inspired by config-layer diagnostics (`/debug-config`), `HARNESS_showMeStatus` i
 | 1. Method ceiling | `.catdd/methodPrompts/` | Owns CaTDD category semantics, priority order, and US/AC/TP/TC rules. Never overridden by any downstream layer. |
 | 2. Canonical commands | `.catdd/slashCommands/**/<Name>.md` | Owns portable flow, kit, and command contracts. |
 | 3. Local evolved overlays | `.catdd/slashCommands/**/<Name>Evolved.md` | Supersedes its canonical `<Name>.md` sibling locally. Report active overlays and flag `attention` if `based_on` trails the installed version. |
-| 4. Project context & K-invariants | `.catdd/spec/projectContext.md` | Owns project facts, `K-SEC-*` constitutional invariants, SUT granularity, and the recorded `AGENTS.md` surface inventory. |
+| 4. Project context & K-invariants | `<metaspec_root>/projectContext.md` | Owns project facts, `K-SEC-*` constitutional invariants, SUT granularity, and the recorded `AGENTS.md` surface inventory. |
 | 5. Native adapter rules & wrappers | `.github/instructions/catdd.instructions.md`, `AGENTS.md` managed block, `.github/prompts/`, `.github/skills/`, `.agents/skills/` | Thin, regenerable adapters over Layers 1–3. Flag `attention` if both `.github/prompts/` and `.github/skills/{test,spec,harness}-*` are active simultaneously, or if generated skills lack explicit-only invocation guards. |
 | 6. Directory instruction chain | Root `AGENTS.md` → nested `AGENTS.md` / `AGENTS.override.md` | Capped at operating conventions. Flag `attention` if a directory `AGENTS.override.md` shadows a root `AGENTS.md` managed block without carrying the CaTDD pointers, or if combined `AGENTS.md` chain size approaches the 32 KiB truncation limit. |
 

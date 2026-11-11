@@ -1,18 +1,22 @@
 # SPEC_resumeUserStory
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Resume a suspended user story back into active work.
 
 ## CoT Pattern
 
-**Linear** -- Direct execution. Given a selected suspended story, this command moves the story and its paired task artifact from `.catdd/spec/suspendUS/` to `.catdd/spec/doingUS/` and validates the stored resume reference.
+**Linear** -- Direct execution. Given a selected suspended story, this command moves the story and its paired task artifact from `<metaspec_root>/suspendUS/` to `<metaspec_root>/doingUS/` and validates the stored resume reference.
 
 ### Linear Execution
 
 Run these steps once, in order. There is no retry loop; any failed check stops and asks the developer.
 
-1. Confirm no story with the same ID already exists under `.catdd/spec/doingUS/`.
+1. Confirm no story with the same ID already exists under `<metaspec_root>/doingUS/`.
 2. Validate the stored `resume_ref` still exists — the branch or worktree must be resolvable. Stop if it is gone.
 3. Move the story and its paired tasks artifact from `suspendUS` to `doingUS`, preserving prior task state and suspended history.
 4. Write the resume note confirming `resume_ref` and any handoff caveats.
@@ -25,24 +29,24 @@ The incident that paused the story is closed, so work resumes:
 
 ```text
 /SPEC_resumeUserStory
-suspended_user_story: .catdd/spec/suspendUS/20260904-payment-retry-UserStory.md
+suspended_user_story: <metaspec_root>/suspendUS/20260904-payment-retry-UserStory.md
 resume_ref: us-123-suspend
-projectContext_file: .catdd/spec/projectContext.md
+projectContext_file: <metaspec_root>/projectContext.md
 ```
 
 Expected result:
 
 1. No matching ID under `doingUS` → check passes.
 2. `git rev-parse --verify us-123-suspend` resolves → resume ref valid.
-3. Story and tasks moved to `.catdd/spec/doingUS/`; the `[x]`/`[ ]` task state from before the suspend is preserved unchanged.
+3. Story and tasks moved to `<metaspec_root>/doingUS/`; the `[x]`/`[ ]` task state from before the suspend is preserved unchanged.
 4. Resume note records `us-123-suspend` and the caveat that the branch is behind `main` by 12 commits.
 5. ID absent from `suspendUS` → verified.
 6. Reported: first unchecked task is `[ ] implement idempotency key`, so `next_command = SPEC_whatsNextTask`.
 
 ## Inputs
 
-- `suspended_user_story`: selected suspended story under `.catdd/spec/suspendUS/`.
-- `suspended_tasks_file`: optional `.catdd/spec/suspendUS/*-UserStory-Tasks.md` task artifact paired with the story.
+- `suspended_user_story`: selected suspended story under `<metaspec_root>/suspendUS/`.
+- `suspended_tasks_file`: optional `<metaspec_root>/suspendUS/*-UserStory-Tasks.md` task artifact paired with the story.
 - `resume_ref`: recorded durable resume reference, typically a branch name or worktree path.
 - `projectContext_file`: current project context.
 
@@ -53,19 +57,19 @@ Expected result:
 
 ## Output Contract
 
-- A `.catdd/spec/doingUS/*-UserStory.md` team-shared active work artifact restored from suspended state.
-- A paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact restored when present.
+- A `<metaspec_root>/doingUS/*-UserStory.md` team-shared active work artifact restored from suspended state.
+- A paired `<metaspec_root>/doingUS/*-UserStory-Tasks.md` task artifact restored when present.
 - Resume note confirming `resume_ref` and any handoff caveats.
-- Local `.catdd/spec/suspendUS/` suspended work state removed after active artifact restoration.
+- Local `<metaspec_root>/suspendUS/` suspended work state removed after active artifact restoration.
 - Next recommended command: usually `SPEC_whatsNextTask`, `SPEC_updateMadePlan` (if the restored task checklist is stale or needs refinement), or the first unchecked task from `*-UserStory-Tasks.md`.
 
 ## Conflict Guard
 
 Resolve and preserve StoryIdAlias and CreatedAt from the suspended story and registry. Reconcile conflicting identity mappings before resuming; never assign the resume time as the creation time or create replacement child IDs.
 
-Do not resume if the story already exists under `.catdd/spec/doingUS/`.
+Do not resume if the story already exists under `<metaspec_root>/doingUS/`.
 Do not resume without validating the stored `resume_ref`.
 Do not mutate suspended history; move artifacts and preserve evidence.
-Do not leave the same story ID under both `.catdd/spec/suspendUS/` and `.catdd/spec/doingUS/`.
+Do not leave the same story ID under both `<metaspec_root>/suspendUS/` and `<metaspec_root>/doingUS/`.
 
 ONE-MORE-THING: ask developer if something not sure

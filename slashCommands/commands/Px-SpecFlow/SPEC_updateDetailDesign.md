@@ -1,5 +1,9 @@
 # SPEC_updateDetailDesign
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Revise detailed design and acceptance criteria after story review, implementation feedback, or quality failure.
@@ -23,7 +27,7 @@ Detail-design review returned two findings:
 
 ```text
 /SPEC_updateDetailDesign
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 detail_design: README_DetailDesign.md
 review_feedback: |
   F1: the degraded state has no documented exit transition
@@ -39,7 +43,7 @@ Expected result:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `detail_design`: project-root README detail design file or active story design section to update.
 - `readme_spec_files`: optional project-root `README*` SPEC files to create or update using matching `slashCommands/templates/README_*Template.md` files when first created, including `README_DetailVerifyDesign.md`, `README_ArchVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, or `README_DiagnosisDesign.md` when feedback changes verification, error, resource, state, performance, compatibility, or diagnosis design. `README_DetailVerifyDesign.md` is the detail-owned verification design; `README_ArchVerifyDesign.md` is architecture-owned and is only referenced by TP ID here; `README_VerifyDesign.md` is the routing index.
 - `review_feedback`: findings from story, code, test, or CI review.
@@ -52,7 +56,7 @@ Expected result:
 
 ## Output Contract
 
-- Updated design and acceptance criteria in team-shared `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
+- Updated design and acceptance criteria in team-shared `<metaspec_root>/doingUS/` work state or team-shared project-root README SPEC docs.
 - Updated `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, or `README_VerifyDesign.md` when the feedback changes module, error, resource, state, performance, compatibility, diagnosis, or verification design.
 - Review-feedback checklist showing what was addressed.
 - Remaining risks and next recommended command.

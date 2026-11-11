@@ -1,5 +1,9 @@
 # SPEC_refactTests
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Orchestrate no-behavior-change refactoring for implemented CaTDD unit tests in the active user story, using `TEST_refactTestCase` as the TC-level mechanic.
@@ -27,7 +31,7 @@ Cleaning up duplicated setup after the suite went GREEN:
 
 ```text
 /SPEC_refactTests
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 tc_slices: TC-003 (GREEN, reviewed)
 ```
 
@@ -41,7 +45,7 @@ Expected result:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `target_test_files`: implemented unit test files to inspect or refactor.
 - `selected_tc`: optional TC identifier and name; if omitted, choose the safest GREEN refactor candidate.
 - `refactor_scope`: optional explicit list of TC slices, files, or cleanup goals.

@@ -1,8 +1,12 @@
 # SPEC_importUserStory
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Import an existing structured user story, requirement slice, or acceptance-criterion slice directly into `.catdd/spec/todoUS/` as ready-to-open SpecCoding input.
+Import an existing structured user story, requirement slice, or acceptance-criterion slice directly into `<metaspec_root>/todoUS/` as ready-to-open SpecCoding input.
 
 Use this when the source already has `US-*`, `AC-*`, role, priority, dependency, or checklist structure, such as `README_UserStory.md`, `README_UserStoryStatus.md`, a PRD user-story table, or an exported backlog item.
 
@@ -20,10 +24,10 @@ Run these steps once, in order. There is no retry loop; a missing slice or ambig
 2. Resolve `granularity` per the Import Granularity rules. Stop and ask when the choice changes the artifact boundary.
 3. Copy the slice verbatim, preserving source `US-*`/`AC-*` IDs, priority, dependency hints, and status markers exactly as written. If the source Story ID is already registered as the project-wide identity, preserve it. Otherwise assign a human-readable project Story ID in `US-<whoName>-<doWhat>` form, with both segments in lowerCamelCase, per [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids). Record the source ID as a source-qualified alias and trace metadata without rewriting source wording.
 4. Record the source trace, including the paired `README_UserGuide.md` when the source is a module `README_UserStory.md`.
-5. Apply [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids), register each story in `README_UserStories.md`, and write one `.catdd/spec/todoUS/*-UserStory.md` per selected slice. Never merge unrelated requirements into one artifact.
+5. Apply [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids), register each story in `README_UserStories.md`, and write one `<metaspec_root>/todoUS/*-UserStory.md` per selected slice. Never merge unrelated requirements into one artifact.
 6. Report the output paths and `next_command = SPEC_openUserStory`.
 
-## Usage Example
+### Worked Example
 
 One story is pulled out of a large existing requirements doc:
 
@@ -40,7 +44,7 @@ Expected result:
 2. `US-by-US` requested and the source treats US-07's four ACs as one deliverable → no ambiguity, no stop.
 3. AC-01..AC-04 copied verbatim with their IDs, `priority: P1`, and the dependency note on US-03 preserved. Wording is **not** improved or rephrased.
 4. Source trace records `services/payment/README_UserStory.md#US-07` plus the paired `services/payment/README_UserGuide.md`.
-5. Written to `.catdd/spec/todoUS/20260904-payment-retry-UserStory.md`.
+5. Written to `<metaspec_root>/todoUS/20260904-payment-retry-UserStory.md`.
 6. Reported: path, plus `AskWhy` when any imported criterion has neither Example nor Rule under `From`. Save the human answer and only then report `next_command = SPEC_openUserStory`; no new AC or provenance is invented.
 
 ## Inputs
@@ -50,7 +54,7 @@ Expected result:
 - `slice_id`: optional `US-*`, `AC-*`, role, range, or heading to import from the source.
 - `granularity`: optional `US-by-US` or `AC-by-AC`; default is `US-by-US`.
 - `projectContext_file`: optional project context.
-- `target_todo_file`: optional file name under `.catdd/spec/todoUS/`.
+- `target_todo_file`: optional file name under `<metaspec_root>/todoUS/`.
 - `execution_mode`: optional `manualMode | autonomousMode` (default: `manualMode`). When `autonomousMode` is requested, record the mode in the todo story artifact; autonomous execution is strictly supported only for implementation-oriented stories once planned.
 
 ## Method References
@@ -68,7 +72,7 @@ Expected result:
 
 ## Output Contract
 
-- A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user-story artifact ready for `SPEC_openUserStory`.
+- A `<metaspec_root>/todoUS/*-UserStory.md` team-shared persistent user-story artifact ready for `SPEC_openUserStory`.
 - Preserved source text, exact requirement IDs, acceptance-criterion IDs, priority, dependency hints, and status/checklist markers when present.
 - Preserved or explicitly normalized CaTDD-AC evidence fields: `From / Given / When / Then / Counter`. If an imported AC has neither `From` Example nor Rule, stop and report `AskWhy`; save the human answer as `Example (AskWhy)` or `Rule (AskWhy)` before declaring the artifact ready for opening.
 - A registered project-wide Story ID, permanent `StoryIdAlias`, and verified `CreatedAt`, with new canonical AC references qualified by the alias. Preserve the existing pair when importing a registered story or another slice of it. Original local/external IDs remain source-qualified aliases and verbatim source text is unchanged.

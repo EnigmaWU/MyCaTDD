@@ -7,11 +7,13 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Portable slash command source: `.catdd/slashCommands/`
 - Copilot prompt wrappers: `.github/prompts/TEST_*.prompt.md`, `.github/prompts/SPEC_*.prompt.md`, and `.github/prompts/HARNESS_*.prompt.md`
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
+- Before reading or writing SpecCoding artifacts, follow `.catdd/slashCommands/MetaspecWorkspaceResolution.md` and use the `metaspec_root` declared in `projectContext.md`.
+- Supported workspaces are canonical `.catdd/metaspec/`, agent-owned `.agents/metaspec/`, and legacy `.catdd/spec/`; use `HARNESS_migrateMetaspec` rather than merging populated roots.
 - If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
-- Commit team-shared SpecCoding artifacts under `.catdd/spec/`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
+- Commit team-shared SpecCoding artifacts under the resolved `metaspec_root`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
-- Keep local SpecCoding work state such as `.catdd/spec/WorkingProcessLog.md` gitignored.
+- Keep local SpecCoding work state such as `WorkingProcessLog.md` gitignored in every supported workspace.
 - After every meaningful verified success, report `success_learning_checkpoint = recommended` and remind the developer to run `/HARNESS_evolveHarness` with `evolution_mode=auto`. Keep the hook non-blocking, preserve any required lifecycle/commit/merge/safety command as the immediate next action, and never auto-apply an evolution proposal. While running `HARNESS_evolveHarness`, suppress this hook for the command's own completion or the same evidence; only materially new verified evidence may trigger another checkpoint.
 - Ask the developer when product intent, acceptance criteria, or test behavior is unclear.

@@ -1,5 +1,9 @@
 # SPEC_updateArchDesign
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Revise high-level architecture design after architecture review feedback, story-level feedback, or quality failure.
@@ -23,7 +27,7 @@ Architecture review returned two findings:
 
 ```text
 /SPEC_updateArchDesign
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 arch_design: README_ArchDesign.md
 review_feedback: |
   F1: gateway adapters depend directly on the auth module, violating the port boundary
@@ -39,7 +43,7 @@ Expected result:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `arch_design`: project-root `README_ArchDesign.md` (and optional mirror) to update.
 - `readme_ubilang`: optional project-root `README_UbiLang.md` to revise when architecture review feedback resolves synonym drift (`EPIC I2.1`) or refines bounded-context terminology (`EPIC E1.3 / E1.4`).
 - `arch_verify_design`: optional project-root `README_ArchVerifyDesign.md` to revise when the finding changes verification topology, the level-and-boundary map, target runtime environments, doubles, or evidence/equipment ownership.

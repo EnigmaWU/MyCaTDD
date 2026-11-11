@@ -57,13 +57,13 @@ assert_absent_file "$REPO_ROOT/slashCommands/commands/Px-SpecFlow/SPEC_commitWor
 
 # 2. Pre-story span: before openUserStory, never story-span work.
 assert_contains "$COMMIT_PRE_STORY" 'before `SPEC_openUserStory`'
-assert_contains "$COMMIT_PRE_STORY" 'still lives in `.catdd/spec/todoUS/`'
+assert_contains "$COMMIT_PRE_STORY" 'still lives in `<metaspec_root>/todoUS/`'
 assert_contains "$COMMIT_PRE_STORY" 'route to `SPEC_commitStoryWorks`'
 assert_contains "$COMMIT_PRE_STORY" 'analysis_mode: AUTONOMOUS'
 assert_contains "$COMMIT_PRE_STORY" 'this checkpoint is the default'
 assert_contains "$COMMIT_PRE_STORY" 'not applicable to the pre-story span'
 assert_contains "$COMMIT_PRE_STORY" 'next_command = SPEC_openUserStory'
-assert_contains "$COMMIT_PRE_STORY" 'Do not run after the story moved to `.catdd/spec/doingUS/`'
+assert_contains "$COMMIT_PRE_STORY" 'Do not run after the story moved to `<metaspec_root>/doingUS/`'
 assert_not_contains "$COMMIT_PRE_STORY" '`autonomousMode`: default pre-story checkpoint'
 
 # 3. Step span: only planned boundaries, only after the gate passed.

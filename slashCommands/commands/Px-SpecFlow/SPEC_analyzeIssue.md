@@ -1,8 +1,12 @@
 # SPEC_analyzeIssue
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
-Analyze a pending issue, bug report, defect, support problem, or research input; extract detailed evidence, causes, implications, and actionable insights; generate a user story artifact under `.catdd/spec/todoUS/`; and archive the raw issue under `.catdd/spec/analyzedNews/`.
+Analyze a pending issue, bug report, defect, support problem, or research input; extract detailed evidence, causes, implications, and actionable insights; generate a user story artifact under `<metaspec_root>/todoUS/`; and archive the raw issue under `<metaspec_root>/analyzedNews/`.
 
 ## CoT Pattern
 
@@ -49,13 +53,13 @@ Mode selection rule:
 - If the developer explicitly requests `AUTONOMOUS`, run autonomous generation using this command's Analysis Pipeline.
 - Otherwise default to `BRAINSTORM`, because issue analysis often contains hidden product intent and should converge through developer conversation before committing a todo story.
 
-## Usage Example
+### Worked Example
 
 An imported issue says the user guide is confusing:
 
 ```text
 /SPEC_analyzeIssue
-pending_issue: .catdd/spec/pendingNews/20260904-user-guide-confusing-Issue.md
+pending_issue: <metaspec_root>/pendingNews/20260904-user-guide-confusing-Issue.md
 analysis_mode: BRAINSTORM
 ```
 
@@ -79,11 +83,11 @@ analysis_mode: BRAINSTORM
 - **Select**: Candidate A, confirmed by the developer in Stage 0.1.
 - **Execute**: Analysis Pipeline Steps 0-11 run against Candidate A.
 - **Verify**: Step 3 finds the story still spans 3 functional areas → return to **Select** → Candidate B adopted as a split, with A kept as the first slice.
-- Result: `.catdd/spec/todoUS/20260904-user-guide-api-integration-UserStory.md`, raw issue archived to `analyzedNews/` with `status: analyzed` and a `## Chat History` section recording the Stage 0.1 Q&A and Stage 0.2 candidate-split dialogue.
+- Result: `<metaspec_root>/todoUS/20260904-user-guide-api-integration-UserStory.md`, raw issue archived to `analyzedNews/` with `status: analyzed` and a `## Chat History` section recording the Stage 0.1 Q&A and Stage 0.2 candidate-split dialogue.
 
 ## Inputs
 
-- `pending_issue`: issue file under `.catdd/spec/pendingNews/`.
+- `pending_issue`: issue file under `<metaspec_root>/pendingNews/`.
 - `issue_origin`: optional `external_issue | defect_report | support_problem | research_input`.
 - `projectContext_file`: current project context.
 - `related_docs`: optional architecture, README, API, logs, test docs, or reproduction notes.
@@ -101,15 +105,15 @@ analysis_mode: BRAINSTORM
 
 ## Output Contract
 
-- A `.catdd/spec/todoUS/*-UserStory.md` team-shared persistent user story artifact.
+- A `<metaspec_root>/todoUS/*-UserStory.md` team-shared persistent user story artifact.
 - One project-wide Story ID registered in `README_UserStories.md`, with each AC declared under its category-qualified Story alias ID.
-- The source issue moved from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` as a team-shared raw input archive.
+- The source issue moved from `<metaspec_root>/pendingNews/` to `<metaspec_root>/analyzedNews/` as a team-shared raw input archive.
 - The archived raw issue metadata is normalized to analyzed state:
   - `status: analyzed`
   - `analyzed_by: SPEC_analyzeIssue`
   - `analyzed_on: YYYY-MM-DD`
   - `analysis_mode: BRAINSTORM | AUTONOMOUS`
-- A mandatory `## Chat History` (`chatHistory`) section appended to the archived `.catdd/spec/analyzedNews/*-Issue.md` file to preserve how the issue was analyzed:
+- A mandatory `## Chat History` (`chatHistory`) section appended to the archived `<metaspec_root>/analyzedNews/*-Issue.md` file to preserve how the issue was analyzed:
   - In `BRAINSTORM` mode: chronological turn-by-turn or Q&A record of the developer and CodeAgent dialogue (clarification questions asked, developer answers/quotes, candidate interpretations and repair slices compared, rejected alternatives, scope-split choices, and final `BRAINSTORM` decisions).
   - In `AUTONOMOUS` mode: chronological autonomous reasoning/prompt trace, candidate evaluations, recorded assumptions, and open `ONE-MORE-THING` / Initial Acceptance Questions surfaced.
 - An issue-focused, independently testable user story slice with observed behavior, expected behavior, priority, acceptance scenarios, edge cases, scope, non-goals, risks, assumptions, and acceptance questions.
@@ -138,7 +142,7 @@ Apply the pipeline below, driven by the ToT Execution step 4. Each step summariz
 
 Classify the issue origin. This command accepts only pending issue, bug report, defect, support problem, or research input. It must not accept an aborted UserStory as input.
 
-- If the input is `.catdd/spec/abortUS/*-UserStory.md`, a paired abort task artifact, or any request to analyze preserved abort evidence, stop immediately and route to `SPEC_analyzeAbortedUserStory`.
+- If the input is `<metaspec_root>/abortUS/*-UserStory.md`, a paired abort task artifact, or any request to analyze preserved abort evidence, stop immediately and route to `SPEC_analyzeAbortedUserStory`.
 - Do not read or summarize abortUS evidence inside `SPEC_analyzeIssue`.
 
 Create an evidence inventory table with source, facts found, confidence, and gaps.
@@ -207,9 +211,9 @@ Register `StoryIdAlias` and `CreatedAt` together with the Story ID, following th
 
 Before writing the todo artifact, register the Story ID in the project story ledger, creating `README_UserStories.md` from `README_UserStoriesTemplate.md` if needed. Follow the [Project-Wide Traceability IDs](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#project-wide-traceability-ids) contract: preserve an existing unambiguous ID or derive a descriptive human-readable ID in `US-<whoName>-<doWhat>` form, writing both segments in lowerCamelCase. Derive them from the story's actor and observable behavior, and ask if either is unclear. Check the project registry and known story sources, and assign each AC a distinct qualified ID. Refine a collision with meaningful context rather than an arbitrary number or UUID. Register blocked drafts too; do not archive the input if story/ledger registration cannot be reconciled. Preserve external or legacy IDs as source-qualified aliases, and stop for conflicting or ambiguous identities.
 
-Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`, including the Stage 1 EPIC-mapped `## Story Readiness Snapshot` (`E1 Unambiguous`, `E2 Singular`, `E3 Verifiable`, `E3.4 Completion & Readiness`, `P1 Dependency Control`, `P2 Complete`, `I1 Conforming`, `C1 Scope Discipline`) and story-specific `## Story Completion Conditions (`EPIC E3.4`)` (`Required TestLevel`, `Required TestScope & Environment`, `Required CaTDD Categories`, `Required SPEC & Doc Surfaces`, `Not-Done Conditions`, and `Approved Deferrals`). Move the raw issue from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/`. Update trace links both ways. **Gate:** if any Initial Acceptance Questions remain open or any required Stage 1 EPIC lens in `## Story Readiness Snapshot` is `no`, mark the story NOT ready — it may not proceed to `SPEC_openUserStory` until resolved (the full 10-dimension `## EPIC Specification Sufficiency` ledger will be seeded in `*-UserStory-Tasks.md` by `SPEC_makePlan`).
+Write `todoUS/*-UserStory.md` following `SpecTodoUserStoryTemplate.md`, including the Stage 1 EPIC-mapped `## Story Readiness Snapshot` (`E1 Unambiguous`, `E2 Singular`, `E3 Verifiable`, `E3.4 Completion & Readiness`, `P1 Dependency Control`, `P2 Complete`, `I1 Conforming`, `C1 Scope Discipline`) and story-specific `## Story Completion Conditions (`EPIC E3.4`)` (`Required TestLevel`, `Required TestScope & Environment`, `Required CaTDD Categories`, `Required SPEC & Doc Surfaces`, `Not-Done Conditions`, and `Approved Deferrals`). Move the raw issue from `<metaspec_root>/pendingNews/` to `<metaspec_root>/analyzedNews/`. Update trace links both ways. **Gate:** if any Initial Acceptance Questions remain open or any required Stage 1 EPIC lens in `## Story Readiness Snapshot` is `no`, mark the story NOT ready — it may not proceed to `SPEC_openUserStory` until resolved (the full 10-dimension `## EPIC Specification Sufficiency` ledger will be seeded in `*-UserStory-Tasks.md` by `SPEC_makePlan`).
 
-After moving the raw issue, normalize analyzed metadata, append `## Chat History`, and update trace links in the archived `.catdd/spec/analyzedNews/*-Issue.md` file:
+After moving the raw issue, normalize analyzed metadata, append `## Chat History`, and update trace links in the archived `<metaspec_root>/analyzedNews/*-Issue.md` file:
 
 - set `status: analyzed`
 - add/update `analyzed_by: SPEC_analyzeIssue`
@@ -225,12 +229,12 @@ After moving the raw issue, normalize analyzed metadata, append `## Chat History
 
 If the issue lacks reproducible intent or expected behavior, create questions and keep the story draft incomplete instead of inventing requirements.
 
-- Do not archive a raw issue into `.catdd/spec/analyzedNews/` without appending a `## Chat History` section (`chatHistory`) that records how the issue was analyzed (especially the developer/CodeAgent dialogue and decisions in `BRAINSTORM` mode).
+- Do not archive a raw issue into `<metaspec_root>/analyzedNews/` without appending a `## Chat History` section (`chatHistory`) that records how the issue was analyzed (especially the developer/CodeAgent dialogue and decisions in `BRAINSTORM` mode).
 - Do not run `AUTONOMOUS` mode unless the developer explicitly requested it.
 - In `BRAINSTORM` mode, do not generate `todoUS` before the good-enough gate passes unless the output is explicitly marked incomplete/not-ready.
 - In `AUTONOMOUS` mode, do not hide missing intent behind assumptions. Record every material unknown as an Initial Acceptance Question, Ambiguity Warning, or Risk/Assumption entry.
 - If the input is an aborted UserStory, paired abort task artifact, or preserved abort evidence, stop and route to `SPEC_analyzeAbortedUserStory`; do not synthesize a new issue story here.
-- If issue analysis would require reading `.catdd/spec/abortUS/` evidence, stop and ask the developer to run `SPEC_analyzeAbortedUserStory`.
+- If issue analysis would require reading `<metaspec_root>/abortUS/` evidence, stop and ask the developer to run `SPEC_analyzeAbortedUserStory`.
 - If expected behavior cannot be determined from the issue: keep the story draft incomplete — do not guess.
 - If Step 3 detects oversize: propose splitting, don't write one oversized repair story.
 - If Step 6 finds unhandled model gaps: list them as questions, don't invent paths.

@@ -1,5 +1,9 @@
 # TEST_designTypicalSkeleton
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Design a CaTDD Typical functional skeleton from an interface, protocol, existing draft, or behavior contract.
@@ -19,7 +23,7 @@ Repeat until the Typical skeleton holds only primary valid behavior.
 3. **Observation** — Check category fit: anything relying on a boundary value, an invalid caller input, or a dependency failure does not belong here → back to **Thought** and hand it to Edge, Misuse, or Fault. Check the [US/AC/TP/TC cardinality](../../../methodPrompts/CaTDD_methodPrompt-testStructure.md#usactptc-contract) for the declared scope; unassigned TPs block completion.
 4. **Stop** — Exit when the skeleton holds only the success path and passes the cardinality check. Recommend `TEST_designEdgeSkeleton` or `TEST_reviewFuncTestsSkeleton`.
 
-## Usage Example
+### Worked Example
 
 Specifying the primary valid path for an authorize call. IDs below are abbreviated; generated artifacts use registered Story IDs and qualified AC/TP/TC IDs.
 

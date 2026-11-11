@@ -37,7 +37,7 @@ Tradeoff summary (phase-weighted):
 ## Traceability
 
 - Source issue: [../../.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md](../../.catdd/spec/analyzedNews/20260604-decide-utCodeAgentCLI-runtime-language-Issue.md)
-- Active story: [../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/spec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
+- Active story: [../../.catdd/metaspec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md](../../.catdd/metaspec/doingUS/20260604-decide-utCodeAgentCLI-runtime-language-UserStory.md)
 - TASKs artifact: [../../.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-TASKs.md](../../.catdd/spec/doneUS/20260604-decide-utCodeAgentCLI-runtime-language-TASKs.md)
 
 ## Follow-up

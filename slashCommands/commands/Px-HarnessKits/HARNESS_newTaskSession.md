@@ -1,5 +1,9 @@
 # HARNESS_newTaskSession
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Capture and preserve important session context when a developer finishes the current task and starts a new session, so the next CodeAgent session does not lose key decisions, in-progress work, environment facts, or CaTDD lifecycle state.
@@ -37,23 +41,23 @@ Expected result:
 - **Action**: Handoff Note Template filled with Active Story, Completed Tasks, Pending Tasks, Key Files, Decisions and Constraints, Environment Facts, Next Action.
 - **Observation**: Next Action reads "implement TC-003" — but the note never records that TC-003 is blocked on the sandbox gateway credential → the next session would rediscover it the hard way → back to **Thought** → added under Environment Facts.
 - **Observation (pass 2)**: every Next Action is fully supported by the note → self-sufficient.
-- **Stop**: note printed. No `target_file` was given, so nothing is written to `.catdd/spec/WorkingProcessLog.md`.
+- **Stop**: note printed. No `target_file` was given, so nothing is written to `<metaspec_root>/WorkingProcessLog.md`.
 
 ## Inputs
 
 - `current_session_goal`: the task or user story the developer was working on this session.
 - `code_agent`: the CodeAgent in use. Allowed values: `copilot`, `continue`, `cline`, `custom`, or `auto`.
 - `scope`: optional scope of facts to capture. Allowed values: `full` (default), `spec_only`, `code_only`, or `decisions_only`.
-- `target_file`: optional path to write the handoff note. When provided, write or append the handoff note to this path. When omitted, print the handoff note in the response only and do not write to `.catdd/spec/WorkingProcessLog.md`.
+- `target_file`: optional path to write the handoff note. When provided, write or append the handoff note to this path. When omitted, print the handoff note in the response only and do not write to `<metaspec_root>/WorkingProcessLog.md`.
 - `include_file_inventory`: optional flag. When true, list key changed or open files. Default: true.
-- `include_pending_tasks`: optional flag. When true, list unchecked tasks from the active `.catdd/spec/doingUS/*-TASKs.md` artifact. Default: true.
+- `include_pending_tasks`: optional flag. When true, list unchecked tasks from the active `<metaspec_root>/doingUS/*-TASKs.md` artifact. Default: true.
 
 ## Preflight Mapping Checklist
 
 Before collecting session facts, print and confirm:
 
 1. `current goal`: the task or user story the developer was working on.
-2. `lifecycle state`: active story ID and checked or unchecked tasks from `.catdd/spec/doingUS/` if any.
+2. `lifecycle state`: active story ID and checked or unchecked tasks from `<metaspec_root>/doingUS/` if any.
 3. `code agent`: selected adapter surface.
 4. `output target`: response-only, or write to `target_file` when specified.
 5. `scope`: which categories of facts to collect.
@@ -64,9 +68,9 @@ If the current goal or lifecycle state is unclear, ask the developer before coll
 
 1. **Collect lifecycle state**
 
-   - Find the active story and its tasks artifact in `.catdd/spec/doingUS/`.
+   - Find the active story and its tasks artifact in `<metaspec_root>/doingUS/`.
    - Record completed tasks (`[x]`) and pending tasks (`[ ]`).
-   - Note the last `SPEC_*` command invoked: check `.catdd/spec/WorkingProcessLog.md` first, then ask the developer if it cannot be determined from the log or git history.
+   - Note the last `SPEC_*` command invoked: check `<metaspec_root>/WorkingProcessLog.md` first, then ask the developer if it cannot be determined from the log or git history.
 
 2. **Collect code and file context**
 

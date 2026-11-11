@@ -1,5 +1,9 @@
 # SPEC_commitWorks
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Generate a repository-style commit log message for any staged or recently modified change, and commit it after approval.
@@ -20,7 +24,7 @@ Run these steps once, in order. There is no retry loop; an ambiguous scope stops
 
 1. Resolve scope: use `staged_files` when non-empty; otherwise use `modified_files` ordered by most recent modification time, newest first.
 2. If the resolved scope is empty, report `commit_scope = empty` and stop. Never create an empty commit.
-3. Exclude local work state such as `.catdd/spec/WorkingProcessLog.md` and generated adapter output that the repository ignores.
+3. Exclude local work state such as `<metaspec_root>/WorkingProcessLog.md` and generated adapter output that the repository ignores.
 4. Stop and ask when in-scope files belong to more than one coherent change, or when a file's purpose is unclear. One commit describes one change.
 5. Read `recent_commit_messages` (latest 5) and extract tone, tense, capitalization, and scope format.
 6. Draft the message with `WHAT` / `HOW` / `WHY` sections in that style.
@@ -108,9 +112,9 @@ WHY
 
 Do not commit unrelated changes together. Ask the developer before including ambiguous files.
 Do not create an empty commit when the resolved scope is empty.
-Do not read, write, or resolve scope from `.catdd/spec/doingUS/` story artifacts; span-scoped commits belong to `SPEC_commitPreStoryWorks`, `SPEC_commitStepWorks`, and `SPEC_commitStoryWorks`.
+Do not read, write, or resolve scope from `<metaspec_root>/doingUS/` story artifacts; span-scoped commits belong to `SPEC_commitPreStoryWorks`, `SPEC_commitStepWorks`, and `SPEC_commitStoryWorks`.
 Do not advance SpecFlow lifecycle state, and do not claim an active story is committed because a general commit happened.
-Do not commit `.catdd/spec/WorkingProcessLog.md` or other gitignored local work state.
+Do not commit `<metaspec_root>/WorkingProcessLog.md` or other gitignored local work state.
 Do not commit unadopted VibeCoding excursion edits as a general commit while a story is open; route them through the owning `SPEC_*` step or revert them first.
 
 ONE-MORE-THING: ask developer if something not sure

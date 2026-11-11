@@ -105,7 +105,7 @@ install_fresh() {
   assert_contains "$dir/.catdd/methodPrompts/CaTDD_methodPrompt4Cat-Typical.md" 'project-wide-traceability-ids'
   assert_contains "$dir/.catdd/slashCommands/templates/SpecTodoUserStoryTemplate.md" '{{StoryIdAlias}}-AC-Typical-{{n}}'
   assert_contains "$dir/.catdd/slashCommands/commands/Px-SpecFlow/SPEC_analyzeIssue.md" 'project-wide-traceability-ids'
-  assert_dir "$dir/.catdd/spec/pendingNews"
+  assert_dir "$dir/.catdd/metaspec/pendingNews"
   assert_absent "$dir/README_UbiLang.md"
   assert_file "$dir/.catdd/CaTDD_INSTALL.manifest"
   assert_dir "$dir/.catdd/.install-baseline/methodPrompts"
@@ -153,7 +153,7 @@ install_agent_host() {
   "$INSTALLER" --targetDir "$dir" --targetCodeAgent ChatCopilotAgentHost --init --clean-prompts --yes >/dev/null 2>&1
   assert_file "$dir/.catdd/methodPrompts/README.md"
   assert_file "$dir/.catdd/slashCommands/TEST_slashCommandTemplate.md"
-  assert_dir "$dir/.catdd/spec/pendingNews"
+  assert_dir "$dir/.catdd/metaspec/pendingNews"
   assert_file "$dir/.catdd/CaTDD_INSTALL.manifest"
   marker="$dir/.catdd/CaTDD_INSTALL.md"
   assert_contains "$marker" '- Target agent: ChatCopilotAgentHost'
@@ -200,7 +200,7 @@ install_codex() {
   "$INSTALLER" --targetDir "$dir" --targetCodeAgent Codex --init --clean-prompts --yes >/dev/null 2>&1
   assert_file "$dir/.catdd/methodPrompts/README.md"
   assert_file "$dir/.catdd/slashCommands/TEST_slashCommandTemplate.md"
-  assert_dir "$dir/.catdd/spec/pendingNews"
+  assert_dir "$dir/.catdd/metaspec/pendingNews"
   assert_file "$dir/.catdd/CaTDD_INSTALL.manifest"
   marker="$dir/.catdd/CaTDD_INSTALL.md"
   assert_contains "$marker" '- Target agent: Codex'

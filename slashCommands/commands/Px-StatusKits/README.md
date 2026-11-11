@@ -9,7 +9,7 @@ This directory contains `*_showMeStatus` command templates for CaTDD status repo
 | Command | Viewpoint | Purpose |
 | --- | --- | --- |
 | [TEST_showMeStatus](TEST_showMeStatus.md) | UT | Report TC markers, CaTDD class distribution, design-gate currency, and the next UT command. |
-| [SPEC_showMeStatus](SPEC_showMeStatus.md) | SPEC | Report `.catdd/spec/` lane counts, the active story and its gate, AC totals, and lane drift. |
+| [SPEC_showMeStatus](SPEC_showMeStatus.md) | SPEC | Report `.catdd/metaspec/` lane counts, the active story and its gate, AC totals, and lane drift. |
 | [HARNESS_showMeStatus](HARNESS_showMeStatus.md) | HARNESS | Report installation identity, generated adapters, effective layer precedence, invocation hygiene, instruction surfaces, source drift, and prior harness evidence. |
 
 ## Shared Report Contract

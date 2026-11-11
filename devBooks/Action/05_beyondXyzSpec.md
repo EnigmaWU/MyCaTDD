@@ -188,7 +188,7 @@ pendingNews/  →  analyzedNews/  →  todoUS/  →  doingUS/  →  doneUS/
                                                 ↘ abortUS/ (preserved)
 ```
 
-Seven lifecycle directories, all version-controlled under `.catdd/spec/`:
+Seven lifecycle directories, all version-controlled under `.catdd/metaspec/`:
 
 | State | Directory | Meaning |
 |---|---|---|
@@ -374,7 +374,7 @@ If source or a human decision is missing, report `BLOCKED` or `ASK` through the 
 | **Design source gate** | Project-selected | Project-selected | Source-backed discovery and applicable P1/P2 promotion gates |
 | **Model tier guidance** | Tool/project dependent | Tool/project dependent | Per-command guidance in `Px-SpecFlow` |
 | **Review gates** | Cross-artifact analysis and checklist tools | Change verification | Requirement, architecture, detail, test, and code reviews with canonical verdicts and owning rework routes |
-| **Artifact persistence** | File system (specs directory) | File system (changes directory) | **Team-shared `.catdd/spec/`** with a commit policy per artifact |
+| **Artifact persistence** | File system (specs directory) | File system (changes directory) | **Team-shared `.catdd/metaspec/`** with a commit policy per artifact |
 | **Project-root docs** | Spec + plan, then project-defined | Proposal + design, then project-defined | Relevant `README*` sources are created or revised on demand; verification design has architecture- and detail-level ownership |
 | **Brownfield** | Primarily greenfield | **Brownfield-first** (designed for existing codebases) | **Both** — analyze existing code into US/AC/TC |
 | **Install method** | `uv tool install specify-cli` (Python) | `npm install -g @fission-ai/openspec` (TypeScript) | Markdown prompt files (agent-agnostic) |
@@ -447,7 +447,7 @@ For an active story whose detail design has passed review, start CaTDD test desi
 
 ```text
 /SPEC_designTests
-doing_user_story: .catdd/spec/doingUS/<story>-UserStory.md
+doing_user_story: .catdd/metaspec/doingUS/<story>-UserStory.md
 detail_design: README_DetailDesign.md
 verify_design: README_DetailVerifyDesign.md
 ```

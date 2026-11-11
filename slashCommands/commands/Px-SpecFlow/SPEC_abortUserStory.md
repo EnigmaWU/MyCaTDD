@@ -1,18 +1,22 @@
 # SPEC_abortUserStory
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Abort an active user story when continuing it in place would hide a scope, assumption, design, test, or product-quality problem, while preserving all useful evidence for the next round.
 
 ## CoT Pattern
 
-**Linear** -- Direct execution. Given a selected active story and an explicit structured abort reason, this command moves the active story and its paired task artifact from `.catdd/spec/doingUS/` to `.catdd/spec/abortUS/` while preserving traceability and normalizing lifecycle lanes. It does not decide new product intent or repair the story in place.
+**Linear** -- Direct execution. Given a selected active story and an explicit structured abort reason, this command moves the active story and its paired task artifact from `<metaspec_root>/doingUS/` to `<metaspec_root>/abortUS/` while preserving traceability and normalizing lifecycle lanes. It does not decide new product intent or repair the story in place.
 
 ### Linear Execution
 
 Run these steps once, in order. There is no retry loop; any failed check stops and asks the developer.
 
-1. Validate there is exactly one active target story in `.catdd/spec/doingUS/` for the selected story ID.
+1. Validate there is exactly one active target story in `<metaspec_root>/doingUS/` for the selected story ID.
 2. Validate `abort_reason` carries all four required fields. Stop and ask if any is missing; do not infer them.
 3. Capture the structured `abort_reason` in the aborted artifact.
 4. Move the story and its paired tasks artifact from `doingUS` to `abortUS`.
@@ -26,7 +30,7 @@ Halfway through implementation the story's core assumption turns out to be wrong
 
 ```text
 /SPEC_abortUserStory
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
 abort_reason:
   primary_gap_type: assumption-gap
   problem_summary: The gateway is not idempotent, so blind retries can double-charge.
@@ -39,15 +43,15 @@ Expected result:
 1. Exactly one active story matches the ID → check passes.
 2. All four `abort_reason` fields present → check passes.
 3. Abort reason captured verbatim in the aborted artifact, including the failing test reference.
-4. Story and tasks moved to `.catdd/spec/abortUS/`.
+4. Story and tasks moved to `<metaspec_root>/abortUS/`.
 5. Lane check: ID no longer present in `doingUS` → normalized.
 6. `followup_intent` omitted by developer → defaulted to `SPEC_analyzeAbortedUserStory` and recorded as pending.
 7. Reported: `next_command = SPEC_analyzeAbortedUserStory`. No replacement story is invented here.
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
-- `doing_tasks_file`: optional active `.catdd/spec/doingUS/*-UserStory-Tasks.md` task artifact paired with the story.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
+- `doing_tasks_file`: optional active `<metaspec_root>/doingUS/*-UserStory-Tasks.md` task artifact paired with the story.
 - `abort_reason`: the blocking problem that makes the current story unsafe to continue.
   - Required structure (minimum):
     - `primary_gap_type`: one of `scope-gap | assumption-gap | design-gap | implementation-gap | quality-gap`.
@@ -64,11 +68,11 @@ Expected result:
 
 ## Output Contract
 
-- A `.catdd/spec/abortUS/*-UserStory.md` team-shared aborted story artifact preserving source trace, current status, abort reason, and unresolved questions.
-- A paired `.catdd/spec/abortUS/*-UserStory-Tasks.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
-- Local `.catdd/spec/doingUS/` active work state removed or marked aborted after the aborted artifact is created.
+- A `<metaspec_root>/abortUS/*-UserStory.md` team-shared aborted story artifact preserving source trace, current status, abort reason, and unresolved questions.
+- A paired `<metaspec_root>/abortUS/*-UserStory-Tasks.md` team-shared task artifact when the story was planned through `SPEC_makePlan`.
+- Local `<metaspec_root>/doingUS/` active work state removed or marked aborted after the aborted artifact is created.
 - Lane normalization guarantee:
-  - After completion, the same story ID must not remain simultaneously active in both `.catdd/spec/doingUS/` and `.catdd/spec/abortUS/`.
+  - After completion, the same story ID must not remain simultaneously active in both `<metaspec_root>/doingUS/` and `<metaspec_root>/abortUS/`.
   - The aborted lane must be the single source of truth for that story ID.
 - Next recommended command: `SPEC_analyzeAbortedUserStory` when the next work should reuse the preserved story evidence, or `SPEC_importIssue` when the problem should become a new improvement/refinement input for the next round.
 - Terminal commit checkpoint result:

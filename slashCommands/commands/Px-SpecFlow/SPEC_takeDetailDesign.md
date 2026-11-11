@@ -1,5 +1,9 @@
 # SPEC_takeDetailDesign
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Create or update detailed design and acceptance criteria for the active user story.
@@ -25,7 +29,7 @@ Detailing the gateway adapter story after architecture review passed:
 
 ```text
 /SPEC_takeDetailDesign
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 readme_spec_files: README_DetailDesign.md, README_ErrorDesign.md, README_StateDesign.md
 ```
 
@@ -40,7 +44,7 @@ Expected result — two passes:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `projectContext_file`: current project context.
 - `readme_spec_files`: optional project-root README SPEC files to create or update, including `README_ArchDesign.md`, `README_UbiLang.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_SecurityDesign.md`, `README_ArchVerifyDesign.md`, `README_VerifyDesign.md`, and `README_UsageDesign.md` when the active story changes those design surfaces. `README_DetailVerifyDesign.md` is owned here; `README_ArchDesign.md`, `README_UbiLang.md`, and `README_ArchVerifyDesign.md` are architecture-owned and are only consumed, declared, or deferred here; `README_VerifyDesign.md` is the routing index.
 - `readme_spec_templates`: matching templates under `slashCommands/templates/`, such as `README_UbiLangTemplate.md`, `README_DetailDesignTemplate.md`, `README_DetailVerifyDesignTemplate.md`, `README_ErrorDesignTemplate.md`, `README_ResourceDesignTemplate.md`, `README_StateDesignTemplate.md`, `README_PerfDesignTemplate.md`, `README_CompatDesignTemplate.md`, `README_DiagnosisDesignTemplate.md`, `README_SecurityDesignTemplate.md`, `README_ArchVerifyDesignTemplate.md`, `README_VerifyDesignTemplate.md`, `README_UsageDesignLiteCliTemplate.md`, and `README_UsageDesignMicroServiceTemplate.md`.
@@ -77,7 +81,7 @@ Expected result — two passes:
 - `README_DetailVerifyDesign.md` carries the Behavior Inventory (`discovery_ledger`), test-level routing, CaTDD category x Agile quadrant coverage, submodule strategy, and the promotion table for `SysTesting`/`UserTesting` obligations.
 - First-time README SPEC docs should be based on the corresponding `slashCommands/templates/README_*Template.md` file.
 - A lightweight implementation plan inside the relevant README SPEC docs, covering technical context, structure decisions, constraints, and verification strategy for the active story.
-- Detailed design notes tied to the active user story in team-shared `.catdd/spec/doingUS/` work state or team-shared project-root README SPEC docs.
+- Detailed design notes tied to the active user story in team-shared `<metaspec_root>/doingUS/` work state or team-shared project-root README SPEC docs.
 - Acceptance criteria that can be converted into CaTDD US/AC/TC skeletons, plus test-point discovery evidence for the scope reviewed.
 - Explicit assumptions, constraints, and unresolved questions.
 

@@ -1,5 +1,9 @@
 # SPEC_implProductCodes
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Implement the minimum product code for the active story after selected unit tests provide valid RED evidence.
@@ -23,7 +27,7 @@ Implementing against a reviewed RED test:
 
 ```text
 /SPEC_implProductCodes
-doing_user_story: .catdd/spec/doingUS/20260904-multi-gateway-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-multi-gateway-UserStory.md
 failing_tests: test_payment_gateway_funcValidTypical.ts TC-001 (RED: module not found)
 focused_validation: node --test services/payment/SysTests/test_payment_gateway_funcValidTypical.ts
 max_correction_attempts: 3
@@ -42,7 +46,7 @@ A `ROUTE` variant: if TC-002 had failed because the design never defined the err
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `failing_tests`: selected tests and current RED output.
 - `acceptance_and_test_scope`: targeted acceptance-criterion and test-case IDs.
 - `production_files`: product code files to create or update.

@@ -80,8 +80,8 @@ Both modes are SpecCoding: the difference is who issues the `SPEC_doXYZ` command
 
 - Flow-level `execution_mode` (`manualMode | autonomousMode`) governs the overarching SpecCoding lifecycle across story transitions.
 - Command-level `analysis_mode` (`BRAINSTORM | AUTONOMOUS`) operates locally within `SPEC_analyzeIssue` and `SPEC_analyzeFeature` under `manualMode`.
-  - In `BRAINSTORM` mode (default), the assistant discusses requirements interactively with the developer step by step, and **MUST** record a structured `## Chat History` (`chatHistory`) section inside the archived `.catdd/spec/analyzedNews/` file capturing the clarification turns, candidate options compared, developer answers, and `BRAINSTORM` decisions.
-  - In `AUTONOMOUS` mode, the assistant executes the composed SKILL analysis pipeline in one shot to draft `todoUS` without interrupting on every step, appends the autonomous prompt/reasoning trace under `## Chat History` in `.catdd/spec/analyzedNews/`, and records assumptions and questions while marking the story NOT ready if blocking questions remain.
+  - In `BRAINSTORM` mode (default), the assistant discusses requirements interactively with the developer step by step, and **MUST** record a structured `## Chat History` (`chatHistory`) section inside the archived `.catdd/metaspec/analyzedNews/` file capturing the clarification turns, candidate options compared, developer answers, and `BRAINSTORM` decisions.
+  - In `AUTONOMOUS` mode, the assistant executes the composed SKILL analysis pipeline in one shot to draft `todoUS` without interrupting on every step, appends the autonomous prompt/reasoning trace under `## Chat History` in `.catdd/metaspec/analyzedNews/`, and records assumptions and questions while marking the story NOT ready if blocking questions remain.
 - Using `analysis_mode: AUTONOMOUS` inside an analysis command does NOT switch the flow to `autonomousMode`; the story lifecycle remains in interactive `manualMode`.
 
 ### The ONE-MORE-THING Universal Stop Rule
@@ -108,7 +108,7 @@ A headless run also halts when it would need a discipline switch: VibeCoding req
 - `VibeCoding` is intent-driven: the developer states intent in natural language and the agent generates, with no `SPEC_doXYZ` sequencing. It is a deliberate, `manualMode`-only excursion entered through [SPEC_whatsWrong](../commands/Px-SpecFlow/SPEC_whatsWrong.md) from any active post-open and pre-close point.
 - Because VibeCoding needs a human intent source, a headless `autonomousMode` run can never enter it: the Flow halts and the developer chooses `ASK`, abort, or the switch.
 - Escalation ladder: bounded rework inside the failing gate -> `ONE-MORE-THING` halt when the problem can be stated as a question -> `SPEC_whatsWrong` when it cannot yet be stated as a question.
-- While VibeCoding runs, the Flow is frozen by artifact class. Frozen: `.catdd/spec/**` except `WorkingProcessLog.md`, `README_UserStories.md`, `projectContext.md`, and the paired `*-UserStory-Tasks.md`; the active story keeps its current step. Allowed but unadopted: product code, tests, and design docs. Local always: `.catdd/spec/WorkingProcessLog.md`.
+- While VibeCoding runs, the Flow is frozen by artifact class. Frozen: `.catdd/metaspec/**` except `WorkingProcessLog.md`, `README_UserStories.md`, `projectContext.md`, and the paired `*-UserStory-Tasks.md`; the active story keeps its current step. Allowed but unadopted: product code, tests, and design docs. Local always: `.catdd/metaspec/WorkingProcessLog.md`.
 - `ONE-MORE-THING` remains binding inside VibeCoding; the switch never suspends the universal stop rule.
 - Exploratory edits are allowed but stay `unadopted` until a `SPEC_*` step re-adopts them, and no story-span commit covers an excursion.
 - Exit sequence: reconcile each finding into its owning command, run [HARNESS_evolveHarness](../commands/Px-HarnessKits/HARNESS_evolveHarness.md) with `evolution_mode=auto` to keep reusable tactics, then resume SpecCoding with any `SPEC_doXYZ`, including `SPEC_whatsNextTask`.
@@ -134,7 +134,7 @@ Canonical definitions of `PASS`, `REVISE`, `BLOCKED`, and `ASK` live in [README_
 Not every artifact carries a dedicated gate, and the flow names the owner so the absence is a decision rather than a gap:
 
 - The paired `*-UserStory-Tasks.md` artifact is owned by `SPEC_makePlan` at authoring time, updated and refined across phase transitions, rework loops, or drift checkpoints by `SPEC_updateMadePlan`, verified at close by `SPEC_closeUserStory` (`plan_drift` when a checked task has no gate evidence or the commit plan disagrees with the commits taken), and diagnosed by `SPEC_whatsWrong`.
-- `.catdd/spec/projectContext.md` is gated internally by the Lossless Compaction Gate in `SPEC_updateProjectContext` and externally by `HARNESS_diagnoseProject`'s consistency bucket.
+- `.catdd/metaspec/projectContext.md` is gated internally by the Lossless Compaction Gate in `SPEC_updateProjectContext` and externally by `HARNESS_diagnoseProject`'s consistency bucket.
 - The project-root README SPEC doc set is covered by `HARNESS_diagnoseProject` drift for the whole set, and by the architecture or detail-design gate for the documents those gates own.
 - `P3 Addons / Demo-Example` has no design or review gate by intent: it is a learning surface. `TEST_convertDemoToTypical` converts demo material into `P0 Functional / Typical` work, and a P3 skeleton is authored as an explicit learning artifact that never substitutes for P0/P1/P2 coverage.
 
@@ -158,10 +158,10 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 
 | Refinement | WHY | HOW in `Px SpecFlow` |
 | --- | --- | --- |
-| Govern work with constitution-level project context. | Spec Kit starts with project principles so later spec, plan, and task decisions do not drift. | Treat `.catdd/spec/projectContext.md` as the shared constitution-like guardrail. `SPEC_initProjectContext` and `SPEC_updateProjectContext` should record stable principles, constraints, quality gates, and team conventions before story work continues. |
-| Analyze work into independently testable story slices. | Spec Kit's spec template asks for prioritized user stories plus an independent test, which makes MVP scope and user value explicit. | `SPEC_analyzeIssue` and `SPEC_analyzeFeature` should produce `.catdd/spec/todoUS/` stories that include actor, value, priority, independent-test intent, acceptance scenarios, edge cases, risks, and open questions instead of only a loose summary. `SPEC_importUserStory` is a direct queue for already structured US/AC input and writes `.catdd/spec/todoUS/` without analysis. Analysis should move issue/feature raw input from `.catdd/spec/pendingNews/` to `.catdd/spec/analyzedNews/` and append a mandatory `## Chat History` (`chatHistory`) section recording the `BRAINSTORM` dialogue or `AUTONOMOUS` reasoning trace so traceability and analysis rationale are preserved without leaving analyzed work in the pending inbox. |
+| Govern work with constitution-level project context. | Spec Kit starts with project principles so later spec, plan, and task decisions do not drift. | Treat `.catdd/metaspec/projectContext.md` as the shared constitution-like guardrail. `SPEC_initProjectContext` and `SPEC_updateProjectContext` should record stable principles, constraints, quality gates, and team conventions before story work continues. |
+| Analyze work into independently testable story slices. | Spec Kit's spec template asks for prioritized user stories plus an independent test, which makes MVP scope and user value explicit. | `SPEC_analyzeIssue` and `SPEC_analyzeFeature` should produce `.catdd/metaspec/todoUS/` stories that include actor, value, priority, independent-test intent, acceptance scenarios, edge cases, risks, and open questions instead of only a loose summary. `SPEC_importUserStory` is a direct queue for already structured US/AC input and writes `.catdd/metaspec/todoUS/` without analysis. Analysis should move issue/feature raw input from `.catdd/metaspec/pendingNews/` to `.catdd/metaspec/analyzedNews/` and append a mandatory `## Chat History` (`chatHistory`) section recording the `BRAINSTORM` dialogue or `AUTONOMOUS` reasoning trace so traceability and analysis rationale are preserved without leaving analyzed work in the pending inbox. |
 | Clear developer and CodeAgent story intent before design. | A story can look complete while the developer and CodeAgent still infer different scope, non-goals, or success evidence. Clearing both sides before design prevents expensive architecture and detail-design drift. | Use `SPEC_clearStoryIntent` after `SPEC_openUserStory` when the active story still needs scope alignment. Record a `Mutual Intent Contract` in the active story before planning starts. The contract states developer intent, CodeAgent intent, in-scope work, out-of-scope work, success signal, assumptions, and open questions. If intent is not aligned, ask or revise the active story before `SPEC_makePlan` begins. |
-| Separate `WHAT`/`WHY` from `HOW` with a lightweight plan step. | Spec Kit keeps product intent in `spec.md` and delays technical choices to `plan.md`, reducing premature design decisions. | Keep user-story intent in the story artifact, then use `SPEC_makePlan` to create a paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact that expresses next work as Markdown checkbox tasks and decides whether the active story is intent-clearing, design-oriented, or implementation-oriented, and use `SPEC_updateMadePlan` at later phase transitions or drift checkpoints to synchronize `[ ]`/`[x]` status and expand coarse phases into detailed design or US/AC/TC execution slices. For design-oriented work, distinguish initial architecture/detail design (`SPEC_take*Design`) from follow-up design revision (`SPEC_update*Design`). Detailed technical choices still land in project-root `README*` SPEC docs when later commands require them. |
+| Separate `WHAT`/`WHY` from `HOW` with a lightweight plan step. | Spec Kit keeps product intent in `spec.md` and delays technical choices to `plan.md`, reducing premature design decisions. | Keep user-story intent in the story artifact, then use `SPEC_makePlan` to create a paired `.catdd/metaspec/doingUS/*-UserStory-Tasks.md` artifact that expresses next work as Markdown checkbox tasks and decides whether the active story is intent-clearing, design-oriented, or implementation-oriented, and use `SPEC_updateMadePlan` at later phase transitions or drift checkpoints to synchronize `[ ]`/`[x]` status and expand coarse phases into detailed design or US/AC/TC execution slices. For design-oriented work, distinguish initial architecture/detail design (`SPEC_take*Design`) from follow-up design revision (`SPEC_update*Design`). Detailed technical choices still land in project-root `README*` SPEC docs when later commands require them. |
 | Run a clarify/analyze/checklist gate before implementation. | Spec Kit surfaces ambiguity, inconsistency, and missing coverage before coding so rework happens early. | Use `SPEC_reviewArchDesign` after architecture design and `SPEC_reviewDetailDesign` after detail design. Route failed architecture reviews to `SPEC_updateArchDesign`; route failed detail reviews to `SPEC_updateDetailDesign` instead of skipping ahead. |
 | Make execution slices explicit, ordered, and parallel-aware. | Spec Kit's tasks template turns plans into visible tasks with dependencies, parallel markers, and validation checkpoints. | Before `SPEC_implTests` or `SPEC_implProductCodes`, break the active story into explicit US/AC/TC slices and validation checkpoints in the doing story, verification design, paired `*-UserStory-Tasks.md` (via `SPEC_updateMadePlan`), and test files. Preserve P0-first order, but mark independent work that can run in parallel. |
 
@@ -179,25 +179,25 @@ Use this list first when explaining or adopting `Px SpecFlow` refinements from G
 
 ## Artifacts
 
-- `.catdd/spec/projectContext.md`: project facts, constraints, conventions, and current operating context.
-- `.catdd/spec/pendingNews/YYYYMMDD-*.md`: imported issues or feature requests waiting for analysis.
-- `.catdd/spec/analyzedNews/YYYYMMDD-*.md`: raw issue or feature inputs already analyzed and preserved as source trace, including normalized analyzed metadata and a mandatory `## Chat History` (`chatHistory`) section recording the `BRAINSTORM` dialogue or `AUTONOMOUS` analysis trace.
-- `.catdd/spec/todoUS/YYYYMMDD-UserStory.md`: analyzed user stories and directly imported structured user stories waiting to be opened (carrying the Stage 1 EPIC-mapped `## Story Readiness Snapshot` from `SpecTodoUserStoryTemplate.md`).
-- `.catdd/spec/doingUS/YYYYMMDD-UserStory.md`: active user stories under design, test, implementation, or review.
-- `.catdd/spec/doingUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`: team-shared task artifact paired with the active story (seeded from `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md`), recording the Stage 2 10-dimension `## EPIC Specification Sufficiency` ledger (`E1..E3`, `P1..P2`, `I1..I3`, `C1..C2`), an append-only chronological `## Trajectory` table (`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`), and the forward-looking `[ ]`/`[x]` `## Task Checklist` and rationale.
-- `.catdd/spec/suspendUS/YYYYMMDD-UserStory.md`: suspended active user stories preserved with a durable resume reference, such as a git branch or worktree, when the work is paused instead of continued in place.
-- `.catdd/spec/suspendUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`: suspended task artifact preserved beside the suspended story when the story was planned through `SPEC_makePlan`.
+- `.catdd/metaspec/projectContext.md`: project facts, constraints, conventions, and current operating context.
+- `.catdd/metaspec/pendingNews/YYYYMMDD-*.md`: imported issues or feature requests waiting for analysis.
+- `.catdd/metaspec/analyzedNews/YYYYMMDD-*.md`: raw issue or feature inputs already analyzed and preserved as source trace, including normalized analyzed metadata and a mandatory `## Chat History` (`chatHistory`) section recording the `BRAINSTORM` dialogue or `AUTONOMOUS` analysis trace.
+- `.catdd/metaspec/todoUS/YYYYMMDD-UserStory.md`: analyzed user stories and directly imported structured user stories waiting to be opened (carrying the Stage 1 EPIC-mapped `## Story Readiness Snapshot` from `SpecTodoUserStoryTemplate.md`).
+- `.catdd/metaspec/doingUS/YYYYMMDD-UserStory.md`: active user stories under design, test, implementation, or review.
+- `.catdd/metaspec/doingUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`: team-shared task artifact paired with the active story (seeded from `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md`), recording the Stage 2 10-dimension `## EPIC Specification Sufficiency` ledger (`E1..E3`, `P1..P2`, `I1..I3`, `C1..C2`), an append-only chronological `## Trajectory` table (`# | Date | Command / Gate | Verdict / Evidence / Commit | Plan Delta -> Next Command`), and the forward-looking `[ ]`/`[x]` `## Task Checklist` and rationale.
+- `.catdd/metaspec/suspendUS/YYYYMMDD-UserStory.md`: suspended active user stories preserved with a durable resume reference, such as a git branch or worktree, when the work is paused instead of continued in place.
+- `.catdd/metaspec/suspendUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`: suspended task artifact preserved beside the suspended story when the story was planned through `SPEC_makePlan`.
 - `Mutual Intent Contract`: a section inside the active doing story that records developer intent, CodeAgent intent, scope, non-goals, success signal, assumptions, and open questions before design begins.
-- `.catdd/spec/abortUS/YYYYMMDD-UserStory.md`: aborted active user stories preserved for later analysis, re-import, or next-round improvement planning.
-- `.catdd/spec/abortUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`: aborted task artifact preserved beside the aborted story when the story was planned through `SPEC_makePlan`.
-- `.catdd/spec/doneUS/YYYYMMDD-UserStory.md`: completed user stories after review, commit, and CI.
-- `.catdd/spec/doneUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`: completed task artifact preserved beside the closed story for later diagnosis.
+- `.catdd/metaspec/abortUS/YYYYMMDD-UserStory.md`: aborted active user stories preserved for later analysis, re-import, or next-round improvement planning.
+- `.catdd/metaspec/abortUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`: aborted task artifact preserved beside the aborted story when the story was planned through `SPEC_makePlan`.
+- `.catdd/metaspec/doneUS/YYYYMMDD-UserStory.md`: completed user stories after review, commit, and CI.
+- `.catdd/metaspec/doneUS/YYYYMMDD-<StorySlug>-UserStory-Tasks.md`: completed task artifact preserved beside the closed story for later diagnosis.
 - `<module-or-submodule>/README_UserStory.md`: canonical formalized requirement source for that module scope.
 - `<module-or-submodule>/README_UserGuide.md`: paired usage context for the same module scope.
 - `<module-or-submodule>/README_ArchDesign.md` and `<module-or-submodule>/README_DetailDesign.md`: design artifacts derived from and traceable to the module `README_UserStory.md` IDs.
 - `README_UserStories.md`: mandatory project-level story ledger containing TODO and DONE story state plus acceptance-criteria trace summaries.
 - `README*.md`: project-root SPEC docs created as needed for overview, architecture, stories, guide, detail design, and verification design.
-- `.catdd/spec/WorkingProcessLog.md`: optional trace log for decisions, command transitions, and unresolved questions.
+- `.catdd/metaspec/WorkingProcessLog.md`: optional trace log for decisions, command transitions, and unresolved questions.
 - `AGENTS.md` and `AGENTS.override.md` (root and nested): the repository files that tell a code agent how to work here. `SPEC_initProjectContext` records them, and `SPEC_updateProjectContext` keeps their CaTDD-owned region in step with project context. The installer-generated adapters (`.github/instructions/catdd.instructions.md`, `.clinerules/catdd.md`, `.continue/rules/catdd.md`, `.antigravityrules/catdd.md`) and generated trees such as `.agents/skills/` and `.codex/prompts/` are rewritten wholesale on refresh and stay out of scope.
 
 ## Project-Root README SPEC Docs
@@ -211,7 +211,7 @@ These document module-context architecture plus consuming-system context, along 
 | File | Purpose |
 | --- | --- |
 | `README_ArchDesign.md` | Module-context architecture, consuming-system context, module decomposition, dependencies, data flow, and key trade-offs. |
-| `README_UbiLang.md` | Canonical project and bounded-context ubiquitous language dictionary (`EPIC I2.1`) and controlled normative vocabulary (`MUST`, `MUST NOT`, `SHOULD`, `MAY`, `EPIC E1.4`); referenced from `.catdd/spec/projectContext.md` as `REFERENCE` memory without duplicating glossary tables. |
+| `README_UbiLang.md` | Canonical project and bounded-context ubiquitous language dictionary (`EPIC I2.1`) and controlled normative vocabulary (`MUST`, `MUST NOT`, `SHOULD`, `MAY`, `EPIC E1.4`); referenced from `.catdd/metaspec/projectContext.md` as `REFERENCE` memory without duplicating glossary tables. |
 | `README_UsageDesign.md` | Public boundaries, CLI/API contracts, argument parsing rules, and run examples. |
 | `README_ErrorDesign.md` | Fault-tolerance architecture, fail-safe states, watchdogs, and global error taxonomies. |
 | `README_ResourceDesign.md` | Finite resource allocations, memory/CPU/power budgets, DMA, and watchdogs. |
@@ -246,7 +246,7 @@ Identity and definition ownership: the project registry binds Story ID, StoryIdA
 
 Use matching templates from `slashCommands/templates/` when creating a README SPEC doc for the first time.
 
-- `SpecTodoUserStoryTemplate.md` — reusable template for `.catdd/spec/todoUS/*-UserStory.md` artifacts, composed from `.github/skills/` requirements-analysis SKILLs.
+- `SpecTodoUserStoryTemplate.md` — reusable template for `.catdd/metaspec/todoUS/*-UserStory.md` artifacts, composed from `.github/skills/` requirements-analysis SKILLs.
   - `SPEC_analyzeFeature` and `SPEC_analyzeIssue` use a full 9-step SKILL pipeline and produce output following this template.
   - `SPEC_analyzeAbortedUserStory` uses this template for output format but follows a **selective re-analysis** pipeline (audit → diagnose → preserve → reject → selectively correct) since the input is already a structured user story.
 For embedded software and digital video/audio domain work, use `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, and `README_SecurityDesign.md` when hardware faults, finite resources, hardware state, real-time behavior, compatibility matrices, buffering, media pipeline timing, A/V sync constraints, hardware protection, or field-debug evidence matter.
@@ -255,32 +255,44 @@ For embedded software and digital video/audio domain work, use `README_ErrorDesi
 
 SpecCoding separates team knowledge from personal work-in-progress state.
 
-SpecFlow lifecycle state lives under `.catdd/spec/`. Shared `README*` SPEC docs live in the target project root.
+SpecFlow lifecycle state lives under `.catdd/metaspec/`. Shared `README*` SPEC docs live in the target project root.
+
+### Workspace Selection
+
+The active lifecycle workspace MUST be declared in the selected root's `projectContext.md`:
+
+```text
+metaspec_root: .catdd/metaspec
+```
+
+Supported declarations are `.catdd/metaspec` (canonical), `.agents/metaspec` (agent-owned alternate), and `.catdd/spec` (legacy). Every command resolves the workspace using [Metaspec Workspace Resolution](../MetaspecWorkspaceResolution.md) before reading or writing artifacts. Multiple populated workspaces are configuration drift and MUST be reconciled with [HARNESS_migrateMetaspec](../commands/Px-HarnessKits/HARNESS_migrateMetaspec.md) rather than merged during normal command execution.
 
 | Artifact | Scope | Git policy |
 | --- | --- | --- |
-| `.catdd/spec/projectContext.md` | Team-shared | Commit stable project context so teammates and CodeAgents use the same facts. |
-| `.catdd/spec/pendingNews/` | Team-shared | Commit imported work items that should be visible to the team. |
-| `.catdd/spec/analyzedNews/` | Team-shared | Commit raw imported issues or features after analysis so `pendingNews/` stays only for waiting input. |
-| `.catdd/spec/todoUS/` | Team-shared | Commit analyzed user stories and directly imported structured user stories that are ready to be picked up. |
-| `.catdd/spec/doingUS/` | Team-shared | Commit active user stories so in-progress work can move across machines and stay visible to teammates. |
-| `.catdd/spec/doingUS/*-UserStory-Tasks.md` | Team-shared | Commit the active task artifact paired with the opened user story so the next SPEC steps stay explicit, checkable, and diagnosable. |
-| `.catdd/spec/suspendUS/` | Team-shared | Commit suspended active stories together with a durable resume reference when work is paused instead of continued in place. |
-| `.catdd/spec/suspendUS/*-UserStory-Tasks.md` | Team-shared | Commit the suspended task artifact beside the suspended story so the next resume step stays explicit and traceable. |
-| `.catdd/spec/abortUS/` | Team-shared | Commit aborted active stories when the current scope or assumptions are no longer safe to continue in place. |
-| `.catdd/spec/abortUS/*-UserStory-Tasks.md` | Team-shared | Commit the aborted task artifact beside the aborted story for later analysis or next-round improvement planning. |
-| `.catdd/spec/doneUS/` | Team-shared | Commit completed story records after review, verification, and close. |
-| `.catdd/spec/doneUS/*-UserStory-Tasks.md` | Team-shared | Commit the completed task artifact beside the closed user story for later diagnosis. |
+| `.catdd/metaspec/projectContext.md` | Team-shared | Commit stable project context so teammates and CodeAgents use the same facts. |
+| `.catdd/metaspec/pendingNews/` | Team-shared | Commit imported work items that should be visible to the team. |
+| `.catdd/metaspec/analyzedNews/` | Team-shared | Commit raw imported issues or features after analysis so `pendingNews/` stays only for waiting input. |
+| `.catdd/metaspec/todoUS/` | Team-shared | Commit analyzed user stories and directly imported structured user stories that are ready to be picked up. |
+| `.catdd/metaspec/doingUS/` | Team-shared | Commit active user stories so in-progress work can move across machines and stay visible to teammates. |
+| `.catdd/metaspec/doingUS/*-UserStory-Tasks.md` | Team-shared | Commit the active task artifact paired with the opened user story so the next SPEC steps stay explicit, checkable, and diagnosable. |
+| `.catdd/metaspec/suspendUS/` | Team-shared | Commit suspended active stories together with a durable resume reference when work is paused instead of continued in place. |
+| `.catdd/metaspec/suspendUS/*-UserStory-Tasks.md` | Team-shared | Commit the suspended task artifact beside the suspended story so the next resume step stays explicit and traceable. |
+| `.catdd/metaspec/abortUS/` | Team-shared | Commit aborted active stories when the current scope or assumptions are no longer safe to continue in place. |
+| `.catdd/metaspec/abortUS/*-UserStory-Tasks.md` | Team-shared | Commit the aborted task artifact beside the aborted story for later analysis or next-round improvement planning. |
+| `.catdd/metaspec/doneUS/` | Team-shared | Commit completed story records after review, verification, and close. |
+| `.catdd/metaspec/doneUS/*-UserStory-Tasks.md` | Team-shared | Commit the completed task artifact beside the closed user story for later diagnosis. |
 | `README_UserStories.md` | Team-shared | Commit as the project-level source of truth for TODO/DONE story state and AC traceability status. |
 | `README*.md` | Team-shared | Commit project-root SPEC docs such as README, architecture design, user stories, user guide, detail design, error design, resource design, state design, performance design, compatibility design, diagnosis design, and verify design as needed. |
-| `slashCommands/templates/SpecTodoUserStoryTemplate.md` | Team-shared | Commit reusable per-story template for `.catdd/spec/todoUS/*-UserStory.md`. |
-| `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md` | Team-shared | Commit reusable per-story task and `## Trajectory` template for `.catdd/spec/doingUS/*-UserStory-Tasks.md`. |
-| `.catdd/spec/WorkingProcessLog.md` | Local work state | Gitignore personal command traces, temporary decisions, and unresolved local notes. |
+| `slashCommands/templates/SpecTodoUserStoryTemplate.md` | Team-shared | Commit reusable per-story template for `.catdd/metaspec/todoUS/*-UserStory.md`. |
+| `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md` | Team-shared | Commit reusable per-story task and `## Trajectory` template for `.catdd/metaspec/doingUS/*-UserStory-Tasks.md`. |
+| `.catdd/metaspec/WorkingProcessLog.md` | Local work state | Gitignore personal command traces, temporary decisions, and unresolved local notes. |
 | `AGENTS.md` / `AGENTS.override.md` (root and nested) | Team-shared | Commit the file. It is the one agent surface the installer patches in place: the region between the `CaTDD Codex instructions` markers is regenerable and CaTDD-owned, and every other line is project-owned and never rewritten. Installer-generated adapters such as `.clinerules/catdd.md` are rewritten wholesale and are not tracked here. |
 
 Recommended target-project `.gitignore` rules:
 
 ```gitignore
+/.catdd/metaspec/WorkingProcessLog.md
+/.agents/metaspec/WorkingProcessLog.md
 /.catdd/spec/WorkingProcessLog.md
 ```
 
@@ -318,20 +330,20 @@ SPEC_commitPreStoryWorks                SPEC_commitStepWorks   at planned step b
 
 ```mermaid
 flowchart LR
-    Init["SPEC_initProjectContext"] --> Context[".catdd/spec/projectContext.md"]
+    Init["SPEC_initProjectContext"] --> Context[".catdd/metaspec/projectContext.md"]
     UpdateContext["SPEC_updateProjectContext"] --> Context
     Context --> ImportIssue["SPEC_importIssue"]
     Context --> ImportFeature["SPEC_importFeature"]
     Context --> ImportUserStory["SPEC_importUserStory"]
 
-    ImportIssue --> Pending[".catdd/spec/pendingNews/*.md"]
+    ImportIssue --> Pending[".catdd/metaspec/pendingNews/*.md"]
     ImportFeature --> Pending
     ImportUserStory --> Todo
     Pending --> AnalyzeIssue["SPEC_analyzeIssue"]
     Pending --> AnalyzeFeature["SPEC_analyzeFeature"]
-    AnalyzeIssue --> Todo[".catdd/spec/todoUS/*-UserStory.md"]
+    AnalyzeIssue --> Todo[".catdd/metaspec/todoUS/*-UserStory.md"]
     AnalyzeFeature --> Todo
-    AnalyzeIssue --> Analyzed[".catdd/spec/analyzedNews/*.md"]
+    AnalyzeIssue --> Analyzed[".catdd/metaspec/analyzedNews/*.md"]
     AnalyzeFeature --> Analyzed
 
     Todo --> PreStoryCommit["SPEC_commitPreStoryWorks"]
@@ -346,13 +358,13 @@ This diagram covers post-open planning, requirement-oriented updates, and design
 
 ```mermaid
 flowchart TB
-    Open["SPEC_openUserStory"] --> Doing[".catdd/spec/doingUS/*-UserStory.md"]
+    Open["SPEC_openUserStory"] --> Doing[".catdd/metaspec/doingUS/*-UserStory.md"]
     Doing --> ClearIntent["SPEC_clearStoryIntent"]
     Doing --> Plan["SPEC_makePlan"]
     ClearIntent --> QualityIntent{"intent aligned?"}
     QualityIntent -- "NO" --> ClearIntent
     QualityIntent -- "YES" --> Plan
-    Plan --> Tasks[".catdd/spec/doingUS/*-UserStory-Tasks.md"]
+    Plan --> Tasks[".catdd/metaspec/doingUS/*-UserStory-Tasks.md"]
     Plan --> PlanChoice{"work orientation?"}
     PlanChoice -- "intent unclear" --> ClearIntent
     PlanChoice -- "requirement-oriented" --> UpdateStory["SPEC_updateUserStory"]
@@ -363,12 +375,12 @@ flowchart TB
     ReqQuality -- "YES" --> ReqTail{"after requirement update?"}
     ReqTail -- "requirement-oriented only" --> CommitReq["SPEC_commitStoryWorks"]
     CommitReq --> CloseReq["SPEC_closeUserStory"]
-    CloseReq --> DoneReq[".catdd/spec/doneUS/*-UserStory.md"]
+    CloseReq --> DoneReq[".catdd/metaspec/doneUS/*-UserStory.md"]
     ReqTail -- "design-oriented next" --> DesignChoice
     ReqTail -. "sync [x] & expand design tasks" .-> UpdatePlan["SPEC_updateMadePlan"]
     UpdatePlan --> Tasks
     Doing -. "may suspend from any active step" .-> Suspend["SPEC_suspendUserStory"]
-    Suspend --> SuspendUS[".catdd/spec/suspendUS/*-UserStory.md"]
+    Suspend --> SuspendUS[".catdd/metaspec/suspendUS/*-UserStory.md"]
     SuspendUS -. "resume later with durable work reference" .-> Resume["SPEC_resumeUserStory"]
     Resume --> Doing
     PlanChoice -- "design-oriented" --> DesignChoice{"design state?"}
@@ -392,10 +404,10 @@ flowchart TB
     UpdateDetail --> ReviewDetail
     TailChoice -- "design-oriented only" --> CommitDesign["SPEC_commitStoryWorks"]
     CommitDesign --> CloseDesign["SPEC_closeUserStory"]
-    CloseDesign --> DoneDesign[".catdd/spec/doneUS/*-UserStory.md"]
+    CloseDesign --> DoneDesign[".catdd/metaspec/doneUS/*-UserStory.md"]
     TailChoice -- "implementation follows" --> DesignReady["handoff to Part 2.b"]
     DesignReady -. "sync [x] & expand US/AC/TC slices" .-> UpdatePlan
-    Abort2a --> AbortUS2a[".catdd/spec/abortUS/*-UserStory.md"]
+    Abort2a --> AbortUS2a[".catdd/metaspec/abortUS/*-UserStory.md"]
     AbortUS2a -. "later re-analysis" .-> AnalyzeAbort2a["SPEC_analyzeAbortedUserStory"]
     AbortUS2a -. "new improvement input" .-> ImportIssue2a["SPEC_importIssue"]
 ```
@@ -442,10 +454,10 @@ flowchart TB
     ReviewImplTestsAfterProductCode -. "sync [x]/REVISE & append Trajectory" .-> UpdatePlan2b
     ImplTests -. "step commit at planned boundaries" .-> StepCommit["SPEC_commitStepWorks"]
     ImplCode -. "step commit at planned boundaries" .-> StepCommit
-    Close --> Done[".catdd/spec/doneUS/*-UserStory.md"]
-    Close --> DoneTasks[".catdd/spec/doneUS/*-UserStory-Tasks.md"]
+    Close --> Done[".catdd/metaspec/doneUS/*-UserStory.md"]
+    Close --> DoneTasks[".catdd/metaspec/doneUS/*-UserStory-Tasks.md"]
     Close -. "post-close lifecycle/meta changes" .-> CommitFinalize["SPEC_commitStoryWorks (post_close / span_end)"]
-    Abort2b --> AbortUS2b[".catdd/spec/abortUS/*-UserStory.md"]
+    Abort2b --> AbortUS2b[".catdd/metaspec/abortUS/*-UserStory.md"]
     AbortUS2b -. "span_end commit" .-> CommitFinalize
     AbortUS2b -. "later re-analysis" .-> AnalyzeAbort2b["SPEC_analyzeAbortedUserStory"]
     AbortUS2b -. "new improvement input" .-> ImportIssue2b["SPEC_importIssue"]
@@ -455,16 +467,16 @@ flowchart TB
 
 1. Use [SPEC_initProjectContext](../commands/Px-SpecFlow/SPEC_initProjectContext.md) to create the first project context.
 2. Use [SPEC_updateProjectContext](../commands/Px-SpecFlow/SPEC_updateProjectContext.md) whenever project facts, constraints, or conventions change.
-3. Use [SPEC_importIssue](../commands/Px-SpecFlow/SPEC_importIssue.md) or [SPEC_importFeature](../commands/Px-SpecFlow/SPEC_importFeature.md) to import issue or feature input into `.catdd/spec/pendingNews/`.
-4. Use [SPEC_importUserStory](../commands/Px-SpecFlow/SPEC_importUserStory.md) to queue existing structured user-story input directly into `.catdd/spec/todoUS/`; prefer each module or submodule `README_UserStory.md` paired with `README_UserGuide.md` as the source.
-5. Use [SPEC_analyzeIssue](../commands/Px-SpecFlow/SPEC_analyzeIssue.md) or [SPEC_analyzeFeature](../commands/Px-SpecFlow/SPEC_analyzeFeature.md) to convert pending issue/feature input into a user story in `.catdd/spec/todoUS/` and move the raw input to `.catdd/spec/analyzedNews/` with a mandatory `## Chat History` (`chatHistory`) section recording how the issue or feature was analyzed (especially the developer/CodeAgent dialogue and decisions in `BRAINSTORM` mode).
+3. Use [SPEC_importIssue](../commands/Px-SpecFlow/SPEC_importIssue.md) or [SPEC_importFeature](../commands/Px-SpecFlow/SPEC_importFeature.md) to import issue or feature input into `.catdd/metaspec/pendingNews/`.
+4. Use [SPEC_importUserStory](../commands/Px-SpecFlow/SPEC_importUserStory.md) to queue existing structured user-story input directly into `.catdd/metaspec/todoUS/`; prefer each module or submodule `README_UserStory.md` paired with `README_UserGuide.md` as the source.
+5. Use [SPEC_analyzeIssue](../commands/Px-SpecFlow/SPEC_analyzeIssue.md) or [SPEC_analyzeFeature](../commands/Px-SpecFlow/SPEC_analyzeFeature.md) to convert pending issue/feature input into a user story in `.catdd/metaspec/todoUS/` and move the raw input to `.catdd/metaspec/analyzedNews/` with a mandatory `## Chat History` (`chatHistory`) section recording how the issue or feature was analyzed (especially the developer/CodeAgent dialogue and decisions in `BRAINSTORM` mode).
    - These analysis commands use a composed pipeline of `.github/skills/` requirements-analysis SKILLs: `write-user-story`, `build-feature-tree`, `elicit-requirements-models`, `extract-business-rules`, `facilitate-example-mapping`, `validate-requirements-criteria`, `prioritize-requirements`.
    - Output follows `SpecTodoUserStoryTemplate.md`.
    - Use `SPEC_analyzeAbortedUserStory.md` for re-analyzing an aborted story that needs selective correction rather than full-scope analysis (recording `### Re-Analysis Chat History` under `## Abort Evidence` and appending to the linked `analyzedNews/` `## Chat History` when present).
    - After analysis queues the story, use [SPEC_commitPreStoryWorks](../commands/Px-SpecFlow/SPEC_commitPreStoryWorks.md) to commit the pre-story intake/analysis span before opening; when the intake ran headless with `analysis_mode: AUTONOMOUS`, this checkpoint is the default, and the pre-story span otherwise stays in `manualMode`.
-6. Use [SPEC_openUserStory](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/spec/doingUS/`, and ask whether a dedicated story branch should be created/switched before planning.
+6. Use [SPEC_openUserStory](../commands/Px-SpecFlow/SPEC_openUserStory.md) to move a selected user story into `.catdd/metaspec/doingUS/`, and ask whether a dedicated story branch should be created/switched before planning.
 7. Optionally use [SPEC_clearStoryIntent](../commands/Px-SpecFlow/SPEC_clearStoryIntent.md) when developer intent and CodeAgent intent still need to be aligned before planning.
-8. Use [SPEC_makePlan](../commands/Px-SpecFlow/SPEC_makePlan.md) to create the paired `.catdd/spec/doingUS/*-UserStory-Tasks.md` artifact (from `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md`), initialize its append-only `## Trajectory` table, express the work as Markdown checkbox tasks, distinguish intent-clearing, requirement-oriented, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next required `SPEC_*` step for the opened story. Use [SPEC_updateMadePlan](../commands/Px-SpecFlow/SPEC_updateMadePlan.md) after all five `SPEC_review*` gates (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`), rework loops, story resumption, or `plan_drift` checkpoints to append a chronological row to `## Trajectory`, synchronize `[ ]`/`[x]` task status, and progressively expand coarse phases into detailed design or US/AC/TC execution slices and step-commit boundaries.
+8. Use [SPEC_makePlan](../commands/Px-SpecFlow/SPEC_makePlan.md) to create the paired `.catdd/metaspec/doingUS/*-UserStory-Tasks.md` artifact (from `slashCommands/templates/SpecDoingUserStoryTasksTemplate.md`), initialize its append-only `## Trajectory` table, express the work as Markdown checkbox tasks, distinguish intent-clearing, requirement-oriented, design-oriented, and implementation-oriented work, distinguish initial design from follow-up design revision, and choose the next required `SPEC_*` step for the opened story. Use [SPEC_updateMadePlan](../commands/Px-SpecFlow/SPEC_updateMadePlan.md) after all five `SPEC_review*` gates (`SPEC_reviewUserStory`, `SPEC_reviewArchDesign`, `SPEC_reviewDetailDesign`, `SPEC_reviewImplTests`, `SPEC_reviewProductCodes`), rework loops, story resumption, or `plan_drift` checkpoints to append a chronological row to `## Trajectory`, synchronize `[ ]`/`[x]` task status, and progressively expand coarse phases into detailed design or US/AC/TC execution slices and step-commit boundaries.
 9. Use [SPEC_updateUserStory](../commands/Px-SpecFlow/SPEC_updateUserStory.md) when the plan is requirement-oriented and project-level `README_UserStories.md` plus paired `README_UserGuide.md` (and module surfaces when used) must be updated before downstream work.
 10. Use [SPEC_reviewUserStory](../commands/Px-SpecFlow/SPEC_reviewUserStory.md) after requirement updates, and then either close requirement-oriented-only work (`SPEC_commitStoryWorks`, then `SPEC_closeUserStory`, then optional merge step such as `SPEC_mergeWorks` when branch integration is still required, followed by an immediate `post_close` checkpoint of `SPEC_commitStoryWorks` if close generated file changes) or transfer to design-oriented next steps. `SPEC_reviewUserStory` must verify that `README_UserStories.md` TODO/DONE and AC trace status are consistent with active lifecycle artifacts.
 11. Use [SPEC_whatsNextTask](../commands/Px-SpecFlow/SPEC_whatsNextTask.md) whenever you need a single next-step recommendation from current state.
@@ -519,7 +531,7 @@ A no-progress stop must preserve the latest observed evidence, restore the worki
 - Test-implementation defect -> `SPEC_implTests`; test-design/coverage defect -> `SPEC_designTests`; product-code defect -> bounded local correction in `SPEC_implProductCodes` or design routing per its Conflict Guard.
 - Exhausted no-progress bound -> `ASK` for a decision, [SPEC_whatsWrong](../commands/Px-SpecFlow/SPEC_whatsWrong.md) in `manualMode` when the problem is still unproven, or `SPEC_abortUserStory` when the problem changed the story intent or invalidated its assumptions.
 
-Failure classification follows ASR-R3: retry only transient failures; route permanent failures deterministically. If no-progress persists after the bound, do not continue patching in place: a `manualMode` session may escalate to `SPEC_whatsWrong` while the problem is still unproven, an `autonomousMode` run must halt and hand the choice to the developer because it cannot switch discipline, and `SPEC_abortUserStory` into `.catdd/spec/abortUS/` is required when the problem changed the story intent or invalidated its assumptions.
+Failure classification follows ASR-R3: retry only transient failures; route permanent failures deterministically. If no-progress persists after the bound, do not continue patching in place: a `manualMode` session may escalate to `SPEC_whatsWrong` while the problem is still unproven, an `autonomousMode` run must halt and hand the choice to the developer because it cannot switch discipline, and `SPEC_abortUserStory` into `.catdd/metaspec/abortUS/` is required when the problem changed the story intent or invalidated its assumptions.
 
 ## Conflict Guard
 
@@ -540,7 +552,7 @@ Failure classification follows ASR-R3: retry only transient failures; route perm
 - Do not run `SPEC_closeUserStory` until required branch integration/merge work is complete.
 - The `pre_close` checkpoint of `SPEC_commitStoryWorks` covers implementation and design artifacts for the story span; close-generated lifecycle/meta changes require the immediate `post_close` checkpoint of `SPEC_commitStoryWorks` before closure is complete.
 - Do not treat `SPEC_commitWorks` as a span commit: it never advances lifecycle state, and a story span is never closed by a general commit.
-- Do not run `SPEC_commitPreStoryWorks` after the story moved to `.catdd/spec/doingUS/`, and do not run `SPEC_commitStepWorks` at a boundary `SPEC_makePlan` did not mark committable.
+- Do not run `SPEC_commitPreStoryWorks` after the story moved to `.catdd/metaspec/doingUS/`, and do not run `SPEC_commitStepWorks` at a boundary `SPEC_makePlan` did not mark committable.
 - `SPEC_patchOriginalCaTDD` is downstream-to-upstream only (installed project to original CaTDD) and must not be used as an upstream-to-installed sync command.
 - If product intent is unclear, keep the user story open and ask the developer instead of inventing requirements.
 - Every review -> update -> review rework cycle is bounded: the update command carries a rework bound (`max_rework_attempts`, default `3`) and must stop on no-progress or exhausted attempts and route or abort.

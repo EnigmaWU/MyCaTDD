@@ -1,5 +1,9 @@
 # SPEC_updateUserStory
 
+## Metaspec Workspace
+
+Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Resolution](../../MetaspecWorkspaceResolution.md). Use `projectContext.md` to declare or retrieve `metaspec_root`; supported roots are `.catdd/metaspec`, `.agents/metaspec`, and legacy `.catdd/spec`.
+
 ## Purpose
 
 Update requirement-oriented story artifacts for an active story by revising project-root `README_UserStories.md` (TODO/DONE + AC trace/status ledger) and paired `README_UserGuide.md` before design or implementation proceeds. Module or submodule `README_UserStory.md` may also be updated when the project uses module-local requirement docs.
@@ -23,7 +27,7 @@ Acting on a review finding that AC-04 was untestable:
 
 ```text
 /SPEC_updateUserStory
-doing_user_story: .catdd/spec/doingUS/20260904-payment-retry-UserStory.md
+doing_user_story: <metaspec_root>/doingUS/20260904-payment-retry-UserStory.md
 project_user_stories_doc: README_UserStories.md
 update_scope: AC-04
 ```
@@ -37,7 +41,7 @@ Expected result:
 
 ## Inputs
 
-- `doing_user_story`: active story under `.catdd/spec/doingUS/`.
+- `doing_user_story`: active story under `<metaspec_root>/doingUS/`.
 - `project_user_stories_doc`: project-root `README_UserStories.md` to update as the authoritative TODO/DONE and AC ledger.
 - `project_ubilang_doc`: optional project-root `README_UbiLang.md` (seeded from `slashCommands/templates/README_UbiLangTemplate.md`) to synchronize newly introduced or revised domain terms (`EPIC I2.1`) and verify controlled modal wording (`MUST`, `MUST NOT`, `SHOULD`, `MAY`, `EPIC E1.4`).
 - `module_user_story_doc`: optional module or submodule `README_UserStory.md` to update when module-local requirement docs are used.
