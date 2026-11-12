@@ -20,9 +20,15 @@ This file is the team-shared, always-loaded working memory for SpecCoding in thi
 | Layer | Path | Responsibility |
 | --- | --- | --- |
 | Method source | `methodPrompts/` | Owns CaTDD semantics, category meanings, US/AC/TC skeleton rules, status discipline, and implementation templates. |
-| Command flow | `slashCommands/` | Owns portable `UT_*` and `SPEC_*` command contracts, flow order, input/output handoff, and tool-neutral execution rules. |
-| Native CLI execution | `codeAgents/utCodeAgentCLI/` | Owns the CaTDD-native CLI execution layer and its goal/input/target/behavior contract. It has a runnable US-USER-01 invocation-validation slice; end-to-end planning and execution remain unimplemented. See the module `README.md` for the current boundary. |
+| Command flow | `slashCommands/` | Owns portable `TEST_*`, `SPEC_*`, and `HARNESS_*` command contracts, flow order, input/output handoff, and tool-neutral execution rules. |
+| Native CLI execution | `codeAgents/specCodeAgentCLI/` | Owns the active unified CaTDD-native CLI orchestration layer over `Px-SpecFlow`, `methodPrompts/`, and `slashCommands/` (`autonomousMode` by default inside the `implementation-oriented` boundary; `manualMode` step-by-step control otherwise). Legacy `codeAgents/utCodeAgentCLI/` is **deprecated** and retained only as historical/regression reference. |
 | Skill packaging | `agentSkills/` | Owns reusable CodeAgent skill packages that reference the canonical method and command assets. |
+
+## Agent Instruction Surfaces
+
+| Surface | Scope | Provenance & Region Ownership | Operating Conventions Owned |
+| --- | --- | --- | --- |
+| `AGENTS.md` | Repository root | `catdd-created` (`CaTDD Codex instructions` managed region only; no hand-written region outside markers) | Projects `.catdd/` sources, metaspec workspace resolution, explicit SpecFlow intake, and `ONE-MORE-THING` ask-if-unsure behavior for Codex/agent sessions. |
 
 ## Installed Project Surface
 
@@ -42,9 +48,10 @@ After self-install with `scripts/installCaTDD.sh --targetDir "$PWD" --targetCode
 - Treat native wrappers as thin, regenerable adapters over `.catdd/slashCommands/` or `slashCommands/`.
 - Commit `.catdd/spec/projectContext.md`, shared lifecycle artifacts under `.catdd/spec/`, and stable project-root `README*` SPEC docs.
 - Keep local SpecCoding work-state trace gitignored: `.catdd/spec/WorkingProcessLog.md`.
-- `SPEC_*` commands may orchestrate `UT_*` commands, but must not replace P0/P1/P2 category rules.
+- `SPEC_*` commands may orchestrate `TEST_*` commands, but must not replace P0/P1/P2 category rules.
 - `SPEC_clearStoryIntent` is the early mutual-intent gate after `SPEC_openUserStory`; it records developer intent and CodeAgent intent before design begins. It does not replace the final `SPEC_reviewUserStory` readiness gate after detail design.
-- `utCodeAgentCLI` uses the subproject context at [projectContext-utCodeAgentCLI.md](projectContext-utCodeAgentCLI.md). Its reviewed architecture-only policy overrides generic DetailDesign routing for that subproject.
+- `specCodeAgentCLI` is the single active CLI layer under `codeAgents/` and has no dependency on `utCodeAgentCLI`; LLM/backend provider settings live in its config file rather than CLI flags.
+- `utCodeAgentCLI` is deprecated (historical context at [projectContext-utCodeAgentCLI](projectContext-utCodeAgentCLI.md)); keep its existing files intact only for repository mirror/contract regression tests.
 
 ## Constitutional Invariants (K)
 
@@ -60,11 +67,11 @@ Non-negotiable security, safety, and governance guardrails governing all CodeAge
 The boundary treated as one **Unit** for CaTDD unit tests in this project:
 
 - Default scope: `module-interface` — one cohesive public boundary surfaced by a module or submodule.
-- Rationale: MyCaTDD is organized around self-contained layers (`methodPrompts/`, `slashCommands/`, `codeAgents/utCodeAgentCLI/`, `agentSkills/`); each module interface is large enough to define meaningful behavior and small enough to design tests against without leaking unrelated internals.
+- Rationale: MyCaTDD is organized around self-contained layers (`methodPrompts/`, `slashCommands/`, `codeAgents/specCodeAgentCLI/`, `agentSkills/`); each module interface is large enough to define meaningful behavior and small enough to design tests against without leaking unrelated internals.
 - Example SUT names:
   - `SUT: methodPrompts` for the CaTDD method layer.
   - `SUT: slashCommands` for the portable command flow layer.
-  - `SUT: utCodeAgentCLI` for the CLI module.
+  - `SUT: specCodeAgentCLI` for the unified CaTDD-native CLI module.
 - A single file such as a `*.H` header, a single class, or a single slash command may become the unit when the module interface is too coarse; record the exception in the story-level verification design.
 - Update this convention through `SPEC_updateProjectContext` if the project later decides on a different default granularity.
 
@@ -73,12 +80,10 @@ The boundary treated as one **Unit** for CaTDD unit tests in this project:
 | Knowledge | Canonical source | Retrieval rule |
 | --- | --- | --- |
 | CaTDD semantics, category meanings, skeleton rules, and status discipline | [methodPrompts](../../methodPrompts/README.md) and `methodPrompts/` | Read before interpreting or changing the method; project context must not redefine it. |
-| SpecFlow lifecycle, command ownership, and artifact policy | [Px-SpecFlow](../../slashCommands/flows/Px-SpecFlow.md) and `slashCommands/commands/` | Read for `SPEC_*` orchestration and `UT_*` handoff rules. |
-| `utCodeAgentCLI` requirements and open product questions | [README_UserStory](../../codeAgents/utCodeAgentCLI/README_UserStory.md) | Read when planning or reviewing CLI behavior. |
-| `utCodeAgentCLI` public argument and behavior contract | [README_UsageDesign](../../codeAgents/utCodeAgentCLI/README_UsageDesign.md) | Read before changing CLI inputs, aliases, diagnostics, or invocation behavior. |
-| `utCodeAgentCLI` subproject constraints and routing | [projectContext-utCodeAgentCLI.md](projectContext-utCodeAgentCLI.md) | Read before planning or changing the subproject. |
-| `utCodeAgentCLI` architecture, implementation constraints, runtime decisions, and rationale | [README_ArchDesign](../../codeAgents/utCodeAgentCLI/README_ArchDesign.md) and [ADRs](../../codeAgents/utCodeAgentCLI/ADRs/) | This is the sole module design route; executable detail remains in source/tests. |
-| Verification design and traceability | [README_VerifyDesign.md](../../README_VerifyDesign.md) routing index; `README_ArchVerifyDesign.md` for `SysTesting`/`UserTesting` and `README_DetailVerifyDesign.md` for `UnitTesting` once the templates instantiate them; module `README_*VerifyDesign.md` files | Read the project or module scope relevant to the active story. Live status belongs in `README_VerifyStatusTraces.md` when the project keeps one, otherwise in story TASKs or test-file comments. |
+| SpecFlow lifecycle, command ownership, and artifact policy | [Px-SpecFlow](../../slashCommands/flows/Px-SpecFlow.md) and `slashCommands/commands/` | Read for `SPEC_*` orchestration and `TEST_*` handoff rules. |
+| `specCodeAgentCLI` overview, execution-mode boundary, and CLI usage contract | [specCodeAgentCLI README](../../codeAgents/specCodeAgentCLI/README.md) and `codeAgents/specCodeAgentCLI/README_UsageDesign.md` | Read before changing unified CLI inputs, modes, output contracts, exit codes, or lifecycle orchestration. |
+| Deprecated `utCodeAgentCLI` historical artifacts and policy | [projectContext-utCodeAgentCLI](projectContext-utCodeAgentCLI.md) and [utCodeAgentCLI README](../../codeAgents/utCodeAgentCLI/README.md) | Historical reference only; do not add new features or active stories to `utCodeAgentCLI`. |
+| Verification design and traceability | [README_VerifyDesign](../../README_VerifyDesign.md) routing index; `README_ArchVerifyDesign.md` for `SysTesting`/`UserTesting` and `README_DetailVerifyDesign.md` for `UnitTesting` once instantiated; module `README_*VerifyDesign.md` files | Read the project or module scope relevant to the active story. Live status belongs in `README_VerifyStatusTraces.md` when present, otherwise in story TASKs or test-file comments. |
 
 ## Validation Commands
 
