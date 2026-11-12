@@ -1,6 +1,6 @@
 # Define Unified specCodeAgentCLI CLI UsageDesign Contract
 
-> **Story ID:** US-specDeveloper-defineSpecCodeAgentCliUsageContract | **State:** doing | **Priority:** P0
+> **Story ID:** US-specDeveloper-defineSpecCodeAgentCliUsageContract | **State:** done | **Priority:** P0
 > **StoryIdAlias:** US-261111.220010
 > **CreatedAt:** 2026-11-11T22:00:10+08:00
 > **Source:** `.catdd/spec/analyzedNews/20261111-design-specCodeAgentCLI-usage-contract-Feature.md`
@@ -11,17 +11,20 @@
 
 ## Active Work Status
 
-- **Status:** OPEN (`doing`).
+- **Status:** CLOSED (`done`).
 - **Opened by:** `/SPEC_openUserStory` on `2026-11-11` (`execution_mode: manualMode`).
-- **Lifecycle transition:** `.catdd/spec/todoUS/` -> `.catdd/spec/doingUS/`.
-- **Branch:** `feat/specCodeAgentCLI-requirements-and-usage-design` (selected by developer).
-- **Pre-story commit:** deferred by developer (`No git commits yet`; manual review requested before committing).
+- **Closed by:** `/SPEC_closeUserStory` on `2026-11-13` (`execution_mode: manualMode`).
+- **Lifecycle transition:** `.catdd/spec/todoUS/` -> `.catdd/spec/doingUS/` -> `.catdd/spec/doneUS/`.
+- **Branch:** `feat/specCodeAgentCLI-requirements-and-usage-design` (branch integration to `main` pending via `/SPEC_mergeWorks` after `post_close` commit).
+- **Pre-story commit:** deferred by developer (`No git commits yet`; captured in `pre_close` story-span commit `be10406`).
 - **Planned by:** `/SPEC_makePlan` on `2026-11-11` (`work_orientation: design-oriented` for the UsageDesign CLI contract slice).
 - **Requirement & ledger review (`/SPEC_reviewUserStory`):** `PASS` on `2026-11-11` (`README_UserStories.md` synchronized; transfer to UsageDesign authoring).
 - **UsageDesign artifact (`/SPEC_takeDetailDesign` scoped to CLI UsageDesign):** `codeAgents/specCodeAgentCLI/README_UsageDesign.md` authored from `slashCommands/templates/README_UsageDesignLiteCliTemplate.md`, reviewed `PASS` on `2026-11-11`, and step-committed via `/SPEC_commitStepWorks` (`step_commit_ref = 5862e55`) on `2026-11-13`.
-- **Pre-close story-span commit (`/SPEC_commitStoryWorks`):** committed on `2026-11-13` (`commit_checkpoint = pre_close`, after `US-SPECFLOW-REPAIR-01` `span_end` commit `2178251`).
-- **Paired tasks:** `.catdd/spec/doingUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory-Tasks.md`.
-- **Next recommended command:** `/SPEC_closeUserStory`.
+- **Pre-close story-span commit (`/SPEC_commitStoryWorks`):** `commit_ref = be10406` committed on `2026-11-13` (`commit_checkpoint = pre_close`, after `US-SPECFLOW-REPAIR-01` `span_end` commit `2178251`).
+- **Post-close story-span commit (`/SPEC_commitStoryWorks`):** committed on `2026-11-13` (`commit_checkpoint = post_close`; `close_commit_required` satisfied).
+- **Verification / CI summary (`ci_summary`):** Repository contract validation suite `PASS` (`test_codeAgents_structure`, `check_readme_mirror`, `test_documentation_contract`, `test_metaspec_workspace`, `test_specflow_execution_modes`, `test_readme_templates`, `test_specflow_artifact_policy`, `test_methodPrompts_consistency`, Markdown lint, and `git diff --check`).
+- **Paired tasks:** `.catdd/spec/doneUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory-Tasks.md`.
+- **Next recommended command:** `/SPEC_mergeWorks`.
 
 ---
 

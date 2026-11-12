@@ -9,7 +9,7 @@ Paired with [20261111-design-specCodeAgentCLI-usage-contract-UserStory](20261111
 - **ID:** `US-specDeveloper-defineSpecCodeAgentCliUsageContract`
 - **StoryIdAlias:** `US-261111.220010`
 - **CreatedAt:** `2026-11-11T22:00:10+08:00`
-- **State:** `doing / OPEN`
+- **State:** `done / CLOSED`
 - **Priority:** `P0 Functional` / `Typical`
 - **Branch:** `feat/specCodeAgentCLI-requirements-and-usage-design`
 - **Execution Mode:** `manualMode`
@@ -22,7 +22,7 @@ Paired with [20261111-design-specCodeAgentCLI-usage-contract-UserStory](20261111
 
 | Prerequisite | Status | Evidence or gap |
 | --- | --- | --- |
-| Lifecycle state | Satisfied | Active story in `.catdd/spec/doingUS/` on branch `feat/specCodeAgentCLI-requirements-and-usage-design`; obsolete `US-SPECFLOW-REPAIR-01` cleanly moved to `.catdd/spec/abortUS/`. |
+| Lifecycle state | Satisfied | Closed in `.catdd/spec/doneUS/` on branch `feat/specCodeAgentCLI-requirements-and-usage-design`; obsolete `US-SPECFLOW-REPAIR-01` cleanly archived in `.catdd/spec/abortUS/` (`2178251`). |
 | Intent alignment | Satisfied | `Mutual Intent Contract` recorded as `CLEARED` from 2 interactive `BRAINSTORM` rounds. |
 | Requirement surfaces | Reviewed PASS | `README_UserStories.md` registered with `US-261111.220010` and 9 `CaTDD-AC` rows (`SPEC_reviewUserStory = PASS`). |
 | Architecture design | Deferred (approved) | High-level `README_ArchDesign.md` explicitly deferred in `Story Completion Conditions`; layer boundary documented in `codeAgents/specCodeAgentCLI/README.md` and `projectContext.md`. |
@@ -52,7 +52,7 @@ Paired with [20261111-design-specCodeAgentCLI-usage-contract-UserStory](20261111
 | **Interpretable (I)** | `I2 Consistent` | `satisfied` | Aligned with `Px-SpecFlow.md`, `README_UbiLang.md`, `projectContext.md`, and `README_UserStories.md` | `none` |
 | **Interpretable (I)** | `I3 Comprehensible` | `satisfied` | 5W1H, OOPSI model, Mermaid flow, copy-exec bash examples, and CaTDD verification handoff included | `none` |
 | **Compartmentalized (C)** | `C1 Scope Discipline` | `satisfied` | Strictly scoped to English `README_UsageDesign.md` + ledger; ZH mirror, ArchDesign, and runtime code explicitly deferred | `none` |
-| **Compartmentalized (C)** | `C2 Implementation Planning` | `satisfied` | Design-only closure path, CaTDD verification handoff table for future implementation story, and verified `step` + `pre_close` commit plan | `SPEC_closeUserStory` |
+| **Compartmentalized (C)** | `C2 Implementation Planning` | `satisfied` | Design-only closure and `post_close` commit completed (`5862e55` + `be10406` + `post_close`); branch integration next | `SPEC_mergeWorks` |
 
 ### Cross-Artifact Semantic-Delta Matrix (`EPIC I2.3 / Transformation Preservation`)
 
@@ -80,7 +80,9 @@ Paired with [20261111-design-specCodeAgentCLI-usage-contract-UserStory](20261111
 | 4 | `2026-11-11` | `SPEC_reviewUserStory` + `SPEC_updateMadePlan` | `review_verdict = PASS`; verified `US-261111.220010` identity, 9 `From/Given/When/Then/Counter` CaTDD-ACs, normative `MUST`/`MUST NOT` modals, and `README_UserStories.md` sync | Checked `[x]` requirement review; transferred to UsageDesign authoring -> `SPEC_takeDetailDesign` |
 | 5 | `2026-11-11` | `SPEC_takeDetailDesign` + `SPEC_reviewDetailDesign` + `SPEC_updateMadePlan` | `review_verdict = PASS`; authored `codeAgents/specCodeAgentCLI/README_UsageDesign.md` from `README_UsageDesignLiteCliTemplate.md`, updated `scripts/test_codeAgents_structure.sh`, and verified all repository validation scripts pass; commit held per developer choice | Ready for developer review & commit approval -> `SPEC_commitStoryWorks` (`pre_close`) |
 | 6 | `2026-11-13` | `SPEC_commitStepWorks` | Committed step `SPEC_takeDetailDesign` (`step_commit_ref = 5862e55`; 4 step-scoped files: `codeAgents/specCodeAgentCLI/README_UsageDesign.md`, `codeAgents/specCodeAgentCLI/README.md`, `codeAgents/README.md`, `scripts/test_codeAgents_structure.sh`); metaspec/ledger files kept unstaged for story-span commits | Recorded `step_commit_ref = 5862e55`; no remaining planned step commits -> `SPEC_commitStoryWorks` (`span_end` + `pre_close`) |
-| 7 | `2026-11-13` | `SPEC_commitStoryWorks` (`span_end` + `pre_close`) | Committed `US-SPECFLOW-REPAIR-01` `span_end` (`span_commit_ref = 2178251`) and `US-261111.220010` `pre_close` story-span artifacts (`projectContext.md`, `README_UserStories.md`, `analyzedNews/`, `doingUS/`; referencing `step_commit_refs = 5862e55`) | Checked `[x]` `SPEC_commitStoryWorks` (`pre_close`) -> `SPEC_closeUserStory` |
+| 7 | `2026-11-13` | `SPEC_commitStoryWorks` (`span_end` + `pre_close`) | Committed `US-SPECFLOW-REPAIR-01` `span_end` (`span_commit_ref = 2178251`) and `US-261111.220010` `pre_close` story-span artifacts (`commit_ref = be10406`; `projectContext.md`, `README_UserStories.md`, `analyzedNews/`, `doingUS/`; referencing `step_commit_refs = 5862e55`) | Checked `[x]` `SPEC_commitStoryWorks` (`pre_close`) -> `SPEC_closeUserStory` |
+| 8 | `2026-11-13` | `SPEC_closeUserStory` | Close gates `PASS` (`commit_ref = be10406`, `step_commit_ref = 5862e55`, validation scripts `PASS`, zero `plan_drift`); moved story & tasks to `.catdd/spec/doneUS/`, normalized `doingUS/` links, and updated `README_UserStories.md` to `DONE` | Checked `[x]` `SPEC_closeUserStory`; `close_commit_required = yes` -> `SPEC_commitStoryWorks` (`post_close`) then `SPEC_mergeWorks` |
+| 9 | `2026-11-13` | `SPEC_commitStoryWorks` (`post_close`) | Finalized `post_close` commit covering `doingUS -> doneUS` moves, link normalizations, and `README_UserStories.md` `DONE` state (referencing `5862e55` and `be10406`) | Checked `[x]` `SPEC_commitStoryWorks` (`post_close`); story span closed -> `SPEC_mergeWorks` |
 
 ---
 
@@ -109,18 +111,18 @@ Paired with [20261111-design-specCodeAgentCLI-usage-contract-UserStory](20261111
 
 ### Phase 4: Commit, Closure, and Merge
 
-- [x] **SPEC_commitStoryWorks** (`span_end` for `US-SPECFLOW-REPAIR-01` = `2178251`; `pre_close` for `US-261111.220010`) — Committed remaining story-span lifecycle, ledger, and project-context artifacts.
-- [ ] **SPEC_closeUserStory** — Move story and tasks to `.catdd/spec/doneUS/` and update `README_UserStories.md` to `DONE` after `pre_close` commit.
-- [ ] **SPEC_commitStoryWorks** (`post_close`) — Commit close-generated lifecycle/ledger updates.
+- [x] **SPEC_commitStepWorks** (`SPEC_takeDetailDesign` UsageDesign surface) — Committed step-scoped files (`step_commit_ref = 5862e55`).
+- [x] **SPEC_commitStoryWorks** (`span_end` for `US-SPECFLOW-REPAIR-01` = `2178251`; `pre_close` for `US-261111.220010` = `be10406`) — Committed remaining story-span lifecycle, ledger, and project-context artifacts.
+- [x] **SPEC_commitStoryWorks** (`post_close`) — Committed close-generated lifecycle/ledger updates (`close_commit_required` satisfied).
 - [ ] **SPEC_mergeWorks** — Merge `feat/specCodeAgentCLI-requirements-and-usage-design` into `main` when ready.
 
 ---
 
 ## Commit Plan
 
-- **Pre-Story Commit (`pre_story_commit`):** `no` (developer selected `No git commits yet` during intake; pre-story artifacts captured in `pre_close` story-span commit)
-- **Single Story Squash (`single_story_commit`):** `no` (preserved step commit `5862e55` alongside `SPEC_commitStoryWorks` checkpoints)
-- **Story-Span Closing Command:** `SPEC_commitStoryWorks` (`span_end = 2178251` for aborted `US-SPECFLOW-REPAIR-01`; `pre_close` committed; `post_close` pending after `SPEC_closeUserStory`)
+- **Pre-Story Commit (`pre_story_commit`):** `no` (developer selected `No git commits yet` during intake; pre-story artifacts captured in `pre_close` story-span commit `be10406`)
+- **Single Story Squash (`single_story_commit`):** `no` (preserved step commit `5862e55` alongside `SPEC_commitStoryWorks` checkpoints `be10406` and `post_close`)
+- **Story-Span Closing Command:** `SPEC_commitStoryWorks` (`span_end = 2178251` for aborted `US-SPECFLOW-REPAIR-01`; `pre_close = be10406` and `post_close` committed)
 
 | Step Boundary | Policy (`commit_step`) | Gate Condition | Recorded `commit_ref` / Status |
 | --- | --- | --- | --- |
@@ -133,22 +135,22 @@ Paired with [20261111-design-specCodeAgentCLI-usage-contract-UserStory](20261111
 
 | Candidate | Decision | Rationale |
 | --- | --- | --- |
-| `SPEC_closeUserStory` | Selected | All in-scope UsageDesign and ledger gates are `PASS`, step commit `5862e55` is recorded, and `pre_close` commit provides `commit_ref`. |
-| `SPEC_designTests` | Rejected | This story is a `design-oriented only` UsageDesign slice; executable code/tests are deferred to follow-up stories after ArchDesign/DetailDesign. |
+| `SPEC_mergeWorks` | Selected | Story span is closed and `post_close` changes are committed, while dedicated branch `feat/specCodeAgentCLI-requirements-and-usage-design` is not yet integrated into `main`. |
+| `SPEC_whatsNextTask` | Deferred until after merge | Branch integration takes precedence before selecting the next backlog/follow-up story. |
 
 ## Rejected Next Steps
 
 | Candidate | Reason rejected now |
 | --- | --- |
-| `SPEC_designTests` | Approved `Story Completion Conditions` scope this story to English `README_UsageDesign.md` + `README_UserStories.md` first. |
+| `SPEC_whatsNextTask` | Dedicated branch `feat/specCodeAgentCLI-requirements-and-usage-design` still requires integration into `main` via `SPEC_mergeWorks`. |
 
 ## Selected Next Command
 
-### `/SPEC_closeUserStory`
+### `/SPEC_mergeWorks`
 
-Close `US-specDeveloper-defineSpecCodeAgentCliUsageContract` (`US-261111.220010`) using the `pre_close` `commit_ref` and green repository contract verification summary, then finalize close-generated changes via `/SPEC_commitStoryWorks` (`post_close`).
+Integrate the closed story branch `feat/specCodeAgentCLI-requirements-and-usage-design` into `main` via `/SPEC_mergeWorks`.
 
 ## Blockers and Open Questions
 
-- No blocker prevents `/SPEC_closeUserStory`
-- No specification or design blocker remains. Git commits are intentionally paused per developer preference (`No git commits yet`).
+- No blocker prevents `/SPEC_mergeWorks`
+- No blocker prevents `/SPEC_commitStoryWorks` (`commit_checkpoint = post_close`).

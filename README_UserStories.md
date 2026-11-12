@@ -8,7 +8,7 @@ This file is the project-level ledger for SpecCoding user story lifecycle state 
 
 | Story ID | StoryIdAlias | CreatedAt (UTC+08:00) | Authoritative Story / AC Source | Source IDs / Revision | Parent / Supersession |
 | --- | --- | --- | --- | --- | --- |
-| `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `US-261111.220010` | `2026-11-11T22:00:10+08:00` | `.catdd/spec/doingUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md` | `.catdd/spec/analyzedNews/20261111-design-specCodeAgentCLI-usage-contract-Feature.md` | Supersedes deprecated `utCodeAgentCLI` CLI contract direction |
+| `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `US-261111.220010` | `2026-11-11T22:00:10+08:00` | `.catdd/spec/doneUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md` | `.catdd/spec/analyzedNews/20261111-design-specCodeAgentCLI-usage-contract-Feature.md` | Supersedes deprecated `utCodeAgentCLI` CLI contract direction |
 | `US-SPECFLOW-REPAIR-01` | legacy (pre-alias; created `2026-08-30`, exact time unrecorded) | `2026-08-30` (legacy date-only; alias allocation blocked per identity contract) | `.catdd/spec/abortUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md` | `AC-01..AC-05` in aborted story | Aborted when `utCodeAgentCLI` was deprecated on `2026-11-11` |
 
 ## Legacy Identity Mappings
@@ -21,7 +21,7 @@ None for `specCodeAgentCLI`. Legacy `utCodeAgentCLI` story/AC identities remain 
 
 | Story ID | Title | State | Source | Trace Link |
 | --- | --- | --- | --- | --- |
-| `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | Define unified `specCodeAgentCLI` CLI UsageDesign contract | `doing` | Analyzed feature (`BRAINSTORM`) | [.catdd/spec/doingUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md](.catdd/spec/doingUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md) |
+| None | — | — | — | — |
 
 ### SUSPENDED Stories
 
@@ -33,6 +33,7 @@ None for `specCodeAgentCLI`. Legacy `utCodeAgentCLI` story/AC identities remain 
 
 | Story ID | Title | Closed On | Evidence | Trace Link |
 | --- | --- | --- | --- | --- |
+| `US-specDeveloper-defineSpecCodeAgentCliUsageContract` (`US-261111.220010`) | Define unified `specCodeAgentCLI` CLI UsageDesign contract | `2026-11-13` | `step_commit_ref = 5862e55`, `commit_ref = be10406`, `SPEC_reviewUserStory = PASS`, `SPEC_reviewDetailDesign = PASS`, `scripts/test_codeAgents_structure.sh` `PASS` | [.catdd/spec/doneUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md](.catdd/spec/doneUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md) |
 | Historical `utCodeAgentCLI` & `methodPrompts` / `slashCommands` stories | Closed prior to root ledger initialization | `2026-05-30` .. `2026-06-28` | Archived in `.catdd/spec/doneUS/` | [.catdd/spec/doneUS](.catdd/spec/doneUS) |
 
 ### ABORTED Stories
@@ -44,33 +45,31 @@ None for `specCodeAgentCLI`. Legacy `utCodeAgentCLI` story/AC identities remain 
 ## Active Story
 
 ```text
-US-specDeveloper-defineSpecCodeAgentCliUsageContract (US-261111.220010):
-  As a SpecFlow developer and CLI operator,
-  I want a unified bash-style CLI usage contract for specCodeAgentCLI across autonomousMode and manualMode,
-  So that I can drive Px-SpecFlow headlessly from a --goal to terminal completion or ONE-MORE-THING halt, or step through explicit commands interactively without depending on deprecated utCodeAgentCLI.
+None (doingUS/ is empty; last closed story: US-specDeveloper-defineSpecCodeAgentCliUsageContract / US-261111.220010).
 ```
 
 ## CaTDD-AC Ledger
 
 | AC ID | Story | From | Given | When | Then | Counter | Status | Verification Trace |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `US-261111.220010-AC-Typical-01` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-01`, `RULE-01`, `RULE-02` | Valid metaspec workspace and `implementation-oriented` story | `specCodeAgentCLI --goal "<xyz>"` runs in default `autonomousMode` | `MUST` plan via `SPEC_makePlan`, auto-advance deterministic Part 2.b `SPEC_*`/`TEST_*` steps, and exit at terminal `END` (`0`/`6`/`7`) without `utCodeAgentCLI` | Non-implementation story `MUST` halt (`10`) rather than auto-advance | `reviewed` | UsageDesign `USAGE-SC-001`, `USAGE-SC-002`; executable TCs deferred to implementation story |
-| `US-261111.220010-AC-Typical-02` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-02`, `RULE-01`, `RULE-03` | Valid metaspec workspace in `manualMode` | `specCodeAgentCLI --mode manualMode [--command <SLASH_CMD>]` runs | `MUST` run at most one explicit `Px-SpecFlow` step (default `SPEC_whatsNextTask`) and emit next-command choices for the user | `MUST NOT` auto-chain subsequent lifecycle steps in `manualMode` | `reviewed` | UsageDesign `USAGE-SC-003`, `USAGE-SC-004`; executable TCs deferred to implementation story |
-| `US-261111.220010-AC-Typical-03` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-03`, `RULE-04`, `RULE-05` | Valid invocation with `--json` / `--output` and `--config-file` | CLI emits execution report and loads runtime settings | `MUST` emit deterministic schema-versioned JSON, load LLM/backend settings from config file only, and redact secrets (`K-SEC-02`) | `MUST NOT` expose cleartext tokens or accept `--model`/`--backend` CLI flags | `reviewed` | UsageDesign `USAGE-SC-005`; executable TCs deferred to implementation story |
-| `US-261111.220010-AC-Edge-01` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-04`, `CEX-01`, `RULE-02`, `RULE-06` | `autonomousMode` hits non-implementation orientation, `ONE-MORE-THING`, or VibeCoding need | CLI evaluates orientation or step gate | `MUST` halt immediately, record mode handoff to `manualMode`, emit `status: manual_required`, and exit `10` | `implementation-oriented` story with clear evidence continues without halting | `reviewed` | UsageDesign `USAGE-SC-006`, `USAGE-SC-007`; executable TCs deferred to implementation story |
-| `US-261111.220010-AC-Edge-02` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-05`, `RULE-07` | Supported workspace (`.catdd/metaspec`, `.agents/metaspec`, or `.catdd/spec`) with `--dry-run` | CLI resolves workspace and previews plan | `MUST` resolve `metaspec_root` without mutating files or git state and exit `0` | Normal run without `--dry-run` writes lifecycle artifacts | `reviewed` | UsageDesign `USAGE-SC-008`; executable TCs deferred to implementation story |
-| `US-261111.220010-AC-Misuse-01` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `CEX-02`, `RULE-02`, `RULE-04` | Caller omits `--goal` in `autonomousMode`, passes conflicting inputs, passes `--model`/`--backend`, or requests `SPEC_whatsWrong` in `autonomousMode` | CLI validates arguments | `MUST` fail fast with zero writes, print actionable diagnostic to `stderr`, and exit `2` | Valid `--mode manualMode` without `--goal` succeeds via `SPEC_whatsNextTask` | `reviewed` | UsageDesign `USAGE-SC-009`..`USAGE-SC-011`; executable TCs deferred to implementation story |
-| `US-261111.220010-AC-Misuse-02` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `CEX-03`, `RULE-07` | Caller supplies unsupported `--metaspec-root` or path-traversal path (`K-SEC-01`) | CLI validates path boundaries | `MUST` reject before command dispatch, emit diagnostic on `stderr`, and exit `2` | Supported relative `metaspec_root` inside repo root is accepted | `reviewed` | UsageDesign `USAGE-SC-012`; executable TCs deferred to implementation story |
-| `US-261111.220010-AC-Fault-01` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `CEX-04`, `RULE-07` | Multiple populated metaspec roots, missing/invalid `--config-file` or `--inputFile`, or missing `.catdd/` assets | CLI resolves workspace and dependencies | `MUST` stop without merging or guessing, cite remediation (`HARNESS_migrateMetaspec` / `HARNESS_diagnoseInstallation`), and exit `3` | Single valid workspace and readable config/assets proceed | `reviewed` | UsageDesign `USAGE-SC-013`, `USAGE-SC-014`; executable TCs deferred to implementation story |
-| `US-261111.220010-AC-Fault-02` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `CEX-05`, `RULE-08` | Retry/rework budget exhausted (`maxStepRetry = 2`, `maxRunCorrectionLoop = 3`) or external dependency fails | Loop Guard triggers during execution | `MUST` stop bounded loop, preserve clean baseline, emit failure diagnostics, and exit `5` or `6` | Transient single failure recovering within budget proceeds | `reviewed` | UsageDesign `USAGE-SC-015`; executable TCs deferred to implementation story |
+| `US-261111.220010-AC-Typical-01` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-01`, `RULE-01`, `RULE-02` | Valid metaspec workspace and `implementation-oriented` story | `specCodeAgentCLI --goal "<xyz>"` runs in default `autonomousMode` | `MUST` plan via `SPEC_makePlan`, auto-advance deterministic Part 2.b `SPEC_*`/`TEST_*` steps, and exit at terminal `END` (`0`/`6`/`7`) without `utCodeAgentCLI` | Non-implementation story `MUST` halt (`10`) rather than auto-advance | `verified` | UsageDesign `USAGE-SC-001`, `USAGE-SC-002` (`5862e55`), `test_codeAgents_structure.sh` `PASS`; executable TCs deferred to implementation story |
+| `US-261111.220010-AC-Typical-02` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-02`, `RULE-01`, `RULE-03` | Valid metaspec workspace in `manualMode` | `specCodeAgentCLI --mode manualMode [--command <SLASH_CMD>]` runs | `MUST` run at most one explicit `Px-SpecFlow` step (default `SPEC_whatsNextTask`) and emit next-command choices for the user | `MUST NOT` auto-chain subsequent lifecycle steps in `manualMode` | `verified` | UsageDesign `USAGE-SC-003`, `USAGE-SC-004` (`5862e55`), `test_codeAgents_structure.sh` `PASS`; executable TCs deferred to implementation story |
+| `US-261111.220010-AC-Typical-03` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-03`, `RULE-04`, `RULE-05` | Valid invocation with `--json` / `--output` and `--config-file` | CLI emits execution report and loads runtime settings | `MUST` emit deterministic schema-versioned JSON, load LLM/backend settings from config file only, and redact secrets (`K-SEC-02`) | `MUST NOT` expose cleartext tokens or accept `--model`/`--backend` CLI flags | `verified` | UsageDesign `USAGE-SC-005` (`5862e55`), `test_codeAgents_structure.sh` `PASS`; executable TCs deferred to implementation story |
+| `US-261111.220010-AC-Edge-01` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-04`, `CEX-01`, `RULE-02`, `RULE-06` | `autonomousMode` hits non-implementation orientation, `ONE-MORE-THING`, or VibeCoding need | CLI evaluates orientation or step gate | `MUST` halt immediately, record mode handoff to `manualMode`, emit `status: manual_required`, and exit `10` | `implementation-oriented` story with clear evidence continues without halting | `verified` | UsageDesign `USAGE-SC-006`, `USAGE-SC-007` (`5862e55`), `test_codeAgents_structure.sh` `PASS`; executable TCs deferred to implementation story |
+| `US-261111.220010-AC-Edge-02` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `EX-05`, `RULE-07` | Supported workspace (`.catdd/metaspec`, `.agents/metaspec`, or `.catdd/spec`) with `--dry-run` | CLI resolves workspace and previews plan | `MUST` resolve `metaspec_root` without mutating files or git state and exit `0` | Normal run without `--dry-run` writes lifecycle artifacts | `verified` | UsageDesign `USAGE-SC-008` (`5862e55`); executable TCs deferred to implementation story |
+| `US-261111.220010-AC-Misuse-01` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `CEX-02`, `RULE-02`, `RULE-04` | Caller omits `--goal` in `autonomousMode`, passes conflicting inputs, passes `--model`/`--backend`, or requests `SPEC_whatsWrong` in `autonomousMode` | CLI validates arguments | `MUST` fail fast with zero writes, print actionable diagnostic to `stderr`, and exit `2` | Valid `--mode manualMode` without `--goal` succeeds via `SPEC_whatsNextTask` | `verified` | UsageDesign `USAGE-SC-009`..`USAGE-SC-011` (`5862e55`); executable TCs deferred to implementation story |
+| `US-261111.220010-AC-Misuse-02` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `CEX-03`, `RULE-07` | Caller supplies unsupported `--metaspec-root` or path-traversal path (`K-SEC-01`) | CLI validates path boundaries | `MUST` reject before command dispatch, emit diagnostic on `stderr`, and exit `2` | Supported relative `metaspec_root` inside repo root is accepted | `verified` | UsageDesign `USAGE-SC-012` (`5862e55`); executable TCs deferred to implementation story |
+| `US-261111.220010-AC-Fault-01` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `CEX-04`, `RULE-07` | Multiple populated metaspec roots, missing/invalid `--config-file` or `--inputFile`, or missing `.catdd/` assets | CLI resolves workspace and dependencies | `MUST` stop without merging or guessing, cite remediation (`HARNESS_migrateMetaspec` / `HARNESS_diagnoseInstallation`), and exit `3` | Single valid workspace and readable config/assets proceed | `verified` | UsageDesign `USAGE-SC-013`, `USAGE-SC-014` (`5862e55`); executable TCs deferred to implementation story |
+| `US-261111.220010-AC-Fault-02` | `US-specDeveloper-defineSpecCodeAgentCliUsageContract` | `CEX-05`, `RULE-08` | Retry/rework budget exhausted (`maxStepRetry = 2`, `maxRunCorrectionLoop = 3`) or external dependency fails | Loop Guard triggers during execution | `MUST` stop bounded loop, preserve clean baseline, emit failure diagnostics, and exit `5` or `6` | Transient single failure recovering within budget proceeds | `verified` | UsageDesign `USAGE-SC-015` (`5862e55`); executable TCs deferred to implementation story |
 
 ## Lifecycle Links
 
 - Pending inbox: `.catdd/spec/pendingNews/`
 - Analyzed archive: `.catdd/spec/analyzedNews/20261111-design-specCodeAgentCLI-usage-contract-Feature.md`
 - Todo queue: `.catdd/spec/todoUS/`
-- Active story: `.catdd/spec/doingUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md`
-- Active tasks: `.catdd/spec/doingUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory-Tasks.md`
+- Active story: none (`.catdd/spec/doingUS/` empty)
+- Closed story: `.catdd/spec/doneUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md`
+- Closed tasks: `.catdd/spec/doneUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory-Tasks.md`
 - Aborted archive: `.catdd/spec/abortUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md`
 - Done archive: `.catdd/spec/doneUS/`
 

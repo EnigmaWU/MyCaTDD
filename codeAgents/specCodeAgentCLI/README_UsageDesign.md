@@ -2,8 +2,8 @@
 
 This document defines the public bash-style CLI usage contract for `specCodeAgentCLI`, instantiated from [README_UsageDesignLiteCliTemplate](../../slashCommands/templates/README_UsageDesignLiteCliTemplate.md).
 
-- **Active Story:** `US-specDeveloper-defineSpecCodeAgentCliUsageContract` (`US-261111.220010`)
-- **Story Artifact:** [.catdd/spec/doingUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory](../../.catdd/spec/doingUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md)
+- **Source Story:** `US-specDeveloper-defineSpecCodeAgentCliUsageContract` (`US-261111.220010`)
+- **Story Artifact:** [.catdd/spec/doneUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory](../../.catdd/spec/doneUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md)
 - **Project Story Ledger:** [README_UserStories](../../README_UserStories.md)
 - **Implementation Status:** Design contract only (`specCodeAgentCLI` does not yet ship a runnable binary). Deprecated `utCodeAgentCLI` is retained as historical reference only; `specCodeAgentCLI` is the single unified CaTDD-native CLI runner with zero dependency on `utCodeAgentCLI`.
 

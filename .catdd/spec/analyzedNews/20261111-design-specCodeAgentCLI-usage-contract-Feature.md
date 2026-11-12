@@ -12,7 +12,7 @@ Imported by `/SPEC_importFeature` and analyzed by `/SPEC_analyzeFeature` on 2026
 - `analyzed_on`: `2026-11-11`
 - `analysis_mode`: `BRAINSTORM`
 - `execution_mode`: `manualMode`
-- `generated_todo_story`: `.catdd/spec/doingUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md` (moved from `.catdd/spec/todoUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md` via `SPEC_openUserStory`)
+- `generated_todo_story`: `.catdd/spec/doneUS/20261111-design-specCodeAgentCLI-usage-contract-UserStory.md` (moved through `todoUS/ -> doingUS/ -> doneUS/`)
 - `project_story_ledger`: `README_UserStories.md`
 - `story_id`: `US-specDeveloper-defineSpecCodeAgentCliUsageContract`
 - `story_id_alias`: `US-261111.220010`
