@@ -1,6 +1,6 @@
 # User Story: Reconcile utCodeAgentCLI partial closure and lifecycle evidence
 
-> **Story ID:** US-SPECFLOW-REPAIR-01 | **State:** doing | **Priority:** P1
+> **Story ID:** US-SPECFLOW-REPAIR-01 | **State:** aborted | **Priority:** P1
 > **Source:** `.catdd/spec/analyzedNews/20260830-reconcile-utCodeAgentCLI-closure-and-session-contract-Issue.md`
 > **Related Closed Story:** `.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md`
 > **CaTDD Class:** P1 Design
@@ -11,9 +11,10 @@
 
 ## Active Work Status
 
-- Status: OPEN.
+- Status: ABORTED.
 - Opened by `/SPEC_openUserStory` on 2026-08-30.
-- Lifecycle transition: `.catdd/spec/todoUS/` -> `.catdd/spec/doingUS/`.
+- Aborted by `/SPEC_abortUserStory` on 2026-11-11.
+- Lifecycle transition: `.catdd/spec/doingUS/` -> `.catdd/spec/abortUS/`.
 - Branch: `fix/utcodeagentcli-partial-closure-reconciliation`.
 - Planned by `/SPEC_makePlan` on 2026-08-30.
 - Requirement surfaces updated by `/SPEC_updateUserStory` on 2026-08-30; review pending.
@@ -30,11 +31,21 @@
 - Developer architecture decision on 2026-08-30 superseded the DetailDesign route: all `utCodeAgentCLI` DetailDesign files are removed and ArchDesign becomes the sole design authority.
 - Architecture-only policy recorded in `ADR_ArchitectureOnlyDesignPolicy.md`, module subproject context, and both ArchDesign mirrors; architecture review pending.
 - Work orientation: requirement-oriented first, then implementation-oriented validation.
-- Paired tasks: `.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md`.
+- Paired tasks: `.catdd/spec/abortUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md`.
 - Subproject context: [projectContext-utCodeAgentCLI.md](../projectContext-utCodeAgentCLI.md).
 - Architecture decision: [ADR_ArchitectureOnlyDesignPolicy.md](../../../codeAgents/utCodeAgentCLI/ADRs/ADR_ArchitectureOnlyDesignPolicy.md).
 - Design authority: [README_ArchDesign.md](../../../codeAgents/utCodeAgentCLI/README_ArchDesign.md).
-- Next recommended command: `/SPEC_reviewArchDesign`.
+- Next recommended command: `/SPEC_commitStoryWorks` (`commit_checkpoint = span_end`), followed by `specCodeAgentCLI` intake (`followup_intent = undecided` for deprecated `utCodeAgentCLI`).
+
+## Abort Evidence
+
+- **Aborted on:** 2026-11-11 via `/SPEC_abortUserStory` (`execution_mode: manualMode`).
+- **Structured `abort_reason`:**
+  - `primary_gap_type`: `scope-gap`
+  - `problem_summary`: `utCodeAgentCLI` is deprecated and superseded by the unified `specCodeAgentCLI` layer, making dedicated `utCodeAgentCLI` lifecycle-checker work obsolete.
+  - `evidence_refs`: `codeAgents/README.md`, `codeAgents/specCodeAgentCLI/README.md`, `.catdd/spec/projectContext.md`
+  - `unsafe_if_continue`: Continuing in place would invest design, verification, and implementation effort into a deprecated CLI layer instead of establishing the unified `specCodeAgentCLI` contract.
+- **Follow-up intent (`followup_intent`):** `undecided` (historical evidence preserved; active product work moves to `specCodeAgentCLI`).
 
 ## Detail-Design Review Result
 
@@ -382,4 +393,4 @@ mindmap
 
 ## Next Recommended Command
 
-`/SPEC_reviewArchDesign`
+`/SPEC_commitStoryWorks` (`commit_checkpoint = span_end`)

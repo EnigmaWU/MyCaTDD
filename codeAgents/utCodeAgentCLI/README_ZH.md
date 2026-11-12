@@ -1,5 +1,7 @@
 # utCodeAgentCLI
 
+> **状态：已废弃（DEPRECATED，2026-11-11）。** `utCodeAgentCLI` 仅作为历史设计与回归切片保留；当前活跃的统一 CaTDD-native CLI 编排层已收敛至 [`../specCodeAgentCLI/`](../specCodeAgentCLI/)，且不再依赖 `utCodeAgentCLI`。
+
 `utCodeAgentCLI` 代表 CaTDD-native CLI 代码智能体执行层。
 
 本 README 是 CLI agent 层的 WHAT / WHY 入口。关于 user intent 和 acceptance criteria，请阅读 [README_UserStory_ZH.md](README_UserStory_ZH.md)。关于 HOW、WHO、WHEN、WHERE 如何设计或使用这一层，请阅读 [README_UserGuide.md](README_UserGuide.md) 或 [README_UserGuide_ZH.md](README_UserGuide_ZH.md)。
