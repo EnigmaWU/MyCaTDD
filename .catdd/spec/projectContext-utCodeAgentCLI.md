@@ -1,4 +1,6 @@
-# utCodeAgentCLI SpecFlow Subproject Context
+# utCodeAgentCLI SpecFlow Subproject Context (Deprecated)
+
+> **Status: DEPRECATED on 2026-11-11.** `utCodeAgentCLI` is frozen as historical reference and regression artifacts only. Active CaTDD-native CLI work is unified under `codeAgents/specCodeAgentCLI/` with zero dependency on `utCodeAgentCLI`.
 
 This file is the team-shared, durable subproject context for `codeAgents/utCodeAgentCLI/`. It refines the repository-wide rules in `projectContext.md` without duplicating lifecycle snapshots.
 

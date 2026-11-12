@@ -1,5 +1,7 @@
 # utCodeAgentCLI
 
+> **Status: DEPRECATED (2026-11-11).** `utCodeAgentCLI` is retained as a historical reference and regression slice only. Active CaTDD-native CLI orchestration is unified in [`../specCodeAgentCLI/`](../specCodeAgentCLI/) with no dependency on `utCodeAgentCLI`.
+
 `utCodeAgentCLI` represents the CaTDD-native CLI code-agent execution layer.
 
 This README is the WHAT / WHY entry point for the CLI agent layer. For user intent and acceptance criteria, read [README_UserStory.md](README_UserStory.md). For HOW, WHO, WHEN, and WHERE to design or use this layer, read [README_UserGuide.md](README_UserGuide.md) or [README_UserGuide_ZH.md](README_UserGuide_ZH.md).

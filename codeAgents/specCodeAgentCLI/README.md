@@ -8,36 +8,35 @@ This README is the WHAT / WHY entry point for this layer. It intentionally keeps
 
 `specCodeAgentCLI` is the layer responsible for turning a spec-driven workflow into a structured, executable module flow.
 
-It is the repository's SpecCoding-oriented agent concept:
+It is the repository's unified SpecCoding-oriented agent layer:
 
-- It operates from the same upstream CaTDD sources as the rest of the repository.
-- It is aligned to `Px-SpecFlow` and the project-level lifecycle discipline in `.catdd/spec/`.
-- It translates product/story intent into ordered action sequences, validation checkpoints, and traceable outcomes.
+- It operates directly from `methodPrompts` and `slashCommands` with zero runtime or architectural dependency on the deprecated `utCodeAgentCLI`.
+- It is aligned to `Px-SpecFlow` and the project-level lifecycle discipline in the resolved `metaspec_root` (`.catdd/metaspec/` by default, with `.agents/metaspec/` and legacy `.catdd/spec/` supported).
+- It translates product/story intent into ordered action sequences, validation checkpoints, and traceable outcomes across `SPEC_*`, orchestrated `TEST_*`, and status/harness commands.
 - It keeps spec flow, review gates, and result evidence aligned instead of letting them drift into loose documentation or ad hoc execution.
-- It complements `utCodeAgentCLI`, which focuses on unit-level validation and technical execution slices.
 
 At the current repository stage, this directory is documenting the intended layer contract rather than shipping a full runnable implementation. It is a design and planning boundary, not yet a complete product runtime.
 
 ## Why
 
-`specCodeAgentCLI` exists to make the SpecCoding layer first-class instead of treating it as a side effect of unit-level work.
+`specCodeAgentCLI` exists to make the SpecCoding layer first-class as a single unified CLI runner rather than splitting lifecycle orchestration from unit-test execution.
 
 It keeps a clear execution boundary:
 
 - `methodPrompts` owns the method semantics, category meaning, and verification design contract.
-- `slashCommands` owns portable flow commands and lifecycle steps.
-- `utCodeAgentCLI` owns unit-testing-oriented execution slices and low-level validation patterns.
-- `specCodeAgentCLI` owns module-level spec orchestration: sequencing story work, coordinating review/update cycles, and maintaining traceability across the lifecycle flow.
+- `slashCommands` owns portable flow commands (`SPEC_*`, `TEST_*`, `HARNESS_*`) and lifecycle steps.
+- `specCodeAgentCLI` owns unified CLI orchestration: driving `Px-SpecFlow` in `autonomousMode` or `manualMode`, sequencing story and test steps, enforcing review/commit gates, and maintaining traceability across the lifecycle flow.
+- `utCodeAgentCLI` is deprecated and kept only as historical reference; `specCodeAgentCLI` does not delegate to or depend on it.
 
-This split matters because project-level reasoning and unit-level reasoning are not the same thing. A project can have good technical validation while still having weak flow discipline, stale story state, or fuzzy integration between review, implementation, and verification. `specCodeAgentCLI` exists to reduce that gap.
+This split matters because project-level flow discipline and category-level test execution belong in one coherent CaTDD-native runner backed directly by `methodPrompts` and `slashCommands`.
 
 ## CaTDD-native contract
 
-The CLI implementation must be based on the upstream layers:
+The CLI implementation must be based directly on the canonical upstream layers:
 
 - `methodPrompts` provides the language-agnostic CaTDD method contract.
-- `slashCommands` provides the reusable SpecCoding commands and flow steps.
-- `utCodeAgentCLI` provides the execution model and unit-test discipline that spec orchestration can reuse.
+- `slashCommands` provides the reusable `SPEC_*`, `TEST_*`, and `HARNESS_*` commands and flow steps.
+- `specCodeAgentCLI` adds mode-aware (`autonomousMode` vs `manualMode`) CLI execution, plan-driven progression, `ONE-MORE-THING` halt governance, and traceable output contracts.
 
 ## Execution Mode Contract
 
@@ -69,10 +68,11 @@ The layer is expected to contain some or all of the following as the design and 
 
 - Upstream inputs:
   - `methodPrompts` for methodological constraints and category semantics
-  - `slashCommands` for portable command flow and lifecycle checks
-  - `utCodeAgentCLI` where shared validation patterns or runtime conventions are reused
+  - `slashCommands` for portable `SPEC_*`, `TEST_*`, and `HARNESS_*` command contracts and lifecycle checks
 - Separate generic CodeAgent packaging:
   - `agentSkills` helps common CodeAgents use CaTDD patterns, but this layer should not depend on it by default
+- Deprecated sibling reference:
+  - `utCodeAgentCLI` is deprecated; `specCodeAgentCLI` has no runtime or design dependency on it
 - Downstream outputs:
   - structured story execution
   - lifecycle and review evidence
@@ -86,7 +86,8 @@ Keep the documentation split clear:
 | File | Owns |
 | --- | --- |
 | `README.md` / `README_ZH.md` | WHAT this layer is and WHY it exists. |
-| `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW to design or use the SpecCoding layer when it is implemented. |
+| `README_UsageDesign.md` / `README_UsageDesign_ZH.md` | Public bash CLI synopsis, `autonomousMode` vs `manualMode` invocation contract, options, stdout/stderr, exit codes, and scenario traces. |
+| `README_UserGuide.md` / `README_UserGuide_ZH.md` | HOW, WHO, WHEN, and WHERE to design or operate `specCodeAgentCLI`. |
 | `README_UserStory.md` / `README_UserStory_ZH.md` | WHO this layer serves and which module-flow scenarios it should satisfy. |
 | `README_ArchDesign.md` / `README_ArchDesign_ZH.md` | Module architecture, workflow boundaries, and orchestrator responsibilities. |
 | `README_DetailDesign.md` / `README_DetailDesign_ZH.md` | Concrete contracts, state transitions, and execution sequencing decisions. |

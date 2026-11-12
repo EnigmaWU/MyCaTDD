@@ -1,11 +1,11 @@
 # utCodeAgentCLI Verification Design
 
-This document captures module-scoped verification strategy and US/AC/TC traceability for `utCodeAgentCLI`.
+This document captures module-scoped verification strategy and US/AC/TC traceability for `utCodeAgentCLI` (deprecated historical subproject; superseded by unified `specCodeAgentCLI`).
 
 ## Story and Design Inputs
 
-- Active lifecycle-reconciliation story: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md](../../.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md)
-- Active lifecycle-reconciliation TASKs: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md](../../.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md)
+- Aborted lifecycle-reconciliation story: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md](../../.catdd/spec/abortUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md)
+- Aborted lifecycle-reconciliation TASKs: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md](../../.catdd/spec/abortUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md)
 - Partially closed delegation story: [20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md](../../.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-INVENTOR-01-UserStory.md)
 - Partially closed delegation TASKs: [20260607-utCodeAgentCLI-US-INVENTOR-01-TASKs.md](../../.catdd/spec/doneUS/20260607-utCodeAgentCLI-US-INVENTOR-01-TASKs.md)
 - Reviewed requirement: [USs/README_UserStory4INVENTOR-01.md](USs/README_UserStory4INVENTOR-01.md)
@@ -28,14 +28,15 @@ This document captures module-scoped verification strategy and US/AC/TC traceabi
 
 ## Current Lifecycle Status
 
-- Current lifecycle story: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md](../../.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md)
-- Current lifecycle tasks: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md](../../.catdd/spec/doingUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md)
-- Current lifecycle command: `/SPEC_reviewArchDesign`
+- Subproject status: DEPRECATED on 2026-11-11; superseded by unified `specCodeAgentCLI`.
+- Aborted lifecycle story: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md](../../.catdd/spec/abortUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md)
+- Aborted lifecycle tasks: [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md](../../.catdd/spec/abortUS/20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory-Tasks.md)
+- Current lifecycle command: none (`utCodeAgentCLI` deprecated; active CLI development moved to `specCodeAgentCLI`)
 - Executable delegation bodies: 2
 - US-INVENTOR-01 is partially closed: AC-01 / TC-DELEGATE-001 is accepted DONE/GREEN evidence; AC-02 through AC-16 and TC-DELEGATE-002 through TC-DELEGATE-016 remain TODO/PLANNED under [US-INVENTOR-01-FOLLOWUP-01](../../.catdd/spec/todoUS/20260830-utCodeAgentCLI-US-INVENTOR-01-remaining-delegation-UserStory.md).
 - The separate `TC-DELEGATE-001-SYMLINK` executable body is current regression evidence but has no independent CaTDD TC identity; its reconciliation belongs to `US-UTCLI-REPAIR-01`.
 - Historical review sections below preserve the decisions that led to the partial closure. They are not current next-command guidance.
-- Current lifecycle work is US-SPECFLOW-REPAIR-01; the architecture-only policy supersedes its DetailDesign route and selects `SPEC_reviewArchDesign`.
+- `US-SPECFLOW-REPAIR-01` was aborted via `/SPEC_abortUserStory` when `utCodeAgentCLI` was deprecated.
 
 ## Testing Definition
 

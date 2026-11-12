@@ -11,12 +11,13 @@ Updated by `/SPEC_takeDetailDesign` on 2026-08-30; initial lifecycle-checker des
 Updated by `/SPEC_reviewDetailDesign` on 2026-08-30; result REVISE with DD-REV-01 through DD-REV-03.
 Updated by `/SPEC_updateDetailDesign` on 2026-08-30; attempt 1 of 3 corrected DD-REV-01 through DD-REV-03 and re-review is pending.
 Updated after developer architecture decision on 2026-08-30; DetailDesign is removed, ArchDesign is the sole design authority, and architecture review is pending.
+Aborted by `/SPEC_abortUserStory` on 2026-11-11 after developer deprecated `utCodeAgentCLI` in favor of unified `specCodeAgentCLI`; preserved in `.catdd/spec/abortUS/`.
 Paired with [20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md](20260830-utCodeAgentCLI-partial-closure-reconciliation-UserStory.md).
 
 ## Active Story
 
 - **ID:** US-SPECFLOW-REPAIR-01
-- **State:** doing / OPEN
+- **State:** aborted / ABORTED
 - **Priority:** P1 Design / State
 - **Branch:** `fix/utcodeagentcli-partial-closure-reconciliation`
 - **Source:** [analyzed issue](../analyzedNews/20260830-reconcile-utCodeAgentCLI-closure-and-session-contract-Issue.md)
@@ -124,4 +125,4 @@ Review the architecture-only ADR, subproject context, ArchDesign mirrors, delete
 
 ## Next Recommended Command
 
-`/SPEC_reviewArchDesign`
+`/SPEC_commitStoryWorks` (`commit_checkpoint = span_end`)

@@ -4,5 +4,5 @@
 
 ## Agents
 
-- `utCodeAgentCLI`: based on CaTDD and focused on unit testing design and implementation. Its current detailed design docs remain in [`./utCodeAgentCLI/`](./utCodeAgentCLI/).
-- `specCodeAgentCLI`: based on Px-SpecFlow and `utCodeAgentCLI`, focused on module-level flow from input to output. As a flow driver it runs Px-SpecFlow in `autonomousMode` by default, inside the orientation boundary that halts non-implementation work to `manualMode`. Its layer README is [`./specCodeAgentCLI/README.md`](./specCodeAgentCLI/README.md).
+- `specCodeAgentCLI` (**active unified CLI**): based on Px-SpecFlow, `methodPrompts`, and `slashCommands`, focused on module-level SpecCoding flow from input to output (including `SPEC_*`, orchestrated `TEST_*`, and status/harness checks) with no dependency on `utCodeAgentCLI`. As a flow driver it runs Px-SpecFlow in `autonomousMode` by default, inside the orientation boundary that halts non-implementation work to `manualMode`. Its layer README is [`./specCodeAgentCLI/README.md`](./specCodeAgentCLI/README.md).
+- `utCodeAgentCLI` (**deprecated**): historical unit-testing CLI prototype based on CaTDD, retained as archived reference and regression artifacts in [`./utCodeAgentCLI/`](./utCodeAgentCLI/). Active CLI development is unified in `specCodeAgentCLI`.
