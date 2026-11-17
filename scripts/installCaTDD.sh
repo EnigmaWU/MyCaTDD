@@ -27,9 +27,10 @@ changes overlap are kept as-is and reported as conflicts; use --force-overwrite
 to restore canonical source for all managed files.
 
 HARNESS_evolveHarness keeps its slash-command learning in local <Name>Evolved.md
-overlays instead of editing canonical commands. These overlays are local-only:
-refresh keeps them, and --force-overwrite preserves them rather than deleting
-them.
+patches (Base + Evolved Patch: canonical <Name>.md read first, <Name>Evolved.md
+applied on top) instead of editing canonical commands in place. These evolved
+files are local-only: refresh keeps them, and --force-overwrite preserves them
+rather than deleting them.
 
 Options:
   --targetDir DIR           Target project directory (alias: --target DIR).
@@ -329,7 +330,7 @@ This block is the CaTDD-owned region and projects the rules recorded in `<metasp
 ### Codex Behavior
 
 - Treat each Codex skill under `.agents/skills/` as a thin adapter over `.catdd/slashCommands/commands/`; read the portable command before acting.
-- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
+- If a `<Name>Evolved.md` patch exists beside the canonical `<Name>.md` command, flow, or kit, apply `Base + Evolved Patch` composition: read canonical `<Name>.md` first as the base, then apply `<Name>Evolved.md` on top (execute `<Name>Evolved.md` standalone only when it declares `New evolved command` with no canonical base). Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Codex skill names are lowercase and hyphenated: `test-convert-demo-to-typical` adapts `TEST_convertDemoToTypical`.
 - Before reading or writing lifecycle state, follow `.catdd/slashCommands/MetaspecWorkspaceResolution.md`; supported roots are `.catdd/metaspec/`, `.agents/metaspec/`, and legacy `.catdd/spec/`.
@@ -671,8 +672,8 @@ This directory is managed by `scripts/installCaTDD.sh` from MyCaTDD.
 - `.install-baseline/` stores canonical baseline content used for three-way merge.
 - Refresh keeps target files evolved after install (for example by `HARNESS_evolveHarness`).
   Disjoint upstream and target edits are merged; overlapping edits keep the target and are reported.
-- `HARNESS_evolveHarness` writes slash-command learning to local `<Name>Evolved.md` overlays, which supersede the canonical `<Name>.md` locally.
-  Overlays are local-only: refresh and `--force-overwrite` preserve them instead of overwriting or deleting them.
+- `HARNESS_evolveHarness` writes slash-command learning to local `<Name>Evolved.md` patches (`Base + Evolved Patch`: canonical `<Name>.md` read first, `<Name>Evolved.md` applied on top; standalone only for brand-new evolved commands).
+  Local `*Evolved.md` files are local-only: refresh and `--force-overwrite` preserve them instead of overwriting or deleting them.
 - `--force-overwrite` restores canonical source for all managed files.
 - Commit team-shared SpecCoding artifacts under the resolved `metaspec_root`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
 - Use project-root `README*` files for shared SPEC docs such as `README.md`, `README_ArchDesign.md`, `README_UserStories.md`, `README_UserGuide.md`, `README_DetailDesign.md`, `README_DetailVerifyDesign.md`, `README_ErrorDesign.md`, `README_ResourceDesign.md`, `README_StateDesign.md`, `README_PerfDesign.md`, `README_CompatDesign.md`, `README_DiagnosisDesign.md`, `README_ArchVerifyDesign.md`, and `README_VerifyDesign.md` as needed.
@@ -740,7 +741,7 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
 - Before reading or writing SpecCoding artifacts, follow `.catdd/slashCommands/MetaspecWorkspaceResolution.md` and use the `metaspec_root` declared in `projectContext.md`.
 - Supported workspaces are canonical `.catdd/metaspec/`, agent-owned `.agents/metaspec/`, and legacy `.catdd/spec/`; use `HARNESS_migrateMetaspec` rather than merging populated roots.
-- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
+- If a `<Name>Evolved.md` patch exists beside the canonical `<Name>.md` command, flow, or kit, apply `Base + Evolved Patch` composition: read canonical `<Name>.md` first as the base, then apply `<Name>Evolved.md` on top (execute `<Name>Evolved.md` standalone only when it declares `New evolved command` with no canonical base). Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
 - Commit team-shared SpecCoding artifacts under the resolved `metaspec_root`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
@@ -791,7 +792,7 @@ You are running a Copilot-native wrapper around a portable CaTDD slash command.
 
 ## Execution Rules
 
-1. Read and follow the portable source command before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
+1. Read and follow the portable source command as the canonical base before acting; if a sibling <Name>Evolved.md patch exists, apply it on top of <Name>.md (Base + Evolved Patch). If this wrapper points to <Name>Evolved.md and a canonical <Name>.md sibling exists, read <Name>.md first and apply <Name>Evolved.md on top.
 2. Treat this file as a thin Copilot adapter; do not redefine CaTDD method semantics here.
 3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
 4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.
@@ -835,7 +836,7 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Portable slash command source: `.catdd/slashCommands/`
 - Copilot skill wrappers: `.github/skills/test-*/SKILL.md`, `.github/skills/spec-*/SKILL.md`, and `.github/skills/harness-*/SKILL.md`
 - Treat Copilot skill files as thin adapters over `.catdd/slashCommands/`.
-- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
+- If a `<Name>Evolved.md` patch exists beside the canonical `<Name>.md` command, flow, or kit, apply `Base + Evolved Patch` composition: read canonical `<Name>.md` first as the base, then apply `<Name>Evolved.md` on top (execute `<Name>Evolved.md` standalone only when it declares `New evolved command` with no canonical base). Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
 - Commit team-shared SpecCoding artifacts under the resolved `metaspec_root`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
@@ -906,7 +907,7 @@ You are running a Copilot-native skill wrapper around a portable CaTDD slash com
 
 ## Execution Rules
 
-1. Read and follow the portable source command before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
+1. Read and follow the portable source command as the canonical base before acting; if a sibling <Name>Evolved.md patch exists, apply it on top of <Name>.md (Base + Evolved Patch). If this wrapper points to <Name>Evolved.md and a canonical <Name>.md sibling exists, read <Name>.md first and apply <Name>Evolved.md on top.
 2. Treat this file as a thin Copilot adapter; do not redefine CaTDD method semantics here.
 3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
 4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.
@@ -999,7 +1000,7 @@ You are running a Codex Skill wrapper around a portable CaTDD slash command.
 
 ## Execution Rules
 
-1. Read and follow the portable source command located at \`$rel_source\` before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
+1. Read and follow the portable source command located at \`$rel_source\` as the canonical base before acting; if a sibling <Name>Evolved.md patch exists, apply it on top of <Name>.md (Base + Evolved Patch). If \`$rel_source\` is <Name>Evolved.md and a canonical <Name>.md sibling exists, read <Name>.md first and apply <Name>Evolved.md on top.
 2. Treat this file as a thin Codex Skill adapter; do not redefine CaTDD method semantics here.
 3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
 4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.

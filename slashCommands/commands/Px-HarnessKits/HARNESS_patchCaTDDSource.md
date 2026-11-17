@@ -8,7 +8,7 @@ Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Re
 
 Patch effective CaTDD meta-file improvements from an installed project back to the original CaTDD source repository.
 
-This is the promotion path for evolved command overlays: an installed project keeps its local learning in `<Name>Evolved.md` files, and this command moves an approved overlay into the canonical `<Name>.md` upstream.
+This is the promotion path for `Base + Evolved Patch` files: an installed project keeps its local slash-command learning in `<Name>Evolved.md` patches beside untouched canonical `<Name>.md` files (or as standalone new evolved commands), and this command merges or promotes approved evolved files into canonical `<Name>.md` upstream.
 
 ## Command Type
 
@@ -50,10 +50,10 @@ Expected result:
 - `installed_project_repo`: project repository that already installed CaTDD and contains effective local modifications.
 - `catdd_source_repo`: upstream/original CaTDD source repository that should receive the patch.
 - `installed_source_layout`: optional source layout selector. Default: `installed_dot_catdd`.
-	- `installed_dot_catdd`: read from `installed_project_repo/.catdd/methodPrompts` and `installed_project_repo/.catdd/slashCommands`.
+  - `installed_dot_catdd`: read from `installed_project_repo/.catdd/methodPrompts` and `installed_project_repo/.catdd/slashCommands`.
 - `catdd_target_layout`: optional target layout selector. Default: `project_root_sources`.
-	- `project_root_sources`: patch `catdd_source_repo/methodPrompts` and `catdd_source_repo/slashCommands`.
-	- `source_dot_catdd`: patch `catdd_source_repo/.catdd/*` only when developer explicitly requests self-install test sync.
+  - `project_root_sources`: patch `catdd_source_repo/methodPrompts` and `catdd_source_repo/slashCommands`.
+  - `source_dot_catdd`: patch `catdd_source_repo/.catdd/*` only when developer explicitly requests self-install test sync.
 - `patch_scope_allowlist`: optional allowed paths, such as `methodPrompts/`, `slashCommands/`, `scripts/`, or docs, to prevent accidental unrelated sync.
 - `target_branch`: non-default source-repository branch used for patch submission.
 - `base_branch`: source-repository comparison branch, usually `main`.
@@ -74,14 +74,16 @@ If path mapping is unclear, stop and ask the developer.
 
 ## Evolved Overlay Promotion
 
-`HARNESS_evolveHarness` writes slash-command lessons to `<Name><evolved_command_suffix>.md` (for example `SPEC_implTestsEvolved.md`) and never edits the canonical command in place. Promotion therefore has one extra mapping step:
+`HARNESS_evolveHarness` follows `Base + Evolved Patch`: it writes slash-command deltas to `<Name><evolved_command_suffix>.md` (for example `SPEC_implTestsEvolved.md` beside untouched `SPEC_implTests.md`, or a standalone `> New evolved command` when no canonical base exists) and never edits the canonical command in place. Promotion therefore resolves `Base + Evolved Patch` into canonical upstream `<Name>.md`:
 
-1. Read the overlay `<Name><evolved_command_suffix>.md`, not the untouched canonical `<Name>.md`.
-2. Confirm the overlay is portable and method-consistent; keep the `based_on` provenance note for the reviewer.
-3. Strip the suffix and target the canonical path: `<Name><evolved_command_suffix>.md` -> `<Name>.md` in `catdd_source_repo`.
-4. Report the mapping in the changed-file inventory so the reviewer sees which canonical command each overlay becomes.
+1. Read `<Name><evolved_command_suffix>.md` together with its canonical base `<Name>.md` when a base exists (both installed `<Name>.md` / `based_on` provenance and `catdd_source_repo`'s current `<Name>.md`).
+2. Confirm the evolved patch (or new command) is portable and method-consistent; keep the `based_on` provenance note in the patch report for the reviewer, while omitting local provenance headers from the canonical file.
+3. Strip `<evolved_command_suffix>` and target canonical `<Name>.md` in `catdd_source_repo`:
+   - For an **evolved patch** (`Evolved patch for <Name>.md` / legacy `Evolved overlay of <Name>.md`): selectively merge its section additions, refinements, and overrides into `catdd_source_repo`'s canonical `<Name>.md` without discarding newer upstream sections.
+   - For a **brand-new evolved command** (`New evolved command`): promote the complete command body to the new canonical `<Name>.md` path.
+4. Report the mapping in the changed-file inventory so the reviewer sees which canonical command each `<Name><evolved_command_suffix>.md` updates or creates.
 
-Do not delete the overlay in the installed project as part of patch-back; local overlays are the project's own learning until the canonical source absorbs them.
+Do not delete `<Name><evolved_command_suffix>.md` in the installed project as part of patch-back; local evolved patches remain the project's own learning until the canonical source absorbs them and the target refreshes.
 
 ## Method References
 

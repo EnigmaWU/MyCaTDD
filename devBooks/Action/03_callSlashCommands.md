@@ -15,7 +15,7 @@ That is why the same command intent can be adapted to different tools. The canon
 | **When** | Use a command when its declared preconditions and owning flow/kit apply |
 | **Where** | Canonical Markdown under `slashCommands/commands/`, organized by flow or kit |
 | **Why** | To make one method-defined step repeatable, reviewable, and adapter-independent |
-| **How** | Resolve any local `Evolved` overlay, read the method source, run one command, verify its output, and follow its next step |
+| **How** | Compose any local `Evolved` patch on top of the canonical base, read the method source, run one command, verify its output, and follow its next step |
 
 ```
    methodPrompts          slashCommands            CodeAgent
@@ -1216,7 +1216,7 @@ The next chapter, **applyClassicSWE**, connects these repeatable workflows to th
 
 ## Evolved Command Overlays
 
-When a project has a local `<Name>Evolved.md` beside a canonical command, flow, or kit, use the self-contained overlay for that project. It supersedes the canonical file locally; it is not an upstream source edit and is not part of the installation manifest. `HARNESS_evolveHarness` creates or refines one sibling overlay; `HARNESS_patchCaTDDSource` is the guarded promotion path back to the CaTDD source. Do not ignore a local overlay or silently overwrite it during refresh.
+When a project has a local `<Name>Evolved.md` beside a canonical command, flow, or kit, apply the **`Base + Evolved Patch`** pattern: read canonical `<Name>.md` first as the base contract, then apply the delta-only `<Name>Evolved.md` patch on top (execute `<Name>Evolved.md` standalone only when it declares a brand-new evolved command with no canonical base yet). That keeps upstream refreshes to `<Name>.md` live instead of shadowing them with a full-file copy, while keeping `<Name>Evolved.md` local-only and out of the installation manifest. `HARNESS_evolveHarness` creates or refines one sibling `<Name>Evolved.md` patch; `HARNESS_patchCaTDDSource` is the guarded promotion path that merges the delta back into the canonical CaTDD source. Do not ignore a local evolved patch or silently overwrite it during refresh.
 
 ## Usage Example
 

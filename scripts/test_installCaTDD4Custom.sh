@@ -47,6 +47,7 @@ grep -Fq 'SPEC_importUserStory' "$rule" || fail "custom rule missing user-story 
 grep -Fq 'success_learning_checkpoint = recommended' "$rule" || fail "custom rule missing success-learning checkpoint"
 grep -Fq '/HARNESS_evolveHarness' "$rule" || fail "custom rule missing unified evolution command hook"
 grep -Fq 'same evidence' "$rule" || fail "custom rule missing same-evidence evolution hook suppression"
+grep -Fq 'Base + Evolved Patch' "$rule" || fail "custom rule missing Base + Evolved Patch guidance"
 
 source_count="$(find "$REPO_ROOT/slashCommands/commands" -type f \( -name 'TEST_*.md' -o -name 'SPEC_*.md' -o -name 'HARNESS_*.md' \) | wc -l | tr -d '[:space:]')"
 prompt_count="$(find "$TARGET_DIR/.customCodeAgent/prompts" -type f \( -name 'TEST_*.prompt' -o -name 'SPEC_*.prompt' -o -name 'HARNESS_*.prompt' \) | wc -l | tr -d '[:space:]')"
@@ -58,6 +59,7 @@ grep -Fq 'name: TEST_convertDemoToTypical' "$sample_prompt" || fail "custom samp
 grep -Fq 'description: Run CaTDD slash command TEST_convertDemoToTypical' "$sample_prompt" || fail "custom sample prompt missing description"
 grep -Fq '.catdd/slashCommands/commands/P0-FuncTestsFlow/TEST_convertDemoToTypical.md' "$sample_prompt" || fail "custom sample prompt missing installed source command reference"
 grep -Fq '.catdd/methodPrompts/README.md' "$sample_prompt" || fail "custom sample prompt missing installed method source reference"
+grep -Fq 'Base + Evolved Patch' "$sample_prompt" || fail "custom sample prompt missing Base + Evolved Patch rule"
 
 harness_prompt="$TARGET_DIR/.customCodeAgent/prompts/HARNESS_patchCaTDDSource.prompt"
 [[ -f "$harness_prompt" ]] || fail "missing custom HARNESS prompt: HARNESS_patchCaTDDSource.prompt"

@@ -59,15 +59,15 @@ When a command conflicts with `methodPrompts`, update `methodPrompts` first, the
 
 ## Evolved command overlay
 
-`HARNESS_evolveHarness` never rewrites a canonical command file in place. When a verified lesson refines or creates a slash command, flow, or kit, the result is written as a sibling `<Name>Evolved.md` file in the same directory. The canonical `<Name>.md` stays exactly as installed from `MyCaTDD`.
+`HARNESS_evolveHarness` never rewrites a canonical command file in place. When a verified lesson refines or creates a slash command, flow, or kit, the result is written as a sibling `<Name>Evolved.md` file in the same directory using the **`Base + Evolved Patch`** pattern. The canonical `<Name>.md` stays exactly as installed from `MyCaTDD`.
 
-- **Overlay**: refining `SPEC_implTests` produces `SPEC_implTestsEvolved.md` beside an untouched `SPEC_implTests.md`.
-- **New command**: a command born from evolution keeps the suffix too, such as `SPEC_doNewXyzEvolved.md`.
-- **One overlay per base**: repeated refines update the single existing `<Name>Evolved.md`; there is no `Evolved2` or parallel overlay chain.
-- **Resolution**: the evolved file is self-contained and, when present, supersedes its non-suffixed sibling for local execution. The agent follows `<Name>Evolved.md` instead of `<Name>.md`.
+- **Base + Evolved Patch**: refining `SPEC_implTests` keeps `SPEC_implTests.md` untouched as the canonical base and writes only the local delta (section additions, refinements, or explicit overrides) into sibling `SPEC_implTestsEvolved.md`.
+- **New command**: a command born from evolution with no canonical `<Name>.md` sibling keeps the suffix too, such as `SPEC_doNewXyzEvolved.md`, and carries a complete command contract until promoted upstream.
+- **One patch per base**: repeated refines update the single existing `<Name>Evolved.md`; there is no `Evolved2` or parallel patch chain.
+- **Resolution (`<Name>.md` + `<Name>Evolved.md`)**: when both files exist, the agent reads canonical `<Name>.md` **first** and **then** applies `<Name>Evolved.md` on top, so upstream refreshes to `<Name>.md` remain live for all untouched sections instead of becoming shadowed or outdated.
 - **Local-only**: `*Evolved.md` files are not part of the install manifest. Refresh never overwrites them and `--force-overwrite` preserves them; verification and diagnosis treat them as intentional, not drift.
-- **Promotion**: move an overlay upstream with `HARNESS_patchCaTDDSource`, which strips the suffix (`<Name>Evolved.md` -> canonical `<Name>.md`).
-- **Staleness**: each evolved file starts with `> Evolved overlay of <Name>.md · based_on: <installed_version>` (new commands use `> New evolved command · based_on: <installed_version>`), so a stale overlay is detectable after the canonical base changes.
+- **Promotion**: move an evolved patch upstream with `HARNESS_patchCaTDDSource`, which merges the delta into canonical `<Name>.md` (or promotes a brand-new `<Name>Evolved.md` to `<Name>.md`).
+- **Staleness**: each evolved file starts with `> Evolved patch for <Name>.md · based_on: <installed_version>` (new commands use `> New evolved command · based_on: <installed_version>`), so patched sections can be re-reviewed after the canonical base changes.
 
 ## Priority contract
 

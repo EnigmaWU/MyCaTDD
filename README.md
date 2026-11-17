@@ -136,7 +136,7 @@ Add `--clean-prompts` when you want to remove old generated prompt or skill wrap
 
 Refresh is patch-aware: files evolved in the target after install are kept and never silently overwritten. Disjoint upstream and target edits are three-way merged, overlapping edits keep the target and are reported, and `--force-overwrite` restores canonical source for all managed files.
 
-`HARNESS_evolveHarness` keeps slash-command learning out of the canonical commands: it writes a sibling `<Name>Evolved.md` overlay, such as `SPEC_implTestsEvolved.md` beside an untouched `SPEC_implTests.md`. The overlay is self-contained, supersedes its canonical sibling locally, may be a brand-new command such as `SPEC_doNewXyzEvolved.md`, and is promoted upstream with `HARNESS_patchCaTDDSource`. Overlays are local-only: refresh and `--force-overwrite` preserve them instead of overwriting or deleting them.
+`HARNESS_evolveHarness` keeps slash-command learning out of the canonical commands using **`Base + Evolved Patch`**: it writes a delta-only sibling `<Name>Evolved.md` patch, such as `SPEC_implTestsEvolved.md` beside an untouched `SPEC_implTests.md`. At runtime, agents read canonical `<Name>.md` first and apply `<Name>Evolved.md` on top (standalone execution applies only to brand-new commands such as `SPEC_doNewXyzEvolved.md` with no canonical base yet), and approved patches are merged upstream with `HARNESS_patchCaTDDSource`. Local `*Evolved.md` files are local-only: refresh and `--force-overwrite` preserve them instead of overwriting or deleting them.
 
 The installer creates or refreshes these target-project assets:
 

@@ -18,7 +18,7 @@ This block is the CaTDD-owned region and projects the rules recorded in `<metasp
 ### Codex Behavior
 
 - Treat each Codex skill under `.agents/skills/` as a thin adapter over `.catdd/slashCommands/commands/`; read the portable command before acting.
-- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
+- If a `<Name>Evolved.md` patch exists beside the canonical `<Name>.md` command, flow, or kit, apply `Base + Evolved Patch` composition: read canonical `<Name>.md` first as the base, then apply `<Name>Evolved.md` on top (execute `<Name>Evolved.md` standalone only when it declares `New evolved command` with no canonical base). Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Codex skill names are lowercase and hyphenated: `test-convert-demo-to-typical` adapts `TEST_convertDemoToTypical`.
 - Before reading or writing lifecycle state, follow `.catdd/slashCommands/MetaspecWorkspaceResolution.md`; supported roots are `.catdd/metaspec/`, `.agents/metaspec/`, and legacy `.catdd/spec/`.

@@ -8,7 +8,7 @@ Before reading or writing any SpecCoding artifact, follow [Metaspec Workspace Re
 
 Learn from verified CaTDD successes and failures, then evolve the correct canonical artifact at the smallest justified depth. One command supports lightweight evidence-backed refinement and heavier trace-driven restructuring without changing model weights or silently mutating source.
 
-Slash-command lessons never edit the canonical command file in place: they are written as a sibling `<Name>Evolved.md` overlay so the installed command source stays pristine. See the Evolved Command Overlay Rule below.
+Slash-command lessons never edit the canonical command file in place: they follow the **Base + Evolved Patch** pattern, writing only the local delta to a sibling `<Name>Evolved.md` patch beside the pristine canonical `<Name>.md` (or a full portable command only when creating a brand-new `<Name>Evolved.md` with no canonical base). See the Base + Evolved Patch Rule below.
 
 ## Command Type
 
@@ -60,7 +60,7 @@ dry_run: true
 Expected result:
 
 - **Thought**: Evidence Gate — outcome evidence present (the contract passed), contribution evidence present (the lesson caused the pass), reuse evidence is a single occurrence. One occurrence justifies a dry-run `refine` proposal but not persistence, and it does not meet the `restructure` bar. Mode Selection Gate → `refine`. Ownership Router → one canonical owner file. Acceptance criterion defined up front.
-- **Action**: one minimal proposed update against that owner, dry-run — a `<Name>Evolved.md` overlay when the owner is a slash command.
+- **Action**: one minimal proposed update against that owner, dry-run — a delta-only `<Name>Evolved.md` patch composed on top of canonical `<Name>.md` when the owner is an existing slash command.
 - **Observation**: focused validation passes against the stated criterion, using external command output rather than self-assessment.
 - **Stop**: returns one reviewable patch. Branch-population search is **not** started, because the evidence never justified `restructure`.
 - Under same-evidence suppression, this run reports `success_learning_checkpoint = suppressed_same_evidence` rather than recommending itself again.
@@ -82,7 +82,7 @@ Expected result:
 - `candidate_scope`: optional canonical-owner filter. Default: `all`.
   - `all`: classify across project context, product specification, method, slash commands, harness, and reusable skills.
   - `project-context`, `product-spec`, `method`, `skill`: delegate accepted lessons to the corresponding canonical owner and governed workflow.
-  - `slashCommands`: portable command files under `.catdd/slashCommands/commands/`. Command targets are written as the `<Name>Evolved.md` overlay, never the canonical file.
+  - `slashCommands`: portable command files under `.catdd/slashCommands/commands/`. Command targets follow `Base + Evolved Patch`: write deltas to the sibling `<Name>Evolved.md` patch, never the canonical `<Name>.md`.
   - `wrappers`: native adapter wrappers such as `.github/prompts/*.prompt.md`.
   - `installers`: installation scripts under `.catdd/scripts/` or project-root `scripts/installCaTDD*.sh`.
   - `tests`: harness test scripts under `scripts/test_*.sh`.
@@ -136,30 +136,30 @@ When `auto` lacks enough evidence to choose safely, return `ASK`; do not default
 | Stable project-wide fact, constraint, or routing rule | `<metaspec_root>/projectContext.md` | Delegate through `SPEC_updateProjectContext`; do not append session history. |
 | Product behavior, acceptance criterion, edge case, or design decision | User story or project/module `README*` SPEC document | Delegate through the narrowest SpecFlow command. |
 | CaTDD category meaning, US/AC/TC semantics, or method rule | `methodPrompts/` | Require a reviewed method-level story. |
-| Portable CodeAgent workflow or slash-command contract | `slashCommands/commands/` or `slashCommands/flows/` | Write to the `<Name>Evolved.md` overlay, never the canonical `<Name>.md`; refine when bounded, restructure only with systemic evidence. |
+| Portable CodeAgent workflow or slash-command contract | `slashCommands/commands/`, `slashCommands/flows/`, or `slashCommands/kits/` | Write a delta-only `<Name>Evolved.md` patch on top of canonical `<Name>.md` (`Base + Evolved Patch`), never editing `<Name>.md` in place; refine when bounded, restructure only with systemic evidence. |
 | Installer, wrapper, verification, or execution behavior | Harness command or `scripts/` | Refine or restructure according to the Mode Selection Gate. |
 | Reusable cross-project procedure with clear triggers | Agent skill | Delegate to the governed skill workflow. |
 | One-session tactic, preference, or incidental detail | None | Discard as transient. |
 
 If a lesson fits multiple owners, choose the narrowest source of truth. Never duplicate the same lesson across owners.
 
-## Evolved Command Overlay Rule
+## Base + Evolved Patch Rule
 
-Any slash command produced or refined by this command is written as `<Name>Evolved.md` beside the artifact it evolves, in the same directory. This applies to every command family (`SPEC_*`, `TEST_*`, `HARNESS_*`), to flows and kits under `slashCommands/`, and to both overlay and new-command cases.
+Any slash command, flow, or kit produced or refined by this command is written as `<Name>Evolved.md` beside the artifact it evolves, in the same directory. Instead of duplicating and shadowing the canonical file, evolution uses **`Base + Evolved Patch`** (`<Name>.md` + `<Name>Evolved.md`) across every command family (`SPEC_*`, `TEST_*`, `HARNESS_*`) and across `flows/` and `kits/`.
 
-- **Overlay case**: refining `SPEC_implTests` produces `SPEC_implTestsEvolved.md` and leaves `SPEC_implTests.md` untouched.
-- **New-command case**: a command born from evolution keeps the suffix, such as `SPEC_doNewXyzEvolved.md`.
-- **Self-contained**: the evolved file is a complete, effective command, not a delta, so it works even when no canonical base exists.
-- **Supersedes**: when both `<Name>.md` and `<Name>Evolved.md` exist, the evolved file is the effective local command and takes precedence.
-- **One overlay per base**: every refine of the same base updates the existing `<Name>Evolved.md` in place. Do not create `Evolved2`, `EvolvedNew`, or parallel overlays; merge the new lesson into the single overlay and refresh its provenance header.
-- **Local-only**: `*Evolved.md` files are not part of the install manifest. Refresh never overwrites them, `--force-overwrite` preserves them, and `HARNESS_verifyInstallation` / `HARNESS_diagnoseInstallation` treat them as intentional rather than as drift.
-- **Provenance**: start the overlay with one header line so staleness is machine-detectable:
-  - overlay: `> Evolved overlay of SPEC_implTests.md · based_on: 20260919.08`
+- **Base + Evolved Patch case (existing canonical base)**: refining `SPEC_implTests` keeps `SPEC_implTests.md` untouched as the canonical **Base** and writes only the local delta into `SPEC_implTestsEvolved.md` as the **Evolved Patch**.
+- **Delta-only patch**: when `<Name>.md` exists, `<Name>Evolved.md` records **only** the `based_on` provenance header plus targeted section additions, refinements, or explicit overrides keyed to `<Name>.md` headings (for example `## Execution Rules (Patch: Append)` or `## Conflict Guard (Patch: Override)`). Never copy unchanged canonical sections into `<Name>Evolved.md`.
+- **Layered runtime composition (`<Name>.md` + `<Name>Evolved.md`)**: when both `<Name>.md` and `<Name>Evolved.md` exist, CodeAgents read canonical `<Name>.md` **first** as the base contract and **then** apply `<Name>Evolved.md` on top. Patched sections augment or override the matching sections of `<Name>.md`, while all untouched sections of `<Name>.md` stay active (including upstream improvements delivered by installer refresh). A local patch may refine workflow mechanics, checks, or local constraints, but must not weaken `methodPrompts/` invariants or safety gates.
+- **Brand-new command case (no canonical base yet)**: a command born from evolution with no `<Name>.md` sibling keeps the suffix, such as `SPEC_doNewXyzEvolved.md`, and carries a complete portable command contract so it runs standalone until promoted upstream to `<Name>.md`.
+- **One patch per base**: every refine of the same base updates the single existing `<Name>Evolved.md` in place. Do not create `Evolved2`, `EvolvedNew`, or parallel patch chains; consolidate the new delta into the single `<Name>Evolved.md` and refresh its provenance header.
+- **Local-only**: `*Evolved.md` files are not part of the install manifest. Refresh updates canonical `<Name>.md` freely without overwriting `*Evolved.md`, `--force-overwrite` preserves `*Evolved.md`, and `HARNESS_verifyInstallation` / `HARNESS_diagnoseInstallation` treat them as intentional local evolution rather than as drift.
+- **Provenance**: start `<Name>Evolved.md` with one header line so base pairing and staleness are machine-detectable:
+  - evolved patch: `> Evolved patch for SPEC_implTests.md · based_on: 20260919.08`
   - new command: `> New evolved command · based_on: 20260919.08`
-  - Take `based_on` from `.catdd/CaTDD_INSTALL.manifest` (or the `- Installed version:` line in `.catdd/CaTDD_INSTALL.md`) at creation time. An overlay is stale when the base command's current manifest version differs from the recorded value.
-- **Promotion**: `<Name>Evolved.md` is promoted upstream with `HARNESS_patchCaTDDSource`, which strips the suffix to the canonical `<Name>.md`.
+  - Take `based_on` from `.catdd/CaTDD_INSTALL.manifest` (or the `- Installed version:` line in `.catdd/CaTDD_INSTALL.md`) at creation or update time. When canonical `<Name>.md` advances past `based_on`, untouched base updates already take effect automatically; the version difference flags the patched sections for compatibility review.
+- **Promotion**: `<Name>Evolved.md` is promoted upstream with `HARNESS_patchCaTDDSource`, which merges an evolved patch's deltas into canonical `<Name>.md` (or promotes a brand-new `<Name>Evolved.md` to `<Name>.md` after stripping the suffix and provenance header).
 
-The canonical `<Name>.md` remains the upstream-managed asset. Writing into it directly would force the installer to merge or keep-local the change on every refresh; the overlay keeps learning and canonical source independent.
+The canonical `<Name>.md` remains the live upstream-managed base. Copying a full replacement into `<Name>Evolved.md` would shadow upstream updates and leave `<Name>.md` locally outdated; `Base + Evolved Patch` keeps canonical source updates and local learning composable.
 
 ## Evidence Gate
 
@@ -196,7 +196,7 @@ Reason/Propose
 
 Missing any mutation requirement returns the reviewable proposal or winner without writing source. Approval never substitutes for validation, and a passing validation never substitutes for approval.
 
-For a slash-command owner, the mutation target is the `<Name>Evolved.md` overlay, not `<Name>.md`. The mode-specific requirements above still apply unchanged; the overlay rule only changes which file receives the accepted content.
+For a slash-command owner, the mutation target is `<Name>Evolved.md` (a delta-only patch beside `<Name>.md`, or a standalone file for a brand-new evolved command), never `<Name>.md`. The mode-specific requirements above still apply unchanged; the `Base + Evolved Patch` rule only changes which file receives the accepted delta.
 
 ## Preflight Mapping Checklist
 
@@ -221,7 +221,7 @@ If the target path is unclear, stop and ask the developer. Require a clear trace
 5. **Restructure path**: initialize `branches_G` role-diverse lineages, run `rounds_R` Observe-Propose-Judge cycles on the same trace batch, expose raw traces and proxy signals, and select one winner.
 6. **Mutate or return**: enforce the Mode-Specific Mutation Gates. Without every required gate, return the dry-run artifact unchanged.
 7. **Evaluate and correct**: apply the Evidence-Grounded Correction Loop to the selected proposal or winner, bounded by `max_correction_attempts` and the no-progress rule.
-8. **Persist or delegate**: write only through the canonical owner. For a slash-command owner, write the `<Name>Evolved.md` overlay. For project context, product specification, method, or skill changes, hand off to the governed owning workflow.
+8. **Persist or delegate**: write only through the canonical owner. For a slash-command, flow, or kit owner, write a delta-only `<Name>Evolved.md` patch beside untouched `<Name>.md` (or a complete `<Name>Evolved.md` when creating a brand-new command). For project context, product specification, method, or skill changes, hand off to the governed owning workflow.
 9. **Stop**: return `no reusable learning` when no candidate passes the evidence and reuse gates.
 
 ## Proxy-Signal Rules
@@ -257,7 +257,7 @@ If the target path is unclear, stop and ask the developer. Require a clear trace
 - Correction trace: attempt number, acceptance criteria, action, external evidence, evaluation result, and stop reason. Do not require a branch-population trace for `refine`.
 - Coverage gaps: observed failures that no candidate addressed.
 - If `dry_run=true`: a commit-ready diff or patch artifact for the winner.
-- If `dry_run=false`: branch name, final verification result, and exact committed files. For a slash-command owner, the committed file is the `<Name>Evolved.md` overlay; confirm the canonical `<Name>.md` is unchanged.
+- If `dry_run=false`: branch name, final verification result, and exact committed files. For a slash-command owner, the committed file is `<Name>Evolved.md` (delta-only patch when `<Name>.md` exists); confirm canonical `<Name>.md` is unchanged and composes cleanly with `<Name>Evolved.md`.
 - Risk notes: conflicts, generated-wrapper drift, portability gaps, batch specialization, and side effects on non-harness files.
 - Recommended next action:
   - `refine` with `dry_run=true`: review the proposal, then rerun with `dry_run=false`, `apply_approved=true`, and a non-default `target_branch`.
@@ -283,8 +283,9 @@ Apply same-evidence suppression: while executing `HARNESS_evolveHarness`, do not
 
 Do not modify product code, user stories, acceptance criteria, or SpecFlow lifecycle state.
 Do not directly evolve product or method semantics; delegate accepted lessons to their governed owner.
-Do not write a slash-command lesson into the canonical `<Name>.md`; place it in the `<Name>Evolved.md` overlay.
-Do not fold an evolved overlay back into the canonical command file outside `HARNESS_patchCaTDDSource`.
+Do not write a slash-command lesson into the canonical `<Name>.md`; place it in the sibling `<Name>Evolved.md` patch.
+Do not copy unchanged canonical sections into `<Name>Evolved.md` when a canonical `<Name>.md` base exists; keep `<Name>Evolved.md` delta-only (`Base + Evolved Patch`) so upstream refreshes to `<Name>.md` stay active.
+Do not fold an evolved patch back into the canonical command file outside `HARNESS_patchCaTDDSource`.
 Do not mutate or commit without `apply_approved=true` and a non-default `target_branch`, regardless of mode.
 Do not treat generated adapter wrappers as source-of-truth when portable command files are available.
 Do not propose destructive changes that overwrite newer source content.

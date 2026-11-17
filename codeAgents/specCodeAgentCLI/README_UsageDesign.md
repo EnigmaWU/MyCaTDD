@@ -210,7 +210,7 @@ Conflict and override invariants:
 
 - Two mutually exclusive CLI flags (`--input` + `--inputFile`, `--input` + `--stdin`, `--inputFile` + `--stdin`) or any forbidden provider/model CLI flag (`--model`, `--backend`, `--api-key`) fail fast with exit `2` before reading or mutating lifecycle state.
 - If `--metaspec-root` (or `SPECCLI_METASPEC_ROOT`) disagrees with the `metaspec_root` declared in `projectContext.md`, execution stops with configuration drift (`exit 3`) per `MetaspecWorkspaceResolution.md`.
-- Local `<Name>Evolved.md` overlays beside canonical `.catdd/slashCommands/` artifacts take precedence automatically per CaTDD overlay rules and are surfaced when `--diagSlashCommands` is enabled.
+- Local `<Name>Evolved.md` patches beside canonical `.catdd/slashCommands/` artifacts compose automatically via `Base + Evolved Patch` (canonical `<Name>.md` loaded first, `<Name>Evolved.md` applied on top; standalone only for brand-new evolved commands) and are surfaced when `--diagSlashCommands` is enabled.
 
 ## Command Resolution and Mode Compatibility Matrix
 

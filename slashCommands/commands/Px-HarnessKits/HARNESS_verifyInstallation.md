@@ -89,11 +89,14 @@ If the target path or adapter surface is unclear, stop and ask the developer.
 
 ### Evolved Overlays
 
-- List `<Name>Evolved.md` files under `.catdd/slashCommands/`. These are local `HARNESS_evolveHarness` artifacts and are expected, not drift.
+- List `<Name>Evolved.md` files under `.catdd/slashCommands/`. These are local `HARNESS_evolveHarness` `Base + Evolved Patch` artifacts (or brand-new evolved commands) and are expected, not drift.
 - Count `*Evolved.md` files under `commands/` as portable commands, and expect a generated wrapper or skill for each on wrapper-based adapters, the same as any other command file.
-- Treat `*Evolved.md` files under `flows/` or `kits/` as local evolution documents; no native wrapper is expected for them.
-- Read each overlay's provenance header (`> Evolved overlay of <Name>.md · based_on: <version>` or `> New evolved command · based_on: <version>`). Report the overlay as `advisory` when the base command's current version differs from the recorded `based_on`, so the developer can re-review or promote it.
-- Treat a missing canonical base as expected when the header says `New evolved command`, such as `SPEC_doNewXyzEvolved.md`.
+- Treat `*Evolved.md` files under `flows/` or `kits/` as local evolution patches; no native wrapper is expected for them.
+- Read each evolved file's provenance header (`> Evolved patch for <Name>.md · based_on: <version>`, legacy `> Evolved overlay of <Name>.md · based_on: <version>`, or `> New evolved command · based_on: <version>`).
+- Verify base pairing under `Base + Evolved Patch`:
+  - When the header declares an evolved patch (`Evolved patch for <Name>.md` or legacy `Evolved overlay of <Name>.md`), confirm the sibling canonical `<Name>.md` exists so `Base + Evolved Patch` composition has its base; fail when the canonical base is missing.
+  - Treat a missing canonical base as expected when the header says `New evolved command`, such as `SPEC_doNewXyzEvolved.md`.
+- Report the evolved file as `advisory` when the canonical base's current version differs from the recorded `based_on`, so the developer can re-review the patched sections against the updated base or promote the patch upstream.
 
 ### Adapter Surfaces
 

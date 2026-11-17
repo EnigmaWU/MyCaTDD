@@ -22,7 +22,7 @@ You are running a Copilot-native wrapper around a portable CaTDD slash command.
 
 ## Execution Rules
 
-1. Read and follow the portable source command before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
+1. Read and follow the portable source command as the canonical base before acting; if a sibling <Name>Evolved.md patch exists, apply it on top of <Name>.md (Base + Evolved Patch). If this wrapper points to <Name>Evolved.md and a canonical <Name>.md sibling exists, read <Name>.md first and apply <Name>Evolved.md on top.
 2. Treat this file as a thin Copilot adapter; do not redefine CaTDD method semantics here.
 3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
 4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.

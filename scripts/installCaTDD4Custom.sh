@@ -221,7 +221,7 @@ You are running a Continue-native prompt wrapper around a portable CaTDD slash c
 
 ## Execution Rules
 
-1. Read and follow the portable source command before acting; if a sibling <Name>Evolved.md overlay exists, follow the overlay instead because it supersedes the canonical command locally.
+1. Read and follow the portable source command as the canonical base before acting; if a sibling <Name>Evolved.md patch exists, apply it on top of <Name>.md (Base + Evolved Patch). If this wrapper points to <Name>Evolved.md and a canonical <Name>.md sibling exists, read <Name>.md first and apply <Name>Evolved.md on top.
 2. Treat this file as a thin Continue adapter; do not redefine CaTDD method semantics here.
 3. Use methodPrompts for category meaning, priority order, design skeleton rules, and CaTDD constraints.
 4. Use the source command for inputs, outputs, conflict guards, and next-step flow or kit contract.
@@ -359,6 +359,7 @@ This is a custom project rule installed by MyCaTDD. Use it when working with CaT
 - Treat this file as a thin custom adapter over \`.catdd/methodPrompts/\` and \`.catdd/slashCommands/\`.
 - Before reading or writing SpecCoding artifacts, follow \`.catdd/slashCommands/MetaspecWorkspaceResolution.md\`; supported roots are \`.catdd/metaspec/\`, \`.agents/metaspec/\`, and legacy \`.catdd/spec/\`.
 - Use \`$CUSTOM_DIR/prompts/\` for triggerable TEST_*, SPEC_*, and HARNESS_* prompt wrappers in Continue format.
+- If a \`<Name>Evolved.md\` patch exists beside the canonical \`<Name>.md\` command, flow, or kit, apply \`Base + Evolved Patch\` composition: read canonical \`<Name>.md\` first as the base, then apply \`<Name>Evolved.md\` on top (execute \`<Name>Evolved.md\` standalone only when it declares \`New evolved command\` with no canonical base).
 - Treat \`.catdd/methodPrompts/\` as the source of truth for CaTDD category meaning, priority order, design skeleton rules, and method constraints.
 - Use \`.catdd/slashCommands/commands/\` for TEST_*, SPEC_*, and HARNESS_* commands; read the portable command before acting.
 - Keep SpecCoding lifecycle state under the resolved \`metaspec_root\`.

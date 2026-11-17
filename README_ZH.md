@@ -132,7 +132,7 @@ scripts/installCaTDD.sh --targetDir /path/to/new-project --targetCodeAgent Copil
 
 刷新是补丁感知的：安装后目标中被演进的文件会被保留，绝不静默覆盖。互不重叠的上游与目标修改会进行三方合并，重叠修改保留目标并报告冲突，`--force-overwrite` 可将所有受管文件恢复为规范源。
 
-`HARNESS_evolveHarness` 不会把斜杠命令的经验写回规范命令本身，而是写为同级的 `<Name>Evolved.md` 覆盖文件，例如在保持不变的 `SPEC_implTests.md` 旁生成 `SPEC_implTestsEvolved.md`。该覆盖文件是自包含的，在本地取代同名规范命令；也可以是全新命令，例如 `SPEC_doNewXyzEvolved.md`；并通过 `HARNESS_patchCaTDDSource` 回灌上游。覆盖文件仅属于本地：刷新与 `--force-overwrite` 都会保留它们，而不会覆盖或删除。
+`HARNESS_evolveHarness` 通过 **`Base + Evolved Patch`** 模式把斜杠命令经验留在规范命令之外：它在保持不变的 `SPEC_implTests.md` 旁写入仅含本地增量的同级 `<Name>Evolved.md` 补丁（如 `SPEC_implTestsEvolved.md`）。运行时代理先读取规范 `<Name>.md`，再将 `<Name>Evolved.md` 叠加应用其上（仅在尚无规范基命令的全新命令如 `SPEC_doNewXyzEvolved.md` 时独立执行），并通过 `HARNESS_patchCaTDDSource` 合并回灌上游。本地 `*Evolved.md` 文件仅属于本地：刷新与 `--force-overwrite` 都会保留它们，而不会覆盖或删除。
 
 安装器会在目标项目中创建或刷新这些资产：
 

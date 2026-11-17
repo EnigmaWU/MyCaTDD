@@ -59,15 +59,15 @@
 
 ## Evolved command overlay
 
-`HARNESS_evolveHarness` 永不直接改写规范命令文件。当一条已验证的经验要细化或新增某个斜杠命令、流程或工具集时，结果会写为同一目录下的同级 `<Name>Evolved.md` 文件，而规范 `<Name>.md` 保持与从 `MyCaTDD` 安装时完全一致。
+`HARNESS_evolveHarness` 永不直接改写规范命令文件。当一条已验证的经验要细化或新增某个斜杠命令、流程或工具集时，结果遵循 **`Base + Evolved Patch`** 模式写为同一目录下的同级 `<Name>Evolved.md` 文件，而规范 `<Name>.md` 保持与从 `MyCaTDD` 安装时完全一致。
 
-- **覆盖（Overlay）**：细化 `SPEC_implTests` 会生成 `SPEC_implTestsEvolved.md`，并与保持不变的 `SPEC_implTests.md` 并列存放。
-- **新命令**：由演进产生的新命令同样保留该后缀，例如 `SPEC_doNewXyzEvolved.md`。
-- **一个基命令一个覆盖**：对同一基命令的重复细化会更新同一个 `<Name>Evolved.md`，不会产生 `Evolved2` 或并列的覆盖链。
-- **解析**：演进文件是自包含的；当它存在时，本地执行以它为准，取代同名但无后缀的命令。代理应读取 `<Name>Evolved.md` 而不是 `<Name>.md`。
+- **Base + Evolved Patch（基命令 + 演进补丁）**：细化 `SPEC_implTests` 时保持规范基命令 `SPEC_implTests.md` 不变，仅把本地增量（章节补充、细化或显式覆写）写入同级 `SPEC_implTestsEvolved.md`。
+- **新命令**：尚无规范 `<Name>.md` 基命令的新增演进命令同样保留该后缀（例如 `SPEC_doNewXyzEvolved.md`），并在回灌上游前携带完整命令契约。
+- **一个基命令一个补丁**：对同一基命令的重复细化会更新同一个 `<Name>Evolved.md`，不会产生 `Evolved2` 或并列的补丁链。
+- **解析（`<Name>.md` + `<Name>Evolved.md`）**：当两个文件同时存在时，代理**先读取**规范 `<Name>.md` 作为基命令，**再将 `<Name>Evolved.md` 叠加应用其上**，使 `<Name>.md` 的上游刷新对所有未覆写章节立即生效，避免基命令因整文件遮蔽而失活过时。
 - **仅本地**：`*Evolved.md` 文件不进入安装清单。刷新永不覆盖它们，`--force-overwrite` 会保留它们；验证与诊断将其视为有意为之，而非漂移。
-- **回灌（Promotion）**：通过 `HARNESS_patchCaTDDSource` 将覆盖文件回灌上游，该命令会去掉后缀（`<Name>Evolved.md` -> 规范 `<Name>.md`）。
-- **陈旧检测**：每个演进文件以 `> Evolved overlay of <Name>.md · based_on: <已安装版本>` 开头（新命令使用 `> New evolved command · based_on: <已安装版本>`），从而在规范基命令变更后检测出陈旧的覆盖文件。
+- **回灌（Promotion）**：通过 `HARNESS_patchCaTDDSource` 将演进补丁合并回上游规范 `<Name>.md`（或将全新 `<Name>Evolved.md` 去掉后缀提升为 `<Name>.md`）。
+- **陈旧检测**：每个演进补丁以 `> Evolved patch for <Name>.md · based_on: <已安装版本>` 开头（新命令使用 `> New evolved command · based_on: <已安装版本>`），从而在规范基命令变更后提示复核受补丁影响的章节。
 
 ## Priority contract
 

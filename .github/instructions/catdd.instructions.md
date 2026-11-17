@@ -9,7 +9,7 @@ description: "Use when working with CaTDD, comment-alive tests, US/AC/TC skeleto
 - Treat Copilot prompt files as thin adapters over `.catdd/slashCommands/`.
 - Before reading or writing SpecCoding artifacts, follow `.catdd/slashCommands/MetaspecWorkspaceResolution.md` and use the `metaspec_root` declared in `projectContext.md`.
 - Supported workspaces are canonical `.catdd/metaspec/`, agent-owned `.agents/metaspec/`, and legacy `.catdd/spec/`; use `HARNESS_migrateMetaspec` rather than merging populated roots.
-- If a `<Name>Evolved.md` overlay exists beside the canonical `<Name>.md` command, flow, or kit, follow the overlay: it supersedes the canonical artifact locally. Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
+- If a `<Name>Evolved.md` patch exists beside the canonical `<Name>.md` command, flow, or kit, apply `Base + Evolved Patch` composition: read canonical `<Name>.md` first as the base, then apply `<Name>Evolved.md` on top (execute `<Name>Evolved.md` standalone only when it declares `New evolved command` with no canonical base). Local `*Evolved.md` files are kept across refresh and `--force-overwrite`.
 - Treat `.catdd/methodPrompts/` as the source of truth for category meaning, priority order, design skeleton rules, and CaTDD method constraints.
 - Use project-root `README_UbiLang.md` and `README_UbiLang_ZH.md` as the canonical CaTDD terminology glossaries.
 - Commit team-shared SpecCoding artifacts under the resolved `metaspec_root`, such as `projectContext.md`, `pendingNews/`, `analyzedNews/`, `todoUS/`, `doingUS/`, `suspendUS/`, `abortUS/`, and `doneUS/`.
